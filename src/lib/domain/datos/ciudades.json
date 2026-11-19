@@ -1,0 +1,524 @@
+[
+ {
+  "id": "ciudad-de-mexico",
+  "nombre": "Ciudad de México",
+  "estado": "CDMX",
+  "lon": -99.1329,
+  "lat": 19.4444,
+  "poblacion": 19028000,
+  "capital": "pais"
+ },
+ {
+  "id": "guadalajara",
+  "nombre": "Guadalajara",
+  "estado": "JAL",
+  "lon": -103.332,
+  "lat": 20.672,
+  "poblacion": 4198000,
+  "capital": "estado"
+ },
+ {
+  "id": "monterrey",
+  "nombre": "Monterrey",
+  "estado": "NL",
+  "lon": -100.3319,
+  "lat": 25.6719,
+  "poblacion": 3712000,
+  "capital": "estado"
+ },
+ {
+  "id": "puebla",
+  "nombre": "Puebla",
+  "estado": "PUE",
+  "lon": -98.202,
+  "lat": 19.0519,
+  "poblacion": 2195000,
+  "capital": "estado"
+ },
+ {
+  "id": "tijuana",
+  "nombre": "Tijuana",
+  "estado": "BC",
+  "lon": -117.0819,
+  "lat": 32.502,
+  "poblacion": 1553000,
+  "capital": null
+ },
+ {
+  "id": "toluca",
+  "nombre": "Toluca",
+  "estado": "MEX",
+  "lon": -99.6719,
+  "lat": 19.3323,
+  "poblacion": 1531000,
+  "capital": "estado"
+ },
+ {
+  "id": "leon",
+  "nombre": "León",
+  "estado": "GTO",
+  "lon": -101.702,
+  "lat": 21.1519,
+  "poblacion": 1488000,
+  "capital": null
+ },
+ {
+  "id": "ciudad-juarez",
+  "nombre": "Ciudad Juárez",
+  "estado": "CHIH",
+  "lon": -106.492,
+  "lat": 31.6923,
+  "poblacion": 1343000,
+  "capital": null
+ },
+ {
+  "id": "torreon",
+  "nombre": "Torreón",
+  "estado": "COAH",
+  "lon": -103.4219,
+  "lat": 25.572,
+  "poblacion": 1144000,
+  "capital": null
+ },
+ {
+  "id": "san-luis-potosi",
+  "nombre": "San Luis Potosí",
+  "estado": "SLP",
+  "lon": -101.0019,
+  "lat": 22.1719,
+  "poblacion": 992000,
+  "capital": "estado"
+ },
+ {
+  "id": "merida",
+  "nombre": "Mérida",
+  "estado": "YUC",
+  "lon": -89.6186,
+  "lat": 20.9686,
+  "poblacion": 965000,
+  "capital": "estado"
+ },
+ {
+  "id": "queretaro",
+  "nombre": "Querétaro",
+  "estado": "QRO",
+  "lon": -100.3819,
+  "lat": 20.632,
+  "poblacion": 961000,
+  "capital": "estado"
+ },
+ {
+  "id": "mexicali",
+  "nombre": "Mexicali",
+  "estado": "BC",
+  "lon": -115.482,
+  "lat": 32.6519,
+  "poblacion": 885000,
+  "capital": "estado"
+ },
+ {
+  "id": "aguascalientes",
+  "nombre": "Aguascalientes",
+  "estado": "AGS",
+  "lon": -102.2924,
+  "lat": 21.8814,
+  "poblacion": 869000,
+  "capital": "estado"
+ },
+ {
+  "id": "tampico",
+  "nombre": "Tampico",
+  "estado": "TAMPS",
+  "lon": -97.87,
+  "lat": 22.3,
+  "poblacion": 859419,
+  "capital": null
+ },
+ {
+  "id": "cuernavaca",
+  "nombre": "Cuernavaca",
+  "estado": "MOR",
+  "lon": -99.24,
+  "lat": 18.9211,
+  "poblacion": 834001,
+  "capital": "estado"
+ },
+ {
+  "id": "culiacan",
+  "nombre": "Culiacán",
+  "estado": "SIN",
+  "lon": -107.3819,
+  "lat": 24.8319,
+  "poblacion": 809000,
+  "capital": "estado"
+ },
+ {
+  "id": "chihuahua",
+  "nombre": "Chihuahua",
+  "estado": "CHIH",
+  "lon": -106.0869,
+  "lat": 28.6469,
+  "poblacion": 793000,
+  "capital": "estado"
+ },
+ {
+  "id": "saltillo",
+  "nombre": "Saltillo",
+  "estado": "COAH",
+  "lon": -101.0069,
+  "lat": 25.4219,
+  "poblacion": 754000,
+  "capital": "estado"
+ },
+ {
+  "id": "acapulco",
+  "nombre": "Acapulco",
+  "estado": "GRO",
+  "lon": -99.916,
+  "lat": 16.85,
+  "poblacion": 715584,
+  "capital": null
+ },
+ {
+  "id": "morelia",
+  "nombre": "Morelia",
+  "estado": "MICH",
+  "lon": -101.1895,
+  "lat": 19.7334,
+  "poblacion": 644306,
+  "capital": "estado"
+ },
+ {
+  "id": "hermosillo",
+  "nombre": "Hermosillo",
+  "estado": "SON",
+  "lon": -110.9541,
+  "lat": 29.0989,
+  "poblacion": 595811,
+  "capital": "estado"
+ },
+ {
+  "id": "veracruz",
+  "nombre": "Veracruz",
+  "estado": "VER",
+  "lon": -96.16,
+  "lat": 19.1773,
+  "poblacion": 578963,
+  "capital": null
+ },
+ {
+  "id": "cancun",
+  "nombre": "Cancún",
+  "estado": "QROO",
+  "lon": -86.83,
+  "lat": 21.17,
+  "poblacion": 542043,
+  "capital": null
+ },
+ {
+  "id": "matamoros",
+  "nombre": "Matamoros",
+  "estado": "TAMPS",
+  "lon": -97.5,
+  "lat": 25.88,
+  "poblacion": 538785,
+  "capital": null
+ },
+ {
+  "id": "oaxaca",
+  "nombre": "Oaxaca",
+  "estado": "OAX",
+  "lon": -96.6699,
+  "lat": 17.0827,
+  "poblacion": 530728,
+  "capital": "estado"
+ },
+ {
+  "id": "tlaxcala",
+  "nombre": "Tlaxcala",
+  "estado": "TLAX",
+  "lon": -98.23,
+  "lat": 19.32,
+  "poblacion": 503878,
+  "capital": "estado"
+ },
+ {
+  "id": "reynosa",
+  "nombre": "Reynosa",
+  "estado": "TAMPS",
+  "lon": -98.3,
+  "lat": 26.08,
+  "poblacion": 498654,
+  "capital": null
+ },
+ {
+  "id": "tuxtla-gutierrez",
+  "nombre": "Tuxtla Gutiérrez",
+  "estado": "CHIS",
+  "lon": -93.15,
+  "lat": 16.75,
+  "poblacion": 481128,
+  "capital": "estado"
+ },
+ {
+  "id": "durango",
+  "nombre": "Durango",
+  "estado": "DGO",
+  "lon": -104.67,
+  "lat": 24.0311,
+  "poblacion": 457140,
+  "capital": "estado"
+ },
+ {
+  "id": "xalapa",
+  "nombre": "Xalapa",
+  "estado": "VER",
+  "lon": -96.92,
+  "lat": 19.53,
+  "poblacion": 452186,
+  "capital": "estado"
+ },
+ {
+  "id": "villahermosa",
+  "nombre": "Villahermosa",
+  "estado": "TAB",
+  "lon": -92.9,
+  "lat": 18,
+  "poblacion": 428564,
+  "capital": "estado"
+ },
+ {
+  "id": "celaya",
+  "nombre": "Celaya",
+  "estado": "GTO",
+  "lon": -100.8,
+  "lat": 20.53,
+  "poblacion": 383697,
+  "capital": null
+ },
+ {
+  "id": "mazatlan",
+  "nombre": "Mazatlán",
+  "estado": "SIN",
+  "lon": -106.42,
+  "lat": 23.2211,
+  "poblacion": 368204,
+  "capital": null
+ },
+ {
+  "id": "orizaba",
+  "nombre": "Orizaba",
+  "estado": "VER",
+  "lon": -97.13,
+  "lat": 18.85,
+  "poblacion": 355333,
+  "capital": null
+ },
+ {
+  "id": "nuevo-laredo",
+  "nombre": "Nuevo Laredo",
+  "estado": "TAMPS",
+  "lon": -99.55,
+  "lat": 27.5,
+  "poblacion": 349550,
+  "capital": null
+ },
+ {
+  "id": "irapuato",
+  "nombre": "Irapuato",
+  "estado": "GTO",
+  "lon": -101.5,
+  "lat": 20.67,
+  "poblacion": 339554,
+  "capital": null
+ },
+ {
+  "id": "pachuca",
+  "nombre": "Pachuca",
+  "estado": "HGO",
+  "lon": -98.73,
+  "lat": 20.1704,
+  "poblacion": 319581,
+  "capital": "estado"
+ },
+ {
+  "id": "tepic",
+  "nombre": "Tepic",
+  "estado": "NAY",
+  "lon": -104.88,
+  "lat": 21.5054,
+  "poblacion": 318781,
+  "capital": "estado"
+ },
+ {
+  "id": "ciudad-victoria",
+  "nombre": "Ciudad Victoria",
+  "estado": "TAMPS",
+  "lon": -99.13,
+  "lat": 23.72,
+  "poblacion": 274900,
+  "capital": "estado"
+ },
+ {
+  "id": "ensenada",
+  "nombre": "Ensenada",
+  "estado": "BC",
+  "lon": -116.62,
+  "lat": 31.87,
+  "poblacion": 256565,
+  "capital": null
+ },
+ {
+  "id": "los-mochis",
+  "nombre": "Los Mochis",
+  "estado": "SIN",
+  "lon": -109,
+  "lat": 25.79,
+  "poblacion": 249047,
+  "capital": null
+ },
+ {
+  "id": "zacatecas",
+  "nombre": "Zacatecas",
+  "estado": "ZAC",
+  "lon": -102.58,
+  "lat": 22.7704,
+  "poblacion": 234481,
+  "capital": "estado"
+ },
+ {
+  "id": "colima",
+  "nombre": "Colima",
+  "estado": "COL",
+  "lon": -103.72,
+  "lat": 19.23,
+  "poblacion": 223287,
+  "capital": "estado"
+ },
+ {
+  "id": "tapachula",
+  "nombre": "Tapachula",
+  "estado": "CHIS",
+  "lon": -92.27,
+  "lat": 14.9,
+  "poblacion": 221521,
+  "capital": null
+ },
+ {
+  "id": "campeche",
+  "nombre": "Campeche",
+  "estado": "CAMP",
+  "lon": -90.5,
+  "lat": 19.83,
+  "poblacion": 205212,
+  "capital": "estado"
+ },
+ {
+  "id": "la-paz",
+  "nombre": "La Paz",
+  "estado": "BCS",
+  "lon": -110.32,
+  "lat": 24.14,
+  "poblacion": 189767,
+  "capital": "estado"
+ },
+ {
+  "id": "puerto-vallarta",
+  "nombre": "Puerto Vallarta",
+  "estado": "JAL",
+  "lon": -105.245,
+  "lat": 20.6771,
+  "poblacion": 187134,
+  "capital": null
+ },
+ {
+  "id": "chilpancingo",
+  "nombre": "Chilpancingo",
+  "estado": "GRO",
+  "lon": -99.5,
+  "lat": 17.55,
+  "poblacion": 182387,
+  "capital": "estado"
+ },
+ {
+  "id": "nogales",
+  "nombre": "Nogales",
+  "estado": "SON",
+  "lon": -110.945,
+  "lat": 31.305,
+  "poblacion": 178097,
+  "capital": null
+ },
+ {
+  "id": "lazaro-cardenas",
+  "nombre": "Lázaro Cárdenas",
+  "estado": "MICH",
+  "lon": -102.2,
+  "lat": 17.9587,
+  "poblacion": 160087,
+  "capital": null
+ },
+ {
+  "id": "ciudad-del-carmen",
+  "nombre": "Ciudad del Carmen",
+  "estado": "CAMP",
+  "lon": -91.8245,
+  "lat": 18.6537,
+  "poblacion": 156195,
+  "capital": null
+ },
+ {
+  "id": "chetumal",
+  "nombre": "Chetumal",
+  "estado": "QROO",
+  "lon": -88.3,
+  "lat": 18.5,
+  "poblacion": 154517,
+  "capital": "estado"
+ },
+ {
+  "id": "piedras-negras",
+  "nombre": "Piedras Negras",
+  "estado": "COAH",
+  "lon": -100.5317,
+  "lat": 28.7076,
+  "poblacion": 139619,
+  "capital": null
+ },
+ {
+  "id": "guanajuato",
+  "nombre": "Guanajuato",
+  "estado": "GTO",
+  "lon": -101.28,
+  "lat": 21.0204,
+  "poblacion": 112200,
+  "capital": "estado"
+ },
+ {
+  "id": "manzanillo",
+  "nombre": "Manzanillo",
+  "estado": "COL",
+  "lon": -104.3231,
+  "lat": 19.0496,
+  "poblacion": 110735,
+  "capital": null
+ },
+ {
+  "id": "guaymas",
+  "nombre": "Guaymas",
+  "estado": "SON",
+  "lon": -110.89,
+  "lat": 27.93,
+  "poblacion": 103449,
+  "capital": null
+ },
+ {
+  "id": "salina-cruz",
+  "nombre": "Salina Cruz",
+  "estado": "OAX",
+  "lon": -95.2,
+  "lat": 16.1671,
+  "poblacion": 81063,
+  "capital": null
+ }
+]
