@@ -22,6 +22,13 @@ export type Trayecto = {
    * on the world views.
    */
   enTablero: [number, number];
+  /**
+   * Rail only: per segment, the network tramo it runs on (`Via.base`) and the
+   * speed on free track. A saturated tramo slows the train down from that
+   * (`saturacion.ts` rewrites `vel` through `fijarVelocidades`).
+   */
+  vias?: number[];
+  velLibre?: number[];
 };
 
 const D2R = Math.PI / 180;
@@ -58,7 +65,16 @@ export function crearTrayecto(puntos: LonLat[], vel: number[], tablero?: [number
 export function invertir(t: Trayecto): Trayecto {
   const r = crearTrayecto([...t.puntos].reverse(), [...t.vel].reverse());
   r.enTablero = [t.km - t.enTablero[1], t.km - t.enTablero[0]];
+  if (t.vias) r.vias = [...t.vias].reverse();
+  if (t.velLibre) r.velLibre = [...t.velLibre].reverse();
   return r;
+}
+
+/** New speeds per segment, in place: positions are kept in km, so a vehicle under way stays put. */
+export function fijarVelocidades(t: Trayecto, vel: number[]): void {
+  t.vel = vel;
+  for (let i = 1; i < t.puntos.length; i++) t.acumH[i] = t.acumH[i - 1] + (t.acum[i] - t.acum[i - 1]) / vel[i - 1];
+  t.horas = t.acumH[t.acumH.length - 1];
 }
 
 /** Index of the segment that contains `km` (binary search on `acum`). */

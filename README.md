@@ -93,8 +93,21 @@ saltar al siguiente libre.
 
 - **La red es un grafo** (`domain/red.ts`): nodos en entronques, puntas y cambios de clase;
   tramos entre ellos. Al cargar, cada sitio a ≤ 15 km de una vía recibe **estación** en el
-  punto más cercano de la vía (partiendo el tramo si hace falta). 60 de los 73 sitios tienen
-  estación; los demás muestran a cuántos km queda la vía (Acapulco, Cancún, La Paz…).
+  punto más cercano de la vía en servicio (partiendo el tramo si hace falta). 59 de los 73
+  sitios tienen estación; los demás muestran a cuántos km queda la vía (Acapulco, Cancún, La
+  Paz…).
+- **Cada vía tiene dueño, tráfico y capacidad** (`Red.vias`, de `datos/vias.json`): la
+  concesionaria de 2018 o el Estado (de OpenStreetMap, corregido a 2018 y cotejado con el
+  anuario de la ARTF), si estaba en servicio (3,590 km no: se ven punteados y no llevan trenes
+  ni estaciones), los trenes privados al día (el promedio de su empresa o el de su corredor) y
+  los que caben (16 en vía sencilla, 30 con control centralizado, 75 en doble). Las cifras y
+  sus fuentes están en la [enciclopedia](docs/enciclopedia.md#dueños).
+- **Saturación** (`domain/saturacion.ts`): los trenes del jugador se cuentan por su horario
+  (`sim.trenesPorVia`); el uso de cada vía es privados + del jugador entre capacidad, y
+  pasado el 60 % los trenes que la usan van más lento (60 % de su velocidad al 100 % de uso).
+  Se recalcula al agregar o retirar un tren y al reconstruirse la red; la ruta de cada pierna
+  guarda su vía por segmento (`Trayecto.vias`) y su velocidad libre (`velLibre`). El
+  tablero pinta la red por clase, dueño o uso, y una vía al pasar el cursor dice todo eso.
 - **Dos clases de vía**: primaria (`scalerank` ≤ 6 de Natural Earth, 60 km/h) y secundaria
   (40 km/h). La ruta es la **más rápida**, no la más corta (Dijkstra por tiempo): un tren toma
   la troncal aunque un ramal sea más directo, como lo haría un despachador.
@@ -176,6 +189,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
 | `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
+| `src/lib/domain/datos/vias.json`     | **Dueño y estado de cada tramo**, trenes privados por empresa y por corredor, capacidades; con fuentes |
 
 `npm run datos` (`scripts/datos-mexico.mjs`) regenera los cuatro primeros desde **Natural
 Earth 10m**, fijado a un commit de `nvkelso/natural-earth-vector`. Baja ~85 MB una sola vez a
@@ -266,7 +280,8 @@ src/lib/
     obras.ts         construir polos: presupuesto, cuadrillas, avance, ocupación y empleos
     trayecto.ts      un recorrido como polilínea con velocidad por segmento; avanzar sobre él
     servicio.ts      el motor común: un vehículo recorriendo sus paradas (ida y vuelta o circuito)
-    red.ts           grafo ferroviario, estaciones, ruta más rápida
+    red.ts           grafo ferroviario, dueños y estado de cada vía, estaciones, ruta más rápida
+    saturacion.ts    uso de cada vía (privados + trenes del jugador) y cuánto frena a los trenes
     mar.ts           rutas marítimas, Canal de Panamá, travesías; compone la pierna completa
     trenes.ts        trenes y servicios iniciales
     barcos.ts        clases de barco, travesías, barcos y servicios iniciales
@@ -358,8 +373,12 @@ costa del mundo solo sube de resolución). Además:
   2018 en adelante (el Tren Maya, las líneas nuevas del Corredor Interoceánico…) lo
   construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
   cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
-  Tuxpan…).
-- **Presupuesto del Estado**: de dónde y cada cuánto llega el dinero (hoy solo se gasta).
+  Tuxpan…). Siguiente paso acordado: el catálogo de obras con trazo oficial (el Tren Maya por
+  tramos, Dos Bocas, las líneas paralelas de pasajeros, rehabilitar las vías muertas), que
+  serán vías **del Estado**, con su propia capacidad.
+- **Presupuesto del Estado**: de dónde y cada cuánto llega el dinero (hoy solo se gasta): los
+  derechos de las concesionarias (3 % de sus ingresos desde 2027), los impuestos, lo que
+  cobran los trenes del Estado y lo que pagan por pasar por vía privada.
 - **Carga**: qué lleva cada tren y cada barco (contenedores, granel, autos, combustibles),
   cuánto cabe y quién lo demanda; hoy corren sus servicios sin carga. El puerto es donde
   barco y tren se pasan la carga.

@@ -2,6 +2,7 @@ import { browser } from '$app/environment';
 import { COLORES_BARCO, crearBarco, NOMBRES_BARCO, SERVICIOS_BARCO, type Barco, type ClaseBarco } from '$lib/domain/barcos';
 import { construirMar, type Mar, type RutasMarJson } from '$lib/domain/mar';
 import { construirRed, type Red, type RedJson } from '$lib/domain/red';
+import { aplicarSaturacion, trenesDelJugador, usoDe, type Uso } from '$lib/domain/saturacion';
 import { avanzar } from '$lib/domain/servicio';
 import {
   avanzarObra,
@@ -67,6 +68,12 @@ class Simulacion {
   versionRed = $state(0);
   /** The camera keeps the selected vehicle centred. */
   siguiendo = $state(false);
+  /**
+   * The player's trains a day on each rail line (by `Via.base`). Recounted
+   * whenever the fleet or the network changes; the board repaints line use
+   * from it.
+   */
+  trenesPorVia = $state.raw<Map<number, number>>(new Map());
 
   /** The rail network with stations, and the sea lanes. Static once loaded, so not reactive. */
   red: Red | null = null;
@@ -136,6 +143,7 @@ class Simulacion {
         }
         this.trenes = trenes;
         this.barcos = barcos;
+        this.#saturar();
         this.estado = 'lista';
       } catch (err) {
         console.error(err);
@@ -177,7 +185,10 @@ class Simulacion {
   /** Put a new train in service. Null when the stops can't be joined by rail. */
   agregarTren(paradas: string[]): Tren | null {
     const t = this.#crearTren(paradas);
-    if (t) this.trenes = [...this.trenes, t];
+    if (t) {
+      this.trenes = [...this.trenes, t];
+      this.#saturar();
+    }
     return t;
   }
 
@@ -189,7 +200,9 @@ class Simulacion {
   }
 
   retirar(id: string) {
+    const antes = this.trenes.length;
     this.trenes = this.trenes.filter((t) => t.id !== id);
+    if (this.trenes.length !== antes) this.#saturar();
     this.barcos = this.barcos.filter((b) => b.id !== id);
     if (this.seleccion === id) this.seleccionar(null);
   }
@@ -258,7 +271,22 @@ class Simulacion {
       [...this.obras.values()].filter((o) => o.fase === 'operando').map((o) => `polo:${o.id}`)
     );
     this.red = construirRed(this.#redJson, SITIOS, enServicio);
+    this.#saturar();
     this.versionRed++;
+  }
+
+  /** Recount the player's trains on every line and slow each train down where its lines are full. */
+  #saturar() {
+    if (!this.red) return;
+    const porVia = trenesDelJugador(this.trenes);
+    aplicarSaturacion(this.red, this.trenes, porVia);
+    this.trenesPorVia = porVia;
+  }
+
+  /** How full a rail line is (by `Via.base`): private trains, the player's, and what fits. */
+  uso(base: number): Uso | null {
+    const v = this.red?.vias[base];
+    return v ? usoDe(v, this.trenesPorVia) : null;
   }
 
   /** Register a viewer; returns the teardown, so call sites read `$effect(() => sim.attach())`. */

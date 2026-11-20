@@ -4,8 +4,8 @@ Referencia de lo que hay en el juego: qué contiene, de dónde sale cada dato, q
 mano y por qué, y con qué reglas se mueve. Vive también dentro del juego: el librito de la esquina
 superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`), que se arma con este archivo.
 
-> **Cifras al 19 de noviembre de 2026, con trenes, barcos, travesías oceánicas y los Polos del
-> Bienestar.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> **Cifras al 20 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
+> Bienestar y los dueños, el tráfico y la capacidad de cada vía.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -39,7 +39,14 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | `logistica-oceanica` (proyecto hermano) | Velocidades de referencia de las clases de barco | — | Del proyecto |
 | [Diario Oficial de la Federación](https://dof.gob.mx) | Las declaratorias de los 32 Polos del Bienestar vigentes: polígono, superficie, municipio y fecha de cada uno (ver [Polos del Bienestar](#5-polos-del-bienestar)) | Declaratorias del 12 de mayo de 2023 al 7 de agosto de 2026, con sus notas aclaratorias y modificaciones; consultadas el 19 de noviembre de 2026 | Documento oficial público |
 | Secretaría de Economía | Lámina "Polos de Desarrollo Económico para el Bienestar" (22 de mayo de 2025): los polos anunciados por etapa | — | Documento oficial público |
-| [OpenStreetMap](https://www.openstreetmap.org/copyright) | El trazo de la autopista MEX-185D, para ubicar dos polos cuyas coordenadas no traen meridiano (ver la nota ¹ de los polos) | Consultado el 19 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
+| [OpenStreetMap](https://www.openstreetmap.org/copyright) | El trazo de la autopista MEX-185D, para ubicar dos polos cuyas coordenadas no traen meridiano (ver la nota ¹ de los polos); el operador y el estado (en uso, en desuso, abandonada) de cada vía, para saber de quién es cada tramo de la red | Consultado el 19 y el 20 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
+| [ARTF, Anuario Estadístico Ferroviario 2018](https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf) | Los km de vía de cada empresa en 2018, para comprobar el reparto de dueños | 2019 | Documento oficial público |
+| [ARTF, Sistema Nacional de Indicadores Ferroviarios 2022](https://www.gob.mx/cms/uploads/attachment/file/789599/SNIF_2022.pdf) | Densidad de tráfico y carga por tren de cada empresa (2018–2021): de ahí salen los trenes privados al día | 2022 | Documento oficial público |
+| [ARTF, Pulso de Interconexión, 1er semestre 2024](https://www.gob.mx/cms/uploads/attachment/file/947545/Pulso_Interconexion_VF7.pdf) | La tabla de derechos de paso obligatorios: quién es dueño de cada línea y kilómetro, donde OpenStreetMap no lo dice | 2024 | Documento oficial público |
+| [ATTRAPI, Anuario Estadístico Ferroviario 2025](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas por par origen–destino, para estimar cuántos trenes de Nuevo Laredo siguen al sur de Monterrey | 2026 | Documento oficial público |
+| [Bureau of Transportation Statistics (EUA), Border Crossing Entry Data](https://data.bts.gov/resource/keg4-3bc2.json) | Trenes que cruzan a Estados Unidos por cada puerto fronterizo: el tráfico de los corredores de Nuevo Laredo, Piedras Negras y Ciudad Juárez | Datos 2018 y 2025 | Dato oficial público (gobierno de EUA) |
+| AAR / Cambridge Systematics, *National Rail Freight Infrastructure Capacity and Investment Study* (2007), citado por el TRB | Cuántos trenes al día caben en vía sencilla, con control centralizado y en vía doble. Es referencia de Estados Unidos: no hay cifra oficial mexicana | 2007 | Estudio público |
+| [Reforma a la Ley Reglamentaria del Servicio Ferroviario](https://dof.gob.mx/nota_detalle.php?codigo=5763165&fecha=16/07/2025) | El derecho de paso: quien usa la vía de otro le paga una contraprestación | DOF, 16 de julio de 2025 | Documento oficial público |
 | INEGI (convención cartográfica) | Parámetros de la proyección del tablero: cónica conforme de Lambert, paralelos 17.5° y 29.5°, meridiano central 102° O | — | — |
 | [INEGI, Censos Económicos 2024](https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mver_ce24.pdf) | Empleos que da la obra por cada millón de pesos (construcción en Veracruz, 2023) | Resultados definitivos, 2025 | Documento oficial público |
 | Presidencia de la República y Gobierno de Tlaxcala | Tiempos y empleos del polo de Huamantla, el único terminado: su ritmo de obra y su proyección de empleos | Comunicados del 14 oct 2025 al 12 abr 2026 | Documento oficial público |
@@ -495,21 +502,112 @@ operadores ferroviarios**, pero sigue de cerca los corredores troncales. El jueg
 | Primaria | 6 o menos | Ámbar intenso y más gruesa | 60 km/h | 10,139 |
 | Secundaria | más de 6 | Ámbar tenue y delgada | 40 km/h | 9,075 |
 
+### Dueños
+
+Cada tramo tiene dueño: la empresa que tenía su concesión en 2018, o el Estado. Las vías
+concesionadas siguen siendo privadas en el juego; las que el jugador construya serán del
+Estado (ver [Decisiones de diseño](#11-decisiones-de-diseño)).
+
+| Dueño | Tipo | km en servicio | km fuera de operación | Trenes privados al día (promedio) |
+| --- | --- | ---: | ---: | ---: |
+| Ferromex | Privada | 7,625 | 1,165 | 5.9 |
+| Kansas City Southern de México (hoy CPKC) | Privada | 3,306 | 925 | 8.3 |
+| Ferrosur | Privada | 1,186 | 372 | 5.7 |
+| Línea Coahuila–Durango | Privada | 897 | 432 | 2.5 |
+| Ferrovalle (Valle de México) | Mixta: 25 % de cada troncal y 25 % del gobierno federal | 165 | — | 5.6 ¹ |
+| **Ferrocarril del Istmo de Tehuantepec** (Istmo, Chiapas–Mayab y Oaxaca) | **Estatal** | **2,384** | 91 | 0.8 |
+| Tijuana–Tecate (Gobierno de Baja California) | Estatal | 60 | — | 0.4 |
+| Sin dueño identificado | — | — | 606 | — |
+
+¹ Ferrovalle no tiene dato propio: se usa el promedio del sistema.
+
+**Cómo se supo.** OpenStreetMap trae el operador de casi toda la red en uso. Donde no lo
+trae, se usó la letra de la línea (A, B, M…) con la tabla oficial de derechos de paso
+obligatorios de la ARTF, que dice qué empresa tiene cada línea y kilómetro. OpenStreetMap
+describe 2026, así que se corrigió a 2018 donde el dueño cambió (ver la
+[bitácora](#12-bitácora-de-correcciones-a-los-datos)). Los km por empresa cuadran con los
+del Anuario 2018. El reparto se hizo tramo por tramo, por mayoría de km: un tramo largo que
+cruza de una empresa a otra queda entero con la que tiene más.
+
+**Fuera de operación.** 3,590 km de la red del juego ya no tenían trenes en 2018: Ciudad
+Juárez–Casas Grandes, Saltillo–Torreón, San Luis Potosí–San Miguel de Allende–Celaya,
+México–Cuernavaca–Iguala, Durango–Tepehuanes, Tepic–Ameca y varios ramales del Bajío, de
+Hidalgo, de Veracruz y de Oaxaca. Se ven punteadas y apagadas: no pasan trenes, no anclan
+estaciones y la ruta más rápida no las usa. **Rehabilitarlas será una obra del Estado.**
+
+**Trenes privados al día.** Es el tráfico de cada empresa en 2018, en promedio por km de su
+red y contando los dos sentidos: su densidad de tráfico (toneladas-km por km de vía) entre lo
+que lleva un tren (toneladas netas por tren-km), entre 365 días (SNIF 2022). Esos trenes no
+los controla el jugador, pero ocupan la vía.
+
+### Tráfico y capacidad
+
+Una vía aguanta un número de trenes al día. En vía sencilla, dos trenes en sentido contrario
+no pueden pasar a la vez: uno espera en un escape (un tramo corto de vía paralela). Por eso
+una vía sencilla aguanta pocos trenes, y cuando se llena, los trenes pasan más tiempo
+esperando que avanzando.
+
+| Cómo se opera la vía | Trenes al día que caben | km en la red |
+| --- | ---: | ---: |
+| Sencilla, con autorización de tramos (casi toda la red mexicana) | 16 | 14,726 |
+| Sencilla, con control de tráfico centralizado | 30 | 689 |
+| Doble (Monterrey–Saltillo y Querétaro) | 75 | 208 |
+
+Las capacidades vienen de un estudio de Estados Unidos (AAR, 2007); no hay cifra oficial
+mexicana. Ferromex reporta 6,206 km con autorización de tramos y solo 661 km con control
+centralizado.
+
+**Los corredores fuertes** llevan más que el promedio de su empresa:
+
+| Corredor | Trenes privados al día | Capacidad | De dónde sale |
+| --- | ---: | --- | --- |
+| Nuevo Laredo–Monterrey | 23 | Control centralizado (30) | 4,251 trenes cruzaron a EUA por Nuevo Laredo en 2018: 11.6 al día hacia el norte, unos 23 contando los dos sentidos |
+| Piedras Negras–Saltillo | 21 | Control centralizado (30) | 3,762 trenes cruzaron por Piedras Negras en 2025 |
+| Ciudad Juárez–Chihuahua | 7 | Sencilla (16) | 1,356 trenes cruzaron por Ciudad Juárez en 2025 |
+| Monterrey–San Luis Potosí–Querétaro–Ciudad de México | 14 | Sencilla (16) | Estimación del juego: seis de cada diez toneladas que cruzan por Nuevo Laredo siguen al sur de Monterrey (pares origen–destino de 2025) |
+
+Un corredor que mueve más de 16 trenes al día tiene que tener control centralizado, porque
+si no, no le cabrían: por eso los dos primeros tienen capacidad de 30.
+
+**Uso y velocidad.** El uso de una vía es la suma de los trenes privados y los del jugador,
+entre lo que cabe. Los del jugador se cuentan por su horario: cuántas veces al día pasa cada
+tren por esa vía, en los dos sentidos. Pasado el 60 % (el techo diario que recomienda el
+método internacional de capacidad UIC 406, que adoptó la ARTF), los trenes empiezan a
+esperarse y su velocidad promedio baja:
+
+| Uso de la vía | Velocidad de los trenes | En el mapa (modo *Uso*) |
+| --- | ---: | --- |
+| Hasta 60 % | 100 % | Verde: holgada |
+| 80 % | 80 % | Ámbar: cargada |
+| 100 % | 60 % | Ámbar: cargada |
+| 125 % | 40 % | Rojo: saturada |
+| 150 % o más | 30 % (nunca menos de 25 %) | Rojo: saturada |
+
+Afecta a todos los trenes del jugador que pasan por esa vía, incluso los que ya van en
+camino. Al arrancar la partida, con los 8 servicios iniciales, 1,654 km quedan cargados
+(casi toda la troncal México–Querétaro–San Luis Potosí–Monterrey y Nuevo Laredo–Monterrey) y
+5 km saturados (un tramo de Ferrovalle en la Ciudad de México).
+
+**En el mapa.** El panel de vías, sobre los botones de capas, cambia el color de la red:
+**Clase** (troncal o secundaria, como siempre), **Dueño** o **Uso**. Al pasar el cursor por
+una vía, su ficha dice de quién es, cómo se opera, cuántos trenes lleva (privados y del
+jugador) de cuántos caben, y cuánto más lento van los trenes si está cargada o saturada.
+
 ### Cifras
 
 | | |
 | --- | --- |
-| Longitud total | 19,214 km |
+| Longitud total | 19,214 km: 15,623 en servicio y 3,590 fuera de operación |
 | Nodos y tramos del archivo | 198 nodos, 231 tramos |
-| Nodos y tramos con estaciones | 252 nodos, 285 tramos (cada estación puede partir un tramo) |
-| Sitios con estación | 60 de 73 (ciudades y puertos) |
-| Piezas conectadas | 4 |
+| Nodos y tramos con estaciones | 249 nodos, 282 tramos (cada estación puede partir un tramo) |
+| Sitios con estación | 59 de 73 (ciudades y puertos) |
+| Piezas conectadas | 4, contando solo la vía en servicio |
 
 Las cuatro piezas:
 
-| Pieza | km | Conexión |
+| Pieza | km en servicio | Conexión |
 | --- | ---: | --- |
-| Red nacional | 18,874 | La que usan todos los servicios |
+| Red nacional | 15,284 | La que usan todos los servicios |
 | Tramo fronterizo de Sonora: une Cananea con la frontera en Naco y en las afueras de Nogales | 168 | Solo con EUA |
 | Agua Prieta–Nacozari | 111 | Solo con EUA |
 | Tijuana–Tecate | 60 | Solo con EUA |
@@ -525,9 +623,12 @@ Si la vía pasa lejos (más de 5 km), el mapa une el sitio y su estación con un
 punteada. Las estaciones más alejadas de su sitio: Puerto Chiapas (12.5 km), Pachuca
 (7.7 km), Tijuana (7.3 km), Irapuato (6.7 km) y el puerto de Tampico (6.4 km).
 
-**Sin vía** (13 sitios): Acapulco, Cancún, Chetumal, Chilpancingo, Ciudad del Carmen, Dos
-Bocas, Ensenada (ciudad y puerto), La Paz, Puerto Vallarta, Tuxpan, Tuxtla Gutiérrez y
-Villahermosa.
+Solo la vía en servicio da estación: una vía fuera de operación junto a un sitio no le
+sirve.
+
+**Sin vía** (14 sitios): Acapulco, Cancún, Chetumal, Chilpancingo, Ciudad del Carmen,
+Cuernavaca (su vía a la capital está fuera de operación), Dos Bocas, Ensenada (ciudad y
+puerto), La Paz, Puerto Vallarta, Tuxpan, Tuxtla Gutiérrez y Villahermosa.
 
 ---
 
@@ -536,27 +637,29 @@ Villahermosa.
 El tablero arranca con **8 servicios de carga** sobre corredores reales. Solo se definen las
 paradas: el camino entre ellas lo calcula el juego (la ruta más rápida por la red).
 "Marcha" es el tiempo en movimiento por sentido; la vuelta completa suma ida, regreso y las
-esperas de carga en cada parada.
+esperas de carga en cada parada. Los tiempos ya cuentan lo que frenan las vías cargadas al
+arrancar (ver [Tráfico y capacidad](#tráfico-y-capacidad)); entre paréntesis, el tiempo con
+la vía libre cuando es distinto.
 
 | Servicio | Paradas | km por sentido | Marcha por sentido | Vuelta completa | Corredor |
 | --- | --- | ---: | ---: | ---: | --- |
-| Manzanillo ⇄ CDMX | Manzanillo → Guadalajara → Ciudad de México | 907 | 15.1 h | 38.2 h | Del Pacífico al centro |
-| Lázaro Cárdenas ⇄ Nuevo Laredo | Lázaro Cárdenas → San Luis Potosí → Monterrey → Nuevo Laredo | 1,449 | 25.3 h | 60.6 h | Del Pacífico a la frontera con Texas |
-| Veracruz ⇄ CDMX | Veracruz → Puebla → Ciudad de México | 452 | 8.0 h | 24.0 h | Del Golfo al centro |
-| CDMX ⇄ Ciudad Juárez | Ciudad de México → Querétaro → Torreón → Chihuahua → Ciudad Juárez | 1,910 | 31.8 h | 75.6 h | Corredor central, hacia El Paso |
-| Guadalajara ⇄ Nogales | Guadalajara → Mazatlán → Hermosillo → Nogales | 1,702 | 28.4 h | 66.8 h | Línea del Pacífico, hacia Arizona |
-| Altamira ⇄ Monterrey | Altamira → Monterrey | 507 | 12.6 h | 31.2 h | Del puerto industrial del Golfo a Monterrey |
-| Coatzacoalcos ⇄ Salina Cruz | Coatzacoalcos → Salina Cruz | 274 | 4.6 h | 15.2 h | El Istmo de Tehuantepec, de océano a océano |
-| Coatzacoalcos ⇄ Progreso | Coatzacoalcos → Mérida → Progreso | 909 | 15.1 h | 38.2 h | Del Istmo a la península de Yucatán |
+| Manzanillo ⇄ CDMX | Manzanillo → Guadalajara → Ciudad de México | 907 | 17.3 h (15.1) | 42.6 h (38.2) | Del Pacífico al centro |
+| Lázaro Cárdenas ⇄ Nuevo Laredo | Lázaro Cárdenas → San Luis Potosí → Monterrey → Nuevo Laredo | 1,449 | 30.0 h (25.3) | 70.0 h (60.6) | Del Pacífico a la frontera con Texas |
+| Veracruz ⇄ CDMX | Veracruz → Puebla → Ciudad de México | 452 | 8.0 h | 24.1 h | Del Golfo al centro |
+| CDMX ⇄ Ciudad Juárez | Ciudad de México → Querétaro → Torreón → Chihuahua → Ciudad Juárez | 1,910 | 34.0 h (31.8) | 80.0 h (75.7) | Corredor central, hacia El Paso |
+| Guadalajara ⇄ Nogales | Guadalajara → Mazatlán → Hermosillo → Nogales | 1,702 | 28.4 h | 66.7 h | Línea del Pacífico, hacia Arizona |
+| Altamira ⇄ Monterrey | Altamira → Monterrey | 507 | 12.6 h | 31.3 h | Del puerto industrial del Golfo a Monterrey |
+| Coatzacoalcos ⇄ Salina Cruz | Coatzacoalcos → Salina Cruz | 274 | 4.6 h | 15.1 h | El Istmo de Tehuantepec, de océano a océano |
+| Coatzacoalcos ⇄ Progreso | Coatzacoalcos → Mérida → Progreso | 909 | 15.1 h | 38.3 h | Del Istmo a la península de Yucatán |
 
 Detalle por tramo (ida):
 
 - **Manzanillo ⇄ CDMX**: Manzanillo–Guadalajara 332 km (5.5 h) · Guadalajara–CDMX 575 km
-  (9.6 h).
-- **Lázaro Cárdenas ⇄ Nuevo Laredo**: Lázaro Cárdenas–San Luis Potosí 703 km (12.9 h) · San
-  Luis Potosí–Monterrey 477 km (8.0 h) · Monterrey–Nuevo Laredo 269 km (4.5 h).
-- **Veracruz ⇄ CDMX**: Veracruz–Puebla 270 km (5.0 h) · Puebla–CDMX 182 km (3.0 h).
-- **CDMX ⇄ Ciudad Juárez**: CDMX–Querétaro 215 km (3.6 h) · Querétaro–Torreón 863 km
+  (11.8 h).
+- **Lázaro Cárdenas ⇄ Nuevo Laredo**: Lázaro Cárdenas–San Luis Potosí 703 km (13.9 h) · San
+  Luis Potosí–Monterrey 477 km (10.6 h) · Monterrey–Nuevo Laredo 269 km (5.5 h).
+- **Veracruz ⇄ CDMX**: Veracruz–Puebla 270 km (5.0 h) · Puebla–CDMX 182 km (3.1 h).
+- **CDMX ⇄ Ciudad Juárez**: CDMX–Querétaro 215 km (5.8 h) · Querétaro–Torreón 863 km
   (14.4 h) · Torreón–Chihuahua 478 km (8.0 h) · Chihuahua–Ciudad Juárez 355 km (5.9 h).
 - **Guadalajara ⇄ Nogales**: Guadalajara–Mazatlán 534 km (8.9 h) · Mazatlán–Hermosillo
   897 km (14.9 h) · Hermosillo–Nogales 270 km (4.5 h).
@@ -566,8 +669,8 @@ Detalle por tramo (ida):
   36 km (0.6 h).
 
 Además, el jugador puede crear trenes nuevos eligiendo estaciones en el mapa (*＋ Nuevo
-tren*). Los servicios no llevan nombre de empresa: los corredores son reales, los
-operadores no aparecen en el juego.
+tren*). Los trenes del jugador son del Estado y no llevan nombre de empresa; las vías por
+donde pasan sí dicen de quién son (ver [Dueños](#dueños)).
 
 ---
 
@@ -767,7 +870,11 @@ la cámara del tablero se queda esperándolo en la salida.
 | Largo de un tren | 1.8 km (unos 100 carros); en pantalla nunca menos de 18 px |
 | Cómo se elige la ruta | La más rápida en tiempo, no la más corta (algoritmo de Dijkstra) |
 | Servicio | Ida y vuelta entre sus paradas, sin fin: A → B → C → B → A… |
-| Velocidad comercial resultante | ~44 km/h promedio contando las esperas (medida en 500 h simuladas con los 8 servicios) |
+| Velocidad comercial resultante | ~42 km/h promedio contando las esperas y la saturación (medida en 500 h simuladas con los 8 servicios) |
+| Vías fuera de operación | Sin trenes ni estaciones; la ruta no las usa |
+| Capacidad de una vía | 16 trenes al día en vía sencilla, 30 con control centralizado, 75 en vía doble |
+| Uso de una vía | (trenes privados + trenes del jugador al día) ÷ capacidad |
+| Saturación | Hasta 60 % de uso, velocidad completa; 60 % de la velocidad al 100 % de uso; 30 % al 150 %; nunca menos de 25 % |
 
 Las velocidades son promedios de marcha de un tren de carga, no velocidades máximas. Elegir
 la ruta por tiempo hace que un tren prefiera una vía primaria aunque un ramal sea más corto,
@@ -814,6 +921,23 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
   trazos, fechas y longitudes de esas obras se documentarán aquí cuando se diseñe la mecánica
   de construcción. Los dos tramos trazados a mano (Cuyutlán–Manzanillo y el ramal de
   Altamira) son anteriores a 2018, así que respetan la regla.
+- **Las vías originales siguen siendo privadas; las que construye el jugador son del
+  Estado.** *(20 nov 2026.)* Así está pasando en la realidad: las líneas nuevas de pasajeros
+  van paralelas a las de carga concesionadas, y las opera el Estado. Con las estatales el
+  Estado gana más; de las privadas solo cobra impuestos y derechos. Las privadas tienen dos
+  razones de ser: dan impuestos y dan el servicio de transporte a los polos y a los puertos.
+- **Las privadas tienen su propio tráfico, y los trenes del jugador pueden usarlas pagando.**
+  *(20 nov 2026.)* Los trenes de las concesionarias no los controla el jugador, pero llenan la
+  vía. Usar vía ajena cuesta: la ley dice que el que pide pasar le paga al dueño (derecho de
+  paso, reforma del DOF del 16 de julio de 2025). El cobro entrará junto con el dinero.
+- **Capacidad por tramo, no escapes.** *(20 nov 2026.)* Cada vía aguanta cierto número de
+  trenes al día; pasado eso, todos van más lento y la vía se pinta de rojo. Es una
+  abstracción: no se ve al tren esperando en el escape, pero se siente cuándo un corredor se
+  satura. Se puede convertir después en escapes de verdad sin tirar nada.
+- **Las vías muertas se ven apagadas y rehabilitarlas es obra del Estado.** *(20 nov 2026.)*
+- **Dueños por OpenStreetMap**, corregido a 2018 y cotejado con el anuario oficial.
+  *(20 nov 2026.)* El gobierno publica la red con su concesionario, pero su servidor no
+  permite la descarga automática; OpenStreetMap cuadra con los km oficiales.
 - **El jugador es el Estado.** *(19 nov 2026.)* Tiene un presupuesto que debe usar
   sabiamente. Construir cuesta tiempo y dinero, y lo que se mide no es solo el dinero: también
   los **empleos generados**, que son de valor para el jugador.
@@ -849,11 +973,15 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
 - **Rutas calculadas, no dibujadas.** Un servicio solo define sus paradas; el camino lo da
   la red. Si la red cambia (por ejemplo, porque el jugador construye una vía), las rutas
   cambian solas.
-- **Sin nombres de empresas.** Los corredores son reales; los operadores no aparecen.
+- **Los trenes del jugador no llevan nombre de empresa; las vías sí dicen de quién son.**
+  *(20 nov 2026; antes no aparecía ninguna empresa.)* Los trenes son del Estado. Las vías
+  dicen su dueño porque eso decide qué gana el Estado y cuánto le cuesta pasar.
 - **El color significa algo.** Lo marítimo es cian (cada barco tiene su propio tono frío), lo
   ferroviario es ámbar (cada tren tiene su propio tono cálido), las ciudades son tinta clara y
   los Polos del Bienestar, rosa guinda (el color del programa, aclarado para leerse sobre el
-  mar oscuro), punteados mientras no se construyan.
+  mar oscuro), punteados mientras no se construyan. Coloreada por dueño, la vía del Estado es
+  blanca (es la del jugador) y cada concesionaria tiene su tono; coloreada por uso, verde,
+  ámbar y rojo.
 - **Las estaciones llegan hasta 15 km.** Más lejos, el sitio no tiene servicio de tren y su
   ficha dice a cuántos km queda la vía.
 
@@ -862,6 +990,27 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
 ## 12. Bitácora de correcciones a los datos
 
 Todo lo que se cambió respecto a las fuentes, y por qué.
+
+### 20 de noviembre de 2026
+
+- **Dueño de cada tramo.** OpenStreetMap describe 2026; se corrigió a 2018:
+  - Coatzacoalcos–Medias Aguas (líneas Z, ZA y FA) era de Ferrosur; pasó al Ferrocarril del
+    Istmo por decreto (DOF del 19 de mayo de 2023). En el juego queda dentro del tramo largo
+    Mérida–Medias Aguas, que es del Istmo: sus primeros ~95 km eran de Ferrosur en 2018.
+  - Puebla–Oaxaca al sur de Tehuacán (línea E) pasó de Ferrosur al Istmo el 23 de febrero de
+    2018.
+  - Chiapas–Mayab: Genesee & Wyoming dejó la concesión en 2007 y desde entonces la opera el
+    Ferrocarril del Istmo; su título se modificó en el DOF del 23 de febrero de 2018 (Cuenta
+    Pública 2022 del FIT). Hoy OpenStreetMap la marca abandonada o reemplazada por el Tren
+    Maya, pero en 2018 funcionaba.
+- **3,590 km fuera de operación.** Las vías que OpenStreetMap marca abandonadas o en desuso y
+  que no son de las líneas que se sabe que funcionaban en 2018. Incluye 26 km cerca de
+  Saltillo (tramos 69 y 70 del archivo) que no casan con ninguna vía de OpenStreetMap.
+- **Cuernavaca pierde su estación**: la única vía que le pasa cerca, México–Cuernavaca–Iguala,
+  está fuera de operación.
+- **Estimado, no dato:** el tráfico de la troncal Monterrey–Ciudad de México (14 trenes al
+  día) y la capacidad de 30 de los corredores de Nuevo Laredo y Piedras Negras. Ver
+  [Tráfico y capacidad](#tráfico-y-capacidad).
 
 ### 19 de noviembre de 2026
 
@@ -972,6 +1121,17 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Polo del Bienestar**: parque industrial declarado por el gobierno federal en el DOF; en el
   juego, un sitio por construir.
 - **Declaratoria**: el acuerdo publicado en el DOF que crea un polo y delimita su terreno.
+- **Concesión**: el título con el que el gobierno le dio a una empresa una línea de
+  ferrocarril para operarla (casi toda la red, desde 1997). La vía sigue siendo de la nación;
+  la empresa la opera y paga un derecho por usarla.
+- **Derecho de paso**: el permiso para que los trenes de una empresa circulen por la vía de
+  otra, pagándole.
+- **Capacidad**: cuántos trenes al día caben en una vía.
+- **Uso**: los trenes que de verdad pasan por una vía al día, entre su capacidad. Pasado el
+  60 %, los trenes empiezan a esperarse.
+- **Corredor**: una ruta de mucho tráfico (por ejemplo, Nuevo Laredo–Monterrey) cuyas vías
+  llevan más trenes que el promedio de su empresa.
+- **Fuera de operación**: vía que sigue en el mapa pero no tenía trenes en 2018.
 - **Cuadrilla**: un equipo de obra. Más cuadrillas en un polo lo terminan antes y cuestan más.
 - **Ocupación**: qué tanto de un polo operando ya tienen las empresas; da los empleos
   permanentes.

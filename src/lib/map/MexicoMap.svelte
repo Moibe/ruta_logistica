@@ -8,6 +8,8 @@
   import type { LonLat } from '$lib/domain/geo';
   import { CLASES_BARCO, fueraDelMapa } from '$lib/domain/barcos';
   import { kmTravesia } from '$lib/domain/mar';
+  import { CAPACIDAD, DUEÑOS, type Dueño } from '$lib/domain/red';
+  import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
   import { esperaTotal, piernasDelRecorrido, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
   import {
     CIUDAD_DEL_PUERTO,
@@ -56,6 +58,33 @@
   /** The Polos del Bienestar's colour: a light guinda, the programme's own hue made to read on the dark sea. */
   const POLO = '#f472b6';
   const POLO_CLARO = '#ffe4f1';
+
+  /**
+   * Track coloured by who runs it. The State's own railways are ink-white —
+   * they are the player's; the concessionaires each get a hue of their own,
+   * none of them the sea's cyan or the polos' rose.
+   */
+  const COLOR_DUEÑO: Record<Dueño, string> = {
+    FXE: '#f59e0b',
+    KCSM: '#a78bfa',
+    FSRR: '#4ade80',
+    LCD: '#f87171',
+    FTVM: '#94a3b8',
+    FIT: '#f4f1de',
+    ADMICARGA: '#f4f1de',
+  };
+  const COLOR_SIN_DUEÑO = '#64748b';
+  /** Track coloured by use: room to spare, busy (trains slow down), over capacity. */
+  const COLOR_USO: Record<NivelUso, string> = { holgada: '#4ade80', cargada: '#fbbf24', saturada: '#f87171' };
+  /** Track out of service since before 2018: there, but dead. */
+  const VIA_MUERTA = 'rgba(138, 164, 194, 0.3)';
+
+  type ModoVias = 'clase' | 'dueño' | 'uso';
+  const MODOS_VIAS: { id: ModoVias; label: string }[] = [
+    { id: 'clase', label: 'Clase' },
+    { id: 'dueño', label: 'Dueño' },
+    { id: 'uso', label: 'Uso' },
+  ];
 
   /**
    * INEGI's Lambert conformal conic for the whole country (standard parallels
@@ -143,6 +172,8 @@
 
   type Layers = { estados: boolean; vias: boolean; puertos: boolean; ciudades: boolean; polos: boolean };
   let layers = $state<Layers>({ estados: true, vias: true, puertos: true, ciudades: true, polos: true });
+  /** What the track's colour says: its class (the default), its owner, or how full it is. */
+  let modoVias = $state<ModoVias>('clase');
 
   type Target =
     | { kind: 'unidad'; unidad: Unidad }
@@ -150,6 +181,7 @@
     | { kind: 'puerto'; puerto: Puerto }
     | { kind: 'ciudad'; ciudad: Ciudad }
     | { kind: 'polo'; polo: Polo }
+    | { kind: 'via'; base: number }
     | { kind: 'estado'; estado: EstadoProps };
 
   let host = $state.raw<HTMLDivElement>();
@@ -200,6 +232,10 @@
   /** Track, by class; baked from the simulation's network. */
   let viaPrimaria: Path2D | null = null;
   let viaSecundaria: Path2D | null = null;
+  /** Each line of the network (`Via.base`), for colouring by owner or use and for hovering. */
+  let viaPaths: { path: Path2D; bounds: [[number, number], [number, number]]; primaria: boolean; operando: boolean }[] = [];
+  /** Track out of service, drawn dimmed in every mode. */
+  let viaMuerta: Path2D | null = null;
   /** The selected vehicle's route (one direction of a line, a ship's whole loop), baked on selection. */
   let rutaSel: { id: string; path: Path2D } | null = null;
   /** The Panama Canal, baked from the sea lanes' data. */
@@ -316,10 +352,20 @@
     if (!path || !projection || !red) return;
     const lineas = (clase: 'primaria' | 'secundaria'): MultiLineString => ({
       type: 'MultiLineString',
-      coordinates: red.tramos.filter((t) => t.clase === clase).map((t) => t.puntos),
+      coordinates: red.tramos.filter((t) => t.operando && t.clase === clase).map((t) => t.puntos),
     });
     viaPrimaria = new Path2D(path(lineas('primaria')) ?? '');
     viaSecundaria = new Path2D(path(lineas('secundaria')) ?? '');
+    viaMuerta = new Path2D(
+      path({ type: 'MultiLineString', coordinates: red.tramos.filter((t) => !t.operando).map((t) => t.puntos) }) ?? ''
+    );
+    const piezas = red.vias.map(() => [] as LonLat[][]);
+    for (const t of red.tramos) piezas[t.base].push(t.puntos);
+    viaPaths = red.vias.map((v, i) => {
+      const g: MultiLineString = { type: 'MultiLineString', coordinates: piezas[i] };
+      const primera = red.tramos[i];
+      return { path: new Path2D(path!(g) ?? ''), bounds: path!.bounds(g), primaria: primera.clase === 'primaria', operando: v.operando };
+    });
     estacionPts = [];
     for (const e of red.estaciones.values()) {
       const s = sitioLonLat(e.sitio);
@@ -678,12 +724,38 @@
         ctx.stroke(viaSecundaria);
         ctx.restore();
       }
-      ctx.strokeStyle = 'rgba(255, 209, 102, 0.36)';
-      ctx.lineWidth = 0.8 / k;
-      ctx.stroke(viaSecundaria);
-      ctx.strokeStyle = 'rgba(255, 209, 102, 0.72)';
-      ctx.lineWidth = 1.15 / k;
-      ctx.stroke(viaPrimaria);
+      if (viaMuerta) {
+        ctx.save();
+        ctx.setLineDash([2.5 / k, 2.5 / k]);
+        ctx.strokeStyle = VIA_MUERTA;
+        ctx.lineWidth = 0.8 / k;
+        ctx.stroke(viaMuerta);
+        ctx.restore();
+      }
+      if (modoVias === 'clase') {
+        ctx.strokeStyle = 'rgba(255, 209, 102, 0.36)';
+        ctx.lineWidth = 0.8 / k;
+        ctx.stroke(viaSecundaria);
+        ctx.strokeStyle = 'rgba(255, 209, 102, 0.72)';
+        ctx.lineWidth = 1.15 / k;
+        ctx.stroke(viaPrimaria);
+      } else if (sim.red) {
+        // One stroke per line, in its owner's colour or its use's.
+        sim.red.vias.forEach((v, i) => {
+          const vp = viaPaths[i];
+          if (!vp || !v.operando) return;
+          ctx.strokeStyle =
+            modoVias === 'dueño'
+              ? v.dueño
+                ? COLOR_DUEÑO[v.dueño]
+                : COLOR_SIN_DUEÑO
+              : COLOR_USO[nivelUso(sim.uso(i)?.uso ?? 0)];
+          ctx.globalAlpha = vp.primaria ? 0.9 : 0.6;
+          ctx.lineWidth = (vp.primaria ? 1.5 : 1) / k;
+          ctx.stroke(vp.path);
+        });
+        ctx.globalAlpha = 1;
+      }
     }
 
     // The Panama Canal: a cyan channel across the isthmus, the one place
@@ -769,6 +841,22 @@
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.drawImage(capa, Math.round((dx - MARGEN) * dpr), Math.round((dy - MARGEN) * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    // The hovered rail line, lit along its whole length.
+    if (hovered?.kind === 'via' && viaPaths[hovered.base]) {
+      ctx.save();
+      ctx.translate(transform.x, transform.y);
+      ctx.scale(k, k);
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+      ctx.lineWidth = 7 / k;
+      ctx.stroke(viaPaths[hovered.base].path);
+      ctx.strokeStyle = 'rgba(255, 244, 214, 0.95)';
+      ctx.lineWidth = 1.8 / k;
+      ctx.stroke(viaPaths[hovered.base].path);
+      ctx.restore();
     }
 
     // ---- sites & labels, in screen space (crisp at any zoom) --------------
@@ -1453,12 +1541,22 @@
       });
     }
     if (best || tablero.trazando) return best;
-    if (!baked) return null;
     hitCtx ??= document.createElement('canvas').getContext('2d');
     if (!hitCtx) return null;
     // Identity transform + a point in path space = test against the un-zoomed path.
     const px = transform.invertX(mx);
     const py = transform.invertY(my);
+    // A rail line under the pointer (within a few screen px of it).
+    if (layers.vias && viaPaths.length) {
+      const margen = 5 / transform.k;
+      hitCtx.lineWidth = 2 * margen;
+      for (let i = 0; i < viaPaths.length; i++) {
+        const [[x0, y0], [x1, y1]] = viaPaths[i].bounds;
+        if (px < x0 - margen || px > x1 + margen || py < y0 - margen || py > y1 + margen) continue;
+        if (hitCtx.isPointInStroke(viaPaths[i].path, px, py)) return { kind: 'via', base: i };
+      }
+    }
+    if (!baked) return null;
     for (const e of baked.estados) {
       const [[x0, y0], [x1, y1]] = e.bounds;
       if (px < x0 || px > x1 || py < y0 || py > y1) continue;
@@ -1480,7 +1578,9 @@
             ? `ciudad:${t.ciudad.id}`
             : t.kind === 'polo'
               ? `polo:${t.polo.id}`
-              : `estado:${t.estado.clave}`;
+              : t.kind === 'via'
+                ? `via:${t.base}`
+                : `estado:${t.estado.clave}`;
 
   /** The site key of a target, if it is a site. */
   const sitioDe = (t: Target | null): string | null =>
@@ -1544,6 +1644,8 @@
       sim.seleccionar(null);
       tablero.poloSel = target.polo.id;
     }
+    // A rail line only shows its card on hover.
+    if (target.kind === 'via') return;
     if (target.kind === 'estado') {
       const e = baked?.estados.find((x) => x.props.clave === target.estado.clave);
       if (e) flyToBounds(e.bounds);
@@ -1667,9 +1769,16 @@
     // selected train's route (hidden while picking stops).
     layers.estados;
     layers.vias;
+    modoVias;
     sim.seleccion;
     tablero.trazando;
     ensuciaCapa();
+  });
+
+  $effect(() => {
+    // The fleet changed: line use changed with it.
+    sim.trenesPorVia;
+    if (untrack(() => modoVias) === 'uso') ensuciaCapa();
   });
 
   $effect(() => {
@@ -1775,9 +1884,11 @@
     return `Clic: ${que} ${n + 1} · ${fmtKm(tablero.kmPrevia)} · ${duracion(tablero.horasPrevia)}${barco ? ' por vuelta' : ''}`;
   });
 
+  const fmtTrenes = (n: number) => (n < 10 ? n.toFixed(1) : String(Math.round(n)));
+
   const kmDeVia = $derived.by(() => {
     if (sim.estado !== 'lista' || !sim.red) return 0;
-    return Math.round(sim.red.tramos.reduce((s, t) => s + t.km, 0));
+    return Math.round(sim.red.tramos.reduce((s, t) => s + (t.operando ? t.km : 0), 0));
   });
 </script>
 
@@ -1848,6 +1959,33 @@
       </span>
       {@const rail = lineaTrazado || servicio(`ciudad:${hovered.ciudad.id}`)}
       {#if rail}<span class="tip-rail">{rail}</span>{/if}
+    {:else if hovered.kind === 'via'}
+      {@const v = sim.red?.vias[hovered.base]}
+      {@const u = sim.uso(hovered.base)}
+      {#if v}
+        {@const d = v.dueño ? DUEÑOS[v.dueño] : null}
+        <span class="label tip-kind" style:color={v.dueño ? COLOR_DUEÑO[v.dueño] : COLOR_SIN_DUEÑO}>
+          Vía {d ? (d.tipo === 'estatal' ? 'del Estado' : d.tipo === 'mixta' ? 'mixta' : 'concesionada') : 'sin dueño identificado'}
+          {#if !v.operando}· fuera de operación{/if}
+        </span>
+        <strong>{d?.nombre ?? 'Sin dueño identificado'}</strong>
+        <span class="tip-sub">
+          {fmtKm(v.km)} · {v.doble ? 'vía doble' : v.capacidad > CAPACIDAD.sencilla ? 'vía sencilla, control centralizado' : 'vía sencilla'}
+          {#if v.corredor}· corredor {v.corredor}{/if}
+        </span>
+        {#if !v.operando}
+          <span class="tip-sub">Sin trenes desde antes de 2018. El Estado puede rehabilitarla.</span>
+        {:else if u}
+          <span class="tip-rail">
+            {fmtTrenes(u.privados)} privados{u.jugador > 0.05 ? ` + ${fmtTrenes(u.jugador)} tuyos` : ''} de {u.capacidad} al día · {Math.round(u.uso * 100)} %
+          </span>
+          {#if factorVelocidad(u.uso) < 0.995}
+            <span class="tip-sub tip-lento">
+              {nivelUso(u.uso) === 'saturada' ? 'Saturada' : 'Cargada'}: los trenes van {Math.round((1 - factorVelocidad(u.uso)) * 100)} % más lento
+            </span>
+          {/if}
+        {/if}
+      {/if}
     {:else}
       <span class="label tip-kind">Estado · {hovered.estado.clave}</span>
       <strong>{hovered.estado.nombre}</strong>
@@ -1866,11 +2004,37 @@
     <span class="stat"><b class="mono">{PUERTOS.length}</b> puertos</span>
     <span class="stat"><b class="mono">{CIUDADES.length}</b> ciudades</span>
     <span class="stat"><b class="mono">{POLOS.length}</b> polos</span>
-    <span class="stat"><b class="mono">{fmt.format(kmDeVia)}</b> km de vía</span>
+    <span class="stat"><b class="mono">{fmt.format(kmDeVia)}</b> km de vía en servicio</span>
     <span class="stat"><b class="mono">{sim.trenes.length}</b> trenes</span>
     <span class="stat"><b class="mono">{sim.barcos.length}</b> barcos</span>
   {/if}
 </div>
+
+{#if layers.vias}
+  <div class="vias panel">
+    <div class="modos" role="group" aria-label="Color de las vías">
+      {#each MODOS_VIAS as m (m.id)}
+        <button class="modo" aria-pressed={modoVias === m.id} onclick={() => (modoVias = m.id)}>{m.label}</button>
+      {/each}
+    </div>
+    <ul class="leyenda">
+      {#if modoVias === 'dueño'}
+        {#each Object.entries(DUEÑOS) as [id, d] (id)}
+          {#if id !== 'ADMICARGA'}
+            <li>
+              <span class="raya" style:background={COLOR_DUEÑO[id as Dueño]}></span>{id === 'FIT' ? 'Del Estado' : d.nombre}
+            </li>
+          {/if}
+        {/each}
+      {:else}
+        <li><span class="raya" style:background={COLOR_USO.holgada}></span>Holgada · hasta 60 %</li>
+        <li><span class="raya" style:background={COLOR_USO.cargada}></span>Cargada · los trenes frenan</li>
+        <li><span class="raya" style:background={COLOR_USO.saturada}></span>Saturada · más de lo que cabe</li>
+      {/if}
+      <li><span class="raya muerta"></span>Fuera de operación</li>
+    </ul>
+  </div>
+{/if}
 
 <div class="tools panel">
   <button class="ctl" aria-pressed={layers.estados} onclick={() => (layers.estados = !layers.estados)}>
@@ -2054,6 +2218,79 @@
     height: 7px;
     border-radius: 50%;
     background: var(--ink);
+  }
+
+  /* ---- track colour switch and legend, above the tools ------------------ */
+
+  .vias {
+    position: fixed;
+    right: 1rem;
+    bottom: 4.4rem;
+    z-index: 30;
+    width: 13.5rem;
+    padding: 0.55rem 0.65rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .modos {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.2rem;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line);
+  }
+
+  .modo {
+    flex: 1;
+    padding: 0.25rem 0;
+    border: 0;
+    border-radius: 7px;
+    background: none;
+    font-size: 0.68rem;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .modo:hover {
+    color: var(--ink);
+  }
+
+  .modo[aria-pressed='true'] {
+    background: rgba(255, 209, 102, 0.14);
+    color: #fff1cc;
+  }
+
+  .leyenda {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0 0.15rem;
+    display: grid;
+    gap: 0.28rem;
+    color: var(--muted);
+  }
+
+  .leyenda li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .raya {
+    flex: none;
+    width: 16px;
+    height: 3px;
+    border-radius: 2px;
+  }
+
+  .raya.muerta {
+    height: 0;
+    border-top: 2px dashed rgba(138, 164, 194, 0.55);
+    border-radius: 0;
+  }
+
+  .tip-lento {
+    color: #fca5a5;
   }
 
   .sep {

@@ -1,5 +1,6 @@
 import type { LonLat } from './geo';
 import type { Sitio } from './sitios';
+import VIAS from './datos/vias.json';
 import { acumulado, crearTrayecto, lerp, type Trayecto } from './trayecto';
 
 /**
@@ -11,6 +12,11 @@ import { acumulado, crearTrayecto, lerp, type Trayecto } from './trayecto';
  * a tramo is the polyline between two nodes. On top of that, `construirRed`
  * anchors a station to every site within reach of the track — splitting the
  * tramo there if needed — so a route always runs node to node.
+ *
+ * Every tramo of the source graph is also a `Via`: who owns it, whether it was
+ * running in 2018, how many private trains use it and how many fit
+ * (`datos/vias.json`). Track out of service carries no trains and anchors no
+ * station; it stays on the map, dimmed, until the State rehabilitates it.
  */
 
 // ---- shapes ----------------------------------------------------------------
@@ -39,8 +45,59 @@ export const ESTACION_MAX_KM = 15;
 /** Closer than this to a node, a station uses the node instead of splitting the tramo. */
 const SNAP_NODO_KM = 0.25;
 
+/** Who runs a line (`datos/vias.json`): the concessionaires and the State's own railways. */
+export type Dueño = 'FXE' | 'KCSM' | 'FSRR' | 'LCD' | 'FTVM' | 'FIT' | 'ADMICARGA';
+export type TipoDueño = 'privada' | 'mixta' | 'estatal';
+export type InfoDueño = { nombre: string; largo: string; tipo: TipoDueño; trenesDia: number };
+export const DUEÑOS = VIAS.dueños as Record<Dueño, InfoDueño>;
+
+/** Trains a day that fit on a line, by how it is run (`datos/vias.json`, `capacidad`). */
+export const CAPACIDAD = {
+  sencilla: VIAS.capacidad.sencilla,
+  centralizada: VIAS.capacidad.centralizada,
+  doble: VIAS.capacidad.doble,
+};
+
+type Corredor = { nombre: string; desde: string; hasta: string; trenesDia: number; capacidad?: string };
+const CORREDORES = VIAS.corredores as Corredor[];
+
+/**
+ * A line of the source graph (one per `RedJson` tramo, same index): the unit
+ * that has an owner, traffic and capacity. A station can split it into
+ * several `Tramo`s, all with the same `base`.
+ */
+export type Via = {
+  base: number;
+  dueño: Dueño | null;
+  operando: boolean;
+  doble: boolean;
+  km: number;
+  /** Private trains a day, both directions: the owner's average, or its corridor's figure. */
+  privados: number;
+  /** Trains a day that fit. */
+  capacidad: number;
+  /** The corridor whose figure it carries, if any. */
+  corredor: string | null;
+};
+
+type FilaVia = { a: number[]; b: number[]; dueño: string | null; operando: boolean };
+const FILAS = VIAS.tramos as FilaVia[];
+
+/** Same point to within ~20 m (the rows store 4 decimals). */
+const cerca = (p: number[], lon: number, lat: number) => Math.abs(p[0] - lon) < 2e-4 && Math.abs(p[1] - lat) < 2e-4;
+
+/** The row for a source tramo: same index when the data hasn't moved, else whichever row has its two ends. */
+function filaDe(t: RedJson['tramos'][number], base: number): FilaVia | undefined {
+  const n = t.coords.length;
+  const es = (f: FilaVia) => cerca(f.a, t.coords[0], t.coords[1]) && cerca(f.b, t.coords[n - 2], t.coords[n - 1]);
+  return FILAS[base] && es(FILAS[base]) ? FILAS[base] : FILAS.find(es);
+}
+
 export type Tramo = {
   id: number;
+  /** The source line it is part of (`Red.vias`). */
+  base: number;
+  operando: boolean;
   a: number;
   b: number;
   clase: Clase;
@@ -62,7 +119,9 @@ export type Estacion = {
 export type Red = {
   nodos: LonLat[];
   tramos: Tramo[];
-  /** Per node, the ids of the tramos that touch it. */
+  /** Per source line (`Tramo.base`): owner, state, traffic and capacity. */
+  vias: Via[];
+  /** Per node, the ids of the tramos in service that touch it. */
   ady: number[][];
   /** Per node, the id of its connected piece of network. */
   componente: number[];
@@ -98,9 +157,37 @@ export const claseDe = (rango: number): Clase => (rango <= RANGO_MAX_PRIMARIA ? 
 
 // ---- building ------------------------------------------------------------------------
 
-function nuevoTramo(id: number, a: number, b: number, clase: Clase, doble: boolean, puntos: LonLat[]): Tramo {
+function nuevoTramo(
+  id: number,
+  base: number,
+  operando: boolean,
+  a: number,
+  b: number,
+  clase: Clase,
+  doble: boolean,
+  puntos: LonLat[]
+): Tramo {
   const acum = acumulado(puntos);
-  return { id, a, b, clase, doble, puntos, acum, km: acum[acum.length - 1] };
+  return { id, base, operando, a, b, clase, doble, puntos, acum, km: acum[acum.length - 1] };
+}
+
+/** The line's owner and state from `vias.json`, matched by its two ends. */
+function viaDe(t: RedJson['tramos'][number], base: number): Via {
+  const fila = filaDe(t, base);
+  if (!fila) console.warn(`vias.json no tiene el tramo ${base}; se toma como en operación y sin dueño`);
+  const dueño = (fila?.dueño ?? null) as Dueño | null;
+  const operando = fila?.operando ?? true;
+  const doble = t.doble === 1;
+  return {
+    base,
+    dueño,
+    operando,
+    doble,
+    km: t.km,
+    privados: operando && dueño ? DUEÑOS[dueño].trenesDia : 0,
+    capacidad: doble ? CAPACIDAD.doble : CAPACIDAD.sencilla,
+    corredor: null,
+  };
 }
 
 /**
@@ -110,10 +197,11 @@ function nuevoTramo(id: number, a: number, b: number, clase: Clase, doble: boole
  */
 export function construirRed(json: RedJson, sitios: readonly Sitio[], polosEnServicio: ReadonlySet<string> = new Set()): Red {
   const nodos: LonLat[] = json.nodos.map(([lon, lat]) => [lon, lat]);
+  const vias = json.tramos.map(viaDe);
   const tramos: Tramo[] = json.tramos.map((t, id) => {
     const puntos: LonLat[] = [];
     for (let i = 0; i < t.coords.length; i += 2) puntos.push([t.coords[i], t.coords[i + 1]]);
-    return nuevoTramo(id, t.a, t.b, claseDe(t.rango), t.doble === 1, puntos);
+    return nuevoTramo(id, id, vias[id].operando, t.a, t.b, claseDe(t.rango), t.doble === 1, puntos);
   });
 
   const estaciones = new Map<string, Estacion>();
@@ -122,9 +210,10 @@ export function construirRed(json: RedJson, sitios: readonly Sitio[], polosEnSer
 
   // Gateways are out at sea and never get a station.
   for (const s of sitios.filter((x) => x.tipo !== 'puerta')) {
-    // Nearest point on the whole network.
+    // Nearest point on the track in service: dead track serves nobody.
     let best = { km: Infinity, tramo: -1, seg: 0, u: 0 };
     for (const t of tramos) {
+      if (!t.operando) continue;
       for (let i = 0; i < t.puntos.length - 1; i++) {
         const hit = sobreSegmento(s.lonLat, t.puntos[i], t.puntos[i + 1]);
         if (hit.km < best.km) best = { km: hit.km, tramo: t.id, seg: i, u: hit.u };
@@ -152,14 +241,15 @@ export function construirRed(json: RedJson, sitios: readonly Sitio[], polosEnSer
       nodos.push(p);
       const antes = [...t.puntos.slice(0, best.seg + 1), p];
       const despues = [p, ...t.puntos.slice(best.seg + 1)];
-      tramos[t.id] = nuevoTramo(t.id, t.a, nodo, t.clase, t.doble, antes);
-      tramos.push(nuevoTramo(tramos.length, nodo, t.b, t.clase, t.doble, despues));
+      tramos[t.id] = nuevoTramo(t.id, t.base, t.operando, t.a, nodo, t.clase, t.doble, antes);
+      tramos.push(nuevoTramo(tramos.length, t.base, t.operando, nodo, t.b, t.clase, t.doble, despues));
     }
     estaciones.set(s.clave, { sitio: s.clave, nodo, distanciaKm: best.km });
   }
 
   const ady: number[][] = nodos.map(() => []);
   for (const t of tramos) {
+    if (!t.operando) continue;
     ady[t.a].push(t.id);
     if (t.b !== t.a) ady[t.b].push(t.id);
   }
@@ -184,7 +274,35 @@ export function construirRed(json: RedJson, sitios: readonly Sitio[], polosEnSer
     c++;
   }
 
-  return { nodos, tramos, ady, componente, estaciones, sinEstacion, aLaVia };
+  const red: Red = { nodos, tramos, vias, ady, componente, estaciones, sinEstacion, aLaVia };
+  aplicarCorredores(red);
+  return red;
+}
+
+/**
+ * The busy corridors carry more than their owner's average: every line on the
+ * route between the corridor's two ends takes its figure, and the ones that
+ * move more than single track allows get centralised traffic control (they
+ * couldn't carry it otherwise).
+ */
+function aplicarCorredores(red: Red) {
+  for (const c of CORREDORES) {
+    const a = red.estaciones.get(c.desde);
+    const b = red.estaciones.get(c.hasta);
+    const t = a && b ? ruta(red, a.nodo, b.nodo) : null;
+    if (!t?.vias) {
+      console.warn(`corredor sin ruta: ${c.nombre}`);
+      continue;
+    }
+    for (const base of new Set(t.vias)) {
+      const v = red.vias[base];
+      if (c.trenesDia > v.privados) {
+        v.privados = c.trenesDia;
+        v.corredor = c.nombre;
+      }
+      if (c.capacidad === 'centralizada' && !v.doble) v.capacidad = Math.max(v.capacidad, CAPACIDAD.centralizada);
+    }
+  }
 }
 
 // ---- routing ------------------------------------------------------------------------------
@@ -266,13 +384,20 @@ export function ruta(red: Red, desde: number, hasta: number): Trayecto | null {
 
   const puntos: LonLat[] = [];
   const vel: number[] = [];
+  const vias: number[] = [];
   for (const { tramo, alReves } of pasos) {
     const pts = alReves ? [...tramo.puntos].reverse() : tramo.puntos;
     const v = VELOCIDAD[tramo.clase];
     for (let i = puntos.length ? 1 : 0; i < pts.length; i++) {
-      if (puntos.length) vel.push(v);
+      if (puntos.length) {
+        vel.push(v);
+        vias.push(tramo.base);
+      }
       puntos.push(pts[i]);
     }
   }
-  return crearTrayecto(puntos, vel);
+  const t = crearTrayecto(puntos, vel);
+  t.vias = vias;
+  t.velLibre = [...vel];
+  return t;
 }
