@@ -248,8 +248,27 @@ son un solo lugar: la etiqueta es la del puerto y su ficha muestra la población
 No todos los aeropuertos son de carga: casi todos llevan algo en la bodega de los aviones de
 pasajeros, pero la carga se concentra en pocos. Los cinco primeros mueven el 80 % del país. El
 tablero tiene los diez que más movieron en 2025, con su capa propia (*Aeropuertos*): un avión del
-tamaño de sus toneladas, y su ficha al pasar el cursor. Todavía no son paradas: lo serán como
-puertos secos cuando haya carga.
+tamaño de sus toneladas, y su ficha al pasar el cursor.
+
+**Puertos secos.** Un aeropuerto a 15 km o menos de una vía en servicio tiene estación, como una
+ciudad, y un tren puede hacer parada en él: es donde la carga pasará del avión al tren. Con la red
+de 2018, nueve de los diez la tienen:
+
+| Aeropuerto | Vía más cercana |
+| --- | ---: |
+| Mérida | 0.4 km |
+| AIFA | 0.9 km |
+| Querétaro | 1.2 km |
+| Monterrey | 1.3 km |
+| AICM | 2.2 km |
+| Tijuana | 3.0 km |
+| San Luis Potosí | 3.8 km |
+| Toluca | 4.2 km |
+| Guadalajara | 5.6 km |
+| Cancún | 132 km: sin estación |
+
+Cancún recibe estación cuando el jugador construye el Tren Maya hasta ahí, porque la red se rehace
+al terminarse una obra. Qué carga mueve cada puerto seco viene con el diseño de la carga.
 
 Toneladas de 2025 (AFAC; el país movió 1,232,808). La doméstica y la internacional solo están
 cuando la AFAC pone al aeropuerto entre los diez primeros de cada tipo, y el total de un
@@ -1486,6 +1505,8 @@ tienen fecha de corte, a la vista bajo la línea de tiempo.
 - **La partida empieza el 1 de diciembre de 2018.** *(20 nov 2026.)* El día en que empezó el
   sexenio: da un mes más de juego, y el modo Realidad arranca el mismo día (ahí se ve el anuncio
   del Tren Maya, el 16 de diciembre). Diciembre trae la doceava parte del presupuesto de 2018.
+- **Los aeropuertos, puertos secos.** *(20 nov 2026.)* Con vía cerca tienen estación y son paradas
+  de tren; la carga que pase por ellos queda para el diseño de la carga.
 - **El panel del Estado, una barra arriba.** *(20 nov 2026.)* Pedido del usuario: el presupuesto,
   la CFE, los empleos y las obras van en una fila a lo largo de la parte de arriba, del reloj al
   librito; las fichas de la derecha empiezan debajo.

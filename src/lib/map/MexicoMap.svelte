@@ -557,6 +557,7 @@
     if (tipo === 'puerto') return PUERTOS.find((p) => p.id === id)?.lonLat ?? null;
     if (tipo === 'puerta') return PUERTAS.find((p) => p.id === id)?.lonLat ?? null;
     if (tipo === 'polo') return POLOS.find((p) => p.id === id)?.lonLat ?? null;
+    if (tipo === 'aeropuerto') return AEROPUERTOS.find((a) => a.id === id)?.lonLat ?? null;
     return CIUDADES.find((c) => c.id === id)?.lonLat ?? null;
   }
 
@@ -1124,7 +1125,7 @@
     const trazaTren = trazando && tablero.pestaña === 'tren';
     const trazaBarco = trazando && tablero.pestaña === 'barco';
     const atenuado = (clave: string) =>
-      trazaTren ? !conEstacion(clave) : trazaBarco ? clave.startsWith('ciudad:') : false;
+      trazaTren ? !conEstacion(clave) : trazaBarco ? clave.startsWith('ciudad:') || clave.startsWith('aeropuerto:') : false;
 
     // Stations: a small square on the track, tied to its site by a faint
     // dashed line when the track passes at a distance.
@@ -1360,7 +1361,9 @@
         if (!onScreen(x, y)) return;
         const hot = hovered?.kind === 'aeropuerto' && hovered.aeropuerto.id === a.id;
         const s = tamañoAvion(toneladas(a, año)) * (hot ? 1.15 : 1);
-        ctx.globalAlpha = trazando ? 0.3 : 1;
+        // A dry port: with a station it's a train stop like a city; without, it fades back.
+        const clave = `aeropuerto:${a.id}`;
+        ctx.globalAlpha = atenuado(clave) ? 0.3 : 1;
         avion(ctx, x, y, s);
         ctx.fillStyle = hot ? '#eef0ff' : AEROPUERTO;
         ctx.fill();
@@ -1370,7 +1373,7 @@
         ctx.globalAlpha = 1;
         const R = s + 1.5;
         taken.push([x - R, y - R, x + R, y + R]);
-        if (trazando) return;
+        if (atenuado(clave)) return;
         labels.push({
           text: a.corto,
           spots: spotsAround(x, y, R),
@@ -1853,9 +1856,11 @@
         }
       });
     }
-    if (layers.aeropuertos && !tablero.trazando) {
+    // While laying out a train, an airport with a station is a stop; never for a ship.
+    if (layers.aeropuertos && (!tablero.trazando || tablero.pestaña === 'tren')) {
       AEROPUERTOS.forEach((a, i) => {
         if (!aeropuertoVisible(a)) return;
+        if (tablero.trazando && !sim.red?.estaciones.has(`aeropuerto:${a.id}`)) return;
         const d = Math.hypot(transform.applyX(aeropuertoPts[i][0]) - mx, transform.applyY(aeropuertoPts[i][1]) - my);
         if (d < 10 && d < bestD) {
           best = { kind: 'aeropuerto', aeropuerto: a };
@@ -1966,7 +1971,9 @@
           ? `puerta:${t.puerta.id}`
           : t?.kind === 'polo'
             ? `polo:${t.polo.id}`
-            : null;
+            : t?.kind === 'aeropuerto'
+              ? `aeropuerto:${t.aeropuerto.id}`
+              : null;
 
   function onPointerMove(event: PointerEvent) {
     if (!canvas || event.buttons) return; // no hover while dragging the map
@@ -2383,6 +2390,8 @@
       </span>
       <strong>{a.nombre} · {a.iata}</strong>
       <span class="tip-sub">{estadoNombre.get(a.estado) ?? a.estado}</span>
+      {@const rail = lineaTrazado || servicio(`aeropuerto:${a.id}`)}
+      {#if rail}<span class="tip-rail">Puerto seco · {rail}</span>{/if}
       <span class="tip-rail">
         {fmt.format(Math.round(t))} toneladas {periodo} · {((t / SERIE_AEROPUERTOS.totalPais[String(año)]) * 100).toLocaleString('es-MX', { maximumFractionDigits: 1 })} % del país
       </span>

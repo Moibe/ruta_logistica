@@ -285,7 +285,7 @@ export const CENTRO_MEXICO: LonLat = [-102.5, 23.6];
 
 // ---- one registry for every kind of site ------------------------------------
 
-export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo';
+export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo' | 'aeropuerto';
 
 /**
  * Any place on the board, whatever its kind, under one key. Ids alone clash
@@ -318,6 +318,8 @@ export const SITIOS: readonly Sitio[] = [
   // Gateways belong to no estado.
   ...PUERTAS.map((p) => ({ clave: `puerta:${p.id}`, tipo: 'puerta' as const, id: p.id, nombre: p.nombre, estado: '', lonLat: p.lonLat })),
   ...POLOS.map((p) => ({ clave: `polo:${p.id}`, tipo: 'polo' as const, id: p.id, nombre: `Polo ${p.corto}`, estado: p.estado, lonLat: p.lonLat })),
+  // Cargo airports are dry ports: within reach of the track they get a station like a city.
+  ...AEROPUERTOS.map((a) => ({ clave: `aeropuerto:${a.id}`, tipo: 'aeropuerto' as const, id: a.id, nombre: a.corto, estado: a.estado, lonLat: a.lonLat })),
 ];
 
 export function polo(clave: string): Polo | null {
