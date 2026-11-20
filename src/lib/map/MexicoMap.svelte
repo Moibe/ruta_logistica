@@ -11,6 +11,7 @@
   import { CAPACIDAD, DUEÑOS, type Dueño } from '$lib/domain/red';
   import { obraVia } from '$lib/domain/obrasVia';
   import { clavePolo, TEXTO_ETAPA } from '$lib/domain/realidad';
+  import { ADUANA_DEL_SITIO, EXPORTACIONES, SALIDAS } from '$lib/domain/exportaciones';
   import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, SUBREGIONES_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
   import { añoDe, fechaLarga as fechaDeJuego, horasDeFecha } from '$lib/domain/calendario';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
@@ -1387,6 +1388,30 @@
       });
     }
 
+    // Exits for exports: a small amber square at the corner of the site,
+    // the customs office a train can leave the country through.
+    for (const clave of SALIDAS) {
+      const tipo = clave.split(':')[0];
+      if (tipo === 'ciudad' ? !layers.ciudades : tipo === 'puerto' ? !layers.puertos : !layers.aeropuertos) continue;
+      if (tipo === 'aeropuerto' && sim.modo === 'realidad') {
+        const a = AEROPUERTOS.find((x) => `aeropuerto:${x.id}` === clave);
+        if (a && !aeropuertoVisible(a)) continue;
+      }
+      const ll = sitioLonLat(clave);
+      const p = ll && projection ? projection(ll) : null;
+      if (!p) continue;
+      const x = sx(p) + 6;
+      const y = sy(p) - 6;
+      if (!onScreen(x, y)) continue;
+      ctx.globalAlpha = atenuado(clave) ? 0.3 : 1;
+      ctx.fillStyle = 'rgba(3, 9, 18, 0.85)';
+      ctx.fillRect(x - 2.6, y - 2.6, 5.2, 5.2);
+      ctx.strokeStyle = '#fcd34d';
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(x - 2.6, y - 2.6, 5.2, 5.2);
+      ctx.globalAlpha = 1;
+    }
+
     // Gateways to the world: a ring with an arrow pointing out of the board,
     // the way the ships leave.
     if (layers.puertos) {
@@ -2341,6 +2366,24 @@
   ></canvas>
 </div>
 
+<!-- A site's customs office: what it collected, and whether exports leave through it. -->
+{#snippet aduana(clave: string)}
+  {@const ad = ADUANA_DEL_SITIO.get(clave)}
+  {@const salida = SALIDAS.has(clave)}
+  {@const ferro = EXPORTACIONES.porSalida2025[clave]}
+  {@const mias = sim.exportacion.porSalida[clave] ?? 0}
+  {#if ad}
+    <span class="tip-sub tip-aduana">
+      Aduana {ad.tipo === 'maritima' ? 'marítima' : ad.tipo} {ad.nombre} · recaudó {(ad.recaudacion2025 / 1000).toLocaleString('es-MX', { maximumFractionDigits: 1 })} mil millones en 2025
+    </span>
+  {/if}
+  {#if salida}
+    <span class="tip-sub tip-aduana">
+      Salida de exportación{ferro ? ` · ${ferro.toLocaleString('es-MX')} Mt por tren en 2025` : ''}{mias > 0 ? ` · tus trenes: ${Math.round(mias).toLocaleString('es-MX')} t` : ''}
+    </span>
+  {/if}
+{/snippet}
+
 {#if hovered && (hovered.kind !== 'estado' || !tablero.trazando)}
   <div
     class="tip panel"
@@ -2377,6 +2420,7 @@
       </span>
       {@const rail = lineaTrazado || servicio(`puerto:${hovered.puerto.id}`)}
       {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.pestaña === 'barco'}>{rail}</span>{/if}
+      {@render aduana(`puerto:${hovered.puerto.id}`)}
     {:else if hovered.kind === 'aeropuerto'}
       {@const a = hovered.aeropuerto}
       {@const año = añoAeropuerto()}
@@ -2392,6 +2436,7 @@
       <span class="tip-sub">{estadoNombre.get(a.estado) ?? a.estado}</span>
       {@const rail = lineaTrazado || servicio(`aeropuerto:${a.id}`)}
       {#if rail}<span class="tip-rail">Puerto seco · {rail}</span>{/if}
+      {@render aduana(`aeropuerto:${a.id}`)}
       <span class="tip-rail">
         {fmt.format(Math.round(t))} toneladas {periodo} · {((t / SERIE_AEROPUERTOS.totalPais[String(año)]) * 100).toLocaleString('es-MX', { maximumFractionDigits: 1 })} % del país
       </span>
@@ -2426,6 +2471,7 @@
       </span>
       {@const rail = lineaTrazado || servicio(`ciudad:${hovered.ciudad.id}`)}
       {#if rail}<span class="tip-rail">{rail}</span>{/if}
+      {@render aduana(`ciudad:${hovered.ciudad.id}`)}
     {:else if hovered.kind === 'via'}
       {@const v = sim.red?.vias[hovered.base]}
       {@const u = sim.uso(hovered.base)}
@@ -2922,6 +2968,10 @@
 
   .energia-nivel {
     color: #b7f5cf;
+  }
+
+  .tip-aduana {
+    color: #fcd34d;
   }
 
   .energia-nivel.critico {

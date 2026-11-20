@@ -8,6 +8,7 @@
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
   import { OBRAS_ENERGIA } from '$lib/domain/energia';
   import { AÑOS_AEROPUERTOS, POLOS, SERIE_AEROPUERTOS } from '$lib/domain/sitios';
+  import { EXPORTACIONES } from '$lib/domain/exportaciones';
   import { clavePolo } from '$lib/domain/realidad';
 
   /** The last year with a real figure: later years repeat it. */
@@ -66,7 +67,9 @@
     const añoCarga = Math.min(Math.max(a.año, AÑOS_AEROPUERTOS[0]), AÑOS_AEROPUERTOS[AÑOS_AEROPUERTOS.length - 1]);
     const parcial = añoCarga === SERIE_AEROPUERTOS.parcial.año;
     const carga = { año: añoCarga, t: SERIE_AEROPUERTOS.totalPais[String(añoCarga)], parcial };
-    return { ...cuenta, cfe, polos, carga, año: a.año, federal: a.federal, serie };
+    // Rail exports that year (ATTRAPI), when the yearbook has it.
+    const ferro = EXPORTACIONES.ferrocarril.exportacion[String(a.año)] ?? null;
+    return { ...cuenta, cfe, polos, carga, ferro, año: a.año, federal: a.federal, serie };
   });
 
   /** This month's payment and the year it comes from, with the sources in words. */
@@ -102,6 +105,13 @@
   });
   const hechasCfe = $derived([...sim.obrasEnergia.values()].filter((o) => o.fase === 'en-servicio').length);
 
+  /** What the player's trains have exported this game year, and in all. */
+  const exportado = $derived.by(() => {
+    sim.horas;
+    const año = añoDe(sim.horas);
+    return { año, t: sim.exportacion.porAño[String(año)] ?? 0, total: sim.exportacion.total };
+  });
+
   const obrasEnCurso = $derived(cuenta.enCurso + cuenta.viasEnObra + enObraCfe);
   const obrasDetenidas = $derived(cuenta.detenidas + cuenta.viasDetenidas);
   const obrasHechas = $derived(cuenta.operando + cuenta.viasEnServicio + hechasCfe);
@@ -129,6 +139,10 @@
       <span class="label">Polos</span>
       <span class="valor"><b class="mono">{real.polos.operando}</b> operando <span class="dim">· {real.polos.declarados} declarados</span></span>
     </div>
+    <div class="celda opcional" title="Toneladas que salieron del país por tren ese año, por fronteras y puertos (ATTRAPI)">
+      <span class="label export">Exportación por tren {real.año}</span>
+      <span class="valor">{#if real.ferro !== null}<b class="mono">{real.ferro.toLocaleString('es-MX')}</b> Mt{:else}<span class="dim">sin dato aún</span>{/if}</span>
+    </div>
     <div class="celda opcional" title={`Carga aérea de todo el país (AFAC)${real.carga.parcial ? ', de enero a septiembre' : ''}`}>
       <span class="label aereo">Carga aérea {real.carga.año}{real.carga.parcial ? '*' : ''}</span>
       <span class="valor"><b class="mono">{personas(real.carga.t)}</b> t</span>
@@ -155,6 +169,10 @@
     <div class="celda">
       <span class="label">Empleos</span>
       <span class="valor"><b class="mono">{personas(cuenta.permanentes)}</b> permanentes <span class="dim">· <b class="mono">{personas(cuenta.enObra)}</b> en obra</span></span>
+    </div>
+    <div class="celda" title={`Lo que tus trenes llevaron de un origen a una salida del país (aduana fronteriza, puerto o aeropuerto). En total: ${personas(exportado.total)} t.`}>
+      <span class="label export">Exportaciones {exportado.año}</span>
+      <span class="valor"><b class="mono">{personas(exportado.t)}</b> t</span>
     </div>
     <div class="celda opcional">
       <span class="label">Obras</span>
@@ -234,6 +252,10 @@
 
   .aereo {
     color: #c7d2fe;
+  }
+
+  .export {
+    color: #fcd34d;
   }
 
   .agotado {

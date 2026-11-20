@@ -15,7 +15,7 @@ import {
   type ObraViaEstado,
   type PresupuestoVia,
 } from '$lib/domain/obrasVia';
-import { fechaCorta, horaDelDia, horasDeHoy, mesDe } from '$lib/domain/calendario';
+import { añoDe, fechaCorta, horaDelDia, horasDeHoy, mesDe } from '$lib/domain/calendario';
 import { mensualidad, type Mensualidad } from '$lib/domain/presupuesto';
 import {
   CAJA_CFE_MES,
@@ -29,6 +29,7 @@ import {
 } from '$lib/domain/energia';
 import { clavePolo, estadoReal, type EstadoReal } from '$lib/domain/realidad';
 import { avanzar } from '$lib/domain/servicio';
+import { CARGA_POR_TREN, DIAS_EN_ESPERA, ESTADOS_EXPORTADORES, flujoDelEstado, SALIDAS } from '$lib/domain/exportaciones';
 import {
   avanzarObra,
   empleosPermanentes,
@@ -38,6 +39,8 @@ import {
   type ObraPolo,
 } from '$lib/domain/obras';
 import { POLOS, SITIOS } from '$lib/domain/sitios';
+
+const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
 import { COLORES_TREN, crearTren, ESPERA_TERMINAL_H, SERVICIOS, type Tren } from '$lib/domain/trenes';
 
 /**
@@ -129,6 +132,18 @@ class Simulacion {
   versionRed = $state(0);
   /** The camera keeps the selected vehicle centred. */
   siguiendo = $state(false);
+  /**
+   * What the player's trains have exported (`exportaciones.ts`): tonnes in all,
+   * by year, by exit and by the state it came from. Replaced on every delivery.
+   */
+  exportacion = $state.raw<{ total: number; porAño: Record<string, number>; porSalida: Record<string, number>; porEstado: Record<string, number> }>({
+    total: 0,
+    porAño: {},
+    porSalida: {},
+    porEstado: {},
+  });
+  /** Export cargo waiting at each state's stations, tonnes. */
+  #bodegas = new Map<string, number>();
   modo = $state<Modo>('juego');
   /** In Realidad, each rail work as it really stood on the date shown (`horas`). Empty in the game. */
   real = $state.raw<Map<string, EstadoReal>>(new Map());
@@ -217,6 +232,7 @@ class Simulacion {
         }
         this.trenes = trenes;
         this.barcos = barcos;
+        for (const e of ESTADOS_EXPORTADORES) this.#bodegas.set(e, flujoDelEstado(e, añoDe(this.horas)) * 24 * 7);
         this.#saturar();
         this.#cobrar();
         this.#actualizarEnergia(true);
@@ -552,8 +568,64 @@ class Simulacion {
       nuevo.espera = viejo.espera;
       nuevo.km = antes.km > 0 ? (viejo.km / antes.km) * ahora.km : 0;
       nuevo.odometro = viejo.odometro;
+      nuevo.llegadas = [];
+      nuevo.carga = viejo.carga;
+      nuevo.cargaDe = viejo.cargaDe;
+      nuevo.exportado = viejo.exportado;
       return nuevo;
     });
+  }
+
+  // ---- exports ---------------------------------------------------------------------------------
+
+  /** Each state's export cargo piles up at its stations, up to a month of it. */
+  #producir(horas: number) {
+    const año = añoDe(this.horas);
+    for (const e of ESTADOS_EXPORTADORES) {
+      const f = flujoDelEstado(e, año);
+      this.#bodegas.set(e, Math.min((this.#bodegas.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
+    }
+  }
+
+  /** Export cargo waiting in a state, tonnes. */
+  enEspera(estado: string): number {
+    return this.#bodegas.get(estado) ?? 0;
+  }
+
+  /**
+   * A train got to a stop: at an exit it unloads its export cargo (that's an
+   * export); anywhere else it loads what its state has waiting, up to a train's load.
+   */
+  #atenderLlegadas(t: Tren) {
+    const llegadas = t.llegadas!;
+    while (llegadas.length) {
+      const destino = t.destinos[llegadas.shift()!];
+      if (SALIDAS.has(destino)) {
+        if (t.carga <= 0) continue;
+        const e = this.exportacion;
+        const año = String(añoDe(this.horas));
+        const porEstado = { ...e.porEstado };
+        for (const [edo, ton] of Object.entries(t.cargaDe)) porEstado[edo] = (porEstado[edo] ?? 0) + ton;
+        this.exportacion = {
+          total: e.total + t.carga,
+          porAño: { ...e.porAño, [año]: (e.porAño[año] ?? 0) + t.carga },
+          porSalida: { ...e.porSalida, [destino]: (e.porSalida[destino] ?? 0) + t.carga },
+          porEstado,
+        };
+        t.exportado += t.carga;
+        t.carga = 0;
+        t.cargaDe = {};
+        continue;
+      }
+      const estado = SITIOS_POR_CLAVE.get(destino)?.estado;
+      if (!estado) continue;
+      const hay = this.#bodegas.get(estado) ?? 0;
+      const sube = Math.min(CARGA_POR_TREN - t.carga, hay);
+      if (sube <= 0) continue;
+      this.#bodegas.set(estado, hay - sube);
+      t.carga += sube;
+      t.cargaDe[estado] = (t.cargaDe[estado] ?? 0) + sube;
+    }
   }
 
   /** Recount the player's trains on every line and slow each train down where its lines are full. */
@@ -590,7 +662,11 @@ class Simulacion {
       this.#ultimo = now;
       const horas = this.corriendo ? dt * HORAS_POR_SEGUNDO * this.multiplicador : 0;
       if (horas > 0) {
-        for (const t of this.trenes) avanzar(t, horas);
+        this.#producir(horas);
+        for (const t of this.trenes) {
+          avanzar(t, horas);
+          if (t.llegadas?.length) this.#atenderLlegadas(t);
+        }
         for (const b of this.barcos) avanzar(b, horas);
         this.#cobrar();
         this.#avanzarObras(horas);

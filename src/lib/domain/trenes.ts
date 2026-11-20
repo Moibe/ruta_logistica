@@ -19,6 +19,11 @@ export type Tren = Marcha & {
   id: string;
   nombre: string;
   color: string;
+  /** Export cargo aboard, tonnes, and the states it came from. */
+  carga: number;
+  cargaDe: Record<string, number>;
+  /** Tonnes it has exported so far. */
+  exportado: number;
 };
 
 /**
@@ -59,6 +64,11 @@ export function crearTren(red: Red, def: NuevoTren, costo?: CostoTramo): Tren | 
     id: def.id,
     nombre: `${nombreCorto(def.paradas[0])} ⇄ ${nombreCorto(def.paradas[def.paradas.length - 1])}`,
     color: def.color,
+    // Born at its first stop as if just arrived there: it loads before leaving.
+    llegadas: marcha.estado === 'parada' ? [marcha.pierna] : [],
+    carga: 0,
+    cargaDe: {},
+    exportado: 0,
   };
 }
 

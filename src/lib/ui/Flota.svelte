@@ -10,6 +10,7 @@
     velocidad,
   } from '$lib/domain/servicio';
   import { nombreCorto } from '$lib/domain/sitios';
+  import { CARGA_POR_TREN } from '$lib/domain/exportaciones';
   import { sim, type Unidad } from '$lib/state/simulacion.svelte';
   import { tablero, type TipoUnidad } from '$lib/state/tablero.svelte';
   import { duracion, estadoUnidad, horaDeJuego, km, nudos } from './formato';
@@ -81,7 +82,7 @@
       enH,
       fuera,
       llegada: horaDeJuego(sim.horas + enH),
-      velocidad: u.tipo === 'barco' ? (v ? `${nudos(v)} (${Math.round(v)} km/h)` : '0 nudos') : `${v} km/h`,
+      velocidad: u.tipo === 'barco' ? (v ? `${nudos(v)} (${Math.round(v)} km/h)` : '0 nudos') : `${Math.round(v)} km/h`,
       descripcion:
         u.tipo === 'barco'
           ? `${u.id} · ${CLASES_BARCO[u.clase].nombre} · ${km(kmDelRecorrido(u))} por vuelta`
@@ -254,6 +255,13 @@
       <div><dt>Llega en</dt><dd class="mono">{duracion(ficha.enH)}</dd></div>
       <div><dt>Hora de llegada</dt><dd class="mono">{ficha.llegada}</dd></div>
       <div><dt>Recorrido</dt><dd class="mono">{ficha.recorrido}</dd></div>
+      {#if ficha.u.tipo === 'tren'}
+        <div>
+          <dt>Carga de exportación</dt>
+          <dd class="mono">{Math.round(ficha.u.carga).toLocaleString('es-MX')} de {CARGA_POR_TREN.toLocaleString('es-MX')} t</dd>
+        </div>
+        <div><dt>Ha exportado</dt><dd class="mono">{Math.round(ficha.u.exportado).toLocaleString('es-MX')} t</dd></div>
+      {/if}
     </dl>
 
     <div class="acciones">

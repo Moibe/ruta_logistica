@@ -37,6 +37,8 @@ export type Marcha = {
   espera: number;
   /** Total km run since the vehicle entered service. */
   odometro: number;
+  /** Legs just finished (their index), oldest first, for whoever keeps the cargo: trains only. */
+  llegadas?: number[];
 };
 
 export type Armado = {
@@ -136,6 +138,7 @@ export function avanzar(m: Marcha, horas: number): void {
       m.km = leg.km;
       m.estado = 'parada';
       m.espera = m.esperas[m.pierna];
+      m.llegadas?.push(m.pierna);
     }
   }
 }

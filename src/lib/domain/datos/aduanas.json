@@ -1,0 +1,494 @@
+{
+ "corte": "2026-11-20",
+ "nota": "Las aduanas del país con su recaudación y el valor de sus operaciones (importación y exportación juntas) en 2025, en millones de pesos. Las que tienen sitio en el tablero lo dicen; las de cruces fronterizos, puertos y aeropuertos son salidas de las exportaciones.",
+ "fuente": {
+  "fuente": "ANAM, Informe mensual de diciembre de 2025 (enero a diciembre; cuadros 3 a 5 y 12 a 14)",
+  "url": "https://www.anam.gob.mx/wp-content/uploads/IM_12_2025-.pdf"
+ },
+ "creacion": {
+  "fuente": "DOF, 14 de julio de 2021: decreto por el que se crea la Agencia Nacional de Aduanas de México (opera desde el 1 de enero de 2022)",
+  "url": "https://www.dof.gob.mx/nota_detalle.php?codigo=5623945&fecha=14/07/2021"
+ },
+ "aduanas": [
+  {
+   "id": "nuevo-laredo",
+   "nombre": "Nuevo Laredo",
+   "tipo": "fronteriza",
+   "sitio": "ciudad:nuevo-laredo",
+   "salida": true,
+   "recaudacion2025": 215227.1,
+   "valorOperaciones2025": 6666208.8
+  },
+  {
+   "id": "ciudad-juarez",
+   "nombre": "Ciudad Juárez",
+   "tipo": "fronteriza",
+   "sitio": "ciudad:ciudad-juarez",
+   "salida": true,
+   "recaudacion2025": 64213.7,
+   "valorOperaciones2025": 5711171
+  },
+  {
+   "id": "reynosa",
+   "nombre": "Reynosa",
+   "tipo": "fronteriza",
+   "sitio": "ciudad:reynosa",
+   "salida": true,
+   "recaudacion2025": 32382.4,
+   "valorOperaciones2025": 1446820.8
+  },
+  {
+   "id": "colombia",
+   "nombre": "Colombia",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 31238.9,
+   "valorOperaciones2025": 1239275.5
+  },
+  {
+   "id": "matamoros",
+   "nombre": "Matamoros",
+   "tipo": "fronteriza",
+   "sitio": "ciudad:matamoros",
+   "salida": true,
+   "recaudacion2025": 30000.6,
+   "valorOperaciones2025": 546612.2
+  },
+  {
+   "id": "tijuana",
+   "nombre": "Tijuana",
+   "tipo": "fronteriza",
+   "sitio": "ciudad:tijuana",
+   "salida": true,
+   "recaudacion2025": 23855.6,
+   "valorOperaciones2025": 1976496
+  },
+  {
+   "id": "mexicali",
+   "nombre": "Mexicali",
+   "tipo": "fronteriza",
+   "sitio": "ciudad:mexicali",
+   "salida": true,
+   "recaudacion2025": 15827.1,
+   "valorOperaciones2025": 686993.8
+  },
+  {
+   "id": "nogales",
+   "nombre": "Nogales",
+   "tipo": "fronteriza",
+   "sitio": "ciudad:nogales",
+   "salida": true,
+   "recaudacion2025": 15184.8,
+   "valorOperaciones2025": 803117.5
+  },
+  {
+   "id": "piedras-negras",
+   "nombre": "Piedras Negras",
+   "tipo": "fronteriza",
+   "sitio": "ciudad:piedras-negras",
+   "salida": true,
+   "recaudacion2025": 13690,
+   "valorOperaciones2025": 1036352.1
+  },
+  {
+   "id": "camargo",
+   "nombre": "Camargo",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 6676,
+   "valorOperaciones2025": 45837.5
+  },
+  {
+   "id": "ciudad-hidalgo",
+   "nombre": "Ciudad Hidalgo",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 2480.5,
+   "valorOperaciones2025": 179099.8
+  },
+  {
+   "id": "ciudad-acuna",
+   "nombre": "Ciudad Acuña",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 1438.3,
+   "valorOperaciones2025": 148649.4
+  },
+  {
+   "id": "ojinaga",
+   "nombre": "Ojinaga",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 1360.2,
+   "valorOperaciones2025": 14314.5
+  },
+  {
+   "id": "agua-prieta",
+   "nombre": "Agua Prieta",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 1298.8,
+   "valorOperaciones2025": 49510.7
+  },
+  {
+   "id": "miguel-aleman",
+   "nombre": "Miguel Alemán",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 1157.7,
+   "valorOperaciones2025": 22794.5
+  },
+  {
+   "id": "tecate",
+   "nombre": "Tecate",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 487.2,
+   "valorOperaciones2025": 56000.6
+  },
+  {
+   "id": "san-luis-rio-colorado",
+   "nombre": "San Luis Río Colorado",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 367.1,
+   "valorOperaciones2025": 48594.4
+  },
+  {
+   "id": "naco",
+   "nombre": "Naco",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 252,
+   "valorOperaciones2025": 2033
+  },
+  {
+   "id": "puerto-palomas",
+   "nombre": "Puerto Palomas",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 236.3,
+   "valorOperaciones2025": 3134.1
+  },
+  {
+   "id": "subteniente-lopez",
+   "nombre": "Subteniente López",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 32.6,
+   "valorOperaciones2025": 8252.6
+  },
+  {
+   "id": "sonoyta",
+   "nombre": "Sonoyta",
+   "tipo": "fronteriza",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 15.9,
+   "valorOperaciones2025": 62
+  },
+  {
+   "id": "aifa",
+   "nombre": "AIFA",
+   "tipo": "interior",
+   "sitio": "aeropuerto:aifa",
+   "salida": true,
+   "recaudacion2025": 62389.1,
+   "valorOperaciones2025": 472469
+  },
+  {
+   "id": "aicm",
+   "nombre": "AICM",
+   "tipo": "interior",
+   "sitio": "aeropuerto:aicm",
+   "salida": true,
+   "recaudacion2025": 41768.7,
+   "valorOperaciones2025": 838894
+  },
+  {
+   "id": "puebla",
+   "nombre": "Puebla",
+   "tipo": "interior",
+   "sitio": "ciudad:puebla",
+   "salida": false,
+   "recaudacion2025": 34124.5,
+   "valorOperaciones2025": 719553
+  },
+  {
+   "id": "toluca",
+   "nombre": "Toluca",
+   "tipo": "interior",
+   "sitio": "aeropuerto:toluca",
+   "salida": true,
+   "recaudacion2025": 30974.2,
+   "valorOperaciones2025": 369375
+  },
+  {
+   "id": "guadalajara",
+   "nombre": "Guadalajara",
+   "tipo": "interior",
+   "sitio": "aeropuerto:guadalajara",
+   "salida": true,
+   "recaudacion2025": 16924.9,
+   "valorOperaciones2025": 2347331
+  },
+  {
+   "id": "mexico",
+   "nombre": "México",
+   "tipo": "interior",
+   "sitio": "ciudad:ciudad-de-mexico",
+   "salida": false,
+   "recaudacion2025": 12236.7,
+   "valorOperaciones2025": 53989
+  },
+  {
+   "id": "aguascalientes",
+   "nombre": "Aguascalientes",
+   "tipo": "interior",
+   "sitio": "ciudad:aguascalientes",
+   "salida": false,
+   "recaudacion2025": 12110.4,
+   "valorOperaciones2025": 253194
+  },
+  {
+   "id": "queretaro",
+   "nombre": "Querétaro",
+   "tipo": "interior",
+   "sitio": "aeropuerto:queretaro",
+   "salida": true,
+   "recaudacion2025": 11545.8,
+   "valorOperaciones2025": 438644
+  },
+  {
+   "id": "monterrey",
+   "nombre": "Monterrey",
+   "tipo": "interior",
+   "sitio": "aeropuerto:monterrey",
+   "salida": true,
+   "recaudacion2025": 11266.4,
+   "valorOperaciones2025": 832734
+  },
+  {
+   "id": "chihuahua",
+   "nombre": "Chihuahua",
+   "tipo": "interior",
+   "sitio": "ciudad:chihuahua",
+   "salida": false,
+   "recaudacion2025": 1317.5,
+   "valorOperaciones2025": 94119
+  },
+  {
+   "id": "guanajuato",
+   "nombre": "Guanajuato",
+   "tipo": "interior",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 976.8,
+   "valorOperaciones2025": 41168
+  },
+  {
+   "id": "torreon",
+   "nombre": "Torreón",
+   "tipo": "interior",
+   "sitio": "ciudad:torreon",
+   "salida": false,
+   "recaudacion2025": 843.7,
+   "valorOperaciones2025": 73588
+  },
+  {
+   "id": "manzanillo",
+   "nombre": "Manzanillo",
+   "tipo": "maritima",
+   "sitio": "puerto:manzanillo",
+   "salida": true,
+   "recaudacion2025": 185634.3,
+   "valorOperaciones2025": 1824374.4
+  },
+  {
+   "id": "veracruz",
+   "nombre": "Veracruz",
+   "tipo": "maritima",
+   "sitio": "puerto:veracruz",
+   "salida": true,
+   "recaudacion2025": 140978.7,
+   "valorOperaciones2025": 1467633.5
+  },
+  {
+   "id": "lazaro-cardenas",
+   "nombre": "Lázaro Cárdenas",
+   "tipo": "maritima",
+   "sitio": "puerto:lazaro-cardenas",
+   "salida": true,
+   "recaudacion2025": 137665.9,
+   "valorOperaciones2025": 965709.2
+  },
+  {
+   "id": "tuxpan",
+   "nombre": "Tuxpan",
+   "tipo": "maritima",
+   "sitio": "puerto:tuxpan",
+   "salida": true,
+   "recaudacion2025": 94293.2,
+   "valorOperaciones2025": 343791.1
+  },
+  {
+   "id": "altamira",
+   "nombre": "Altamira",
+   "tipo": "maritima",
+   "sitio": "puerto:altamira",
+   "salida": true,
+   "recaudacion2025": 47669,
+   "valorOperaciones2025": 882185.2
+  },
+  {
+   "id": "ensenada",
+   "nombre": "Ensenada",
+   "tipo": "maritima",
+   "sitio": "puerto:ensenada",
+   "salida": true,
+   "recaudacion2025": 38610.4,
+   "valorOperaciones2025": 338437.4
+  },
+  {
+   "id": "mazatlan",
+   "nombre": "Mazatlán",
+   "tipo": "maritima",
+   "sitio": "puerto:mazatlan",
+   "salida": true,
+   "recaudacion2025": 36003,
+   "valorOperaciones2025": 149151
+  },
+  {
+   "id": "coatzacoalcos",
+   "nombre": "Coatzacoalcos",
+   "tipo": "maritima",
+   "sitio": "puerto:coatzacoalcos",
+   "salida": true,
+   "recaudacion2025": 25639.3,
+   "valorOperaciones2025": 299418.9
+  },
+  {
+   "id": "guaymas",
+   "nombre": "Guaymas",
+   "tipo": "maritima",
+   "sitio": "puerto:guaymas",
+   "salida": true,
+   "recaudacion2025": 12277,
+   "valorOperaciones2025": 124517.6
+  },
+  {
+   "id": "progreso",
+   "nombre": "Progreso",
+   "tipo": "maritima",
+   "sitio": "puerto:progreso",
+   "salida": true,
+   "recaudacion2025": 12242.9,
+   "valorOperaciones2025": 143178.9
+  },
+  {
+   "id": "dos-bocas",
+   "nombre": "Dos Bocas",
+   "tipo": "maritima",
+   "sitio": "puerto:dos-bocas",
+   "salida": true,
+   "recaudacion2025": 7952.5,
+   "valorOperaciones2025": 153495.8
+  },
+  {
+   "id": "tampico",
+   "nombre": "Tampico",
+   "tipo": "maritima",
+   "sitio": "puerto:tampico",
+   "salida": true,
+   "recaudacion2025": 6300.5,
+   "valorOperaciones2025": 78169.7
+  },
+  {
+   "id": "la-paz",
+   "nombre": "La Paz",
+   "tipo": "maritima",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 5410.6,
+   "valorOperaciones2025": 30256.4
+  },
+  {
+   "id": "cancun",
+   "nombre": "Cancún",
+   "tipo": "maritima",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 2336.3,
+   "valorOperaciones2025": 42915.7
+  },
+  {
+   "id": "ciudad-del-carmen",
+   "nombre": "Ciudad del Carmen",
+   "tipo": "maritima",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 1221.9,
+   "valorOperaciones2025": 141144.1
+  },
+  {
+   "id": "acapulco",
+   "nombre": "Acapulco",
+   "tipo": "maritima",
+   "sitio": null,
+   "salida": false,
+   "recaudacion2025": 796.7,
+   "valorOperaciones2025": 1635.8
+  },
+  {
+   "id": "salina-cruz",
+   "nombre": "Salina Cruz",
+   "tipo": "maritima",
+   "sitio": "puerto:salina-cruz",
+   "salida": true,
+   "recaudacion2025": 527.6,
+   "valorOperaciones2025": 49035.3
+  }
+ ],
+ "salidas": [
+  "ciudad:nuevo-laredo",
+  "ciudad:ciudad-juarez",
+  "ciudad:reynosa",
+  "ciudad:matamoros",
+  "ciudad:tijuana",
+  "ciudad:mexicali",
+  "ciudad:nogales",
+  "ciudad:piedras-negras",
+  "aeropuerto:aifa",
+  "aeropuerto:aicm",
+  "aeropuerto:toluca",
+  "aeropuerto:guadalajara",
+  "aeropuerto:queretaro",
+  "aeropuerto:monterrey",
+  "puerto:manzanillo",
+  "puerto:veracruz",
+  "puerto:lazaro-cardenas",
+  "puerto:tuxpan",
+  "puerto:altamira",
+  "puerto:ensenada",
+  "puerto:mazatlan",
+  "puerto:coatzacoalcos",
+  "puerto:guaymas",
+  "puerto:progreso",
+  "puerto:dos-bocas",
+  "puerto:tampico",
+  "puerto:salina-cruz",
+  "puerto:topolobampo"
+ ]
+}

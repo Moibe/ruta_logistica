@@ -51,6 +51,9 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039](https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297) | Demanda máxima por región de 2018 a 2024; cómo se mide el margen de reserva y sus mínimos; costo de inversión por kW de cada tecnología | DOF, 14 de octubre de 2025 | Documento oficial público |
 | [SICT, AFAC, Estadística Operacional de Aeropuertos, diciembre de 2025](https://www.gob.mx/cms/uploads/attachment/file/1051974/producto-aeropuertos-es-dic-25-27012026.pdf) | Toneladas de carga de 2024 y 2025 de los diez aeropuertos que más mueven; doméstica e internacional de los primeros | Enero de 2026 | Documento oficial público |
 | [AFAC, Estadística operativa de aeropuertos 2006–2026](https://www.gob.mx/cms/uploads/attachment/file/1112825/producto-aeropuertos-2006-2026-sep-27102026.xlsx) | Carga nacional e internacional de cada aeropuerto, mes por mes, de 2006 a septiembre de 2026: la serie del modo Realidad | Octubre de 2026 | Dato oficial público |
+| [INEGI, Exportaciones por Entidad Federativa](https://www.inegi.org.mx/programas/exporta_ef/) | Valor de lo que exporta cada estado, por subsector, de 2007 a 2025 (datos abiertos) | 2026 | Dato oficial público |
+| [ANAM, informe mensual de diciembre de 2025](https://www.anam.gob.mx/wp-content/uploads/IM_12_2025-.pdf) y [decreto de creación (DOF, 14 de julio de 2021)](https://www.dof.gob.mx/nota_detalle.php?codigo=5623945&fecha=14/07/2021) | Recaudación, operaciones y valor de las operaciones de cada aduana en 2025; la creación de la ANAM | 2021 y 2026 | Documento oficial público |
+| [ATTRAPI, Anuario Estadístico Ferroviario 2025, tablas A10 a A13](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas que salen del país por tren cada año (2017–2025), por frontera y por puerto | 2026 | Documento oficial público |
 | [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
 | [CNE, lista de permisos de generación](https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx) | Las centrales privadas que entraron (o entrarán) desde 2019: capacidad, tecnología, fecha y municipio; inversión estimada de varias de la CFE | Al 31 de octubre de 2026 | Documento oficial público |
 | [CFE, Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) y [Programa de Desarrollo 2026–2030](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) | Costo de las centrales de la CFE, inicio de obra y avance físico de cada una al cierre de 2024; lo que la CFE invierte al año en centrales propias y cuándo entraron Salamanca, El Sauz II y Villa de Reyes | 2025 y 2026 | Documento oficial público |
@@ -1452,6 +1455,112 @@ hoy marca crítica la península, aun con Mérida operando. La leyenda lo dice.
 No es una transmisión en vivo: no hay fuente oficial en línea del avance de las obras. Los datos
 tienen fecha de corte, a la vista bajo la línea de tiempo.
 
+### Las exportaciones y las aduanas
+
+Los trenes del jugador **exportan**. Es la primera carga del juego, con un enfoque mixto: la
+carga nacional se medirá como número, pero una exportación va de un **origen** a una **salida**
+del país, y eso es lo que el juego mide.
+
+- **Las salidas** son las aduanas a las que llega un tren: los cruces fronterizos, los puertos y
+  los aeropuertos con aduana propia (ANAM), más los puertos por los que el anuario ferroviario
+  cuenta exportaciones por tren (Topolobampo). En el mapa llevan un cuadrito ámbar en la esquina.
+  Las aduanas interiores de una ciudad (Puebla, Aguascalientes) despachan mercancía que todavía
+  tiene que salir por una frontera o un puerto: no son salidas.
+- **Los orígenes** son todas las demás estaciones. Cada estado genera carga de exportación a un
+  ritmo que es una **estimación del juego**: su parte del valor que exporta el país (INEGI) por
+  las toneladas que salen del país por tren ese año (anuario ferroviario). La carga espera en las
+  estaciones del estado, hasta un mes de ella; la partida abre con una semana esperando.
+- **Un tren** carga en los orígenes en los que para hasta la carga neta promedio de un tren de
+  carga mexicano, **2,436 toneladas** (SNIF 2022), y descarga en la primera salida a
+  la que llega: eso es una exportación. Un tren que solo une salidas (Coatzacoalcos–Salina Cruz)
+  no exporta.
+
+La barra de arriba dice cuántas toneladas exportaron los trenes del jugador en el año; la ficha
+de cada tren, cuánta carga lleva y cuánto ha exportado; la de cada salida, su aduana, lo que
+recaudó y lo que salió por tren en 2025. En el modo Realidad la barra da las toneladas que de
+verdad salieron por tren cada año.
+
+**El valor en dólares todavía no**: el INEGI mide dólares y el anuario ferroviario toneladas, y
+para unirlos falta un valor por tonelada. La fuente natural es la de cruces fronterizos de
+Estados Unidos (BTS), cuyo sitio no deja descargar sus datos automáticamente.
+
+Lo que exportó cada estado en 2025 (INEGI, millones de dólares; cifras preliminares) y la carga
+que genera en el juego (toneladas al día, estimación):
+
+| Estado | Exportó en 2025 (MUSD) | Del país | Carga de exportación en el juego (t/día) |
+| --- | ---: | ---: | ---: |
+| Chihuahua | 109,505 | 18.2 % | 11,461 |
+| Coahuila | 65,505 | 10.9 % | 6,856 |
+| Nuevo León | 59,065 | 9.8 % | 6,182 |
+| Baja California | 56,626 | 9.4 % | 5,927 |
+| Jalisco | 52,577 | 8.7 % | 5,503 |
+| Guanajuato | 37,988 | 6.3 % | 3,976 |
+| Tamaulipas | 36,297 | 6.0 % | 3,799 |
+| Sonora | 28,612 | 4.7 % | 2,995 |
+| San Luis Potosí | 26,096 | 4.3 % | 2,731 |
+| Estado de México | 21,488 | 3.6 % | 2,249 |
+
+Lo que salió del país por tren en 2025 (anuario ferroviario, tabla A13, millones de toneladas):
+20.53 por fronteras y 2.5 por puertos.
+
+| Salida | Tipo | Mt en 2025 |
+| --- | --- | ---: |
+| Piedras Negras | Frontera | 6.95 |
+| Nuevo Laredo | Frontera | 6.18 |
+| Nogales | Frontera | 2.62 |
+| Matamoros | Frontera | 2.35 |
+| Mexicali | Frontera | 1.32 |
+| Ciudad Juarez | Frontera | 1.12 |
+| Guaymas | Puerto | 0.59 |
+| Mazatlan | Puerto | 0.39 |
+| Coatzacoalcos | Puerto | 0.35 |
+| Veracruz | Puerto | 0.34 |
+| Tampico | Puerto | 0.21 |
+| Lazaro Cardenas | Puerto | 0.21 |
+| Manzanillo | Puerto | 0.20 |
+| Altamira | Puerto | 0.12 |
+| Topolobampo | Puerto | 0.10 |
+
+**Las aduanas.** La Agencia Nacional de Aduanas de México (ANAM) se creó por decreto el 14 de
+julio de 2021 y opera desde el 1 de enero de 2022, separada del SAT. En 2025 recaudó unos 1.45
+billones de pesos. Las que tienen sitio en el tablero (recaudación de 2025, miles de millones de
+pesos):
+
+| Aduana | Tipo | Recaudó en 2025 | ¿Salida? |
+| --- | --- | ---: | --- |
+| Nuevo Laredo | Fronteriza | 215.2 | Sí |
+| Manzanillo | Marítima | 185.6 | Sí |
+| Veracruz | Marítima | 141 | Sí |
+| Lázaro Cárdenas | Marítima | 137.7 | Sí |
+| Tuxpan | Marítima | 94.3 | Sí |
+| Ciudad Juárez | Fronteriza | 64.2 | Sí |
+| AIFA | Interior | 62.4 | Sí |
+| Altamira | Marítima | 47.7 | Sí |
+| AICM | Interior | 41.8 | Sí |
+| Ensenada | Marítima | 38.6 | Sí |
+| Mazatlán | Marítima | 36 | Sí |
+| Puebla | Interior | 34.1 | No (aduana interior de ciudad) |
+| Reynosa | Fronteriza | 32.4 | Sí |
+| Toluca | Interior | 31 | Sí |
+| Matamoros | Fronteriza | 30 | Sí |
+| Coatzacoalcos | Marítima | 25.6 | Sí |
+| Tijuana | Fronteriza | 23.9 | Sí |
+| Guadalajara | Interior | 16.9 | Sí |
+| Mexicali | Fronteriza | 15.8 | Sí |
+| Nogales | Fronteriza | 15.2 | Sí |
+| Piedras Negras | Fronteriza | 13.7 | Sí |
+| Guaymas | Marítima | 12.3 | Sí |
+| Progreso | Marítima | 12.2 | Sí |
+| México | Interior | 12.2 | No (aduana interior de ciudad) |
+| Aguascalientes | Interior | 12.1 | No (aduana interior de ciudad) |
+| Querétaro | Interior | 11.5 | Sí |
+| Monterrey | Interior | 11.3 | Sí |
+| Dos Bocas | Marítima | 8 | Sí |
+| Tampico | Marítima | 6.3 | Sí |
+| Chihuahua | Interior | 1.3 | No (aduana interior de ciudad) |
+| Torreón | Interior | 0.8 | No (aduana interior de ciudad) |
+| Salina Cruz | Marítima | 0.5 | Sí |
+
 ---
 
 ## 11. Decisiones de diseño
@@ -1505,6 +1614,13 @@ tienen fecha de corte, a la vista bajo la línea de tiempo.
 - **La partida empieza el 1 de diciembre de 2018.** *(20 nov 2026.)* El día en que empezó el
   sexenio: da un mes más de juego, y el modo Realidad arranca el mismo día (ahí se ve el anuncio
   del Tren Maya, el 16 de diciembre). Diciembre trae la doceava parte del presupuesto de 2018.
+- **Las exportaciones, con un enfoque mixto.** *(20 nov 2026.)* El usuario quiere medir
+  exportaciones. La carga nacional será un número; la exportación va de un origen a una salida.
+  Se mide en toneladas; el valor en dólares espera un valor por tonelada de fuente oficial.
+- **Las aduanas son las salidas.** *(20 nov 2026.)* El usuario preguntó por las aduanas, que se
+  reorganizaron (la ANAM, desde 2022): las de frontera, puertos y aeropuertos son por donde sale
+  lo que se exporta, con su recaudación real. Modernizarlas como obra espera datos de tiempos de
+  cruce.
 - **Los aeropuertos, puertos secos.** *(20 nov 2026.)* Con vía cerca tienen estación y son paradas
   de tren; la carga que pase por ellos queda para el diseño de la carga.
 - **El panel del Estado, una barra arriba.** *(20 nov 2026.)* Pedido del usuario: el presupuesto,
@@ -1753,6 +1869,8 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   puede ser más o menos que lo aprobado.
 - **Derecho por uso de vía**: lo que paga cada concesionaria al Estado por operar la vía, un
   porcentaje de sus ingresos.
+- **Salida de exportación**: aduana a la que llega un tren (cruce fronterizo, puerto o aeropuerto
+  con aduana propia); la carga que descarga ahí cuenta como exportación.
 - **Margen de reserva**: cuánta capacidad disponible sobra sobre la demanda máxima de una
   región, en porcentaje. Se mide en el pico de la tarde y en el de la noche.
 - **Región del sistema eléctrico**: cada zona que opera un centro de control del CENACE
