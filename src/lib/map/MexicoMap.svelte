@@ -970,7 +970,8 @@
     // The selected vehicle's route, in its colour: a train's line one way, a
     // ship's whole loop — dashed, sea lanes aren't track.
     const sel = sim.seleccionado;
-    if (sel && !trazando) {
+    // Without the track layer, trains (and their line) go too; ships stay.
+    if (sel && !trazando && (sel.tipo === 'barco' || layers.vias)) {
       if (rutaSel?.id !== sel.id) bakeRutaSel(sel);
       if (rutaSel) {
         ctx.save();
@@ -1523,7 +1524,7 @@
     const orden = [...sim.barcos, ...sim.trenes].sort((a, b) => Number(sel(a)) - Number(sel(b)));
     for (const u of orden) {
       if (u.tipo === 'barco') pintarBarco(ctx, u, pxKm, now);
-      else pintarTren(ctx, u, pxKm, now);
+      else if (layers.vias) pintarTren(ctx, u, pxKm, now);
     }
   }
 
