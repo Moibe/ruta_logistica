@@ -70,9 +70,12 @@
     title="Cambiar de vista"
     onclick={() => (abierto = !abierto)}
   >
-    <svg class="ojo" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
-      <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z" />
-      <circle cx="12" cy="12" r="2.8" />
+    <!-- An eye under a stepped brow: the stepped fret of Mesoamerican temples
+         and codices, read as "looking out" over the land. -->
+    <svg class="ojo" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <path d="M3 7.5h3.5v-2h3v-2h5v2h3v2H21" />
+      <path d="M2.5 14c3.5-4.6 15.5-4.6 19 0-3.5 4-15.5 4-19 0Z" />
+      <circle cx="12" cy="12.9" r="2.7" />
     </svg>
     <span class="nombre">{actual}</span>
     <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" /></svg>
