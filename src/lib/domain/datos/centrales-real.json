@@ -1,0 +1,40 @@
+{
+  "corte": "2026-11-20",
+  "nota": "Lo que pasó de verdad con cada central de la CFE del catálogo: anuncio, inicio de obra, avances oficiales y entrada en operación. Es lo que muestra el modo Realidad. Donde la CFE no publica el inicio, «enObraAl» es la primera fecha en que una fuente la reporta en obra; antes de esa fecha el visor no la dibuja.",
+  "fuentes": {
+    "cfe-ia2024": { "fuente": "CFE, Informe Anual 2024: fecha de inicio de construcción y avance físico de cada central al cierre de 2024", "url": "https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf" },
+    "cfe-progdes26": { "fuente": "CFE, Programa de Desarrollo 2026–2030 (julio de 2026): entrada en operación de Salamanca, El Sauz II y Villa de Reyes, y lo que sigue en obra", "url": "https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf" },
+    "cfe-cne": { "fuente": "CNE, lista de permisos de generación al 31 de octubre de 2026 (fecha de entrada en operación de cada permiso)", "url": "https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx" },
+    "cfe-gen1": { "fuente": "CFE, Informe de la Gestión Gubernamental 2018–2024, EPS Generación I (proyectos inconclusos de la administración anterior)", "url": "https://www.cfe.gob.mx/nuestraempresa/Informe%20de%20gestion%201824/EPS%20Generaci%C3%B3n%20I.pdf" },
+    "cfe-b10527": { "fuente": "CFE, boletín del 17 de abril de 2026: entra en operación comercial Manzanillo III", "url": "https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=10527" },
+    "cfe-b10576": { "fuente": "CFE, boletín del 13 de mayo de 2026: entra en operación comercial Elvia Carrillo Puerto", "url": "https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=10576" },
+    "cfe-b3788": { "fuente": "CFE, boletín del 17 de febrero de 2023: entra en operación la primera etapa de Puerto Peñasco", "url": "https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=3788" },
+    "cfe-amlo-2024": { "fuente": "Presidencia de la República, «Cumplimos con el rescate de CFE» (5 de julio de 2024)", "url": "https://www.gob.mx/amlo/prensa/cumplimos-con-el-rescate-de-cfe-presidente-amlo" },
+    "cfe-jornada-mexicali": { "fuente": "La Jornada, «CFE construye planta de energía en Mexicali, ante riesgo de escasez» (10 de abril de 2022)", "url": "https://www.jornada.com.mx/notas/2022/04/10/estados/cfe-construye-planta-de-energia-en-mexicali-ante-riesgo-de-escasez/" },
+    "cfe-termo": { "fuente": "Presidencia de la República, 26 de agosto de 2025: la CFE construirá dos centrales termosolares en Baja California Sur", "url": "https://www.gob.mx/presidencia/prensa/mexico-a-la-vanguardia-cfe-construira-2-centrales-termosolares-en-baja-california-sur-para-beneficiar-hasta-200-mil-hogares?idiom=es" },
+    "cfe-b095": { "fuente": "CFE, boletín de prensa 095/26 (1 de junio de 2026)", "url": "https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/260601%20-%20gen%20energias%20limpias%20y%20renovables.pdf" },
+    "cfe-b179": { "fuente": "CFE, boletín de prensa 179/26 (10 de septiembre de 2026)", "url": "https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/179hidrogenoverdevf.pdf" }
+  },
+  "obras": {
+    "cc-tula": { "anuncio": "2014-12-23", "enObraAl": "2018-12-01", "operacion": "2020-11-28", "nota": "Proyecto de la administración anterior: el contrato se firmó el 23 de diciembre de 2014 y al empezar el sexenio seguía sin terminar. Aceptación provisional el 28 de julio de 2020.", "fuentes": ["cfe-gen1", "cfe-cne"] },
+    "cc-salamanca": { "inicio": "2021-09-30", "avances": [{ "fecha": "2024-12-31", "pct": 99.4 }], "operacion": "2025-02-14", "fuentes": ["cfe-ia2024", "cfe-progdes26"] },
+    "cc-sauz-ii": { "inicio": "2021-09-30", "avances": [{ "fecha": "2024-12-31", "pct": 99.6 }], "operacion": "2025-09-12", "fuentes": ["cfe-ia2024", "cfe-progdes26"] },
+    "cc-san-luis-potosi": { "inicio": "2021-09-30", "avances": [{ "fecha": "2024-12-31", "pct": 99.9 }], "operacion": "2025-07-05", "fuentes": ["cfe-ia2024", "cfe-progdes26"] },
+    "cc-manzanillo-iii": { "inicio": "2022-03-08", "avances": [{ "fecha": "2024-12-31", "pct": 87.8 }], "operacion": "2026-04-17", "fuentes": ["cfe-ia2024", "cfe-b10527"] },
+    "cc-gonzalez-ortega": { "inicio": "2022-01-26", "avances": [{ "fecha": "2024-12-31", "pct": 89.8 }], "operacion": "2026-05-15", "fuentes": ["cfe-ia2024", "cfe-cne", "cfe-progdes26"] },
+    "cc-merida": { "inicio": "2022-01-18", "avances": [{ "fecha": "2024-12-31", "pct": 94.3 }], "operacion": "2026-05-12", "fuentes": ["cfe-ia2024", "cfe-b10576"] },
+    "cc-tuxpan-i": { "inicio": "2022-02-17", "avances": [{ "fecha": "2024-12-31", "pct": 84.8 }], "prevista": "entre 2026 y 2028", "fuentes": ["cfe-ia2024", "cfe-progdes26"] },
+    "cc-riviera-maya": { "inicio": "2022-01-20", "avances": [{ "fecha": "2024-12-31", "pct": 92.3 }], "prevista": "entre 2026 y 2028", "fuentes": ["cfe-ia2024", "cfe-progdes26"] },
+    "cc-san-luis-rio-colorado": { "inicio": "2022-01-26", "avances": [{ "fecha": "2024-07-05", "pct": 80 }, { "fecha": "2024-12-31", "pct": 89.9 }], "prevista": "31 de diciembre de 2027, según su permiso", "fuentes": ["cfe-ia2024", "cfe-amlo-2024", "cfe-cne"] },
+    "cc-lerdo": { "inicio": "2022-04-29", "avances": [{ "fecha": "2024-12-31", "pct": 89.0 }], "prevista": "entre 2026 y 2028", "fuentes": ["cfe-ia2024", "cfe-progdes26"] },
+    "fv-puerto-penasco-i-ii": { "enObraAl": "2022-09", "parcial": { "fecha": "2023-02-17", "texto": "la primera etapa, 120 MW" }, "operacion": "2024-09-11", "nota": "La CFE no publica cuándo empezó la primera etapa; la segunda (300 MW) empezó en septiembre de 2022 y entró en operación comercial el 11 de septiembre de 2024.", "fuentes": ["cfe-b3788", "cfe-ia2024"] },
+    "fv-puerto-penasco-iii-iv": { "anuncio": "2023-02-17", "prevista": "2028", "situacion": "La CFE prepara la secuencia III; el Programa de Desarrollo 2026–2030 pone las secuencias III y IV (580 MW) en 2028.", "nota": "Al inaugurar la primera etapa se anunció que la central llegaría a 1,000 MW.", "fuentes": ["cfe-b3788", "cfe-progdes26"] },
+    "ci-baja-california": { "enObraAl": "2022-04-10", "parcial": { "fecha": "2024-07-05", "texto": "Mexicali Oriente, terminada y en operación" }, "operacion": "2025-06-12", "nota": "La CNE registra la entrada en operación de San Luis Río Colorado el 26 de marzo de 2025, la combustión interna de Mexicali el 12 de mayo de 2025 y las turbogás de Mexicali el 12 de junio de 2025; Presidencia ya reportaba Mexicali Oriente en operación el 5 de julio de 2024. El visor marca esa parte en operación desde julio de 2024 y la obra completa desde junio de 2025.", "fuentes": ["cfe-jornada-mexicali", "cfe-amlo-2024", "cfe-cne"] },
+    "tg-los-cabos": { "operacion": "2025-06-12", "nota": "No hay fecha publicada de su inicio de obra: el visor la dibuja desde que entró en operación.", "fuentes": ["cfe-cne"] },
+    "tg-riviera-maya": { "anuncio": "2026-07", "enObraAl": "2026-10-14", "parcial": { "fecha": "2026-10-14", "texto": "Nizuc (36.9 MW), en Cancún" }, "prevista": "finales de 2026", "situacion": "Cancún 1 y 2 y Chankanaab (Cozumel), de 34.5 MW cada una, siguen en obra según los permisos de octubre de 2026.", "fuentes": ["cfe-progdes26", "cfe-cne"] },
+    "termosolar-bcs-i": { "anuncio": "2025-08-26", "situacion": "La CFE aún busca los sitios.", "fuentes": ["cfe-termo"] },
+    "termosolar-bcs-ii": { "anuncio": "2025-08-26", "situacion": "Segunda etapa, después de la primera.", "fuentes": ["cfe-termo"] },
+    "oasis-mulege": { "anuncio": "2026-06-01", "situacion": "En evaluación.", "fuentes": ["cfe-b095", "cfe-b179"] },
+    "chicoasen-ii": { "inicio": "2022-06-17", "avances": [{ "fecha": "2024-12-31", "pct": 28.1 }], "prevista": "finales de 2028", "fuentes": ["cfe-ia2024", "cfe-b095"] }
+  }
+}

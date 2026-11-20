@@ -308,7 +308,6 @@ class Simulacion {
     this.trenes = [];
     this.barcos = [];
     this.obras = new Map(POLOS.map((p) => [p.id, obraNueva(p.id)]));
-    this.obrasEnergia = new Map(OBRAS_ENERGIA.map((o) => [o.id, obraViaNueva(o.id)]));
     this.irA(horasDeHoy(), true);
   }
 
@@ -316,16 +315,16 @@ class Simulacion {
   irA(horas: number, forzar = false) {
     if (this.modo !== 'realidad') return;
     this.horas = Math.max(0, Math.min(horas, horasDeHoy()));
-    const real = new Map(OBRAS_VIA.map((o) => [o.id, estadoReal(o.id, this.horas)]));
+    const real = new Map([...OBRAS_VIA, ...OBRAS_ENERGIA].map((o) => [o.id, estadoReal(o.id, this.horas)]));
+    const fase = (id: string) => {
+      const e = real.get(id)!.etapa;
+      return e === 'en-operacion' ? 'en-servicio' : e === 'en-obra' ? 'en-obra' : 'por-construir';
+    };
     const enServicio = (m: Map<string, ObraViaEstado>) => [...m.values()].filter((o) => o.fase === 'en-servicio').map((o) => o.id).join();
     const antes = enServicio(this.obrasVia);
-    this.obrasVia = new Map(
-      OBRAS_VIA.map((o) => {
-        const r = real.get(o.id)!;
-        const fase = r.etapa === 'en-operacion' ? 'en-servicio' : r.etapa === 'en-obra' ? 'en-obra' : 'por-construir';
-        return [o.id, { ...obraViaNueva(o.id), fase, avance: r.avance ?? 0 }];
-      })
-    );
+    this.obrasVia = new Map(OBRAS_VIA.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
+    // The CFE's plants as they really stood: the map draws them and the regions count the ones in service.
+    this.obrasEnergia = new Map(OBRAS_ENERGIA.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
     this.real = real;
     // The track itself changes only when a work opens (or, going back, un-opens).
     if (forzar || enServicio(this.obrasVia) !== antes) this.#reconstruirRed();

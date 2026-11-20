@@ -4,7 +4,7 @@
   import { CAPACIDAD } from '$lib/domain/red';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
   import { aporte, CAJA_CFE_MES, mesesConCajaCfe, OBRAS_ENERGIA, obraEnergia, type ObraEnergia } from '$lib/domain/energia';
-  import { fechaLarga } from '$lib/domain/calendario';
+  import { fechaLarga, horasDeFecha } from '$lib/domain/calendario';
   import { fechaEnPalabras, fichaReal, HORAS_DEL_CORTE, TEXTO_ETAPA } from '$lib/domain/realidad';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
@@ -69,7 +69,7 @@
 
   // ---- the CFE's plants ---------------------------------------------------------------------
 
-  const planta = $derived(tablero.obraSel && sim.modo === 'juego' ? obraEnergia(tablero.obraSel) : null);
+  const planta = $derived(tablero.obraSel ? obraEnergia(tablero.obraSel) : null);
   const planPlanta = $derived(planta ? sim.presupuestoPlanta(planta.id, cuadrillas) : null);
 
   const fichaPlanta = $derived.by(() => {
@@ -144,6 +144,70 @@
 
 <svelte:window onkeydown={onKey} />
 
+{#snippet etapaReal(id: string)}
+  {@const r = sim.real.get(id)}
+  {#if r}
+    <span class="fase" class:en-obra={r.etapa === 'en-obra'} class:en-servicio={r.etapa === 'en-operacion'}>
+      {TEXTO_ETAPA[r.etapa]}{r.etapa === 'en-obra' && r.avance !== null ? ` ${r.estimado ? '≈ ' : ''}${(r.avance * 100).toFixed(0)} %` : ''}
+    </span>
+  {/if}
+{/snippet}
+
+<!-- Where a work really stood on the date shown, with its dates and sources (Realidad). -->
+{#snippet fichaRealidad(id: string)}
+  {@const r = sim.real.get(id)}
+  {@const fr = fichaReal(id)}
+  {#if r}
+    <p class="status" class:en-obra={r.etapa === 'en-obra'} class:en-servicio={r.etapa === 'en-operacion'}>
+      {TEXTO_ETAPA[r.etapa].charAt(0).toUpperCase() + TEXTO_ETAPA[r.etapa].slice(1)} · al {fechaLarga(sim.horas)}
+    </p>
+    {#if r.etapa === 'en-obra' && r.avance !== null}
+      <div class="barra"><span style:width="{r.avance * 100}%"></span></div>
+    {/if}
+    <dl>
+      {#if r.etapa === 'en-obra' && r.avance !== null}
+        <div>
+          <dt>Avance{r.estimado ? ' (estimado entre datos oficiales)' : ''}</dt>
+          <dd class="mono">{r.estimado ? '≈ ' : ''}{(r.avance * 100).toFixed(r.estimado ? 0 : 1)} %</dd>
+        </div>
+      {/if}
+      {#if r.parcial}<div><dt>Ya abrió una parte</dt><dd>{r.parcial}</dd></div>{/if}
+      {#if fr?.anuncio}<div><dt>Anunciada</dt><dd class="mono">{fechaEnPalabras(fr.anuncio)}</dd></div>{/if}
+      {#if fr?.inicio}
+        <div><dt>Inicio de obra</dt><dd class="mono">{fechaEnPalabras(fr.inicio)}</dd></div>
+      {:else if fr?.enObraAl}
+        <div>
+          <dt>Inicio de obra</dt>
+          <dd>no publicado; ya en obra {fr.enObraAl.split('-').length === 3 ? 'el' : 'en'} {fechaEnPalabras(fr.enObraAl)}</dd>
+        </div>
+      {/if}
+      {#each fr?.avances ?? [] as a (a.fecha)}
+        <div><dt>Avance oficial al {fechaEnPalabras(a.fecha)}</dt><dd class="mono">{a.pct} %</dd></div>
+      {/each}
+      {#if fr?.operacion}
+        <div>
+          <dt>{sim.horas >= horasDeFecha(fr.operacion) ? 'En operación desde' : 'Entró en operación, más adelante, el'}</dt>
+          <dd class="mono">{fechaEnPalabras(fr.operacion)}</dd>
+        </div>
+      {:else if fr?.prevista}
+        <div><dt>Apertura prevista</dt><dd class="mono">{fr.prevista}</dd></div>
+      {/if}
+    </dl>
+    {#if fr?.situacion && sim.horas >= HORAS_DEL_CORTE - 24 * 90}<p class="nota">{fr.situacion}</p>{/if}
+    {#if fr?.nota}<p class="nota">{fr.nota}</p>{/if}
+    {#if !fr}
+      <p class="nota">No hay un proyecto oficial para esta obra: está en el catálogo del juego como obra posible.</p>
+    {:else}
+      <details class="fuentes" open>
+        <summary>Fuentes</summary>
+        {#each fr.fuentesCitadas as c (c.url + c.fuente)}
+          <p><a href={c.url} target="_blank" rel="noopener noreferrer">{c.fuente}</a></p>
+        {/each}
+      </details>
+    {/if}
+  {/if}
+{/snippet}
+
 {#if tablero.catalogo}
   <section class="catalogo panel">
     {#if fichaPlanta}
@@ -154,12 +218,20 @@
       </header>
       <h2>{o.nombre}</h2>
       <p class="label">Central de la CFE · {o.tecnologia} · {personas(o.mw)} MW</p>
+      {#if sim.modo === 'realidad'}
+        <p class="efecto">
+          {region.region.parteDe ? 'Sistema aislado de' : 'Región'} <b>{region.region.nombre}</b>: margen estimado de {pct(region.margen.tarde)} en
+          la tarde y {pct(region.margen.noche)} en la noche al {fechaLarga(sim.horas)}. En operación, la central suma {personas(aporte(o, 'tarde'))} MW
+          a la tarde y {personas(aporte(o, 'noche'))} a la noche.
+        </p>
+      {:else}
       <p class="efecto">
         {region.region.parteDe ? 'Sistema aislado de' : 'Región'} <b>{region.region.nombre}</b>: hoy tiene {pct(region.margen.tarde)} de margen
         en la tarde y {pct(region.margen.noche)} en la noche. La central suma {personas(aporte(o, 'tarde'))} MW a la tarde y
         {personas(aporte(o, 'noche'))} a la noche{o.clase === 'solar' && !o.aporte ? ' (de noche la solar no da)' : ''}: quedaría en
         {pct(despues.tarde)} y {pct(despues.noche)}.
       </p>
+      {/if}
       {#if o.aporteDato}
         <p class="nota">{o.aporteDato}</p>
       {/if}
@@ -168,7 +240,9 @@
       {/if}
       <p class="real"><span class="label">En la realidad</span> {o.real}</p>
 
-      {#if estado.fase === 'por-construir' && planPlanta}
+      {#if sim.modo === 'realidad'}
+        {@render fichaRealidad(o.id)}
+      {:else if estado.fase === 'por-construir' && planPlanta}
         <div class="cuadrillas" role="radiogroup" aria-label="Cuadrillas">
           <span class="label">Cuadrillas</span>
           {#each Array.from({ length: MAX_CUADRILLAS }, (_, i) => i + 1) as n (n)}
@@ -242,47 +316,7 @@
       <p class="real"><span class="label">En la realidad</span> {o.real}</p>
 
       {#if sim.modo === 'realidad'}
-        {@const r = sim.real.get(o.id)}
-        {@const fr = fichaReal(o.id)}
-        {#if r}
-          <p class="status" class:en-obra={r.etapa === 'en-obra'} class:en-servicio={r.etapa === 'en-operacion'}>
-            {TEXTO_ETAPA[r.etapa].charAt(0).toUpperCase() + TEXTO_ETAPA[r.etapa].slice(1)} · al {fechaLarga(sim.horas)}
-          </p>
-          {#if r.etapa === 'en-obra' && r.avance !== null}
-            <div class="barra"><span style:width="{r.avance * 100}%"></span></div>
-          {/if}
-          <dl>
-            {#if r.etapa === 'en-obra' && r.avance !== null}
-              <div>
-                <dt>Avance{r.estimado ? ' (estimado entre datos oficiales)' : ''}</dt>
-                <dd class="mono">{r.estimado ? '≈ ' : ''}{(r.avance * 100).toFixed(r.estimado ? 0 : 1)} %</dd>
-              </div>
-            {/if}
-            {#if r.parcial}<div><dt>Ya abrió una parte</dt><dd>{r.parcial}</dd></div>{/if}
-            {#if fr?.anuncio}<div><dt>Anunciada</dt><dd class="mono">{fechaEnPalabras(fr.anuncio)}</dd></div>{/if}
-            {#if fr?.inicio}<div><dt>Inicio de obra</dt><dd class="mono">{fechaEnPalabras(fr.inicio)}</dd></div>{/if}
-            {#each fr?.avances ?? [] as a (a.fecha)}
-              <div><dt>Avance oficial al {fechaEnPalabras(a.fecha)}</dt><dd class="mono">{a.pct} %</dd></div>
-            {/each}
-            {#if fr?.operacion}
-              <div><dt>En operación desde</dt><dd class="mono">{fechaEnPalabras(fr.operacion)}</dd></div>
-            {:else if fr?.prevista}
-              <div><dt>Apertura prevista</dt><dd class="mono">{fr.prevista}</dd></div>
-            {/if}
-          </dl>
-          {#if fr?.situacion && sim.horas >= HORAS_DEL_CORTE - 24 * 90}<p class="nota">{fr.situacion}</p>{/if}
-          {#if fr?.nota}<p class="nota">{fr.nota}</p>{/if}
-          {#if !fr}
-            <p class="nota">No hay un proyecto oficial para esta vía: está en el catálogo del juego como obra posible.</p>
-          {:else}
-            <details class="fuentes" open>
-              <summary>Fuentes</summary>
-              {#each fr.fuentesCitadas as c (c.url + c.fuente)}
-                <p><a href={c.url} target="_blank" rel="noopener noreferrer">{c.fuente}</a></p>
-              {/each}
-            </details>
-          {/if}
-        {/if}
+        {@render fichaRealidad(o.id)}
       {:else if estado.fase === 'por-construir' && plan}
         <div class="cuadrillas" role="radiogroup" aria-label="Cuadrillas">
           <span class="label">Cuadrillas</span>
@@ -362,12 +396,7 @@
                   <span class="nombre">{corto(o.nombre)}</span>
                   <span class="datos mono">
                     {#if sim.modo === 'realidad'}
-                      {@const r = sim.real.get(o.id)}
-                      {#if r}
-                        <span class="fase" class:en-obra={r.etapa === 'en-obra'} class:en-servicio={r.etapa === 'en-operacion'}>
-                          {TEXTO_ETAPA[r.etapa]}{r.etapa === 'en-obra' && r.avance !== null ? ` ${r.estimado ? '≈ ' : ''}${(r.avance * 100).toFixed(0)} %` : ''}
-                        </span>
-                      {/if}
+                      {@render etapaReal(o.id)}
                     {:else if estado?.fase === 'en-obra'}
                       <span class="fase en-obra" class:detenida={estado.detenida}>
                         {estado.detenida ? 'detenida' : 'en obra'} {(estado.avance * 100).toFixed(0)} %
@@ -383,11 +412,14 @@
             {/each}
           </ul>
         {/each}
-        {#if sim.modo === 'juego'}
         <h3 class="energia">Energía (CFE)</h3>
         <p class="texto">
-          Centrales de la CFE desde 2019. Se pagan con la caja de la CFE, no con el presupuesto de trenes. Suben el margen de su región;
-          sin margen, los polos de la región no se llenan.
+          {#if sim.modo === 'realidad'}
+            Centrales de la CFE desde 2019, en su etapa real. Las que operan cuentan en el margen estimado de su región.
+          {:else}
+            Centrales de la CFE desde 2019. Se pagan con la caja de la CFE, no con el presupuesto de trenes. Suben el margen de su región;
+            sin margen, los polos de la región no se llenan.
+          {/if}
         </p>
         <ul>
           {#each filasEnergia as { o, estado, plan } (o.id)}
@@ -395,7 +427,9 @@
               <button class="obra" onclick={() => (tablero.obraSel = o.id)}>
                 <span class="nombre">{o.nombre}</span>
                 <span class="datos mono">
-                  {#if estado?.fase === 'en-obra'}
+                  {#if sim.modo === 'realidad'}
+                    {@render etapaReal(o.id)}
+                  {:else if estado?.fase === 'en-obra'}
                     <span class="fase en-obra" class:detenida={estado.detenida}>
                       {estado.detenida ? 'detenida' : 'en obra'} {(estado.avance * 100).toFixed(0)} %
                     </span>
@@ -409,8 +443,8 @@
             </li>
           {/each}
         </ul>
-        {:else}
-          <p class="texto">Las centrales de la CFE y los polos todavía no están en el modo Realidad.</p>
+        {#if sim.modo === 'realidad'}
+          <p class="texto">Los polos todavía no están en el modo Realidad.</p>
         {/if}
       </div>
     {/if}

@@ -10,6 +10,7 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, type Dueño } from '$lib/domain/red';
   import { obraVia } from '$lib/domain/obrasVia';
+  import { TEXTO_ETAPA } from '$lib/domain/realidad';
   import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, SUBREGIONES_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
   import { fechaLarga as fechaDeJuego, horasDeFecha } from '$lib/domain/calendario';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
@@ -345,14 +346,28 @@
   };
 
   /** Something in the geography layer itself changed (not just the camera). */
-  /** Plants on the map right now: the 2018 ones, private ones already in service, the player's CFE works under way or done. */
-  function plantaVisible(p: PlantaMapa): 'servicio' | 'obra' | null {
+  /**
+   * Plants on the map right now: the 2018 ones, private ones already in service,
+   * the CFE works under way or done (the player's, or in Realidad the real ones,
+   * where the announced ones show too).
+   */
+  function plantaVisible(p: PlantaMapa): 'servicio' | 'obra' | 'anunciada' | null {
     if (p.obra) {
       const fase = sim.obrasEnergia.get(p.obra)?.fase;
-      return fase === 'en-servicio' ? 'servicio' : fase === 'en-obra' ? 'obra' : null;
+      if (fase === 'en-servicio') return 'servicio';
+      if (fase === 'en-obra') return 'obra';
+      return sim.modo === 'realidad' && sim.real.get(p.obra)?.etapa === 'anunciada' ? 'anunciada' : null;
     }
     if (p.desde !== null && p.desde > sim.horas) return null;
     return 'servicio';
+  }
+
+  /** A CFE plant's real stage on the date shown (Realidad), for its tooltip: "En obra · ≈ 62 %". */
+  function etapaPlanta(id: string): string {
+    const r = sim.real.get(id);
+    if (!r) return '';
+    const texto = TEXTO_ETAPA[r.etapa].charAt(0).toUpperCase() + TEXTO_ETAPA[r.etapa].slice(1);
+    return r.etapa === 'en-obra' && r.avance !== null ? `${texto} · ${r.estimado ? '≈ ' : ''}${Math.round(r.avance * 100)} %` : texto;
   }
 
   const ensuciaCapa = () => {
@@ -1127,9 +1142,14 @@
           ctx.fill();
           ctx.strokeStyle = c;
           ctx.lineWidth = 1.5;
-          if (vis !== 'servicio') ctx.setLineDash([2, 2]);
+          // Under way: dashed. Only announced (Realidad): dotted and faint.
+          if (vis === 'anunciada') {
+            ctx.globalAlpha = 0.55;
+            ctx.setLineDash([1, 2.5]);
+          } else if (vis !== 'servicio') ctx.setLineDash([2, 2]);
           ctx.stroke();
           ctx.setLineDash([]);
+          ctx.globalAlpha = 1;
         }
         if (hot || elegida) {
           ctx.beginPath();
@@ -2049,10 +2069,6 @@
     ensuciaCapa();
   });
 
-  $effect(() => {
-    // The electricity shown is the game's model, not the real grid: off in Realidad.
-    if (sim.modo === 'realidad') layers.energia = false;
-  });
 
   $effect(() => {
     // A work's card opened: light its line and fly to it. A CFE plant also
@@ -2298,9 +2314,11 @@
       </span>
       <span class="tip-sub">
         {p.obra
-          ? vis === 'obra'
-            ? 'En obra'
-            : 'En servicio'
+          ? sim.modo === 'realidad'
+            ? etapaPlanta(p.obra)
+            : vis === 'obra'
+              ? 'En obra'
+              : 'En servicio'
           : p.desde === null
             ? 'En servicio desde antes de 2019'
             : `En servicio desde el ${fechaDeJuego(p.desde)}`}
@@ -2360,7 +2378,7 @@
 
 {#if layers.energia && !tablero.catalogo}
   <div class="vias panel energia">
-    <span class="label">Energía · margen de cada región</span>
+    <span class="label">{sim.modo === 'realidad' ? 'Energía · margen estimado' : 'Energía · margen de cada región'}</span>
     <ul class="leyenda dos">
       {#each Object.entries(TEXTO_NIVEL) as [n, texto] (n)}
         <li><span class="mancha" style:background={COLOR_ENERGIA[n as NivelEnergia].replace(/[\d.]+\)$/, '0.75)')}></span>{texto.split(' · ')[0]}</li>
@@ -2369,7 +2387,13 @@
         <li><span class="punto" style:background={color}></span>{nombre}</li>
       {/each}
       <li><span class="punto anillo"></span>Privada · <span class="punto lleno"></span>CFE</li>
+      {#if sim.modo === 'realidad'}
+        <li class="ancho"><span class="punto anillo punteado"></span>CFE en obra · <span class="punto anillo tenue"></span>anunciada</li>
+      {/if}
     </ul>
+    {#if sim.modo === 'realidad'}
+      <p class="nota-leyenda">Margen estimado por el juego: los oficiales de 2019 más las centrales que entraron de verdad.</p>
+    {/if}
   </div>
 {:else if layers.vias && !tablero.catalogo}
   <div class="vias panel">
@@ -2429,8 +2453,6 @@
   <button
     class="ctl"
     aria-pressed={layers.energia}
-    disabled={sim.modo === 'realidad'}
-    title={sim.modo === 'realidad' ? 'La energía todavía no está en el modo Realidad' : undefined}
     onclick={() => (layers.energia = !layers.energia)}
   >
     <svg class="sw" width="10" height="13" viewBox="0 0 10 13" aria-hidden="true">
@@ -2717,6 +2739,29 @@
   .punto.lleno {
     background: var(--muted);
     margin-left: 0.2rem;
+  }
+
+  .punto.punteado {
+    border-style: dashed;
+  }
+
+  .punto.tenue {
+    border-style: dotted;
+    opacity: 0.55;
+    margin-left: 0.2rem;
+  }
+
+  .leyenda li.ancho {
+    grid-column: 1 / -1;
+  }
+
+  .nota-leyenda {
+    margin: 0.45rem 0 0;
+    padding: 0 0.15rem;
+    font-size: 0.66rem;
+    line-height: 1.35;
+    color: var(--muted);
+    opacity: 0.85;
   }
 
   .energia-nivel {

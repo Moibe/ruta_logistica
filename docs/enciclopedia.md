@@ -51,7 +51,10 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039](https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297) | Demanda máxima por región de 2018 a 2024; cómo se mide el margen de reserva y sus mínimos; costo de inversión por kW de cada tecnología | DOF, 14 de octubre de 2025 | Documento oficial público |
 | [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
 | [CNE, lista de permisos de generación](https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx) | Las centrales privadas que entraron (o entrarán) desde 2019: capacidad, tecnología, fecha y municipio; inversión estimada de varias de la CFE | Al 31 de octubre de 2026 | Documento oficial público |
-| [CFE, Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) y [Programa de Desarrollo 2026–2030](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) | Costo de las centrales de la CFE; lo que la CFE invierte al año en centrales propias | 2025 y 2026 | Documento oficial público |
+| [CFE, Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) y [Programa de Desarrollo 2026–2030](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) | Costo de las centrales de la CFE, inicio de obra y avance físico de cada una al cierre de 2024; lo que la CFE invierte al año en centrales propias y cuándo entraron Salamanca, El Sauz II y Villa de Reyes | 2025 y 2026 | Documento oficial público |
+| [CFE, boletines de Manzanillo III](https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=10527), [Elvia Carrillo Puerto](https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=10576) y [Puerto Peñasco](https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=3788) | Fecha y MW de entrada en operación de esas centrales | 2023 y 2026 | Documento oficial público |
+| [CFE, Informe de la Gestión Gubernamental 2018–2024, EPS Generación I](https://www.cfe.gob.mx/nuestraempresa/Informe%20de%20gestion%201824/EPS%20Generaci%C3%B3n%20I.pdf) | El ciclo combinado Tula: contrato de 2014, sin terminar en 2018, en operación en 2020 | Septiembre de 2024 | Documento oficial público |
+| [Presidencia, «Cumplimos con el rescate de CFE»](https://www.gob.mx/amlo/prensa/cumplimos-con-el-rescate-de-cfe-presidente-amlo) y [La Jornada, «CFE construye planta de energía en Mexicali»](https://www.jornada.com.mx/notas/2022/04/10/estados/cfe-construye-planta-de-energia-en-mexicali-ante-riesgo-de-escasez/) | Las unidades de emergencia de Mexicali: en obra en abril de 2022, en operación en julio de 2024; avance de San Luis Río Colorado | 2022 y 2024 | Comunicado oficial; prensa |
 | [INEGI, servicio del Catálogo Único de Claves Geoestadísticas](https://gaia.inegi.org.mx/wscatgeo/v2/) | Ubicación de cada central: la cabecera de su municipio; el límite de Mulegé con Comondú y Loreto (Marco Geoestadístico, diciembre de 2025) | Consultado el 20 de noviembre de 2026 | Dato oficial público |
 | [Presidencia, «CFE construirá 2 centrales termosolares en Baja California Sur»](https://www.gob.mx/presidencia/prensa/mexico-a-la-vanguardia-cfe-construira-2-centrales-termosolares-en-baja-california-sur-para-beneficiar-hasta-200-mil-hogares?idiom=es) | Las termosolares de Baja California Sur: dos de 50 MW y una segunda etapa de 50 MW, con 11 horas de almacenamiento y de 36 a 48 meses de obra | 26 de agosto de 2025 | Documento oficial público |
 | [CFE, boletín de prensa 095/26](https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/260601%20-%20gen%20energias%20limpias%20y%20renovables.pdf) | Chicoasén II (240 MW, para finales de 2028) y el Proyecto Oasis, en evaluación | 1 de junio de 2026 | Documento oficial público |
@@ -1202,13 +1205,13 @@ los polos se detienen):
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Central | 23 % | 23 % | 23.3 % | 23.8 % | 29.6 % |
 | Oriental | 22.6 % | 17.2 % | 10.6 % | 7.5 % | 19.4 % |
-| Occidental | 18.9 % | 13.8 % | 9.2 % | 5.1 % ✗ | 20.4 % |
+| Occidental | 18.9 % | 13.8 % | 9.2 % | 5.1 % ✗ | 19.5 % |
 | Noroeste | 34.6 % | 25.3 % | 29.3 % | 20.6 % | 20.6 % |
 | Norte | 25.7 % | 18.5 % | 12.2 % | 6 % ✗ | 11.2 % |
 | Noreste | 38.9 % | 35.6 % | 29.6 % | 23 % | 23 % |
 | Peninsular | 12.4 % | -0.5 % ✗ | -11.9 % ✗ | -20.9 % ✗ | 20 % |
 | Baja California | -6.7 % ✗ | -13.1 % ✗ | -19.6 % ✗ | -22.4 % ✗ | 22.1 % |
-| Baja California Sur | 19.1 % | 9 % ✗ | 17.7 % | 5.8 % ✗ | 39.6 % |
+| Baja California Sur | 19.2 % | 9 % ✗ | 17.7 % | 5.8 % ✗ | 39.6 % |
 | Mulegé | 180.9 % | 166.4 % | 152.6 % | 139.5 % | 193.8 % |
 
 La península cae en 2023, como en la realidad (los apagones de Yucatán de 2023–2024). Baja
@@ -1233,22 +1236,22 @@ Presidencia.
 
 | Central | Región | MW | Costo con 4 cuadrillas | Tiempo | De dónde sale el costo | En la realidad |
 | --- | --- | ---: | ---: | ---: | --- | --- |
-| Ciclo combinado Tula (paquetes 1 y 2) | Central | 567 | 5.7 mil millones | 36 meses | Permiso de la CNE | En operación desde el 28 de noviembre de 2020. |
-| Ciclo combinado Salamanca | Occidental | 958 | 11.3 mil millones | 36 meses | Permiso de la CNE | Entró en operación en 2025. |
-| Ciclo combinado El Sauz II | Occidental | 203 | 3.1 mil millones | 36 meses | Costo por kW de su tecnología | Entró en operación en 2025. Sus MW salen de restar Salamanca (958.18) y San Luis Potosí (448.68) a los 1,610 MW que la CFE reporta para las tres. |
-| Ciclo combinado San Luis Potosí (Villa de Reyes) | Occidental | 449 | 6.9 mil millones | 36 meses | Costo por kW de su tecnología | Entró en operación en 2025. |
-| Ciclo combinado Manzanillo III | Occidental | 540 | 8.3 mil millones | 36 meses | Costo por kW de su tecnología | Entró en operación el primer semestre de 2026. Sus MW salen de restar González Ortega (641.4) y Mérida (499) a los 1,680 MW de las tres. |
-| Ciclo combinado González Ortega (Mexicali) | Baja California | 641 | 15.6 mil millones | 36 meses | Informe Anual CFE 2024 | Entró en operación el primer semestre de 2026. |
-| Ciclo combinado Mérida (Elvia Carrillo Puerto) | Peninsular | 499 | 10 mil millones | 36 meses | Informe Anual CFE 2024 | Entró en operación el primer semestre de 2026. |
-| Ciclo combinado Tuxpan, fase I | Oriental | 1,057 | 16.6 mil millones | 36 meses | Informe Anual CFE 2024 | En obra; la CFE la espera entre 2026 y 2028. |
-| Ciclo combinado Riviera Maya (Valladolid IV) | Peninsular | 1,020 | 16.7 mil millones | 36 meses | Informe Anual CFE 2024 | En obra; la CFE la espera entre 2026 y 2028. |
-| Ciclo combinado San Luis Río Colorado | Baja California | 648 | 14.5 mil millones | 36 meses | Informe Anual CFE 2024 | En obra; la CFE la espera entre 2026 y 2028. |
-| Ciclo combinado Lerdo | Norte | 350 | 5.4 mil millones | 36 meses | Costo por kW de su tecnología | En obra; la CFE la espera entre 2026 y 2028. |
-| Parque solar Puerto Peñasco, etapas I y II | Noroeste | 457 | 15 mil millones | 12 meses | Permiso de la CNE | Primera etapa en febrero de 2024; la segunda (300 MW) desde el 11 de septiembre de 2025. |
+| Ciclo combinado Tula (paquetes 1 y 2) | Central | 567 | 5.7 mil millones | 36 meses | Permiso de la CNE | Proyecto de la administración anterior (contrato de 2014), sin terminar en 2018; en operación comercial desde el 28 de noviembre de 2020. |
+| Ciclo combinado Salamanca | Occidental | 958 | 11.3 mil millones | 36 meses | Permiso de la CNE | Obra desde el 30 de septiembre de 2021; en operación desde el 14 de febrero de 2025. |
+| Ciclo combinado El Sauz II | Occidental | 269 | 4.2 mil millones | 36 meses | Costo por kW de su tecnología | Obra desde el 30 de septiembre de 2021; en operación desde el 12 de septiembre de 2025, con 268.97 MW. |
+| Ciclo combinado San Luis Potosí (Villa de Reyes) | Occidental | 449 | 6.9 mil millones | 36 meses | Costo por kW de su tecnología | Obra desde el 30 de septiembre de 2021; en operación desde el 5 de julio de 2025. |
+| Ciclo combinado Manzanillo III | Occidental | 346 | 5.3 mil millones | 36 meses | Costo por kW de su tecnología | Obra desde el 8 de marzo de 2022; en operación comercial desde el 17 de abril de 2026, con 346 MW. |
+| Ciclo combinado González Ortega (Mexicali) | Baja California | 641 | 15.6 mil millones | 36 meses | Informe Anual CFE 2024 | Obra desde el 26 de enero de 2022; en operación desde el 15 de mayo de 2026. |
+| Ciclo combinado Mérida (Elvia Carrillo Puerto) | Peninsular | 499 | 10 mil millones | 36 meses | Informe Anual CFE 2024 | Obra desde el 18 de enero de 2022; en operación comercial desde el 12 de mayo de 2026. |
+| Ciclo combinado Tuxpan, fase I | Oriental | 1,057 | 16.6 mil millones | 36 meses | Informe Anual CFE 2024 | Obra desde el 17 de febrero de 2022, 84.8 % al cierre de 2024; la CFE la espera entre 2026 y 2028. |
+| Ciclo combinado Riviera Maya (Valladolid IV) | Peninsular | 1,020 | 16.7 mil millones | 36 meses | Informe Anual CFE 2024 | Obra desde el 20 de enero de 2022, 92.3 % al cierre de 2024; la CFE la espera entre 2026 y 2028. |
+| Ciclo combinado San Luis Río Colorado | Baja California | 648 | 14.5 mil millones | 36 meses | Informe Anual CFE 2024 | Obra desde el 26 de enero de 2022, 89.9 % al cierre de 2024; su permiso la espera a finales de 2027. |
+| Ciclo combinado Lerdo | Norte | 350 | 5.4 mil millones | 36 meses | Costo por kW de su tecnología | Obra desde el 29 de abril de 2022, 89 % al cierre de 2024; la CFE la espera entre 2026 y 2028. |
+| Parque solar Puerto Peñasco, etapas I y II | Noroeste | 457 | 15 mil millones | 12 meses | Permiso de la CNE | Primera etapa (120 MW) en operación desde el 17 de febrero de 2023; la segunda (300 MW), empezada en septiembre de 2022, desde el 11 de septiembre de 2024. |
 | Parque solar Puerto Peñasco, etapas III y IV | Noroeste | 580 | 10.8 mil millones | 12 meses | Costo por kW de su tecnología | Programada para 2028. |
-| Unidades de combustión interna y turbogás en Mexicali y San Luis Río Colorado | Baja California | 735 | 12.6 mil millones | 12 meses | Permiso de la CNE | En operación desde 2025. |
+| Unidades de combustión interna y turbogás en Mexicali y San Luis Río Colorado | Baja California | 735 | 12.6 mil millones | 12 meses | Permiso de la CNE | Mexicali Oriente ya operaba en julio de 2024; la CNE registra las unidades en operación de marzo a junio de 2025. |
 | Turbogás de emergencia en Los Cabos | Baja California Sur | 154 | 2.8 mil millones | 12 meses | Permiso de la CNE | En operación desde el 12 de junio de 2025. |
-| Turbogás aeroderivadas Riviera Maya | Peninsular | 100 | 2 mil millones | 12 meses | Costo por kW de su tecnología | Programadas para 2026 (Cancún y Cozumel). |
+| Turbogás aeroderivadas Riviera Maya | Peninsular | 100 | 2 mil millones | 12 meses | Costo por kW de su tecnología | La primera, Nizuc (36.9 MW, Cancún), en operación desde el 14 de octubre de 2026; Cancún 1 y 2 y Chankanaab (Cozumel), en obra. |
 | Termosolares de Baja California Sur, primera etapa (2 de 50 MW) | Baja California Sur | 100 | 6.7 mil millones | 42 meses | Estimación con IRENA | Anunciadas el 26 de agosto de 2025: dos centrales de torre central con almacenamiento térmico, 100 MW y 11 horas de operación continua. Primeras de su tipo en México; la CFE aún busca los sitios y las quiere operando al cierre del sexenio. |
 | Termosolar de Baja California Sur, segunda etapa (50 MW) | Baja California Sur | 50 | 3.4 mil millones | 42 meses | Estimación con IRENA | Anunciada el 26 de agosto de 2025 como segunda etapa: «una más de 50 megawatts» para descarbonizar el sistema de Baja California Sur. |
 | Proyecto Oasis: solar, baterías e hidrógeno verde en Mulegé | Mulegé | 60 | 2.4 mil millones | 24 meses | Estimación con el plan de la SENER e IRENA | Anunciado por la CFE el 10 de septiembre de 2026: el primer proyecto en México que combina solar, baterías e hidrógeno verde en un sistema eléctrico aislado. Abastecerá 40 mil hogares, evitará 23 mil m³ de diésel y combustóleo y 93 mil toneladas de CO₂ al año. En evaluación. |
@@ -1300,14 +1303,15 @@ Mulegé) dice sus márgenes y su demanda; por una central, su capacidad, dueño 
 ### El modo Realidad
 
 El tablero tiene dos modos, con el interruptor *Juego / Realidad* del reloj. En **Realidad** no
-se juega: el tablero muestra lo que de verdad pasó con cada obra de vía del catálogo, hoy o en
+se juega: el tablero muestra lo que de verdad pasó con cada obra de vía y cada central de la CFE
+del catálogo, hoy o en
 cualquier fecha desde el 1 de diciembre de 2018, el mismo arranque de la partida (la línea de
 tiempo del reloj). La partida queda guardada y sigue
 donde estaba al volver a *Juego*.
 
-Cada obra tiene sus fechas reales, con fuente (`datos/obras-via-real.json`): cuándo se anunció,
-cuándo arrancó, sus avances oficiales y cuándo entró en operación. En la fecha elegida, la obra
-está:
+Cada obra tiene sus fechas reales, con fuente (`datos/obras-via-real.json` y
+`datos/centrales-real.json`): cuándo se anunció, cuándo arrancó, sus avances oficiales y cuándo
+entró en operación. En la fecha elegida, una vía está:
 
 | Etapa | En el mapa |
 | --- | --- |
@@ -1315,6 +1319,22 @@ está:
 | Anunciada | Línea de puntos tenue |
 | En obra | Línea punteada, con su avance en la ficha |
 | En operación | Vía del Estado; la red y sus km cambian |
+
+Y una central de la CFE (con la capa *Energía*):
+
+| Etapa | En el mapa |
+| --- | --- |
+| Sin anunciar, o sin datos (la CFE no publica cuándo empezó) | No se dibuja |
+| Anunciada | Círculo de puntos tenue |
+| En obra | Círculo punteado, con su avance en la ficha |
+| En operación | Círculo lleno; cuenta en el margen de su región |
+
+Las fechas de las centrales salen sobre todo de la CFE: su Informe Anual 2024 da el inicio de
+obra y el avance físico al cierre de 2024 de cada ciclo combinado y de Chicoasén II; su Programa
+de Desarrollo 2026–2030 y sus boletines, el día en que cada una entró en operación; la lista de
+permisos de la CNE, las que faltan. Donde la CFE no publica el inicio (Tula, Puerto Peñasco, las
+unidades de emergencia), la central se ve en obra desde la primera fecha en que una fuente la
+reporta así: Tula, por ejemplo, era un proyecto sin terminar de la administración anterior.
 
 **El avance entre dos datos es una estimación.** El gobierno publica avances en fechas sueltas
 («32 % al 31 de octubre de 2026»). Entre el arranque (0 %), cada dato oficial y la apertura
@@ -1326,9 +1346,15 @@ desde el día 1). El tramo 5 Sur del Tren Maya no tiene fecha exacta de apertura
 oficial: se toma la del circuito completo, el 15 de diciembre de 2024.
 
 El panel de arriba a la derecha cambia: el presupuesto federal real para ferrocarriles de ese
-año y cuántas obras y km están en operación, en obra y anunciadas. No hay trenes ni barcos (los
-del juego son servicios inventados), ni capa de energía (la del juego es un modelo). **Las
-centrales de la CFE y los polos todavía no están en este modo.**
+año, cuántas obras y km están en operación, en obra y anunciadas, y cuántas centrales de la CFE
+operan (con sus MW) y cuántas están en obra. No hay trenes ni barcos: los del juego son
+servicios inventados. **Los polos todavía no están en este modo.**
+
+**El margen de cada región es una estimación.** La capa *Energía* pinta las regiones con el
+modelo del juego: los márgenes oficiales de 2019, la demanda creciendo a su ritmo real y las
+centrales que entraron de verdad, privadas y de la CFE. No cuenta la transmisión entre
+regiones ni las obras que no están en el catálogo, así que puede quedar más bajo que el real:
+hoy marca crítica la península, aun con Mérida operando. La leyenda lo dice.
 
 No es una transmisión en vivo: no hay fuente oficial en línea del avance de las obras. Los datos
 tienen fecha de corte, a la vista bajo la línea de tiempo.
@@ -1386,6 +1412,9 @@ tienen fecha de corte, a la vista bajo la línea de tiempo.
 - **La partida empieza el 1 de diciembre de 2018.** *(20 nov 2026.)* El día en que empezó el
   sexenio: da un mes más de juego, y el modo Realidad arranca el mismo día (ahí se ve el anuncio
   del Tren Maya, el 16 de diciembre). Diciembre trae la doceava parte del presupuesto de 2018.
+- **Las centrales de la CFE, también en Realidad.** *(20 nov 2026.)* Con sus fechas oficiales y
+  la capa de energía encendida; el margen de las regiones se marca como estimado, porque es el
+  modelo del juego con las centrales reales.
 - **Dos modos: Juego y Realidad.** *(20 nov 2026.)* El usuario vio que el tablero también sirve
   como visor de lo que se va haciendo de verdad. El mismo mapa, con las mismas obras: en un modo
   decides tú, en el otro se ve lo que pasó. Empieza por las obras de vía, con línea de tiempo.
@@ -1451,6 +1480,12 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 20 de noviembre de 2026
 
+- **Centrales de la CFE, con sus cifras oficiales.** El Sauz II y Manzanillo III tenían MW
+  sacados de restar otras centrales a un total de la CFE (203 y 540 MW); la CFE publica 268.97
+  MW (El Sauz II, Programa de Desarrollo 2026–2030) y 346 MW (Manzanillo III, boletín del 17 de
+  abril de 2026). Puerto Peñasco decía primera etapa en febrero de 2024 y segunda en septiembre
+  de 2025: fueron el 17 de febrero de 2023 y el 11 de septiembre de 2024 (boletín de la CFE e
+  Informe Anual 2024). Las demás centrales ya en operación tienen ahora su fecha exacta.
 - **Tren Maya, tramos 1 y 2.** Decían «inaugurado el 15 de diciembre de 2023», que fue la ruta
   Campeche–Cancún. Palenque–Campeche (el tramo 1 y el resto del 2) entró en servicio el 1 de
   enero de 2024.

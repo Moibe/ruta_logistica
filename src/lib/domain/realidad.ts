@@ -1,9 +1,11 @@
-import DATOS from './datos/obras-via-real.json';
+import VIAS from './datos/obras-via-real.json';
+import CENTRALES from './datos/centrales-real.json';
 import { horasDeFecha } from './calendario';
 
 /**
- * What really happened with each rail work of the catalog
- * (`datos/obras-via-real.json`, every date with its source): the Realidad
+ * What really happened with each rail work and each CFE plant of the catalog
+ * (`datos/obras-via-real.json`, `datos/centrales-real.json`, every date with
+ * its source): the Realidad
  * mode shows the board as it stood on any date since 1 December 2018, the day
  * the government took office (the game's own start), instead of what
  * the player builds.
@@ -18,6 +20,8 @@ type ObraRealJson = {
   /** "2024", "2024-03" or "2024-03-15": as precise as the source is. */
   anuncio?: string;
   inicio?: string;
+  /** The start isn't published: the first date a source reports it under way. */
+  enObraAl?: string;
   operacion?: string;
   /** A part of it opened before the whole. */
   parcial?: { fecha: string; texto: string };
@@ -31,7 +35,15 @@ type ObraRealJson = {
   fuentes: string[];
 };
 type RealJson = { corte: string; nota: string; fuentes: Record<string, Fuente>; obras: Record<string, ObraRealJson> };
-const REAL = DATOS as unknown as RealJson;
+const vias = VIAS as unknown as RealJson;
+const centrales = CENTRALES as unknown as RealJson;
+/** Both records in one: rail works and plants have different ids, and the sources different keys. */
+const REAL: RealJson = {
+  corte: vias.corte,
+  nota: vias.nota,
+  fuentes: { ...vias.fuentes, ...centrales.fuentes },
+  obras: { ...vias.obras, ...centrales.obras },
+};
 
 export const CORTE_REAL = REAL.corte;
 
@@ -45,11 +57,12 @@ export function fechaEnPalabras(fecha: string): string {
 
 export const HORAS_DEL_CORTE = horasDeFecha(REAL.corte) + 24;
 
-export type EtapaReal = 'sin-proyecto' | 'sin-anunciar' | 'anunciada' | 'en-obra' | 'en-operacion';
+export type EtapaReal = 'sin-proyecto' | 'sin-anunciar' | 'sin-datos' | 'anunciada' | 'en-obra' | 'en-operacion';
 
 export const TEXTO_ETAPA: Record<EtapaReal, string> = {
   'sin-proyecto': 'sin proyecto oficial',
   'sin-anunciar': 'aún sin anunciar',
+  'sin-datos': 'sin datos oficiales todavía',
   anunciada: 'anunciada',
   'en-obra': 'en obra',
   'en-operacion': 'en operación',
@@ -79,25 +92,26 @@ export function estadoReal(id: string, horas: number): EstadoReal {
   const nada = { avance: null, estimado: false, parcial: null };
   if (!o) return { etapa: 'sin-proyecto', ...nada };
   if (o.operacion && horas >= horasDeFecha(o.operacion)) return { etapa: 'en-operacion', avance: 1, estimado: false, parcial: null };
-  if (o.inicio && horas >= horasDeFecha(o.inicio)) {
-    // Known points: the start, each official figure, the opening.
-    const puntos: [number, number][] = [[horasDeFecha(o.inicio), 0]];
+  const enObra = o.inicio ?? o.enObraAl ?? o.avances?.[0]?.fecha;
+  if (enObra && horas >= horasDeFecha(enObra)) {
+    // Known points: the start (0 %, only when it's published), each official figure, the opening.
+    const puntos: [number, number][] = o.inicio ? [[horasDeFecha(o.inicio), 0]] : [];
     for (const a of o.avances ?? []) puntos.push([horasDeFecha(a.fecha), a.pct / 100]);
     if (o.operacion) puntos.push([horasDeFecha(o.operacion), 1]);
     let avance: number | null = null;
     let estimado = false;
-    if (puntos.length > 1) {
-      const i = puntos.findIndex(([h]) => h > horas);
-      if (i < 0) avance = puntos[puntos.length - 1][1];
-      else {
-        const [h0, p0] = puntos[i - 1];
-        const [h1, p1] = puntos[i];
-        avance = p0 + ((p1 - p0) * (horas - h0)) / (h1 - h0);
-        estimado = true;
-      }
+    const i = puntos.findIndex(([h]) => h > horas);
+    if (i > 0) {
+      const [h0, p0] = puntos[i - 1];
+      const [h1, p1] = puntos[i];
+      avance = p0 + ((p1 - p0) * (horas - h0)) / (h1 - h0);
+      estimado = true;
+    } else if (i < 0 && puntos.length > (o.inicio ? 1 : 0)) {
+      // Past the last figure: that figure, no guessing beyond it.
+      avance = puntos[puntos.length - 1][1];
     }
     return { etapa: 'en-obra', avance, estimado, parcial: o.parcial && horas >= horasDeFecha(o.parcial.fecha) ? o.parcial.texto : null };
   }
   if (o.anuncio && horas >= horasDeFecha(o.anuncio)) return { etapa: 'anunciada', ...nada };
-  return { etapa: 'sin-anunciar', ...nada };
+  return { etapa: o.anuncio ? 'sin-anunciar' : 'sin-datos', ...nada };
 }

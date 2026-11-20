@@ -6,6 +6,7 @@
   import { km, mdp, personas } from './formato';
   import { añoDe } from '$lib/domain/calendario';
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
+  import { OBRAS_ENERGIA } from '$lib/domain/energia';
 
   /** The last year with a real figure: later years repeat it. */
   const ULTIMO_AÑO = FEDERAL.años[FEDERAL.años.length - 1].año;
@@ -45,8 +46,14 @@
       else if (e === 'en-obra') (cuenta.enObra++, (cuenta.kmObra += largo));
       else if (e === 'en-operacion') (cuenta.enOperacion++, (cuenta.kmOperacion += largo));
     }
+    const cfe = { enOperacion: 0, mwOperacion: 0, enObra: 0 };
+    for (const o of OBRAS_ENERGIA) {
+      const e = sim.real.get(o.id)?.etapa;
+      if (e === 'en-operacion') (cfe.enOperacion++, (cfe.mwOperacion += o.mw));
+      else if (e === 'en-obra') cfe.enObra++;
+    }
     const serie = a.repetido ? 'sin dato aún: el último publicado' : a.serie === 'ejercido' ? 'ejercido' : a.serie === 'aprobado' ? 'aprobado' : 'proyecto';
-    return { ...cuenta, año: a.año, federal: a.federal, serie };
+    return { ...cuenta, cfe, año: a.año, federal: a.federal, serie };
   });
 
   /** This month's payment and the year it comes from, with the sources in words. */
@@ -102,6 +109,11 @@
     <span class="label">En obra</span>
     <span><b class="mono">{real.enObra}</b> obra{real.enObra === 1 ? '' : 's'} · <b class="mono">{km(real.kmObra)}</b></span>
     <span class="dim">· {real.anunciadas} anunciadas</span>
+  </div>
+  <div class="fila" title="Centrales de la CFE del catálogo, en su etapa real">
+    <span class="label">Centrales CFE</span>
+    <span><b class="mono">{real.cfe.enOperacion}</b> operando · <b class="mono">{personas(real.cfe.mwOperacion)}</b> MW</span>
+    <span class="dim">· {real.cfe.enObra} en obra</span>
   </div>
   <button class="fila obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
     <span class="label">Obras</span>

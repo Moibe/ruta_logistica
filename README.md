@@ -236,12 +236,15 @@ al paso del dinero (`mesesAlRitmoDelDinero`, con el calendario real de mensualid
 tabla por año y el método, en la [enciclopedia](docs/enciclopedia.md#el-presupuesto-del-estado).
 
 **Dos modos** (`sim.modo`): *Juego* y *Realidad*, con el interruptor del reloj. En Realidad
-(`domain/realidad.ts`, `datos/obras-via-real.json`) el tablero muestra cómo estaba de verdad cada
-obra de vía (anunciada, en obra con su avance, en operación) hoy o en cualquier fecha desde el 1 de diciembre de 2018:
-`sim.entrarRealidad()` guarda la partida, `sim.irA(horas)` pone la fecha y rehace la red cuando
-cambia lo que está en operación, y `sim.salirRealidad()` devuelve la partida intacta. El reloj no
-corre, no hay flota ni energía, y nada se paga. Por ahora solo las obras de vía; faltan las
-centrales de la CFE y los polos. Los datos tienen fecha de corte (`corte`), que el reloj muestra.
+(`domain/realidad.ts`, `datos/obras-via-real.json`, `datos/centrales-real.json`) el tablero
+muestra cómo estaba de verdad cada obra de vía y cada central de la CFE (anunciada, en obra con
+su avance, en operación) hoy o en cualquier fecha desde el 1 de diciembre de 2018:
+`sim.entrarRealidad()` guarda la partida, `sim.irA(horas)` pone la fecha, rehace la red cuando
+cambia lo que está en operación y pone las centrales en su etapa real, y `sim.salirRealidad()`
+devuelve la partida intacta. El reloj no corre, no hay flota y nada se paga. La capa de energía
+pinta el margen de cada región con el modelo del juego y las centrales reales: es una
+estimación y la leyenda lo dice. Faltan los polos. Los datos tienen fecha de corte (`corte`), que
+el reloj muestra.
 
 **La energía** (`domain/energia.ts`, `datos/energia.json`): el país en sus 9 regiones del
 sistema eléctrico, más Mulegé, el sistema aislado del norte de Baja California Sur. Cada una
