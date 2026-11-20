@@ -1,5 +1,6 @@
 import type { LonLat } from './geo';
 import type { Sitio } from './sitios';
+import { acumulado, crearTrayecto, lerp, type Trayecto } from './trayecto';
 
 /**
  * The rail network as a graph, and how to get around it. Pure data and math:
@@ -71,35 +72,9 @@ export type Red = {
   sinEstacion: Map<string, number>;
 };
 
-/** A route through the network, flattened into one polyline. */
-export type Trayecto = {
-  desde: number;
-  hasta: number;
-  puntos: LonLat[];
-  acum: number[];
-  /** Speed on each segment (puntos[i] → puntos[i + 1]), km/h. */
-  vel: number[];
-  /** Cumulative hours along `puntos`, at each segment's speed. */
-  acumH: number[];
-  km: number;
-  horas: number;
-};
-
 // ---- geometry helpers -------------------------------------------------------------
 
 const D2R = Math.PI / 180;
-
-/** Distance in km; equirectangular at the pair's mean latitude — exact enough for track segments. */
-export function kmEntre(a: LonLat, b: LonLat): number {
-  const c = Math.cos(((a[1] + b[1]) / 2) * D2R);
-  return 6371 * Math.hypot((b[0] - a[0]) * D2R * c, (b[1] - a[1]) * D2R);
-}
-
-function acumulado(puntos: LonLat[]): number[] {
-  const out = [0];
-  for (let i = 1; i < puntos.length; i++) out.push(out[i - 1] + kmEntre(puntos[i - 1], puntos[i]));
-  return out;
-}
 
 /** Nearest point of segment a–b to p, in a local planar frame. */
 function sobreSegmento(p: LonLat, a: LonLat, b: LonLat): { km: number; u: number } {
@@ -113,8 +88,6 @@ function sobreSegmento(p: LonLat, a: LonLat, b: LonLat): { km: number; u: number
   const u = l2 ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / l2)) : 0;
   return { km: Math.hypot(ax + u * dx, ay + u * dy), u };
 }
-
-const lerp = (a: LonLat, b: LonLat, u: number): LonLat => [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u];
 
 export const claseDe = (rango: number): Clase => (rango <= RANGO_MAX_PRIMARIA ? 'primaria' : 'secundaria');
 
@@ -136,7 +109,8 @@ export function construirRed(json: RedJson, sitios: readonly Sitio[]): Red {
   const estaciones = new Map<string, Estacion>();
   const sinEstacion = new Map<string, number>();
 
-  for (const s of sitios) {
+  // Gateways are out at sea and never get a station.
+  for (const s of sitios.filter((x) => x.tipo !== 'puerta')) {
     // Nearest point on the whole network.
     let best = { km: Infinity, tramo: -1, seg: 0, u: 0 };
     for (const t of tramos) {
@@ -284,67 +258,5 @@ export function ruta(red: Red, desde: number, hasta: number): Trayecto | null {
       puntos.push(pts[i]);
     }
   }
-  return trayecto(desde, hasta, puntos, vel);
-}
-
-function trayecto(desde: number, hasta: number, puntos: LonLat[], vel: number[]): Trayecto {
-  const acum = acumulado(puntos);
-  const acumH = [0];
-  for (let i = 1; i < puntos.length; i++) acumH.push(acumH[i - 1] + (acum[i] - acum[i - 1]) / vel[i - 1]);
-  return {
-    desde,
-    hasta,
-    puntos,
-    acum,
-    vel,
-    acumH,
-    km: acum[acum.length - 1],
-    horas: acumH[acumH.length - 1],
-  };
-}
-
-/** The same track, travelled the other way. */
-export function invertir(t: Trayecto): Trayecto {
-  return trayecto(t.hasta, t.desde, [...t.puntos].reverse(), [...t.vel].reverse());
-}
-
-// ---- moving along a route ----------------------------------------------------------------
-
-/** Index of the segment that contains `km` (binary search on `acum`). */
-export function segmentoEn(t: Trayecto, km: number): number {
-  let lo = 0;
-  let hi = t.acum.length - 2;
-  while (lo < hi) {
-    const mid = (lo + hi + 1) >> 1;
-    if (t.acum[mid] <= km) lo = mid;
-    else hi = mid - 1;
-  }
-  return Math.max(0, lo);
-}
-
-export function puntoEn(t: Trayecto, km: number): LonLat {
-  const k = Math.max(0, Math.min(t.km, km));
-  const i = segmentoEn(t, k);
-  const largo = t.acum[i + 1] - t.acum[i];
-  return lerp(t.puntos[i], t.puntos[i + 1], largo > 0 ? (k - t.acum[i]) / largo : 0);
-}
-
-/** Hours of running left from `km` to the end of the route. */
-export function horasRestantes(t: Trayecto, km: number): number {
-  const k = Math.max(0, Math.min(t.km, km));
-  const i = segmentoEn(t, k);
-  return t.horas - (t.acumH[i] + (k - t.acum[i]) / t.vel[i]);
-}
-
-/** The polyline between two distances along the route (clamped), interior vertices included. */
-export function seccion(t: Trayecto, km0: number, km1: number): LonLat[] {
-  const a = Math.max(0, Math.min(t.km, km0));
-  const b = Math.max(0, Math.min(t.km, km1));
-  if (b <= a) return [puntoEn(t, a)];
-  const i = segmentoEn(t, a);
-  const j = segmentoEn(t, b);
-  const out: LonLat[] = [puntoEn(t, a)];
-  for (let n = i + 1; n <= j; n++) out.push(t.puntos[n]);
-  out.push(puntoEn(t, b));
-  return out;
+  return crearTrayecto(puntos, vel);
 }

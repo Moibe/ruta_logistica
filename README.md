@@ -8,10 +8,11 @@ país. Dos escalas de la misma geografía:
   y la cámara vuela hasta el país y entra al tablero.
 - **México**: el tablero, donde se juega. Estados, red ferroviaria real, puertos y ciudades,
   en la proyección cónica de Lambert del INEGI, con **trenes de carga** corriendo por las
-  vías reales bajo un reloj de juego.
+  vías reales y **barcos** navegando rutas marítimas calculadas (por el Canal de Panamá de
+  costa a costa, y hacia Asia y Europa por dos salidas al mundo), bajo un reloj de juego.
 
-**[Enciclopedia del juego](docs/enciclopedia.md)**: qué puertos, ciudades, vías y servicios
-hay, de qué fuente sale cada dato, qué se corrigió a mano y las reglas de la simulación. Se
+**[Enciclopedia del juego](docs/enciclopedia.md)**: qué puertos, ciudades, vías, rutas y
+servicios hay, de qué fuente sale cada dato, qué se corrigió a mano y las reglas de la simulación. Se
 actualiza con cada cosa que entra al juego; más adelante será una página web.
 
 Scaffold basado en `global`, que a su vez salió de
@@ -38,13 +39,13 @@ saltar al siguiente libre.
 | `npm run dev`   | Servidor de desarrollo                                          |
 | `npm run build` | Build de producción (`adapter-auto`, sin destino de deploy aún) |
 | `npm run check` | `svelte-check` sobre todo el proyecto                           |
-| `npm run datos` | Regenera la geografía y la red ferroviaria desde Natural Earth  |
+| `npm run datos` | Regenera geografía, red ferroviaria y rutas marítimas (~15 s)   |
 
 ## Vistas
 
 | Ruta            | Stack             | Qué hace                                                                                     |
 | --------------- | ----------------- | -------------------------------------------------------------------------------------------- |
-| `/mexico`       | d3-geo + Canvas2D | El tablero con los trenes. `/` redirige aquí: el juego es lo principal.                      |
+| `/mexico`       | d3-geo + Canvas2D | El tablero con trenes y barcos. `/` redirige aquí: el juego es lo principal.                 |
 | `/mundo/canvas` | d3-geo + Canvas2D | El mundo plano de `global` (tres proyecciones, mundo repetido) con México en ámbar.          |
 | `/mundo/globo`  | Threlte + three   | El globo de `global`, abre mirando a México; el país va relleno de puntos ámbar. Solo cliente. |
 
@@ -74,10 +75,12 @@ saltar al siguiente libre.
     demás junto.
   - **fondo**: mar (fijo a la pantalla), la capa desplazada, sitios, estaciones y etiquetas.
     Se repinta solo cuando algo cambia.
-  - **movimiento**: cada cuadro copia el fondo y dibuja encima los trenes y la vista previa de
-    ruta. Con la cámara quieta y el reloj corriendo, un cuadro es un `drawImage` y los trenes.
+  - **movimiento**: cada cuadro copia el fondo y dibuja encima los trenes, los barcos y la
+    vista previa de ruta. Con la cámara quieta y el reloj corriendo, un cuadro es un
+    `drawImage` y los vehículos.
 
-  Medido con GPU en Chrome a 1600×900: 60 fps quieto, arrastrando y siguiendo un tren.
+  Medido con GPU en Chrome a 1600×900: 60 fps quieto, arrastrando y siguiendo un tren, con
+  8 trenes y 6 barcos (en una prueba A/B, con y sin barcos, la diferencia es ruido).
 
 ### Trenes
 
@@ -104,6 +107,25 @@ saltar al siguiente libre.
   orden; la ruta se dibuja mientras eliges y *Despachar* (o Enter) lo pone a correr.
   Retroceso quita la última parada, Esc cancela.
 
+### Barcos
+
+- **Rutas marítimas calculadas** (`domain/mar.ts`), una por cada par de puertos y salidas:
+  ver [Datos](#datos). Por mar de Salina Cruz a Coatzacoalcos hay 4,825 km (por Panamá);
+  por tren, 274: el Istmo en números, tal como es.
+- **Cuatro clases** (`domain/barcos.ts`): portacontenedores y ro-ro a 18 nudos, buque tanque
+  a 14, granelero a 13; cada una con su tiempo en puerto. En el Canal, 9 km/h.
+- **Servicios circulares** (A → B → C → A), como las líneas de navieras. Un barco que sale
+  por una **salida al mundo** (Asia, Europa) queda fuera del mapa el tiempo real de la
+  travesía al puerto lejano (Shanghái, Róterdam) y de vuelta.
+- **6 barcos iniciales**: Asia–Manzanillo–Lázaro Cárdenas, Europa–Veracruz–Altamira, los
+  combustibles del Pacífico desde Salina Cruz y los del Golfo, autos de costa a costa por
+  Panamá y graneles de Guaymas a Asia. Nombres inventados de la geografía de México.
+- **Un motor de servicios común** (`domain/servicio.ts`) para trenes y barcos: cambia cómo se
+  traza cada pierna y cuánto se espera, el paso de simulación es el mismo.
+- **En el tablero**: casco con proa orientado al rumbo y estela; el Canal de Panamá trazado en
+  cian; las dos salidas como un anillo con flecha. La lista tiene pestañas Trenes / Barcos, y
+  *＋ Nuevo* en la pestaña Barcos pide la clase y las escalas (puertos o salidas).
+
 ### Mundo
 
 - **Canvas** (`CanvasMap.svelte`): México se dibuja encima del mundo con la misma geometría
@@ -124,18 +146,29 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `static/data/land-*.json`, `countries-110m.json` | Mundo, de `world-atlas` (heredado de `global`)                     |
 | `static/data/mexico.topo.json`       | Estados y países vecinos en un solo TopoJSON (~350 KB)                         |
 | `static/data/red-ferroviaria.json`   | La red como grafo: 198 nodos, 231 tramos, ~19,200 km (~210 KB)                 |
+| `static/data/rutas-maritimas.json`   | 136 rutas por mar entre puertos y salidas, y el trazo del Canal (~50 KB)       |
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
-| `src/lib/domain/sitios.ts`           | Tipos de sitio, las ciudades tipadas y los **15 puertos, curados a mano**      |
+| `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
+| `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa), a mano                              |
 
-`npm run datos` (`scripts/datos-mexico.mjs`) regenera los tres primeros desde **Natural Earth
-10m**, fijado a un commit de `nvkelso/natural-earth-vector`. Baja ~85 MB una sola vez a
+`npm run datos` (`scripts/datos-mexico.mjs`) regenera los cuatro primeros desde **Natural
+Earth 10m**, fijado a un commit de `nvkelso/natural-earth-vector`. Baja ~85 MB una sola vez a
 `.cache/ne/` (ignorado por git). La lógica de atributos (nombres en español, qué ciudades
 entran) es JS simple; mapshaper solo hace geometría: disolver, recortar, simplificar (~250 m)
 y codificar TopoJSON. Los archivos generados se commitean: la app nunca necesita el script.
 
 Los puertos van a mano porque la capa de puertos de Natural Earth no trae ni Lázaro Cárdenas
-ni Altamira, los más grandes del país. Coordenadas de la terminal; los puertos de río
-(Altamira, Tampico, Tuxpan) están en su bocana, que es a donde llegará un barco.
+ni Altamira. Coordenadas de la terminal; los puertos de río (Altamira, Tampico, Tuxpan) y
+Topolobampo, al fondo de una bahía, están en su bocana, que es a donde llega un barco. Están
+en JSON (no en TS) porque el script los lee para calcular las rutas marítimas.
+
+**Las rutas marítimas** se calculan sobre la misma tierra del tablero: malla de 0.05° (~5.5
+km) donde una celda es tierra si su centro cae en tierra o si la toca una costa; el **Canal de
+Panamá** se abre a mano sobre su trazo real; ruta más corta (Dijkstra) sin cortar esquinas
+de tierra y con sobrecosto a menos de ~22 km de la costa; luego se **endereza** en tramos
+rectos con un recorrido exacto de celdas, por corridas de mar y de canal que nunca se
+mezclan. Una **auditoría** en una malla 5 veces más fina confirma que ninguna de las 136
+rutas pisa tierra fuera de la entrada a cada puerto y del Canal.
 
 **La red ferroviaria** viene de la capa de Norteamérica de Natural Earth, que a su vez sale del
 *Atlas Ambiental de América del Norte* de la CEC (Comisión para la Cooperación Ambiental de
@@ -159,17 +192,22 @@ El script:
 
 ```
 scripts/
-  datos-mexico.mjs   Natural Earth → mexico.topo.json + red-ferroviaria.json + ciudades.json
+  datos-mexico.mjs   Natural Earth → mexico.topo.json + red-ferroviaria.json
+                     + rutas-maritimas.json + ciudades.json
 src/lib/
   domain/            TypeScript puro, sin nada de UI ni de render
     geo.ts           LonLat, distancia, interpolación por gran círculo, rumbo, lon/lat ↔ vec3
-    sitios.ts        ciudades, puertos y un registro común por clave (`puerto:veracruz`)
-    red.ts           grafo ferroviario, estaciones, ruta más rápida, avanzar sobre una ruta
-    trenes.ts        tren, paso de simulación, servicios iniciales
-    datos/           datos generados
+    sitios.ts        ciudades, puertos, salidas al mundo y un registro común por clave
+    trayecto.ts      un recorrido como polilínea con velocidad por segmento; avanzar sobre él
+    servicio.ts      el motor común: un vehículo recorriendo sus paradas (ida y vuelta o circuito)
+    red.ts           grafo ferroviario, estaciones, ruta más rápida
+    mar.ts           rutas marítimas, Canal de Panamá
+    trenes.ts        trenes y servicios iniciales
+    barcos.ts        clases de barco, travesías, barcos y servicios iniciales
+    datos/           datos (generados y curados)
   state/             estado reactivo compartido (runas)
-    simulacion.svelte.ts   reloj, flota, selección
-    tablero.svelte.ts      modo "nuevo tren" y pedidos de cámara de los paneles al mapa
+    simulacion.svelte.ts   reloj, flota (trenes y barcos), selección
+    tablero.svelte.ts      pestaña, modo "nuevo tren / nuevo barco" y pedidos de cámara
   map/
     world.ts         carga del mundo (110m / 50m)
     mexico.ts        carga de México: estados, país, costa vs. frontera, vías, vecinos
@@ -210,9 +248,10 @@ costa del mundo solo sube de resolución). Además:
   El `cssHash` hashea una ruta normalizada. Además el globo es solo cliente (`ssr = false`).
 - **El favicon va en `app.html`**, no en el layout: la ruta del globo es solo cliente y el
   navegador pide `/favicon.ico` antes de que exista cualquier `<link>` insertado en cliente.
-- **Los trenes son `$state.raw` y se mutan en su lugar**: el paso de simulación corre 60 veces
-  por segundo y hacer proxies profundos de sus rutas costaría más que todo el cuadro. Lo que
-  deba re-renderizarse al moverse un tren lee además `sim.horas`, que cambia en cada tick.
+- **Trenes y barcos son `$state.raw` y se mutan en su lugar**: el paso de simulación corre 60
+  veces por segundo y hacer proxies profundos de sus rutas costaría más que todo el cuadro. Lo
+  que deba re-renderizarse al moverse un vehículo lee además `sim.horas`, que cambia en cada
+  tick.
 - **Un `$effect` que mueve la cámara debe usar `untrack`.** Volar lee `transform`; si el
   efecto lo rastrea, cada cuadro del vuelo relanza el vuelo. Junto con un timestamp de rAF
   anterior al inicio del vuelo (avance negativo, que la interpolación geométrica del zoom
@@ -220,6 +259,16 @@ costa del mundo solo sube de resolución). Además:
   del vuelo se acota a [0, 1] y `setTransform` acota el zoom: d3 solo lo limita en gestos.
 - **El mar no va en la capa**: es un degradado fijo a la pantalla, y en una capa que se desliza
   "brincaría" cada vez que la capa se repinta.
+- **Rasterizar con un margen de fila.** Las coordenadas vienen redondeadas a 1e-5 y muchos
+  vértices caen justo en el centro de una fila de la malla; repartidos por fila sin holgura,
+  el error de punto flotante sacaba bordes de su fila, se perdía un cruce, la paridad se
+  invertía y aparecía una franja falsa de "tierra" en el mar (la auditoría la marcaba en las
+  Bahamas). Se reparte con una fila de margen y decide la prueba exacta de cruce.
+- **La línea de vista recorre celdas, no muestrea.** Muestrear la recta saltaba la esquina de
+  una celda de tierra; el recorrido exacto (Amanatides–Woo) con la malla conservadora
+  garantiza que una recta no cruza tierra.
+- **Cada puerto entra al mar abierto**, no a la celda de agua más cercana: una bahía de boca
+  angosta queda sellada a esta escala y su agua no conecta con nada.
 - **En Windows el watcher a veces no ve archivos nuevos** (un `+page.ts` recién creado no
   entró al manifiesto de rutas). Si una ruta nueva no se comporta como dice su código:
   `npx svelte-kit sync` y reiniciar el dev server.
@@ -230,8 +279,9 @@ costa del mundo solo sube de resolución). Además:
   2018 en adelante (el Tren Maya, las líneas nuevas del Corredor Interoceánico…) lo
   construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
   cambia sola.
-- **Carga**: qué lleva cada tren (contenedores, granel, autos), cuánto cabe y quién lo
-  demanda; hoy los trenes corren su servicio sin carga.
-- **Barcos**: rutas entre puertos por mar, y de puertos del mundo a México en las vistas
-  globales (Asia → Manzanillo / Lázaro Cárdenas).
+- **Carga**: qué lleva cada tren y cada barco (contenedores, granel, autos, combustibles),
+  cuánto cabe y quién lo demanda; hoy corren sus servicios sin carga. El puerto es donde
+  barco y tren se pasan la carga.
+- **Barcos en las vistas del mundo**: que la travesía a Shanghái o a Róterdam, hoy fuera del
+  mapa, se vea en el globo.
 - **Sitios**: que el jugador pueda colocar los suyos (bodegas, plantas, terminales).

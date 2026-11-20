@@ -1,5 +1,7 @@
 import type { LonLat } from './geo';
 import ciudadesJson from './datos/ciudades.json';
+import puertasJson from './datos/puertas.json';
+import puertosJson from './datos/puertos.json';
 
 /**
  * The fixed places of the board. Pure data: nothing here knows how a site is
@@ -7,8 +9,10 @@ import ciudadesJson from './datos/ciudades.json';
  *
  * Cities come from Natural Earth through `npm run datos` (state capitals, every
  * city over 300k and a handful of border and port towns). Ports are curated by
- * hand below, because Natural Earth's port layer misses the two biggest ones in
- * the country (Lázaro Cárdenas and Altamira).
+ * hand in `datos/puertos.json`, because Natural Earth's port layer misses the
+ * two biggest ones in the country after Manzanillo's (Lázaro Cárdenas and
+ * Altamira). They are JSON, not TS, so `npm run datos` can read them too: the
+ * sea lanes between ports are computed there.
  */
 
 export type ClaveEstado = string;
@@ -53,24 +57,61 @@ export const CIUDADES: readonly Ciudad[] = (ciudadesJson as CiudadJson[]).map((c
   capital: c.capital,
 }));
 
-/** Port terminals (the docks, not the town centre), ordered Pacific north → south, then Gulf. */
-export const PUERTOS: readonly Puerto[] = [
-  { id: 'ensenada', nombre: 'Ensenada', estado: 'BC', lonLat: [-116.625, 31.855], litoral: 'pacifico', principal: false },
-  { id: 'guaymas', nombre: 'Guaymas', estado: 'SON', lonLat: [-110.86, 27.915], litoral: 'pacifico', principal: false },
-  { id: 'topolobampo', nombre: 'Topolobampo', estado: 'SIN', lonLat: [-109.05, 25.6], litoral: 'pacifico', principal: false },
-  { id: 'mazatlan', nombre: 'Mazatlán', estado: 'SIN', lonLat: [-106.405, 23.195], litoral: 'pacifico', principal: false },
-  { id: 'manzanillo', nombre: 'Manzanillo', estado: 'COL', lonLat: [-104.305, 19.065], litoral: 'pacifico', principal: true },
-  { id: 'lazaro-cardenas', nombre: 'Lázaro Cárdenas', estado: 'MICH', lonLat: [-102.175, 17.945], litoral: 'pacifico', principal: true },
-  { id: 'salina-cruz', nombre: 'Salina Cruz', estado: 'OAX', lonLat: [-95.195, 16.165], litoral: 'pacifico', principal: false },
-  { id: 'puerto-chiapas', nombre: 'Puerto Chiapas', estado: 'CHIS', lonLat: [-92.405, 14.705], litoral: 'pacifico', principal: false },
-  { id: 'altamira', nombre: 'Altamira', estado: 'TAMPS', lonLat: [-97.84, 22.48], litoral: 'golfo', principal: true },
-  { id: 'tampico', nombre: 'Tampico', estado: 'TAMPS', lonLat: [-97.78, 22.258], litoral: 'golfo', principal: false },
-  { id: 'tuxpan', nombre: 'Tuxpan', estado: 'VER', lonLat: [-97.28, 20.955], litoral: 'golfo', principal: false },
-  { id: 'veracruz', nombre: 'Veracruz', estado: 'VER', lonLat: [-96.135, 19.205], litoral: 'golfo', principal: true },
-  { id: 'coatzacoalcos', nombre: 'Coatzacoalcos', estado: 'VER', lonLat: [-94.41, 18.14], litoral: 'golfo', principal: false },
-  { id: 'dos-bocas', nombre: 'Dos Bocas', estado: 'TAB', lonLat: [-93.18, 18.43], litoral: 'golfo', principal: false },
-  { id: 'progreso', nombre: 'Progreso', estado: 'YUC', lonLat: [-89.665, 21.285], litoral: 'golfo', principal: false },
-];
+type PuertoJson = {
+  id: string;
+  nombre: string;
+  estado: string;
+  lon: number;
+  lat: number;
+  litoral: Litoral;
+  principal: boolean;
+};
+
+/**
+ * Port terminals (the docks, not the town centre), ordered Pacific north →
+ * south, then Gulf. River ports (Altamira, Tampico, Tuxpan) sit at their
+ * harbour mouth, which is where a ship arrives.
+ */
+export const PUERTOS: readonly Puerto[] = (puertosJson as PuertoJson[]).map((p) => ({
+  id: p.id,
+  nombre: p.nombre,
+  estado: p.estado,
+  lonLat: [p.lon, p.lat],
+  litoral: p.litoral,
+  principal: p.principal,
+}));
+
+/**
+ * Gateways to the rest of the world, on the edge of the board. A ship that
+ * sails out through one is on an ocean crossing to the port it stands for
+ * (`hacia`) and back, off the map, for as long as that voyage really takes.
+ */
+export type Puerta = {
+  id: string;
+  nombre: string;
+  lonLat: LonLat;
+  /** The far port the crossing goes to. */
+  hacia: string;
+  haciaLonLat: LonLat;
+};
+
+type PuertaJson = {
+  id: string;
+  nombre: string;
+  lon: number;
+  lat: number;
+  hacia: string;
+  haciaLon: number;
+  haciaLat: number;
+};
+
+export const PUERTAS: readonly Puerta[] = (puertasJson as PuertaJson[]).map((p) => ({
+  id: p.id,
+  nombre: p.nombre,
+  lonLat: [p.lon, p.lat],
+  hacia: p.hacia,
+  haciaLonLat: [p.haciaLon, p.haciaLat],
+}));
 
 /**
  * Port cities: the city that shares its name with a port (Veracruz, Mazatlán,
@@ -97,7 +138,7 @@ export const CENTRO_MEXICO: LonLat = [-102.5, 23.6];
 
 // ---- one registry for every kind of site ------------------------------------
 
-export type TipoSitio = 'ciudad' | 'puerto';
+export type TipoSitio = 'ciudad' | 'puerto' | 'puerta';
 
 /**
  * Any place on the board, whatever its kind, under one key. Ids alone clash
@@ -117,7 +158,13 @@ export type Sitio = {
 export const SITIOS: readonly Sitio[] = [
   ...PUERTOS.map((p) => ({ clave: `puerto:${p.id}`, tipo: 'puerto' as const, id: p.id, nombre: p.nombre, estado: p.estado, lonLat: p.lonLat })),
   ...CIUDADES.map((c) => ({ clave: `ciudad:${c.id}`, tipo: 'ciudad' as const, id: c.id, nombre: c.nombre, estado: c.estado, lonLat: c.lonLat })),
+  // Gateways belong to no estado.
+  ...PUERTAS.map((p) => ({ clave: `puerta:${p.id}`, tipo: 'puerta' as const, id: p.id, nombre: p.nombre, estado: '', lonLat: p.lonLat })),
 ];
+
+export function puerta(clave: string): Puerta | null {
+  return clave.startsWith('puerta:') ? (PUERTAS.find((p) => `puerta:${p.id}` === clave) ?? null) : null;
+}
 
 const POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
 

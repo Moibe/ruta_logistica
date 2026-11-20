@@ -5,6 +5,7 @@
 // Outputs (all committed, so the app never needs this script or the network):
 //   static/data/mexico.topo.json         estados + países vecinos
 //   static/data/red-ferroviaria.json     la red como grafo: nodos y tramos
+//   static/data/rutas-maritimas.json     rutas por mar entre cada par de puertos y puertas
 //   src/lib/domain/datos/ciudades.json   ciudades de referencia
 //
 // The Natural Earth sources (~85 MB) are downloaded once into `.cache/ne/`
@@ -389,6 +390,465 @@ function red(fc) {
   };
 }
 
+// ---- rutas marítimas -----------------------------------------------------------
+
+/**
+ * The sea grid: where ships can be routed. Wider than the board so lanes can
+ * leave it (Asia to the west, the Atlantic past Florida), and down to 5° N to
+ * take in Panama. 0.05° ≈ 5.5 km a cell.
+ */
+const MAR = { w: -122, e: -70, s: 5, n: 34, res: 0.05 };
+/** The audit's grid: five times finer, centre-in-polygon only. */
+const AUDITORIA_RES = 0.01;
+
+/**
+ * The Panama Canal, Pacific → Caribbean: the approach off Balboa, Miraflores
+ * and Pedro Miguel locks, the Culebra cut, Gamboa, Gatún Lake, Gatún locks,
+ * Limón Bay. Carved into the grid as water, because at this scale (and in the
+ * source) the isthmus is solid land, and it's the only way from one coast of
+ * Mexico to the other by sea.
+ */
+const CANAL_PANAMA = [
+  [-79.52, 8.86],
+  [-79.57, 8.95],
+  [-79.6, 9.0],
+  [-79.62, 9.02],
+  [-79.67, 9.07],
+  [-79.7, 9.12],
+  [-79.78, 9.14],
+  [-79.86, 9.2],
+  [-79.92, 9.27],
+  [-79.91, 9.35],
+  [-79.92, 9.42],
+];
+
+/** Lanes keep this many cells (~22 km) off the coast when they can… */
+const OLGURA_CELDAS = 4;
+/** …and pay this much extra per cell they come closer. */
+const PENALIZACION_COSTA = 0.4;
+
+/**
+ * Rasterise polygons onto a grid. A cell is land when its centre is inside a
+ * polygon (scanline, even-odd over every ring) and, if `conservadora`, also when
+ * a coastline passes through it — so a sand bar or an island narrower than a
+ * cell still blocks the way instead of letting a lane slip through.
+ */
+function rasterizar(colecciones, malla, conservadora) {
+  const cols = Math.round((malla.e - malla.w) / malla.res);
+  const filas = Math.round((malla.n - malla.s) / malla.res);
+  const tierra = new Uint8Array(cols * filas);
+  const bordes = [];
+  for (const fc of colecciones) {
+    for (const f of fc.features) {
+      const g = f.geometry;
+      if (!g) continue;
+      const poligonos = g.type === 'Polygon' ? [g.coordinates] : g.type === 'MultiPolygon' ? g.coordinates : [];
+      for (const poligono of poligonos) {
+        for (const anillo of poligono) {
+          for (let i = 1; i < anillo.length; i++) {
+            const [x1, y1] = anillo[i - 1];
+            const [x2, y2] = anillo[i];
+            if (Math.max(y1, y2) < malla.s || Math.min(y1, y2) > malla.n) continue;
+            bordes.push([x1, y1, x2, y2]);
+          }
+        }
+      }
+    }
+  }
+  // Scanline: crossings of every edge with each row's centre line. Edges west
+  // of the grid still count, or the parity to their east would be wrong.
+  //
+  // Edges are bucketed by row with a row of slack on each side, and the exact
+  // crossing test below decides. Coordinates come rounded to 1e-5, so plenty
+  // of vertices sit exactly on a row centre; computed tightly, float error
+  // dropped some of those edges from their row, one crossing went missing,
+  // the parity flipped and a streak of open sea turned into "land".
+  const porFila = Array.from({ length: filas }, () => []);
+  for (const b of bordes) {
+    const j0 = Math.max(0, Math.ceil((Math.min(b[1], b[3]) - malla.s) / malla.res - 0.5) - 1);
+    const j1 = Math.min(filas - 1, Math.floor((Math.max(b[1], b[3]) - malla.s) / malla.res - 0.5) + 1);
+    for (let j = j0; j <= j1; j++) porFila[j].push(b);
+  }
+  for (let j = 0; j < filas; j++) {
+    const lat = malla.s + (j + 0.5) * malla.res;
+    const xs = [];
+    for (const [x1, y1, x2, y2] of porFila[j]) {
+      if (y1 <= lat !== y2 <= lat) xs.push(x1 + ((lat - y1) * (x2 - x1)) / (y2 - y1));
+    }
+    xs.sort((a, b) => a - b);
+    for (let k = 0; k + 1 < xs.length; k += 2) {
+      const i0 = Math.max(0, Math.ceil((xs[k] - malla.w) / malla.res - 0.5));
+      const i1 = Math.min(cols - 1, Math.floor((xs[k + 1] - malla.w) / malla.res - 0.5));
+      for (let i = i0; i <= i1; i++) tierra[j * cols + i] = 1;
+    }
+  }
+  if (conservadora) {
+    for (const [x1, y1, x2, y2] of bordes) {
+      const pasos = Math.max(1, Math.ceil((Math.hypot(x2 - x1, y2 - y1) / malla.res) * 3));
+      for (let p = 0; p <= pasos; p++) {
+        const i = Math.floor((x1 + ((x2 - x1) * p) / pasos - malla.w) / malla.res);
+        const j = Math.floor((y1 + ((y2 - y1) * p) / pasos - malla.s) / malla.res);
+        if (i >= 0 && i < cols && j >= 0 && j < filas) tierra[j * cols + i] = 1;
+      }
+    }
+  }
+  return { tierra, cols, filas, malla };
+}
+
+const celdaDe = (g, [lon, lat]) => [
+  Math.floor((lon - g.malla.w) / g.malla.res),
+  Math.floor((lat - g.malla.s) / g.malla.res),
+];
+const centroDe = (g, c) => [
+  g.malla.w + ((c % g.cols) + 0.5) * g.malla.res,
+  g.malla.s + (Math.floor(c / g.cols) + 0.5) * g.malla.res,
+];
+
+/** Min-heap of cell ids by cost, on typed arrays (the grid has ~600k cells). */
+function monticulo(capacidad) {
+  let costes = new Float64Array(capacidad);
+  let ids = new Int32Array(capacidad);
+  let n = 0;
+  return {
+    get size() {
+      return n;
+    },
+    push(c, id) {
+      if (n === costes.length) {
+        const nc = new Float64Array(n * 2);
+        nc.set(costes);
+        costes = nc;
+        const ni = new Int32Array(n * 2);
+        ni.set(ids);
+        ids = ni;
+      }
+      let i = n++;
+      while (i > 0) {
+        const p = (i - 1) >> 1;
+        if (costes[p] <= c) break;
+        costes[i] = costes[p];
+        ids[i] = ids[p];
+        i = p;
+      }
+      costes[i] = c;
+      ids[i] = id;
+    },
+    pop() {
+      const top = ids[0];
+      const topCoste = costes[0];
+      const c = costes[--n];
+      const id = ids[n];
+      let i = 0;
+      for (;;) {
+        let h = 2 * i + 1;
+        if (h >= n) break;
+        if (h + 1 < n && costes[h + 1] < costes[h]) h++;
+        if (costes[h] >= c) break;
+        costes[i] = costes[h];
+        ids[i] = ids[h];
+        i = h;
+      }
+      costes[i] = c;
+      ids[i] = id;
+      return [topCoste, top];
+    },
+  };
+}
+
+/**
+ * Shortest sea lanes between every pair of `puntos` (ports and gateways).
+ * Returns the lanes and a report; see the caller for what's checked.
+ */
+function rutasMaritimas(tierraFc, puntos) {
+  const g = rasterizar(tierraFc, MAR, true);
+  const { tierra, cols, filas } = g;
+  const N = cols * filas;
+
+  // Carve the canal: every cell its centreline passes, plus a corner cell on
+  // each diagonal step, so it's a 4-connected channel the router can't refuse.
+  const canal = new Uint8Array(N);
+  let previa = -1;
+  for (let k = 1; k < CANAL_PANAMA.length; k++) {
+    const [x1, y1] = CANAL_PANAMA[k - 1];
+    const [x2, y2] = CANAL_PANAMA[k];
+    const pasos = Math.ceil((Math.hypot(x2 - x1, y2 - y1) / MAR.res) * 4);
+    for (let p = 0; p <= pasos; p++) {
+      const [i, j] = celdaDe(g, [x1 + ((x2 - x1) * p) / pasos, y1 + ((y2 - y1) * p) / pasos]);
+      const c = j * cols + i;
+      if (previa >= 0 && c !== previa) {
+        const pi = previa % cols;
+        const pj = Math.floor(previa / cols);
+        if (pi !== i && pj !== j) {
+          tierra[pj * cols + i] = 0;
+          canal[pj * cols + i] = 1;
+        }
+      }
+      tierra[c] = 0;
+      canal[c] = 1;
+      previa = c;
+    }
+  }
+
+  // Distance to land in cells (8-neighbour BFS), capped: it only feeds the
+  // coastal penalty and the straightening clearance.
+  const MAXD = OLGURA_CELDAS + 2;
+  const dist = new Uint8Array(N).fill(255);
+  let cola = [];
+  for (let c = 0; c < N; c++) {
+    if (tierra[c]) {
+      dist[c] = 0;
+      cola.push(c);
+    }
+  }
+  for (let d = 1; d <= MAXD && cola.length; d++) {
+    const sig = [];
+    for (const c of cola) {
+      const i = c % cols;
+      const j = (c / cols) | 0;
+      for (let dj = -1; dj <= 1; dj++) {
+        for (let di = -1; di <= 1; di++) {
+          const ii = i + di;
+          const jj = j + dj;
+          if (ii < 0 || jj < 0 || ii >= cols || jj >= filas) continue;
+          const n = jj * cols + ii;
+          if (dist[n] === 255) {
+            dist[n] = d;
+            sig.push(n);
+          }
+        }
+      }
+    }
+    cola = sig;
+  }
+
+  // The open sea: water connected to the mid-Pacific under the same moves the
+  // router makes. At this scale a bay with a narrow mouth (Topolobampo's) is
+  // sealed off, and a port that entered the water there would have no way out.
+  const abierto = new Uint8Array(N);
+  {
+    const [i0, j0] = celdaDe(g, [-115, 10]);
+    const pila = [j0 * cols + i0];
+    abierto[pila[0]] = 1;
+    while (pila.length) {
+      const c = pila.pop();
+      const i = c % cols;
+      const j = (c / cols) | 0;
+      for (let dj = -1; dj <= 1; dj++) {
+        for (let di = -1; di <= 1; di++) {
+          const ii = i + di;
+          const jj = j + dj;
+          if ((!di && !dj) || ii < 0 || jj < 0 || ii >= cols || jj >= filas) continue;
+          const n = jj * cols + ii;
+          if (abierto[n] || tierra[n]) continue;
+          if (di && dj && (tierra[j * cols + ii] || tierra[jj * cols + i])) continue;
+          abierto[n] = 1;
+          pila.push(n);
+        }
+      }
+    }
+  }
+
+  // Where each point enters the water: the nearest cell of open sea.
+  const entrada = puntos.map((p) => {
+    const [i0, j0] = celdaDe(g, p.lonLat);
+    for (let r = 0; r < 30; r++) {
+      let mejor = -1;
+      let mejorD = Infinity;
+      for (let j = j0 - r; j <= j0 + r; j++) {
+        for (let i = i0 - r; i <= i0 + r; i++) {
+          if (i < 0 || j < 0 || i >= cols || j >= filas || !abierto[j * cols + i]) continue;
+          const d = Math.hypot(i - i0, j - j0);
+          if (d < mejorD) {
+            mejorD = d;
+            mejor = j * cols + i;
+          }
+        }
+      }
+      if (mejor >= 0) return mejor;
+    }
+    throw new Error(`Sin agua cerca de ${p.clave}`);
+  });
+
+  const cellH = MAR.res * 110.57;
+  const cellW = new Float64Array(filas);
+  for (let j = 0; j < filas; j++) cellW[j] = MAR.res * 111.32 * Math.cos((MAR.s + (j + 0.5) * MAR.res) * D2R);
+  const factor = (c) => (canal[c] ? 1 : 1 + PENALIZACION_COSTA * Math.max(0, OLGURA_CELDAS - dist[c]));
+
+  // Straight-line visibility between two cells for the straightening pass:
+  // every cell under the line must be water and keep the clearance asked for.
+  // A line across open sea may not touch the canal at all (`sinCanal`).
+  //
+  // It walks every cell the line passes through (Amanatides–Woo), corners
+  // included, rather than sampling: sampling skipped the corner of a land cell
+  // and a lane clipped an islet in the Bahamas. With the conservative grid
+  // (every cell a coast touches is land) an exact walk means no straight lane
+  // can cross land at all.
+  const bloquea = (i, j, holgura, sinCanal) => {
+    const c = j * cols + i;
+    return tierra[c] === 1 || (canal[c] ? sinCanal : dist[c] < holgura);
+  };
+  const despejado = (a, b, holgura, sinCanal) => {
+    let x = a % cols;
+    let y = (a / cols) | 0;
+    const xb = b % cols;
+    const yb = (b / cols) | 0;
+    const dx = xb - x;
+    const dy = yb - y;
+    const sx = Math.sign(dx);
+    const sy = Math.sign(dy);
+    const tdx = dx ? Math.abs(1 / dx) : Infinity;
+    const tdy = dy ? Math.abs(1 / dy) : Infinity;
+    // Cell centres sit on integer coordinates: the first boundary is half a cell away.
+    let tx = dx ? tdx / 2 : Infinity;
+    let ty = dy ? tdy / 2 : Infinity;
+    while (x !== xb || y !== yb) {
+      if (Math.abs(tx - ty) < 1e-12) {
+        // Exactly through a corner: both side cells count.
+        if (bloquea(x + sx, y, holgura, sinCanal) || bloquea(x, y + sy, holgura, sinCanal)) return false;
+        x += sx;
+        y += sy;
+        tx += tdx;
+        ty += tdy;
+      } else if (tx < ty) {
+        x += sx;
+        tx += tdx;
+      } else {
+        y += sy;
+        ty += tdy;
+      }
+      if ((x !== xb || y !== yb) && bloquea(x, y, holgura, sinCanal)) return false;
+    }
+    return true;
+  };
+
+  const rutas = [];
+  const costeTotal = new Float64Array(N);
+  const previo = new Int32Array(N);
+  for (let s = 0; s < puntos.length - 1; s++) {
+    costeTotal.fill(Infinity);
+    previo.fill(-1);
+    const origen = entrada[s];
+    costeTotal[origen] = 0;
+    const heap = monticulo(1 << 16);
+    heap.push(0, origen);
+    const pendientes = new Set(entrada.slice(s + 1));
+    while (heap.size && pendientes.size) {
+      const [c0, c] = heap.pop();
+      if (c0 > costeTotal[c]) continue;
+      pendientes.delete(c);
+      const i = c % cols;
+      const j = (c / cols) | 0;
+      for (let dj = -1; dj <= 1; dj++) {
+        for (let di = -1; di <= 1; di++) {
+          if (!di && !dj) continue;
+          const ii = i + di;
+          const jj = j + dj;
+          if (ii < 0 || jj < 0 || ii >= cols || jj >= filas) continue;
+          const n = jj * cols + ii;
+          if (tierra[n]) continue;
+          // No cutting a corner of land on a diagonal step.
+          if (di && dj && (tierra[j * cols + ii] || tierra[jj * cols + i])) continue;
+          const paso = Math.hypot(di * cellW[j], dj * cellH) * factor(n);
+          const nc = c0 + paso;
+          if (nc < costeTotal[n]) {
+            costeTotal[n] = nc;
+            previo[n] = c;
+            heap.push(nc, n);
+          }
+        }
+      }
+    }
+
+    for (let t = s + 1; t < puntos.length; t++) {
+      const camino = [];
+      for (let c = entrada[t]; c !== -1; c = previo[c]) camino.push(c);
+      camino.reverse();
+      if (camino[0] !== origen) throw new Error(`Sin ruta por mar: ${puntos[s].clave} → ${puntos[t].clave}`);
+
+      // Straighten: from each kept cell, run as far along the path as the
+      // line of sight stays clear. Clearance relaxes near the ends, where a
+      // lane has to come close to shore to reach its port.
+      //
+      // The path is straightened in runs — open sea, canal, open sea — that
+      // never merge: a straight line from inside the canal out to sea passes
+      // carved cells that are water only on this grid, and in reality cuts
+      // across Colón. Each run boundary is kept as a vertex.
+      const quedan = [camino[0]];
+      let a = 0;
+      while (a < camino.length - 1) {
+        const enCanal = canal[camino[a + 1]];
+        let b = a + 1;
+        while (b + 1 < camino.length && canal[camino[b + 1]] === enCanal) {
+          const holgura = enCanal ? 0 : Math.min(2, dist[camino[a]], dist[camino[b + 1]]);
+          if (!despejado(camino[a], camino[b + 1], holgura, !enCanal)) break;
+          b++;
+        }
+        quedan.push(camino[b]);
+        a = b;
+      }
+
+      const coords = quedan.map((c) => centroDe(g, c));
+      if (kmEntre(puntos[s].lonLat, coords[0]) > 0.05) coords.unshift(puntos[s].lonLat);
+      if (kmEntre(puntos[t].lonLat, coords.at(-1)) > 0.05) coords.push(puntos[t].lonLat);
+      const segCanal = [];
+      let km = 0;
+      for (let k = 1; k < coords.length; k++) {
+        km += kmEntre(coords[k - 1], coords[k]);
+        const medio = [(coords[k - 1][0] + coords[k][0]) / 2, (coords[k - 1][1] + coords[k][1]) / 2];
+        const [i, j] = celdaDe(g, medio);
+        if (canal[j * cols + i]) segCanal.push(k - 1);
+      }
+      rutas.push({
+        a: puntos[s].clave,
+        b: puntos[t].clave,
+        km: Math.round(km * 10) / 10,
+        coords: coords.flatMap(([lon, lat]) => [Math.round(lon * 1e4) / 1e4, Math.round(lat * 1e4) / 1e4]),
+        canal: segCanal,
+      });
+    }
+  }
+
+  // ---- audit: does any lane cross land? ------------------------------------------
+  // On a grid five times finer, centre-in-polygon only (nothing conservative
+  // here: this asks the plain question). Exempt: the canal, and the first and
+  // last 8 km of a lane, where it threads into a port the 10m coast may
+  // swallow.
+  const fina = rasterizar(tierraFc, { ...MAR, res: AUDITORIA_RES }, false);
+  const exentoKm = 8;
+  const fallas = [];
+  for (const r of rutas) {
+    const pts = [];
+    for (let k = 0; k < r.coords.length; k += 2) pts.push([r.coords[k], r.coords[k + 1]]);
+    let recorrido = 0;
+    let enTierra = 0;
+    let donde = null;
+    for (let k = 1; k < pts.length; k++) {
+      const largo = kmEntre(pts[k - 1], pts[k]);
+      const enCanal = r.canal.includes(k - 1);
+      const pasos = Math.max(1, Math.ceil(largo / 0.5));
+      for (let p = 0; p < pasos; p++) {
+        const u = p / pasos;
+        const kmAqui = recorrido + largo * u;
+        if (enCanal || kmAqui < exentoKm || kmAqui > r.km - exentoKm) continue;
+        const punto = [pts[k - 1][0] + (pts[k][0] - pts[k - 1][0]) * u, pts[k - 1][1] + (pts[k][1] - pts[k - 1][1]) * u];
+        // The canal's carved cells are exempt wherever a sample lands in them
+        // (a run of open sea starts on the canal's last cell).
+        const [ci, cj] = celdaDe(g, punto);
+        if (canal[cj * cols + ci]) continue;
+        const [i, j] = celdaDe(fina, punto);
+        if (i >= 0 && j >= 0 && i < fina.cols && j < fina.filas && fina.tierra[j * fina.cols + i]) {
+          enTierra++;
+          donde ??= punto;
+        }
+      }
+      recorrido += largo;
+    }
+    if (enTierra) fallas.push({ ruta: `${r.a} → ${r.b}`, muestras: enTierra, donde });
+  }
+
+  return { rutas, reporte: { celdas: N, fallas } };
+}
+
 // ---- vecinos --------------------------------------------------------------
 
 /** Spanish names for the countries that show up around Mexico. */
@@ -582,6 +1042,9 @@ const out = await mapshaper.applyCommands(
     '-filter-slivers min-area=2km2 target=vecinos',
     '-o format=topojson quantization=100000 mexico.topo.json target=estados,vecinos',
     '-o format=geojson precision=0.00001 vias.json target=vias',
+    // The same land, as plain polygons, for routing ships around it.
+    '-o format=geojson precision=0.00001 tierra-estados.json target=estados',
+    '-o format=geojson precision=0.00001 tierra-vecinos.json target=vecinos',
   ].join(' '),
   inputs
 );
@@ -597,6 +1060,29 @@ const redJson = JSON.stringify({
   tramos: grafo.tramos,
 });
 await writeFile(join(ROOT, 'static', 'data', 'red-ferroviaria.json'), redJson);
+
+// Ports (curated by hand) and gateways: the points the sea lanes join.
+const datos = join(ROOT, 'src', 'lib', 'domain', 'datos');
+const puertosMar = JSON.parse(await readFile(join(datos, 'puertos.json'), 'utf8'));
+const puertasMar = JSON.parse(await readFile(join(datos, 'puertas.json'), 'utf8'));
+const puntosMar = [
+  ...puertosMar.map((p) => ({ clave: `puerto:${p.id}`, lonLat: [p.lon, p.lat] })),
+  ...puertasMar.map((p) => ({ clave: `puerta:${p.id}`, lonLat: [p.lon, p.lat] })),
+];
+const t0Mar = performance.now();
+const mar = rutasMaritimas(
+  [JSON.parse(out['tierra-estados.json']), JSON.parse(out['tierra-vecinos.json'])],
+  puntosMar
+);
+const marJson = JSON.stringify({
+  fuente:
+    'Rutas calculadas sobre la tierra de Natural Earth 10m (estados y vecinos), malla de ' +
+    `${MAR.res}°, con el Canal de Panamá abierto a mano`,
+  malla: MAR,
+  canalPanama: CANAL_PANAMA,
+  rutas: mar.rutas,
+});
+await writeFile(join(ROOT, 'static', 'data', 'rutas-maritimas.json'), marJson);
 
 const lista = ciudades(places);
 await mkdir(join(ROOT, 'src', 'lib', 'domain', 'datos'), { recursive: true });
@@ -621,3 +1107,13 @@ console.log(`  componentes conectados: ${reporte.componentes.length}`);
 for (const c of reporte.componentes) {
   console.log(`    ${Math.round(c.km)} km  caja ${lugar(c.caja.slice(0, 2))} → ${lugar(c.caja.slice(2))}`);
 }
+console.log(
+  `rutas-maritimas.json  ${kb(marJson)} · ${mar.rutas.length} rutas entre ${puntosMar.length} puntos · ` +
+    `${mar.reporte.celdas.toLocaleString('es-MX')} celdas · ${((performance.now() - t0Mar) / 1000).toFixed(1)} s`
+);
+console.log(`  por el Canal de Panamá: ${mar.rutas.filter((r) => r.canal.length).length} rutas`);
+console.log(
+  `  auditoría (¿alguna ruta pisa tierra, fuera de puertos y del Canal?): ` +
+    (mar.reporte.fallas.length ? `${mar.reporte.fallas.length} con problemas` : 'ninguna')
+);
+for (const f of mar.reporte.fallas) console.log(`    ${f.ruta}: ${f.muestras} muestras en tierra, la primera en ${lugar(f.donde)}`);

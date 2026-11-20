@@ -1,14 +1,18 @@
 <script lang="ts">
-  import { nombreCorto } from '$lib/domain/sitios';
+  import { CLASES_BARCO, type ClaseBarco } from '$lib/domain/barcos';
   import { tablero } from '$lib/state/tablero.svelte';
   import { duracion, km } from './formato';
 
   /**
-   * Laying out a new train: click stations on the map, in order, then
+   * Laying out a new train or ship: click stops on the map, in order, then
    * dispatch. The map does the picking (it knows what's under the cursor);
-   * this strip shows the stops so far and the buttons. Keyboard: Enter
+   * this strip shows the stops so far and the buttons. A ship also takes a
+   * class, and its loop closes back on the first port. Keyboard: Enter
    * dispatches, Backspace drops the last stop, Esc cancels.
    */
+
+  const esBarco = $derived(tablero.pestaña === 'barco');
+  const clases = Object.entries(CLASES_BARCO) as [ClaseBarco, (typeof CLASES_BARCO)[ClaseBarco]][];
 
   function despachar() {
     const id = tablero.despachar();
@@ -33,31 +37,55 @@
 <svelte:window onkeydown={onKey} />
 
 {#if tablero.trazando}
-  <div class="trazado panel" role="status">
+  <div class="trazado panel" class:mar={esBarco} role="status">
+    {#if esBarco}
+      <div class="clases" role="radiogroup" aria-label="Clase de barco">
+        {#each clases as [clave, c] (clave)}
+          <button
+            class="ctl"
+            role="radio"
+            aria-checked={tablero.claseBarco === clave}
+            class:is-active={tablero.claseBarco === clave}
+            onclick={() => tablero.cambiarClase(clave)}
+          >
+            {c.nombre} <span class="mono">{c.nudos} kn</span>
+          </button>
+        {/each}
+      </div>
+    {/if}
     <div class="fila">
-      <span class="label">Nuevo tren</span>
+      <span class="label">{esBarco ? 'Nuevo barco' : 'Nuevo tren'}</span>
       {#if !tablero.paradas.length}
-        <span class="ayuda">Elige en el mapa la estación de origen</span>
+        <span class="ayuda">
+          {esBarco ? 'Elige en el mapa el puerto (o la salida al mundo) de origen' : 'Elige en el mapa la estación de origen'}
+        </span>
       {:else}
         <ol class="paradas">
           {#each tablero.paradas as clave, i (clave + i)}
-            <li><b class="mono">{i + 1}</b>{nombreCorto(clave)}</li>
+            <li><b class="mono">{i + 1}</b>{tablero.nombre(clave)}</li>
           {/each}
         </ol>
         {#if tablero.paradas.length >= 2}
-          <span class="mono total">{km(tablero.kmElegida)} · {duracion(tablero.horasElegida)}</span>
+          <span class="mono total">
+            {km(tablero.kmElegida)} · {duracion(tablero.horasElegida)}{esBarco ? ' por vuelta, sin escalas' : ''}
+          </span>
         {:else}
-          <span class="ayuda">Ahora el destino (o más paradas)</span>
+          <span class="ayuda">{esBarco ? 'Ahora la siguiente escala' : 'Ahora el destino (o más paradas)'}</span>
         {/if}
       {/if}
     </div>
+    {#if esBarco && tablero.paradas.length >= 2}
+      <p class="nota">Recorre las escalas en ciclo y vuelve a {tablero.nombre(tablero.paradas[0])}.</p>
+    {/if}
     {#if tablero.aviso}
       <p class="aviso">{tablero.aviso}</p>
     {/if}
     <div class="botones">
       <button class="ctl" onclick={() => tablero.quitarUltima()} disabled={!tablero.paradas.length}>Deshacer</button>
       <button class="ctl" onclick={() => tablero.cancelar()}>Cancelar</button>
-      <button class="ctl despachar" onclick={despachar} disabled={tablero.paradas.length < 2}>Despachar tren</button>
+      <button class="ctl despachar" onclick={despachar} disabled={tablero.paradas.length < 2}>
+        {esBarco ? 'Zarpar' : 'Despachar tren'}
+      </button>
     </div>
   </div>
 {/if}
@@ -155,5 +183,56 @@
 
   .despachar:not(:disabled):hover {
     background: rgba(255, 209, 102, 0.22);
+  }
+
+  /* Laying out a ship: the same strip, in the sea's cyan. */
+  .trazado.mar {
+    border-color: rgba(76, 201, 255, 0.4);
+  }
+
+  .mar .ayuda {
+    color: #bfeaff;
+  }
+
+  .mar .paradas li {
+    background: rgba(76, 201, 255, 0.1);
+    border-color: rgba(76, 201, 255, 0.3);
+  }
+
+  .mar .paradas b {
+    background: var(--accent);
+    color: #04121f;
+  }
+
+  .mar .despachar:not(:disabled) {
+    border-color: rgba(76, 201, 255, 0.55);
+    background: rgba(76, 201, 255, 0.14);
+    color: #d6f2ff;
+  }
+
+  .mar .despachar:not(:disabled):hover {
+    background: rgba(76, 201, 255, 0.22);
+  }
+
+  .clases {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .clases .ctl {
+    padding: 0.25rem 0.55rem;
+    font-size: 0.7rem;
+  }
+
+  .clases .ctl .mono {
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+
+  .nota {
+    margin: 0;
+    font-size: 0.7rem;
+    color: var(--muted);
   }
 </style>

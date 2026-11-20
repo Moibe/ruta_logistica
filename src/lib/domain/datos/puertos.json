@@ -1,0 +1,17 @@
+[
+ { "id": "ensenada", "nombre": "Ensenada", "estado": "BC", "lon": -116.625, "lat": 31.855, "litoral": "pacifico", "principal": false },
+ { "id": "guaymas", "nombre": "Guaymas", "estado": "SON", "lon": -110.86, "lat": 27.915, "litoral": "pacifico", "principal": false },
+ { "id": "topolobampo", "nombre": "Topolobampo", "estado": "SIN", "lon": -109.105, "lat": 25.555, "litoral": "pacifico", "principal": false },
+ { "id": "mazatlan", "nombre": "Mazatlán", "estado": "SIN", "lon": -106.405, "lat": 23.195, "litoral": "pacifico", "principal": false },
+ { "id": "manzanillo", "nombre": "Manzanillo", "estado": "COL", "lon": -104.305, "lat": 19.065, "litoral": "pacifico", "principal": true },
+ { "id": "lazaro-cardenas", "nombre": "Lázaro Cárdenas", "estado": "MICH", "lon": -102.175, "lat": 17.945, "litoral": "pacifico", "principal": true },
+ { "id": "salina-cruz", "nombre": "Salina Cruz", "estado": "OAX", "lon": -95.195, "lat": 16.165, "litoral": "pacifico", "principal": false },
+ { "id": "puerto-chiapas", "nombre": "Puerto Chiapas", "estado": "CHIS", "lon": -92.405, "lat": 14.705, "litoral": "pacifico", "principal": false },
+ { "id": "altamira", "nombre": "Altamira", "estado": "TAMPS", "lon": -97.84, "lat": 22.48, "litoral": "golfo", "principal": true },
+ { "id": "tampico", "nombre": "Tampico", "estado": "TAMPS", "lon": -97.78, "lat": 22.258, "litoral": "golfo", "principal": false },
+ { "id": "tuxpan", "nombre": "Tuxpan", "estado": "VER", "lon": -97.28, "lat": 20.955, "litoral": "golfo", "principal": false },
+ { "id": "veracruz", "nombre": "Veracruz", "estado": "VER", "lon": -96.135, "lat": 19.205, "litoral": "golfo", "principal": true },
+ { "id": "coatzacoalcos", "nombre": "Coatzacoalcos", "estado": "VER", "lon": -94.41, "lat": 18.14, "litoral": "golfo", "principal": false },
+ { "id": "dos-bocas", "nombre": "Dos Bocas", "estado": "TAB", "lon": -93.18, "lat": 18.43, "litoral": "golfo", "principal": false },
+ { "id": "progreso", "nombre": "Progreso", "estado": "YUC", "lon": -89.665, "lat": 21.285, "litoral": "golfo", "principal": false }
+]

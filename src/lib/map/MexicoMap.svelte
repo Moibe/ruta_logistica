@@ -6,37 +6,44 @@
   import type { MultiLineString, MultiPoint } from 'geojson';
   import { untrack } from 'svelte';
   import type { LonLat } from '$lib/domain/geo';
-  import { seccion, type Trayecto } from '$lib/domain/red';
+  import { CLASES_BARCO, fueraDelMapa } from '$lib/domain/barcos';
+  import { esperaTotal, piernasDelRecorrido, posicion, trayectoActual } from '$lib/domain/servicio';
   import {
     CIUDAD_DEL_PUERTO,
     CIUDADES,
+    PUERTAS,
     PUERTO_DE_LA_CIUDAD,
     PUERTOS,
     type Ciudad,
+    type Puerta,
     type Puerto,
   } from '$lib/domain/sitios';
-  import { esperaTotal, LARGO_TREN_KM, posicion, trayectoActual, type Tren } from '$lib/domain/trenes';
-  import { sim } from '$lib/state/simulacion.svelte';
+  import { seccion, type Trayecto } from '$lib/domain/trayecto';
+  import { LARGO_TREN_KM, type Tren } from '$lib/domain/trenes';
+  import type { Barco } from '$lib/domain/barcos';
+  import { sim, type Unidad } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
-  import { duracion, estadoTren, km as fmtKm } from '$lib/ui/formato';
+  import { duracion, estadoUnidad, km as fmtKm } from '$lib/ui/formato';
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
 
   /**
-   * The game board: Mexico alone, in detail, with the trains running on it.
+   * The game board: Mexico alone, in detail, with the trains and ships running
+   * on it.
    *
    * Same machinery as the world canvas (geometry baked once into `Path2D` in
    * un-zoomed projected space, the d3-zoom transform applied to the context),
-   * split in two layers now that things move:
+   * split in layers now that things move:
    *
-   * - the **fondo** — geography, track, sites, labels, the selected train's
+   * - the **fondo** — geography, track, sites, labels, the selected vehicle's
    *   route — is painted into an offscreen canvas only when it changes (camera,
    *   layers, hover, selection, picking stops);
-   * - every frame copies the fondo and draws the trains and the route preview
-   *   on top. A still camera with the clock running costs one `drawImage` plus
-   *   the trains.
+   * - every frame copies the fondo and draws the vehicles and the route
+   *   preview on top. A still camera with the clock running costs one
+   *   `drawImage` plus the vehicles.
    *
-   * Colour carries meaning: sea things are cyan (`--accent`), rail things are
-   * amber (`--warn`) — each train gets its own warm tint — and cities are ink.
+   * Colour carries meaning: sea things are cyan (`--accent`) — each ship gets
+   * its own cool tint — rail things are amber (`--warn`) — each train its own
+   * warm tint — and cities are ink.
    */
 
   // ---- constants ---------------------------------------------------------
@@ -94,6 +101,10 @@
   const TREN_MIN_PX = 18;
   /** Glowing wake behind a moving train, in screen px so it reads at any zoom. */
   const ESTELA_PX = 46;
+  /** A ship's wake: longer and fainter than a train's, it's a slower, bigger thing. */
+  const ESTELA_BARCO_PX = 70;
+  /** Hull drawn on screen: a fixed icon size (a real 300 m hull is a few px even at 40×). */
+  const CASCO_PX = 13;
   /** How far the camera can slide before the geography layer is repainted. */
   const MARGEN = 256;
 
@@ -112,6 +123,11 @@
     { text: 'BELICE', at: [-88.72, 17.15], minK: 2.6 },
     { text: 'HONDURAS', at: [-86.9, 14.85], minK: 1.4 },
     { text: 'CUBA', at: [-80.6, 22.15], minK: 1 },
+    // Down the isthmus, where ships go coast to coast.
+    { text: 'NICARAGUA', at: [-85.0, 12.9], minK: 1.4 },
+    { text: 'COSTA RICA', at: [-84.15, 10.05], minK: 1.8 },
+    { text: 'PANAMÁ', at: [-80.4, 8.45], minK: 1.4 },
+    { text: 'COLOMBIA', at: [-75.6, 8.0], minK: 1.4 },
   ];
 
   // ---- state --------------------------------------------------------------
@@ -120,7 +136,8 @@
   let layers = $state<Layers>({ estados: true, vias: true, puertos: true, ciudades: true });
 
   type Target =
-    | { kind: 'tren'; tren: Tren }
+    | { kind: 'unidad'; unidad: Unidad }
+    | { kind: 'puerta'; puerta: Puerta }
     | { kind: 'puerto'; puerto: Puerto }
     | { kind: 'ciudad'; ciudad: Ciudad }
     | { kind: 'estado'; estado: EstadoProps };
@@ -173,16 +190,19 @@
   /** Track, by class; baked from the simulation's network. */
   let viaPrimaria: Path2D | null = null;
   let viaSecundaria: Path2D | null = null;
-  /** The selected train's route (one direction), baked when the selection changes. */
+  /** The selected vehicle's route (one direction of a line, a ship's whole loop), baked on selection. */
   let rutaSel: { id: string; path: Path2D } | null = null;
+  /** The Panama Canal, baked from the sea lanes' data. */
+  let canalPath: Path2D | null = null;
 
   /** Projected (un-zoomed path space) positions, rebuilt with the projection. */
   let ciudadPts: [number, number][] = [];
   let puertoPts: [number, number][] = [];
+  let puertaPts: [number, number][] = [];
   /** Station on the track and the site it serves, both in path space. */
   let estacionPts: { clave: string; via: [number, number]; sitio: [number, number]; km: number }[] = [];
-  /** Where each train's head was drawn last frame, for hit-testing. */
-  let cabezas: { tren: Tren; x: number; y: number }[] = [];
+  /** Where each vehicle's head was drawn last frame, for hit-testing. */
+  let cabezas: { unidad: Unidad; x: number; y: number }[] = [];
 
   const estadoNombre = new Map<string, string>();
 
@@ -219,6 +239,7 @@
     path = geoPath(projection);
     ciudadPts = CIUDADES.map((c) => projection!(c.lonLat) ?? [NaN, NaN]);
     puertoPts = PUERTOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
+    puertaPts = PUERTAS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     applyTranslateExtent();
     bake();
     bakeRed();
@@ -294,20 +315,23 @@
       const q = s ? projection(s) : null;
       if (v && q) estacionPts.push({ clave: e.sitio, via: v, sitio: q, km: e.distanciaKm });
     }
+    const mar = sim.mar;
+    canalPath = mar ? new Path2D(path({ type: 'LineString', coordinates: mar.canalPanama }) ?? '') : null;
   }
 
   function sitioLonLat(clave: string): LonLat | null {
     const [tipo, id] = clave.split(':');
     if (tipo === 'puerto') return PUERTOS.find((p) => p.id === id)?.lonLat ?? null;
+    if (tipo === 'puerta') return PUERTAS.find((p) => p.id === id)?.lonLat ?? null;
     return CIUDADES.find((c) => c.id === id)?.lonLat ?? null;
   }
 
-  function bakeRutaSel(t: Tren) {
+  function bakeRutaSel(u: Unidad) {
     if (!path) return;
-    const ida = t.piernas.slice(0, t.piernas.length / 2);
+    const piernas = piernasDelRecorrido(u);
     rutaSel = {
-      id: t.id,
-      path: new Path2D(path({ type: 'MultiLineString', coordinates: ida.map((p) => p.puntos) }) ?? ''),
+      id: u.id,
+      path: new Path2D(path({ type: 'MultiLineString', coordinates: piernas.map((p) => p.puntos) }) ?? ''),
     };
   }
 
@@ -362,9 +386,12 @@
     flyTo((x0 + x1) / 2, (y0 + y1) / 2, k);
   }
 
-  function flyToTren(t: Tren) {
-    const p = projection?.(posicion(t));
-    if (p) flyTo(p[0], p[1], Math.max(transform.k, 5));
+  function flyToUnidad(u: Unidad) {
+    // A ship off the map on a crossing: show where it left from.
+    const lonLat = u.tipo === 'barco' && fueraDelMapa(u) ? sitioLonLat(u.destinos[u.pierna]) : posicion(u);
+    const p = lonLat ? projection?.(lonLat) : null;
+    // Ships sail open water: a train-sized close-up would show nothing but sea.
+    if (p) flyTo(p[0], p[1], Math.max(transform.k, u.tipo === 'barco' ? 3 : 5));
   }
 
   function stepCamera(now: number) {
@@ -411,7 +438,7 @@
 
   /** Something on screen is moving and needs the next frame too. */
   const animando = () =>
-    !!fly || (sim.corriendo && sim.trenes.length > 0) || tablero.trazando || sim.siguiendo;
+    !!fly || (sim.corriendo && (sim.trenes.length > 0 || sim.barcos.length > 0)) || tablero.trazando || sim.siguiendo;
 
   function requestDraw() {
     if (frame) return;
@@ -437,7 +464,7 @@
     ctx.drawImage(fondo, 0, 0);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     pintarPrevia(ctx, now);
-    pintarTrenes(ctx, now);
+    pintarUnidades(ctx, now);
   }
 
   // ---- labels -------------------------------------------------------------------
@@ -625,7 +652,22 @@
       ctx.stroke(viaPrimaria);
     }
 
-    // The selected train's route, in its colour, over the track.
+    // The Panama Canal: a cyan channel across the isthmus, the one place
+    // where the sea crosses land.
+    if (canalPath) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.strokeStyle = 'rgba(76, 201, 255, 0.22)';
+      ctx.lineWidth = 5 / k;
+      ctx.stroke(canalPath);
+      ctx.restore();
+      ctx.strokeStyle = 'rgba(150, 220, 255, 0.9)';
+      ctx.lineWidth = 1.3 / k;
+      ctx.stroke(canalPath);
+    }
+
+    // The selected vehicle's route, in its colour: a train's line one way, a
+    // ship's whole loop — dashed, sea lanes aren't track.
     const sel = sim.seleccionado;
     if (sel && !trazando) {
       if (rutaSel?.id !== sel.id) bakeRutaSel(sel);
@@ -636,9 +678,12 @@
         ctx.lineWidth = 7 / k;
         ctx.stroke(rutaSel.path);
         ctx.restore();
+        ctx.save();
+        if (sel.tipo === 'barco') ctx.setLineDash([6 / k, 4 / k]);
         ctx.strokeStyle = conAlfa(sel.color, 0.95);
         ctx.lineWidth = 1.8 / k;
         ctx.stroke(rutaSel.path);
+        ctx.restore();
       }
     }
     ctx.restore();
@@ -697,10 +742,15 @@
     const sy = (p: [number, number]) => transform.applyY(p[1]);
     const onScreen = (x: number, y: number) => x > -20 && x < width + 20 && y > -20 && y < height + 20;
     const conEstacion = (clave: string) => !!sim.red?.estaciones.has(clave);
+    // Picking stops: what can't be a stop for this kind of vehicle fades back.
+    const trazaTren = trazando && tablero.pestaña === 'tren';
+    const trazaBarco = trazando && tablero.pestaña === 'barco';
+    const atenuado = (clave: string) =>
+      trazaTren ? !conEstacion(clave) : trazaBarco ? clave.startsWith('ciudad:') : false;
 
     // Stations: a small square on the track, tied to its site by a faint
     // dashed line when the track passes at a distance.
-    if (layers.vias && sim.red && (k >= ESTACIONES_AT || trazando)) {
+    if (layers.vias && sim.red && !trazaBarco && (k >= ESTACIONES_AT || trazaTren)) {
       ctx.save();
       for (const e of estacionPts) {
         const vx = sx(e.via);
@@ -737,8 +787,7 @@
         if (!onScreen(x, y)) return;
         const r = cityRadius(c);
         const hot = hovered?.kind === 'ciudad' && hovered.ciudad.id === c.id;
-        // Picking stops: sites the train can't reach fade back.
-        ctx.globalAlpha = trazando && !conEstacion(`ciudad:${c.id}`) ? 0.3 : 1;
+        ctx.globalAlpha = atenuado(`ciudad:${c.id}`) ? 0.3 : 1;
         if (c.capital) {
           // Capitals: a ring around a dot, the cartographic convention.
           ctx.beginPath();
@@ -776,7 +825,7 @@
         if (!onScreen(x, y)) return;
         const hot = hovered?.kind === 'puerto' && hovered.puerto.id === p.id;
         const s = p.principal ? 5.2 : 3.8;
-        ctx.globalAlpha = trazando && !conEstacion(`puerto:${p.id}`) ? 0.3 : 1;
+        ctx.globalAlpha = atenuado(`puerto:${p.id}`) ? 0.3 : 1;
         // Glow first, added on top of the coast so it blooms like a beacon.
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
@@ -815,21 +864,75 @@
       });
     }
 
-    // Picking stops: the chosen ones numbered, the one under the cursor ringed.
+    // Gateways to the world: a ring with an arrow pointing out of the board,
+    // the way the ships leave.
+    if (layers.puertos) {
+      const centro = projection([-102, 23]);
+      PUERTAS.forEach((p, i) => {
+        const x = sx(puertaPts[i]);
+        const y = sy(puertaPts[i]);
+        if (!onScreen(x, y) || !centro) return;
+        const hot = hovered?.kind === 'puerta' && hovered.puerta.id === p.id;
+        ctx.globalAlpha = trazaTren ? 0.3 : 1;
+        const ang = Math.atan2(y - transform.applyY(centro[1]), x - transform.applyX(centro[0]));
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.strokeStyle = hot ? '#ffffff' : 'rgba(127, 216, 255, 0.85)';
+        ctx.lineWidth = 1.4;
+        ctx.setLineDash([3, 2.5]);
+        ctx.beginPath();
+        ctx.arc(0, 0, 9, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.rotate(ang);
+        ctx.fillStyle = hot ? '#ffffff' : '#7fd8ff';
+        ctx.beginPath();
+        ctx.moveTo(6, 0);
+        ctx.lineTo(-3, -4.5);
+        ctx.lineTo(-1, 0);
+        ctx.lineTo(-3, 4.5);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+        ctx.globalAlpha = 1;
+        taken.push([x - 11, y - 11, x + 11, y + 11]);
+        labels.push({
+          text: `Hacia ${p.nombre}`,
+          spots: spotsAround(x, y, 11),
+          size: 11,
+          font: '600 11px Inter, "Segoe UI", system-ui, sans-serif',
+          color: hot ? '#ffffff' : '#7fd8ff',
+          priority: (hot ? 1e9 : 0) + 6e7,
+          halo: true,
+        });
+      });
+    }
+
+    // Picking stops: the chosen ones numbered, the one under the cursor
+    // ringed. A train's stop sits on the track (its station), a ship's on the
+    // port itself.
     if (trazando) {
+      const puntoDeParada = (clave: string): [number, number] | null => {
+        if (trazaTren) {
+          const e = estacionPts.find((x) => x.clave === clave);
+          return e ? [sx(e.via), sy(e.via)] : null;
+        }
+        const ll = sitioLonLat(clave);
+        const p = ll ? (projection?.(ll) ?? null) : null;
+        return p ? [transform.applyX(p[0]), transform.applyY(p[1])] : null;
+      };
       tablero.paradas.forEach((clave, i) => {
-        const e = estacionPts.find((x) => x.clave === clave);
-        if (!e) return;
-        const x = sx(e.via);
-        const y = sy(e.via);
+        const pos = puntoDeParada(clave);
+        if (!pos) return;
+        const [x, y] = pos;
         ctx.beginPath();
         ctx.arc(x, y, 8, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffd166';
+        ctx.fillStyle = trazaBarco ? '#4cc9ff' : '#ffd166';
         ctx.fill();
         ctx.strokeStyle = 'rgba(3, 9, 18, 0.95)';
         ctx.lineWidth = 1.5;
         ctx.stroke();
-        ctx.fillStyle = '#1a1205';
+        ctx.fillStyle = trazaBarco ? '#04121f' : '#1a1205';
         ctx.font = '700 10px Inter, "Segoe UI", system-ui, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -838,13 +941,29 @@
         ctx.textBaseline = 'alphabetic';
         taken.push([x - 9, y - 9, x + 9, y + 9]);
       });
-      const cand = tablero.candidato ? estacionPts.find((x) => x.clave === tablero.candidato) : null;
+      const cand = tablero.candidato ? puntoDeParada(tablero.candidato) : null;
       if (cand) {
         ctx.beginPath();
-        ctx.arc(sx(cand.via), sy(cand.via), 9, 0, Math.PI * 2);
+        ctx.arc(cand[0], cand[1], 9, 0, Math.PI * 2);
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 1.5;
         ctx.stroke();
+      }
+    }
+
+    // The canal's name, once the isthmus is big enough to carry it.
+    if (canalPath && k >= 1.6) {
+      const p = projection([-79.75, 9.15]);
+      if (p) {
+        labels.push({
+          text: 'Canal de Panamá',
+          spots: spotsAround(transform.applyX(p[0]), transform.applyY(p[1]), 6),
+          size: 10,
+          font: 'italic 600 10px Inter, "Segoe UI", system-ui, sans-serif',
+          color: 'rgba(150, 220, 255, 0.8)',
+          priority: 4e7,
+          halo: true,
+        });
       }
     }
 
@@ -949,112 +1068,184 @@
   /** Screen px per km at the current zoom (the projection is conformal: near enough everywhere). */
   const pxPorKm = () => (transform.k * (projection?.scale() ?? 1)) / 6371;
 
-  function pintarTrenes(ctx: CanvasRenderingContext2D, now: number) {
+  /**
+   * Every vehicle on the board, ships first (they're under the coast's trains
+   * in spirit, out at sea), the selected one last so it's on top. Records each
+   * head for hit-testing; ships off the map on a crossing aren't drawn.
+   */
+  function pintarUnidades(ctx: CanvasRenderingContext2D, now: number) {
     cabezas = [];
-    if (!projection || !sim.red) return;
+    if (!projection) return;
     const pxKm = pxPorKm();
-    const largo = Math.max(LARGO_TREN_KM, TREN_MIN_PX / pxKm);
-    const estela = ESTELA_PX / pxKm;
-    const orden = [...sim.trenes].sort((a, b) => (a.id === sim.seleccion ? 1 : b.id === sim.seleccion ? -1 : 0));
-
-    for (const t of orden) {
-      const leg = trayectoActual(t);
-      const cuerpo = enPantalla(seccion(leg, t.km - largo, t.km));
-      if (!cuerpo.length) continue;
-      const [hx, hy] = cuerpo[cuerpo.length - 1];
-      cabezas.push({ tren: t, x: hx, y: hy });
-      if (hx < -80 || hx > width + 80 || hy < -80 || hy > height + 80) continue;
-      const sel = sim.seleccion === t.id;
-      const hot = hovered?.kind === 'tren' && hovered.tren.id === t.id;
-      ctx.lineJoin = 'round';
-
-      // Wake: fades from nothing to the tail, added onto the map like a light trail.
-      if (t.estado === 'ruta') {
-        const rastro = enPantalla(seccion(leg, t.km - largo - estela, t.km - largo));
-        if (rastro.length >= 2) {
-          const [ax, ay] = rastro[0];
-          const [bx, by] = rastro[rastro.length - 1];
-          const g = ctx.createLinearGradient(ax, ay, bx, by);
-          g.addColorStop(0, conAlfa(t.color, 0));
-          g.addColorStop(1, conAlfa(t.color, 0.55));
-          ctx.save();
-          ctx.globalCompositeOperation = 'lighter';
-          ctx.strokeStyle = g;
-          ctx.lineWidth = 2.4;
-          ctx.lineCap = 'round';
-          trazar(ctx, rastro);
-          ctx.stroke();
-          ctx.restore();
-        }
-      }
-
-      // Body: a dark casing, then the cars as dashes along the track.
-      if (cuerpo.length >= 2) {
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = 'rgba(3, 9, 18, 0.92)';
-        ctx.lineWidth = sel || hot ? 7.5 : 6.5;
-        trazar(ctx, cuerpo);
-        ctx.stroke();
-        ctx.save();
-        ctx.lineCap = 'butt';
-        ctx.setLineDash([4.2, 1.4]);
-        ctx.strokeStyle = t.color;
-        ctx.lineWidth = 3.8;
-        trazar(ctx, cuerpo);
-        ctx.stroke();
-        ctx.restore();
-        // Locomotive: the front few pixels, solid and bright.
-        const [lx, ly] = atras(cuerpo, 6);
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 4.6;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(lx, ly);
-        ctx.lineTo(hx, hy);
-        ctx.stroke();
-      }
-
-      // Headlight.
-      ctx.save();
-      ctx.globalCompositeOperation = 'lighter';
-      const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, 12);
-      glow.addColorStop(0, conAlfa(t.color, sel || hot ? 0.7 : 0.45));
-      glow.addColorStop(1, conAlfa(t.color, 0));
-      ctx.fillStyle = glow;
-      ctx.fillRect(hx - 12, hy - 12, 24, 24);
-      ctx.restore();
-
-      // Loading at a station: a ring that fills up until departure.
-      if (t.estado === 'estacion') {
-        const total = esperaTotal(t);
-        const hecho = total > 0 ? 1 - t.espera / total : 1;
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(hx, hy, 9, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.strokeStyle = t.color;
-        ctx.beginPath();
-        ctx.arc(hx, hy, 9, -Math.PI / 2, -Math.PI / 2 + hecho * Math.PI * 2);
-        ctx.stroke();
-      }
-
-      if (sel) {
-        // A slow pulse, so the selected train is findable at a glance.
-        const r = 13 + Math.sin(now / 260) * 1.5;
-        ctx.strokeStyle = conAlfa(t.color, 0.85);
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(hx, hy, r, 0, Math.PI * 2);
-        ctx.stroke();
-      }
+    const sel = (u: Unidad) => sim.seleccion === u.id;
+    const orden = [...sim.barcos, ...sim.trenes].sort((a, b) => Number(sel(a)) - Number(sel(b)));
+    for (const u of orden) {
+      if (u.tipo === 'barco') pintarBarco(ctx, u, pxKm, now);
+      else pintarTren(ctx, u, pxKm, now);
     }
+  }
+
+  /** The wake behind a moving vehicle: fades from nothing to its tail, added on like a light trail. */
+  function pintarEstela(ctx: CanvasRenderingContext2D, u: Unidad, desdeKm: number, hastaKm: number, ancho: number, alfa: number) {
+    const rastro = enPantalla(seccion(trayectoActual(u), desdeKm, hastaKm));
+    if (rastro.length < 2) return;
+    const [ax, ay] = rastro[0];
+    const [bx, by] = rastro[rastro.length - 1];
+    const g = ctx.createLinearGradient(ax, ay, bx, by);
+    g.addColorStop(0, conAlfa(u.color, 0));
+    g.addColorStop(1, conAlfa(u.color, alfa));
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.strokeStyle = g;
+    ctx.lineWidth = ancho;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    trazar(ctx, rastro);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  /** Stopped: a ring that fills up until departure. Selected: a slow pulse, findable at a glance. */
+  function pintarAnillos(ctx: CanvasRenderingContext2D, u: Unidad, hx: number, hy: number, now: number, radio = 9) {
+    if (u.estado === 'parada') {
+      const total = esperaTotal(u);
+      const hecho = total > 0 ? 1 - u.espera / total : 1;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(hx, hy, radio, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = u.color;
+      ctx.beginPath();
+      ctx.arc(hx, hy, radio, -Math.PI / 2, -Math.PI / 2 + hecho * Math.PI * 2);
+      ctx.stroke();
+    }
+    if (sim.seleccion === u.id) {
+      const r = radio + 4 + Math.sin(now / 260) * 1.5;
+      ctx.strokeStyle = conAlfa(u.color, 0.85);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(hx, hy, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+
+  function pintarTren(ctx: CanvasRenderingContext2D, t: Tren, pxKm: number, now: number) {
+    const largo = Math.max(LARGO_TREN_KM, TREN_MIN_PX / pxKm);
+    const cuerpo = enPantalla(seccion(trayectoActual(t), t.km - largo, t.km));
+    if (!cuerpo.length) return;
+    const [hx, hy] = cuerpo[cuerpo.length - 1];
+    cabezas.push({ unidad: t, x: hx, y: hy });
+    if (hx < -80 || hx > width + 80 || hy < -80 || hy > height + 80) return;
+    const sel = sim.seleccion === t.id;
+    const hot = hovered?.kind === 'unidad' && hovered.unidad.id === t.id;
+    ctx.lineJoin = 'round';
+
+    if (t.estado === 'ruta') pintarEstela(ctx, t, t.km - largo - ESTELA_PX / pxKm, t.km - largo, 2.4, 0.55);
+
+    // Body: a dark casing, then the cars as dashes along the track.
+    if (cuerpo.length >= 2) {
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'rgba(3, 9, 18, 0.92)';
+      ctx.lineWidth = sel || hot ? 7.5 : 6.5;
+      trazar(ctx, cuerpo);
+      ctx.stroke();
+      ctx.save();
+      ctx.lineCap = 'butt';
+      ctx.setLineDash([4.2, 1.4]);
+      ctx.strokeStyle = t.color;
+      ctx.lineWidth = 3.8;
+      trazar(ctx, cuerpo);
+      ctx.stroke();
+      ctx.restore();
+      // Locomotive: the front few pixels, solid and bright.
+      const [lx, ly] = atras(cuerpo, 6);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 4.6;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(lx, ly);
+      ctx.lineTo(hx, hy);
+      ctx.stroke();
+    }
+
+    // Headlight.
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, 12);
+    glow.addColorStop(0, conAlfa(t.color, sel || hot ? 0.7 : 0.45));
+    glow.addColorStop(1, conAlfa(t.color, 0));
+    ctx.fillStyle = glow;
+    ctx.fillRect(hx - 12, hy - 12, 24, 24);
+    ctx.restore();
+
+    pintarAnillos(ctx, t, hx, hy, now);
+  }
+
+  function pintarBarco(ctx: CanvasRenderingContext2D, b: Barco, pxKm: number, now: number) {
+    if (fueraDelMapa(b)) return;
+    const leg = trayectoActual(b);
+    // Heading from a short stretch of lane behind the bow, measured on screen.
+    const atrasKm = Math.max(0.5, 6 / pxKm);
+    const tramo = enPantalla(seccion(leg, b.km - atrasKm, b.km));
+    if (!tramo.length) return;
+    const [hx, hy] = tramo[tramo.length - 1];
+    cabezas.push({ unidad: b, x: hx, y: hy });
+    if (hx < -80 || hx > width + 80 || hy < -80 || hy > height + 80) return;
+    const [ax, ay] = tramo.length >= 2 ? tramo[0] : [hx - 1, hy];
+    const rumbo = Math.atan2(hy - ay, hx - ax);
+    const sel = sim.seleccion === b.id;
+    const hot = hovered?.kind === 'unidad' && hovered.unidad.id === b.id;
+
+    // Wake: a long, faint light trail on the water behind the stern.
+    if (b.estado === 'ruta') {
+      const popa = CASCO_PX / pxKm;
+      pintarEstela(ctx, b, b.km - popa - ESTELA_BARCO_PX / pxKm, b.km - popa * 0.6, 3, 0.45);
+    }
+
+    // Glow on the water around the hull.
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, 14);
+    glow.addColorStop(0, conAlfa(b.color, sel || hot ? 0.55 : 0.32));
+    glow.addColorStop(1, conAlfa(b.color, 0));
+    ctx.fillStyle = glow;
+    ctx.fillRect(hx - 14, hy - 14, 28, 28);
+    ctx.restore();
+
+    // Hull: pointed bow, square stern, a pale bridge block aft. The bow is the
+    // vehicle's position, like a train's locomotive.
+    // An icon, but one that grows a little as you zoom in (1× at country
+    // scale, ~1.8× at the deepest zoom), so a followed ship isn't lost in its ring.
+    const L = CASCO_PX * Math.min(1.8, 0.85 + 0.15 * Math.sqrt(transform.k)) * (sel || hot ? 1.15 : 1);
+    const W = L * 0.4;
+    ctx.save();
+    ctx.translate(hx, hy);
+    ctx.rotate(rumbo);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-L * 0.3, -W / 2);
+    ctx.lineTo(-L, -W / 2);
+    ctx.lineTo(-L, W / 2);
+    ctx.lineTo(-L * 0.3, W / 2);
+    ctx.closePath();
+    ctx.fillStyle = b.color;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(3, 9, 18, 0.92)';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.fillRect(-L * 0.9, -W * 0.3, L * 0.18, W * 0.6);
+    ctx.restore();
+
+    pintarAnillos(ctx, b, hx - Math.cos(rumbo) * L * 0.5, hy - Math.sin(rumbo) * L * 0.5, now, Math.max(9, L * 0.62));
   }
 
   /** While picking stops: the route so far, as marching dashes. */
   function pintarPrevia(ctx: CanvasRenderingContext2D, now: number) {
     if (!tablero.trazando || !tablero.previa.length) return;
+    const mar = tablero.pestaña === 'barco';
     ctx.save();
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
@@ -1062,12 +1253,12 @@
       const pts = enPantalla(leg.puntos);
       if (pts.length < 2) continue;
       ctx.globalCompositeOperation = 'lighter';
-      ctx.strokeStyle = 'rgba(255, 209, 102, 0.18)';
+      ctx.strokeStyle = mar ? 'rgba(76, 201, 255, 0.2)' : 'rgba(255, 209, 102, 0.18)';
       ctx.lineWidth = 8;
       trazar(ctx, pts);
       ctx.stroke();
       ctx.globalCompositeOperation = 'source-over';
-      ctx.strokeStyle = '#fff4d6';
+      ctx.strokeStyle = mar ? '#dff6ff' : '#fff4d6';
       ctx.lineWidth = 2;
       ctx.setLineDash([7, 6]);
       ctx.lineDashOffset = -now / 40;
@@ -1084,12 +1275,12 @@
     if (!projection) return null;
     let best: Target | null = null;
     let bestD = Infinity;
-    // Trains first: they move over everything else.
+    // Vehicles first: they move over everything else.
     if (!tablero.trazando) {
       for (const c of cabezas) {
         const d = Math.hypot(c.x - mx, c.y - my);
         if (d < 12 && d < bestD) {
-          best = { kind: 'tren', tren: c.tren };
+          best = { kind: 'unidad', unidad: c.unidad };
           bestD = d;
         }
       }
@@ -1105,7 +1296,18 @@
         }
       });
     }
-    if (layers.ciudades) {
+    if (layers.puertos) {
+      PUERTAS.forEach((p, i) => {
+        const d = Math.hypot(transform.applyX(puertaPts[i][0]) - mx, transform.applyY(puertaPts[i][1]) - my);
+        if (d < 12 && d < bestD) {
+          best = { kind: 'puerta', puerta: p };
+          bestD = d;
+        }
+      });
+    }
+    // Laying out a ship, cities aren't stops; skipping them also keeps a port
+    // city's dot (a pixel off its port at country scale) from stealing the click.
+    if (layers.ciudades && !(tablero.trazando && tablero.pestaña === 'barco')) {
       CIUDADES.forEach((c, i) => {
         const d = Math.hypot(transform.applyX(ciudadPts[i][0]) - mx, transform.applyY(ciudadPts[i][1]) - my);
         if (d < 8 && d < bestD) {
@@ -1132,9 +1334,11 @@
   const claveDe = (t: Target | null): string | null =>
     !t
       ? null
-      : t.kind === 'tren'
-        ? `tren:${t.tren.id}`
-        : t.kind === 'puerto'
+      : t.kind === 'unidad'
+        ? `unidad:${t.unidad.id}`
+        : t.kind === 'puerta'
+          ? `puerta:${t.puerta.id}`
+          : t.kind === 'puerto'
           ? `puerto:${t.puerto.id}`
           : t.kind === 'ciudad'
             ? `ciudad:${t.ciudad.id}`
@@ -1142,7 +1346,13 @@
 
   /** The site key of a target, if it is a site. */
   const sitioDe = (t: Target | null): string | null =>
-    t?.kind === 'puerto' ? `puerto:${t.puerto.id}` : t?.kind === 'ciudad' ? `ciudad:${t.ciudad.id}` : null;
+    t?.kind === 'puerto'
+      ? `puerto:${t.puerto.id}`
+      : t?.kind === 'ciudad'
+        ? `ciudad:${t.ciudad.id}`
+        : t?.kind === 'puerta'
+          ? `puerta:${t.puerta.id}`
+          : null;
 
   function onPointerMove(event: PointerEvent) {
     if (!canvas || event.buttons) return; // no hover while dragging the map
@@ -1151,9 +1361,9 @@
     const next = targetAt(pointer.x, pointer.y);
     if (claveDe(next) !== claveDe(hovered)) {
       // A hovered estado is lit in the geography layer; sites in the fondo;
-      // trains only in the moving layer.
+      // vehicles only in the moving layer.
       const capaCambia = hovered?.kind === 'estado' || next?.kind === 'estado';
-      const fondoCambia = hovered?.kind !== 'tren' || next?.kind !== 'tren';
+      const fondoCambia = hovered?.kind !== 'unidad' || next?.kind !== 'unidad';
       hovered = next;
       if (tablero.trazando) tablero.señalar(sitioDe(next));
       if (capaCambia) ensuciaCapa();
@@ -1185,8 +1395,8 @@
       sim.seleccionar(null);
       return;
     }
-    if (target.kind === 'tren') {
-      sim.seleccionar(target.tren.id);
+    if (target.kind === 'unidad') {
+      sim.seleccionar(target.unidad.id);
       return;
     }
     if (target.kind === 'estado') {
@@ -1194,9 +1404,10 @@
       if (e) flyToBounds(e.bounds);
       return;
     }
-    const lonLat = target.kind === 'puerto' ? target.puerto.lonLat : target.ciudad.lonLat;
+    const lonLat =
+      target.kind === 'puerto' ? target.puerto.lonLat : target.kind === 'puerta' ? target.puerta.lonLat : target.ciudad.lonLat;
     const p = projection(lonLat);
-    if (p) flyTo(p[0], p[1], Math.max(transform.k, 9));
+    if (p) flyTo(p[0], p[1], Math.max(transform.k, target.kind === 'puerta' ? 3 : 9));
   }
 
   // ---- lifecycle --------------------------------------------------------------
@@ -1312,10 +1523,13 @@
     // Anything that (re)starts motion: the clock, the fleet, following.
     sim.corriendo;
     const trenes = sim.trenes;
+    const barcos = sim.barcos;
     sim.siguiendo;
-    // A retired train can't stay under the cursor.
+    // A retired vehicle can't stay under the cursor.
     untrack(() => {
-      if (hovered?.kind === 'tren' && !trenes.includes(hovered.tren)) hovered = null;
+      if (hovered?.kind !== 'unidad') return;
+      const u = hovered.unidad;
+      if (!(u.tipo === 'tren' ? trenes.includes(u) : barcos.includes(u))) hovered = null;
     });
     requestDraw();
   });
@@ -1327,14 +1541,14 @@
     const pedido = tablero.irA;
     if (!pedido) return;
     untrack(() => {
-      const t = sim.trenes.find((x) => x.id === pedido.tren);
-      if (t) flyToTren(t);
+      const u = sim.unidades.find((x) => x.id === pedido.id);
+      if (u) flyToUnidad(u);
     });
   });
 
   $effect(() => () => {
     if (frame) cancelAnimationFrame(frame);
-    // Leaving the board mid-pick drops the half-built train.
+    // Leaving the board mid-pick drops the half-built train or ship.
     tablero.cancelar();
   });
 
@@ -1357,10 +1571,10 @@
     return lejos === undefined ? '' : `Sin vía férrea · a ${Math.round(lejos)} km`;
   }
 
-  /** Live line for a hovered train; reads the clock so it updates as the train moves. */
-  const lineaTren = $derived.by(() => {
+  /** Live line for a hovered vehicle; reads the clock so it updates as it moves. */
+  const lineaUnidad = $derived.by(() => {
     sim.horas;
-    return hovered?.kind === 'tren' ? estadoTren(hovered.tren) : '';
+    return hovered?.kind === 'unidad' ? estadoUnidad(hovered.unidad) : '';
   });
 
   /** While picking stops, what clicking the hovered site would do. */
@@ -1370,8 +1584,10 @@
     const problema = tablero.motivo(clave);
     if (problema) return problema;
     const n = tablero.paradas.length;
-    if (!n) return 'Clic: origen del tren';
-    return `Clic: parada ${n + 1} · ${fmtKm(tablero.kmPrevia)} · ${duracion(tablero.horasPrevia)}`;
+    const barco = tablero.pestaña === 'barco';
+    if (!n) return barco ? 'Clic: primera escala del barco' : 'Clic: origen del tren';
+    const que = barco ? 'escala' : 'parada';
+    return `Clic: ${que} ${n + 1} · ${fmtKm(tablero.kmPrevia)} · ${duracion(tablero.horasPrevia)}${barco ? ' por vuelta' : ''}`;
   });
 
   const kmDeVia = $derived.by(() => {
@@ -1400,10 +1616,18 @@
     style:left="{pointer.x}px"
     style:top="{pointer.y}px"
   >
-    {#if hovered.kind === 'tren'}
-      <span class="label tip-kind" style:color={hovered.tren.color}>Tren · {hovered.tren.id}</span>
-      <strong>{hovered.tren.nombre}</strong>
-      <span class="tip-sub">{lineaTren}</span>
+    {#if hovered.kind === 'unidad'}
+      {@const u = hovered.unidad}
+      <span class="label tip-kind" style:color={u.color}>
+        {u.tipo === 'barco' ? `${CLASES_BARCO[u.clase].nombre} · ${u.id}` : `Tren · ${u.id}`}
+      </span>
+      <strong>{u.nombre}</strong>
+      <span class="tip-sub">{lineaUnidad}</span>
+    {:else if hovered.kind === 'puerta'}
+      <span class="label tip-kind" style:color="var(--accent)">Salida al mundo</span>
+      <strong>Hacia {hovered.puerta.nombre}</strong>
+      <span class="tip-sub">Travesía a {hovered.puerta.hacia}, fuera del mapa</span>
+      {#if lineaTrazado}<span class="tip-rail mar">{lineaTrazado}</span>{/if}
     {:else if hovered.kind === 'puerto'}
       <span class="label tip-kind" style:color="var(--accent)">
         Puerto{hovered.puerto.principal ? ' principal' : ''} · {hovered.puerto.litoral === 'pacifico' ? 'Pacífico' : 'Golfo'}
@@ -1416,7 +1640,7 @@
         {/if}
       </span>
       {@const rail = lineaTrazado || servicio(`puerto:${hovered.puerto.id}`)}
-      {#if rail}<span class="tip-rail">{rail}</span>{/if}
+      {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.pestaña === 'barco'}>{rail}</span>{/if}
     {:else if hovered.kind === 'ciudad'}
       <span class="label tip-kind">
         {hovered.ciudad.capital === 'pais' ? 'Capital del país' : hovered.ciudad.capital === 'estado' ? 'Capital estatal' : 'Ciudad'}
@@ -1446,6 +1670,7 @@
     <span class="stat"><b class="mono">{CIUDADES.length}</b> ciudades</span>
     <span class="stat"><b class="mono">{fmt.format(kmDeVia)}</b> km de vía</span>
     <span class="stat"><b class="mono">{sim.trenes.length}</b> trenes</span>
+    <span class="stat"><b class="mono">{sim.barcos.length}</b> barcos</span>
   {/if}
 </div>
 
@@ -1527,6 +1752,10 @@
   .tip-rail {
     font-size: 0.7rem;
     color: #ffe2a3;
+  }
+
+  .tip-rail.mar {
+    color: #bfeaff;
   }
 
   .stats {

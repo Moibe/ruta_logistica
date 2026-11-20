@@ -1,65 +1,96 @@
 <script lang="ts">
-  import { nombreCorto } from '$lib/domain/sitios';
+  import { CLASES_BARCO, enElCanal, fueraDelMapa, KM_POR_MILLA } from '$lib/domain/barcos';
   import {
     avanceDePierna,
     horasAProxima,
-    kmDelServicio,
+    kmDelRecorrido,
     paradaActual,
     proximaParada,
     velocidad,
-  } from '$lib/domain/trenes';
-  import { sim } from '$lib/state/simulacion.svelte';
-  import { tablero } from '$lib/state/tablero.svelte';
-  import { duracion, estadoTren, horaDeJuego, km } from './formato';
+  } from '$lib/domain/servicio';
+  import { nombreCorto, puerta } from '$lib/domain/sitios';
+  import { sim, type Unidad } from '$lib/state/simulacion.svelte';
+  import { tablero, type TipoUnidad } from '$lib/state/tablero.svelte';
+  import { duracion, estadoUnidad, horaDeJuego, km, nudos } from './formato';
 
   /**
-   * The fleet: a roster on the left (every train, where it is, how far along
-   * its leg) and, for the selected one, a card on the right. Both read
-   * `sim.horas` so they refresh as the trains move — trains are mutated in
-   * place and aren't reactive on their own.
+   * The fleet: a roster on the left, trains or ships by tab (each one, where
+   * it is, how far along its leg) and, for the selected one, a card on the
+   * right. Both read `sim.horas` so they refresh as vehicles move — they're
+   * mutated in place and aren't reactive on their own.
    */
+
+  const lista = $derived<Unidad[]>(tablero.pestaña === 'tren' ? sim.trenes : sim.barcos);
 
   const filas = $derived.by(() => {
     sim.horas;
-    return sim.trenes.map((t) => ({
-      id: t.id,
-      nombre: t.nombre,
-      color: t.color,
-      linea: estadoTren(t),
-      avance: avanceDePierna(t),
-      parado: t.estado === 'estacion',
+    return lista.map((u) => ({
+      id: u.id,
+      nombre: u.nombre,
+      color: u.color,
+      linea: estadoUnidad(u),
+      avance: avanceDePierna(u),
+      parado: u.estado === 'parada',
+      fuera: u.tipo === 'barco' && fueraDelMapa(u),
     }));
   });
 
   const ficha = $derived.by(() => {
     sim.horas;
-    const t = sim.seleccionado;
-    if (!t) return null;
-    const aqui = paradaActual(t);
-    const proxima = proximaParada(t);
-    const enH = horasAProxima(t);
-    // Where the train is on its timetable, as an index into the stop list:
-    // the round trip A→B→C→B→A maps back onto A, B, C.
-    const n = t.paradas.length;
-    const destino = t.pierna % (2 * (n - 1));
-    const idaDe = destino < n - 1;
+    const u = sim.seleccionado;
+    if (!u) return null;
+    const aqui = paradaActual(u);
+    const proxima = proximaParada(u);
+    const enH = horasAProxima(u);
+    const fuera = u.tipo === 'barco' && fueraDelMapa(u);
+    let estado: { clase: string; texto: string };
+    if (fuera) {
+      estado = { clase: 'fuera', texto: `En travesía a ${puerta(u.destinos[u.pierna])?.hacia ?? 'ultramar'}, fuera del mapa` };
+    } else if (aqui) {
+      const verbo = u.tipo === 'tren' ? 'sale' : 'zarpa';
+      estado = { clase: 'parado', texto: `En ${nombreCorto(aqui)} · cargando, ${verbo} en ${duracion(u.espera)}` };
+    } else if (u.tipo === 'barco' && enElCanal(u)) {
+      estado = { clase: 'canal', texto: `Cruzando el Canal de Panamá → ${nombreCorto(proxima)}` };
+    } else if (u.tipo === 'barco') {
+      estado = { clase: 'ruta', texto: `Navegando → ${nombreCorto(proxima)}` };
+    } else {
+      // Where the train is on its timetable: the round trip A→B→C→B→A maps
+      // back onto A, B, C.
+      const n = u.paradas.length;
+      const ida = u.pierna % (2 * (n - 1)) < n - 1;
+      estado = { clase: 'ruta', texto: `En ruta (${ida ? 'ida' : 'vuelta'}) → ${nombreCorto(proxima)}` };
+    }
+    const v = velocidad(u);
     return {
-      t,
-      aqui,
+      u,
+      estado,
       proxima,
       enH,
+      fuera,
       llegada: horaDeJuego(sim.horas + enH),
-      velocidad: velocidad(t),
-      kmServicio: kmDelServicio(t),
-      sentido: idaDe ? 'ida' : 'vuelta',
-      paradas: t.paradas.map((clave) => ({
+      velocidad: u.tipo === 'barco' ? (v ? `${nudos(v)} (${Math.round(v)} km/h)` : '0 nudos') : `${v} km/h`,
+      descripcion:
+        u.tipo === 'barco'
+          ? `${u.id} · ${CLASES_BARCO[u.clase].nombre} · ${km(kmDelRecorrido(u))} por vuelta`
+          : `${u.id} · carga · ${km(kmDelRecorrido(u))} por sentido`,
+      recorrido:
+        u.tipo === 'barco'
+          ? `${km(u.odometro)} · ${Math.round(u.odometro / KM_POR_MILLA).toLocaleString('es-MX')} mn`
+          : km(u.odometro),
+      paradas: u.paradas.map((clave) => ({
         clave,
         nombre: nombreCorto(clave),
-        actual: clave === aqui,
+        actual: clave === aqui && !fuera,
         proxima: clave === proxima,
       })),
     };
   });
+
+  function pestaña(tipo: TipoUnidad) {
+    if (tablero.pestaña === tipo) return;
+    if (tablero.trazando) tablero.cancelar();
+    tablero.pestaña = tipo;
+  }
 
   function abrir(id: string) {
     if (tablero.trazando) tablero.cancelar();
@@ -72,7 +103,7 @@
     if (sim.siguiendo && sim.seleccion) tablero.volarA(sim.seleccion);
   }
 
-  // Retiring a train is the one destructive action here: a second click
+  // Retiring a vehicle is the one destructive action here: a second click
   // confirms, inside the card (never the browser's confirm()).
   let confirmando = $state(false);
   let reloj: ReturnType<typeof setTimeout> | undefined;
@@ -92,36 +123,69 @@
   }
 
   $effect(() => {
-    // A different train in the card starts the confirmation over.
+    // A different vehicle in the card starts the confirmation over.
     sim.seleccion;
     confirmando = false;
+  });
+
+  $effect(() => {
+    // Selecting a vehicle on the map shows its tab.
+    const u = sim.seleccionado;
+    if (u && u.tipo !== tablero.pestaña && !tablero.trazando) tablero.pestaña = u.tipo;
   });
 </script>
 
 <aside class="flota panel">
   <header>
-    <span class="label">Trenes</span>
-    <span class="label mono">{sim.trenes.length}</span>
-    <button class="ctl nuevo" onclick={() => tablero.empezar()} disabled={sim.estado !== 'lista' || tablero.trazando}>
-      ＋ Nuevo tren
+    <div class="pestañas" role="tablist">
+      <button
+        role="tab"
+        class:activa={tablero.pestaña === 'tren'}
+        aria-selected={tablero.pestaña === 'tren'}
+        onclick={() => pestaña('tren')}
+      >
+        Trenes <span class="mono">{sim.trenes.length}</span>
+      </button>
+      <button
+        role="tab"
+        class:activa={tablero.pestaña === 'barco'}
+        aria-selected={tablero.pestaña === 'barco'}
+        onclick={() => pestaña('barco')}
+      >
+        Barcos <span class="mono">{sim.barcos.length}</span>
+      </button>
+    </div>
+    <button
+      class="ctl nuevo"
+      class:mar={tablero.pestaña === 'barco'}
+      title={tablero.pestaña === 'tren' ? 'Nuevo tren' : 'Nuevo barco'}
+      onclick={() => tablero.empezar()}
+      disabled={sim.estado !== 'lista' || tablero.trazando}
+    >
+      ＋ Nuevo
     </button>
   </header>
   {#if sim.estado === 'cargando'}
-    <p class="vacio">Cargando la red ferroviaria…</p>
+    <p class="vacio">Cargando las rutas…</p>
   {:else if sim.estado === 'error'}
-    <p class="vacio err">No se pudo cargar la red ferroviaria</p>
+    <p class="vacio err">No se pudieron cargar las rutas</p>
   {:else if !filas.length}
-    <p class="vacio">Sin trenes. Crea uno con «Nuevo tren».</p>
+    <p class="vacio">Sin {tablero.pestaña === 'tren' ? 'trenes' : 'barcos'}. Crea uno con «＋ Nuevo».</p>
   {/if}
   <ul>
     {#each filas as f (f.id)}
       <li>
-        <button class="row" class:is-selected={sim.seleccion === f.id} onclick={() => abrir(f.id)}>
-          <span class="swatch" class:parado={f.parado} style:--c={f.color}></span>
+        <button
+          class="row"
+          class:is-selected={sim.seleccion === f.id}
+          class:mar={tablero.pestaña === 'barco'}
+          onclick={() => abrir(f.id)}
+        >
+          <span class="swatch" class:parado={f.parado} class:fuera={f.fuera} style:--c={f.color}></span>
           <span class="names">
             <span class="nombre">{f.nombre}</span>
             <span class="linea">{f.linea}</span>
-            <span class="barra"><span style:width="{f.avance * 100}%" style:background={f.color}></span></span>
+            <span class="barra"><span style:width="{f.fuera ? 0 : f.avance * 100}%" style:background={f.color}></span></span>
           </span>
           <span class="id mono">{f.id}</span>
         </button>
@@ -131,35 +195,37 @@
 </aside>
 
 {#if ficha}
-  <section class="ficha panel" style:--c={ficha.t.color}>
+  <section class="ficha panel" style:--c={ficha.u.color}>
     <header>
-      <span class="nombre">{ficha.t.nombre}</span>
+      <span class="nombre">{ficha.u.nombre}</span>
       <button class="close" onclick={() => sim.seleccionar(null)} aria-label="Cerrar">×</button>
     </header>
-    <p class="label">{ficha.t.id} · carga · {km(ficha.kmServicio)} por sentido</p>
+    <p class="label">{ficha.descripcion}</p>
 
-    {#if ficha.aqui}
-      <p class="status parado">En {nombreCorto(ficha.aqui)} · cargando, sale en {duracion(ficha.t.espera)}</p>
-    {:else}
-      <p class="status ruta">En ruta ({ficha.sentido}) → {nombreCorto(ficha.proxima)}</p>
-    {/if}
+    <p class="status {ficha.estado.clase}">{ficha.estado.texto}</p>
 
-    <ol class="paradas">
+    <ol class="paradas" class:circular={ficha.u.recorrido === 'circular'}>
       {#each ficha.paradas as p (p.clave)}
         <li class:actual={p.actual} class:proxima={p.proxima}>{p.nombre}</li>
       {/each}
     </ol>
 
     <dl>
-      <div><dt>Velocidad</dt><dd class="mono">{ficha.velocidad} km/h</dd></div>
-      <div><dt>Próxima parada</dt><dd>{nombreCorto(ficha.proxima)}</dd></div>
+      <div><dt>Velocidad</dt><dd class="mono">{ficha.velocidad}</dd></div>
+      <div><dt>{ficha.u.tipo === 'barco' ? 'Próxima escala' : 'Próxima parada'}</dt><dd>{nombreCorto(ficha.proxima)}</dd></div>
       <div><dt>Llega en</dt><dd class="mono">{duracion(ficha.enH)}</dd></div>
       <div><dt>Hora de llegada</dt><dd class="mono">{ficha.llegada}</dd></div>
-      <div><dt>Recorrido</dt><dd class="mono">{km(ficha.t.odometro)}</dd></div>
+      <div><dt>Recorrido</dt><dd class="mono">{ficha.recorrido}</dd></div>
     </dl>
 
     <div class="acciones">
-      <button class="ctl" aria-pressed={sim.siguiendo} title="Seguir el tren con la cámara" onclick={seguir}>
+      <button
+        class="ctl"
+        aria-pressed={sim.siguiendo}
+        disabled={ficha.fuera}
+        title={ficha.fuera ? 'Está fuera del mapa' : 'Seguir con la cámara'}
+        onclick={seguir}
+      >
         {sim.siguiendo ? 'Siguiendo' : 'Seguir'}
       </button>
       <button class="ctl retirar" class:confirmando onclick={retirar}>
@@ -186,8 +252,42 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.6rem 0.6rem 0.55rem 0.85rem;
+    padding: 0.5rem 0.55rem 0.5rem 0.55rem;
     border-bottom: 1px solid var(--line);
+  }
+
+  .pestañas {
+    display: flex;
+    gap: 0.2rem;
+    padding: 0.15rem;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line);
+  }
+
+  .pestañas button {
+    border: none;
+    background: none;
+    padding: 0.28rem 0.55rem;
+    border-radius: 7px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .pestañas button .mono {
+    font-size: 0.64rem;
+    color: var(--dim);
+    margin-left: 0.15rem;
+  }
+
+  .pestañas button.activa {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--ink);
+  }
+
+  .pestañas button.activa .mono {
+    color: var(--muted);
   }
 
   .nuevo {
@@ -202,6 +302,18 @@
   .nuevo:hover:not(:disabled) {
     background: rgba(255, 209, 102, 0.16);
     border-color: rgba(255, 209, 102, 0.6);
+  }
+
+  /* Ships are sea things: cyan, not the rail amber. */
+  .nuevo.mar {
+    border-color: rgba(76, 201, 255, 0.45);
+    color: #d6f2ff;
+    background: rgba(76, 201, 255, 0.08);
+  }
+
+  .nuevo.mar:hover:not(:disabled) {
+    background: rgba(76, 201, 255, 0.16);
+    border-color: rgba(76, 201, 255, 0.6);
   }
 
   .nuevo:disabled {
@@ -249,6 +361,11 @@
     border-color: rgba(255, 209, 102, 0.38);
   }
 
+  .row.mar.is-selected {
+    background: rgba(76, 201, 255, 0.1);
+    border-color: rgba(76, 201, 255, 0.38);
+  }
+
   .swatch {
     width: 8px;
     height: 8px;
@@ -258,10 +375,17 @@
     box-shadow: 0 0 8px var(--c);
   }
 
-  /* Stopped at a station: a ring instead of a lit dot. */
+  /* Stopped at a station or in port: a ring instead of a lit dot. */
   .swatch.parado {
     background: transparent;
     box-shadow: inset 0 0 0 1.5px var(--c);
+  }
+
+  /* Off the map on an ocean crossing: a faint dashed ring. */
+  .swatch.fuera {
+    box-shadow: none;
+    border: 1.5px dashed var(--c);
+    opacity: 0.6;
   }
 
   .names {
@@ -353,13 +477,24 @@
   }
 
   .status.ruta {
-    background: rgba(255, 209, 102, 0.1);
-    color: #ffe2a3;
+    background: color-mix(in srgb, var(--c) 12%, transparent);
+    color: color-mix(in srgb, var(--c) 55%, white);
   }
 
   .status.parado {
     background: rgba(203, 213, 225, 0.1);
     color: #dbe4ef;
+  }
+
+  .status.canal {
+    background: rgba(76, 201, 255, 0.14);
+    color: #bfeaff;
+  }
+
+  .status.fuera {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--muted);
+    border: 1px dashed var(--line);
   }
 
   .paradas {
@@ -376,6 +511,13 @@
   .paradas li:not(:last-child)::after {
     content: '—';
     margin: 0 0.3rem;
+    color: var(--dim);
+  }
+
+  /* A loop closes back on its first stop. */
+  .paradas.circular li:last-child::after {
+    content: '↻';
+    margin-left: 0.35rem;
     color: var(--dim);
   }
 
@@ -423,6 +565,11 @@
     justify-content: center;
     padding: 0.35rem 0.5rem;
     font-size: 0.72rem;
+  }
+
+  .acciones .ctl:disabled {
+    opacity: 0.4;
+    cursor: default;
   }
 
   .retirar:hover {

@@ -4,9 +4,10 @@ Referencia de lo que hay en el juego: qué contiene, de dónde sale cada dato, q
 mano y por qué, y con qué reglas se mueve. Por ahora es un documento; más adelante será una
 página web del juego.
 
-> **Cifras al 19 de noviembre de 2026** (commit `ed8076a`). No están escritas de memoria: se
-> calcularon ejecutando el mismo código del juego que usa el tablero (`domain/red.ts`,
-> `domain/trenes.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
+> **Cifras al 19 de noviembre de 2026, con trenes y barcos.** No están escritas de memoria:
+> se calcularon ejecutando el mismo código del juego que usa el tablero (`domain/red.ts`,
+> `domain/mar.ts`, `domain/trenes.ts`, `domain/barcos.ts`, `domain/sitios.ts`). Si cambian
+> los datos, se recalculan.
 
 **Contenido**
 
@@ -16,10 +17,12 @@ página web del juego.
 4. [Ciudades](#4-ciudades)
 5. [Red ferroviaria](#5-red-ferroviaria)
 6. [Servicios de tren](#6-servicios-de-tren)
-7. [Reglas de la simulación](#7-reglas-de-la-simulación)
-8. [Decisiones de diseño](#8-decisiones-de-diseño)
-9. [Bitácora de correcciones a los datos](#9-bitácora-de-correcciones-a-los-datos)
-10. [Glosario](#10-glosario)
+7. [Rutas marítimas](#7-rutas-marítimas)
+8. [Barcos](#8-barcos)
+9. [Reglas de la simulación](#9-reglas-de-la-simulación)
+10. [Decisiones de diseño](#10-decisiones-de-diseño)
+11. [Bitácora de correcciones a los datos](#11-bitácora-de-correcciones-a-los-datos)
+12. [Glosario](#12-glosario)
 
 ---
 
@@ -30,7 +33,9 @@ página web del juego.
 | [Natural Earth](https://www.naturalearthdata.com/) 1:10m | Estados, países vecinos, vías férreas y ciudades del tablero de México | Repositorio `nvkelso/natural-earth-vector`, commit `ca96624` del 2 de junio de 2022 (versión 5.2.0-pre) | Dominio público |
 | Atlas Ambiental de América del Norte, de la CCA (Comisión para la Cooperación Ambiental de México, Estados Unidos y Canadá) | Origen de las vías férreas de Norteamérica que trae Natural Earth (así lo registra la bitácora de cambios de Natural Earth); reúne cartografía de INEGI, USGS y Natural Resources Canada | Red de alrededor de 2010 | A través de Natural Earth |
 | [world-atlas](https://github.com/topojson/world-atlas) | Contornos del mundo para las vistas globales (tierra a 110m y 50m, países a 110m) | 2.0.2, que redistribuye Natural Earth 4.1.0 en TopoJSON | ISC (los datos, dominio público) |
-| Curaduría propia | Los 15 puertos, dos tramos de vía, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#9-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
+| Curaduría propia | Los 15 puertos, las 2 salidas al mundo, dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#11-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
+| Cálculo propio sobre Natural Earth | Las 136 rutas marítimas entre puertos y salidas (ver [Rutas marítimas](#7-rutas-marítimas)) | Misma tierra 1:10m del tablero | Del proyecto |
+| `logistica-oceanica` (proyecto hermano) | Velocidades de referencia de las clases de barco | — | Del proyecto |
 | INEGI (convención cartográfica) | Parámetros de la proyección del tablero: cónica conforme de Lambert, paralelos 17.5° y 29.5°, meridiano central 102° O | — | — |
 
 Herramientas que procesan los datos (no aportan datos): mapshaper 0.7.101 (MPL-2.0) para
@@ -44,9 +49,12 @@ Natural Earth una sola vez a `.cache/ne/`, fijadas al commit de arriba, y produc
 | --- | --- |
 | `static/data/mexico.topo.json` | Estados y países vecinos, en un solo TopoJSON que comparte arcos |
 | `static/data/red-ferroviaria.json` | La red ferroviaria como grafo: nodos y tramos |
+| `static/data/rutas-maritimas.json` | Las rutas por mar entre cada par de puertos y salidas, y el trazo del Canal |
 | `src/lib/domain/datos/ciudades.json` | Las 58 ciudades |
 
-Los puertos no salen del script: viven a mano en `src/lib/domain/sitios.ts`.
+Los puertos y las salidas al mundo no salen del script: viven a mano en
+`src/lib/domain/datos/puertos.json` y `puertas.json`. Están en JSON para que el script los
+pueda leer y calcular las rutas marítimas entre ellos.
 
 Capas de Natural Earth que se usan: `ne_10m_admin_1_states_provinces` (estados y vecinos),
 `ne_10m_railroads` (vías) y `ne_10m_populated_places_simple` (ciudades). Se consultó
@@ -117,7 +125,7 @@ oficiales:
 Se dibujan de fondo, un paso atrás de México: Estados Unidos, Guatemala y Belice (con
 frontera terrestre) y, en el horizonte, Honduras, El Salvador, Cuba y el resto del Caribe y
 Centroamérica. Vienen del mismo archivo que los estados (ver la
-[bitácora](#9-bitácora-de-correcciones-a-los-datos)) y se recortan a una caja de
+[bitácora](#11-bitácora-de-correcciones-a-los-datos)) y se recortan a una caja de
 -134° a -64° de longitud y 0° a 46° de latitud, mucho más grande de lo que la cámara del
 tablero puede ver, para que el borde del recorte nunca aparezca en pantalla.
 
@@ -127,8 +135,8 @@ tablero puede ver, para que el borde del recorte nunca aparezca en pantalla.
 
 Los **15 puertos se curaron a mano**: la capa de puertos de Natural Earth no trae Lázaro
 Cárdenas (el segundo del país en contenedores) ni Altamira (el cuarto). Las coordenadas son las de
-la terminal; en los puertos de río (Altamira, Tampico, Tuxpan) el marcador va en la bocana,
-que es a donde llegará un barco.
+la terminal; en los puertos de río (Altamira, Tampico, Tuxpan) y en Topolobampo, al fondo de
+una bahía, el marcador va en la bocana, que es a donde llega un barco.
 
 ★ = principal: los cuatro puertos que mueven la mayor parte de los contenedores del país
 (Manzanillo, Lázaro Cárdenas, Veracruz, Altamira). En el mapa llevan un rombo más grande.
@@ -137,7 +145,7 @@ que es a donde llegará un barco.
 | --- | --- | --- | --- | --- |
 | Ensenada | Baja California | Pacífico | 31.855, -116.625 | Sin vía (a 68 km) |
 | Guaymas | Sonora | Pacífico | 27.915, -110.860 | Estación |
-| Topolobampo | Sinaloa | Pacífico | 25.600, -109.050 | Estación |
+| Topolobampo | Sinaloa | Pacífico | 25.555, -109.105 | Estación a 8.7 km |
 | Mazatlán | Sinaloa | Pacífico | 23.195, -106.405 | Estación a 4.2 km |
 | Manzanillo ★ | Colima | Pacífico | 19.065, -104.305 | Estación |
 | Lázaro Cárdenas ★ | Michoacán | Pacífico | 17.945, -102.175 | Estación |
@@ -159,7 +167,8 @@ que es a donde llegará un barco.
   (Tijuana–Tecate) no llega aquí ni conecta con la red nacional.
 - **Guaymas** — Llega el tren por Empalme, cruzando la bahía. Ese cruce se había perdido al
   recortar las vías con la costa y se recuperó (ver bitácora).
-- **Topolobampo** — Extremo del Pacífico de la línea Chihuahua al Pacífico.
+- **Topolobampo** — Extremo del Pacífico de la línea Chihuahua al Pacífico. El marcador está en
+  la boca de la bahía, unos 6 km al suroeste del muelle (ver bitácora).
 - **Mazatlán** — Sobre la línea del Pacífico (Guadalajara–Nogales).
 - **Manzanillo ★** — El puerto de contenedores más grande de México. La fuente dejaba su vía
   a 34 km del puerto; el tramo Cuyutlán–Manzanillo se trazó a mano (ver bitácora).
@@ -269,7 +278,7 @@ una cifra del censo del INEGI. Sirve para ordenar y dimensionar, no como dato de
 Las vías son las de Norteamérica de Natural Earth, que provienen del Atlas Ambiental de
 América del Norte de la CCA ([Fuentes](#1-fuentes)). Es una red de **alrededor de 2010**: no
 incluye obras recientes como el Tren Maya. Eso es deliberado en el juego: ver
-[Decisiones de diseño](#8-decisiones-de-diseño).
+[Decisiones de diseño](#10-decisiones-de-diseño).
 
 ### Vías primarias y secundarias
 
@@ -358,7 +367,134 @@ operadores no aparecen en el juego.
 
 ---
 
-## 7. Reglas de la simulación
+## 7. Rutas marítimas
+
+### Cómo se calculan
+
+Ninguna ruta de barco se dibujó a mano. `npm run datos` las calcula entre **cada par** de los
+15 puertos y las 2 salidas al mundo (136 rutas):
+
+1. **La tierra en una malla.** La misma tierra 1:10m del tablero (estados y países vecinos)
+   se pasa a una malla de 0.05° (unos 5.5 km por celda) que va de 122° a 70° O y de 5° a 34°
+   N: más ancha que el tablero, para que las rutas puedan salir hacia Asia y hacia el
+   Atlántico, y hasta Panamá por el sur. Una celda es tierra si su centro cae en tierra
+   **o si la toca una costa**, así ninguna isla o barra angosta se cuela.
+2. **El Canal de Panamá se abre a mano**, sobre su trazo real: la entrada frente a Balboa,
+   las esclusas de Miraflores y Pedro Miguel, el corte Culebra, Gamboa, el lago Gatún, las
+   esclusas de Gatún y la bahía Limón. Es el único paso entre las dos costas de México.
+3. **La ruta más corta por mar**, sin cortar esquinas de tierra en diagonal y con un
+   sobrecosto por navegar a menos de ~22 km de la costa: así las rutas van mar adentro, como
+   los carriles reales, y solo se acercan a tierra al llegar a un puerto.
+4. **Se endereza** en tramos rectos mientras la línea de vista quede en mar abierto, con un
+   recorrido exacto de celdas para que ninguna recta pise tierra. Mar abierto y canal se
+   enderezan por separado: una recta que saliera del canal directo al mar cruzaría Colón.
+5. **Auditoría**: cada ruta se revisa cada 0.5 km contra una malla 5 veces más fina. Fuera de
+   los primeros y últimos 8 km (la entrada a cada puerto) y del Canal, **ninguna de las 136
+   rutas pisa tierra**.
+
+### Cifras
+
+| | |
+| --- | --- |
+| Rutas | 136 (todas las parejas de 17 puntos) |
+| Pasan por el Canal de Panamá | 72 (las que unen el Pacífico con el Golfo o con la salida a Europa) |
+| Malla | 603,200 celdas de 0.05° |
+
+Algunas distancias, comparadas con las reales en millas náuticas (mn):
+
+| Ruta | En el juego | Real aproximada |
+| --- | ---: | ---: |
+| Manzanillo → Lázaro Cárdenas | 299 km (162 mn) | ~160 mn |
+| Veracruz → Progreso | 721 km (389 mn) | ~400 mn |
+| Manzanillo → Veracruz, por Panamá | 5,975 km (3,226 mn) | ~3,200 mn |
+
+**El Istmo de Tehuantepec, en números.** De Salina Cruz a Coatzacoalcos hay **4,825 km por
+mar** (rodeando por Panamá) y **274 km por tren**. Esa diferencia es la razón de ser del
+corredor interoceánico, y está en el juego tal cual.
+
+### Salidas al mundo
+
+Dos "puertas" en el borde del tablero. Un barco que sale por una queda **en travesía fuera
+del mapa** el tiempo real de ir al puerto que representa, hacer escala allá (48 h) y volver:
+
+| Salida | Dónde | Hacia | Gran círculo | Fuera del mapa (portacontenedores / tanque / granelero) |
+| --- | --- | --- | ---: | --- |
+| Asia | Pacífico, 23.5° N · 118.2° O | Shanghái | 11,221 km | 32.9 d / 41.7 d / 44.7 d |
+| Europa | Atlántico, al norte de las Bahamas, 29.5° N · 77° O | Róterdam | 6,881 km | 20.9 d / 26.3 d / 28.2 d |
+
+El tiempo fuera suma ida y vuelta por el gran círculo más un 10 % (las rutas reales nunca
+son la línea más corta) a la velocidad de la clase, más la escala lejana. La salida a Europa
+está pasado el estrecho de Florida, así que la ruta visible desde el Golfo cruza el estrecho.
+
+---
+
+## 8. Barcos
+
+### Clases
+
+| Clase | Velocidad | Horas en cada puerto |
+| --- | --- | ---: |
+| Portacontenedores | 18 nudos (33 km/h) | 18 |
+| Buque tanque | 14 nudos (26 km/h) | 24 |
+| Granelero | 13 nudos (24 km/h) | 36 |
+| Ro-ro de autos | 18 nudos (33 km/h) | 14 |
+
+Las velocidades parten de las clases de `logistica-oceanica` (Neopanamax 22 nudos, feeder 18,
+petrolero 15, granelero 14), bajadas un poco al promedio de "navegación lenta" que las navieras
+mantienen en la práctica. En el Canal de Panamá todo barco va a 9 km/h: unos 80 km de esclusas,
+corte y lago en cerca de 9 horas.
+
+### Servicios iniciales
+
+Los barcos hacen **circuitos**: recorren sus escalas en orden y vuelven a la primera, como
+los servicios regulares de las navieras.
+
+| Barco | Clase | Circuito | Por vuelta | Ciclo completo |
+| --- | --- | --- | ---: | ---: |
+| Mar de Cortés | Portacontenedores | Asia → Manzanillo → Lázaro Cárdenas → Asia | 3,764 km | 39.1 d |
+| Cabo Corrientes | Portacontenedores | Europa → Veracruz → Altamira → Europa | 5,256 km | 29.0 d |
+| Arrecife Alacranes | Buque tanque | Salina Cruz → Lázaro Cárdenas → Manzanillo → Mazatlán → Guaymas → Salina Cruz | 4,781 km | 12.7 d |
+| Isla Tiburón | Buque tanque | Coatzacoalcos → Dos Bocas → Progreso → Coatzacoalcos | 1,311 km | 5.1 d |
+| Bahía de Banderas | Ro-ro de autos | Lázaro Cárdenas → Veracruz → Lázaro Cárdenas, por Panamá | 11,396 km | 16.1 d |
+| Laguna de Términos | Granelero | Guaymas → Asia → Guaymas | 3,024 km | 51.5 d |
+
+"Por vuelta" son los km dentro del mapa; el ciclo completo incluye las escalas y el tiempo
+fuera del mapa. Qué representan:
+
+- **Mar de Cortés y Cabo Corrientes**: las líneas regulares de contenedores, que escalan donde
+  esos tráficos escalan en la realidad (Asia en Manzanillo y Lázaro Cárdenas; Europa en
+  Veracruz y Altamira).
+- **Arrecife Alacranes**: la distribución de combustibles por la costa del Pacífico desde la
+  refinería de Salina Cruz.
+- **Isla Tiburón**: el reparto de combustibles por el Golfo.
+- **Bahía de Banderas**: autos de costa a costa por el Canal, el rodeo largo que el corredor
+  del Istmo existe para acortar.
+- **Laguna de Términos**: graneles minerales de Sonora hacia Asia.
+
+Detalle por tramo:
+
+- **Mar de Cortés**: Asia–Manzanillo 1,598 km (2.0 d) · Manzanillo–Lázaro Cárdenas 299 km
+  (9 h) · Lázaro Cárdenas–Asia 1,866 km (2.3 d).
+- **Cabo Corrientes**: Europa–Veracruz 2,406 km (3.0 d) · Veracruz–Altamira 419 km (13 h) ·
+  Altamira–Europa 2,430 km (3.0 d).
+- **Arrecife Alacranes**: Salina Cruz–Lázaro Cárdenas 850 km (1.4 d) · Lázaro Cárdenas–
+  Manzanillo 299 km (12 h) · Manzanillo–Mazatlán 570 km (22 h) · Mazatlán–Guaymas 721 km
+  (1.2 d) · Guaymas–Salina Cruz 2,341 km (3.8 d).
+- **Isla Tiburón**: Coatzacoalcos–Dos Bocas 157 km (6 h) · Dos Bocas–Progreso 516 km (20 h) ·
+  Progreso–Coatzacoalcos 638 km (1.0 d).
+- **Bahía de Banderas**: Lázaro Cárdenas–Veracruz 5,698 km (7.5 d), y de regreso igual.
+- **Laguna de Términos**: Guaymas–Asia 1,512 km (2.6 d), y de regreso igual.
+
+Los **nombres de los barcos** son inventados, tomados de mares, islas y costas de México
+(Mar de Cortés, Cabo Corrientes, Arrecife Alacranes…). Ninguno es, ni pretende ser, un barco
+real.
+
+El jugador puede crear barcos nuevos (*＋ Nuevo* en la pestaña Barcos): elige la clase y
+las escalas en el mapa, en orden; el circuito se cierra solo de vuelta a la primera.
+
+---
+
+## 9. Reglas de la simulación
 
 | Regla | Valor |
 | --- | --- |
@@ -378,9 +514,25 @@ Las velocidades son promedios de marcha de un tren de carga, no velocidades máx
 la ruta por tiempo hace que un tren prefiera una vía primaria aunque un ramal sea más corto,
 como lo haría un despachador.
 
+**Barcos:**
+
+| Regla | Valor |
+| --- | --- |
+| Velocidad | La de su clase (13 a 18 nudos); 9 km/h dentro del Canal de Panamá |
+| Escala en un puerto | La de su clase (14 a 36 h) |
+| Salida al mundo | Fuera del mapa: ida y vuelta al puerto lejano por el gran círculo + 10 %, a la velocidad de la clase, más 48 h de escala allá |
+| Servicio | Circular: A → B → C → A… |
+| Cómo se elige la ruta | La ruta marítima calculada para ese par de puntos (ver [Rutas marítimas](#7-rutas-marítimas)) |
+| En pantalla | Un casco con proa, orientado a su rumbo, con estela; crece un poco al acercarte |
+| Resultado medido | En 3,000 h simuladas con los 6 barcos: 170 escalas, 39 % del tiempo en travesías fuera del mapa |
+
+Los trenes y los barcos comparten el mismo motor de servicios (`domain/servicio.ts`): un
+vehículo recorre sus piernas, espera en cada parada lo que le toca y sigue. Solo cambia cómo
+se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
+
 ---
 
-## 8. Decisiones de diseño
+## 10. Decisiones de diseño
 
 - **La red base es la anterior a 2018; lo posterior lo construye el jugador.** *(19 nov
   2026.)* Las vías hechas de 2018 en adelante no están en el mapa a propósito: construirlas
@@ -391,18 +543,24 @@ como lo haría un despachador.
   Altamira) son anteriores a 2018, así que respetan la regla.
 - **Puertos en la terminal o en la bocana**, no en el centro de la ciudad: es a donde llegan
   los barcos.
+- **El juego es México; el mundo entra por dos salidas.** Los barcos que van a Asia o a
+  Europa salen del tablero por una "puerta" y pasan fuera del mapa el tiempo real de la
+  travesía. Lo que pasa allá no se simula.
+- **Los trenes van y vuelven; los barcos hacen circuitos.** Así operan una línea de
+  ferrocarril y un servicio regular de navieras.
+- **Nombres de barco inventados**, de la geografía de México, para no imitar barcos reales.
 - **Rutas calculadas, no dibujadas.** Un servicio solo define sus paradas; el camino lo da
   la red. Si la red cambia (por ejemplo, porque el jugador construye una vía), las rutas
   cambian solas.
 - **Sin nombres de empresas.** Los corredores son reales; los operadores no aparecen.
-- **El color significa algo.** Lo marítimo es cian, lo ferroviario es ámbar (cada tren tiene
-  su propio tono cálido) y las ciudades son tinta clara.
+- **El color significa algo.** Lo marítimo es cian (cada barco tiene su propio tono frío), lo
+  ferroviario es ámbar (cada tren tiene su propio tono cálido) y las ciudades son tinta clara.
 - **Las estaciones llegan hasta 15 km.** Más lejos, el sitio no tiene servicio de tren y su
   ficha dice a cuántos km queda la vía.
 
 ---
 
-## 9. Bitácora de correcciones a los datos
+## 11. Bitácora de correcciones a los datos
 
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
@@ -437,6 +595,20 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   Cárdenas ni Altamira.
 - Tres puertos de río se movieron a su bocana para que un barco pueda llegar: **Altamira**
   (estaba 6.3 km tierra adentro), **Tampico** (8.9 km, sobre el Pánuco) y **Tuxpan** (8.2 km).
+- Los puertos pasaron de código a `src/lib/domain/datos/puertos.json`, para que el script de
+  datos los lea y calcule las rutas marítimas.
+- **Topolobampo** se movió a la boca de su bahía (25.555° N, 109.105° O), unos 6 km al
+  suroeste del muelle. Su bahía se abre al mar por una boca angosta que, a la escala de la
+  malla de rutas, queda cerrada: ninguna ruta podía salir del muelle sin cruzar la barra. Su
+  estación de tren quedó a 8.7 km (antes 1.8 km).
+
+**Rutas marítimas**
+
+- **Canal de Panamá abierto a mano** sobre su trazo real (ver [Rutas marítimas](#7-rutas-marítimas)):
+  en la fuente, y a esta escala, el istmo es tierra continua.
+- **Salidas al mundo** definidas a mano en `puertas.json`: Asia en 23.5° N · 118.2° O (se
+  movió desde 119.5° O para que quede a la vista junto al panel de la izquierda) y Europa en
+  29.5° N · 77° O, pasado el estrecho de Florida.
 
 **Vías férreas**
 
@@ -460,15 +632,21 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ---
 
-## 10. Glosario
+## 12. Glosario
 
 - **Nodo**: punto de la red donde algo cambia: un entronque, el final de una línea o el
   punto donde una vía pasa de primaria a secundaria.
 - **Tramo**: la vía entre dos nodos.
 - **Estación**: el punto de la vía que da servicio a un sitio; puede partir un tramo en dos.
-- **Sitio**: una ciudad o un puerto. Cada uno tiene una clave única, como `puerto:veracruz`
-  o `ciudad:veracruz`.
-- **Servicio**: la lista de paradas que recorre un tren, de ida y de vuelta.
+- **Sitio**: una ciudad, un puerto o una salida al mundo. Cada uno tiene una clave única,
+  como `puerto:veracruz`, `ciudad:veracruz` o `puerta:asia`.
+- **Servicio**: la lista de paradas que recorre un vehículo. Un tren las recorre de ida y de
+  vuelta; un barco, en circuito.
+- **Escala**: una parada de barco en un puerto.
+- **Salida al mundo (puerta)**: punto del borde del tablero por donde un barco sale hacia
+  Asia o Europa.
+- **Travesía**: el tiempo que un barco pasa fuera del mapa tras salir por una puerta.
+- **Ruta marítima**: el camino por mar, ya calculado, entre dos puertos o salidas.
 - **Pieza conectada**: un conjunto de vías unidas entre sí; un tren no puede pasar de una
   pieza a otra.
 - **Marcha**: el tiempo que un tren pasa en movimiento, sin contar las esperas.

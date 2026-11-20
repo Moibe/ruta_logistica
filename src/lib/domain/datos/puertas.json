@@ -1,0 +1,20 @@
+[
+ {
+  "id": "asia",
+  "nombre": "Asia",
+  "lon": -118.2,
+  "lat": 23.5,
+  "hacia": "Shanghái",
+  "haciaLon": 121.47,
+  "haciaLat": 31.23
+ },
+ {
+  "id": "europa",
+  "nombre": "Europa",
+  "lon": -77,
+  "lat": 29.5,
+  "hacia": "Róterdam",
+  "haciaLon": 4.05,
+  "haciaLat": 51.95
+ }
+]
