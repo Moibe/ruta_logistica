@@ -261,6 +261,8 @@
           <dd class="mono">{Math.round(ficha.u.carga).toLocaleString('es-MX')} de {CARGA_POR_TREN.toLocaleString('es-MX')} t</dd>
         </div>
         <div><dt>Ha exportado</dt><dd class="mono">{Math.round(ficha.u.exportado).toLocaleString('es-MX')} t</dd></div>
+        <div><dt>Carga nacional</dt><dd class="mono">{Math.round(ficha.u.cargaNacional).toLocaleString('es-MX')} t a bordo</dd></div>
+        <div><dt>Ha movido</dt><dd class="mono">{Math.round(ficha.u.movidoNacional).toLocaleString('es-MX')} t nacionales</dd></div>
       {/if}
     </dl>
 

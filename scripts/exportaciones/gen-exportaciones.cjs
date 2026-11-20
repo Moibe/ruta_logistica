@@ -3,7 +3,7 @@
 // (ATTRAPI's railway yearbook), the customs offices (ANAM) and which game sites
 // are exits. Every figure carries its source.
 //
-// usage: node scripts/exportaciones/gen-exportaciones.cjs <carpeta con eef_estatal_anual_tr_cifra_2007_2025.csv>
+// usage: node scripts/exportaciones/gen-exportaciones.cjs <carpeta del EEF del INEGI> <carpeta del PIBE del INEGI (conjunto_de_datos)>
 const fs = require('fs');
 const path = require('path');
 const { CVE } = require('../energia/municipios.cjs');
@@ -37,6 +37,33 @@ for (const l of lineas.slice(1)) {
 for (const a of AÑOS) for (const e of Object.keys(porEstado[a])) porEstado[a][e] = r1(porEstado[a][e]);
 const totalPais = Object.fromEntries(AÑOS.map((a) => [a, r1(Object.values(porEstado[a]).reduce((s, v) => s + v, 0))]));
 
+// ---- domestic cargo: where it comes from -----------------------------------------------------------
+// INEGI, PIB por Entidad Federativa: value added of the primary and secondary
+// activities (farming, mining, manufacturing, construction), million pesos of
+// 2018. What rail carries comes from them, not from services; less oil extraction,
+// which leaves by pipeline and ship (it would put Campeche and Tabasco near the top).
+const PIBE = process.argv[3];
+const { estadoDe } = require('../energia/municipios.cjs');
+const AÑOS_PIB = [2018, 2019, 2020, 2021, 2022, 2023];
+const productivo = {};
+for (const [archivo, signo] of [['conjunto_de_datos_pibe_actividad_ap2023_p.csv', 1], ['conjunto_de_datos_pibe_actividad_as2023_p.csv', 1], ['conjunto_de_datos_pibe_actividad_21p2023_p.csv', -1]]) {
+  const filas = fs.readFileSync(path.join(PIBE, archivo), 'utf8').replace(/^﻿/, '').split(/\r?\n/);
+  const años = filas[0].split(',').map((c) => parseInt(c, 10));
+  for (const f of filas.slice(1)) {
+    const c = f.split(',');
+    if (!c[0].startsWith('Millones de pesos')) continue;
+    const nombre = c[0].split('|')[2].replace(/<[^>]*>/g, '').trim();
+    if (nombre === 'Estados Unidos Mexicanos') continue;
+    const edo = estadoDe(nombre.replace(' de Zaragoza', '').replace(' de Ocampo', '').replace(' de Ignacio de la Llave', ''));
+    if (!edo) throw new Error('estado sin clave: ' + nombre);
+    for (const a of AÑOS_PIB) {
+      productivo[a] ??= {};
+      productivo[a][edo] = (productivo[a][edo] ?? 0) + signo * (+c[años.indexOf(a)] || 0);
+    }
+  }
+}
+for (const a of AÑOS_PIB) for (const e of Object.keys(productivo[a])) productivo[a][e] = Math.round(productivo[a][e]);
+
 // ---- exits by rail: ATTRAPI, Anuario Estadístico Ferroviario 2025, tables A10, A11 and A13 (million tonnes) ----
 const SERIE = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
 const serie = (v) => Object.fromEntries(SERIE.map((a, i) => [a, v[i]]));
@@ -45,6 +72,9 @@ const ferrocarril = {
   importacion: serie([61.2, 67.16, 66.02, 62.92, 70.34, 67.87, 71.07, 73.65, 75.36]),
   exportacionFronteras: serie([14.36, 15.72, 15.91, 15.35, 16.76, 18.97, 18.15, 19.36, 20.53]),
   exportacionPuertos: serie([4.22, 8.62, 6.36, 5.96, 5.5, 5.58, 4.76, 3.02, 2.5]),
+  // Table A9: domestic ("interior") traffic and the whole system.
+  nacional: serie([47.09, 36.53, 36.9, 36.16, 37.28, 36.03, 37.49, 36.75, 30.55]),
+  total: serie([126.88, 128.03, 125.19, 120.38, 129.89, 128.46, 131.48, 132.78, 128.94]),
 };
 // 2025 by exit (table A13). The yearbook's text comes out one row shifted; these
 // are lined up with its percentages and totals.
@@ -165,8 +195,11 @@ fs.writeFileSync(
         inegi: { fuente: 'INEGI, Exportaciones por Entidad Federativa (datos abiertos, valor FOB por estado y subsector, 2007–2025)', url: 'https://www.inegi.org.mx/programas/exporta_ef/', dato: `2025 son cifras ${estatus[2025].toLowerCase()}` },
         attrapi: { fuente: 'ATTRAPI, Anuario Estadístico Ferroviario 2025, tablas A10, A11 y A13 (carga de exportación por fronteras y puertos)', url: 'https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf' },
         cargaPorTren: { fuente: 'ARTF, Sistema Nacional de Indicadores Ferroviarios 2022: carga neta promedio por tren del sistema en 2018', url: 'https://www.gob.mx/cms/uploads/attachment/file/789599/SNIF_2022.pdf' },
+        nacional: { fuente: 'ATTRAPI, Anuario Estadístico Ferroviario 2025, tabla A9 (tráfico interior); INEGI, PIB por Entidad Federativa, valor agregado de las actividades primarias y secundarias, menos la extracción de petróleo, a precios de 2018 (2023 preliminar)', url: 'https://www.inegi.org.mx/programas/pibent/2018/', dato: 'Un estado genera carga nacional a su parte del valor agregado del campo y la industria del país por las toneladas de tráfico interior de ese año: estimación del juego.' },
       },
       cargaPorTren: 2436,
+      /** Million pesos of 2018, primary plus secondary activities, by year and state. */
+      productivo,
       porEstado,
       totalPais,
       ferrocarril,

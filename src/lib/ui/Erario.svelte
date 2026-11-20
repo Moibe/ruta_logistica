@@ -69,7 +69,8 @@
     const carga = { año: añoCarga, t: SERIE_AEROPUERTOS.totalPais[String(añoCarga)], parcial };
     // Rail exports that year (ATTRAPI), when the yearbook has it.
     const ferro = EXPORTACIONES.ferrocarril.exportacion[String(a.año)] ?? null;
-    return { ...cuenta, cfe, polos, carga, ferro, año: a.año, federal: a.federal, serie };
+    const ferroNacional = EXPORTACIONES.ferrocarril.nacional[String(a.año)] ?? null;
+    return { ...cuenta, cfe, polos, carga, ferro, ferroNacional, año: a.año, federal: a.federal, serie };
   });
 
   /** This month's payment and the year it comes from, with the sources in words. */
@@ -111,6 +112,16 @@
     const año = añoDe(sim.horas);
     return { año, t: sim.exportacion.porAño[String(año)] ?? 0, total: sim.exportacion.total };
   });
+  /** Tonnes, short enough for the bar as they grow: "9,790", "262 mil", "2.6 M". */
+  const toneladas = (n: number) =>
+    n < 1e5 ? personas(n) : n < 1e6 ? `${Math.round(n / 1e3).toLocaleString('es-MX')} mil` : `${(n / 1e6).toLocaleString('es-MX', { maximumFractionDigits: 1 })} M`;
+
+  /** The domestic cargo the player's trains delivered this game year: tonnes and tonne-km. */
+  const nacional = $derived.by(() => {
+    sim.horas;
+    const año = String(añoDe(sim.horas));
+    return { t: sim.cargaNacional.porAño[año] ?? 0, tkm: sim.cargaNacional.tkmPorAño[año] ?? 0, total: sim.cargaNacional.total };
+  });
 
   const obrasEnCurso = $derived(cuenta.enCurso + cuenta.viasEnObra + enObraCfe);
   const obrasDetenidas = $derived(cuenta.detenidas + cuenta.viasDetenidas);
@@ -139,9 +150,13 @@
       <span class="label">Polos</span>
       <span class="valor"><b class="mono">{real.polos.operando}</b> operando <span class="dim">· {real.polos.declarados} declarados</span></span>
     </div>
-    <div class="celda opcional" title="Toneladas que salieron del país por tren ese año, por fronteras y puertos (ATTRAPI)">
-      <span class="label export">Exportación por tren {real.año}</span>
-      <span class="valor">{#if real.ferro !== null}<b class="mono">{real.ferro.toLocaleString('es-MX')}</b> Mt{:else}<span class="dim">sin dato aún</span>{/if}</span>
+    <div class="celda opcional" title="Toneladas que llevó el tren ese año: las que salieron del país por fronteras y puertos, y la carga nacional (ATTRAPI)">
+      <span class="label export">Carga por tren {real.año}</span>
+      <span class="valor">
+        {#if real.ferro !== null && real.ferroNacional !== null}
+          <b class="mono">{real.ferro.toLocaleString('es-MX')}</b> Mt exportadas · <b class="mono">{real.ferroNacional.toLocaleString('es-MX')}</b> nacionales
+        {:else}<span class="dim">sin dato aún</span>{/if}
+      </span>
     </div>
     <div class="celda opcional" title={`Carga aérea de todo el país (AFAC)${real.carga.parcial ? ', de enero a septiembre' : ''}`}>
       <span class="label aereo">Carga aérea {real.carga.año}{real.carga.parcial ? '*' : ''}</span>
@@ -170,20 +185,30 @@
       <span class="label">Empleos</span>
       <span class="valor"><b class="mono">{personas(cuenta.permanentes)}</b> permanentes <span class="dim">· <b class="mono">{personas(cuenta.enObra)}</b> en obra</span></span>
     </div>
-    <div class="celda" title={`Lo que tus trenes llevaron de un origen a una salida del país (aduana fronteriza, puerto o aeropuerto). En total: ${personas(exportado.total)} t.`}>
-      <span class="label export">Exportaciones {exportado.año}</span>
-      <span class="valor"><b class="mono">{personas(exportado.t)}</b> t</span>
-    </div>
-    <div class="celda opcional">
-      <span class="label">Obras</span>
+    <div
+      class="celda"
+      title={`Exportado: lo que tus trenes llevaron de un origen a una salida del país (aduana fronteriza, puerto o aeropuerto); en total, ${personas(exportado.total)} t.\nNacional: lo que entregaron de una parada a la siguiente; este año ${personas(nacional.tkm / 1e6)} millones de toneladas-km, en total ${personas(nacional.total)} t.`}
+    >
+      <span class="label">Carga {exportado.año}</span>
       <span class="valor">
-        {obrasEnCurso} en obra{#if obrasDetenidas}<span class="alerta"> ({obrasDetenidas} detenida{obrasDetenidas > 1 ? 's' : ''})</span>{/if}
-        · {obrasHechas} hechas
+        <b class="mono export">{toneladas(exportado.t)}</b> t exportadas <span class="dim">·</span> <b class="mono">{toneladas(nacional.t)}</b> t nacionales
       </span>
     </div>
-    <button class="celda obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
-      <span class="label">Catálogo</span>
-      <span class="valor ir">Obras del Estado {tablero.catalogo ? '×' : '→'}</span>
+    <!-- The State's works and the way into their catalog, in one cell. -->
+    <button
+      class="celda obras-via"
+      class:abierto={tablero.catalogo}
+      title="Catálogo de obras del Estado"
+      onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}
+    >
+      <span class="label">Obras del Estado</span>
+      <span class="valor">
+        <span>
+          {obrasEnCurso} en obra{#if obrasDetenidas}<span class="alerta"> ({obrasDetenidas} detenida{obrasDetenidas > 1 ? 's' : ''})</span>{/if}
+          · {obrasHechas} hechas
+        </span>
+        <span class="ir">{tablero.catalogo ? '×' : '→'}</span>
+      </span>
     </button>
   {/if}
 </div>
@@ -210,7 +235,7 @@
     justify-content: center;
     gap: 0.12rem;
     flex: none;
-    padding: 0 0.75rem;
+    padding: 0 0.65rem;
     border-left: 1px solid var(--line);
     white-space: nowrap;
   }

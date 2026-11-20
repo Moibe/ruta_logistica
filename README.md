@@ -197,7 +197,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
 | `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
 | `src/lib/domain/datos/aeropuertos.json` | Los **10 aeropuertos de carga** de la AFAC, con sus toneladas de cada año desde 2018 (serie mensual de la AFAC) para el modo Realidad. Son sitios (`aeropuerto:<id>`): con vía a 15 km o menos tienen estación y son paradas de tren (puertos secos) |
-| `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida (ATTRAPI), carga por tren (SNIF) |
+| `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
 | `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
@@ -255,7 +255,12 @@ cada estado acumula carga de exportación a su parte del valor del país (INEGI)
 toneladas que salen por tren ese año (ATTRAPI), hasta un mes de ella. El motor registra cada
 llegada de un tren (`Marcha.llegadas`); `sim.#atenderLlegadas` carga en los orígenes hasta
 2,436 t y descarga en las salidas (aduanas de frontera, puertos y aeropuertos), sumando a
-`sim.exportacion`. La barra de arriba muestra lo exportado en el año.
+`sim.exportacion`. **La carga nacional** es un número: cada estado la acumula a su parte del
+campo y la industria sin petróleo (INEGI, PIB por entidad; `productivo` en el JSON, el
+generador recibe la carpeta de datos del PIBE como segundo argumento) por el tráfico interior
+por tren (ATTRAPI, tabla A9); el tren la llena con el espacio que dejan las exportaciones y la
+entrega en la siguiente parada, sumando toneladas y toneladas-km a `sim.cargaNacional`. La
+barra de arriba muestra lo exportado y lo nacional del año.
 
 **La energía** (`domain/energia.ts`, `datos/energia.json`): el país en sus 9 regiones del
 sistema eléctrico, más Mulegé, el sistema aislado del norte de Baja California Sur. Cada una

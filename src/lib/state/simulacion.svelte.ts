@@ -29,7 +29,15 @@ import {
 } from '$lib/domain/energia';
 import { clavePolo, estadoReal, type EstadoReal } from '$lib/domain/realidad';
 import { avanzar } from '$lib/domain/servicio';
-import { CARGA_POR_TREN, DIAS_EN_ESPERA, ESTADOS_EXPORTADORES, flujoDelEstado, SALIDAS } from '$lib/domain/exportaciones';
+import {
+  CARGA_POR_TREN,
+  DIAS_EN_ESPERA,
+  ESTADOS_EXPORTADORES,
+  ESTADOS_PRODUCTIVOS,
+  flujoDelEstado,
+  flujoNacional,
+  SALIDAS,
+} from '$lib/domain/exportaciones';
 import {
   avanzarObra,
   empleosPermanentes,
@@ -144,6 +152,18 @@ class Simulacion {
   });
   /** Export cargo waiting at each state's stations, tonnes. */
   #bodegas = new Map<string, number>();
+  /**
+   * The domestic cargo the player's trains have delivered: tonnes and
+   * tonne-km, in all and by year. Replaced on every delivery.
+   */
+  cargaNacional = $state.raw<{ total: number; porAño: Record<string, number>; tkm: number; tkmPorAño: Record<string, number> }>({
+    total: 0,
+    porAño: {},
+    tkm: 0,
+    tkmPorAño: {},
+  });
+  /** Domestic cargo waiting at each state's stations, tonnes. */
+  #bodegasNacional = new Map<string, number>();
   modo = $state<Modo>('juego');
   /** In Realidad, each rail work as it really stood on the date shown (`horas`). Empty in the game. */
   real = $state.raw<Map<string, EstadoReal>>(new Map());
@@ -233,6 +253,7 @@ class Simulacion {
         this.trenes = trenes;
         this.barcos = barcos;
         for (const e of ESTADOS_EXPORTADORES) this.#bodegas.set(e, flujoDelEstado(e, añoDe(this.horas)) * 24 * 7);
+        for (const e of ESTADOS_PRODUCTIVOS) this.#bodegasNacional.set(e, flujoNacional(e, añoDe(this.horas)) * 24 * 7);
         this.#saturar();
         this.#cobrar();
         this.#actualizarEnergia(true);
@@ -572,6 +593,8 @@ class Simulacion {
       nuevo.carga = viejo.carga;
       nuevo.cargaDe = viejo.cargaDe;
       nuevo.exportado = viejo.exportado;
+      nuevo.cargaNacional = viejo.cargaNacional;
+      nuevo.movidoNacional = viejo.movidoNacional;
       return nuevo;
     });
   }
@@ -585,6 +608,10 @@ class Simulacion {
       const f = flujoDelEstado(e, año);
       this.#bodegas.set(e, Math.min((this.#bodegas.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
     }
+    for (const e of ESTADOS_PRODUCTIVOS) {
+      const f = flujoNacional(e, año);
+      this.#bodegasNacional.set(e, Math.min((this.#bodegasNacional.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
+    }
   }
 
   /** Export cargo waiting in a state, tonnes. */
@@ -593,39 +620,74 @@ class Simulacion {
   }
 
   /**
-   * A train got to a stop: at an exit it unloads its export cargo (that's an
-   * export); anywhere else it loads what its state has waiting, up to a train's load.
+   * A train got to a stop. It delivers the domestic cargo it brought from the
+   * last one (counted in tonnes and tonne-km). At an exit it unloads its export
+   * cargo (that's an export); anywhere else it loads the exports its state has
+   * waiting. Then it fills the room left with domestic cargo for its next stop.
    */
   #atenderLlegadas(t: Tren) {
     const llegadas = t.llegadas!;
     while (llegadas.length) {
-      const destino = t.destinos[llegadas.shift()!];
-      if (SALIDAS.has(destino)) {
-        if (t.carga <= 0) continue;
-        const e = this.exportacion;
-        const año = String(añoDe(this.horas));
-        const porEstado = { ...e.porEstado };
-        for (const [edo, ton] of Object.entries(t.cargaDe)) porEstado[edo] = (porEstado[edo] ?? 0) + ton;
-        this.exportacion = {
-          total: e.total + t.carga,
-          porAño: { ...e.porAño, [año]: (e.porAño[año] ?? 0) + t.carga },
-          porSalida: { ...e.porSalida, [destino]: (e.porSalida[destino] ?? 0) + t.carga },
-          porEstado,
-        };
-        t.exportado += t.carga;
-        t.carga = 0;
-        t.cargaDe = {};
-        continue;
-      }
-      const estado = SITIOS_POR_CLAVE.get(destino)?.estado;
-      if (!estado) continue;
-      const hay = this.#bodegas.get(estado) ?? 0;
-      const sube = Math.min(CARGA_POR_TREN - t.carga, hay);
-      if (sube <= 0) continue;
-      this.#bodegas.set(estado, hay - sube);
-      t.carga += sube;
-      t.cargaDe[estado] = (t.cargaDe[estado] ?? 0) + sube;
+      const pierna = llegadas.shift()!;
+      const destino = t.destinos[pierna];
+      this.#entregarNacional(t, t.piernas[pierna].km);
+      this.#exportar(t, destino);
+      this.#cargarNacional(t, destino);
     }
+  }
+
+  #entregarNacional(t: Tren, km: number) {
+    if (t.cargaNacional <= 0) return;
+    const c = this.cargaNacional;
+    const año = String(añoDe(this.horas));
+    const ton = t.cargaNacional;
+    this.cargaNacional = {
+      total: c.total + ton,
+      porAño: { ...c.porAño, [año]: (c.porAño[año] ?? 0) + ton },
+      tkm: c.tkm + ton * km,
+      tkmPorAño: { ...c.tkmPorAño, [año]: (c.tkmPorAño[año] ?? 0) + ton * km },
+    };
+    t.movidoNacional += ton;
+    t.cargaNacional = 0;
+  }
+
+  #cargarNacional(t: Tren, destino: string) {
+    const estado = SITIOS_POR_CLAVE.get(destino)?.estado;
+    if (!estado) return;
+    const hay = this.#bodegasNacional.get(estado) ?? 0;
+    const sube = Math.min(CARGA_POR_TREN - t.carga - t.cargaNacional, hay);
+    if (sube <= 0) return;
+    this.#bodegasNacional.set(estado, hay - sube);
+    t.cargaNacional += sube;
+  }
+
+  /** Export cargo at a stop: unloaded at an exit, loaded anywhere else. */
+  #exportar(t: Tren, destino: string) {
+    if (SALIDAS.has(destino)) {
+      if (t.carga <= 0) return;
+      const e = this.exportacion;
+      const año = String(añoDe(this.horas));
+      const porEstado = { ...e.porEstado };
+      for (const [edo, ton] of Object.entries(t.cargaDe)) porEstado[edo] = (porEstado[edo] ?? 0) + ton;
+      this.exportacion = {
+        total: e.total + t.carga,
+        porAño: { ...e.porAño, [año]: (e.porAño[año] ?? 0) + t.carga },
+        porSalida: { ...e.porSalida, [destino]: (e.porSalida[destino] ?? 0) + t.carga },
+        porEstado,
+      };
+      t.exportado += t.carga;
+      t.carga = 0;
+      t.cargaDe = {};
+      return;
+    }
+    const estado = SITIOS_POR_CLAVE.get(destino)?.estado;
+    if (!estado) return;
+    const hay = this.#bodegas.get(estado) ?? 0;
+    const sube = Math.min(CARGA_POR_TREN - t.carga, hay);
+    if (sube <= 0) return;
+    this.#bodegas.set(estado, hay - sube);
+    t.carga += sube;
+    t.cargaDe[estado] = (t.cargaDe[estado] ?? 0) + sube;
   }
 
   /** Recount the player's trains on every line and slow each train down where its lines are full. */

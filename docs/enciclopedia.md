@@ -53,7 +53,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [AFAC, Estadística operativa de aeropuertos 2006–2026](https://www.gob.mx/cms/uploads/attachment/file/1112825/producto-aeropuertos-2006-2026-sep-27102026.xlsx) | Carga nacional e internacional de cada aeropuerto, mes por mes, de 2006 a septiembre de 2026: la serie del modo Realidad | Octubre de 2026 | Dato oficial público |
 | [INEGI, Exportaciones por Entidad Federativa](https://www.inegi.org.mx/programas/exporta_ef/) | Valor de lo que exporta cada estado, por subsector, de 2007 a 2025 (datos abiertos) | 2026 | Dato oficial público |
 | [ANAM, informe mensual de diciembre de 2025](https://www.anam.gob.mx/wp-content/uploads/IM_12_2025-.pdf) y [decreto de creación (DOF, 14 de julio de 2021)](https://www.dof.gob.mx/nota_detalle.php?codigo=5623945&fecha=14/07/2021) | Recaudación, operaciones y valor de las operaciones de cada aduana en 2025; la creación de la ANAM | 2021 y 2026 | Documento oficial público |
-| [ATTRAPI, Anuario Estadístico Ferroviario 2025, tablas A10 a A13](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas que salen del país por tren cada año (2017–2025), por frontera y por puerto | 2026 | Documento oficial público |
+| [ATTRAPI, Anuario Estadístico Ferroviario 2025, tablas A9 a A13](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas que salen del país por tren cada año (2017–2025), por frontera y por puerto; el tráfico interior (carga nacional) | 2026 | Documento oficial público |
+| [INEGI, PIB por Entidad Federativa, base 2018](https://www.inegi.org.mx/programas/pibent/2018/) | Valor agregado de las actividades primarias y secundarias de cada estado y de la extracción de petróleo, 2018–2023 (2023 preliminar): el reparto de la carga nacional | 2024 | Dato oficial público |
 | [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
 | [CNE, lista de permisos de generación](https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx) | Las centrales privadas que entraron (o entrarán) desde 2019: capacidad, tecnología, fecha y municipio; inversión estimada de varias de la CFE | Al 31 de octubre de 2026 | Documento oficial público |
 | [CFE, Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) y [Programa de Desarrollo 2026–2030](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) | Costo de las centrales de la CFE, inicio de obra y avance físico de cada una al cierre de 2024; lo que la CFE invierte al año en centrales propias y cuándo entraron Salamanca, El Sauz II y Villa de Reyes | 2025 y 2026 | Documento oficial público |
@@ -1457,9 +1458,9 @@ tienen fecha de corte, a la vista bajo la línea de tiempo.
 
 ### Las exportaciones y las aduanas
 
-Los trenes del jugador **exportan**. Es la primera carga del juego, con un enfoque mixto: la
-carga nacional se medirá como número, pero una exportación va de un **origen** a una **salida**
-del país, y eso es lo que el juego mide.
+Los trenes del jugador **exportan** y mueven **carga nacional**, con un enfoque mixto: la carga
+nacional es un número (ver abajo), pero una exportación va de un **origen** a una **salida** del
+país, y eso es lo que el juego mide.
 
 - **Las salidas** son las aduanas a las que llega un tren: los cruces fronterizos, los puertos y
   los aeropuertos con aduana propia (ANAM), más los puertos por los que el anuario ferroviario
@@ -1561,6 +1562,49 @@ pesos):
 | Torreón | Interior | 0.8 | No (aduana interior de ciudad) |
 | Salina Cruz | Marítima | 0.5 | Sí |
 
+### La carga nacional
+
+La carga que no sale del país es un número, no un viaje de un origen a un destino:
+
+- **Cada estado la genera** a un ritmo que es una **estimación del juego**: su parte del valor
+  agregado del campo y la industria del país (INEGI, PIB por entidad federativa, actividades
+  primarias y secundarias, sin la extracción de petróleo, a precios de 2018) por las toneladas
+  de tráfico interior por tren de ese año (anuario ferroviario, tabla A9: 30.55 millones en
+  2025). Se quita el petróleo porque el crudo de Campeche y Tabasco no viaja por tren, y con él
+  esos dos estados pesarían como los más industriales del país. Los años del PIB llegan a 2023
+  (preliminar); después se usa el reparto de 2023 con las toneladas de cada año.
+- **Un tren la carga** en cada parada con el espacio que le dejen las exportaciones, que van
+  primero, hasta sus 2,436 toneladas, y **la entrega en la siguiente parada**. Se cuenta en
+  toneladas y en toneladas-km (las toneladas por los km del tramo). Como la de exportación, la
+  carga espera en las estaciones del estado hasta un mes de ella.
+
+La barra de arriba dice, en la misma celda, las toneladas exportadas y las nacionales del año
+(el detalle de toneladas-km va al pasar el puntero); la ficha de cada tren, cuánta carga
+nacional lleva y cuánta ha movido. En el modo Realidad la barra da las toneladas que de verdad
+movieron los trenes del país cada año, exportadas y nacionales.
+
+Los estados que más carga nacional generan (parte de 2023, toneladas al día con el tráfico de
+2025, estimación):
+
+| Estado | Del campo y la industria del país | Carga nacional en el juego (t/día) |
+| --- | ---: | ---: |
+| Nuevo León | 9.6 % | 8,035 |
+| Jalisco | 7.8 % | 6,494 |
+| Estado de México | 7.7 % | 6,453 |
+| Coahuila | 6.1 % | 5,070 |
+| Chihuahua | 5.8 % | 4,835 |
+| Guanajuato | 5.6 % | 4,718 |
+| Baja California | 5.5 % | 4,562 |
+| Sonora | 5.3 % | 4,424 |
+| Ciudad de México | 4.3 % | 3,617 |
+| Veracruz | 4.0 % | 3,359 |
+| Puebla | 3.9 % | 3,291 |
+| San Luis Potosí | 3.6 % | 3,021 |
+
+Tráfico interior por tren (anuario ferroviario, tabla A9, millones de toneladas): 36.53 en 2018,
+36.90 en 2019, 36.16 en 2020, 37.28 en 2021, 36.03 en 2022, 37.49 en 2023, 36.75 en 2024 y 30.55
+en 2025.
+
 ---
 
 ## 11. Decisiones de diseño
@@ -1617,6 +1661,12 @@ pesos):
 - **Las exportaciones, con un enfoque mixto.** *(20 nov 2026.)* El usuario quiere medir
   exportaciones. La carga nacional será un número; la exportación va de un origen a una salida.
   Se mide en toneladas; el valor en dólares espera un valor por tonelada de fuente oficial.
+- **La carga nacional, un número.** *(20 nov 2026.)* Pedido del usuario. Cada estado la genera a
+  su parte del campo y la industria, sin la extracción de petróleo (que inflaría a Campeche y
+  Tabasco, cuyo crudo no viaja por tren). Va de una parada a la siguiente y se cuenta en
+  toneladas y toneladas-km; la exportación tiene prioridad sobre el espacio del tren. En la
+  barra de arriba, exportado y nacional comparten celda, y los botones de obras se juntaron en
+  uno, para que todo quepa.
 - **Las aduanas son las salidas.** *(20 nov 2026.)* El usuario preguntó por las aduanas, que se
   reorganizaron (la ANAM, desde 2022): las de frontera, puertos y aeropuertos son por donde sale
   lo que se exporta, con su recaudación real. Modernizarlas como obra espera datos de tiempos de

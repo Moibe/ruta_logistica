@@ -17,6 +17,12 @@ import ADUANAS_JSON from './datos/aduanas.json';
  * - **A train** loads up to the average net load of a Mexican freight train
  *   at the origins it stops at, and unloads at the first exit it reaches: that
  *   is an export.
+ *
+ * **Domestic cargo** is just a number: each state generates it at its share of
+ * the country's farming and industry (INEGI, value added, less oil extraction)
+ * times the domestic rail traffic of the year (ATTRAPI); a train fills the room
+ * its exports leave with it and delivers it at its next stop, where it counts
+ * in tonnes and tonne-km.
  */
 
 type Fuente = { fuente: string; url: string; dato?: string };
@@ -37,13 +43,15 @@ export type Aduana = {
 };
 
 type ExportJson = {
-  fuentes: Record<'inegi' | 'attrapi' | 'cargaPorTren', Fuente>;
+  fuentes: Record<'inegi' | 'attrapi' | 'cargaPorTren' | 'nacional', Fuente>;
   cargaPorTren: number;
+  /** Million pesos of 2018 of farming and industry (less oil extraction), by year and state. */
+  productivo: Record<string, Record<string, number>>;
   /** Million USD by state and year. */
   porEstado: Record<string, Record<string, number>>;
   totalPais: Record<string, number>;
   /** Million tonnes by year. */
-  ferrocarril: Record<'exportacion' | 'importacion' | 'exportacionFronteras' | 'exportacionPuertos', Record<string, number>>;
+  ferrocarril: Record<'exportacion' | 'importacion' | 'exportacionFronteras' | 'exportacionPuertos' | 'nacional' | 'total', Record<string, number>>;
   /** Million tonnes exported by rail through each exit in 2025. */
   porSalida2025: Record<string, number>;
 };
@@ -78,6 +86,24 @@ export function flujoDelEstado(estado: string, año: number): number {
   const parte = valor / EXPORTACIONES.totalPais[a];
   return (parte * EXPORTACIONES.ferrocarril.exportacion[a] * 1e6) / HORAS_AÑO;
 }
+
+const AÑOS_PIB = Object.keys(EXPORTACIONES.productivo).map(Number);
+const AÑOS_FERRO = Object.keys(EXPORTACIONES.ferrocarril.nacional).map(Number);
+const entre = (año: number, años: number[]) => String(Math.max(años[0], Math.min(año, años[años.length - 1])));
+const TOTAL_PRODUCTIVO = Object.fromEntries(
+  AÑOS_PIB.map((a) => [a, Object.values(EXPORTACIONES.productivo[a]).reduce((s, v) => s + v, 0)])
+);
+
+/** Tonnes of domestic cargo a state generates per game hour in `año` (estimate: its share of farming and industry times domestic rail traffic). */
+export function flujoNacional(estado: string, año: number): number {
+  const a = entre(año, AÑOS_PIB);
+  const valor = EXPORTACIONES.productivo[a]?.[estado] ?? 0;
+  if (valor <= 0) return 0;
+  return ((valor / TOTAL_PRODUCTIVO[a]) * EXPORTACIONES.ferrocarril.nacional[entre(año, AÑOS_FERRO)] * 1e6) / HORAS_AÑO;
+}
+
+/** Every state with farming or industry, for the clock to walk through. */
+export const ESTADOS_PRODUCTIVOS = Object.keys(EXPORTACIONES.productivo[String(AÑOS_PIB[AÑOS_PIB.length - 1])]);
 
 /** The states that export anything, for the clock to walk through. */
 export const ESTADOS_EXPORTADORES = Object.keys(EXPORTACIONES.porEstado[String(AÑOS[AÑOS.length - 1])]);

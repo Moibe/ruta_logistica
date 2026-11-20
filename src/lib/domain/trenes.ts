@@ -24,6 +24,9 @@ export type Tren = Marcha & {
   cargaDe: Record<string, number>;
   /** Tonnes it has exported so far. */
   exportado: number;
+  /** Domestic cargo aboard, for its next stop, and what it has delivered so far (tonnes). */
+  cargaNacional: number;
+  movidoNacional: number;
 };
 
 /**
@@ -69,6 +72,8 @@ export function crearTren(red: Red, def: NuevoTren, costo?: CostoTramo): Tren | 
     carga: 0,
     cargaDe: {},
     exportado: 0,
+    cargaNacional: 0,
+    movidoNacional: 0,
   };
 }
 
