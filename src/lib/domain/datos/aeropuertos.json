@@ -1,0 +1,25 @@
+{
+  "corte": "2026-11-20",
+  "nota": "Los diez aeropuertos que más carga movieron en 2025, en toneladas, con lo que publica la AFAC de cada uno: el total de 2024 y 2025 y, cuando están entre los diez primeros de su tipo, la carga doméstica y la internacional. El total de un aeropuerto no siempre es la suma de las dos.",
+  "fuente": {
+    "fuente": "SICT, AFAC, Estadística Operacional de Aeropuertos, diciembre de 2025 (acumulado de enero a diciembre; información de los grupos aeroportuarios)",
+    "url": "https://www.gob.mx/cms/uploads/attachment/file/1051974/producto-aeropuertos-es-dic-25-27012026.pdf"
+  },
+  "ubicacion": {
+    "fuente": "Estimación del juego",
+    "dato": "El punto de referencia de cada aeropuerto, aproximado a un kilómetro."
+  },
+  "totalPais": { "2024": 1263585.6, "2025": 1232808.4 },
+  "aeropuertos": [
+    { "id": "aifa", "nombre": "Aeropuerto Internacional Felipe Ángeles", "corto": "AIFA", "iata": "NLU", "estado": "MEX", "lon": -99.0154, "lat": 19.7458, "t2024": 447341.2, "t2025": 406192.7, "internacional2025": 396590.6 },
+    { "id": "aicm", "nombre": "Aeropuerto Internacional de la Ciudad de México", "corto": "AICM", "iata": "MEX", "estado": "CDMX", "lon": -99.0721, "lat": 19.4363, "t2024": 240034.8, "t2025": 252555.7, "domestica2025": 62078.3, "internacional2025": 190477.4 },
+    { "id": "guadalajara", "nombre": "Aeropuerto Internacional de Guadalajara", "corto": "Aerop. Guadalajara", "iata": "GDL", "estado": "JAL", "lon": -103.3112, "lat": 20.5218, "t2024": 173710.6, "t2025": 183409.9, "domestica2025": 43220.0, "internacional2025": 140189.9 },
+    { "id": "monterrey", "nombre": "Aeropuerto Internacional de Monterrey", "corto": "Aerop. Monterrey", "iata": "MTY", "estado": "NL", "lon": -100.1069, "lat": 25.7785, "t2024": 79425.1, "t2025": 76282.3, "domestica2025": 35100.3, "internacional2025": 41182.0 },
+    { "id": "queretaro", "nombre": "Aeropuerto Intercontinental de Querétaro", "corto": "Aerop. Querétaro", "iata": "QRO", "estado": "QRO", "lon": -100.1857, "lat": 20.6173, "t2024": 77390.9, "t2025": 76025.3, "domestica2025": 54611.5 },
+    { "id": "tijuana", "nombre": "Aeropuerto Internacional de Tijuana", "corto": "Aerop. Tijuana", "iata": "TIJ", "estado": "BC", "lon": -116.9701, "lat": 32.5411, "t2024": 38569.7, "t2025": 37893.6, "domestica2025": 34883.9 },
+    { "id": "cancun", "nombre": "Aeropuerto Internacional de Cancún", "corto": "Aerop. Cancún", "iata": "CUN", "estado": "QROO", "lon": -86.8771, "lat": 21.0365, "t2024": 36165.5, "t2025": 36207.3, "domestica2025": 12002.3, "internacional2025": 24204.9 },
+    { "id": "toluca", "nombre": "Aeropuerto Internacional de Toluca", "corto": "Aerop. Toluca", "iata": "TLC", "estado": "MEX", "lon": -99.566, "lat": 19.3371, "t2024": 39109.3, "t2025": 30398.5 },
+    { "id": "san-luis-potosi", "nombre": "Aeropuerto Internacional de San Luis Potosí", "corto": "Aerop. San Luis Potosí", "iata": "SLP", "estado": "SLP", "lon": -100.9308, "lat": 22.2543, "t2024": 27500.4, "t2025": 26619.5, "domestica2025": 25984.4 },
+    { "id": "merida", "nombre": "Aeropuerto Internacional de Mérida", "corto": "Aerop. Mérida", "iata": "MID", "estado": "YUC", "lon": -89.6577, "lat": 20.937, "t2024": 26200.6, "t2025": 25438.7, "domestica2025": 18925.2 }
+  ]
+}

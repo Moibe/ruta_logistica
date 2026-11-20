@@ -23,6 +23,9 @@
     PUERTAS,
     PUERTO_DE_LA_CIUDAD,
     PUERTOS,
+    AEROPUERTOS,
+    CARGA_AEREA_PAIS,
+    type Aeropuerto,
     type Ciudad,
     type Polo,
     type Puerta,
@@ -97,6 +100,29 @@
     justo: 'Justa · arriba del mínimo para operar',
     critico: 'Crítica · debajo del mínimo: los polos no se llenan',
   };
+
+  /** Cargo airports: periwinkle, apart from ports (cyan), polos (pink) and plants. */
+  const AEROPUERTO = '#a5b4fc';
+  /** A plane seen from above, nose up, in a unit box: right half, mirrored for the left. */
+  const MEDIO_AVION: [number, number][] = [
+    [0, -1], [0.13, -0.8], [0.13, -0.28], [1, 0.18], [1, 0.36], [0.13, 0.12], [0.13, 0.62], [0.42, 0.84], [0.42, 1], [0, 0.9],
+  ];
+  const PUNTOS_AVION: [number, number][] = [...MEDIO_AVION, ...MEDIO_AVION.slice(1, -1).reverse().map(([x, y]) => [-x, y] as [number, number])];
+  const AVION_SVG = 'M' + PUNTOS_AVION.map(([x, y]) => `${x} ${y}`).join(' L') + ' Z';
+  /** The plane on the canvas, heading north-east, half-size `s` px. */
+  function avion(ctx: CanvasRenderingContext2D, x: number, y: number, s: number) {
+    const c = Math.SQRT1_2;
+    ctx.beginPath();
+    PUNTOS_AVION.forEach(([px, py], i) => {
+      const rx = (px * c - py * c) * s;
+      const ry = (px * c + py * c) * s;
+      if (i === 0) ctx.moveTo(x + rx, y + ry);
+      else ctx.lineTo(x + rx, y + ry);
+    });
+    ctx.closePath();
+  }
+  /** Half-size of an airport's plane by the tonnes it moved: 4.5 px for the smallest, about 9 for the AIFA. */
+  const tamañoAvion = (t: number) => 3.6 + Math.sqrt(t / 1000) * 0.27;
 
   /** A plant's colour by its technology. */
   function colorTec(t: string): string {
@@ -244,8 +270,8 @@
 
   // ---- state --------------------------------------------------------------
 
-  type Layers = { estados: boolean; vias: boolean; puertos: boolean; ciudades: boolean; polos: boolean; energia: boolean };
-  let layers = $state<Layers>({ estados: true, vias: true, puertos: true, ciudades: true, polos: true, energia: false });
+  type Layers = { estados: boolean; vias: boolean; puertos: boolean; aeropuertos: boolean; ciudades: boolean; polos: boolean; energia: boolean };
+  let layers = $state<Layers>({ estados: true, vias: true, puertos: true, aeropuertos: true, ciudades: true, polos: true, energia: false });
   /** What the track's colour says: its class (the default), its owner, or how full it is. */
   let modoVias = $state<ModoVias>('clase');
 
@@ -253,6 +279,7 @@
     | { kind: 'unidad'; unidad: Unidad }
     | { kind: 'puerta'; puerta: Puerta }
     | { kind: 'puerto'; puerto: Puerto }
+    | { kind: 'aeropuerto'; aeropuerto: Aeropuerto }
     | { kind: 'ciudad'; ciudad: Ciudad }
     | { kind: 'polo'; polo: Polo }
     | { kind: 'via'; base: number }
@@ -326,6 +353,7 @@
   /** Projected (un-zoomed path space) positions, rebuilt with the projection. */
   let ciudadPts: [number, number][] = [];
   let puertoPts: [number, number][] = [];
+  let aeropuertoPts: [number, number][] = [];
   let puertaPts: [number, number][] = [];
   let poloPts: [number, number][] = [];
   let plantaPts: [number, number][] = [];
@@ -393,6 +421,7 @@
     path = geoPath(projection);
     ciudadPts = CIUDADES.map((c) => projection!(c.lonLat) ?? [NaN, NaN]);
     puertoPts = PUERTOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
+    aeropuertoPts = AEROPUERTOS.map((a) => projection!(a.lonLat) ?? [NaN, NaN]);
     puertaPts = PUERTAS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     poloPts = POLOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     plantaPts = LONLAT_PLANTAS.map((p) => projection!(p) ?? [NaN, NaN]);
@@ -1307,6 +1336,39 @@
       });
     }
 
+    // Cargo airports: a plane, sized by the tonnes it moved in 2025. Faded
+    // while laying out a route: they aren't stops.
+    if (layers.aeropuertos) {
+      AEROPUERTOS.forEach((a, i) => {
+        const x = sx(aeropuertoPts[i]);
+        const y = sy(aeropuertoPts[i]);
+        if (!onScreen(x, y)) return;
+        const hot = hovered?.kind === 'aeropuerto' && hovered.aeropuerto.id === a.id;
+        const s = tamañoAvion(a.t2025) * (hot ? 1.15 : 1);
+        ctx.globalAlpha = trazando ? 0.3 : 1;
+        avion(ctx, x, y, s);
+        ctx.fillStyle = hot ? '#eef0ff' : AEROPUERTO;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
+        ctx.lineWidth = 0.9;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        const R = s + 1.5;
+        taken.push([x - R, y - R, x + R, y + R]);
+        if (trazando) return;
+        labels.push({
+          text: a.corto,
+          spots: spotsAround(x, y, R),
+          size: 10,
+          font: `${a.t2025 > 150000 ? 700 : 600} 10px Inter, "Segoe UI", system-ui, sans-serif`,
+          color: hot ? '#ffffff' : 'rgba(199, 210, 254, 0.92)',
+          // Under ports; over polos and most cities.
+          priority: (hot ? 1e9 : 0) + 4e7 + a.t2025,
+          halo: true,
+        });
+      });
+    }
+
     // Gateways to the world: a ring with an arrow pointing out of the board,
     // the way the ships leave.
     if (layers.puertos) {
@@ -1776,6 +1838,15 @@
         }
       });
     }
+    if (layers.aeropuertos && !tablero.trazando) {
+      AEROPUERTOS.forEach((a, i) => {
+        const d = Math.hypot(transform.applyX(aeropuertoPts[i][0]) - mx, transform.applyY(aeropuertoPts[i][1]) - my);
+        if (d < 10 && d < bestD) {
+          best = { kind: 'aeropuerto', aeropuerto: a };
+          bestD = d;
+        }
+      });
+    }
     if (layers.puertos) {
       PUERTAS.forEach((p, i) => {
         const d = Math.hypot(transform.applyX(puertaPts[i][0]) - mx, transform.applyY(puertaPts[i][1]) - my);
@@ -1857,6 +1928,8 @@
           ? `puerta:${t.puerta.id}`
           : t.kind === 'puerto'
           ? `puerto:${t.puerto.id}`
+          : t.kind === 'aeropuerto'
+          ? `aeropuerto:${t.aeropuerto.id}`
           : t.kind === 'ciudad'
             ? `ciudad:${t.ciudad.id}`
             : t.kind === 'polo'
@@ -1937,7 +2010,9 @@
       return;
     }
     const lonLat =
-      target.kind === 'puerto'
+      target.kind === 'aeropuerto'
+        ? target.aeropuerto.lonLat
+        : target.kind === 'puerto'
         ? target.puerto.lonLat
         : target.kind === 'puerta'
           ? target.puerta.lonLat
@@ -2110,6 +2185,7 @@
   $effect(() => {
     // What's drawn in the fondo over it: sites, stations, picked stops.
     layers.puertos;
+    layers.aeropuertos;
     layers.ciudades;
     layers.polos;
     tablero.paradas;
@@ -2277,6 +2353,29 @@
       </span>
       {@const rail = lineaTrazado || servicio(`puerto:${hovered.puerto.id}`)}
       {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.pestaña === 'barco'}>{rail}</span>{/if}
+    {:else if hovered.kind === 'aeropuerto'}
+      {@const a = hovered.aeropuerto}
+      {@const lugar = AEROPUERTOS.indexOf(a) + 1}
+      <span class="label tip-kind" style:color={AEROPUERTO}>Aeropuerto de carga · {lugar}.º del país</span>
+      <strong>{a.nombre} · {a.iata}</strong>
+      <span class="tip-sub">{estadoNombre.get(a.estado) ?? a.estado}</span>
+      <span class="tip-rail">
+        {fmt.format(Math.round(a.t2025))} toneladas en 2025 · {((a.t2025 / CARGA_AEREA_PAIS['2025']) * 100).toLocaleString('es-MX', { maximumFractionDigits: 1 })} % del país
+      </span>
+      <span class="tip-sub">
+        {a.t2025 >= a.t2024 ? '▲' : '▼'} {Math.abs((a.t2025 / a.t2024 - 1) * 100).toLocaleString('es-MX', { maximumFractionDigits: 1 })} % contra 2024
+        ({fmt.format(Math.round(a.t2024))} t)
+      </span>
+      {#if a.internacional2025 !== undefined || a.domestica2025 !== undefined}
+        <span class="tip-sub">
+          {[
+            a.internacional2025 !== undefined ? `internacional ${fmt.format(Math.round(a.internacional2025))} t` : '',
+            a.domestica2025 !== undefined ? `doméstica ${fmt.format(Math.round(a.domestica2025))} t` : '',
+          ]
+            .filter(Boolean)
+            .join(' · ')}
+        </span>
+      {/if}
     {:else if hovered.kind === 'polo'}
       {@const p = hovered.polo}
       <span class="label tip-kind" style:color={POLO}>Polo del Bienestar · {faseDelPolo(p.id)}</span>
@@ -2388,9 +2487,9 @@
     <span class="mono err">no se pudo cargar la geografía</span>
   {:else}
     <span class="stat"><b class="mono">{PUERTOS.length}</b> puertos</span>
-    <span class="stat"><b class="mono">{CIUDADES.length}</b> ciudades</span>
-    <span class="stat"><b class="mono">{POLOS.length}</b> polos</span>
-    <span class="stat"><b class="mono">{fmt.format(kmDeVia)}</b> km de vía en servicio</span>
+    <span class="stat opcional"><b class="mono">{CIUDADES.length}</b> ciudades</span>
+    <span class="stat opcional"><b class="mono">{POLOS.length}</b> polos</span>
+    <span class="stat" title="Kilómetros de vía en servicio"><b class="mono">{fmt.format(kmDeVia)}</b> km de vía</span>
     <span class="stat"><b class="mono">{sim.trenes.length}</b> trenes</span>
     <span class="stat"><b class="mono">{sim.barcos.length}</b> barcos</span>
   {/if}
@@ -2455,6 +2554,11 @@
   </button>
   <button class="ctl" aria-pressed={layers.puertos} onclick={() => (layers.puertos = !layers.puertos)}>
     <span class="sw sw-puertos"></span>Puertos
+  </button>
+  <button class="ctl" aria-pressed={layers.aeropuertos} onclick={() => (layers.aeropuertos = !layers.aeropuertos)}>
+    <svg class="sw" width="12" height="12" viewBox="-1.2 -1.2 2.4 2.4" aria-hidden="true">
+      <path d={AVION_SVG} fill={AEROPUERTO} transform="rotate(45)" />
+    </svg>Aeropuertos
   </button>
   <button class="ctl" aria-pressed={layers.ciudades} onclick={() => (layers.ciudades = !layers.ciudades)}>
     <span class="sw sw-ciudades"></span>Ciudades
@@ -2803,7 +2907,14 @@
     margin: 0 0.25rem;
   }
 
-  @media (max-width: 1240px) {
+  /* The stats share the bottom edge with the layer buttons: they give way first. */
+  @media (max-width: 1600px) {
+    .stat.opcional {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1360px) {
     .stats {
       display: none;
     }

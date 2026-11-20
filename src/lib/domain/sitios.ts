@@ -1,4 +1,5 @@
 import type { LonLat } from './geo';
+import aeropuertosJson from './datos/aeropuertos.json';
 import ciudadesJson from './datos/ciudades.json';
 import polosJson from './datos/polos.json';
 import puertasJson from './datos/puertas.json';
@@ -17,6 +18,41 @@ import puertosJson from './datos/puertos.json';
  */
 
 export type ClaveEstado = string;
+
+/**
+ * The ten airports that moved the most cargo in 2025 (AFAC), with their tonnes.
+ * Not stops yet: they'll be dry ports when cargo comes in.
+ */
+export type Aeropuerto = {
+  id: string;
+  nombre: string;
+  /** For the map label: "AIFA", "Aerop. Monterrey". */
+  corto: string;
+  iata: string;
+  estado: ClaveEstado;
+  lonLat: LonLat;
+  /** Tonnes of cargo in the year. */
+  t2024: number;
+  t2025: number;
+  /** Only when the AFAC lists it among the top ten of that kind. */
+  domestica2025?: number;
+  internacional2025?: number;
+};
+
+type AeropuertosJson = {
+  fuente: { fuente: string; url: string };
+  totalPais: Record<'2024' | '2025', number>;
+  aeropuertos: (Omit<Aeropuerto, 'lonLat'> & { lon: number; lat: number })[];
+};
+const AEROPUERTOS_JSON = aeropuertosJson as AeropuertosJson;
+
+/** Biggest first: their place in the list is their place in the country. */
+export const AEROPUERTOS: readonly Aeropuerto[] = AEROPUERTOS_JSON.aeropuertos
+  .map(({ lon, lat, ...a }) => ({ ...a, lonLat: [lon, lat] as LonLat }))
+  .sort((x, y) => y.t2025 - x.t2025);
+export const FUENTE_AEROPUERTOS = AEROPUERTOS_JSON.fuente;
+/** Tonnes of air cargo in the whole country. */
+export const CARGA_AEREA_PAIS = AEROPUERTOS_JSON.totalPais;
 
 export type Ciudad = {
   id: string;

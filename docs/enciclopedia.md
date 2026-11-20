@@ -49,6 +49,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [SHCP, Transparencia Presupuestaria, datos abiertos](https://www.transparenciapresupuestaria.gob.mx/Datos-Abiertos) | El presupuesto federal para ferrocarriles de cada año: lo ejercido de 2018 a 2025 (Cuenta Pública), lo aprobado en 2026 (PEF) y el proyecto 2027 (PPEF), por clave presupuestaria | Bases consultadas el 20 de noviembre de 2026 | Datos abiertos del gobierno federal |
 | [SENER, PRODESEN 2019–2033](https://www.gob.mx/cms/uploads/attachment/file/475497/PRODESEN_V.pdf) | Capacidad por región y centrales principales a diciembre de 2018 (cap. V); márgenes de reserva de 2019 en el pico de la tarde y de la noche (cap. VII, tablas 7.6 y 7.7) | 2019 | Documento oficial público |
 | [SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039](https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297) | Demanda máxima por región de 2018 a 2024; cómo se mide el margen de reserva y sus mínimos; costo de inversión por kW de cada tecnología | DOF, 14 de octubre de 2025 | Documento oficial público |
+| [SICT, AFAC, Estadística Operacional de Aeropuertos, diciembre de 2025](https://www.gob.mx/cms/uploads/attachment/file/1051974/producto-aeropuertos-es-dic-25-27012026.pdf) | Toneladas de carga de 2024 y 2025 de los diez aeropuertos que más mueven; doméstica e internacional de los primeros | Enero de 2026 | Documento oficial público |
 | [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
 | [CNE, lista de permisos de generación](https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx) | Las centrales privadas que entraron (o entrarán) desde 2019: capacidad, tecnología, fecha y municipio; inversión estimada de varias de la CFE | Al 31 de octubre de 2026 | Documento oficial público |
 | [CFE, Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) y [Programa de Desarrollo 2026–2030](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) | Costo de las centrales de la CFE, inicio de obra y avance físico de cada una al cierre de 2024; lo que la CFE invierte al año en centrales propias y cuándo entraron Salamanca, El Sauz II y Villa de Reyes | 2025 y 2026 | Documento oficial público |
@@ -240,6 +241,34 @@ una bahía, el marcador va en la bocana, que es a donde llega un barco.
 **Ciudades portuarias.** Ocho puertos comparten nombre con una ciudad del juego (Ensenada,
 Guaymas, Mazatlán, Manzanillo, Lázaro Cárdenas, Salina Cruz, Tampico, Veracruz). En el mapa
 son un solo lugar: la etiqueta es la del puerto y su ficha muestra la población de la ciudad.
+
+### Aeropuertos de carga
+
+No todos los aeropuertos son de carga: casi todos llevan algo en la bodega de los aviones de
+pasajeros, pero la carga se concentra en pocos. Los cinco primeros mueven el 80 % del país. El
+tablero tiene los diez que más movieron en 2025, con su capa propia (*Aeropuertos*): un avión del
+tamaño de sus toneladas, y su ficha al pasar el cursor. Todavía no son paradas: lo serán como
+puertos secos cuando haya carga.
+
+Toneladas de 2025 (AFAC; el país movió 1,232,808). La doméstica y la internacional solo están
+cuando la AFAC pone al aeropuerto entre los diez primeros de cada tipo, y el total de un
+aeropuerto no siempre es la suma de las dos:
+
+| # | Aeropuerto | Toneladas 2025 | Del país | Contra 2024 | Internacional | Doméstica |
+| ---: | --- | ---: | ---: | ---: | ---: | ---: |
+| 1 | Aeropuerto Internacional Felipe Ángeles (NLU) | 406,193 | 32.9 % | −9.2 % | 396,591 | — |
+| 2 | Aeropuerto Internacional de la Ciudad de México (MEX) | 252,556 | 20.5 % | +5.2 % | 190,477 | 62,078 |
+| 3 | Aeropuerto Internacional de Guadalajara (GDL) | 183,410 | 14.9 % | +5.6 % | 140,190 | 43,220 |
+| 4 | Aeropuerto Internacional de Monterrey (MTY) | 76,282 | 6.2 % | −4.0 % | 41,182 | 35,100 |
+| 5 | Aeropuerto Intercontinental de Querétaro (QRO) | 76,025 | 6.2 % | −1.8 % | — | 54,612 |
+| 6 | Aeropuerto Internacional de Tijuana (TIJ) | 37,894 | 3.1 % | −1.8 % | — | 34,884 |
+| 7 | Aeropuerto Internacional de Cancún (CUN) | 36,207 | 2.9 % | +0.1 % | 24,205 | 12,002 |
+| 8 | Aeropuerto Internacional de Toluca (TLC) | 30,399 | 2.5 % | −22.3 % | — | — |
+| 9 | Aeropuerto Internacional de San Luis Potosí (SLP) | 26,620 | 2.2 % | −3.2 % | — | 25,984 |
+| 10 | Aeropuerto Internacional de Mérida (MID) | 25,439 | 2.1 % | −2.9 % | — | 18,925 |
+
+El AIFA es el de carga del país: mueve casi la mitad de la carga internacional (46.7 %). Querétaro es el segundo en carga doméstica. La
+ubicación de cada aeropuerto es su punto de referencia, aproximado a un kilómetro.
 
 ---
 
@@ -1430,6 +1459,9 @@ tienen fecha de corte, a la vista bajo la línea de tiempo.
 - **La partida empieza el 1 de diciembre de 2018.** *(20 nov 2026.)* El día en que empezó el
   sexenio: da un mes más de juego, y el modo Realidad arranca el mismo día (ahí se ve el anuncio
   del Tren Maya, el 16 de diciembre). Diciembre trae la doceava parte del presupuesto de 2018.
+- **Los aeropuertos de carga, en el tablero.** *(20 nov 2026.)* El usuario preguntó si todos los
+  aeropuertos son de carga: no, la carga se concentra en pocos. Entran los diez primeros de la
+  AFAC, como sitios con sus toneladas; serán puertos secos cuando se diseñe la carga.
 - **Los polos, también en Realidad, solo con lo que se publica de cada uno.** *(20 nov 2026.)*
   Declaratoria, fallo de su licitación e inauguración. Un avance general («90 % de avance») que
   no dice de qué polo es no se asigna a ninguno.
