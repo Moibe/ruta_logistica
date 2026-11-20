@@ -17,6 +17,16 @@ import {
 } from '$lib/domain/obrasVia';
 import { fechaCorta, horaDelDia, mesDe } from '$lib/domain/calendario';
 import { mensualidad, type Mensualidad } from '$lib/domain/presupuesto';
+import {
+  CAJA_CFE_MES,
+  estadoEnergia,
+  mwDelPolo,
+  OBRAS_ENERGIA,
+  obraEnergia,
+  presupuestarPlanta,
+  regionDelPolo,
+  type EstadoRegion,
+} from '$lib/domain/energia';
 import { avanzar } from '$lib/domain/servicio';
 import {
   avanzarObra,
@@ -76,6 +86,20 @@ class Simulacion {
   dinero = $state(0);
   /** The latest monthly payment, for the ledger. */
   ultimaMensualidad = $state.raw<Mensualidad | null>(null);
+  /**
+   * The CFE's till, millions of pesos: what it puts into its own plants each
+   * month (`energia.ts`). Only its plants are paid from here.
+   */
+  dineroCfe = $state(0);
+  /** Every CFE plant of the catalog, by id: phase, progress, payments. */
+  obrasEnergia = $state.raw<Map<string, ObraViaEstado>>(new Map(OBRAS_ENERGIA.map((o) => [o.id, obraViaNueva(o.id)])));
+  /**
+   * Each electricity region now: demand, available capacity and reserve
+   * margins at the afternoon and night peaks. Recomputed once a game day and
+   * whenever a plant is finished.
+   */
+  energia = $state.raw<EstadoRegion[]>([]);
+  #diaEnergia = -1;
   /** Months already paid in (0 is January 2019): the next one to pay. */
   #mesesCobrados = 0;
   /**
@@ -174,6 +198,7 @@ class Simulacion {
         this.barcos = barcos;
         this.#saturar();
         this.#cobrar();
+        this.#actualizarEnergia(true);
         this.estado = 'lista';
       } catch (err) {
         console.error(err);
@@ -275,6 +300,7 @@ class Simulacion {
     let n = 0;
     for (const o of this.obras.values()) n += personasTrabajando(o);
     for (const o of this.obrasVia.values()) n += personasEnObraVia(o);
+    for (const o of this.obrasEnergia.values()) n += personasEnObraVia(o);
     return n;
   }
 
@@ -318,13 +344,57 @@ class Simulacion {
     const mes = mesDe(this.horas);
     if (this.#mesesCobrados > mes) return;
     let caja = this.dinero;
+    let cajaCfe = this.dineroCfe;
     let ultima: Mensualidad | null = null;
     while (this.#mesesCobrados <= mes) {
       ultima = mensualidad(this.#mesesCobrados++);
       caja += ultima.total;
+      cajaCfe += CAJA_CFE_MES;
     }
     this.dinero = caja;
+    this.dineroCfe = cajaCfe;
     this.ultimaMensualidad = ultima;
+  }
+
+  // ---- electricity ----------------------------------------------------------------------------
+
+  /** What building CFE plant `id` with `cuadrillas` crews takes. */
+  presupuestoPlanta(id: string, cuadrillas: number) {
+    const o = obraEnergia(id);
+    return o ? presupuestarPlanta(o, cuadrillas) : null;
+  }
+
+  /** Order a CFE plant built, paid from the CFE's till as it advances. */
+  construirPlanta(id: string, cuadrillas: number): boolean {
+    const estado = this.obrasEnergia.get(id);
+    const plan = this.presupuestoPlanta(id, cuadrillas);
+    if (!estado || !plan || estado.fase !== 'por-construir') return false;
+    estado.plan = plan;
+    estado.fase = 'en-obra';
+    this.obrasEnergia = new Map(this.obrasEnergia);
+    return true;
+  }
+
+  /** The electricity region of a polo, now. */
+  energiaDelPolo(id: string): EstadoRegion | null {
+    const r = regionDelPolo(id);
+    return this.energia.find((e) => e.region.id === r) ?? null;
+  }
+
+  /** Whether companies can still move into the polo: its region has margin at both peaks. */
+  hayEnergia(id: string): boolean {
+    return this.energiaDelPolo(id)?.alcanza ?? true;
+  }
+
+  /** Recompute the regions once a game day (or now, with `forzar`). */
+  #actualizarEnergia(forzar = false) {
+    const dia = Math.floor(this.horas / 24);
+    if (!forzar && dia === this.#diaEnergia) return;
+    this.#diaEnergia = dia;
+    const hechas = OBRAS_ENERGIA.filter((o) => this.obrasEnergia.get(o.id)?.fase === 'en-servicio');
+    const polos = new Map<string, number>();
+    for (const o of this.obras.values()) if (o.fase === 'operando' && o.ocupacion > 0) polos.set(o.id, mwDelPolo(o.id) * o.ocupacion);
+    this.energia = estadoEnergia(this.horas, hechas, polos);
   }
 
   #avanzarObras(horas: number) {
@@ -332,7 +402,8 @@ class Simulacion {
     let terminadas = false;
     for (const o of this.obras.values()) {
       if (o.fase === 'por-construir') continue;
-      if (avanzarObra(o, horas, caja, this.conectado(o.id))) terminadas = true;
+      // Companies come only with a train and with electricity in the region.
+      if (avanzarObra(o, horas, caja, this.conectado(o.id) && this.hayEnergia(o.id))) terminadas = true;
     }
     let viasTerminadas = false;
     for (const o of this.obrasVia.values()) {
@@ -344,7 +415,22 @@ class Simulacion {
       terminadas = true;
     }
     if (caja.mdp !== this.dinero) this.dinero = caja.mdp;
+
+    // CFE plants, from the CFE's own till.
+    const cajaCfe = { mdp: this.dineroCfe };
+    let plantasTerminadas = false;
+    for (const o of this.obrasEnergia.values()) {
+      if (o.fase !== 'en-obra') continue;
+      if (avanzarObraVia(o, horas, cajaCfe, this.horas + horas)) plantasTerminadas = true;
+    }
+    if (cajaCfe.mdp !== this.dineroCfe) this.dineroCfe = cajaCfe.mdp;
+    if (plantasTerminadas) {
+      this.obrasEnergia = new Map(this.obrasEnergia);
+      this.#actualizarEnergia(true);
+    }
+
     if (terminadas) this.#reconstruirRed();
+    this.#actualizarEnergia();
   }
 
   /**

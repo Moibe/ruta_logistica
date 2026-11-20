@@ -199,6 +199,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
 | `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
 | `src/lib/domain/datos/obras-via.json` | **Catálogo de obras del Estado**: trazos, paradas o líneas, costo por km y tiempo oficiales, con fuentes |
+| `src/lib/domain/datos/energia.json`  | **Electricidad**: regiones (CENACE) con demanda y márgenes oficiales, centrales de 2018, privadas con su fecha (permisos de la CNE), centrales de la CFE para construir, MW de los polos; con fuentes |
 | `src/lib/domain/datos/presupuesto.json` | **Presupuesto del Estado**: lo federal para ferrocarriles por año (2019–2027) y los ingresos de las concesionarias, con fuentes |
 | `src/lib/domain/datos/vias.json`     | **Dueño y estado de cada tramo**, trenes privados por empresa y por corredor, capacidades; con fuentes |
 
@@ -232,6 +233,21 @@ gasta se acumula; polos y vías salen de la misma caja. `sim.#cobrar` paga cada 
 y el panel `Erario` muestra lo que llegó. Las fichas avisan cuánto tardaría de verdad una obra
 al paso del dinero (`mesesAlRitmoDelDinero`, con el calendario real de mensualidades). La
 tabla por año y el método, en la [enciclopedia](docs/enciclopedia.md#el-presupuesto-del-estado).
+
+**La energía** (`domain/energia.ts`, `datos/energia.json`): el país en sus 9 regiones del
+sistema eléctrico. Cada una arranca el 1 de julio de 2019 con sus márgenes de reserva oficiales
+de la tarde y de la noche; su demanda crece al ritmo real de 2018–2024 más lo que piden los
+polos operando; su capacidad crece con las centrales privadas en su fecha real (lista de
+permisos de la CNE) y con las centrales de la CFE que construye el jugador, cada tecnología
+contada a su modo en cada pico (la solar no cuenta de noche). `sim.energia` se recalcula una
+vez al día; si el menor de los dos márgenes cae debajo del mínimo (6 %, 11 % en las Bajas
+Californias), los polos de la región dejan de llenarse (`sim.hayEnergia`). Las centrales de la
+CFE están en el catálogo de obras y se pagan de `sim.dineroCfe`, la caja de la CFE (26.4 mil
+millones al año en mensualidades). El tablero tiene la capa *Energía*: estados por nivel de su
+región y centrales por tecnología. Detalle en la [enciclopedia](docs/enciclopedia.md#la-energía).
+Los datos se arman con `scripts/energia/gen-energia.cjs`, que lee la lista de permisos de la CNE
+(resumida con `permisos_resumen.py`) y la tabla de centrales del PRODESEN transcrita, y ubica cada
+central en la cabecera de su municipio con el servicio del INEGI.
 
 **Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado y paga
 con su presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)
@@ -307,6 +323,7 @@ src/lib/
     obrasVia.ts      catálogo de obras del Estado: medirlas, presupuestarlas, avanzarlas
     calendario.ts    fechas del juego (desde el 1 de enero de 2019) y el mes de cada momento
     presupuesto.ts   el dinero del Estado: mensualidades por año y cuánto tarda una obra al paso del dinero
+    energia.ts       regiones eléctricas: demanda, capacidad y márgenes; centrales de la CFE
     mar.ts           rutas marítimas, Canal de Panamá, travesías; compone la pierna completa
     trenes.ts        trenes y servicios iniciales
     barcos.ts        clases de barco, travesías, barcos y servicios iniciales
@@ -400,9 +417,10 @@ costa del mundo solo sube de resolución). Además:
   construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
   cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
   Tuxpan…). Ya están el catálogo de obras del Estado y su presupuesto real.
-- **Energía** (acordada, va después): la electricidad como requisito de los polos, por región
-  del sistema eléctrico (CENACE), con plantas que el Estado construye; después, las refinerías
-  como origen de carga.
+- **Energía, segunda capa**: las refinerías (las seis del sistema nacional y la Olmeca) como
+  origen de carga, junto con la carga. Y el Plan de Expansión de la CFE 2026–2030 (52 proyectos)
+  en el catálogo, cuando se publique la lista por central: sin él, de 2028 en adelante varias
+  regiones se quedan sin margen.
 - **Más dinero del Estado**, con la carga: lo que cobran los trenes del Estado, lo que pagan
   sus trenes por pasar por vía privada y los impuestos de las concesionarias.
 - **Carga**: qué lleva cada tren y cada barco (contenedores, granel, autos, combustibles),

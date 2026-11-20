@@ -5,8 +5,8 @@ mano y por qué, y con qué reglas se mueve. Vive también dentro del juego: el 
 superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`), que se arma con este archivo.
 
 > **Cifras al 20 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
-> Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado y su
-> presupuesto.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
+> presupuesto y la electricidad.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -46,6 +46,12 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [ARTF, Pulso de Interconexión, 1er semestre 2024](https://www.gob.mx/cms/uploads/attachment/file/947545/Pulso_Interconexion_VF7.pdf) | La tabla de derechos de paso obligatorios: quién es dueño de cada línea y kilómetro, donde OpenStreetMap no lo dice | 2024 | Documento oficial público |
 | [ATTRAPI, Anuario Estadístico Ferroviario 2025](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas por par origen–destino, para estimar cuántos trenes de Nuevo Laredo siguen al sur de Monterrey; los ingresos de cada concesionaria de 2019 a 2025 (tabla A36), sobre los que pagan su derecho | 2026 | Documento oficial público |
 | [SHCP, Transparencia Presupuestaria, datos abiertos](https://www.transparenciapresupuestaria.gob.mx/Datos-Abiertos) | El presupuesto federal para ferrocarriles de cada año: lo ejercido de 2019 a 2025 (Cuenta Pública), lo aprobado en 2026 (PEF) y el proyecto 2027 (PPEF), por clave presupuestaria | Bases consultadas el 20 de noviembre de 2026 | Datos abiertos del gobierno federal |
+| [SENER, PRODESEN 2019–2033](https://www.gob.mx/cms/uploads/attachment/file/475497/PRODESEN_V.pdf) | Capacidad por región y centrales principales a diciembre de 2018 (cap. V); márgenes de reserva de 2019 en el pico de la tarde y de la noche (cap. VII, tablas 7.6 y 7.7) | 2019 | Documento oficial público |
+| [SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039](https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297) | Demanda máxima por región de 2018 a 2024; cómo se mide el margen de reserva y sus mínimos; costo de inversión por kW de cada tecnología | DOF, 14 de octubre de 2025 | Documento oficial público |
+| [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
+| [CNE, lista de permisos de generación](https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx) | Las centrales privadas que entraron (o entrarán) desde 2019: capacidad, tecnología, fecha y municipio; inversión estimada de varias de la CFE | Al 31 de octubre de 2026 | Documento oficial público |
+| [CFE, Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) y [Programa de Desarrollo 2026–2030](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) | Costo de las centrales de la CFE; lo que la CFE invierte al año en centrales propias | 2025 y 2026 | Documento oficial público |
+| [INEGI, servicio del Catálogo Único de Claves Geoestadísticas](https://gaia.inegi.org.mx/wscatgeo/v2/) | Ubicación de cada central: la cabecera de su municipio | Consultado el 20 de noviembre de 2026 | Dato oficial público |
 | [Ley Federal de Derechos, art. 232-B](https://www.diputados.gob.mx/LeyesBiblio/pdf/LFD.pdf) y [su reforma (DOF, 13 de noviembre de 2026)](https://dof.gob.mx/nota_detalle.php?codigo=5803759&fecha=13/11/2026) | El derecho que pagan las concesionarias por usar la vía: 1.25 % de sus ingresos, y 3 % desde 2027 | Vigente al 20 de noviembre de 2026 | Documento oficial público |
 | [Bureau of Transportation Statistics (EUA), Border Crossing Entry Data](https://data.bts.gov/resource/keg4-3bc2.json) | Trenes que cruzan a Estados Unidos por cada puerto fronterizo: el tráfico de los corredores de Nuevo Laredo, Piedras Negras y Ciudad Juárez | Datos 2018 y 2025 | Dato oficial público (gobierno de EUA) |
 | AAR / Cambridge Systematics, *National Rail Freight Infrastructure Capacity and Investment Study* (2007), citado por el TRB | Cuántos trenes al día caben en vía sencilla, con control centralizado y en vía doble. Es referencia de Estados Unidos: no hay cifra oficial mexicana | 2007 | Estudio público |
@@ -1118,8 +1124,125 @@ de las concesionarias son los de carga de la tabla A36 del anuario ferroviario 2
 de un año sale a finales de abril del siguiente, el presupuesto se aprueba a más tardar el 15
 de noviembre del año anterior y el proyecto se presenta el 8 de septiembre.
 
-En el panel del presupuesto, arriba a la derecha, *Cada mes* dice cuánto llegó este mes; al
+En el panel del presupuesto, arriba a la derecha, junto al saldo va cuánto llega cada mes; al
 pasar el cursor, de dónde sale.
+
+### La energía
+
+Los polos necesitan electricidad. El país se divide en las **regiones del sistema eléctrico**
+que opera el CENACE; cada estado va con su región, y varios están partidos por municipio (la
+Laguna de Coahuila va con el Norte; el norte de Veracruz, el oriente de San Luis Potosí y la
+Huasteca de Hidalgo con el Noreste; San Luis Río Colorado con Baja California).
+
+**El margen de reserva.** Es cuánta capacidad disponible sobra en la hora de más demanda:
+(capacidad disponible − demanda máxima) ÷ demanda máxima. El PRODESEN lo mide en dos picos: el
+de la **tarde**, donde la solar ayuda, y el de la **noche**, donde no está. Una región está:
+
+| Nivel | Margen (el menor de los dos picos) | Qué pasa |
+| --- | --- | --- |
+| Holgada | Arriba de la reserva de planeación (21.3 %; 20.9 % en Baja California y 35 % en Baja California Sur) | Nada |
+| Justa | Entre el mínimo para operar y la reserva de planeación | Nada todavía, pero va hacia abajo |
+| Crítica | Debajo del mínimo para operar (6 %; 11 % en los sistemas aislados de las Bajas Californias) | **Los polos de la región no se llenan**: no llegan empresas hasta que haya más generación |
+
+**Cómo se mueve.** Cada región arranca el 1 de julio de 2019 con sus márgenes oficiales de ese
+año. Desde ahí:
+
+- **La demanda** crece al ritmo real de la región de 2018 a 2024 (y sigue igual después), más
+  lo que piden los polos operando: sus MW por qué tan llenos están.
+- **La capacidad** crece con las **centrales privadas** en su fecha real, según la lista de
+  permisos de la Comisión Nacional de Energía (las que entraron de 2019 a 2026 y las que están
+  en construcción para 2025–2031; las que ni siquiera empezaron obras no entran, porque la
+  mitad de los permisos nunca se construye), y con las **centrales de la CFE** que construya el
+  jugador. El jugador no controla las privadas: aparecen solas en el mapa.
+- **Cada tecnología cuenta distinto en cada pico** (estimación del juego: la metodología
+  oficial usa la disponibilidad horaria de cinco años y no publica un porcentaje fijo): las
+  firmes (térmicas, hidroeléctricas, nuclear, geotérmicas) cuentan 90 % en los dos picos; la
+  eólica, 25 %; la solar, 35 % en la tarde y nada en la noche. El 35 % sale de la diferencia
+  entre los márgenes oficiales de la tarde (23.4 %) y la noche (20.6 %) del sistema
+  interconectado en 2019, unos 1,300 MW, entre los ~3,600 MW solares de ese año.
+
+Las regiones, en megawatts (calculado con el código del juego):
+
+| Región | Estados (con partes de otros) | Demanda máxima 2018 → 2024 (MW) | Crece al año | Margen 2019, tarde / noche | Privadas que entran 2019–2026 (MW) | Privadas en construcción 2025–2031 (MW) |
+| --- | --- | --- | ---: | --- | ---: | ---: |
+| Central | CDMX, MEX, HGO | 8,805 → 8,848 | 0.1 % | 14.3 % / 14.6 % | 969 | 138 |
+| Oriental | CHIS, GRO, MOR, OAX, PUE, TAB, TLAX, VER | 7,594 → 9,034 | 2.9 % | 41 % / 27.3 % | 1,377 | 916 |
+| Occidental | AGS, COL, GTO, JAL, MICH, NAY, QRO, ZAC, SLP | 10,373 → 11,834 | 2.2 % | 15.9 % / 15.9 % | 3,327 | 513 |
+| Noroeste | SIN, SON | 4,759 → 5,909 | 3.7 % | 24.3 % / 22.7 % | 3,426 | 184 |
+| Norte | CHIH, DGO | 4,639 → 5,540 | 3 % | 19.3 % / 15.1 % | 2,386 | 213 |
+| Noreste | NL, TAMPS, COAH | 9,202 → 11,109 | 3.2 % | 25.4 % / 26.6 % | 6,113 | 748 |
+| Peninsular | CAMP, QROO, YUC | 2,061 → 2,969 | 6.3 % | 35.8 % / 23.7 % | 589 | 149 |
+| Baja California | BC | 2,863 → 3,635 | 4.1 % | -4.5 % / -4.5 % | 747 | 236 |
+| Baja California Sur | BCS | 529 → 723 | 5.3 % | 35.4 % / 32.6 % | 272 | 0 |
+
+Si el jugador no construye ninguna central, el margen mínimo de cada región va así (✗: crítica,
+los polos se detienen):
+
+| Región | Margen mínimo, julio de 2021 | 2023 | 2025 | 2027 | 2027, con todas las centrales de la CFE |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Central | 23 % | 23 % | 23.3 % | 23.8 % | 29.6 % |
+| Oriental | 22.6 % | 17.2 % | 10.6 % | 7.5 % | 17.2 % |
+| Occidental | 18.9 % | 13.8 % | 9.2 % | 5.1 % ✗ | 20.4 % |
+| Noroeste | 34.6 % | 25.3 % | 29.3 % | 20.6 % | 20.6 % |
+| Norte | 25.7 % | 18.5 % | 12.2 % | 6 % ✗ | 11.2 % |
+| Noreste | 38.9 % | 35.6 % | 29.6 % | 23 % | 23 % |
+| Peninsular | 12.4 % | -0.5 % ✗ | -11.9 % ✗ | -20.9 % ✗ | 20 % |
+| Baja California | -6.7 % ✗ | -13.1 % ✗ | -19.6 % ✗ | -22.4 % ✗ | 22.1 % |
+| Baja California Sur | 19.5 % | 9.5 % ✗ | 17.5 % | 5.9 % ✗ | 22.3 % |
+
+La península cae en 2023, como en la realidad (los apagones de Yucatán de 2023–2024). Baja
+California empieza 2019 ya debajo del mínimo. La solar no levanta el margen nocturno: por eso
+el Noroeste queda igual con Puerto Peñasco.
+
+**La caja de la CFE.** Las centrales de la CFE no se pagan con el presupuesto federal de
+trenes: la CFE las paga con recursos propios (su Fideicomiso Maestro de Inversión). Su
+Programa de Desarrollo 2026–2030 destina 132 mil millones de pesos en cinco años a proyectos
+propios de generación: **26,400 millones al año**, que llegan en mensualidades a una caja
+aparte. Para 2019–2025 no hay una cifra anual oficial comparable y se usa la misma. Los
+dólares se pasan a pesos con el tipo de cambio promedio de 2024: 18.33 (Cuenta Pública 2024,
+con datos de Banxico).
+
+**Las centrales de la CFE**, en el catálogo de obras (grupo *Energía (CFE)*), con cuadrillas
+como las vías; 4 cuadrillas son el costo oficial. El tiempo es una estimación del juego: 36
+meses un ciclo combinado y 12 una solar o unas unidades de emergencia.
+
+| Central | Región | MW | Costo con 4 cuadrillas | Tiempo | De dónde sale el costo | En la realidad |
+| --- | --- | ---: | ---: | ---: | --- | --- |
+| Ciclo combinado Tula (paquetes 1 y 2) | Central | 567 | 5.7 mil millones | 36 meses | Permiso de la CNE | En operación desde el 28 de noviembre de 2020. |
+| Ciclo combinado Salamanca | Occidental | 958 | 11.3 mil millones | 36 meses | Permiso de la CNE | Entró en operación en 2025. |
+| Ciclo combinado El Sauz II | Occidental | 203 | 3.1 mil millones | 36 meses | Costo por kW de su tecnología | Entró en operación en 2025. Sus MW salen de restar Salamanca (958.18) y San Luis Potosí (448.68) a los 1,610 MW que la CFE reporta para las tres. |
+| Ciclo combinado San Luis Potosí (Villa de Reyes) | Occidental | 449 | 6.9 mil millones | 36 meses | Costo por kW de su tecnología | Entró en operación en 2025. |
+| Ciclo combinado Manzanillo III | Occidental | 540 | 8.3 mil millones | 36 meses | Costo por kW de su tecnología | Entró en operación el primer semestre de 2026. Sus MW salen de restar González Ortega (641.4) y Mérida (499) a los 1,680 MW de las tres. |
+| Ciclo combinado González Ortega (Mexicali) | Baja California | 641 | 15.6 mil millones | 36 meses | Informe Anual CFE 2024 | Entró en operación el primer semestre de 2026. |
+| Ciclo combinado Mérida (Elvia Carrillo Puerto) | Peninsular | 499 | 10 mil millones | 36 meses | Informe Anual CFE 2024 | Entró en operación el primer semestre de 2026. |
+| Ciclo combinado Tuxpan, fase I | Oriental | 1,057 | 16.6 mil millones | 36 meses | Informe Anual CFE 2024 | En obra; la CFE la espera entre 2026 y 2028. |
+| Ciclo combinado Riviera Maya (Valladolid IV) | Peninsular | 1,020 | 16.7 mil millones | 36 meses | Informe Anual CFE 2024 | En obra; la CFE la espera entre 2026 y 2028. |
+| Ciclo combinado San Luis Río Colorado | Baja California | 648 | 14.5 mil millones | 36 meses | Informe Anual CFE 2024 | En obra; la CFE la espera entre 2026 y 2028. |
+| Ciclo combinado Lerdo | Norte | 350 | 5.4 mil millones | 36 meses | Costo por kW de su tecnología | En obra; la CFE la espera entre 2026 y 2028. |
+| Parque solar Puerto Peñasco, etapas I y II | Noroeste | 457 | 15 mil millones | 12 meses | Permiso de la CNE | Primera etapa en febrero de 2024; la segunda (300 MW) desde el 11 de septiembre de 2025. |
+| Parque solar Puerto Peñasco, etapas III y IV | Noroeste | 580 | 10.8 mil millones | 12 meses | Costo por kW de su tecnología | Programada para 2028. |
+| Unidades de combustión interna y turbogás en Mexicali y San Luis Río Colorado | Baja California | 735 | 12.6 mil millones | 12 meses | Permiso de la CNE | En operación desde 2025. |
+| Turbogás de emergencia en Los Cabos | Baja California Sur | 154 | 2.8 mil millones | 12 meses | Permiso de la CNE | En operación desde el 12 de junio de 2025. |
+| Turbogás aeroderivadas Riviera Maya | Peninsular | 100 | 2 mil millones | 12 meses | Costo por kW de su tecnología | Programadas para 2026 (Cancún y Cozumel). |
+
+**Lo que piden los polos.** Solo cinco tienen cifra oficial:
+
+| Polo | MW con el polo lleno | De dónde |
+| --- | ---: | --- |
+| Reserva Zapotlán | 20 | Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 20 MW». |
+| Nezahualcóyotl | 7.7 | Declaratoria (DOF): «crecimiento en su demanda de electricidad de 5 a 7.7 MW de 2027 a 2030». |
+| Huamantla | 8 | Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: 8 MW». |
+| Tuxpan | 4 | Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 4 MW». |
+| Hermosillo | 7 | Declaratoria (DOF): «una demanda de electricidad de 1 MW a 7 MW de 2026 a 2030». |
+
+Los demás usan la proporción de esos cinco: 46.7 MW entre 1,813.7 hectáreas, **0.0257 MW por
+hectárea**. Los 32 polos juntos piden unos 223 MW: poco frente a una región, así que lo que
+decide es el margen de la región, no el polo.
+
+**En el mapa**, el botón *Energía* pinta cada estado con el nivel de su región y muestra las
+centrales por tecnología (llenas las de la CFE, como anillo las privadas; punteadas las obras
+en curso). Al pasar el cursor por un estado, su región dice sus márgenes y su demanda; por una
+central, su capacidad, dueño y fecha. La ficha de cada polo dice si su región tiene energía.
 
 ---
 
@@ -1163,9 +1286,16 @@ pasar el cursor, de dónde sale.
   haya Cuenta Pública), más el derecho de las concesionarias, en mensualidades. Lo que no se
   gasta se acumula, y polos y vías salen de una sola caja. Así el jugador vive el mismo margen
   que tuvo el gobierno: años flacos al principio y muy gordos con el Tren Maya.
-- **La energía viene después del presupuesto, en dos capas.** *(20 nov 2026.)* Primero la
-  electricidad como requisito de los polos, por región del sistema eléctrico, con plantas que
-  el Estado puede construir; después, las refinerías como origen de carga, junto con la carga.
+- **La energía, en dos capas.** *(20 nov 2026.)* Primero la electricidad como requisito de los
+  polos, por región del sistema eléctrico, con centrales que el Estado construye; después, las
+  refinerías como origen de carga, junto con la carga.
+- **Las privadas, en el mapa en su fecha real.** *(20 nov 2026.)* El jugador no las controla
+  (como los trenes privados), pero las ve llegar. Las de antes de 2019 cuentan completas en la
+  capacidad inicial.
+- **Dos márgenes, tarde y noche.** *(20 nov 2026.)* La región necesita los dos arriba del
+  mínimo: explica por qué la solar sola no basta y hubo apagones en Yucatán y Baja California.
+- **La CFE tiene su propia caja.** *(20 nov 2026.)* Es una empresa del Estado con presupuesto
+  propio; sus centrales no se pagan con el dinero de los trenes.
 - **El jugador es el Estado.** *(19 nov 2026.)* Tiene un presupuesto que debe usar
   sabiamente. Construir cuesta tiempo y dinero, y lo que se mide no es solo el dinero: también
   los **empleos generados**, que son de valor para el jugador.
@@ -1375,6 +1505,13 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   puede ser más o menos que lo aprobado.
 - **Derecho por uso de vía**: lo que paga cada concesionaria al Estado por operar la vía, un
   porcentaje de sus ingresos.
+- **Margen de reserva**: cuánta capacidad disponible sobra sobre la demanda máxima de una
+  región, en porcentaje. Se mide en el pico de la tarde y en el de la noche.
+- **Región del sistema eléctrico**: cada zona que opera un centro de control del CENACE
+  (Central, Oriental, Occidental, Noroeste, Norte, Noreste, Peninsular, Baja California y Baja
+  California Sur).
+- **Central firme**: la que puede generar cuando se le pide (térmica, hidroeléctrica, nuclear,
+  geotérmica), a diferencia de la solar y la eólica, que dependen del sol y del viento.
 - **Obra del Estado**: vía que construye el jugador desde el catálogo: nueva, paralela,
   modernizada o rehabilitada. Siempre es del Estado.
 - **Doble vía paralela**: la vía del Estado junto a una vía concesionada; los trenes del

@@ -102,6 +102,17 @@ export function medirObras(red: Red): Map<string, Medida> {
   return out;
 }
 
+/** What any State work takes with some number of crews: rail works and CFE plants alike. */
+export type PresupuestoObra = {
+  cuadrillas: number;
+  /** Millions of pesos, all told. */
+  costoMdp: number;
+  meses: number;
+  horas: number;
+  /** People working on it at once. */
+  personasEnObra: number;
+};
+
 export type PresupuestoVia = {
   cuadrillas: number;
   km: number;
@@ -116,19 +127,25 @@ export type PresupuestoVia = {
 /** Four crews cost this much more than one (each extra crew adds 15 % of one crew's cost). */
 const SOBRECOSTO_4 = 1 + SOBRECOSTO_POR_CUADRILLA * (MAX_CUADRILLAS - 1);
 
-export function presupuestarVia(o: ObraVia, km: number, cuadrillas: number): PresupuestoVia {
+/**
+ * Any State work from its official cost and time (the government's pace: 4
+ * crews): fewer crews make it cheaper and slower, with the polos' exponents.
+ */
+export function presupuestarObra(costoGobiernoMdp: number, mesesGobierno: number, cuadrillas: number): PresupuestoObra {
   const n = Math.max(1, Math.min(MAX_CUADRILLAS, Math.round(cuadrillas)));
-  const costoGobierno = km * o.costoMdpKm;
-  const costoMdp = (costoGobierno / SOBRECOSTO_4) * (1 + SOBRECOSTO_POR_CUADRILLA * (n - 1));
-  const meses = o.mesesGobierno * (MAX_CUADRILLAS / n) ** EXPONENTE_CUADRILLAS;
+  const costoMdp = (costoGobiernoMdp / SOBRECOSTO_4) * (1 + SOBRECOSTO_POR_CUADRILLA * (n - 1));
+  const meses = mesesGobierno * (MAX_CUADRILLAS / n) ** EXPONENTE_CUADRILLAS;
   return {
     cuadrillas: n,
-    km,
     costoMdp,
     meses,
     horas: meses * HORAS_POR_MES,
     personasEnObra: (costoMdp * cifra('empleosAnioPorMdp')) / (meses / 12),
   };
+}
+
+export function presupuestarVia(o: ObraVia, km: number, cuadrillas: number): PresupuestoVia {
+  return { ...presupuestarObra(km * o.costoMdpKm, o.mesesGobierno, cuadrillas), km };
 }
 
 // ---- a work's life ------------------------------------------------------------------------
@@ -138,7 +155,7 @@ export type FaseObraVia = 'por-construir' | 'en-obra' | 'en-servicio';
 export type ObraViaEstado = {
   id: string;
   fase: FaseObraVia;
-  plan: PresupuestoVia | null;
+  plan: PresupuestoObra | null;
   /** 0–1. */
   avance: number;
   pagadoMdp: number;

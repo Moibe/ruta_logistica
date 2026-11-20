@@ -10,6 +10,8 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, type Dueño } from '$lib/domain/red';
   import { obraVia } from '$lib/domain/obrasVia';
+  import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
+  import { fechaLarga as fechaDeJuego } from '$lib/domain/calendario';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
   import { esperaTotal, piernasDelRecorrido, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
   import {
@@ -80,6 +82,63 @@
   const COLOR_USO: Record<NivelUso, string> = { holgada: '#4ade80', cargada: '#fbbf24', saturada: '#f87171' };
   /** Track out of service since before 2018: there, but dead. */
   const VIA_MUERTA = 'rgba(138, 164, 194, 0.3)';
+
+  /** Each region painted by how much margin it has at its tighter peak. */
+  const COLOR_ENERGIA: Record<NivelEnergia, string> = {
+    holgado: 'rgba(74, 222, 128, 0.16)',
+    justo: 'rgba(251, 191, 36, 0.2)',
+    critico: 'rgba(248, 113, 113, 0.28)',
+  };
+  const TEXTO_NIVEL: Record<NivelEnergia, string> = {
+    holgado: 'Holgada · arriba de la reserva de planeación',
+    justo: 'Justa · arriba del mínimo para operar',
+    critico: 'Crítica · debajo del mínimo: los polos no se llenan',
+  };
+
+  /** A plant's colour by its technology. */
+  function colorTec(t: string): string {
+    if (/hidro/i.test(t)) return '#60a5fa';
+    if (/fotovolt|solar/i.test(t)) return '#facc15';
+    if (/e.lic/i.test(t)) return '#5eead4';
+    if (/nuclear/i.test(t)) return '#c084fc';
+    if (/geot/i.test(t)) return '#fda4af';
+    return '#fb923c';
+  }
+  const TECNOLOGIAS = [
+    ['Térmica', '#fb923c'],
+    ['Hidroeléctrica', '#60a5fa'],
+    ['Solar', '#facc15'],
+    ['Eólica', '#5eead4'],
+    ['Nuclear', '#c084fc'],
+    ['Geotérmica', '#fda4af'],
+  ];
+
+  type PlantaMapa = {
+    nombre: string;
+    tecnologia: string;
+    mw: number;
+    region: string;
+    dueño: 'CFE' | 'privada';
+    /** Game hour it came (or comes) into service; null for the plants of 2018. */
+    desde: number | null;
+    /** A CFE work of the player's. */
+    obra?: string;
+  };
+  const horasDeFecha = (fecha: string) => (Date.parse(`${fecha}T00:00:00Z`) - Date.UTC(2019, 0, 1)) / 3_600_000;
+  const PLANTAS: PlantaMapa[] = [
+    ...ENERGIA.plantas2018.map((p) => ({ nombre: p.nombre, tecnologia: p.tecnologia, mw: p.mw, region: p.region, dueño: p.dueño, desde: null })),
+    ...ENERGIA.privadas.map((p) => ({
+      nombre: p.nombre,
+      tecnologia: p.tecnologia,
+      mw: p.mw,
+      region: p.region,
+      dueño: 'privada' as const,
+      desde: horasDeFecha(p.fecha),
+    })),
+    ...OBRAS_ENERGIA.map((o) => ({ nombre: o.nombre, tecnologia: o.tecnologia, mw: o.mw, region: o.region, dueño: 'CFE' as const, desde: null, obra: o.id })),
+  ];
+  const LONLAT_PLANTAS: LonLat[] = [...ENERGIA.plantas2018, ...ENERGIA.privadas, ...OBRAS_ENERGIA].map((p) => p.lonLat);
+  const radioPlanta = (mw: number) => 1.6 + Math.sqrt(mw) / 7;
 
   type ModoVias = 'clase' | 'dueño' | 'uso';
   const MODOS_VIAS: { id: ModoVias; label: string }[] = [
@@ -172,8 +231,8 @@
 
   // ---- state --------------------------------------------------------------
 
-  type Layers = { estados: boolean; vias: boolean; puertos: boolean; ciudades: boolean; polos: boolean };
-  let layers = $state<Layers>({ estados: true, vias: true, puertos: true, ciudades: true, polos: true });
+  type Layers = { estados: boolean; vias: boolean; puertos: boolean; ciudades: boolean; polos: boolean; energia: boolean };
+  let layers = $state<Layers>({ estados: true, vias: true, puertos: true, ciudades: true, polos: true, energia: false });
   /** What the track's colour says: its class (the default), its owner, or how full it is. */
   let modoVias = $state<ModoVias>('clase');
 
@@ -184,6 +243,7 @@
     | { kind: 'ciudad'; ciudad: Ciudad }
     | { kind: 'polo'; polo: Polo }
     | { kind: 'via'; base: number }
+    | { kind: 'planta'; indice: number }
     | { kind: 'estado'; estado: EstadoProps };
 
   let host = $state.raw<HTMLDivElement>();
@@ -252,6 +312,7 @@
   let puertoPts: [number, number][] = [];
   let puertaPts: [number, number][] = [];
   let poloPts: [number, number][] = [];
+  let plantaPts: [number, number][] = [];
   /** Station on the track and the site it serves, both in path space. */
   let estacionPts: { clave: string; via: [number, number]; sitio: [number, number]; km: number }[] = [];
   /** Where each vehicle's head was drawn last frame, for hit-testing. */
@@ -269,6 +330,16 @@
   };
 
   /** Something in the geography layer itself changed (not just the camera). */
+  /** Plants on the map right now: the 2018 ones, private ones already in service, the player's CFE works under way or done. */
+  function plantaVisible(p: PlantaMapa): 'servicio' | 'obra' | null {
+    if (p.obra) {
+      const fase = sim.obrasEnergia.get(p.obra)?.fase;
+      return fase === 'en-servicio' ? 'servicio' : fase === 'en-obra' ? 'obra' : null;
+    }
+    if (p.desde !== null && p.desde > sim.horas) return null;
+    return 'servicio';
+  }
+
   const ensuciaCapa = () => {
     capaSucia = true;
     ensucia();
@@ -294,6 +365,7 @@
     puertoPts = PUERTOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     puertaPts = PUERTAS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     poloPts = POLOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
+    plantaPts = LONLAT_PLANTAS.map((p) => projection!(p) ?? [NaN, NaN]);
     applyTranslateExtent();
     bake();
     bakeRed();
@@ -689,6 +761,17 @@
       ctx.fillStyle = '#0e2035';
       ctx.fill(b.pais);
 
+      // Electricity: every state in its region's colour.
+      if (layers.energia && sim.energia.length) {
+        const nivel = new Map(sim.energia.map((e) => [e.region.id, e.nivel]));
+        for (const est of b.estados) {
+          const n = nivel.get(REGION_DEL_ESTADO.get(est.props.clave) ?? '');
+          if (!n) continue;
+          ctx.fillStyle = COLOR_ENERGIA[n];
+          ctx.fill(est.path);
+        }
+      }
+
       const hoveredEstado = hovered?.kind === 'estado' ? hovered.estado.clave : null;
       const e = hoveredEstado ? b.estados.find((x) => x.props.clave === hoveredEstado) : null;
       if (e) {
@@ -950,6 +1033,53 @@
         ctx.fillRect(vx - 2.5, vy - 2.5, 5, 5);
         ctx.strokeRect(vx - 2.5, vy - 2.5, 5, 5);
       }
+      ctx.restore();
+    }
+
+    // Power plants, sized by their MW: the CFE's filled, the private ones as rings;
+    // a CFE work under way dashed.
+    if (layers.energia) {
+      const abierta = tablero.catalogo && tablero.obraSel ? tablero.obraSel : null;
+      ctx.save();
+      PLANTAS.forEach((p, i) => {
+        const vis = plantaVisible(p);
+        const elegida = !!p.obra && p.obra === abierta;
+        if (!vis && !elegida) return;
+        const x = sx(plantaPts[i]);
+        const y = sy(plantaPts[i]);
+        if (!onScreen(x, y)) return;
+        const r = radioPlanta(p.mw) * (k >= 3 ? 1.4 : 1);
+        const c = colorTec(p.tecnologia);
+        const hot = hovered?.kind === 'planta' && hovered.indice === i;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        if (vis === 'servicio' && p.dueño === 'CFE') {
+          ctx.globalAlpha = 0.9;
+          ctx.fillStyle = c;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          ctx.strokeStyle = p.obra ? '#ffffff' : 'rgba(3, 9, 18, 0.9)';
+          ctx.lineWidth = p.obra ? 1.4 : 1;
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = 'rgba(3, 9, 18, 0.65)';
+          ctx.fill();
+          ctx.strokeStyle = c;
+          ctx.lineWidth = 1.5;
+          if (vis !== 'servicio') ctx.setLineDash([2, 2]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+        if (hot || elegida) {
+          ctx.beginPath();
+          ctx.arc(x, y, r + 4, 0, Math.PI * 2);
+          ctx.strokeStyle = elegida ? 'rgba(255, 252, 240, 0.95)' : 'rgba(255, 255, 255, 0.7)';
+          ctx.lineWidth = 1.4;
+          if (elegida && vis !== 'servicio') ctx.setLineDash([3, 3]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      });
       ctx.restore();
     }
 
@@ -1594,6 +1724,16 @@
         }
       });
     }
+    if (layers.energia && !tablero.trazando) {
+      PLANTAS.forEach((p, i) => {
+        if (!plantaVisible(p)) return;
+        const d = Math.hypot(transform.applyX(plantaPts[i][0]) - mx, transform.applyY(plantaPts[i][1]) - my);
+        if (d < Math.max(6, radioPlanta(p.mw) + 2) && d < bestD) {
+          best = { kind: 'planta', indice: i };
+          bestD = d;
+        }
+      });
+    }
     if (best || tablero.trazando) return best;
     hitCtx ??= document.createElement('canvas').getContext('2d');
     if (!hitCtx) return null;
@@ -1634,6 +1774,8 @@
               ? `polo:${t.polo.id}`
               : t.kind === 'via'
                 ? `via:${t.base}`
+                : t.kind === 'planta'
+                  ? `planta:${t.indice}`
                 : `estado:${t.estado.clave}`;
 
   /** The site key of a target, if it is a site. */
@@ -1698,8 +1840,8 @@
       sim.seleccionar(null);
       tablero.poloSel = target.polo.id;
     }
-    // A rail line only shows its card on hover.
-    if (target.kind === 'via') return;
+    // A rail line or a power plant only shows its card on hover.
+    if (target.kind === 'via' || target.kind === 'planta') return;
     if (target.kind === 'estado') {
       const e = baked?.estados.find((x) => x.props.clave === target.estado.clave);
       if (e) flyToBounds(e.bounds);
@@ -1842,14 +1984,29 @@
   });
 
   $effect(() => {
-    // A work's card opened: light its line and fly to it.
+    // A work's card opened: light its line and fly to it. A CFE plant also
+    // turns the electricity layer on.
     const id = tablero.catalogo ? tablero.obraSel : null;
     ensucia();
     if (!id) return;
     untrack(() => {
       const op = obraPaths.get(id);
       if (op) flyToBounds(op.bounds);
+      const planta = obraEnergia(id);
+      if (planta && projection) {
+        layers.energia = true;
+        const p = projection(planta.lonLat);
+        if (p) flyTo(p[0], p[1], Math.max(transform.k, 5));
+      }
     });
+  });
+
+  $effect(() => {
+    // The electricity layer: on or off, and each day's margins and plants.
+    layers.energia;
+    sim.energia;
+    sim.obrasEnergia;
+    ensuciaCapa();
   });
 
   $effect(() => {
@@ -2058,6 +2215,44 @@
           {/if}
         {/if}
       {/if}
+    {:else if hovered.kind === 'planta'}
+      {@const p = PLANTAS[hovered.indice]}
+      {@const vis = plantaVisible(p)}
+      <span class="label tip-kind" style:color={colorTec(p.tecnologia)}>
+        {p.tecnologia} · {p.dueño === 'CFE' ? (p.obra ? 'obra del Estado (CFE)' : 'CFE') : 'privada'}
+      </span>
+      <strong>{p.nombre}</strong>
+      <span class="tip-sub">
+        {fmt.format(Math.round(p.mw))} MW · región {ENERGIA.regiones.find((r) => r.id === p.region)?.nombre ?? p.region}
+      </span>
+      <span class="tip-sub">
+        {p.obra
+          ? vis === 'obra'
+            ? 'En obra'
+            : 'En servicio'
+          : p.desde === null
+            ? 'En servicio desde antes de 2019'
+            : `En servicio desde el ${fechaDeJuego(p.desde)}`}
+      </span>
+    {:else if hovered.kind === 'estado' && layers.energia && sim.energia.length}
+      {@const regionEstado = REGION_DEL_ESTADO.get(hovered.estado.clave)}
+      {@const reg = sim.energia.find((e) => e.region.id === regionEstado)}
+      <span class="label tip-kind">Estado · {hovered.estado.clave}</span>
+      <strong>{hovered.estado.nombre}</strong>
+      {#if reg}
+        <span class="tip-rail energia-nivel" class:critico={reg.nivel === 'critico'}>
+          Región {reg.region.nombre}: {TEXTO_NIVEL[reg.nivel]}
+        </span>
+        <span class="tip-sub">
+          Margen {reg.margen.tarde.toLocaleString('es-MX', { maximumFractionDigits: 1 })} % en la tarde ·
+          {reg.margen.noche.toLocaleString('es-MX', { maximumFractionDigits: 1 })} % en la noche (mínimo {UMBRALES[reg.region.sistema].operativo} %)
+        </span>
+        <span class="tip-sub">
+          Demanda máxima {fmt.format(Math.round(reg.demanda))} MW{reg.demandaPolos > 0.05
+            ? `, ${reg.demandaPolos.toLocaleString('es-MX', { maximumFractionDigits: 1 })} de polos`
+            : ''}
+        </span>
+      {/if}
     {:else}
       <span class="label tip-kind">Estado · {hovered.estado.clave}</span>
       <strong>{hovered.estado.nombre}</strong>
@@ -2082,7 +2277,20 @@
   {/if}
 </div>
 
-{#if layers.vias && !tablero.catalogo}
+{#if layers.energia && !tablero.catalogo}
+  <div class="vias panel energia">
+    <span class="label">Energía · margen de cada región</span>
+    <ul class="leyenda dos">
+      {#each Object.entries(TEXTO_NIVEL) as [n, texto] (n)}
+        <li><span class="mancha" style:background={COLOR_ENERGIA[n as NivelEnergia].replace(/[\d.]+\)$/, '0.75)')}></span>{texto.split(' · ')[0]}</li>
+      {/each}
+      {#each TECNOLOGIAS as [nombre, color] (nombre)}
+        <li><span class="punto" style:background={color}></span>{nombre}</li>
+      {/each}
+      <li><span class="punto anillo"></span>Privada · <span class="punto lleno"></span>CFE</li>
+    </ul>
+  </div>
+{:else if layers.vias && !tablero.catalogo}
   <div class="vias panel">
     <div class="modos" role="group" aria-label="Color de las vías">
       {#each MODOS_VIAS as m (m.id)}
@@ -2132,6 +2340,11 @@
         stroke-dasharray="2 1.4"
       />
     </svg>Polos
+  </button>
+  <button class="ctl" aria-pressed={layers.energia} onclick={() => (layers.energia = !layers.energia)}>
+    <svg class="sw" width="10" height="13" viewBox="0 0 10 13" aria-hidden="true">
+      <path d="M6 0 0 7.5h4L3 13l7-8H6z" fill="#facc15" />
+    </svg>Energía
   </button>
   <span class="sep"></span>
   <span class="label mono">{transform.k.toFixed(1)}×</span>
@@ -2295,9 +2508,11 @@
 
   /* ---- track colour switch and legend, above the tools ------------------ */
 
+  /* Bottom-left, over the Pacific: the panel on the right would cover the
+     peninsula, the region that runs short first. */
   .vias {
     position: fixed;
-    right: 1rem;
+    left: 1rem;
     bottom: 4.4rem;
     z-index: 30;
     width: 13.5rem;
@@ -2334,6 +2549,15 @@
     color: #fff1cc;
   }
 
+  .vias.energia {
+    width: 17rem;
+  }
+
+  .leyenda.dos {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0.6rem;
+  }
+
   .leyenda {
     list-style: none;
     margin: 0.5rem 0 0;
@@ -2366,6 +2590,38 @@
     height: 0;
     border-top: 2px dashed rgba(138, 164, 194, 0.55);
     border-radius: 0;
+  }
+
+  .mancha {
+    flex: none;
+    width: 14px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  .punto {
+    flex: none;
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  .punto.anillo {
+    border: 1.5px solid var(--muted);
+  }
+
+  .punto.lleno {
+    background: var(--muted);
+    margin-left: 0.2rem;
+  }
+
+  .energia-nivel {
+    color: #b7f5cf;
+  }
+
+  .energia-nivel.critico {
+    color: #fca5a5;
   }
 
   .tip-lento {

@@ -3,6 +3,7 @@
   import { GRUPOS_OBRA, obraVia, OBRAS_VIA, TIPOS_OBRA, type ObraVia } from '$lib/domain/obrasVia';
   import { CAPACIDAD } from '$lib/domain/red';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
+  import { aporte, CAJA_CFE_MES, mesesConCajaCfe, OBRAS_ENERGIA, obraEnergia, type ObraEnergia } from '$lib/domain/energia';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
   import { horaDeJuego, km, mdp, meses, personas } from './formato';
@@ -64,6 +65,42 @@
 
   const plan = $derived(obra ? sim.presupuestoVia(obra.id, cuadrillas) : null);
 
+  // ---- the CFE's plants ---------------------------------------------------------------------
+
+  const planta = $derived(tablero.obraSel ? obraEnergia(tablero.obraSel) : null);
+  const planPlanta = $derived(planta ? sim.presupuestoPlanta(planta.id, cuadrillas) : null);
+
+  const fichaPlanta = $derived.by(() => {
+    sim.horas;
+    sim.obrasEnergia;
+    const o = planta;
+    if (!o) return null;
+    const estado = sim.obrasEnergia.get(o.id);
+    const region = sim.energia.find((e) => e.region.id === o.region);
+    if (!estado || !region) return null;
+    // What the region's margins would be with the plant in service.
+    const con = (e: 'tarde' | 'noche') => ((region.capacidad[e] + aporte(o, e) - region.demanda) / region.demanda) * 100;
+    return { o, estado, region, despues: { tarde: con('tarde'), noche: con('noche') } };
+  });
+
+  const filasEnergia = $derived.by(() => {
+    sim.horas;
+    sim.obrasEnergia;
+    return OBRAS_ENERGIA.map((o) => ({ o, estado: sim.obrasEnergia.get(o.id), plan: sim.presupuestoPlanta(o.id, MAX_CUADRILLAS) }));
+  });
+
+  /** How long a plant really takes when the CFE's till sets the pace. */
+  const alRitmoCfe = (p: { costoMdp: number; meses: number }) => mesesConCajaCfe(p.costoMdp, p.meses, sim.dineroCfe);
+
+  const pct = (n: number) => `${n.toLocaleString('es-MX', { maximumFractionDigits: 1 })} %`;
+  const nombreTec = (o: ObraEnergia) => o.tecnologia.toLowerCase();
+
+  function construirPlanta() {
+    if (!planta) return;
+    sim.construirPlanta(planta.id, cuadrillas);
+    confirmando = false;
+  }
+
   const capacidad = (o: ObraVia) =>
     o.capacidad === 'doble'
       ? `vía doble, ${CAPACIDAD.doble} trenes al día`
@@ -107,7 +144,78 @@
 
 {#if tablero.catalogo}
   <section class="catalogo panel">
-    {#if ficha}
+    {#if fichaPlanta}
+      {@const { o, estado, region, despues } = fichaPlanta}
+      <header>
+        <button class="volver" onclick={() => (tablero.obraSel = null)}>← Obras del Estado</button>
+        <button class="close" onclick={() => tablero.cerrarCatalogo()} aria-label="Cerrar">×</button>
+      </header>
+      <h2>{o.nombre}</h2>
+      <p class="label">Central de la CFE · {o.tecnologia} · {personas(o.mw)} MW</p>
+      <p class="efecto">
+        Región <b>{region.region.nombre}</b>: hoy tiene {pct(region.margen.tarde)} de margen en la tarde y {pct(region.margen.noche)} en
+        la noche. La central suma {personas(aporte(o, 'tarde'))} MW a la tarde y {personas(aporte(o, 'noche'))} a la noche{o.clase === 'solar'
+          ? ' (de noche la solar no da)'
+          : ''}: quedaría en {pct(despues.tarde)} y {pct(despues.noche)}.
+      </p>
+      <p class="real"><span class="label">En la realidad</span> {o.real}</p>
+
+      {#if estado.fase === 'por-construir' && planPlanta}
+        <div class="cuadrillas" role="radiogroup" aria-label="Cuadrillas">
+          <span class="label">Cuadrillas</span>
+          {#each Array.from({ length: MAX_CUADRILLAS }, (_, i) => i + 1) as n (n)}
+            <button class="ctl" class:is-active={cuadrillas === n} role="radio" aria-checked={cuadrillas === n} onclick={() => (cuadrillas = n)}>
+              {n}
+            </button>
+          {/each}
+        </div>
+        <dl>
+          <div><dt>Costo (caja de la CFE)</dt><dd class="mono">{mdp(planPlanta.costoMdp)}</dd></div>
+          <div><dt>Duración</dt><dd class="mono">{meses(planPlanta.meses)}</dd></div>
+          <div><dt>Empleos en obra</dt><dd class="mono">{personas(planPlanta.personasEnObra)}</dd></div>
+        </dl>
+        <p class="nota">
+          {cuadrillas === MAX_CUADRILLAS
+            ? 'Cuatro cuadrillas: el ritmo y el costo del gobierno.'
+            : 'Menos cuadrillas que el gobierno: más barata y más lenta.'}
+        </p>
+        {#if alRitmoCfe(planPlanta) > planPlanta.meses * 1.02}
+          <p class="aviso">
+            Ese ritmo cuesta {mdp(planPlanta.costoMdp / planPlanta.meses)} al mes y a la CFE le llegan {mdp(CAJA_CFE_MES)}: con lo que tiene
+            ({mdp(sim.dineroCfe)}), tardaría unos {meses(alRitmoCfe(planPlanta))}, si no hay otras centrales.
+          </p>
+        {/if}
+        <details class="fuentes">
+          <summary>De dónde salen las cifras</summary>
+          <p><b>Costo:</b> {o.costo.dato} <a href={o.costo.url} target="_blank" rel="noopener noreferrer">{o.costo.fuente}</a></p>
+          <p><b>Tiempo:</b> {o.tiempo.dato}</p>
+        </details>
+        <div class="acciones">
+          <button class="ctl construir" onclick={() => (confirmando = true)} disabled={sim.estado !== 'lista'}>
+            Construir · {mdp(planPlanta.costoMdp)}
+          </button>
+        </div>
+      {:else if estado.fase === 'en-obra' && estado.plan}
+        {@const faltanMeses = ((1 - estado.avance) * estado.plan.horas) / HORAS_POR_MES}
+        <p class="status" class:detenida={estado.detenida} class:en-obra={!estado.detenida}>
+          {estado.detenida
+            ? 'Obra detenida: se acabó el dinero de la CFE'
+            : `En obra · ${estado.plan.cuadrillas} cuadrilla${estado.plan.cuadrillas > 1 ? 's' : ''}`}
+        </p>
+        <div class="barra"><span style:width="{estado.avance * 100}%"></span></div>
+        <dl>
+          <div><dt>Avance</dt><dd class="mono">{(estado.avance * 100).toFixed(1)} %</dd></div>
+          <div><dt>Termina en</dt><dd class="mono">{meses(faltanMeses)}</dd></div>
+          <div><dt>Pagado</dt><dd class="mono">{mdp(estado.pagadoMdp)} de {mdp(estado.plan.costoMdp)}</dd></div>
+          <div><dt>Trabajando en la obra</dt><dd class="mono">{personas(estado.detenida ? 0 : estado.plan.personasEnObra)}</dd></div>
+        </dl>
+      {:else if estado.fase === 'en-servicio'}
+        <p class="status en-servicio">En servicio desde el {horaDeJuego(estado.enServicioDesde ?? 0)}</p>
+        <dl>
+          <div><dt>Costó</dt><dd class="mono">{mdp(estado.pagadoMdp)}</dd></div>
+        </dl>
+      {/if}
+    {:else if ficha}
       {@const { o, estado } = ficha}
       <header>
         <button class="volver" onclick={() => (tablero.obraSel = null)}>← Obras del Estado</button>
@@ -207,11 +315,65 @@
             {/each}
           </ul>
         {/each}
+        <h3 class="energia">Energía (CFE)</h3>
+        <p class="texto">
+          Centrales de la CFE desde 2019. Se pagan con la caja de la CFE, no con el presupuesto de trenes. Suben el margen de su región;
+          sin margen, los polos de la región no se llenan.
+        </p>
+        <ul>
+          {#each filasEnergia as { o, estado, plan } (o.id)}
+            <li>
+              <button class="obra" onclick={() => (tablero.obraSel = o.id)}>
+                <span class="nombre">{o.nombre}</span>
+                <span class="datos mono">
+                  {#if estado?.fase === 'en-obra'}
+                    <span class="fase en-obra" class:detenida={estado.detenida}>
+                      {estado.detenida ? 'detenida' : 'en obra'} {(estado.avance * 100).toFixed(0)} %
+                    </span>
+                  {:else if estado?.fase === 'en-servicio'}
+                    <span class="fase en-servicio">en servicio</span>
+                  {:else if plan}
+                    {personas(o.mw)} MW {nombreTec(o)} · {mdp(plan.costoMdp)}
+                  {/if}
+                </span>
+              </button>
+            </li>
+          {/each}
+        </ul>
       </div>
     {/if}
   </section>
 
-  {#if confirmando && plan && obra}
+  {#if confirmando && planPlanta && planta}
+    <div class="fondo-modal" role="presentation" onclick={() => (confirmando = false)}>
+      <div
+        class="modal panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-planta"
+        tabindex="-1"
+        onclick={(e) => e.stopPropagation()}
+        onkeydown={(e) => e.stopPropagation()}
+      >
+        <p class="label">Construir · Central de la CFE</p>
+        <h2 id="titulo-planta">{planta.nombre}</h2>
+        <p>
+          Con {planPlanta.cuadrillas} cuadrilla{planPlanta.cuadrillas > 1 ? 's' : ''}: <b>{mdp(planPlanta.costoMdp)}</b> de la caja de la CFE
+          en <b>{meses(planPlanta.meses)}</b>, con {personas(planPlanta.personasEnObra)} personas trabajando. Se paga conforme avanza.
+        </p>
+        {#if alRitmoCfe(planPlanta) > planPlanta.meses * 1.02}
+          <p class="aviso">
+            Con el dinero de la CFE no alcanza a ese ritmo: la obra irá al paso de lo que le llega cada mes (unos
+            {Number.isFinite(alRitmoCfe(planPlanta)) ? meses(alRitmoCfe(planPlanta)) : 'sin fin'}).
+          </p>
+        {/if}
+        <div class="acciones">
+          <button class="ctl" onclick={() => (confirmando = false)}>Cancelar</button>
+          <button class="ctl construir" onclick={construirPlanta}>Construir</button>
+        </div>
+      </div>
+    </div>
+  {:else if confirmando && plan && obra}
     <div class="fondo-modal" role="presentation" onclick={() => (confirmando = false)}>
       <div
         class="modal panel"
@@ -306,6 +468,10 @@
     margin: 0.5rem 0 0.15rem;
     font-size: 0.98rem;
     font-weight: 600;
+  }
+
+  h3.energia {
+    color: #fde68a;
   }
 
   h3 {

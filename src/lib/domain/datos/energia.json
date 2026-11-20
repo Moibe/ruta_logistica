@@ -1,0 +1,5122 @@
+{
+ "corte": "2026-11-20",
+ "nota": "Electricidad para los Polos del Bienestar. Cada región del sistema eléctrico arranca con su demanda y sus márgenes de reserva oficiales de 2019 (de la tarde y de la noche); la demanda crece al ritmo real de 2018 a 2024; las centrales privadas entran en su fecha real; las de la CFE las construye el jugador. Un polo solo se llena si su región tiene margen en los dos picos.",
+ "fuentes": {
+  "regiones": {
+   "fuente": "CENACE, acuerdo de circunscripción territorial de las Gerencias de Control Regional (DOF, 15 de mayo de 2018)",
+   "url": "https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf"
+  },
+  "capacidad": {
+   "fuente": "SENER, PRODESEN 2019–2033, capítulo V, tablas 5.1 y 5.2 (capacidad y centrales a diciembre de 2018)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/475497/PRODESEN_V.pdf"
+  },
+  "demanda": {
+   "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039, tabla A1.6 (demanda máxima integrada 2018 y 2024)",
+   "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297"
+  },
+  "margenes": {
+   "fuente": "SENER, PRODESEN 2019–2033, capítulo VII, tablas 7.6 y 7.7 (margen de reserva 2019, escalones de la tarde y de la noche)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/475498/PRODESEN_VII.pdf"
+  },
+  "umbrales": {
+   "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039, §3.8: margen operativo de 6 % en el sistema interconectado y 11 % en los aislados; reserva de planeación de 21.3 %, 20.9 % (BC) y 35 % (BCS)",
+   "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297"
+  },
+  "privadas": {
+   "fuente": "CNE, lista de permisos de generación vigentes al 31 de octubre de 2026",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx"
+  },
+  "ubicaciones": {
+   "fuente": "INEGI, servicio web del Catálogo Único de Claves Geoestadísticas (cabecera de cada municipio)",
+   "url": "https://gaia.inegi.org.mx/wscatgeo/v2/"
+  },
+  "factores": {
+   "fuente": "Estimación del juego",
+   "url": "",
+   "dato": "La metodología oficial cuenta la solar y la eólica con su disponibilidad horaria de cinco años, sin publicar un porcentaje fijo. El juego usa: centrales firmes (térmicas, hidroeléctricas, nuclear, geotérmicas) 90 % en los dos picos; eólica 25 %; solar 35 % en la tarde y 0 % en la noche. El 35 % sale de la diferencia entre el margen de la tarde (23.4 %) y el de la noche (20.6 %) del sistema interconectado en 2019, unos 1,300 MW, entre los ~3,600 MW solares de ese año."
+  },
+  "cajaCfe": {
+   "fuente": "CFE, Programa de Desarrollo 2026–2030, tabla 1",
+   "url": "https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf",
+   "dato": "La CFE paga sus centrales con recursos propios (su Fideicomiso Maestro de Inversión), no con el presupuesto federal. Su Programa de Desarrollo 2026–2030 destina 132 mil millones de pesos en cinco años a proyectos propios de generación: 26.4 mil millones al año. Para 2019–2025 no hay una cifra anual oficial comparable y se usa la misma."
+  },
+  "tipoCambio": {
+   "fuente": "SHCP, Cuenta Pública 2024, panorama económico (con datos de Banxico): tipo de cambio promedio de 2024",
+   "url": "https://www.cuentapublica.hacienda.gob.mx/work/models/CP/2024/tomo/I/I50.06.PEF.pdf"
+  },
+  "polos": {
+   "fuente": "Declaratorias de los polos (DOF) y portal de los Polos de Desarrollo de la Secretaría de Economía",
+   "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo",
+   "dato": "Solo cinco polos tienen cifra oficial; los demás usan la razón de esos cinco: 46.7 MW entre 1814 ha, 0.0257 MW por hectárea."
+  }
+ },
+ "umbrales": {
+  "SIN": {
+   "operativo": 6,
+   "planeacion": 21.3
+  },
+  "BC": {
+   "operativo": 11,
+   "planeacion": 20.9
+  },
+  "BCS": {
+   "operativo": 11,
+   "planeacion": 35
+  }
+ },
+ "factores": {
+  "firme": {
+   "tarde": 0.9,
+   "noche": 0.9
+  },
+  "eolica": {
+   "tarde": 0.25,
+   "noche": 0.25
+  },
+  "solar": {
+   "tarde": 0.35,
+   "noche": 0
+  }
+ },
+ "cajaCfeMdpAño": 26400,
+ "tipoCambio": 18.33,
+ "mwPorHa": 0.0257,
+ "regiones": [
+  {
+   "id": "central",
+   "nombre": "Central",
+   "sistema": "SIN",
+   "demanda2018": 8805,
+   "demanda2024": 8848,
+   "crecimiento": 0.0008,
+   "margen2019": {
+    "tarde": 14.3,
+    "noche": 14.6
+   },
+   "capacidad2018": 8449,
+   "estados": [
+    "CDMX",
+    "MEX",
+    "HGO"
+   ]
+  },
+  {
+   "id": "oriental",
+   "nombre": "Oriental",
+   "sistema": "SIN",
+   "demanda2018": 7594,
+   "demanda2024": 9034,
+   "crecimiento": 0.0294,
+   "margen2019": {
+    "tarde": 41,
+    "noche": 27.3
+   },
+   "capacidad2018": 17390,
+   "estados": [
+    "CHIS",
+    "GRO",
+    "MOR",
+    "OAX",
+    "PUE",
+    "TAB",
+    "TLAX",
+    "VER"
+   ]
+  },
+  {
+   "id": "occidental",
+   "nombre": "Occidental",
+   "sistema": "SIN",
+   "demanda2018": 10373,
+   "demanda2024": 11834,
+   "crecimiento": 0.0222,
+   "margen2019": {
+    "tarde": 15.9,
+    "noche": 15.9
+   },
+   "capacidad2018": 11277,
+   "estados": [
+    "AGS",
+    "COL",
+    "GTO",
+    "JAL",
+    "MICH",
+    "NAY",
+    "QRO",
+    "ZAC",
+    "SLP"
+   ]
+  },
+  {
+   "id": "noroeste",
+   "nombre": "Noroeste",
+   "sistema": "SIN",
+   "demanda2018": 4759,
+   "demanda2024": 5909,
+   "crecimiento": 0.0367,
+   "margen2019": {
+    "tarde": 24.3,
+    "noche": 22.7
+   },
+   "capacidad2018": 4940,
+   "estados": [
+    "SIN",
+    "SON"
+   ]
+  },
+  {
+   "id": "norte",
+   "nombre": "Norte",
+   "sistema": "SIN",
+   "demanda2018": 4639,
+   "demanda2024": 5540,
+   "crecimiento": 0.03,
+   "margen2019": {
+    "tarde": 19.3,
+    "noche": 15.1
+   },
+   "capacidad2018": 5450,
+   "estados": [
+    "CHIH",
+    "DGO"
+   ]
+  },
+  {
+   "id": "noreste",
+   "nombre": "Noreste",
+   "sistema": "SIN",
+   "demanda2018": 9202,
+   "demanda2024": 11109,
+   "crecimiento": 0.0319,
+   "margen2019": {
+    "tarde": 25.4,
+    "noche": 26.6
+   },
+   "capacidad2018": 16463,
+   "estados": [
+    "NL",
+    "TAMPS",
+    "COAH"
+   ]
+  },
+  {
+   "id": "peninsular",
+   "nombre": "Peninsular",
+   "sistema": "SIN",
+   "demanda2018": 2061,
+   "demanda2024": 2969,
+   "crecimiento": 0.0627,
+   "margen2019": {
+    "tarde": 35.8,
+    "noche": 23.7
+   },
+   "capacidad2018": 2336,
+   "estados": [
+    "CAMP",
+    "QROO",
+    "YUC"
+   ]
+  },
+  {
+   "id": "baja-california",
+   "nombre": "Baja California",
+   "sistema": "BC",
+   "demanda2018": 2863,
+   "demanda2024": 3635,
+   "crecimiento": 0.0406,
+   "margen2019": {
+    "tarde": -4.5,
+    "noche": -4.5
+   },
+   "capacidad2018": 2910,
+   "estados": [
+    "BC"
+   ]
+  },
+  {
+   "id": "baja-california-sur",
+   "nombre": "Baja California Sur",
+   "sistema": "BCS",
+   "demanda2018": 529,
+   "demanda2024": 723,
+   "crecimiento": 0.0534,
+   "margen2019": {
+    "tarde": 35.4,
+    "noche": 32.6
+   },
+   "capacidad2018": 837,
+   "estados": [
+    "BCS"
+   ]
+  }
+ ],
+ "polos": {
+  "coatzacoalcos-i": {
+   "region": "oriental",
+   "mw": 6.6,
+   "oficial": false
+  },
+  "coatzacoalcos-ii": {
+   "region": "oriental",
+   "mw": 3.4,
+   "oficial": false
+  },
+  "salina-cruz": {
+   "region": "oriental",
+   "mw": 2.1,
+   "oficial": false
+  },
+  "san-blas-atempa": {
+   "region": "oriental",
+   "mw": 8.5,
+   "oficial": false
+  },
+  "san-juan-evangelista": {
+   "region": "oriental",
+   "mw": 9.3,
+   "oficial": false
+  },
+  "texistepec": {
+   "region": "oriental",
+   "mw": 11.9,
+   "oficial": false
+  },
+  "matias-romero": {
+   "region": "oriental",
+   "mw": 4.6,
+   "oficial": false
+  },
+  "mixtequilla": {
+   "region": "oriental",
+   "mw": 12.9,
+   "oficial": false
+  },
+  "ciudad-ixtepec": {
+   "region": "oriental",
+   "mw": 10.6,
+   "oficial": false
+  },
+  "ixtaltepec": {
+   "region": "oriental",
+   "mw": 6.3,
+   "oficial": false
+  },
+  "tapachula-i": {
+   "region": "oriental",
+   "mw": 6.8,
+   "oficial": false
+  },
+  "tapachula-ii": {
+   "region": "oriental",
+   "mw": 3.8,
+   "oficial": false
+  },
+  "arriaga": {
+   "region": "oriental",
+   "mw": 1.3,
+   "oficial": false
+  },
+  "teapa": {
+   "region": "oriental",
+   "mw": 2.5,
+   "oficial": false
+  },
+  "seybaplaya": {
+   "region": "peninsular",
+   "mw": 2.6,
+   "oficial": false
+  },
+  "san-jeronimo": {
+   "region": "norte",
+   "mw": 1.6,
+   "oficial": false
+  },
+  "reserva-zapotlan": {
+   "region": "central",
+   "mw": 20,
+   "oficial": true,
+   "dato": "Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 20 MW»."
+  },
+  "capital-tecnologia": {
+   "region": "oriental",
+   "mw": 7.1,
+   "oficial": false
+  },
+  "chetumal": {
+   "region": "peninsular",
+   "mw": 2.3,
+   "oficial": false
+  },
+  "parque-industrial-bajio": {
+   "region": "occidental",
+   "mw": 8.8,
+   "oficial": false
+  },
+  "puerta-logistica-bajio": {
+   "region": "occidental",
+   "mw": 1.3,
+   "oficial": false
+  },
+  "nezahualcoyotl": {
+   "region": "central",
+   "mw": 7.7,
+   "oficial": true,
+   "dato": "Declaratoria (DOF): «crecimiento en su demanda de electricidad de 5 a 7.7 MW de 2027 a 2030»."
+  },
+  "huamantla": {
+   "region": "oriental",
+   "mw": 8,
+   "oficial": true,
+   "dato": "Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: 8 MW»."
+  },
+  "tuxpan": {
+   "region": "oriental",
+   "mw": 4,
+   "oficial": true,
+   "dato": "Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 4 MW»."
+  },
+  "durango": {
+   "region": "norte",
+   "mw": 8.1,
+   "oficial": false
+  },
+  "hermosillo": {
+   "region": "noroeste",
+   "mw": 7,
+   "oficial": true,
+   "dato": "Declaratoria (DOF): «una demanda de electricidad de 1 MW a 7 MW de 2026 a 2030»."
+  },
+  "altamira": {
+   "region": "noreste",
+   "mw": 42.1,
+   "oficial": false
+  },
+  "topolobampo": {
+   "region": "noroeste",
+   "mw": 7.1,
+   "oficial": false
+  },
+  "cancun": {
+   "region": "peninsular",
+   "mw": 1.6,
+   "oficial": false
+  },
+  "circular-puebla": {
+   "region": "oriental",
+   "mw": 1,
+   "oficial": false
+  },
+  "circular-tlaxcala": {
+   "region": "oriental",
+   "mw": 0.5,
+   "oficial": false
+  },
+  "circular-quintana-roo": {
+   "region": "peninsular",
+   "mw": 1,
+   "oficial": false
+  }
+ },
+ "plantas2018": [
+  {
+   "nombre": "Infiernillo",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 1200,
+   "dueño": "CFE",
+   "estado": "GRO",
+   "municipio": "La Unión",
+   "region": "oriental",
+   "lonLat": [
+    -101.8057,
+    17.9823
+   ]
+  },
+  {
+   "nombre": "La Villita (José María Morelos)",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 320,
+   "dueño": "CFE",
+   "estado": "MICH",
+   "municipio": "Lázaro Cárdenas",
+   "region": "central",
+   "lonLat": [
+    -102.198,
+    17.9623
+   ]
+  },
+  {
+   "nombre": "Tula (Francisco Pérez Ríos)",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 1881,
+   "dueño": "CFE",
+   "estado": "HGO",
+   "municipio": "Tula",
+   "region": "central",
+   "lonLat": [
+    -99.2202,
+    20.0078
+   ]
+  },
+  {
+   "nombre": "Valle de México",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 999,
+   "dueño": "CFE",
+   "estado": "MEX",
+   "municipio": "Acolman",
+   "region": "central",
+   "lonLat": [
+    -98.9119,
+    19.6355
+   ]
+  },
+  {
+   "nombre": "Unidades aeroderivadas",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 448,
+   "dueño": "CFE",
+   "estado": "CDMX",
+   "municipio": "Cuauhtémoc",
+   "region": "central",
+   "lonLat": [
+    -99.1329,
+    19.4444
+   ]
+  },
+  {
+   "nombre": "Petacalco (Plutarco Elías Calles)",
+   "tecnologia": "Carboeléctrica",
+   "clase": "firme",
+   "mw": 2778,
+   "dueño": "CFE",
+   "estado": "GRO",
+   "municipio": "La Unión",
+   "region": "oriental",
+   "lonLat": [
+    -101.8057,
+    17.9823
+   ]
+  },
+  {
+   "nombre": "Angostura (Belisario Domínguez)",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 900,
+   "dueño": "CFE",
+   "estado": "CHIS",
+   "municipio": "Venustiano Carranza",
+   "region": "oriental",
+   "lonLat": [
+    -92.5651,
+    16.3396
+   ]
+  },
+  {
+   "nombre": "Chicoasén (Manuel Moreno Torres)",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 2400,
+   "dueño": "CFE",
+   "estado": "CHIS",
+   "municipio": "Chicoasén",
+   "region": "oriental",
+   "lonLat": [
+    -93.1052,
+    16.9673
+   ]
+  },
+  {
+   "nombre": "Malpaso",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 1080,
+   "dueño": "CFE",
+   "estado": "CHIS",
+   "municipio": "Tecpatán",
+   "region": "oriental",
+   "lonLat": [
+    -93.3112,
+    17.1365
+   ]
+  },
+  {
+   "nombre": "Peñitas",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 420,
+   "dueño": "CFE",
+   "estado": "CHIS",
+   "municipio": "Ostuacán",
+   "region": "oriental",
+   "lonLat": [
+    -93.3371,
+    17.4056
+   ]
+  },
+  {
+   "nombre": "Temascal",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 354,
+   "dueño": "CFE",
+   "estado": "OAX",
+   "municipio": "San Miguel Soyaltepec",
+   "region": "oriental",
+   "lonLat": [
+    -96.4036,
+    18.2404
+   ]
+  },
+  {
+   "nombre": "Caracol (Carlos Ramírez Ulloa)",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 600,
+   "dueño": "CFE",
+   "estado": "GRO",
+   "municipio": "Apaxtla",
+   "region": "central",
+   "lonLat": [
+    -99.9323,
+    18.1301
+   ]
+  },
+  {
+   "nombre": "Humeros",
+   "tecnologia": "Geotérmica",
+   "clase": "firme",
+   "mw": 69,
+   "dueño": "CFE",
+   "estado": "PUE",
+   "municipio": "Chignautla",
+   "region": "oriental",
+   "lonLat": [
+    -97.3894,
+    19.8139
+   ]
+  },
+  {
+   "nombre": "Oaxaca I-IV, La Venta III y La Mata",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 613,
+   "dueño": "privada",
+   "estado": "OAX",
+   "municipio": "Juchitán",
+   "region": "oriental",
+   "lonLat": [
+    -95.0216,
+    16.4333
+   ]
+  },
+  {
+   "nombre": "Laguna Verde",
+   "tecnologia": "Nuclear",
+   "clase": "firme",
+   "mw": 1608,
+   "dueño": "CFE",
+   "estado": "VER",
+   "municipio": "Alto Lucero",
+   "region": "oriental",
+   "lonLat": [
+    -96.7336,
+    19.6235
+   ]
+  },
+  {
+   "nombre": "Dos Bocas",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 226,
+   "dueño": "CFE",
+   "estado": "VER",
+   "municipio": "Medellín",
+   "region": "oriental",
+   "lonLat": [
+    -96.1582,
+    19.0592
+   ]
+  },
+  {
+   "nombre": "San Lorenzo",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 382,
+   "dueño": "CFE",
+   "estado": "PUE",
+   "municipio": "Cuautlancingo",
+   "region": "oriental",
+   "lonLat": [
+    -98.2733,
+    19.0893
+   ]
+  },
+  {
+   "nombre": "Poza Rica",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 232,
+   "dueño": "CFE",
+   "estado": "VER",
+   "municipio": "Tihuatlán",
+   "region": "oriental",
+   "lonLat": [
+    -97.5379,
+    20.7167
+   ]
+  },
+  {
+   "nombre": "Tuxpan (Adolfo López Mateos)",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 1750,
+   "dueño": "CFE",
+   "estado": "VER",
+   "municipio": "Tuxpan",
+   "region": "oriental",
+   "lonLat": [
+    -97.4039,
+    20.9643
+   ]
+  },
+  {
+   "nombre": "Tuxpan II,III,IV y V",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 2103,
+   "dueño": "privada",
+   "estado": "VER",
+   "municipio": "Tuxpan",
+   "region": "oriental",
+   "lonLat": [
+    -97.4039,
+    20.9643
+   ]
+  },
+  {
+   "nombre": "Aguamilpa Solidaridad",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 960,
+   "dueño": "CFE",
+   "estado": "NAY",
+   "municipio": "El Nayar",
+   "region": "occidental",
+   "lonLat": [
+    -104.5179,
+    22.2511
+   ]
+  },
+  {
+   "nombre": "El Cajón (Leonardo Rodríguez Alcaine)",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 750,
+   "dueño": "CFE",
+   "estado": "NAY",
+   "municipio": "Santa María del Oro",
+   "region": "occidental",
+   "lonLat": [
+    -104.5872,
+    21.3332
+   ]
+  },
+  {
+   "nombre": "La Yesca (Alfredo Elías Ayub)",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 750,
+   "dueño": "CFE",
+   "estado": "NAY",
+   "municipio": "La Yesca",
+   "region": "occidental",
+   "lonLat": [
+    -104.0098,
+    21.3189
+   ]
+  },
+  {
+   "nombre": "Zimapán (Fernando Hiriart Balderrama)",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 292,
+   "dueño": "CFE",
+   "estado": "HGO",
+   "municipio": "Zimapán",
+   "region": "occidental",
+   "lonLat": [
+    -99.3831,
+    20.7381
+   ]
+  },
+  {
+   "nombre": "Manzanillo",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 2754,
+   "dueño": "CFE",
+   "estado": "COL",
+   "municipio": "Manzanillo",
+   "region": "occidental",
+   "lonLat": [
+    -104.3164,
+    19.0532
+   ]
+  },
+  {
+   "nombre": "Salamanca TC y Cogeneración",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 1023,
+   "dueño": "CFE",
+   "estado": "GTO",
+   "municipio": "Salamanca",
+   "region": "occidental",
+   "lonLat": [
+    -101.1999,
+    20.5687
+   ]
+  },
+  {
+   "nombre": "Villa de Reyes",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 700,
+   "dueño": "CFE",
+   "estado": "SLP",
+   "municipio": "Villa de Reyes",
+   "region": "occidental",
+   "lonLat": [
+    -100.9325,
+    21.8031
+   ]
+  },
+  {
+   "nombre": "El Sauz",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 591,
+   "dueño": "CFE",
+   "estado": "QRO",
+   "municipio": "Pedro Escobedo",
+   "region": "occidental",
+   "lonLat": [
+    -100.1447,
+    20.5025
+   ]
+  },
+  {
+   "nombre": "El Sauz (Bajío)",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 626,
+   "dueño": "privada",
+   "estado": "GTO",
+   "municipio": "San Luis de la Paz",
+   "region": "occidental",
+   "lonLat": [
+    -100.5151,
+    21.2988
+   ]
+  },
+  {
+   "nombre": "Los Azufres",
+   "tecnologia": "Geotérmica",
+   "clase": "firme",
+   "mw": 245,
+   "dueño": "CFE",
+   "estado": "MICH",
+   "municipio": "Hidalgo",
+   "region": "occidental",
+   "lonLat": [
+    -100.5552,
+    19.6894
+   ]
+  },
+  {
+   "nombre": "El Novillo (Plutarco Elías Calles)",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 135,
+   "dueño": "CFE",
+   "estado": "SON",
+   "municipio": "Soyopa",
+   "region": "noroeste",
+   "lonLat": [
+    -109.6346,
+    28.7642
+   ]
+  },
+  {
+   "nombre": "Huites (Luis Donaldo Colosio)",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 422,
+   "dueño": "CFE",
+   "estado": "SIN",
+   "municipio": "Choix",
+   "region": "noroeste",
+   "lonLat": [
+    -108.3224,
+    26.707
+   ]
+  },
+  {
+   "nombre": "Puerto Libertad",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 632,
+   "dueño": "CFE",
+   "estado": "SON",
+   "municipio": "Pitiquito",
+   "region": "noroeste",
+   "lonLat": [
+    -112.0539,
+    30.676
+   ]
+  },
+  {
+   "nombre": "Guaymas II (Carlos Rodríguez Rivero)",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 484,
+   "dueño": "CFE",
+   "estado": "SON",
+   "municipio": "Guaymas",
+   "region": "noroeste",
+   "lonLat": [
+    -110.8892,
+    27.9233
+   ]
+  },
+  {
+   "nombre": "Mazatlán II (José Aceves Pozos)",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 616,
+   "dueño": "CFE",
+   "estado": "SIN",
+   "municipio": "Mazatlán",
+   "region": "noroeste",
+   "lonLat": [
+    -106.4222,
+    23.2003
+   ]
+  },
+  {
+   "nombre": "Topolobampo II (Juan de Dios Bátiz)",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 320,
+   "dueño": "CFE",
+   "estado": "SIN",
+   "municipio": "Ahome",
+   "region": "noroeste",
+   "lonLat": [
+    -108.9943,
+    25.7834
+   ]
+  },
+  {
+   "nombre": "Hermosillo",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 227,
+   "dueño": "CFE",
+   "estado": "SON",
+   "municipio": "Hermosillo",
+   "region": "noroeste",
+   "lonLat": [
+    -110.9585,
+    29.0749
+   ]
+  },
+  {
+   "nombre": "Agua Prieta II",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 409,
+   "dueño": "CFE",
+   "estado": "SON",
+   "municipio": "Agua Prieta",
+   "region": "noroeste",
+   "lonLat": [
+    -109.5464,
+    31.3278
+   ]
+  },
+  {
+   "nombre": "Hermosillo",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 284,
+   "dueño": "privada",
+   "estado": "SON",
+   "municipio": "Hermosillo",
+   "region": "noroeste",
+   "lonLat": [
+    -110.9585,
+    29.0749
+   ]
+  },
+  {
+   "nombre": "Naco Nogales",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 308,
+   "dueño": "privada",
+   "estado": "SON",
+   "municipio": "Agua Prieta",
+   "region": "noroeste",
+   "lonLat": [
+    -109.5464,
+    31.3278
+   ]
+  },
+  {
+   "nombre": "Francisco Villa",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 300,
+   "dueño": "CFE",
+   "estado": "CHIH",
+   "municipio": "Delicias",
+   "region": "norte",
+   "lonLat": [
+    -105.4711,
+    28.1933
+   ]
+  },
+  {
+   "nombre": "Lerdo (Guadalupe Victoria)",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 320,
+   "dueño": "CFE",
+   "estado": "DGO",
+   "municipio": "Lerdo",
+   "region": "norte",
+   "lonLat": [
+    -103.5248,
+    25.5366
+   ]
+  },
+  {
+   "nombre": "Samalayuca I y II",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 838,
+   "dueño": "CFE",
+   "estado": "CHIH",
+   "municipio": "Juárez",
+   "region": "norte",
+   "lonLat": [
+    -106.485,
+    31.7465
+   ]
+  },
+  {
+   "nombre": "Gómez Palacio",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 240,
+   "dueño": "CFE",
+   "estado": "DGO",
+   "municipio": "Gómez Palacio",
+   "region": "norte",
+   "lonLat": [
+    -103.4964,
+    25.5701
+   ]
+  },
+  {
+   "nombre": "El Encino (Chihuahua II)",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 619,
+   "dueño": "CFE",
+   "estado": "CHIH",
+   "municipio": "Chihuahua",
+   "region": "norte",
+   "lonLat": [
+    -106.0763,
+    28.6368
+   ]
+  },
+  {
+   "nombre": "La Laguna II",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 538,
+   "dueño": "privada",
+   "estado": "DGO",
+   "municipio": "Gómez Palacio",
+   "region": "norte",
+   "lonLat": [
+    -103.4964,
+    25.5701
+   ]
+  },
+  {
+   "nombre": "Norte Durango",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 555,
+   "dueño": "privada",
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "Chihuahua III",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 275,
+   "dueño": "privada",
+   "estado": "CHIH",
+   "municipio": "Juárez",
+   "region": "norte",
+   "lonLat": [
+    -106.485,
+    31.7465
+   ]
+  },
+  {
+   "nombre": "Norte II",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 433,
+   "dueño": "privada",
+   "estado": "CHIH",
+   "municipio": "Chihuahua",
+   "region": "norte",
+   "lonLat": [
+    -106.0763,
+    28.6368
+   ]
+  },
+  {
+   "nombre": "Altamira",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 465,
+   "dueño": "CFE",
+   "estado": "TAMPS",
+   "municipio": "Altamira",
+   "region": "noreste",
+   "lonLat": [
+    -97.9367,
+    22.3916
+   ]
+  },
+  {
+   "nombre": "Río Escondido (José López Portillo) y Carbón II",
+   "tecnologia": "Carboeléctrica",
+   "clase": "firme",
+   "mw": 2600,
+   "dueño": "CFE",
+   "estado": "COAH",
+   "municipio": "Nava",
+   "region": "noreste",
+   "lonLat": [
+    -100.7676,
+    28.4219
+   ]
+  },
+  {
+   "nombre": "Huinalá I y II",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 976,
+   "dueño": "CFE",
+   "estado": "NL",
+   "municipio": "Pesquería",
+   "region": "noreste",
+   "lonLat": [
+    -100.0537,
+    25.7833
+   ]
+  },
+  {
+   "nombre": "Río Bravo (Emilio Portes Gil)",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 511,
+   "dueño": "CFE",
+   "estado": "TAMPS",
+   "municipio": "Río Bravo",
+   "region": "noreste",
+   "lonLat": [
+    -98.0901,
+    25.981
+   ]
+  },
+  {
+   "nombre": "Saltillo",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 298,
+   "dueño": "privada",
+   "estado": "COAH",
+   "municipio": "Ramos Arizpe",
+   "region": "noreste",
+   "lonLat": [
+    -100.9508,
+    25.5432
+   ]
+  },
+  {
+   "nombre": "Río Bravo II,III y IV",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 1753,
+   "dueño": "privada",
+   "estado": "TAMPS",
+   "municipio": "Valle Hermoso",
+   "region": "noreste",
+   "lonLat": [
+    -97.8125,
+    25.6738
+   ]
+  },
+  {
+   "nombre": "Monterrey III",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 489,
+   "dueño": "privada",
+   "estado": "NL",
+   "municipio": "San Nicolás de los Garza",
+   "region": "noreste",
+   "lonLat": [
+    -100.2896,
+    25.7553
+   ]
+  },
+  {
+   "nombre": "Altamira II,III,IV y V",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 2845,
+   "dueño": "privada",
+   "estado": "TAMPS",
+   "municipio": "Altamira",
+   "region": "noreste",
+   "lonLat": [
+    -97.9367,
+    22.3916
+   ]
+  },
+  {
+   "nombre": "Tamazunchale",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 1217,
+   "dueño": "privada",
+   "estado": "SLP",
+   "municipio": "Tamazunchale",
+   "region": "noreste",
+   "lonLat": [
+    -98.7915,
+    21.2627
+   ]
+  },
+  {
+   "nombre": "Presidente Juárez",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 1063,
+   "dueño": "CFE",
+   "estado": "BC",
+   "municipio": "Rosarito",
+   "region": "baja-california",
+   "lonLat": [
+    -117.0545,
+    32.3637
+   ]
+  },
+  {
+   "nombre": "Mexicali",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 489,
+   "dueño": "privada",
+   "estado": "BC",
+   "municipio": "Mexicali",
+   "region": "baja-california",
+   "lonLat": [
+    -115.4756,
+    32.6412
+   ]
+  },
+  {
+   "nombre": "Baja California III (La Jovita)",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 324,
+   "dueño": "CFE",
+   "estado": "BC",
+   "municipio": "Ensenada",
+   "region": "baja-california",
+   "lonLat": [
+    -116.5951,
+    31.8089
+   ]
+  },
+  {
+   "nombre": "Cerro Prieto I,II,III y IV",
+   "tecnologia": "Geotérmica",
+   "clase": "firme",
+   "mw": 340,
+   "dueño": "CFE",
+   "estado": "BC",
+   "municipio": "Mexicali",
+   "region": "baja-california",
+   "lonLat": [
+    -115.4756,
+    32.6412
+   ]
+  },
+  {
+   "nombre": "Tijuana",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 345,
+   "dueño": "CFE",
+   "estado": "BC",
+   "municipio": "Tijuana",
+   "region": "baja-california",
+   "lonLat": [
+    -117.0189,
+    32.5325
+   ]
+  },
+  {
+   "nombre": "Punta Prieta",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 113,
+   "dueño": "CFE",
+   "estado": "BCS",
+   "municipio": "La Paz",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -110.3066,
+    24.1487
+   ]
+  },
+  {
+   "nombre": "San Carlos (Agustín Olachea A.)",
+   "tecnologia": "Combustión interna",
+   "clase": "firme",
+   "mw": 104,
+   "dueño": "CFE",
+   "estado": "BCS",
+   "municipio": "Comondú",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -111.6733,
+    25.0346
+   ]
+  },
+  {
+   "nombre": "Baja California Sur I",
+   "tecnologia": "Combustión interna",
+   "clase": "firme",
+   "mw": 210,
+   "dueño": "CFE",
+   "estado": "BCS",
+   "municipio": "La Paz",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -110.3066,
+    24.1487
+   ]
+  },
+  {
+   "nombre": "Valladolid (Felipe Carrillo Puerto)",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 295,
+   "dueño": "CFE",
+   "estado": "YUC",
+   "municipio": "Valladolid",
+   "region": "peninsular",
+   "lonLat": [
+    -88.201,
+    20.6897
+   ]
+  },
+  {
+   "nombre": "Mérida II",
+   "tecnologia": "Termoeléctrica",
+   "clase": "firme",
+   "mw": 198,
+   "dueño": "CFE",
+   "estado": "YUC",
+   "municipio": "Mérida",
+   "region": "peninsular",
+   "lonLat": [
+    -89.6244,
+    20.9672
+   ]
+  },
+  {
+   "nombre": "Valladolid III",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 525,
+   "dueño": "privada",
+   "estado": "YUC",
+   "municipio": "Valladolid",
+   "region": "peninsular",
+   "lonLat": [
+    -88.201,
+    20.6897
+   ]
+  },
+  {
+   "nombre": "Campeche",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 252,
+   "dueño": "privada",
+   "estado": "CAMP",
+   "municipio": "Palizada",
+   "region": "peninsular",
+   "lonLat": [
+    -92.0909,
+    18.2536
+   ]
+  },
+  {
+   "nombre": "Mérida III",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 484,
+   "dueño": "privada",
+   "estado": "YUC",
+   "municipio": "Mérida",
+   "region": "peninsular",
+   "lonLat": [
+    -89.6244,
+    20.9672
+   ]
+  }
+ ],
+ "privadas": [
+  {
+   "nombre": "NRS Noreste Escobedo",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 946.1,
+   "fecha": "2019-01-11",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "El Carmen",
+   "region": "noreste",
+   "lonLat": [
+    -100.3641,
+    25.9322
+   ]
+  },
+  {
+   "nombre": "Cúbico Alten Aguascalientes Dos",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 140,
+   "fecha": "2019-01-16",
+   "enConstruccion": false,
+   "estado": "AGS",
+   "municipio": "EL llano",
+   "region": "occidental",
+   "lonLat": [
+    -101.9653,
+    21.9189
+   ]
+  },
+  {
+   "nombre": "Central Progreso",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 6,
+   "fecha": "2019-01-30",
+   "enConstruccion": false,
+   "estado": "VER",
+   "municipio": "Paso del Macho",
+   "region": "oriental",
+   "lonLat": [
+    -96.7245,
+    18.9722
+   ]
+  },
+  {
+   "nombre": "Ingenio José María Morelos",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 4.5,
+   "fecha": "2019-01-30",
+   "enConstruccion": false,
+   "estado": "JAL",
+   "municipio": "Casimiro Castillo",
+   "region": "occidental",
+   "lonLat": [
+    -104.4347,
+    19.6036
+   ]
+  },
+  {
+   "nombre": "Tai Durango Seis",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2019-01-31",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "La Trinidad Solar Uno",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2019-01-31",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "La Trinidad Solar Dos",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2019-01-31",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "Engie Eólica Tres Me",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 49.5,
+   "fecha": "2019-02-24",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Llera",
+   "region": "noreste",
+   "lonLat": [
+    -99.0236,
+    23.319
+   ]
+  },
+  {
+   "nombre": "Parque Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 166,
+   "fecha": "2019-02-28",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Galeana",
+   "region": "norte",
+   "lonLat": [
+    -107.6167,
+    30.1129
+   ]
+  },
+  {
+   "nombre": "BMW SLP",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 5,
+   "fecha": "2019-03-01",
+   "enConstruccion": false,
+   "estado": "SLP",
+   "municipio": "Villa de Reyes",
+   "region": "occidental",
+   "lonLat": [
+    -100.9325,
+    21.8031
+   ]
+  },
+  {
+   "nombre": "Parque Eólico Reyno",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 431,
+   "fecha": "2019-03-04",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Reynosa",
+   "region": "noreste",
+   "lonLat": [
+    -98.2781,
+    26.0924
+   ]
+  },
+  {
+   "nombre": "Energía Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 21.8,
+   "fecha": "2019-03-27",
+   "enConstruccion": false,
+   "estado": "YUC",
+   "municipio": "Progreso",
+   "region": "peninsular",
+   "lonLat": [
+    -89.6636,
+    21.2826
+   ]
+  },
+  {
+   "nombre": "Tuto Energy II",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 137.5,
+   "fecha": "2019-03-29",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Pitiquito",
+   "region": "noroeste",
+   "lonLat": [
+    -112.0539,
+    30.676
+   ]
+  },
+  {
+   "nombre": "Petroleos Mexicanos E P E, Plataforma de Producción Abkatun-A2",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 30.9,
+   "fecha": "2019-03-31",
+   "enConstruccion": false,
+   "estado": "CAMP",
+   "municipio": "Carmen",
+   "region": "peninsular",
+   "lonLat": [
+    -91.8364,
+    18.6378
+   ]
+  },
+  {
+   "nombre": "Compañía Eólica Vicente Guerrero",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 58,
+   "fecha": "2019-04-01",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Güémez",
+   "region": "noreste",
+   "lonLat": [
+    -99.0083,
+    23.9191
+   ]
+  },
+  {
+   "nombre": "Compañía Eólica Vicente Guerrero",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 60,
+   "fecha": "2019-04-01",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Güémez",
+   "region": "noreste",
+   "lonLat": [
+    -99.0083,
+    23.9191
+   ]
+  },
+  {
+   "nombre": "Polímeros y Derivados",
+   "tecnologia": "Cogeneración Eficiente",
+   "clase": "firme",
+   "mw": 5,
+   "fecha": "2019-04-01",
+   "enConstruccion": false,
+   "estado": "GTO",
+   "municipio": "León",
+   "region": "occidental",
+   "lonLat": [
+    -101.6832,
+    21.122
+   ]
+  },
+  {
+   "nombre": "Grupo Gusi, S. P. R. de R. L. de C. V.",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 2.9,
+   "fecha": "2019-04-09",
+   "enConstruccion": false,
+   "estado": "SLP",
+   "municipio": "Tamuín",
+   "region": "noreste",
+   "lonLat": [
+    -98.7752,
+    22.0041
+   ]
+  },
+  {
+   "nombre": "Parque Solar Orejana",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 125.1,
+   "fecha": "2019-04-16",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Hermosillo",
+   "region": "noroeste",
+   "lonLat": [
+    -110.9585,
+    29.0749
+   ]
+  },
+  {
+   "nombre": "FRV Potosí Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 329,
+   "fecha": "2019-05-11",
+   "enConstruccion": false,
+   "estado": "SLP",
+   "municipio": "Villa de Ramos",
+   "region": "occidental",
+   "lonLat": [
+    -101.9105,
+    22.8309
+   ]
+  },
+  {
+   "nombre": "CE G.",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 1,
+   "fecha": "2019-05-30",
+   "enConstruccion": false,
+   "estado": "CDMX",
+   "municipio": "Iztapalapa",
+   "region": "central",
+   "lonLat": [
+    -99.1329,
+    19.4444
+   ]
+  },
+  {
+   "nombre": "CE G.",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 1,
+   "fecha": "2019-05-30",
+   "enConstruccion": false,
+   "estado": "PUE",
+   "municipio": "Puebla",
+   "region": "oriental",
+   "lonLat": [
+    -98.1975,
+    19.044
+   ]
+  },
+  {
+   "nombre": "Bluemex Power 1",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 90,
+   "fecha": "2019-06-01",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Empalme",
+   "region": "noroeste",
+   "lonLat": [
+    -110.8161,
+    27.9576
+   ]
+  },
+  {
+   "nombre": "AT Solar V",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 180,
+   "fecha": "2019-06-05",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Pitiquito",
+   "region": "noroeste",
+   "lonLat": [
+    -112.0539,
+    30.676
+   ]
+  },
+  {
+   "nombre": "Pactiv Foodservice México",
+   "tecnologia": "Cogeneración Eficiente",
+   "clase": "firme",
+   "mw": 9.3,
+   "fecha": "2019-06-11",
+   "enConstruccion": false,
+   "estado": "JAL",
+   "municipio": "Zapopan",
+   "region": "occidental",
+   "lonLat": [
+    -103.3883,
+    20.7206
+   ]
+  },
+  {
+   "nombre": "Energía Solar Sonorense",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2019-06-15",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Ahumada",
+   "region": "norte",
+   "lonLat": [
+    -106.5124,
+    30.6177
+   ]
+  },
+  {
+   "nombre": "Energía Eléctrica de Chihuahua",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2019-06-15",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Ahumada",
+   "region": "norte",
+   "lonLat": [
+    -106.5124,
+    30.6177
+   ]
+  },
+  {
+   "nombre": "Ahumada IV Solar PV",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2019-06-15",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Ahumada",
+   "region": "norte",
+   "lonLat": [
+    -106.5124,
+    30.6177
+   ]
+  },
+  {
+   "nombre": "Fotovoltaica de Ahumada",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2019-06-15",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Ahumada",
+   "region": "norte",
+   "lonLat": [
+    -106.5124,
+    30.6177
+   ]
+  },
+  {
+   "nombre": "Parque Eólico El Mezquite",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 250,
+   "fecha": "2019-06-28",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Mina",
+   "region": "noreste",
+   "lonLat": [
+    -100.5318,
+    26.0013
+   ]
+  },
+  {
+   "nombre": "Photoemeris Sustentable",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2019-06-30",
+   "enConstruccion": false,
+   "estado": "YUC",
+   "municipio": "Peto",
+   "region": "peninsular",
+   "lonLat": [
+    -88.924,
+    20.1259
+   ]
+  },
+  {
+   "nombre": "CE G.",
+   "tecnologia": "Cogeneración Eficiente",
+   "clase": "firme",
+   "mw": 1,
+   "fecha": "2019-07-01",
+   "enConstruccion": false,
+   "estado": "CDMX",
+   "municipio": "Iztapalapa",
+   "region": "central",
+   "lonLat": [
+    -99.1329,
+    19.4444
+   ]
+  },
+  {
+   "nombre": "CE G.",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 1,
+   "fecha": "2019-07-05",
+   "enConstruccion": false,
+   "estado": "QRO",
+   "municipio": "Querétaro",
+   "region": "occidental",
+   "lonLat": [
+    -100.39,
+    20.5934
+   ]
+  },
+  {
+   "nombre": "174 PG Torreón",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 101.1,
+   "fecha": "2019-07-22",
+   "enConstruccion": false,
+   "estado": "COAH",
+   "municipio": "Matamoros",
+   "region": "norte",
+   "lonLat": [
+    -103.2304,
+    25.5281
+   ]
+  },
+  {
+   "nombre": "Aldebaran Energy Project",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 15,
+   "fecha": "2019-07-31",
+   "enConstruccion": false,
+   "estado": "ZAC",
+   "municipio": "Villa de Cos",
+   "region": "occidental",
+   "lonLat": [
+    -102.3469,
+    23.2939
+   ]
+  },
+  {
+   "nombre": "Central LFGE León",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 2.8,
+   "fecha": "2019-08-01",
+   "enConstruccion": false,
+   "estado": "GTO",
+   "municipio": "León",
+   "region": "occidental",
+   "lonLat": [
+    -101.6832,
+    21.122
+   ]
+  },
+  {
+   "nombre": "Fuerza y Energía de Naco-Nogales",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 26,
+   "fecha": "2019-08-13",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Agua Prieta",
+   "region": "noroeste",
+   "lonLat": [
+    -109.5464,
+    31.3278
+   ]
+  },
+  {
+   "nombre": "Energía Azteca X",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 173.1,
+   "fecha": "2019-08-13",
+   "enConstruccion": false,
+   "estado": "BC",
+   "municipio": "Mexicali",
+   "region": "baja-california",
+   "lonLat": [
+    -115.4756,
+    32.6412
+   ]
+  },
+  {
+   "nombre": "Granjas Carroll de México",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 9.3,
+   "fecha": "2019-08-28",
+   "enConstruccion": false,
+   "estado": "PUE",
+   "municipio": "Oriental",
+   "region": "oriental",
+   "lonLat": [
+    -97.6194,
+    19.3758
+   ]
+  },
+  {
+   "nombre": "Helios Generación",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 165,
+   "fecha": "2019-09-01",
+   "enConstruccion": false,
+   "estado": "ZAC",
+   "municipio": "Mazapil",
+   "region": "occidental",
+   "lonLat": [
+    -101.555,
+    24.6381
+   ]
+  },
+  {
+   "nombre": "Laboratorios Liomont",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 1,
+   "fecha": "2019-09-01",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Ocoyoacac",
+   "region": "central",
+   "lonLat": [
+    -99.4557,
+    19.2693
+   ]
+  },
+  {
+   "nombre": "Palmas de Candelaria",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 3.9,
+   "fecha": "2019-09-02",
+   "enConstruccion": false,
+   "estado": "CAMP",
+   "municipio": "Carmen",
+   "region": "peninsular",
+   "lonLat": [
+    -91.8364,
+    18.6378
+   ]
+  },
+  {
+   "nombre": "De",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 0.7,
+   "fecha": "2019-09-07",
+   "enConstruccion": false,
+   "estado": "QROO",
+   "municipio": "Playa del Carmen",
+   "region": "peninsular",
+   "lonLat": [
+    -87.0755,
+    20.6281
+   ]
+  },
+  {
+   "nombre": "De",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 1.8,
+   "fecha": "2019-09-07",
+   "enConstruccion": false,
+   "estado": "QROO",
+   "municipio": "Playa del Carmen",
+   "region": "peninsular",
+   "lonLat": [
+    -87.0755,
+    20.6281
+   ]
+  },
+  {
+   "nombre": "Soporte de Generación Eficiente",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 949.8,
+   "fecha": "2019-09-26",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "El Carmen",
+   "region": "noreste",
+   "lonLat": [
+    -100.3641,
+    25.9322
+   ]
+  },
+  {
+   "nombre": "Recursos Solares PV de México IV",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 126,
+   "fecha": "2019-09-27",
+   "enConstruccion": false,
+   "estado": "AGS",
+   "municipio": "Aguascalientes",
+   "region": "occidental",
+   "lonLat": [
+    -102.296,
+    21.8798
+   ]
+  },
+  {
+   "nombre": "Cogeneración de Altamira",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 391,
+   "fecha": "2019-10-01",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Altamira",
+   "region": "noreste",
+   "lonLat": [
+    -97.9367,
+    22.3916
+   ]
+  },
+  {
+   "nombre": "De",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 4,
+   "fecha": "2019-10-01",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Delicias",
+   "region": "norte",
+   "lonLat": [
+    -105.4711,
+    28.1933
+   ]
+  },
+  {
+   "nombre": "De",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 4,
+   "fecha": "2019-10-01",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Delicias",
+   "region": "norte",
+   "lonLat": [
+    -105.4711,
+    28.1933
+   ]
+  },
+  {
+   "nombre": "De",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 7,
+   "fecha": "2019-10-01",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Delicias",
+   "region": "norte",
+   "lonLat": [
+    -105.4711,
+    28.1933
+   ]
+  },
+  {
+   "nombre": "TPD Noroeste Topolobampo II",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 1091.6,
+   "fecha": "2019-10-22",
+   "enConstruccion": false,
+   "estado": "SIN",
+   "municipio": "Ahome",
+   "region": "noroeste",
+   "lonLat": [
+    -108.9943,
+    25.7834
+   ]
+  },
+  {
+   "nombre": "ENR Ags",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 300,
+   "fecha": "2019-11-17",
+   "enConstruccion": false,
+   "estado": "AGS",
+   "municipio": "El llano",
+   "region": "occidental",
+   "lonLat": [
+    -101.9653,
+    21.9189
+   ]
+  },
+  {
+   "nombre": "Productora Nacional de Papel",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 9.9,
+   "fecha": "2019-11-22",
+   "enConstruccion": false,
+   "estado": "SLP",
+   "municipio": "Villa de Reyes",
+   "region": "occidental",
+   "lonLat": [
+    -100.9325,
+    21.8031
+   ]
+  },
+  {
+   "nombre": "Petroleos Mexicanos E P E, Central Akal-J3",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 26.8,
+   "fecha": "2019-11-30",
+   "enConstruccion": false,
+   "estado": "CAMP",
+   "municipio": "Ciudad del Carmen",
+   "region": "peninsular",
+   "lonLat": [
+    -91.8364,
+    18.6378
+   ]
+  },
+  {
+   "nombre": "Ingeniería y Proyectos M+R",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 2.1,
+   "fecha": "2019-12-09",
+   "enConstruccion": false,
+   "estado": "HGO",
+   "municipio": "Mineral de la Reforma",
+   "region": "central",
+   "lonLat": [
+    -98.696,
+    20.0724
+   ]
+  },
+  {
+   "nombre": "Akin Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 100,
+   "fecha": "2019-12-09",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Pitiquito",
+   "region": "noroeste",
+   "lonLat": [
+    -112.0539,
+    30.676
+   ]
+  },
+  {
+   "nombre": "Tuli Energía",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 165,
+   "fecha": "2019-12-21",
+   "enConstruccion": false,
+   "estado": "ZAC",
+   "municipio": "Mazapil",
+   "region": "occidental",
+   "lonLat": [
+    -101.555,
+    24.6381
+   ]
+  },
+  {
+   "nombre": "Empaques Nova",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 8,
+   "fecha": "2019-12-23",
+   "enConstruccion": false,
+   "estado": "YUC",
+   "municipio": "Umán",
+   "region": "peninsular",
+   "lonLat": [
+    -89.7483,
+    20.8819
+   ]
+  },
+  {
+   "nombre": "Fuerza Eólica de",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 30,
+   "fecha": "2019-12-31",
+   "enConstruccion": false,
+   "estado": "BC",
+   "municipio": "Ensenada",
+   "region": "baja-california",
+   "lonLat": [
+    -116.5951,
+    31.8089
+   ]
+  },
+  {
+   "nombre": "Tai Durango Uno",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 15.6,
+   "fecha": "2019-12-31",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "Eólica Me",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 306,
+   "fecha": "2019-12-31",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Llera",
+   "region": "noreste",
+   "lonLat": [
+    -99.0236,
+    23.319
+   ]
+  },
+  {
+   "nombre": "Optimaize",
+   "tecnologia": "Cogeneración Eficiente",
+   "clase": "firme",
+   "mw": 9.5,
+   "fecha": "2019-12-31",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Tlalnepantla",
+   "region": "central",
+   "lonLat": [
+    -99.1952,
+    19.5385
+   ]
+  },
+  {
+   "nombre": "Energía Solar de Poniente",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 82.9,
+   "fecha": "2020-01-23",
+   "enConstruccion": false,
+   "estado": "COAH",
+   "municipio": "Matamoros",
+   "region": "norte",
+   "lonLat": [
+    -103.2304,
+    25.5281
+   ]
+  },
+  {
+   "nombre": "Fuerza y Energía de Tuxpan",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 150,
+   "fecha": "2020-02-01",
+   "enConstruccion": false,
+   "estado": "VER",
+   "municipio": "Tuxpan",
+   "region": "oriental",
+   "lonLat": [
+    -97.4039,
+    20.9643
+   ]
+  },
+  {
+   "nombre": "BNB Villa Ahumada Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 150,
+   "fecha": "2020-02-07",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Ahumada",
+   "region": "norte",
+   "lonLat": [
+    -106.5124,
+    30.6177
+   ]
+  },
+  {
+   "nombre": "Tai Durango Cinco P-10",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 10,
+   "fecha": "2020-02-07",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "Tai Durango Cinco P-15",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 15,
+   "fecha": "2020-02-07",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "Servicios Compresión de Gas CA-KU-A1",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 14.8,
+   "fecha": "2020-02-29",
+   "enConstruccion": false,
+   "estado": "CAMP",
+   "municipio": "Ciudad del Carmen",
+   "region": "peninsular",
+   "lonLat": [
+    -91.8364,
+    18.6378
+   ]
+  },
+  {
+   "nombre": "Abein",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 969.9,
+   "fecha": "2020-03-20",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Ciudad Juárez",
+   "region": "norte",
+   "lonLat": [
+    -106.485,
+    31.7465
+   ]
+  },
+  {
+   "nombre": "TPD Noroeste Topolobampo II",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 87,
+   "fecha": "2020-04-01",
+   "enConstruccion": false,
+   "estado": "SIN",
+   "municipio": "Ahome",
+   "region": "noroeste",
+   "lonLat": [
+    -108.9943,
+    25.7834
+   ]
+  },
+  {
+   "nombre": "Infraestructura Energética del Norte",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 37.3,
+   "fecha": "2020-04-28",
+   "enConstruccion": false,
+   "estado": "AGS",
+   "municipio": "Aguascalientes",
+   "region": "occidental",
+   "lonLat": [
+    -102.296,
+    21.8798
+   ]
+  },
+  {
+   "nombre": "",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2020-05-08",
+   "enConstruccion": false,
+   "estado": "SLP",
+   "municipio": "Villa de Arista",
+   "region": "occidental",
+   "lonLat": [
+    -100.849,
+    22.6448
+   ]
+  },
+  {
+   "nombre": "EGP Magdalena Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 220,
+   "fecha": "2020-05-25",
+   "enConstruccion": false,
+   "estado": "TLAX",
+   "municipio": "Tlaxco",
+   "region": "oriental",
+   "lonLat": [
+    -98.1192,
+    19.6149
+   ]
+  },
+  {
+   "nombre": "Parque Industrial de Energía Renovable",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 89.3,
+   "fecha": "2020-07-14",
+   "enConstruccion": false,
+   "estado": "PUE",
+   "municipio": "Cañada Morelos y Esperanza",
+   "region": "oriental",
+   "lonLat": [
+    -97.3751,
+    18.8584
+   ]
+  },
+  {
+   "nombre": "Kenergreen",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 223.9,
+   "fecha": "2020-07-15",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Navojoa",
+   "region": "noroeste",
+   "lonLat": [
+    -109.4455,
+    27.0816
+   ]
+  },
+  {
+   "nombre": "Energía Renovable de la Península",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 92.4,
+   "fecha": "2020-07-28",
+   "enConstruccion": false,
+   "estado": "YUC",
+   "municipio": "Mérida",
+   "region": "peninsular",
+   "lonLat": [
+    -89.6244,
+    20.9672
+   ]
+  },
+  {
+   "nombre": "Eólica Tres Me",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 95.7,
+   "fecha": "2020-07-31",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Llera",
+   "region": "noreste",
+   "lonLat": [
+    -99.0236,
+    23.319
+   ]
+  },
+  {
+   "nombre": "Pier IV",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 136.5,
+   "fecha": "2020-08-01",
+   "enConstruccion": false,
+   "estado": "PUE",
+   "municipio": "Cañada Morelos y Chapulco",
+   "region": "oriental",
+   "lonLat": [
+    -97.4112,
+    18.6205
+   ]
+  },
+  {
+   "nombre": "Ciclo Combinado Tierra Mojada",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 970.2,
+   "fecha": "2020-10-28",
+   "enConstruccion": false,
+   "estado": "JAL",
+   "municipio": "Zapotlanejo",
+   "region": "occidental",
+   "lonLat": [
+    -103.0642,
+    20.6225
+   ]
+  },
+  {
+   "nombre": "Ver",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 22.5,
+   "fecha": "2020-10-30",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "Ver",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 22.5,
+   "fecha": "2020-10-30",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "Ver",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 22.5,
+   "fecha": "2020-10-30",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "Genomma Lab Internacional",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 2,
+   "fecha": "2020-11-26",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Toluca",
+   "region": "central",
+   "lonLat": [
+    -99.6573,
+    19.2935
+   ]
+  },
+  {
+   "nombre": "Compañía de Electricidad Los Ramones",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 768,
+   "fecha": "2020-12-11",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Los ramones",
+   "region": "noreste",
+   "lonLat": [
+    -99.624,
+    25.6964
+   ]
+  },
+  {
+   "nombre": "Green Park Energy",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 220.8,
+   "fecha": "2020-12-18",
+   "enConstruccion": false,
+   "estado": "PUE",
+   "municipio": "Cuyoaco",
+   "region": "oriental",
+   "lonLat": [
+    -97.6219,
+    19.6053
+   ]
+  },
+  {
+   "nombre": "Acciona Eólica",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 138,
+   "fecha": "2020-12-20",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Reynosa",
+   "region": "noreste",
+   "lonLat": [
+    -98.2781,
+    26.0924
+   ]
+  },
+  {
+   "nombre": "Don Diego Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 125,
+   "fecha": "2020-12-21",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Benjamín Hill",
+   "region": "noroeste",
+   "lonLat": [
+    -111.1179,
+    30.1672
+   ]
+  },
+  {
+   "nombre": "Generadora Fénix",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 2.2,
+   "fecha": "2021-01-01",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Temascaltepec",
+   "region": "central",
+   "lonLat": [
+    -100.0414,
+    19.0431
+   ]
+  },
+  {
+   "nombre": "EVM Energía del Valle de México Generador",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 850,
+   "fecha": "2021-01-01",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Axapusco",
+   "region": "central",
+   "lonLat": [
+    -98.7583,
+    19.7245
+   ]
+  },
+  {
+   "nombre": "X-Elio FV Xoxocotla",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 70,
+   "fecha": "2021-01-11",
+   "enConstruccion": false,
+   "estado": "MOR",
+   "municipio": "Ayala",
+   "region": "oriental",
+   "lonLat": [
+    -98.9821,
+    18.7671
+   ]
+  },
+  {
+   "nombre": "Látex Mexicana",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 1,
+   "fecha": "2021-01-13",
+   "enConstruccion": false,
+   "estado": "JAL",
+   "municipio": "San Pedro Tlaquepaque",
+   "region": "occidental",
+   "lonLat": [
+    -103.3072,
+    20.6386
+   ]
+  },
+  {
+   "nombre": "Vega Solar 6",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 116,
+   "fecha": "2021-01-24",
+   "enConstruccion": false,
+   "estado": "HGO",
+   "municipio": "Nopala de Villagrán",
+   "region": "occidental",
+   "lonLat": [
+    -99.6443,
+    20.2517
+   ]
+  },
+  {
+   "nombre": "Parque",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 103.5,
+   "fecha": "2021-01-29",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Reynosa",
+   "region": "noreste",
+   "lonLat": [
+    -98.2781,
+    26.0924
+   ]
+  },
+  {
+   "nombre": "Fotovoltaica ENH",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 25,
+   "fecha": "2021-02-01",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Hermosillo",
+   "region": "noroeste",
+   "lonLat": [
+    -110.9585,
+    29.0749
+   ]
+  },
+  {
+   "nombre": "Bimbo",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 1.8,
+   "fecha": "2021-02-26",
+   "enConstruccion": false,
+   "estado": "CDMX",
+   "municipio": "Azcapotzalco",
+   "region": "central",
+   "lonLat": [
+    -99.1329,
+    19.4444
+   ]
+  },
+  {
+   "nombre": "Energía Sierra Juárez Holding",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 44.6,
+   "fecha": "2021-02-28",
+   "enConstruccion": false,
+   "estado": "BC",
+   "municipio": "Tecate",
+   "region": "baja-california",
+   "lonLat": [
+    -116.6266,
+    32.5727
+   ]
+  },
+  {
+   "nombre": "Tai Durango Cuatro Neo",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 23,
+   "fecha": "2021-03-09",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Durango",
+   "region": "norte",
+   "lonLat": [
+    -104.6702,
+    24.024
+   ]
+  },
+  {
+   "nombre": "Central Fotovoltaica Border Solar Norte",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 150,
+   "fecha": "2021-03-25",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Juarez",
+   "region": "norte",
+   "lonLat": [
+    -106.485,
+    31.7465
+   ]
+  },
+  {
+   "nombre": "Dolores Wind",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 273.9,
+   "fecha": "2021-04-07",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "China",
+   "region": "noreste",
+   "lonLat": [
+    -99.2393,
+    25.7059
+   ]
+  },
+  {
+   "nombre": "Petroleos Mexicanos E P E, Central Plataforma Habitacional Litoral A2",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 1.4,
+   "fecha": "2021-06-06",
+   "enConstruccion": false,
+   "estado": "TAB",
+   "municipio": "Centla",
+   "region": "oriental",
+   "lonLat": [
+    -92.6522,
+    18.5301
+   ]
+  },
+  {
+   "nombre": "FV Mexsolar XI",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 100,
+   "fecha": "2021-06-18",
+   "enConstruccion": false,
+   "estado": "VER",
+   "municipio": "Perote",
+   "region": "oriental",
+   "lonLat": [
+    -97.2441,
+    19.5607
+   ]
+  },
+  {
+   "nombre": "Pollux Energy Project",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 29.9,
+   "fecha": "2021-06-25",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Galeana",
+   "region": "noreste",
+   "lonLat": [
+    -100.0774,
+    24.8263
+   ]
+  },
+  {
+   "nombre": "Sol de Insurgentes",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 27.2,
+   "fecha": "2021-06-25",
+   "enConstruccion": false,
+   "estado": "BCS",
+   "municipio": "Comondú",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -111.6733,
+    25.0346
+   ]
+  },
+  {
+   "nombre": "Sol de Sonora",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 10,
+   "fecha": "2021-07-01",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Hermosillo",
+   "region": "noroeste",
+   "lonLat": [
+    -110.9585,
+    29.0749
+   ]
+  },
+  {
+   "nombre": "FRV Potrero Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 270,
+   "fecha": "2021-09-18",
+   "enConstruccion": false,
+   "estado": "JAL",
+   "municipio": "Lagos de Moreno",
+   "region": "occidental",
+   "lonLat": [
+    -101.9292,
+    21.3564
+   ]
+  },
+  {
+   "nombre": "Engie Abril PV",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 108,
+   "fecha": "2021-09-29",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Caborca",
+   "region": "noroeste",
+   "lonLat": [
+    -112.1477,
+    30.7138
+   ]
+  },
+  {
+   "nombre": "Energía Sierra Juárez",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 108,
+   "fecha": "2021-12-12",
+   "enConstruccion": false,
+   "estado": "BC",
+   "municipio": "Tecate",
+   "region": "baja-california",
+   "lonLat": [
+    -116.6266,
+    32.5727
+   ]
+  },
+  {
+   "nombre": "Green Hub",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2021-12-15",
+   "enConstruccion": false,
+   "estado": "GTO",
+   "municipio": "San Miguel de Allende",
+   "region": "occidental",
+   "lonLat": [
+    -100.7134,
+    20.904
+   ]
+  },
+  {
+   "nombre": "Flex Américas",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 15.1,
+   "fecha": "2022-01-05",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Altamira",
+   "region": "noreste",
+   "lonLat": [
+    -97.9367,
+    22.3916
+   ]
+  },
+  {
+   "nombre": "Eólica Coromuel",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 50.4,
+   "fecha": "2022-02-13",
+   "enConstruccion": false,
+   "estado": "BCS",
+   "municipio": "La Paz",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -110.3066,
+    24.1487
+   ]
+  },
+  {
+   "nombre": "ENI México",
+   "tecnologia": "Termoeléctrica Convencional",
+   "clase": "firme",
+   "mw": 107.6,
+   "fecha": "2022-02-20",
+   "enConstruccion": false,
+   "estado": "TAB",
+   "municipio": "Dos Bocas",
+   "region": "oriental",
+   "lonLat": [
+    -92.9,
+    18
+   ]
+  },
+  {
+   "nombre": "Tamazunchale Energía",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 564,
+   "fecha": "2022-05-07",
+   "enConstruccion": false,
+   "estado": "SLP",
+   "municipio": "Tamazunchale",
+   "region": "noreste",
+   "lonLat": [
+    -98.7915,
+    21.2627
+   ]
+  },
+  {
+   "nombre": "Hokchi Energy",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 40.4,
+   "fecha": "2022-06-28",
+   "enConstruccion": false,
+   "estado": "TAB",
+   "municipio": "Paraíso",
+   "region": "oriental",
+   "lonLat": [
+    -93.2142,
+    18.3958
+   ]
+  },
+  {
+   "nombre": "X-Elio FV Conejos Medanos",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 80,
+   "fecha": "2022-07-23",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Juarez",
+   "region": "norte",
+   "lonLat": [
+    -106.485,
+    31.7465
+   ]
+  },
+  {
+   "nombre": "Aeropuerto Internacional Felipe Ángeles",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 20.7,
+   "fecha": "2022-08-30",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Zumpango",
+   "region": "central",
+   "lonLat": [
+    -99.1006,
+    19.7971
+   ]
+  },
+  {
+   "nombre": "Aeropuerto Internacional Felipe Ángeles",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 0.8,
+   "fecha": "2022-08-30",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Zumpango",
+   "region": "central",
+   "lonLat": [
+    -99.1006,
+    19.7971
+   ]
+  },
+  {
+   "nombre": "MG HR",
+   "tecnologia": "Fotovoltaica / Sistema de almacenamiento SAE",
+   "clase": "solar",
+   "mw": 35.3,
+   "fecha": "2022-10-07",
+   "enConstruccion": false,
+   "estado": "BCS",
+   "municipio": "Comondú",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -111.6733,
+    25.0346
+   ]
+  },
+  {
+   "nombre": "Pia",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 20,
+   "fecha": "2022-11-30",
+   "enConstruccion": false,
+   "estado": "SLP",
+   "municipio": "Ciudad Valles",
+   "region": "noreste",
+   "lonLat": [
+    -99.0187,
+    21.9865
+   ]
+  },
+  {
+   "nombre": "Tampico Renewable Energy",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 15,
+   "fecha": "2022-11-30",
+   "enConstruccion": false,
+   "estado": "VER",
+   "municipio": "Pánuco",
+   "region": "noreste",
+   "lonLat": [
+    -98.1813,
+    22.0536
+   ]
+  },
+  {
+   "nombre": "Servicios Integrales en Reúso de Agua",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 1.4,
+   "fecha": "2022-12-30",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Chihuahua",
+   "region": "norte",
+   "lonLat": [
+    -106.0763,
+    28.6368
+   ]
+  },
+  {
+   "nombre": "Horus Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 95,
+   "fecha": "2023-02-01",
+   "enConstruccion": false,
+   "estado": "AGS",
+   "municipio": "Pabellón de Arteaga",
+   "region": "occidental",
+   "lonLat": [
+    -102.2765,
+    22.1492
+   ]
+  },
+  {
+   "nombre": "Parque Solar Los Cuervos",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 200,
+   "fecha": "2023-02-01",
+   "enConstruccion": false,
+   "estado": "AGS",
+   "municipio": "Aguascalientes",
+   "region": "occidental",
+   "lonLat": [
+    -102.296,
+    21.8798
+   ]
+  },
+  {
+   "nombre": "Mitre Calera Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 80.3,
+   "fecha": "2023-02-28",
+   "enConstruccion": false,
+   "estado": "ZAC",
+   "municipio": "Calera",
+   "region": "occidental",
+   "lonLat": [
+    -102.7023,
+    22.949
+   ]
+  },
+  {
+   "nombre": "NP Energía La Lucha",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 130.7,
+   "fecha": "2023-06-28",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Mapimí",
+   "region": "norte",
+   "lonLat": [
+    -103.8482,
+    25.8333
+   ]
+  },
+  {
+   "nombre": "Buenos Días Energía",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 217.1,
+   "fecha": "2023-07-26",
+   "enConstruccion": false,
+   "estado": "TLAX",
+   "municipio": "Calpulalpan",
+   "region": "oriental",
+   "lonLat": [
+    -98.5705,
+    19.5885
+   ]
+  },
+  {
+   "nombre": "Elan Energy Generadora Dos",
+   "tecnologia": "Cogeneración Eficiente",
+   "clase": "firme",
+   "mw": 3.8,
+   "fecha": "2023-07-31",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Cuautitlán",
+   "region": "central",
+   "lonLat": [
+    -99.1786,
+    19.6651
+   ]
+  },
+  {
+   "nombre": "Vientos de Coahuila",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 96,
+   "fecha": "2023-07-31",
+   "enConstruccion": false,
+   "estado": "COAH",
+   "municipio": "General Cepeda",
+   "region": "norte",
+   "lonLat": [
+    -101.4793,
+    25.3799
+   ]
+  },
+  {
+   "nombre": "México FLNG",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 63.3,
+   "fecha": "2023-08-31",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Aldama",
+   "region": "noreste",
+   "lonLat": [
+    -98.0735,
+    22.9194
+   ]
+  },
+  {
+   "nombre": "Iberdrola Renovables del Bajío",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 105,
+   "fecha": "2023-09-15",
+   "enConstruccion": false,
+   "estado": "GTO",
+   "municipio": "San Felipe",
+   "region": "occidental",
+   "lonLat": [
+    -101.2159,
+    21.4793
+   ]
+  },
+  {
+   "nombre": "Amaunet",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 159.4,
+   "fecha": "2023-11-13",
+   "enConstruccion": false,
+   "estado": "BCS",
+   "municipio": "La Paz",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -110.3066,
+    24.1487
+   ]
+  },
+  {
+   "nombre": "American Beef",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 2.1,
+   "fecha": "2023-11-24",
+   "enConstruccion": false,
+   "estado": "CHIH",
+   "municipio": "Chihuahua",
+   "region": "norte",
+   "lonLat": [
+    -106.0763,
+    28.6368
+   ]
+  },
+  {
+   "nombre": "Recursos Solares PV de México II",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 100,
+   "fecha": "2023-11-30",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Hermosillo",
+   "region": "noroeste",
+   "lonLat": [
+    -110.9585,
+    29.0749
+   ]
+  },
+  {
+   "nombre": "TBT Topolobampo III",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 868.1,
+   "fecha": "2023-12-01",
+   "enConstruccion": false,
+   "estado": "SIN",
+   "municipio": "Ahome",
+   "region": "noroeste",
+   "lonLat": [
+    -108.9943,
+    25.7834
+   ]
+  },
+  {
+   "nombre": "ESJ Renovable II",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 110,
+   "fecha": "2023-12-11",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Caborca",
+   "region": "noroeste",
+   "lonLat": [
+    -112.1477,
+    30.7138
+   ]
+  },
+  {
+   "nombre": "ESJ Renovable I",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 100,
+   "fecha": "2023-12-11",
+   "enConstruccion": false,
+   "estado": "AGS",
+   "municipio": "Tepezalá",
+   "region": "occidental",
+   "lonLat": [
+    -102.167,
+    22.2242
+   ]
+  },
+  {
+   "nombre": "Silkimya",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 1.5,
+   "fecha": "2023-12-31",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Altamira",
+   "region": "noreste",
+   "lonLat": [
+    -97.9367,
+    22.3916
+   ]
+  },
+  {
+   "nombre": "Ingenio El Mante",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 27.5,
+   "fecha": "2024-02-29",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "El Mante",
+   "region": "noreste",
+   "lonLat": [
+    -98.9717,
+    22.744
+   ]
+  },
+  {
+   "nombre": "Parque Amistad II",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 103,
+   "fecha": "2024-05-25",
+   "enConstruccion": false,
+   "estado": "COAH",
+   "municipio": "Acuña",
+   "region": "noreste",
+   "lonLat": [
+    -100.9783,
+    29.33
+   ]
+  },
+  {
+   "nombre": "Parque Eólico de Fenicias",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 168,
+   "fecha": "2024-06-10",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Reynosa",
+   "region": "noreste",
+   "lonLat": [
+    -100.3319,
+    25.6719
+   ]
+  },
+  {
+   "nombre": "Availmed",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 5,
+   "fecha": "2024-06-10",
+   "enConstruccion": false,
+   "estado": "BC",
+   "municipio": "Tijuana",
+   "region": "baja-california",
+   "lonLat": [
+    -117.0189,
+    32.5325
+   ]
+  },
+  {
+   "nombre": "Prolade",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 2.5,
+   "fecha": "2024-06-26",
+   "enConstruccion": false,
+   "estado": "TAB",
+   "municipio": "Huimanguillo",
+   "region": "oriental",
+   "lonLat": [
+    -93.3908,
+    17.8352
+   ]
+  },
+  {
+   "nombre": "Central LFGE García",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 1,
+   "fecha": "2024-06-28",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "García",
+   "region": "noreste",
+   "lonLat": [
+    -100.5855,
+    25.8005
+   ]
+  },
+  {
+   "nombre": "Central LFGE Cadereyta",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 1.1,
+   "fecha": "2024-06-28",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Cadereyta Jiménez",
+   "region": "noreste",
+   "lonLat": [
+    -100.0016,
+    25.591
+   ]
+  },
+  {
+   "nombre": "TIME CERAMICS",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 19,
+   "fecha": "2024-08-01",
+   "enConstruccion": false,
+   "estado": "HGO",
+   "municipio": "Emiliano Zapata",
+   "region": "central",
+   "lonLat": [
+    -98.5474,
+    19.657
+   ]
+  },
+  {
+   "nombre": "Iberia Renovables Durango",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 100,
+   "fecha": "2024-10-30",
+   "enConstruccion": false,
+   "estado": "DGO",
+   "municipio": "Canatlán",
+   "region": "norte",
+   "lonLat": [
+    -104.7784,
+    24.5273
+   ]
+  },
+  {
+   "nombre": "Radiomóvil Dip",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 7,
+   "fecha": "2024-11-01",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Ixtlahuaca",
+   "region": "central",
+   "lonLat": [
+    -99.7693,
+    19.5698
+   ]
+  },
+  {
+   "nombre": "Parque Amistad III",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 108,
+   "fecha": "2024-12-20",
+   "enConstruccion": false,
+   "estado": "COAH",
+   "municipio": "Acuña",
+   "region": "noreste",
+   "lonLat": [
+    -100.9783,
+    29.33
+   ]
+  },
+  {
+   "nombre": "Gobierno de la Ciudad de México",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 16,
+   "fecha": "2024-12-20",
+   "enConstruccion": false,
+   "estado": "CDMX",
+   "municipio": "Iztapalapa",
+   "region": "central",
+   "lonLat": [
+    -99.1329,
+    19.4444
+   ]
+  },
+  {
+   "nombre": "Aligntech de México",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 1.7,
+   "fecha": "2025-01-15",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Chihuahua",
+   "region": "norte",
+   "lonLat": [
+    -106.0763,
+    28.6368
+   ]
+  },
+  {
+   "nombre": "MIN",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 1.2,
+   "fecha": "2025-01-16",
+   "enConstruccion": false,
+   "estado": "VER",
+   "municipio": "Jáltipan",
+   "region": "oriental",
+   "lonLat": [
+    -94.7217,
+    17.9661
+   ]
+  },
+  {
+   "nombre": "SECRETARIA DE MEDIO AMBIENTE Y RECURSOS NATURALES COMISION NACIONAL DE AREAS NATURALES PROTEGIDAS",
+   "tecnologia": "Combustión Interna y fotovoltaica",
+   "clase": "firme",
+   "mw": 4.2,
+   "fecha": "2025-01-31",
+   "enConstruccion": true,
+   "estado": "NAY",
+   "municipio": "San Blas",
+   "region": "occidental",
+   "lonLat": [
+    -105.286,
+    21.5417
+   ]
+  },
+  {
+   "nombre": "Sol de Los Manzanos",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2025-02-24",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Cuauhtémoc",
+   "region": "norte",
+   "lonLat": [
+    -106.866,
+    28.4063
+   ]
+  },
+  {
+   "nombre": "Papeles y Conversiones de México",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 20.6,
+   "fecha": "2025-03-01",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Guadalupe",
+   "region": "noreste",
+   "lonLat": [
+    -100.2599,
+    25.6773
+   ]
+  },
+  {
+   "nombre": "Encon Monterrey",
+   "tecnologia": "Ciclo Combinado",
+   "clase": "firme",
+   "mw": 64.3,
+   "fecha": "2025-03-16",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Monterrey",
+   "region": "noreste",
+   "lonLat": [
+    -100.3109,
+    25.6647
+   ]
+  },
+  {
+   "nombre": "Cogen Tepetlaoxtoc",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 16.8,
+   "fecha": "2025-03-31",
+   "enConstruccion": true,
+   "estado": "MEX",
+   "municipio": "Tepetlaoxtoc",
+   "region": "central",
+   "lonLat": [
+    -98.8197,
+    19.5734
+   ]
+  },
+  {
+   "nombre": "Malta Texo de México",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 1.1,
+   "fecha": "2025-05-21",
+   "enConstruccion": false,
+   "estado": "MEX",
+   "municipio": "Texcoco",
+   "region": "central",
+   "lonLat": [
+    -98.8815,
+    19.5134
+   ]
+  },
+  {
+   "nombre": "Ecoplexus",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 165,
+   "fecha": "2025-06-30",
+   "enConstruccion": true,
+   "estado": "GTO",
+   "municipio": "Abasolo",
+   "region": "occidental",
+   "lonLat": [
+    -101.5284,
+    20.4509
+   ]
+  },
+  {
+   "nombre": "Energía Nuevo Parque Industrial",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 3.2,
+   "fecha": "2025-08-15",
+   "enConstruccion": true,
+   "estado": "QRO",
+   "municipio": "San Juan del Río",
+   "region": "occidental",
+   "lonLat": [
+    -99.9996,
+    20.3864
+   ]
+  },
+  {
+   "nombre": "TERRONERA PRECIOUS METALS",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 12.6,
+   "fecha": "2025-09-01",
+   "enConstruccion": false,
+   "estado": "JAL",
+   "municipio": "San Sebastián del Oeste",
+   "region": "occidental",
+   "lonLat": [
+    -104.8517,
+    20.7608
+   ]
+  },
+  {
+   "nombre": "PF Protón I",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 104.5,
+   "fecha": "2025-12-15",
+   "enConstruccion": true,
+   "estado": "AGS",
+   "municipio": "Aguascalientes",
+   "region": "occidental",
+   "lonLat": [
+    -102.296,
+    21.8798
+   ]
+  },
+  {
+   "nombre": "VIENTOS DE SUCILÁ",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 148.5,
+   "fecha": "2025-12-30",
+   "enConstruccion": true,
+   "estado": "YUC",
+   "municipio": "Sucilá",
+   "region": "peninsular",
+   "lonLat": [
+    -88.3139,
+    21.1562
+   ]
+  },
+  {
+   "nombre": "La Pimienta Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 357.5,
+   "fecha": "2025-12-31",
+   "enConstruccion": false,
+   "estado": "CAMP",
+   "municipio": "Carmen",
+   "region": "peninsular",
+   "lonLat": [
+    -91.8364,
+    18.6378
+   ]
+  },
+  {
+   "nombre": "MIN",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 1.6,
+   "fecha": "2026-01-27",
+   "enConstruccion": false,
+   "estado": "COAH",
+   "municipio": "Ramos Arizpe",
+   "region": "noreste",
+   "lonLat": [
+    -100.9508,
+    25.5432
+   ]
+  },
+  {
+   "nombre": "MIN",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 1.2,
+   "fecha": "2026-01-29",
+   "enConstruccion": false,
+   "estado": "SIN",
+   "municipio": "Ahome",
+   "region": "noroeste",
+   "lonLat": [
+    -108.9943,
+    25.7834
+   ]
+  },
+  {
+   "nombre": "Munisol",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 18,
+   "fecha": "2026-02-09",
+   "enConstruccion": false,
+   "estado": "SON",
+   "municipio": "Hermosillo",
+   "region": "noroeste",
+   "lonLat": [
+    -110.9585,
+    29.0749
+   ]
+  },
+  {
+   "nombre": "MIN",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 2.4,
+   "fecha": "2026-02-27",
+   "enConstruccion": false,
+   "estado": "JAL",
+   "municipio": "Guadalajara",
+   "region": "occidental",
+   "lonLat": [
+    -103.3422,
+    20.6764
+   ]
+  },
+  {
+   "nombre": "Audi México",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 4.2,
+   "fecha": "2026-02-28",
+   "enConstruccion": false,
+   "estado": "PUE",
+   "municipio": "San José Chiapa",
+   "region": "oriental",
+   "lonLat": [
+    -97.7688,
+    19.2421
+   ]
+  },
+  {
+   "nombre": "Mexicana de Hidroelectricidad Mexhidro",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 30,
+   "fecha": "2026-03-01",
+   "enConstruccion": false,
+   "estado": "GRO",
+   "municipio": "Cutzamala de Pinzón",
+   "region": "central",
+   "lonLat": [
+    -100.5785,
+    18.4652
+   ]
+  },
+  {
+   "nombre": "Energía Sierra Juárez",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 318.6,
+   "fecha": "2026-03-06",
+   "enConstruccion": false,
+   "estado": "BC",
+   "municipio": "Tecate",
+   "region": "baja-california",
+   "lonLat": [
+    -116.6266,
+    32.5727
+   ]
+  },
+  {
+   "nombre": "Johnson Controls Be Operations México",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 5.7,
+   "fecha": "2026-03-15",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Apocada",
+   "region": "noreste",
+   "lonLat": [
+    -100.3319,
+    25.6719
+   ]
+  },
+  {
+   "nombre": "ATLACOMULCO SOLAR",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 104.3,
+   "fecha": "2026-03-29",
+   "enConstruccion": true,
+   "estado": "MEX",
+   "municipio": "Almoloya de Juárez",
+   "region": "central",
+   "lonLat": [
+    -99.7586,
+    19.3693
+   ]
+  },
+  {
+   "nombre": "Hidroelectricidad del Pacífico",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 9.2,
+   "fecha": "2026-05-01",
+   "enConstruccion": true,
+   "estado": "JAL",
+   "municipio": "Pihuamo",
+   "region": "occidental",
+   "lonLat": [
+    -103.375,
+    19.2525
+   ]
+  },
+  {
+   "nombre": "Trane Technologies Manufactura",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 5.3,
+   "fecha": "2026-05-15",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Apodaca",
+   "region": "noreste",
+   "lonLat": [
+    -100.1892,
+    25.7813
+   ]
+  },
+  {
+   "nombre": "Johnson Controls Be Operations México",
+   "tecnologia": "Combustión interna",
+   "clase": "firme",
+   "mw": 5.7,
+   "fecha": "2026-05-17",
+   "enConstruccion": false,
+   "estado": "NL",
+   "municipio": "Apodaca",
+   "region": "noreste",
+   "lonLat": [
+    -100.1892,
+    25.7813
+   ]
+  },
+  {
+   "nombre": "Johnson Controls Be Operations México",
+   "tecnologia": "Combustión interna",
+   "clase": "firme",
+   "mw": 3.8,
+   "fecha": "2026-05-30",
+   "enConstruccion": true,
+   "estado": "NL",
+   "municipio": "Apodaca",
+   "region": "noreste",
+   "lonLat": [
+    -100.1892,
+    25.7813
+   ]
+  },
+  {
+   "nombre": "Wiwynn México",
+   "tecnologia": "Combustión interna",
+   "clase": "firme",
+   "mw": 9.9,
+   "fecha": "2026-06-27",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Juárez",
+   "region": "norte",
+   "lonLat": [
+    -106.485,
+    31.7465
+   ]
+  },
+  {
+   "nombre": "Energía Costa Azul",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 67.7,
+   "fecha": "2026-07-15",
+   "enConstruccion": false,
+   "estado": "BC",
+   "municipio": "Ensenada",
+   "region": "baja-california",
+   "lonLat": [
+    -116.5951,
+    31.8089
+   ]
+  },
+  {
+   "nombre": "SL & TD Tire Manufacturing",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 16,
+   "fecha": "2026-07-30",
+   "enConstruccion": true,
+   "estado": "GTO",
+   "municipio": "Irapuato",
+   "region": "occidental",
+   "lonLat": [
+    -101.3481,
+    20.6728
+   ]
+  },
+  {
+   "nombre": "IG",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 17.2,
+   "fecha": "2026-08-21",
+   "enConstruccion": true,
+   "estado": "JAL",
+   "municipio": "Zapopan",
+   "region": "occidental",
+   "lonLat": [
+    -103.3883,
+    20.7206
+   ]
+  },
+  {
+   "nombre": "TRACTEBEL ENERGÍA DE PÁNUCO",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 60.7,
+   "fecha": "2026-10-15",
+   "enConstruccion": false,
+   "estado": "TAMPS",
+   "municipio": "Altamira",
+   "region": "noreste",
+   "lonLat": [
+    -97.9367,
+    22.3916
+   ]
+  },
+  {
+   "nombre": "Petroleos Mexicanos E P E, Refinería Olmeca",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 341.1,
+   "fecha": "2026-10-25",
+   "enConstruccion": true,
+   "estado": "TAB",
+   "municipio": "Paraíso",
+   "region": "oriental",
+   "lonLat": [
+    -93.2142,
+    18.3958
+   ]
+  },
+  {
+   "nombre": "COLIBRI SOLAR",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 103.1,
+   "fecha": "2026-11-30",
+   "enConstruccion": true,
+   "estado": "TLAX",
+   "municipio": "Huamantla",
+   "region": "oriental",
+   "lonLat": [
+    -97.9231,
+    19.3127
+   ]
+  },
+  {
+   "nombre": "Eólica Cerritos",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 66,
+   "fecha": "2026-12-23",
+   "enConstruccion": true,
+   "estado": "ZAC",
+   "municipio": "Pinos",
+   "region": "occidental",
+   "lonLat": [
+    -101.5752,
+    22.2988
+   ]
+  },
+  {
+   "nombre": "Cogen Tepetlaoxtoc",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 16.8,
+   "fecha": "2026-12-25",
+   "enConstruccion": true,
+   "estado": "MEX",
+   "municipio": "Tepetlaoxtoc",
+   "region": "central",
+   "lonLat": [
+    -98.8197,
+    19.5734
+   ]
+  },
+  {
+   "nombre": "Impala Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 155.5,
+   "fecha": "2026-12-30",
+   "enConstruccion": true,
+   "estado": "PUE",
+   "municipio": "Tepeyahualco",
+   "region": "oriental",
+   "lonLat": [
+    -97.4922,
+    19.492
+   ]
+  },
+  {
+   "nombre": "AmazonData Services MX",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 2.5,
+   "fecha": "2026-12-31",
+   "enConstruccion": true,
+   "estado": "QRO",
+   "municipio": "Escobedo",
+   "region": "occidental",
+   "lonLat": [
+    -100.1447,
+    20.5025
+   ]
+  },
+  {
+   "nombre": "AmazonData Services MX",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 2.5,
+   "fecha": "2026-12-31",
+   "enConstruccion": true,
+   "estado": "QRO",
+   "municipio": "Cólon",
+   "region": "occidental",
+   "lonLat": [
+    -100.0454,
+    20.7883
+   ]
+  },
+  {
+   "nombre": "AmazonData Services MX",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 2.5,
+   "fecha": "2026-12-31",
+   "enConstruccion": true,
+   "estado": "QRO",
+   "municipio": "El Marqués",
+   "region": "occidental",
+   "lonLat": [
+    -100.3311,
+    20.6066
+   ]
+  },
+  {
+   "nombre": "Compañía Industrial Papelera Poblana",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 3.5,
+   "fecha": "2027-01-08",
+   "enConstruccion": true,
+   "estado": "PUE",
+   "municipio": "Amozoc",
+   "region": "oriental",
+   "lonLat": [
+    -98.0449,
+    19.0446
+   ]
+  },
+  {
+   "nombre": "Papel y Empaques Gondi Monterrey",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 39.7,
+   "fecha": "2027-01-22",
+   "enConstruccion": true,
+   "estado": "NL",
+   "municipio": "Guadalupe",
+   "region": "noreste",
+   "lonLat": [
+    -100.2599,
+    25.6773
+   ]
+  },
+  {
+   "nombre": "B-Energy Industries",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 7.5,
+   "fecha": "2027-02-06",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Chihuahua",
+   "region": "norte",
+   "lonLat": [
+    -106.0763,
+    28.6368
+   ]
+  },
+  {
+   "nombre": "RMCS Comercio",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2027-02-24",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Ascensión",
+   "region": "norte",
+   "lonLat": [
+    -107.9959,
+    31.0922
+   ]
+  },
+  {
+   "nombre": "Altair Importación y Exportación",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2027-02-24",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Ascensión",
+   "region": "norte",
+   "lonLat": [
+    -107.9959,
+    31.0922
+   ]
+  },
+  {
+   "nombre": "Energía Solar Alaia II",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2027-02-24",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Ascensión",
+   "region": "norte",
+   "lonLat": [
+    -107.9959,
+    31.0922
+   ]
+  },
+  {
+   "nombre": "Energía Solar Alaia III",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2027-02-24",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Ascensión",
+   "region": "norte",
+   "lonLat": [
+    -107.9959,
+    31.0922
+   ]
+  },
+  {
+   "nombre": "Energía Solar Alaia V",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 30,
+   "fecha": "2027-02-24",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Ascensión",
+   "region": "norte",
+   "lonLat": [
+    -107.9959,
+    31.0922
+   ]
+  },
+  {
+   "nombre": "Viento de Bella Unión",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 50,
+   "fecha": "2027-03-05",
+   "enConstruccion": true,
+   "estado": "COAH",
+   "municipio": "Arteaga",
+   "region": "noreste",
+   "lonLat": [
+    -100.8496,
+    25.4506
+   ]
+  },
+  {
+   "nombre": "GUACAMAYO SOLAR",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 155.5,
+   "fecha": "2027-03-17",
+   "enConstruccion": true,
+   "estado": "TLAX",
+   "municipio": "Huamantla",
+   "region": "oriental",
+   "lonLat": [
+    -97.9231,
+    19.3127
+   ]
+  },
+  {
+   "nombre": "Gas y Petroquímica de Occidente",
+   "tecnologia": "Termoeléctrica Convencional",
+   "clase": "firme",
+   "mw": 18,
+   "fecha": "2027-03-31",
+   "enConstruccion": true,
+   "estado": "SIN",
+   "municipio": "Ahome",
+   "region": "noroeste",
+   "lonLat": [
+    -108.9943,
+    25.7834
+   ]
+  },
+  {
+   "nombre": "Industrializadora de Cárnicos Strattega",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 2,
+   "fecha": "2027-04-01",
+   "enConstruccion": true,
+   "estado": "MICH",
+   "municipio": "La Piedad",
+   "region": "occidental",
+   "lonLat": [
+    -102.0226,
+    20.3415
+   ]
+  },
+  {
+   "nombre": "Energía Villa de Arriaga",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 94,
+   "fecha": "2027-04-20",
+   "enConstruccion": true,
+   "estado": "SLP",
+   "municipio": "Villa de Arriaga",
+   "region": "occidental",
+   "lonLat": [
+    -101.3834,
+    21.9101
+   ]
+  },
+  {
+   "nombre": "Tampico Renewable Energy",
+   "tecnologia": "Bioenergía",
+   "clase": "firme",
+   "mw": 44,
+   "fecha": "2027-06-01",
+   "enConstruccion": true,
+   "estado": "TAMPS",
+   "municipio": "El Mante",
+   "region": "noreste",
+   "lonLat": [
+    -98.9717,
+    22.744
+   ]
+  },
+  {
+   "nombre": "Certe Power Supply",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 8,
+   "fecha": "2027-06-30",
+   "enConstruccion": true,
+   "estado": "BC",
+   "municipio": "Mexicali",
+   "region": "baja-california",
+   "lonLat": [
+    -115.4756,
+    32.6412
+   ]
+  },
+  {
+   "nombre": "Arroyo Viento del Norte",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 250,
+   "fecha": "2027-07-15",
+   "enConstruccion": true,
+   "estado": "NL",
+   "municipio": "General Bravo",
+   "region": "noreste",
+   "lonLat": [
+    -99.1812,
+    25.7933
+   ]
+  },
+  {
+   "nombre": "Controladora Mabe",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 8.5,
+   "fecha": "2027-08-01",
+   "enConstruccion": false,
+   "estado": "COAH",
+   "municipio": "Saltillo",
+   "region": "noreste",
+   "lonLat": [
+    -100.9997,
+    25.4217
+   ]
+  },
+  {
+   "nombre": "Parques Eólicos de",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 198,
+   "fecha": "2027-09-30",
+   "enConstruccion": true,
+   "estado": "TAMPS",
+   "municipio": "Villagrán",
+   "region": "noreste",
+   "lonLat": [
+    -99.4881,
+    24.4732
+   ]
+  },
+  {
+   "nombre": "DALIA SOLAR",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 155.5,
+   "fecha": "2027-12-18",
+   "enConstruccion": true,
+   "estado": "PUE",
+   "municipio": "Tepeyahualco",
+   "region": "oriental",
+   "lonLat": [
+    -97.4922,
+    19.492
+   ]
+  },
+  {
+   "nombre": "Marabis Energy",
+   "tecnologia": "Cogeneración",
+   "clase": "firme",
+   "mw": 21.9,
+   "fecha": "2027-12-30",
+   "enConstruccion": true,
+   "estado": "GTO",
+   "municipio": "Irapuato",
+   "region": "occidental",
+   "lonLat": [
+    -101.3481,
+    20.6728
+   ]
+  },
+  {
+   "nombre": "Molino",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 2.5,
+   "fecha": "2028-02-25",
+   "enConstruccion": true,
+   "estado": "GTO",
+   "municipio": "Silao",
+   "region": "occidental",
+   "lonLat": [
+    -101.4262,
+    20.9445
+   ]
+  },
+  {
+   "nombre": "Generación de Energía Elvirita",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 1.4,
+   "fecha": "2028-08-24",
+   "enConstruccion": true,
+   "estado": "VER",
+   "municipio": "Río Blanco",
+   "region": "oriental",
+   "lonLat": [
+    -97.1395,
+    18.8389
+   ]
+  },
+  {
+   "nombre": "Parque Amistad IV",
+   "tecnologia": "Eólica",
+   "clase": "eolica",
+   "mw": 162,
+   "fecha": "2028-12-31",
+   "enConstruccion": true,
+   "estado": "COAH",
+   "municipio": "Acuña",
+   "region": "noreste",
+   "lonLat": [
+    -100.9783,
+    29.33
+   ]
+  },
+  {
+   "nombre": "Cajeme Solar",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 10,
+   "fecha": "2029-01-25",
+   "enConstruccion": true,
+   "estado": "SON",
+   "municipio": "Cajeme",
+   "region": "noroeste",
+   "lonLat": [
+    -109.9327,
+    27.4965
+   ]
+  },
+  {
+   "nombre": "Energía Costa Azul",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 227.6,
+   "fecha": "2029-12-16",
+   "enConstruccion": true,
+   "estado": "BC",
+   "municipio": "Ensenada",
+   "region": "baja-california",
+   "lonLat": [
+    -116.5951,
+    31.8089
+   ]
+  },
+  {
+   "nombre": "TRANSPORTADORA DE GAS SIERRA MADRE",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 6.9,
+   "fecha": "2031-07-31",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Casas Grandes",
+   "region": "norte",
+   "lonLat": [
+    -107.9488,
+    30.3757
+   ]
+  },
+  {
+   "nombre": "TRANSPORTADORA DE GAS SIERRA MADRE",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 8.4,
+   "fecha": "2031-07-31",
+   "enConstruccion": true,
+   "estado": "SON",
+   "municipio": "Santa Ana",
+   "region": "noroeste",
+   "lonLat": [
+    -111.1212,
+    30.5443
+   ]
+  },
+  {
+   "nombre": "TRANSPORTADORA DE GAS SIERRA MADRE",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 6.9,
+   "fecha": "2031-07-31",
+   "enConstruccion": true,
+   "estado": "SON",
+   "municipio": "Cumpas",
+   "region": "noroeste",
+   "lonLat": [
+    -109.7825,
+    29.9936
+   ]
+  },
+  {
+   "nombre": "TRANSPORTADORA DE GAS SIERRA MADRE",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 6.9,
+   "fecha": "2031-07-31",
+   "enConstruccion": true,
+   "estado": "CHIH",
+   "municipio": "Villa Ahumada",
+   "region": "norte",
+   "lonLat": [
+    -106.5124,
+    30.6177
+   ]
+  },
+  {
+   "nombre": "México Pacific Land Holdings",
+   "tecnologia": "Combustión Interna",
+   "clase": "firme",
+   "mw": 141,
+   "fecha": "2031-12-31",
+   "enConstruccion": true,
+   "estado": "SON",
+   "municipio": "Pitiquito",
+   "region": "noroeste",
+   "lonLat": [
+    -112.0539,
+    30.676
+   ]
+  }
+ ],
+ "obras": [
+  {
+   "id": "cc-tula",
+   "nombre": "Ciclo combinado Tula (paquetes 1 y 2)",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 567,
+   "estado": "HGO",
+   "municipio": "Tula de Allende",
+   "costoMusd": 312.25,
+   "costo": {
+    "fuente": "CNE, lista de permisos de generación al 31 de octubre de 2026 (inversión estimada del permiso)",
+    "url": "https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx",
+    "dato": "567 MW, 312.25 millones de dólares de inversión estimada."
+   },
+   "mesesGobierno": 36,
+   "real": "En operación desde el 28 de noviembre de 2020.",
+   "region": "central",
+   "lonLat": [
+    -99.3432,
+    20.0552
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-salamanca",
+   "nombre": "Ciclo combinado Salamanca",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 958.2,
+   "estado": "GTO",
+   "municipio": "Salamanca",
+   "costoMusd": 614.12,
+   "costo": {
+    "fuente": "CNE, lista de permisos de generación al 31 de octubre de 2026 (inversión estimada del permiso)",
+    "url": "https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx",
+    "dato": "Inversión estimada del permiso: 614.12 millones de dólares. La CFE la reporta con 958.18 MW."
+   },
+   "mesesGobierno": 36,
+   "real": "Entró en operación en 2025.",
+   "region": "occidental",
+   "lonLat": [
+    -101.1999,
+    20.5687
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-sauz-ii",
+   "nombre": "Ciclo combinado El Sauz II",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 203.1,
+   "estado": "QRO",
+   "municipio": "Pedro Escobedo",
+   "costoMusd": 171.213,
+   "costo": {
+    "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039, tabla 3.1 (costo de inversión promedio por kW)",
+    "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297",
+    "dato": "Sin costo oficial de la central: 843 dólares por kW de su tecnología, por 203.1 MW."
+   },
+   "mesesGobierno": 36,
+   "real": "Entró en operación en 2025. Sus MW salen de restar Salamanca (958.18) y San Luis Potosí (448.68) a los 1,610 MW que la CFE reporta para las tres.",
+   "region": "occidental",
+   "lonLat": [
+    -100.1447,
+    20.5025
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-san-luis-potosi",
+   "nombre": "Ciclo combinado San Luis Potosí (Villa de Reyes)",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 448.7,
+   "estado": "SLP",
+   "municipio": "Villa de Reyes",
+   "costoMusd": 378.254,
+   "costo": {
+    "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039, tabla 3.1 (costo de inversión promedio por kW)",
+    "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297",
+    "dato": "Sin costo oficial de la central: 843 dólares por kW de su tecnología, por 448.7 MW."
+   },
+   "mesesGobierno": 36,
+   "real": "Entró en operación en 2025.",
+   "region": "occidental",
+   "lonLat": [
+    -100.9325,
+    21.8031
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-manzanillo-iii",
+   "nombre": "Ciclo combinado Manzanillo III",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 539.6,
+   "estado": "COL",
+   "municipio": "Manzanillo",
+   "costoMusd": 454.883,
+   "costo": {
+    "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039, tabla 3.1 (costo de inversión promedio por kW)",
+    "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297",
+    "dato": "Sin costo oficial de la central: 843 dólares por kW de su tecnología, por 539.6 MW."
+   },
+   "mesesGobierno": 36,
+   "real": "Entró en operación el primer semestre de 2026. Sus MW salen de restar González Ortega (641.4) y Mérida (499) a los 1,680 MW de las tres.",
+   "region": "occidental",
+   "lonLat": [
+    -104.3164,
+    19.0532
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-gonzalez-ortega",
+   "nombre": "Ciclo combinado González Ortega (Mexicali)",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 641.4,
+   "estado": "BC",
+   "municipio": "Mexicali",
+   "costoMusd": 853.5,
+   "costo": {
+    "fuente": "CFE, Informe Anual 2024, tabla 4 (proyectos prioritarios del Fideicomiso Maestro de Inversión)",
+    "url": "https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf",
+    "dato": "641.4 MW, 853.5 millones de dólares (más 150.2 de su turbogás)."
+   },
+   "mesesGobierno": 36,
+   "real": "Entró en operación el primer semestre de 2026.",
+   "region": "baja-california",
+   "lonLat": [
+    -115.4756,
+    32.6412
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-merida",
+   "nombre": "Ciclo combinado Mérida (Elvia Carrillo Puerto)",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 499,
+   "estado": "YUC",
+   "municipio": "Mérida",
+   "costoMusd": 545.8,
+   "costo": {
+    "fuente": "CFE, Informe Anual 2024, tabla 4 (proyectos prioritarios del Fideicomiso Maestro de Inversión)",
+    "url": "https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf",
+    "dato": "499 MW, 545.8 millones de dólares."
+   },
+   "mesesGobierno": 36,
+   "real": "Entró en operación el primer semestre de 2026.",
+   "region": "peninsular",
+   "lonLat": [
+    -89.6244,
+    20.9672
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-tuxpan-i",
+   "nombre": "Ciclo combinado Tuxpan, fase I",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 1056.6,
+   "estado": "VER",
+   "municipio": "Tuxpan",
+   "costoMusd": 903.5,
+   "costo": {
+    "fuente": "CFE, Informe Anual 2024, tabla 4 (proyectos prioritarios del Fideicomiso Maestro de Inversión)",
+    "url": "https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf",
+    "dato": "1,056.6 MW, 903.5 millones de dólares."
+   },
+   "mesesGobierno": 36,
+   "real": "En obra; la CFE la espera entre 2026 y 2028.",
+   "region": "oriental",
+   "lonLat": [
+    -97.4039,
+    20.9643
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-riviera-maya",
+   "nombre": "Ciclo combinado Riviera Maya (Valladolid IV)",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 1020,
+   "estado": "YUC",
+   "municipio": "Valladolid",
+   "costoMusd": 912.9,
+   "costo": {
+    "fuente": "CFE, Informe Anual 2024, tabla 4 (proyectos prioritarios del Fideicomiso Maestro de Inversión)",
+    "url": "https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf",
+    "dato": "1,020 MW, 912.9 millones de dólares."
+   },
+   "mesesGobierno": 36,
+   "real": "En obra; la CFE la espera entre 2026 y 2028.",
+   "region": "peninsular",
+   "lonLat": [
+    -88.201,
+    20.6897
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-san-luis-rio-colorado",
+   "nombre": "Ciclo combinado San Luis Río Colorado",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 647.9,
+   "estado": "SON",
+   "municipio": "San Luis Río Colorado",
+   "costoMusd": 788.5,
+   "costo": {
+    "fuente": "CFE, Informe Anual 2024, tabla 4 (proyectos prioritarios del Fideicomiso Maestro de Inversión)",
+    "url": "https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf",
+    "dato": "647.9 MW, 788.5 millones de dólares."
+   },
+   "mesesGobierno": 36,
+   "real": "En obra; la CFE la espera entre 2026 y 2028.",
+   "region": "baja-california",
+   "lonLat": [
+    -114.7796,
+    32.4798
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "cc-lerdo",
+   "nombre": "Ciclo combinado Lerdo",
+   "tecnologia": "Ciclo combinado",
+   "clase": "firme",
+   "mw": 350,
+   "estado": "DGO",
+   "municipio": "Lerdo",
+   "costoMusd": 295.05,
+   "costo": {
+    "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039, tabla 3.1 (costo de inversión promedio por kW)",
+    "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297",
+    "dato": "Sin costo oficial de la central: 843 dólares por kW de su tecnología, por 350 MW."
+   },
+   "mesesGobierno": 36,
+   "real": "En obra; la CFE la espera entre 2026 y 2028.",
+   "region": "norte",
+   "lonLat": [
+    -103.5248,
+    25.5366
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 36 meses para ciclo combinado con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "fv-puerto-penasco-i-ii",
+   "nombre": "Parque solar Puerto Peñasco, etapas I y II",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 457,
+   "estado": "SON",
+   "municipio": "Puerto Peñasco",
+   "costoMusd": 815.62,
+   "costo": {
+    "fuente": "CNE, lista de permisos de generación al 31 de octubre de 2026 (inversión estimada del permiso)",
+    "url": "https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx",
+    "dato": "457 MW, 815.62 millones de dólares de inversión estimada."
+   },
+   "mesesGobierno": 12,
+   "real": "Primera etapa en febrero de 2024; la segunda (300 MW) desde el 11 de septiembre de 2025.",
+   "region": "noroeste",
+   "lonLat": [
+    -113.5405,
+    31.3064
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 12 meses para fotovoltaica con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "fv-puerto-penasco-iii-iv",
+   "nombre": "Parque solar Puerto Peñasco, etapas III y IV",
+   "tecnologia": "Fotovoltaica",
+   "clase": "solar",
+   "mw": 580,
+   "estado": "SON",
+   "municipio": "Puerto Peñasco",
+   "costoMusd": 589.86,
+   "costo": {
+    "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039, tabla 3.1 (costo de inversión promedio por kW)",
+    "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297",
+    "dato": "Sin costo oficial de la central: 1017 dólares por kW de su tecnología, por 580 MW."
+   },
+   "mesesGobierno": 12,
+   "real": "Programada para 2028.",
+   "region": "noroeste",
+   "lonLat": [
+    -113.5405,
+    31.3064
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 12 meses para fotovoltaica con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "ci-baja-california",
+   "nombre": "Unidades de combustión interna y turbogás en Mexicali y San Luis Río Colorado",
+   "tecnologia": "Combustión interna",
+   "clase": "firme",
+   "mw": 735,
+   "estado": "BC",
+   "municipio": "Mexicali",
+   "costoMusd": 685.7,
+   "costo": {
+    "fuente": "CNE, lista de permisos de generación al 31 de octubre de 2026 (inversión estimada del permiso)",
+    "url": "https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx",
+    "dato": "Combustión interna San Luis Río Colorado 206 MW (187.72 millones de dólares), Mexicali 436 MW (406.41) y tres turbogás de 31 MW en Mexicali (30.53 cada uno)."
+   },
+   "mesesGobierno": 12,
+   "real": "En operación desde 2025.",
+   "region": "baja-california",
+   "lonLat": [
+    -115.4756,
+    32.6412
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 12 meses para combustión interna con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "tg-los-cabos",
+   "nombre": "Turbogás de emergencia en Los Cabos",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 154,
+   "estado": "BCS",
+   "municipio": "Los Cabos",
+   "costoMusd": 152.65,
+   "costo": {
+    "fuente": "CNE, lista de permisos de generación al 31 de octubre de 2026 (inversión estimada del permiso)",
+    "url": "https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx",
+    "dato": "Cinco unidades de unos 31 MW, 30.53 millones de dólares cada una."
+   },
+   "mesesGobierno": 12,
+   "real": "En operación desde el 12 de junio de 2025.",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -109.6947,
+    23.0616
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 12 meses para turbogás con 4 cuadrillas."
+   }
+  },
+  {
+   "id": "tg-riviera-maya",
+   "nombre": "Turbogás aeroderivadas Riviera Maya",
+   "tecnologia": "Turbogás",
+   "clase": "firme",
+   "mw": 100,
+   "estado": "QROO",
+   "municipio": "Benito Juárez",
+   "costoMusd": 109.3,
+   "costo": {
+    "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039, tabla 3.1 (costo de inversión promedio por kW)",
+    "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297",
+    "dato": "Sin costo oficial de la central: 1093 dólares por kW de su tecnología, por 100 MW."
+   },
+   "mesesGobierno": 12,
+   "real": "Programadas para 2026 (Cancún y Cozumel).",
+   "region": "peninsular",
+   "lonLat": [
+    -86.8248,
+    21.1614
+   ],
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "No hay fecha oficial de inicio y fin comparable: 12 meses para turbogás con 4 cuadrillas."
+   }
+  }
+ ]
+}

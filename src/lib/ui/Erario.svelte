@@ -2,6 +2,7 @@
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
   import { añoCompleto, FEDERAL } from '$lib/domain/presupuesto';
+  import { CAJA_CFE_MES, ENERGIA } from '$lib/domain/energia';
   import { mdp, personas } from './formato';
 
   /** The last year with a real figure: later years repeat it. */
@@ -49,23 +50,36 @@
     return { total: m.total, año: m.año, detalle };
   });
 
-  const obrasEnCurso = $derived(cuenta.enCurso + cuenta.viasEnObra);
+  /** "+988/mes", "+15.5 mil/mes": a monthly payment, short (millions of pesos, like the till; the tooltip says so). */
+  const alMes = (n: number) =>
+    `+${n >= 1000 ? (n / 1000).toLocaleString('es-MX', { maximumFractionDigits: 1 }) + ' mil' : Math.round(n).toLocaleString('es-MX')}/mes`;
+
+  const detalleCfe =
+    `La CFE paga sus centrales con recursos propios, no con el presupuesto federal: ${mdp(ENERGIA.cajaCfeMdpAño)} al año ` +
+    '(Programa de Desarrollo CFE 2026–2030, proyectos propios de generación). Solo las centrales de la CFE se pagan de aquí.';
+
+  const enObraCfe = $derived.by(() => {
+    sim.horas;
+    return [...sim.obrasEnergia.values()].filter((o) => o.fase === 'en-obra').length;
+  });
+  const hechasCfe = $derived([...sim.obrasEnergia.values()].filter((o) => o.fase === 'en-servicio').length);
+
+  const obrasEnCurso = $derived(cuenta.enCurso + cuenta.viasEnObra + enObraCfe);
   const obrasDetenidas = $derived(cuenta.detenidas + cuenta.viasDetenidas);
-  const obrasHechas = $derived(cuenta.operando + cuenta.viasEnServicio);
+  const obrasHechas = $derived(cuenta.operando + cuenta.viasEnServicio + hechasCfe);
 </script>
 
 <div class="erario panel">
-  <div class="fila">
+  <div class="fila caja" title={llegada?.detalle}>
     <span class="label">Presupuesto</span>
     <b class="mono" class:agotado={cuenta.dinero < 1}>{mdp(cuenta.dinero)}</b>
+    {#if llegada}<span class="mes">{alMes(llegada.total)}</span>{/if}
   </div>
-  {#if llegada}
-    <div class="fila llegada" title={llegada.detalle}>
-      <span class="label">Cada mes</span>
-      <span><b class="mono">+{mdp(llegada.total)}</b></span>
-      <span class="dim">· presupuesto {llegada.año}</span>
-    </div>
-  {/if}
+  <div class="fila caja cfe" title={detalleCfe}>
+    <span class="label">CFE</span>
+    <b class="mono" class:agotado={sim.dineroCfe < 1}>{mdp(sim.dineroCfe)}</b>
+    <span class="mes">{alMes(CAJA_CFE_MES)}</span>
+  </div>
   <div class="fila">
     <span class="label">Empleos</span>
     <span><b class="mono">{personas(cuenta.permanentes)}</b> permanentes</span>
@@ -87,7 +101,7 @@
     top: 1rem;
     right: calc(1rem + var(--libro) + 0.5rem);
     z-index: 30;
-    width: 300px;
+    width: 360px;
     display: grid;
     gap: 0.25rem;
     padding: 0.55rem 0.8rem;
@@ -110,8 +124,22 @@
     font-weight: 600;
   }
 
-  .fila:first-child b {
-    font-size: 0.92rem;
+  .caja {
+    cursor: help;
+  }
+
+  .caja .mes {
+    margin-left: auto;
+    font-size: 0.68rem;
+    color: #b7f5cf;
+  }
+
+  .cfe .label {
+    color: #fde68a;
+  }
+
+  .caja b {
+    font-size: 0.86rem;
   }
 
   .agotado {
@@ -126,13 +154,6 @@
     color: #ff9b9b;
   }
 
-  .llegada {
-    cursor: help;
-  }
-
-  .llegada b {
-    color: #b7f5cf;
-  }
 
   /* The way into the State's catalog of rail works. */
   .obras-via {

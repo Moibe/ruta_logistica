@@ -1,0 +1,71 @@
+1 Infiernillo|Central|Guerrero|La Unión|HID||1|6|1,200
+2 La Villita (José María Morelos)|Central|Michoacán|Lázaro Cárdenas|HID||1|4|320
+3 Tula (Francisco Pérez Ríos)|Central|Hidalgo|Tula|TC,CC|COM y GAS|2|11|1,881
+4 Valle de México|Central|México|Acolman|TC,CC|GAS|1|7|999
+5 Unidades aeroderivadas|Central|México y DF|Varios|TG|GAS|13|14|448
+6 Petacalco (Plutarco Elías Calles)|Central|Guerrero|La Unión|CAR|K|1|7|2,778
+7 Angostura (Belisario Domínguez)|Oriental|Chiapas|V. Carranza|HID||1|5|900
+8 Chicoasén (Manuel Moreno Torres)|Oriental|Chiapas|Chicoasén|HID||1|8|2,400
+9 Malpaso|Oriental|Chiapas|Tecpatán|HID||1|6|1,080
+10 Peñitas|Oriental|Chiapas|Ostuacán|HID||1|4|420
+11 Temascal|Oriental|Oaxaca|San Miguel|HID||1|6|354
+12 Caracol (Carlos Ramírez Ulloa)|Oriental|Guerrero|Apaxtla|HID||1|3|600
+13 Humeros|Oriental|Puebla|Chignautla|GEO||1|6|69
+14 Oaxaca I-IV, La Venta III y La Mata (PIE)|Oriental|Oaxaca|Juchitán|EO||6|410|613
+15 Laguna Verde|Oriental|Veracruz|Alto Lucero|NUC|UO2|1|2|1,608
+16 Dos Bocas|Oriental|Veracruz|Medellín|CC|GAS|1|6|226
+17 San Lorenzo|Oriental|Puebla|Cuautlancingo|CC|GAS|1|3|382
+18 Poza Rica|Oriental|Veracruz|Tihuatlán|CC|GAS|1|4|232
+19 Tuxpan (Adolfo López Mateos)|Oriental|Veracruz|Tuxpan|TC|COM|1|6|1,750
+20 Tuxpan II,III,IV y V (PIE)|Oriental|Veracruz|Tuxpan|CC|GAS|3|12|2,103
+21 Aguamilpa Solidaridad|Occidental|Nayarit|El Nayar|HID||1|3|960
+22 El Cajón (Leonardo Rodríguez Alcaine)|Occidental|Nayarit|Santa María del Oro|HID||1|2|750
+23 La Yesca (Alfredo Elías Ayub)|Occidental|"Guerrero" [errata del PRODESEN; es Nayarit]|La Yesca|HID||1|2|750
+24 Zimapán (Fernando Hiriart Balderrama)|Occidental|Hidalgo|Zimapán|HID||1|2|292
+25 Manzanillo|Occidental|Colima|Manzanillo|TC,CC|COM y GAS|1|12|2,754
+26 Salamanca TC y Cogeneración|Occidental|Guanajuato|Salamanca|TC,TG|COM y GAS|2|5|1,023
+27 Villa de Reyes|Occidental|San Luis Potosí|Villa de Reyes|TC|COM|1|2|700
+28 El Sauz|Occidental|Querétaro|P. Escobedo|CC|GAS|1|5|591
+29 El Sauz (Bajío) (PIE)|Occidental|Guanajuato|S. Luis de la Paz|CC|GAS|1|4|626
+30 Los Azufres|Occidental|Michoacán|Cd. Hidalgo|GEO||1|13|245
+31 El Novillo (Plutarco Elías Calles)|Noroeste|Sonora|Soyopa|HID||1|3|135
+32 Huites (Luis Donaldo Colosio)|Noroeste|Sinaloa|Choix|HID||1|2|422
+33 Puerto Libertad|Noroeste|Sonora|Pitiquito|TC|COM y GAS|1|4|632
+34 Guaymas II (Carlos Rodríguez Rivero)|Noroeste|Sonora|Guaymas|TC|COM|1|4|484
+35 Mazatlán II (José Aceves Pozos)|Noroeste|Sinaloa|Mazatlán|TC|COM|1|3|616
+36 Topolobampo II (Juan de Dios Bátiz)|Noroeste|Sinaloa|Ahome|TC|COM|1|2|320
+37 Hermosillo|Noroeste|Sonora|Hermosillo|CC|GAS|1|2|227
+38 Agua Prieta II|Noroeste|Sonora|Agua Prieta|CC|GAS|1|3|409
+39 Hermosillo (PIE)|Noroeste|Sonora|Hermosillo|CC|GAS|1|1|284
+40 Naco Nogales (PIE)|Noroeste|Sonora|Agua Prieta|CC|GAS|1|2|308
+41 Francisco Villa|Norte|Chihuahua|Delicias|TC|COM y GAS|1|2|300
+42 Lerdo (Guadalupe Victoria)|Norte|Durango|Lerdo|TC|COM|1|2|320
+43 Samalayuca I y II|Norte|Chihuahua|Cd. Juárez|TC,CC|COM y GAS|2|8|838
+44 Gómez Palacio|Norte|Durango|Gómez Palacio|CC|GAS|1|3|240
+45 El Encino (Chihuahua II)|Norte|Chihuahua|Chihuahua|CC|GAS|1|5|619
+46 La Laguna II (PIE)|Norte|Durango|Gómez Palacio|CC|GAS|1|3|538
+47 Norte Durango (PIE)|Norte|Durango|Durango|CC|GAS|1|3|555
+48 Chihuahua III (PIE)|Norte|Chihuahua|Juárez|CC|GAS|1|3|275
+49 Norte II (PIE)|Norte|Chihuahua|Chihuahua|CC|GAS|1|3|433
+50 Altamira|Noreste|Tamaulipas|Altamira|TC|COM y GAS|1|2|465
+51 Río Escondido (José López Portillo) y Carbón II|Noreste|Coahuila|Río Escondido [sic; municipio Nava]|CAR|K|2|8|2,600
+52 Huinalá I y II|Noreste|Nuevo León|Pesquería|CC,TG|GAS|3|8|976
+53 Río Bravo (Emilio Portes Gil)|Noreste|Tamaulipas|Río Bravo|TC,CC|COM y GAS|1|4|511
+54 Saltillo (PIE)|Noreste|Coahuila|Ramos Arizpe|CC|GAS|1|2|298
+55 Río Bravo II,III y IV (PIE)|Noreste|Tamaulipas|Valle Hermoso|CC|GAS|3|9|1,753
+56 Monterrey III (PIE)|Noreste|Nuevo León|S. N. Garza|CC|GAS|1|2|489
+57 Altamira II,III,IV y V (PIE)|Noreste|Tamaulipas|Altamira|CC|GAS|3|15|2,845
+58 Tamazunchale (PIE)|Noreste|San Luis Potosí|Tamazunchale|CC|GAS|1|6|1,217
+59 Presidente Juárez|BC|BC|Rosarito|TC,CC|COM y GAS|2|6|1,063
+60 Mexicali (PIE)|BC|BC|Mexicali|CC|GAS|1|3|489
+61 Baja California III (La Jovita)|BC|BC|Ensenada|CC|GAS|1|3|324
+62 Cerro Prieto I,II,III y IV|BC|BC|Mexicali|GEO||4|9|340
+63 Tijuana|BC|BC|Tijuana|TG|GAS|1|6|345
+64 Punta Prieta|BCS|BCS|La Paz|TC|COM|1|3|113
+65 San Carlos (Agustín Olachea A.)|BCS|BCS|San Carlos|CI|COM y DIE|1|3|104
+66 Baja California Sur I|BCS|BCS|La Paz|CI|COM y DIE|1|5|210
+67 Valladolid (Felipe Carrillo Puerto)|Peninsular|Yucatán|Valladolid|TC,CC|COM y GAS|2|5|295
+68 Mérida II|Peninsular|Yucatán|Mérida|TC,TG|COM y GAS|2|3|198
+69 Valladolid III (PIE)|Peninsular|Yucatán|Valladolid|CC|GAS|1|3|525
+70 Campeche (PIE)|Peninsular|Campeche|Palizada|CC|GAS|1|1|252
+71 Mérida III (PIE)|Peninsular|Yucatán|Mérida|CC|GAS|1|3|484

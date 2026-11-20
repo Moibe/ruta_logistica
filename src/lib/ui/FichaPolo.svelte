@@ -3,6 +3,7 @@
   import { MAX_CUADRILLAS, presupuestar } from '$lib/domain/obras';
   import { PROGRAMAS_POLO, POLOS } from '$lib/domain/sitios';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
+  import { mwDelPolo, UMBRALES } from '$lib/domain/energia';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
   import { mdp, meses, personas } from './formato';
@@ -48,7 +49,8 @@
     if (!obra) return null;
     const km = sim.red?.aLaVia.get(`polo:${p.id}`);
     const alcanzable = km !== undefined && km <= ESTACION_MAX_KM;
-    return { p, obra, km, alcanzable, conectado: sim.conectado(p.id) };
+    const energia = sim.energiaDelPolo(p.id);
+    return { p, obra, km, alcanzable, conectado: sim.conectado(p.id), energia, mw: mwDelPolo(p.id) };
   });
 
   const plan = $derived(polo ? presupuestar(polo, cuadrillas) : null);
@@ -79,6 +81,16 @@
     </header>
     <p class="label">Polo del Bienestar · {PROGRAMAS_POLO[p.programa]} · {personas(p.hectareas)} ha</p>
     <p class="donde">{p.municipio}</p>
+    {#if ficha.energia}
+      {@const e = ficha.energia}
+      <p class="energia" class:sin-energia={!e.alcanza}>
+        Energía · región {e.region.nombre}: margen {e.margen.tarde.toLocaleString('es-MX', { maximumFractionDigits: 1 })} % en la tarde y
+        {e.margen.noche.toLocaleString('es-MX', { maximumFractionDigits: 1 })} % en la noche.
+        {e.alcanza
+          ? `Alcanza para sus ${ficha.mw.toLocaleString('es-MX', { maximumFractionDigits: 1 })} MW.`
+          : `Debajo del ${UMBRALES[e.region.sistema].operativo} % mínimo: no llegan empresas hasta que haya más generación en la región.`}
+      </p>
+    {/if}
 
     {#if obra.fase === 'por-construir' && plan}
       <p class="status por-construir">Por construir</p>
@@ -134,8 +146,13 @@
         <div><dt>Trabajando en la obra</dt><dd class="mono">{personas(obra.detenida ? 0 : obra.plan.personasEnObra)}</dd></div>
       </dl>
     {:else if obra.fase === 'operando'}
-      <p class="status" class:operando={ficha.conectado} class:aislado={!ficha.conectado}>
-        {ficha.conectado ? 'Operando · llegan empresas' : 'Construido, sin tren: no llegan empresas'}
+      {@const conEnergia = ficha.energia?.alcanza ?? true}
+      <p class="status" class:operando={ficha.conectado && conEnergia} class:aislado={!ficha.conectado || !conEnergia}>
+        {!ficha.conectado
+          ? 'Construido, sin tren: no llegan empresas'
+          : conEnergia
+            ? 'Operando · llegan empresas'
+            : 'Operando, sin energía en la región: no llegan empresas'}
       </p>
       <div class="barra"><span style:width="{obra.ocupacion * 100}%"></span></div>
       <dl>
@@ -221,6 +238,17 @@
 
   .ficha > p.label {
     margin: 0.15rem 0 0;
+  }
+
+  .energia {
+    margin: -0.35rem 0 0.6rem;
+    font-size: 0.68rem;
+    line-height: 1.4;
+    color: #fde68a;
+  }
+
+  .energia.sin-energia {
+    color: #ffc2c2;
   }
 
   .donde {
