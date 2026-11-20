@@ -46,6 +46,11 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [ATTRAPI, Anuario Estadístico Ferroviario 2025](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas por par origen–destino, para estimar cuántos trenes de Nuevo Laredo siguen al sur de Monterrey | 2026 | Documento oficial público |
 | [Bureau of Transportation Statistics (EUA), Border Crossing Entry Data](https://data.bts.gov/resource/keg4-3bc2.json) | Trenes que cruzan a Estados Unidos por cada puerto fronterizo: el tráfico de los corredores de Nuevo Laredo, Piedras Negras y Ciudad Juárez | Datos 2018 y 2025 | Dato oficial público (gobierno de EUA) |
 | AAR / Cambridge Systematics, *National Rail Freight Infrastructure Capacity and Investment Study* (2007), citado por el TRB | Cuántos trenes al día caben en vía sencilla, con control centralizado y en vía doble. Es referencia de Estados Unidos: no hay cifra oficial mexicana | 2007 | Estudio público |
+| [Auditoría Superior de la Federación](https://www.asf.gob.mx/) | Costo por km del Tren Maya: sobre el derecho de vía viejo, vía nueva a nivel y viaducto | Cuenta Pública 2021 (auditoría 114) y 2024 (auditoría 126) | Documento oficial público |
+| [Presidencia de la República](https://www.gob.mx/presidencia/prensa/se-construiran-2-mil-400-km-de-trenes-con-inversion-de-750-mil-mdp-en-2027-se-dara-banderazo-al-aifa-pachuca-y-cdmx-queretaro-presidenta) | Costo, km, fechas y avance de los trenes de pasajeros y del Tren Maya | Comunicados del 22 de marzo de 2025 al 31 de octubre de 2026 | Documento oficial público |
+| [SICT](https://www.gob.mx/sct/prensa/precisa-sict-que-ramal-ferroviario-roberto-ayala-dos-bocas-tiene-un-costo-estimado-de-6-mil-54-mdp) | Costo del ramal a Dos Bocas; plan de 13 rutas de pasajeros en 4 fases | 8 de noviembre de 2022; 28 de noviembre de 2024 | Documento oficial público |
+| [Corredor Interoceánico, informe 2025-2026](https://www.gob.mx/cms/uploads/attachment/file/1100578/Informe_anual_de_avance_y_resultados_PICIIT_2025_2026.pdf) | Fechas y avance de las líneas Z, FA y K; costo de su rehabilitación (con la Cuenta Pública 2025) | Corte al 30 de junio de 2026 | Documento oficial público |
+| [OpenStreetMap, Tren Maya](https://www.openstreetmap.org/relation/13196595) | El trazo de los 8 tramos del Tren Maya y del ramal a Dos Bocas | Consultado el 19 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 | [Reforma a la Ley Reglamentaria del Servicio Ferroviario](https://dof.gob.mx/nota_detalle.php?codigo=5763165&fecha=16/07/2025) | El derecho de paso: quien usa la vía de otro le paga una contraprestación | DOF, 16 de julio de 2025 | Documento oficial público |
 | INEGI (convención cartográfica) | Parámetros de la proyección del tablero: cónica conforme de Lambert, paralelos 17.5° y 29.5°, meridiano central 102° O | — | — |
 | [INEGI, Censos Económicos 2024](https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mver_ce24.pdf) | Empleos que da la obra por cada millón de pesos (construcción en Veracruz, 2023) | Resultados definitivos, 2025 | Documento oficial público |
@@ -630,6 +635,132 @@ sirve.
 Cuernavaca (su vía a la capital está fuera de operación), Dos Bocas, Ensenada (ciudad y
 puerto), La Paz, Puerto Vallarta, Tuxpan, Tuxtla Gutiérrez y Villahermosa.
 
+**Cancún** es la excepción: su estación se busca en Cancún Aeropuerto, la del Tren Maya, a unos
+16 km del centro. Sin vía no cambia nada; con el Tren Maya construido, Cancún tiene estación.
+
+### Obras del Estado
+
+El jugador construye vía desde el catálogo de **Obras del Estado** (en el panel del
+presupuesto, *Obras del Estado →*). No hay trazo libre: cada obra es real (construida, en
+obra o anunciada desde 2018) y va por su trazo oficial. El jugador decide **cuáles y cuándo**.
+Toda vía que construye es **del Estado**. Hay cuatro clases de obra:
+
+| Clase | Qué hace | Capacidad |
+| --- | --- | ---: |
+| **Vía nueva** | Vía donde no había, por el trazo oficial (OpenStreetMap). Sus puntas se unen a la vía en servicio si pasa a 6 km o menos | La de la obra |
+| **Doble vía paralela** | Las líneas de pasajeros: una doble vía del Estado junto a la de carga, entre las paradas de la línea. Los trenes privados siguen en la suya; los del jugador pasan a la del Estado | 75 |
+| **Modernización** | Las líneas del propio Estado (el Interoceánico) se reconstruyen: pasan a troncal (60 km/h) y a control centralizado | 30 |
+| **Rehabilitación** | Una vía fuera de operación vuelve al servicio y pasa al Estado | 16 |
+
+**Cómo se construye.** Igual que un polo: de 1 a 4 cuadrillas, se paga conforme avanza y se
+detiene si se acaba el dinero. **Cuatro cuadrillas son el ritmo y el costo del gobierno**: el
+costo oficial por km y el tiempo oficial. Con menos, la obra sale más barata y tarda más, con
+las mismas reglas de los polos (cada cuadrilla extra encarece 15 %; el tiempo se divide entre
+las cuadrillas a la 0.75). La gente en la obra sale de la misma razón del INEGI: 1.187
+empleos-año por millón de pesos.
+
+**Al terminarse**, la red se reconstruye con la obra: los sitios cercanos ganan estación (un
+polo construido junto a la vía nueva empieza a llenarse), y todos los trenes del jugador
+vuelven a buscar su camino, sin perder su lugar en el horario. Para elegir camino, un tren
+pesa cada vía por el tiempo que le toma **con su uso actual**: rodea una vía saturada si hay
+otra, y a igual tiempo prefiere la vía del Estado (no paga por pasar).
+
+**De dónde salen las cifras:**
+
+| Obra | Costo por km | Tiempo con 4 cuadrillas |
+| --- | --- | --- |
+| Tren Maya, tramos 1 a 3 (sobre el derecho de vía viejo) | 169.8 millones (ASF) | 42 meses: obra de junio de 2020 a diciembre de 2023 |
+| Tren Maya, tramos 4, 5 Norte, 6 y 7 (vía nueva a nivel) | 257.9 millones (ASF) | Tramo 4: 42 meses. Los demás: 26 meses, el ritmo de la Defensa (553 km en 788 días) |
+| Tren Maya, tramo 5 Sur (viaducto) | 1,175 millones (ASF) | 26 meses |
+| Dos Bocas | 65.8 millones (SICT: 6,054.4 millones para 92 km, estimado de 2022) | 17 meses: octubre de 2025 a marzo de 2027 |
+| Interoceánico, líneas Z, FA y K | 139 millones, promedio de su rehabilitación (Cuenta Pública 2025) | Z y K: 42 meses; FA: 20 meses |
+| Trenes de pasajeros con costo oficial | El de Presidencia entre sus km: AIFA–Pachuca 837.3; México–Querétaro 634.7; Querétaro–Irapuato 435.2; Saltillo–Nuevo Laredo 353.5 | Pachuca y Querétaro: inauguración en 2027 (se toma diciembre). Querétaro–Irapuato: 54 meses, al ritmo de su avance. Saltillo–Nuevo Laredo: estimado |
+| Trenes de pasajeros sin costo oficial | 480.5 millones, el promedio de los cuatro anteriores (estimación del juego) | Estimado: el ritmo de México–Querétaro (32 meses para 226 km), creciendo con el largo a la 0.3 |
+| El Insurgente | 1,733 millones (Presidencia: unos 100 mil millones para 57.7 km; casi todo viaducto y túnel) | Estimado como los de pasajeros (la obra real duró de 2014 a 2026) |
+| Rehabilitaciones | 139 millones, como el Interoceánico | Estimado: el ritmo de la Línea K (447 km en 42 meses), creciendo con el largo a la 0.3 |
+
+El costo por km se multiplica por los km **del juego**: los del trazo oficial en las vías
+nuevas, y los de la ruta por la red de 2018 en las paralelas y modernizaciones, que pueden
+diferir de los oficiales (México–Pachuca mide 93 km en el juego porque sale del centro de la
+Ciudad de México; la línea real sale del AIFA y mide 57).
+
+**El catálogo** (calculado con el código del juego):
+
+**Tren Maya.** Vía nueva por la península, en los tramos en que se licitó y construyó.
+
+| Obra | km | 4 cuadrillas (ritmo del gobierno) | 1 cuadrilla | En la realidad |
+| --- | ---: | --- | --- | --- |
+| Tren Maya, tramo 1: Palenque–Escárcega | 225 | 38.3 mil millones · 3.5 años · 12,980 personas | 26.4 mil millones · 9.9 años | Inaugurado el 15 de diciembre de 2023. |
+| Tren Maya, tramo 2: Escárcega–Calkiní | 241 | 40.9 mil millones · 3.5 años · 13,873 personas | 28.2 mil millones · 9.9 años | Inaugurado el 15 de diciembre de 2023. |
+| Tren Maya, tramo 3: Calkiní–Izamal | 147 | 25 mil millones · 3.5 años · 8,488 personas | 17.3 mil millones · 9.9 años | Inaugurado el 15 de diciembre de 2023. |
+| Tren Maya, tramo 4: Izamal–Cancún | 241 | 62.1 mil millones · 3.5 años · 21,070 personas | 42.8 mil millones · 9.9 años | Inaugurado el 15 de diciembre de 2023. |
+| Tren Maya, tramo 5 Norte: Cancún–Playa del Carmen | 51 | 13.1 mil millones · 2.2 años · 7,178 personas | 9 mil millones · 6.1 años | Inaugurado el 29 de febrero de 2024. |
+| Tren Maya, tramo 5 Sur: Playa del Carmen–Tulum (viaducto) | 65 | 76.7 mil millones · 2.2 años · 42,035 personas | 52.9 mil millones · 6.1 años | En servicio desde 2024. |
+| Tren Maya, tramo 6: Tulum–Chetumal | 250 | 64.5 mil millones · 2.2 años · 35,351 personas | 44.5 mil millones · 6.1 años | Inaugurado el 15 de diciembre de 2024. |
+| Tren Maya, tramo 7: Chetumal–Escárcega | 272 | 70 mil millones · 2.2 años · 38,374 personas | 48.3 mil millones · 6.1 años | Inaugurado el 15 de diciembre de 2024. |
+
+**Carga.** Ramales nuevos de carga.
+
+| Obra | km | 4 cuadrillas (ritmo del gobierno) | 1 cuadrilla | En la realidad |
+| --- | ---: | --- | --- | --- |
+| Ramal Roberto Ayala–Dos Bocas | 96 | 6.3 mil millones · 1.4 años · 5,293 personas | 4.4 mil millones · 4.0 años | En obra desde octubre de 2025; unos 38 km construidos en septiembre de 2026. |
+
+**Corredor Interoceánico.** Modernizar las líneas del propio Estado: más velocidad y más capacidad.
+
+| Obra | km | 4 cuadrillas (ritmo del gobierno) | 1 cuadrilla | En la realidad |
+| --- | ---: | --- | --- | --- |
+| Interoceánico, Línea Z: Coatzacoalcos–Salina Cruz | 274 | 38.1 mil millones · 3.5 años · 12,913 personas | 26.3 mil millones · 9.9 años | Rehabilitada; pasajeros desde diciembre de 2023 (solo carga desde el descarrilamiento del 28 de diciembre de 2025). |
+| Interoceánico, Línea FA: Coatzacoalcos–Palenque | 314 | 43.6 mil millones · 1.7 años · 31,087 personas | 30.1 mil millones · 4.7 años | En operación desde el 13 de septiembre de 2024. |
+| Interoceánico, Línea K: Ixtepec–Ciudad Hidalgo | 451 | 62.6 mil millones · 3.5 años · 21,242 personas | 43.2 mil millones · 9.9 años | Tramo Ixtepec–Tonalá abierto el 21 de noviembre de 2025; el resto, en obra. |
+
+**Trenes de pasajeros.** Doble vía del Estado junto a la vía de carga concesionada.
+
+| Obra | km | 4 cuadrillas (ritmo del gobierno) | 1 cuadrilla | En la realidad |
+| --- | ---: | --- | --- | --- |
+| Tren México–Pachuca (AIFA–Pachuca) | 93 | 78.2 mil millones · 2.8 años · 33,759 personas | 53.9 mil millones · 7.8 años | En obra: 45 % al 23 de septiembre de 2026. |
+| Tren México–Querétaro | 215 | 136.4 mil millones · 2.7 años · 60,705 personas | 94.1 mil millones · 7.5 años | En obra: 32 % al 31 de octubre de 2026. |
+| Tren Querétaro–Irapuato | 124 | 53.9 mil millones · 4.5 años · 14,213 personas | 37.2 mil millones · 12.7 años | En obra: 22 % al 23 de septiembre de 2026. |
+| Tren Saltillo–Monterrey–Nuevo Laredo | 366 | 129.4 mil millones · 3.2 años · 48,649 personas | 89.3 mil millones · 8.9 años | En obra: 10 % al 23 de septiembre de 2026. |
+| Tren Irapuato–León–Guadalajara | 392 | 188.3 mil millones · 2.6 años · 86,244 personas | 129.9 mil millones · 7.3 años | Anunciado; arranque de obra prometido para finales de 2026. |
+| Tren Querétaro–San Luis Potosí–Saltillo | 619 | 297.6 mil millones · 3.5 años · 100,222 personas | 205.3 mil millones · 10.0 años | En licitación (septiembre–octubre de 2026). |
+| Tren Mazatlán–Los Mochis | 455 | 218.8 mil millones · 3.3 años · 79,709 personas | 150.9 mil millones · 9.2 años | Ingeniería básica (septiembre de 2026). |
+| Tren Guadalajara–Tepic | 233 | 111.9 mil millones · 2.6 años · 51,427 personas | 77.2 mil millones · 7.3 años | En planeación (fase 3 del plan de la SICT). |
+| Tren Los Mochis–Guaymas | 371 | 178.3 mil millones · 3.1 años · 68,843 personas | 123 mil millones · 8.7 años | En planeación (fase 3 del plan de la SICT). |
+| Tren Guaymas–Hermosillo | 147 | 70.6 mil millones · 2.3 años · 36,683 personas | 48.7 mil millones · 6.4 años | En planeación (fase 3 del plan de la SICT). |
+| Tren Tepic–Mazatlán | 304 | 146.1 mil millones · 2.8 años · 61,400 personas | 100.8 mil millones · 8.0 años | Anunciado (fase 4); sin actividades en 2026. |
+| Tren Hermosillo–Nogales | 270 | 129.9 mil millones · 2.8 años · 54,422 personas | 89.6 mil millones · 8.0 años | Anunciado (fase 4); sin actividades en 2026. |
+| Tren El Insurgente: México–Toluca | 69 | 120.2 mil millones · 1.8 años · 80,746 personas | 82.9 mil millones · 5.0 años | Completo desde el 2 de febrero de 2026 (Zinacantepec–Observatorio). |
+
+**Rehabilitar vías muertas.** Vías fuera de operación desde antes de 2018: vuelven al servicio y pasan al Estado.
+
+| Obra | km | 4 cuadrillas (ritmo del gobierno) | 1 cuadrilla | En la realidad |
+| --- | ---: | --- | --- | --- |
+| México–Cuernavaca–Balsas y Puebla–Cuautla | 519 | 72.1 mil millones · 3.7 años · 23,393 personas | 49.7 mil millones · 10.3 años | Fuera de operación desde antes de 2018. |
+| Ciudad Juárez–Casas Grandes–La Junta | 505 | 70.2 mil millones · 3.6 años · 22,925 personas | 48.4 mil millones · 10.3 años | Fuera de operación desde antes de 2018. |
+| Durango–Tepehuanes y vías hacia la sierra | 465 | 64.6 mil millones · 3.5 años · 21,662 personas | 44.6 mil millones · 10.0 años | Fuera de operación desde antes de 2018. |
+| Saltillo–Parras–Torreón | 446 | 62 mil millones · 3.5 años · 21,026 personas | 42.8 mil millones · 9.9 años | Fuera de operación desde antes de 2018. |
+| San Luis Potosí–San Miguel de Allende | 184 | 25.6 mil millones · 2.7 años · 11,310 personas | 17.6 mil millones · 7.6 años | Fuera de operación desde antes de 2018. |
+| Ramal de Sierra Mojada (Coahuila) | 171 | 23.8 mil millones · 2.6 años · 10,750 personas | 16.4 mil millones · 7.4 años | Fuera de operación desde antes de 2018. |
+| Jiménez–Parral (Chihuahua) | 157 | 21.8 mil millones · 2.6 años · 10,097 personas | 15 mil millones · 7.2 años | Fuera de operación desde antes de 2018. |
+| Ramales de Pachuca y Tulancingo | 126 | 17.5 mil millones · 2.4 años · 8,675 personas | 12.1 mil millones · 6.8 años | Fuera de operación desde antes de 2018. |
+| Ramal de El Mante (Tamaulipas) | 125 | 17.4 mil millones · 2.4 años · 8,642 personas | 12 mil millones · 6.8 años | Fuera de operación desde antes de 2018. |
+| Yurécuaro–Zamora–Los Reyes | 122 | 16.9 mil millones · 2.4 años · 8,475 personas | 11.7 mil millones · 6.7 años | Fuera de operación desde antes de 2018. |
+| Rodríguez Clara–San Andrés Tuxtla | 102 | 14.1 mil millones · 2.3 años · 7,445 personas | 9.7 mil millones · 6.4 años | Fuera de operación desde antes de 2018. |
+| Guadalajara–Etzatlán | 91 | 12.7 mil millones · 2.2 años · 6,938 personas | 8.8 mil millones · 6.1 años | Fuera de operación desde antes de 2018. |
+| Ramal de Ocotlán (Oaxaca) | 91 | 12.7 mil millones · 2.2 años · 6,912 personas | 8.7 mil millones · 6.1 años | Fuera de operación desde antes de 2018. |
+| Oriental–Teziutlán | 85 | 11.9 mil millones · 2.1 años · 6,632 personas | 8.2 mil millones · 6.0 años | Fuera de operación desde antes de 2018. |
+| Ramal de Pánuco (Veracruz) | 77 | 10.8 mil millones · 2.1 años · 6,181 personas | 7.4 mil millones · 5.8 años | Fuera de operación desde antes de 2018. |
+| Maravatío–Zitácuaro | 77 | 10.8 mil millones · 2.1 años · 6,181 personas | 7.4 mil millones · 5.8 años | Fuera de operación desde antes de 2018. |
+
+Todo el catálogo: 41 obras, 9,630 km, 2,865.8 mil millones al ritmo del gobierno.
+
+Lo que el Tren Maya costó de verdad incluye trenes, estaciones y talleres (Presidencia: "un
+poco más de 500 mil millones"); el juego solo cobra la vía.
+
+**Con 20,000 millones de presupuesto** solo caben las obras chicas (Dos Bocas, el tramo 5
+Norte, las rehabilitaciones más cortas). Las grandes se pueden empezar, pero se detienen
+cuando se acaba el dinero: el ingreso del Estado se diseña después.
+
 ---
 
 ## 7. Servicios de tren
@@ -875,6 +1006,9 @@ la cámara del tablero se queda esperándolo en la salida.
 | Capacidad de una vía | 16 trenes al día en vía sencilla, 30 con control centralizado, 75 en vía doble |
 | Uso de una vía | (trenes privados + trenes del jugador al día) ÷ capacidad |
 | Saturación | Hasta 60 % de uso, velocidad completa; 60 % de la velocidad al 100 % de uso; 30 % al 150 %; nunca menos de 25 % |
+| Cómo elige camino un tren del jugador | El menor tiempo con el uso actual de cada vía; a igual tiempo, la vía del Estado |
+| Obras del Estado | 41 en el catálogo; de 1 a 4 cuadrillas; 4 = costo y tiempo oficiales |
+| Al terminarse una obra | La red se reconstruye, nacen estaciones y todos los trenes rehacen su ruta |
 
 Las velocidades son promedios de marcha de un tren de carga, no velocidades máximas. Elegir
 la ruta por tiempo hace que un tren prefiera una vía primaria aunque un ramal sea más corto,
@@ -935,6 +1069,15 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
   abstracción: no se ve al tren esperando en el escape, pero se siente cuándo un corredor se
   satura. Se puede convertir después en escapes de verdad sin tirar nada.
 - **Las vías muertas se ven apagadas y rehabilitarlas es obra del Estado.** *(20 nov 2026.)*
+- **Sin trazo libre: obras preestablecidas, el jugador decide cuáles y cuándo.** *(19 nov
+  2026.)* Las grandes obras van por el trazo oficial del gobierno, y el catálogo incluye todos
+  los trenes anunciados, aunque estén en planeación. Tuxpan espera a que haya un proyecto
+  oficial.
+- **El Tren Maya, por tramos**, como lo licitó y construyó el gobierno. *(20 nov 2026.)*
+- **Costos de Presidencia**, los más recientes; los de la cartera de Hacienda, más altos, se
+  anotan aparte. *(20 nov 2026.)*
+- **Cuatro cuadrillas son el ritmo del gobierno.** *(20 nov 2026.)* El costo y el tiempo
+  oficiales de una obra son los de 4 cuadrillas; con menos sale más barata y más lenta.
 - **Dueños por OpenStreetMap**, corregido a 2018 y cotejado con el anuario oficial.
   *(20 nov 2026.)* El gobierno publica la red con su concesionario, pero su servidor no
   permite la descarga automática; OpenStreetMap cuadra con los km oficiales.
@@ -1008,6 +1151,15 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   Saltillo (tramos 69 y 70 del archivo) que no casan con ninguna vía de OpenStreetMap.
 - **Cuernavaca pierde su estación**: la única vía que le pasa cerca, México–Cuernavaca–Iguala,
   está fuera de operación.
+- **Catálogo de obras.** Los trazos del Tren Maya (relación 13196595 de OpenStreetMap) y del
+  ramal a Dos Bocas se simplificaron a 150 m y se partieron en Palenque, Escárcega, Calkiní,
+  Izamal, Cancún, Playa del Carmen, Tulum y Chetumal. Sus km cuadran con los oficiales (tramo 1:
+  225 contra 226 de Fonatur; Dos Bocas: 96 contra 92). Las vías muertas se agruparon en líneas
+  por las que se tocan; las 16 de 75 km o más son obras de rehabilitación, con un nombre puesto
+  por sus puntas (aproximado en los ramales de Sierra Mojada, El Mante, Ocotlán y Pánuco). En la
+  línea de Durango, Natural Earth trae vías hacia la sierra que nunca se terminaron. Tres puntos
+  fijos (Palenque, Ixtepec y Ciudad Hidalgo) parten su línea en dos para que las líneas FA y K
+  puedan modernizarse por separado.
 - **Estimado, no dato:** el tráfico de la troncal Monterrey–Ciudad de México (14 trenes al
   día) y la capacidad de 30 de los corredores de Nuevo Laredo y Piedras Negras. Ver
   [Tráfico y capacidad](#tráfico-y-capacidad).
@@ -1132,6 +1284,10 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Corredor**: una ruta de mucho tráfico (por ejemplo, Nuevo Laredo–Monterrey) cuyas vías
   llevan más trenes que el promedio de su empresa.
 - **Fuera de operación**: vía que sigue en el mapa pero no tenía trenes en 2018.
+- **Obra del Estado**: vía que construye el jugador desde el catálogo: nueva, paralela,
+  modernizada o rehabilitada. Siempre es del Estado.
+- **Doble vía paralela**: la vía del Estado junto a una vía concesionada; los trenes del
+  jugador ya no compiten con los privados.
 - **Cuadrilla**: un equipo de obra. Más cuadrillas en un polo lo terminan antes y cuestan más.
 - **Ocupación**: qué tanto de un polo operando ya tienen las empresas; da los empleos
   permanentes.

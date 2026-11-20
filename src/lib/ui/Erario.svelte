@@ -1,5 +1,6 @@
 <script lang="ts">
   import { sim } from '$lib/state/simulacion.svelte';
+  import { tablero } from '$lib/state/tablero.svelte';
   import { mdp, personas } from './formato';
 
   /**
@@ -18,6 +19,8 @@
       enCurso: obras.filter((o) => o.fase === 'en-obra').length,
       detenidas: obras.filter((o) => o.fase === 'en-obra' && o.detenida).length,
       operando: obras.filter((o) => o.fase === 'operando').length,
+      viasEnObra: [...sim.obrasVia.values()].filter((o) => o.fase === 'en-obra').length,
+      viasEnServicio: [...sim.obrasVia.values()].filter((o) => o.fase === 'en-servicio').length,
     };
   });
 </script>
@@ -41,6 +44,11 @@
       </span>
     </div>
   {/if}
+  <button class="fila obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
+    <span class="label">Vías</span>
+    <span>{cuenta.viasEnObra} en obra · {cuenta.viasEnServicio} en servicio</span>
+    <span class="ir">Obras del Estado {tablero.catalogo ? '×' : '→'}</span>
+  </button>
 </div>
 
 <style>
@@ -90,6 +98,30 @@
 
   .obras {
     color: #f9c6dd;
+  }
+
+  /* The way into the State's catalog of rail works. */
+  .obras-via {
+    margin-top: 0.2rem;
+    padding: 0.3rem 0 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+    background: none;
+    font-size: 0.74rem;
+    color: var(--muted);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .obras-via .ir {
+    margin-left: auto;
+    color: #f4f1de;
+  }
+
+  .obras-via:hover .ir,
+  .obras-via.abierto .ir {
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   /* Between the centred nav bar and the book there is less room on mid-size

@@ -32,6 +32,10 @@ class Tablero {
   previa = $state.raw<Trayecto[]>([]);
   /** The Polo del Bienestar whose card is open (its id), if any. */
   poloSel = $state<string | null>(null);
+  /** The State's catalog of rail works is open; with `obraSel`, on that work's card. */
+  catalogo = $state(false);
+  /** The rail work whose card is open (its id), if any: the map shows its line. */
+  obraSel = $state<string | null>(null);
   /** Bumped to ask the map to fly to a vehicle; the map watches it. */
   irA = $state<{ id: string; n: number } | null>(null);
 
@@ -40,8 +44,21 @@ class Tablero {
   empezar() {
     sim.seleccionar(null);
     this.poloSel = null;
+    this.cerrarCatalogo();
     this.trazando = true;
     this.#limpiar();
+  }
+
+  abrirCatalogo() {
+    sim.seleccionar(null);
+    this.poloSel = null;
+    if (this.trazando) this.cancelar();
+    this.catalogo = true;
+  }
+
+  cerrarCatalogo() {
+    this.catalogo = false;
+    this.obraSel = null;
   }
 
   cancelar() {

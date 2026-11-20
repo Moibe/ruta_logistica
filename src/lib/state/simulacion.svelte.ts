@@ -2,7 +2,19 @@ import { browser } from '$app/environment';
 import { COLORES_BARCO, crearBarco, NOMBRES_BARCO, SERVICIOS_BARCO, type Barco, type ClaseBarco } from '$lib/domain/barcos';
 import { construirMar, type Mar, type RutasMarJson } from '$lib/domain/mar';
 import { construirRed, type Red, type RedJson } from '$lib/domain/red';
-import { aplicarSaturacion, trenesDelJugador, usoDe, type Uso } from '$lib/domain/saturacion';
+import { aplicarSaturacion, costoConUso, trenesDelJugador, usoDe, type Uso } from '$lib/domain/saturacion';
+import {
+  avanzarObraVia,
+  medirObras,
+  OBRAS_VIA,
+  obraVia,
+  obraViaNueva,
+  personasEnObraVia,
+  presupuestarVia,
+  type Medida,
+  type ObraViaEstado,
+  type PresupuestoVia,
+} from '$lib/domain/obrasVia';
 import { avanzar } from '$lib/domain/servicio';
 import {
   avanzarObra,
@@ -64,6 +76,16 @@ class Simulacion {
    * by the clock like the fleet; views that show it also read `horas`.
    */
   obras = $state.raw<Map<string, ObraPolo>>(new Map(POLOS.map((p) => [p.id, obraNueva(p.id)])));
+  /**
+   * Every rail work of the State's catalog, by id: its phase, progress and
+   * payments. Mutated in place by the clock like the polos.
+   */
+  obrasVia = $state.raw<Map<string, ObraViaEstado>>(new Map(OBRAS_VIA.map((o) => [o.id, obraViaNueva(o.id)])));
+  /**
+   * Each work measured once on the 2018 network: its km (what it costs) and its
+   * lines (what the board draws for it). Set on load, before `estado` is 'lista'.
+   */
+  medidas: Map<string, Medida> = new Map();
   /** Bumped when the rail network is rebuilt (a finished polo got its station): the board re-bakes the track. */
   versionRed = $state(0);
   /** The camera keeps the selected vehicle centred. */
@@ -125,6 +147,7 @@ class Simulacion {
         if (!marRes.ok) throw new Error(`rutas marítimas: HTTP ${marRes.status}`);
         this.#redJson = (await redRes.json()) as RedJson;
         this.red = construirRed(this.#redJson, SITIOS);
+        this.medidas = medirObras(this.red);
         this.mar = construirMar((await marRes.json()) as RutasMarJson);
 
         const trenes: Tren[] = [];
@@ -157,12 +180,16 @@ class Simulacion {
   #crearTren(paradas: string[], desfase = 0): Tren | null {
     if (!this.red) return null;
     const n = this.#siguienteTren;
-    const t = crearTren(this.red, {
-      id: `T-${String(n).padStart(2, '0')}`,
-      color: COLORES_TREN[(n - 1) % COLORES_TREN.length],
-      paradas,
-      desfase,
-    });
+    const t = crearTren(
+      this.red,
+      {
+        id: `T-${String(n).padStart(2, '0')}`,
+        color: COLORES_TREN[(n - 1) % COLORES_TREN.length],
+        paradas,
+        desfase,
+      },
+      this.costoRuta
+    );
     if (t) this.#siguienteTren++;
     return t;
   }
@@ -236,11 +263,37 @@ class Simulacion {
     return !!this.red?.estaciones.has(`polo:${id}`);
   }
 
-  /** People working on polo sites right now. */
+  /** People working on polo sites and rail works right now. */
   get empleosEnObra(): number {
     let n = 0;
     for (const o of this.obras.values()) n += personasTrabajando(o);
+    for (const o of this.obrasVia.values()) n += personasEnObraVia(o);
     return n;
+  }
+
+  // ---- the State's rail works ---------------------------------------------------------------
+
+  /** What building work `id` with `cuadrillas` crews takes. Null until the network is measured. */
+  presupuestoVia(id: string, cuadrillas: number): PresupuestoVia | null {
+    const o = obraVia(id);
+    const m = this.medidas.get(id);
+    return o && m ? presupuestarVia(o, m.km, cuadrillas) : null;
+  }
+
+  /** Order a rail work built. Paid as it advances; false if it can't start. */
+  construirObraVia(id: string, cuadrillas: number): boolean {
+    const estado = this.obrasVia.get(id);
+    const plan = this.presupuestoVia(id, cuadrillas);
+    if (!estado || !plan || estado.fase !== 'por-construir') return false;
+    estado.plan = plan;
+    estado.fase = 'en-obra';
+    this.obrasVia = new Map(this.obrasVia);
+    return true;
+  }
+
+  /** How the player's trains weigh each tramo when choosing their way: line use now, the State's track first. */
+  get costoRuta() {
+    return this.red ? costoConUso(this.red, this.trenesPorVia) : undefined;
   }
 
   /** Permanent jobs in the operating polos right now. */
@@ -260,19 +313,55 @@ class Simulacion {
       if (o.fase === 'por-construir') continue;
       if (avanzarObra(o, horas, caja, this.conectado(o.id))) terminadas = true;
     }
+    let viasTerminadas = false;
+    for (const o of this.obrasVia.values()) {
+      if (o.fase !== 'en-obra') continue;
+      if (avanzarObraVia(o, horas, caja, this.horas + horas)) viasTerminadas = true;
+    }
+    if (viasTerminadas) {
+      this.obrasVia = new Map(this.obrasVia);
+      terminadas = true;
+    }
     if (caja.mdp !== this.dinero) this.dinero = caja.mdp;
     if (terminadas) this.#reconstruirRed();
   }
 
-  /** A finished polo within reach of the track gets its spur and station: rebuild the network with it. */
+  /**
+   * A finished polo within reach of the track gets its spur and station; a
+   * finished rail work changes the track. Rebuild the network with all of it,
+   * and let every train find its way again on it.
+   */
   #reconstruirRed() {
     if (!this.#redJson) return;
     const enServicio = new Set(
       [...this.obras.values()].filter((o) => o.fase === 'operando').map((o) => `polo:${o.id}`)
     );
-    this.red = construirRed(this.#redJson, SITIOS, enServicio);
+    const hechas = OBRAS_VIA.filter((o) => this.obrasVia.get(o.id)?.fase === 'en-servicio');
+    this.red = construirRed(this.#redJson, SITIOS, enServicio, hechas);
+    this.#rerutear();
     this.#saturar();
     this.versionRed++;
+  }
+
+  /**
+   * Every train re-plans its route on the new network, keeping its place in
+   * the timetable: same leg, same share of it run, same wait.
+   */
+  #rerutear() {
+    if (!this.red) return;
+    const costo = this.costoRuta;
+    this.trenes = this.trenes.map((viejo) => {
+      const nuevo = crearTren(this.red!, { id: viejo.id, color: viejo.color, paradas: viejo.paradas }, costo);
+      if (!nuevo || nuevo.piernas.length !== viejo.piernas.length) return viejo;
+      const antes = viejo.piernas[viejo.pierna];
+      const ahora = nuevo.piernas[viejo.pierna];
+      nuevo.pierna = viejo.pierna;
+      nuevo.estado = viejo.estado;
+      nuevo.espera = viejo.espera;
+      nuevo.km = antes.km > 0 ? (viejo.km / antes.km) * ahora.km : 0;
+      nuevo.odometro = viejo.odometro;
+      return nuevo;
+    });
   }
 
   /** Recount the player's trains on every line and slow each train down where its lines are full. */

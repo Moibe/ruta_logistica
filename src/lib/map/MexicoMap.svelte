@@ -9,6 +9,7 @@
   import { CLASES_BARCO, fueraDelMapa } from '$lib/domain/barcos';
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, type Dueño } from '$lib/domain/red';
+  import { obraVia } from '$lib/domain/obrasVia';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
   import { esperaTotal, piernasDelRecorrido, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
   import {
@@ -72,6 +73,7 @@
     FTVM: '#94a3b8',
     FIT: '#f4f1de',
     ADMICARGA: '#f4f1de',
+    EST: '#ffffff',
   };
   const COLOR_SIN_DUEÑO = '#64748b';
   /** Track coloured by use: room to spare, busy (trains slow down), over capacity. */
@@ -236,6 +238,10 @@
   let viaPaths: { path: Path2D; bounds: [[number, number], [number, number]]; primaria: boolean; operando: boolean }[] = [];
   /** Track out of service, drawn dimmed in every mode. */
   let viaMuerta: Path2D | null = null;
+  /** Track the State's works laid (new and parallel lines): an ink-white casing under the rail, in every mode. */
+  let viaDelEstado: Path2D | null = null;
+  /** Each rail work's line, as measured on the 2018 network (`sim.medidas`). */
+  let obraPaths = new Map<string, { path: Path2D; bounds: [[number, number], [number, number]] }>();
   /** The selected vehicle's route (one direction of a line, a ship's whole loop), baked on selection. */
   let rutaSel: { id: string; path: Path2D } | null = null;
   /** The Panama Canal, baked from the sea lanes' data. */
@@ -359,13 +365,24 @@
     viaMuerta = new Path2D(
       path({ type: 'MultiLineString', coordinates: red.tramos.filter((t) => !t.operando).map((t) => t.puntos) }) ?? ''
     );
+    viaDelEstado = new Path2D(
+      path({ type: 'MultiLineString', coordinates: red.tramos.filter((t) => red.vias[t.base].nueva).map((t) => t.puntos) }) ?? ''
+    );
     const piezas = red.vias.map(() => [] as LonLat[][]);
-    for (const t of red.tramos) piezas[t.base].push(t.puntos);
+    const primaria = red.vias.map(() => false);
+    for (const t of red.tramos) {
+      piezas[t.base].push(t.puntos);
+      if (t.clase === 'primaria') primaria[t.base] = true;
+    }
     viaPaths = red.vias.map((v, i) => {
       const g: MultiLineString = { type: 'MultiLineString', coordinates: piezas[i] };
-      const primera = red.tramos[i];
-      return { path: new Path2D(path!(g) ?? ''), bounds: path!.bounds(g), primaria: primera.clase === 'primaria', operando: v.operando };
+      return { path: new Path2D(path!(g) ?? ''), bounds: path!.bounds(g), primaria: primaria[i], operando: v.operando };
     });
+    obraPaths = new Map();
+    for (const [id, m] of sim.medidas) {
+      const g: MultiLineString = { type: 'MultiLineString', coordinates: m.piezas };
+      obraPaths.set(id, { path: new Path2D(path(g) ?? ''), bounds: path.bounds(g) });
+    }
     estacionPts = [];
     for (const e of red.estaciones.values()) {
       const s = sitioLonLat(e.sitio);
@@ -724,6 +741,25 @@
         ctx.stroke(viaSecundaria);
         ctx.restore();
       }
+      // The State's own track: an ink-white casing, so a parallel line reads
+      // as a second track beside the private one.
+      if (viaDelEstado) {
+        ctx.strokeStyle = 'rgba(244, 241, 222, 0.42)';
+        ctx.lineWidth = 3.6 / k;
+        ctx.stroke(viaDelEstado);
+      }
+      // Works under way: their line dashed in ink-white.
+      for (const [id, o] of sim.obrasVia) {
+        if (o.fase !== 'en-obra') continue;
+        const op = obraPaths.get(id);
+        if (!op) continue;
+        ctx.save();
+        ctx.setLineDash([4 / k, 3 / k]);
+        ctx.strokeStyle = o.detenida ? 'rgba(248, 113, 113, 0.75)' : 'rgba(244, 241, 222, 0.85)';
+        ctx.lineWidth = 1.6 / k;
+        ctx.stroke(op.path);
+        ctx.restore();
+      }
       if (viaMuerta) {
         ctx.save();
         ctx.setLineDash([2.5 / k, 2.5 / k]);
@@ -841,6 +877,24 @@
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.drawImage(capa, Math.round((dx - MARGEN) * dpr), Math.round((dy - MARGEN) * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    // The rail work whose card is open, lit along its whole line.
+    const obraAbierta = tablero.catalogo && tablero.obraSel ? obraPaths.get(tablero.obraSel) : null;
+    if (obraAbierta) {
+      ctx.save();
+      ctx.translate(transform.x, transform.y);
+      ctx.scale(k, k);
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'rgba(244, 241, 222, 0.18)';
+      ctx.lineWidth = 9 / k;
+      ctx.stroke(obraAbierta.path);
+      ctx.strokeStyle = 'rgba(255, 252, 240, 0.95)';
+      ctx.lineWidth = 2.2 / k;
+      ctx.setLineDash([6 / k, 4 / k]);
+      ctx.stroke(obraAbierta.path);
+      ctx.restore();
     }
 
     // The hovered rail line, lit along its whole length.
@@ -1550,7 +1604,7 @@
     if (layers.vias && viaPaths.length) {
       const margen = 5 / transform.k;
       hitCtx.lineWidth = 2 * margen;
-      for (let i = 0; i < viaPaths.length; i++) {
+      for (let i = viaPaths.length - 1; i >= 0; i--) {
         const [[x0, y0], [x1, y1]] = viaPaths[i].bounds;
         if (px < x0 - margen || px > x1 + margen || py < y0 - margen || py > y1 + margen) continue;
         if (hitCtx.isPointInStroke(viaPaths[i].path, px, py)) return { kind: 'via', base: i };
@@ -1782,6 +1836,23 @@
   });
 
   $effect(() => {
+    // A work ordered, stopped or finished: its dashed line changes.
+    sim.obrasVia;
+    ensuciaCapa();
+  });
+
+  $effect(() => {
+    // A work's card opened: light its line and fly to it.
+    const id = tablero.catalogo ? tablero.obraSel : null;
+    ensucia();
+    if (!id) return;
+    untrack(() => {
+      const op = obraPaths.get(id);
+      if (op) flyToBounds(op.bounds);
+    });
+  });
+
+  $effect(() => {
     // What's drawn in the fondo over it: sites, stations, picked stops.
     layers.puertos;
     layers.ciudades;
@@ -1888,6 +1959,7 @@
 
   const kmDeVia = $derived.by(() => {
     if (sim.estado !== 'lista' || !sim.red) return 0;
+    sim.versionRed;
     return Math.round(sim.red.tramos.reduce((s, t) => s + (t.operando ? t.km : 0), 0));
   });
 </script>
@@ -1968,7 +2040,7 @@
           Vía {d ? (d.tipo === 'estatal' ? 'del Estado' : d.tipo === 'mixta' ? 'mixta' : 'concesionada') : 'sin dueño identificado'}
           {#if !v.operando}· fuera de operación{/if}
         </span>
-        <strong>{d?.nombre ?? 'Sin dueño identificado'}</strong>
+        <strong>{v.obra ? (obraVia(v.obra)?.nombre ?? d?.nombre) : (d?.nombre ?? 'Sin dueño identificado')}</strong>
         <span class="tip-sub">
           {fmtKm(v.km)} · {v.doble ? 'vía doble' : v.capacidad > CAPACIDAD.sencilla ? 'vía sencilla, control centralizado' : 'vía sencilla'}
           {#if v.corredor}· corredor {v.corredor}{/if}
@@ -2010,7 +2082,7 @@
   {/if}
 </div>
 
-{#if layers.vias}
+{#if layers.vias && !tablero.catalogo}
   <div class="vias panel">
     <div class="modos" role="group" aria-label="Color de las vías">
       {#each MODOS_VIAS as m (m.id)}
@@ -2020,9 +2092,9 @@
     <ul class="leyenda">
       {#if modoVias === 'dueño'}
         {#each Object.entries(DUEÑOS) as [id, d] (id)}
-          {#if id !== 'ADMICARGA'}
+          {#if id !== 'ADMICARGA' && id !== 'EST'}
             <li>
-              <span class="raya" style:background={COLOR_DUEÑO[id as Dueño]}></span>{id === 'FIT' ? 'Del Estado' : d.nombre}
+              <span class="raya" style:background={COLOR_DUEÑO[id as Dueño]}></span>{id === 'FIT' ? 'Del Estado (Istmo)' : d.nombre}
             </li>
           {/if}
         {/each}
@@ -2031,6 +2103,7 @@
         <li><span class="raya" style:background={COLOR_USO.cargada}></span>Cargada · los trenes frenan</li>
         <li><span class="raya" style:background={COLOR_USO.saturada}></span>Saturada · más de lo que cabe</li>
       {/if}
+      <li><span class="raya estado"></span>Obra del Estado</li>
       <li><span class="raya muerta"></span>Fuera de operación</li>
     </ul>
   </div>
@@ -2281,6 +2354,12 @@
     width: 16px;
     height: 3px;
     border-radius: 2px;
+  }
+
+  .raya.estado {
+    height: 4px;
+    background: #f4f1de;
+    box-shadow: 0 0 0 1px rgba(244, 241, 222, 0.35);
   }
 
   .raya.muerta {

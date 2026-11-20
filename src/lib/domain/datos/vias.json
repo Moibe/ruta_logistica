@@ -43,6 +43,12 @@
       "largo": "Administradora de la Vía Corta Tijuana–Tecate (Gobierno de Baja California)",
       "tipo": "estatal",
       "trenesDia": 0.4
+    },
+    "EST": {
+      "nombre": "Obras del Estado",
+      "largo": "Vía construida o rehabilitada por el Estado (las obras del jugador)",
+      "tipo": "estatal",
+      "trenesDia": 0
     }
   },
   "trenesDiaFuente": {

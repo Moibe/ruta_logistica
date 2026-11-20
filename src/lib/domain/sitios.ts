@@ -25,6 +25,12 @@ export type Ciudad = {
   lonLat: LonLat;
   poblacion: number;
   capital: 'pais' | 'estado' | null;
+  /**
+   * Where its station goes when that isn't the track nearest to the city: a
+   * real station that serves it from farther than `ESTACION_MAX_KM`
+   * (Cancún's is at the airport).
+   */
+  estacion?: { nombre: string; lonLat: LonLat };
 };
 
 export type Litoral = 'pacifico' | 'golfo';
@@ -47,6 +53,7 @@ type CiudadJson = {
   lat: number;
   poblacion: number;
   capital: 'pais' | 'estado' | null;
+  estacion?: { nombre: string; lon: number; lat: number };
 };
 
 export const CIUDADES: readonly Ciudad[] = (ciudadesJson as CiudadJson[]).map((c) => ({
@@ -56,6 +63,7 @@ export const CIUDADES: readonly Ciudad[] = (ciudadesJson as CiudadJson[]).map((c
   lonLat: [c.lon, c.lat],
   poblacion: c.poblacion,
   capital: c.capital,
+  ...(c.estacion ? { estacion: { nombre: c.estacion.nombre, lonLat: [c.estacion.lon, c.estacion.lat] as LonLat } } : {}),
 }));
 
 type PuertoJson = {
@@ -229,11 +237,21 @@ export type Sitio = {
   nombre: string;
   estado: ClaveEstado;
   lonLat: LonLat;
+  /** Where its station is sought, when not at `lonLat` (`Ciudad.estacion`). */
+  lonLatEstacion?: LonLat;
 };
 
 export const SITIOS: readonly Sitio[] = [
   ...PUERTOS.map((p) => ({ clave: `puerto:${p.id}`, tipo: 'puerto' as const, id: p.id, nombre: p.nombre, estado: p.estado, lonLat: p.lonLat })),
-  ...CIUDADES.map((c) => ({ clave: `ciudad:${c.id}`, tipo: 'ciudad' as const, id: c.id, nombre: c.nombre, estado: c.estado, lonLat: c.lonLat })),
+  ...CIUDADES.map((c) => ({
+    clave: `ciudad:${c.id}`,
+    tipo: 'ciudad' as const,
+    id: c.id,
+    nombre: c.nombre,
+    estado: c.estado,
+    lonLat: c.lonLat,
+    lonLatEstacion: c.estacion?.lonLat,
+  })),
   // Gateways belong to no estado.
   ...PUERTAS.map((p) => ({ clave: `puerta:${p.id}`, tipo: 'puerta' as const, id: p.id, nombre: p.nombre, estado: '', lonLat: p.lonLat })),
   ...POLOS.map((p) => ({ clave: `polo:${p.id}`, tipo: 'polo' as const, id: p.id, nombre: `Polo ${p.corto}`, estado: p.estado, lonLat: p.lonLat })),

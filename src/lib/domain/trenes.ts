@@ -1,4 +1,4 @@
-import { ruta, type Red } from './red';
+import { ruta, type CostoTramo, type Red } from './red';
 import { armarMarcha, type Marcha } from './servicio';
 import { nombreCorto } from './sitios';
 
@@ -35,15 +35,19 @@ export type NuevoTren = {
   desfase?: number;
 };
 
-/** Builds the train, or null if some stop has no station or two stops aren't connected by rail. */
-export function crearTren(red: Red, def: NuevoTren): Tren | null {
+/**
+ * Builds the train, or null if some stop has no station or two stops aren't
+ * connected by rail. `costo` is how it weighs each tramo when choosing its way
+ * (free-track hours by default; the simulation passes current line use).
+ */
+export function crearTren(red: Red, def: NuevoTren, costo?: CostoTramo): Tren | null {
   const marcha = armarMarcha({
     paradas: def.paradas,
     recorrido: 'ida-y-vuelta',
     ruta: (a, b) => {
       const ea = red.estaciones.get(a);
       const eb = red.estaciones.get(b);
-      return ea && eb ? ruta(red, ea.nodo, eb.nodo) : null;
+      return ea && eb ? ruta(red, ea.nodo, eb.nodo, costo) : null;
     },
     espera: (_, terminal) => (terminal ? ESPERA_TERMINAL_H : ESPERA_INTERMEDIA_H),
     desfase: def.desfase,

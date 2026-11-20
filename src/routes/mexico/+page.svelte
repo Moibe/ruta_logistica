@@ -1,5 +1,6 @@
 <script lang="ts">
   import MexicoMap from '$lib/map/MexicoMap.svelte';
+  import CatalogoObras from '$lib/ui/CatalogoObras.svelte';
   import Erario from '$lib/ui/Erario.svelte';
   import FichaPolo from '$lib/ui/FichaPolo.svelte';
   import Flota from '$lib/ui/Flota.svelte';
@@ -16,4 +17,5 @@
 <Erario />
 <Flota />
 <FichaPolo />
+<CatalogoObras />
 <Trazado />

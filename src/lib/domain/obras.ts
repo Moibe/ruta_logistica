@@ -25,7 +25,8 @@ type Cifra = { valor: number; unidad: string; dato: string; fuente: string; url:
 export type Calibracion = { corte: string; nota: string; cifras: Record<string, Cifra>; dofRevisados: number[] };
 
 export const CALIBRACION = calibracionJson as Calibracion;
-const c = (k: string) => CALIBRACION.cifras[k].valor;
+export const cifra = (k: string) => CALIBRACION.cifras[k].valor;
+const c = cifra;
 
 export const MAX_CUADRILLAS = 4;
 /** Each crew beyond the first adds this share of the base cost. */
@@ -33,9 +34,9 @@ export const SOBRECOSTO_POR_CUADRILLA = 0.15;
 /** How time grows with size: a polo 31 times bigger (Altamira) takes 2.8 times longer. */
 const EXPONENTE_TAMAÑO = 0.3;
 /** From the two official paces: four crews do in 8.5 months what one does in 24. */
-const EXPONENTE_CUADRILLAS = Math.log(c('mesesObraTipica') / c('mesesObraRecord')) / Math.log(MAX_CUADRILLAS);
+export const EXPONENTE_CUADRILLAS = Math.log(c('mesesObraTipica') / c('mesesObraRecord')) / Math.log(MAX_CUADRILLAS);
 
-const HORAS_POR_MES = (365 * 24) / 12;
+export const HORAS_POR_MES = (365 * 24) / 12;
 const HORAS_POR_AÑO = 365 * 24;
 
 export type Presupuesto = {
@@ -93,6 +94,38 @@ export function obraNueva(id: string): ObraPolo {
 /** The State's cash, mutated in place as works are paid. */
 export type Caja = { mdp: number };
 
+/** Any work being paid by progress: a polo or a rail work. */
+export type EnPago = {
+  plan: { costoMdp: number; horas: number } | null;
+  avance: number;
+  pagadoMdp: number;
+  detenida: boolean;
+};
+
+/**
+ * Pay `horas` of work, as far as the money goes. Work is paid as it advances
+ * (the way public works are paid, by progress), so a work the money can't
+ * cover stops where it is. True when it's done.
+ */
+export function pagarAvance(o: EnPago, horas: number, caja: Caja): boolean {
+  if (!o.plan) return false;
+  const porHora = o.plan.costoMdp / o.plan.horas;
+  const faltan = (1 - o.avance) * o.plan.horas;
+  const pagables = porHora > 0 ? Math.min(horas, faltan, caja.mdp / porHora) : Math.min(horas, faltan);
+  o.detenida = pagables < Math.min(horas, faltan) - 1e-9;
+  if (pagables > 0) {
+    caja.mdp -= pagables * porHora;
+    o.pagadoMdp += pagables * porHora;
+    o.avance = Math.min(1, o.avance + pagables / o.plan.horas);
+  }
+  if (o.avance >= 1 - 1e-9) {
+    o.avance = 1;
+    o.detenida = false;
+    return true;
+  }
+  return false;
+}
+
 /**
  * Move a polo `horas` forward. Work is paid as it advances (the way public
  * works are paid, by progress), so a work the money can't cover stops where it
@@ -100,22 +133,9 @@ export type Caja = { mdp: number };
  */
 export function avanzarObra(o: ObraPolo, horas: number, caja: Caja, conectado: boolean): boolean {
   if (o.fase === 'en-obra' && o.plan) {
-    const porHora = o.plan.costoMdp / o.plan.horas;
-    const faltan = (1 - o.avance) * o.plan.horas;
-    const pagables = porHora > 0 ? Math.min(horas, faltan, caja.mdp / porHora) : Math.min(horas, faltan);
-    o.detenida = pagables < Math.min(horas, faltan) - 1e-9;
-    if (pagables > 0) {
-      caja.mdp -= pagables * porHora;
-      o.pagadoMdp += pagables * porHora;
-      o.avance = Math.min(1, o.avance + pagables / o.plan.horas);
-    }
-    if (o.avance >= 1 - 1e-9) {
-      o.avance = 1;
-      o.fase = 'operando';
-      o.detenida = false;
-      return true;
-    }
-    return false;
+    if (!pagarAvance(o, horas, caja)) return false;
+    o.fase = 'operando';
+    return true;
   }
   if (o.fase === 'operando' && conectado) {
     o.horasConectado += horas;

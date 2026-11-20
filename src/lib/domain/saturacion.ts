@@ -1,4 +1,4 @@
-import type { Red, Via } from './red';
+import { DUEÑOS, horasTramo, type CostoTramo, type Red, type Via } from './red';
 import type { Marcha } from './servicio';
 import { fijarVelocidades } from './trayecto';
 
@@ -70,6 +70,19 @@ export type Uso = { privados: number; jugador: number; capacidad: number; uso: n
 export function usoDe(v: Via, jugador: ReadonlyMap<number, number>): Uso {
   const j = jugador.get(v.base) ?? 0;
   return { privados: v.privados, jugador: j, capacidad: v.capacidad, uso: (v.privados + j) / v.capacidad };
+}
+
+/**
+ * How the player's trains choose their way: the time each line takes at its
+ * current use, so a full line is avoided when there's another way round. On
+ * equal terms the State's own track wins (no one to pay for passing).
+ */
+export function costoConUso(red: Red, jugador: ReadonlyMap<number, number>): CostoTramo {
+  const factor = red.vias.map((v) => {
+    const propia = v.dueño && DUEÑOS[v.dueño].tipo === 'estatal';
+    return factorVelocidad(usoDe(v, jugador).uso) * (propia ? 1 : 0.99);
+  });
+  return (t) => horasTramo(t) / factor[t.base];
 }
 
 /** Rewrites every train's speeds for the lines' current use. */

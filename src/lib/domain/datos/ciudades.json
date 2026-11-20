@@ -213,7 +213,8 @@
   "lon": -86.83,
   "lat": 21.17,
   "poblacion": 542043,
-  "capital": null
+  "capital": null,
+  "estacion": { "nombre": "Cancún Aeropuerto", "lon": -86.8718, "lat": 21.0283, "nota": "La estación del Tren Maya que sirve a Cancún está junto al aeropuerto, a unos 16 km del centro (trenmaya.gob.mx)." }
  },
  {
   "id": "matamoros",

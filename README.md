@@ -108,6 +108,15 @@ saltar al siguiente libre.
   Se recalcula al agregar o retirar un tren y al reconstruirse la red; la ruta de cada pierna
   guarda su vía por segmento (`Trayecto.vias`) y su velocidad libre (`velLibre`). El
   tablero pinta la red por clase, dueño o uso, y una vía al pasar el cursor dice todo eso.
+- **Obras del Estado** (`domain/obrasVia.ts`, `datos/obras-via.json`, panel `CatalogoObras`):
+  41 obras reales con trazo oficial, sin trazo libre. Vía nueva (los 8 tramos del Tren Maya y
+  Dos Bocas, trazo de OpenStreetMap), doble vía paralela del Estado (las 13 líneas de
+  pasajeros), modernización (Interoceánico Z, FA y K) y rehabilitación (16 líneas muertas). Se
+  construyen como los polos (1 a 4 cuadrillas; 4 = costo y tiempo oficiales, con su fuente).
+  Al terminarse, `construirRed(json, sitios, polos, hechas)` las pone en la red, nacen
+  estaciones y `sim` rehace la ruta de cada tren (`#rerutear`) con `costoConUso`: el tiempo
+  con el uso actual de cada vía, prefiriendo la del Estado. Cada obra se mide una vez sobre la
+  red de 2018 (`sim.medidas`): sus km y las líneas que dibuja el tablero.
 - **Dos clases de vía**: primaria (`scalerank` ≤ 6 de Natural Earth, 60 km/h) y secundaria
   (40 km/h). La ruta es la **más rápida**, no la más corta (Dijkstra por tiempo): un tren toma
   la troncal aunque un ramal sea más directo, como lo haría un despachador.
@@ -189,6 +198,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
 | `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
+| `src/lib/domain/datos/obras-via.json` | **Catálogo de obras del Estado**: trazos, paradas o líneas, costo por km y tiempo oficiales, con fuentes |
 | `src/lib/domain/datos/vias.json`     | **Dueño y estado de cada tramo**, trenes privados por empresa y por corredor, capacidades; con fuentes |
 
 `npm run datos` (`scripts/datos-mexico.mjs`) regenera los cuatro primeros desde **Natural
@@ -282,6 +292,7 @@ src/lib/
     servicio.ts      el motor común: un vehículo recorriendo sus paradas (ida y vuelta o circuito)
     red.ts           grafo ferroviario, dueños y estado de cada vía, estaciones, ruta más rápida
     saturacion.ts    uso de cada vía (privados + trenes del jugador) y cuánto frena a los trenes
+    obrasVia.ts      catálogo de obras del Estado: medirlas, presupuestarlas, avanzarlas
     mar.ts           rutas marítimas, Canal de Panamá, travesías; compone la pierna completa
     trenes.ts        trenes y servicios iniciales
     barcos.ts        clases de barco, travesías, barcos y servicios iniciales
@@ -300,6 +311,7 @@ src/lib/
     ViewNav.svelte   las vistas, plegadas abajo a la izquierda: Mundo (Canvas · Globo) | México
     Reloj.svelte · Flota.svelte · Trazado.svelte · formato.ts   paneles (Reloj y Flota también en el mundo)
     Erario.svelte · FichaPolo.svelte   presupuesto y empleos; la ficha del polo y su construcción
+    CatalogoObras.svelte   el catálogo de obras ferroviarias del Estado y la ficha de cada obra
 ```
 
 La regla heredada: **`domain/` no conoce ningún renderer.** Un barco o un tren devolverá
@@ -373,9 +385,8 @@ costa del mundo solo sube de resolución). Además:
   2018 en adelante (el Tren Maya, las líneas nuevas del Corredor Interoceánico…) lo
   construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
   cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
-  Tuxpan…). Siguiente paso acordado: el catálogo de obras con trazo oficial (el Tren Maya por
-  tramos, Dos Bocas, las líneas paralelas de pasajeros, rehabilitar las vías muertas), que
-  serán vías **del Estado**, con su propia capacidad.
+  Tuxpan…). Ya está el catálogo de obras del Estado; falta que el presupuesto alcance para
+  las grandes (ver abajo).
 - **Presupuesto del Estado**: de dónde y cada cuánto llega el dinero (hoy solo se gasta): los
   derechos de las concesionarias (3 % de sus ingresos desde 2027), los impuestos, lo que
   cobran los trenes del Estado y lo que pagan por pasar por vía privada.
