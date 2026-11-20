@@ -83,7 +83,7 @@
     position: fixed;
     inset: 0;
     overflow-y: auto;
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 1.5rem;
   }
 
   .hoja {
@@ -91,16 +91,16 @@
     grid-template-columns: 250px minmax(0, 860px);
     justify-content: center;
     gap: 2.5rem;
-    padding: 6rem 1.5rem 5rem;
+    padding: 2rem 1.5rem 5rem;
   }
 
   /* ---- index ------------------------------------------------------------- */
 
   .indice {
     position: sticky;
-    top: 6rem;
+    top: 1.5rem;
     align-self: start;
-    max-height: calc(100vh - 7.5rem);
+    max-height: calc(100vh - 5.5rem);
     overflow-y: auto;
     padding: 0.9rem 0.6rem 0.9rem 0.9rem;
   }
@@ -294,8 +294,10 @@
   }
 
   @media (max-width: 1100px) {
+    /* No room beside the column: start below the book in the corner. */
     .hoja {
       grid-template-columns: minmax(0, 860px);
+      padding-top: 5rem;
     }
 
     .indice {
@@ -305,7 +307,7 @@
 
   @media (max-width: 600px) {
     .hoja {
-      padding: 5.5rem 1rem 4rem;
+      padding: 5rem 1rem 4rem;
     }
   }
 </style>

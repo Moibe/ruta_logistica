@@ -93,11 +93,11 @@
 <style>
   .trazado {
     position: fixed;
-    top: 5.6rem;
+    top: 1rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 32;
-    max-width: min(640px, calc(100vw - 2rem));
+    max-width: min(600px, calc(100vw - 2rem));
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

@@ -2,123 +2,192 @@
   import { page } from '$app/state';
 
   /**
-   * Two scales of the same geography. "Mundo" is where Mexico sits — the flat
-   * projection and the sphere from the `global` project, fed by the same
-   * coastline data. "México" is the board the game is played on.
+   * The views, kept out of the way: a small pill in the bottom-left corner that
+   * says where you are and opens the list upward on click. Two scales of the
+   * same geography — "Mundo" is where Mexico sits (the flat projection and the
+   * sphere from the `global` project); "México" is the board the game is
+   * played on.
    */
   const MUNDO = [
     { href: '/mundo/canvas', label: 'Canvas 2D', hint: 'd3-geo · plano' },
     { href: '/mundo/globo', label: 'Globo 3D', hint: 'three · esfera' },
   ];
   const MEXICO = { href: '/mexico', label: 'México', hint: 'el tablero' };
+  const NOMBRES: Record<string, string> = {
+    ...Object.fromEntries([...MUNDO, MEXICO].map((v) => [v.href, v.label])),
+    '/enciclopedia': 'Enciclopedia',
+  };
+
+  let abierto = $state(false);
+  let raiz: HTMLElement;
+
+  const actual = $derived(NOMBRES[page.url.pathname] ?? 'Vistas');
+
+  // Any navigation closes it.
+  $effect(() => {
+    page.url.pathname;
+    abierto = false;
+  });
+
+  function fuera(e: PointerEvent) {
+    if (abierto && !raiz.contains(e.target as Node)) abierto = false;
+  }
+
+  function tecla(e: KeyboardEvent) {
+    if (abierto && e.key === 'Escape') abierto = false;
+  }
 </script>
 
-<nav class="panel">
-  <a class="brand" href="/">
-    <span class="dot"></span>
-    <span class="mono">RUTA LOGÍSTICA</span>
-  </a>
-  <div class="group">
-    <span class="label scale">Mundo</span>
-    {#each MUNDO as view (view.href)}
-      <a class="ctl" class:is-active={page.url.pathname === view.href} href={view.href}>
-        <span>{view.label}</span>
-        <span class="hint">{view.hint}</span>
+<svelte:window onpointerdown={fuera} onkeydown={tecla} />
+
+<nav class="vistas" bind:this={raiz}>
+  {#if abierto}
+    <div class="menu panel">
+      <a class="brand" href="/">
+        <span class="dot"></span>
+        <span class="mono">RUTA LOGÍSTICA</span>
       </a>
-    {/each}
-  </div>
-  <div class="group board">
-    <a class="ctl" class:is-active={page.url.pathname === MEXICO.href} href={MEXICO.href}>
-      <span>{MEXICO.label}</span>
-      <span class="hint">{MEXICO.hint}</span>
-    </a>
-  </div>
+      <span class="label">Mundo</span>
+      {#each MUNDO as view (view.href)}
+        <a class="ctl" class:is-active={page.url.pathname === view.href} href={view.href}>
+          <span>{view.label}</span>
+          <span class="hint">{view.hint}</span>
+        </a>
+      {/each}
+      <span class="label">Tablero</span>
+      <a class="ctl board" class:is-active={page.url.pathname === MEXICO.href} href={MEXICO.href}>
+        <span>{MEXICO.label}</span>
+        <span class="hint">{MEXICO.hint}</span>
+      </a>
+    </div>
+  {/if}
+
+  <button
+    class="pastilla panel"
+    class:abierto
+    aria-expanded={abierto}
+    aria-label="Vistas"
+    title="Cambiar de vista"
+    onclick={() => (abierto = !abierto)}
+  >
+    <span class="dot"></span>
+    <span class="nombre">{actual}</span>
+    <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" /></svg>
+  </button>
 </nav>
 
 <style>
-  nav {
+  .vistas {
     position: fixed;
-    top: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 1rem;
+    bottom: 1rem;
     z-index: 40;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0.75rem 0.5rem 1rem;
   }
 
-  .brand {
-    flex: none;
-    white-space: nowrap;
+  .pastilla {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
+    gap: 0.45rem;
+    width: var(--vistas);
+    height: var(--vistas-alto);
+    padding: 0 0.65rem;
+    font-size: 0.72rem;
     color: var(--muted);
-    padding-right: 1rem;
-    border-right: 1px solid var(--line);
+    cursor: pointer;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+
+  .pastilla:hover,
+  .pastilla.abierto {
+    color: var(--ink);
+    border-color: rgba(126, 190, 255, 0.3);
+  }
+
+  .nombre {
+    flex: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pastilla svg {
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.15s;
+  }
+
+  .pastilla.abierto svg {
+    transform: rotate(180deg);
   }
 
   .dot {
-    width: 7px;
-    height: 7px;
+    flex: none;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--warn);
-    box-shadow: 0 0 10px var(--warn);
+    box-shadow: 0 0 8px var(--warn);
   }
 
-  .group {
+  /* ---- the open list, growing upward from the pill ------------------------ */
+
+  .menu {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 0.5rem);
+    width: 12.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.7rem;
+  }
+
+  .brand {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
+    padding: 0.1rem 0.2rem 0.6rem;
+    margin-bottom: 0.2rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
   }
 
-  .board {
-    padding-left: 1rem;
-    border-left: 1px solid var(--line);
+  .menu .label {
+    margin: 0.35rem 0.2rem 0.05rem;
   }
 
-  .scale {
-    margin-right: 0.2rem;
-  }
-
-  .group .ctl {
+  .menu .ctl {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.1rem;
-    padding: 0.35rem 0.7rem;
-    font-size: 0.8rem;
-    /* Never let a card shrink below its label: squeezed, the hint wraps onto a
-       third line and the whole bar grows taller instead of wider. */
-    flex: none;
-    white-space: nowrap;
+    gap: 0.05rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.78rem;
   }
 
   /* The board is the destination: amber, the rail colour, instead of cyan. */
-  .board .ctl.is-active {
+  .menu .board.is-active {
     background: rgba(255, 209, 102, 0.12);
     border-color: rgba(255, 209, 102, 0.5);
     color: #fff1cc;
   }
 
-  .board .ctl:hover {
+  .menu .board:hover {
     background: rgba(255, 209, 102, 0.1);
     border-color: rgba(255, 209, 102, 0.4);
   }
 
   .hint {
-    font-size: 0.58rem;
+    font-size: 0.56rem;
     letter-spacing: 0.08em;
     color: var(--muted);
-  }
-
-  @media (max-width: 820px) {
-    .brand,
-    .scale,
-    .hint {
-      display: none;
-    }
   }
 </style>

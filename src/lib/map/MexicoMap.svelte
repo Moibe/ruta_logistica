@@ -1969,7 +1969,8 @@
 
   .stats {
     position: fixed;
-    left: 1rem;
+    left: calc(1rem + var(--vistas) + 0.5rem);
+    min-height: var(--vistas-alto);
     bottom: 1rem;
     z-index: 30;
     display: flex;

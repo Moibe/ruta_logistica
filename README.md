@@ -282,7 +282,7 @@ src/lib/
     GlobeBarcos.svelte   los barcos sobre el globo
     MexicoMap.svelte     el tablero
   ui/
-    ViewNav.svelte   navegación: Mundo (Canvas · Globo) | México
+    ViewNav.svelte   las vistas, plegadas abajo a la izquierda: Mundo (Canvas · Globo) | México
     Reloj.svelte · Flota.svelte · Trazado.svelte · formato.ts   paneles (Reloj y Flota también en el mundo)
     Erario.svelte · FichaPolo.svelte   presupuesto y empleos; la ficha del polo y su construcción
 ```
