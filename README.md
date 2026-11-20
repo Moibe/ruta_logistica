@@ -16,8 +16,8 @@ país. Dos escalas de la misma geografía:
 
 **[Enciclopedia del juego](docs/enciclopedia.md)**: qué puertos, ciudades, vías, rutas y
 servicios hay, de qué fuente sale cada dato, qué se corrigió a mano y las reglas de la simulación. Se
-actualiza con cada cosa que entra al juego. También vive dentro del juego en `/enciclopedia` (el librito al
-final de la barra de arriba): `src/lib/enciclopedia.ts` importa el mismo archivo con `?raw` y lo
+actualiza con cada cosa que entra al juego. También vive dentro del juego en `/enciclopedia` (el librito de
+la esquina superior derecha, `ui/Libro.svelte`): `src/lib/enciclopedia.ts` importa el mismo archivo con `?raw` y lo
 convierte con `marked`, así que basta editar el `.md`.
 
 Scaffold basado en `global`, que a su vez salió de

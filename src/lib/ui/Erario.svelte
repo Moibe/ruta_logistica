@@ -47,7 +47,7 @@
   .erario {
     position: fixed;
     top: 1rem;
-    right: 1rem;
+    right: calc(1rem + var(--libro) + 0.5rem);
     z-index: 30;
     width: 300px;
     display: grid;
@@ -92,7 +92,19 @@
     color: #f9c6dd;
   }
 
-  @media (max-width: 1200px) {
+  /* Between the centred nav bar and the book there is less room on mid-size
+     screens: tighter there, and out of the way below that. */
+  @media (max-width: 1340px) {
+    .erario {
+      width: 260px;
+    }
+
+    .fila .label {
+      width: 4.6rem;
+    }
+  }
+
+  @media (max-width: 1240px) {
     .erario {
       display: none;
     }

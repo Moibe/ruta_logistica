@@ -33,18 +33,6 @@
       <span class="hint">{MEXICO.hint}</span>
     </a>
   </div>
-  <a
-    class="libro"
-    class:is-active={page.url.pathname === '/enciclopedia'}
-    href="/enciclopedia"
-    title="Enciclopedia: de dónde sale cada dato y con qué reglas se juega"
-    aria-label="Enciclopedia"
-  >
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-      <path d="M12 6.5C10.2 5.2 7.6 4.6 4 4.75v13.5c3.6-.15 6.2.45 8 1.75 1.8-1.3 4.4-1.9 8-1.75V4.75c-3.6-.15-6.2.45-8 1.75Z" />
-      <path d="M12 6.5V20" />
-    </svg>
-  </a>
 </nav>
 
 <style>
@@ -118,42 +106,6 @@
   .board .ctl:hover {
     background: rgba(255, 209, 102, 0.1);
     border-color: rgba(255, 209, 102, 0.4);
-  }
-
-  /* The encyclopedia: a book at the end of the bar, present in every view. */
-  .libro {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 2.2rem;
-    height: 2.2rem;
-    margin-left: -0.2rem;
-    border-radius: 10px;
-    border: 1px solid var(--line);
-    color: var(--muted);
-    transition:
-      color 0.15s,
-      background 0.15s,
-      border-color 0.15s;
-  }
-
-  .libro svg {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.6;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-  }
-
-  .libro:hover {
-    color: var(--ink);
-    background: rgba(126, 190, 255, 0.08);
-  }
-
-  .libro.is-active {
-    color: var(--accent);
-    background: var(--accent-soft);
-    border-color: rgba(76, 201, 255, 0.45);
   }
 
   .hint {
