@@ -1,8 +1,8 @@
 # Enciclopedia de Ruta Logística
 
 Referencia de lo que hay en el juego: qué contiene, de dónde sale cada dato, qué se corrigió a
-mano y por qué, y con qué reglas se mueve. Por ahora es un documento; más adelante será una
-página web del juego.
+mano y por qué, y con qué reglas se mueve. Vive también dentro del juego: el librito al final
+de la barra de arriba abre esta misma página (`/enciclopedia`), que se arma con este archivo.
 
 > **Cifras al 19 de noviembre de 2026, con trenes, barcos, travesías oceánicas y los Polos del
 > Bienestar.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
