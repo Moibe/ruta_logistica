@@ -4,8 +4,9 @@ Juego de logística en México: mover barcos y trenes y poner sitios sobre un ma
 país. Dos escalas de la misma geografía:
 
 - **Mundo**: dónde está México. Las dos vistas de [`global`](https://github.com/Moibe/global)
-  (Canvas 2D y Globo 3D) con México resaltado en ámbar. Clic en México (o *Entrar a México*)
-  y la cámara vuela hasta el país y entra al tablero.
+  (Canvas 2D y Globo 3D) con México resaltado en ámbar y **los barcos navegando**, también en
+  sus travesías a Shanghái y Róterdam. Clic en México (o *Entrar a México*) y la cámara vuela
+  hasta el país y entra al tablero.
 - **México**: el tablero, donde se juega. Estados, red ferroviaria real, puertos y ciudades,
   en la proyección cónica de Lambert del INEGI, con **trenes de carga** corriendo por las
   vías reales y **barcos** navegando rutas marítimas calculadas (por el Canal de Panamá de
@@ -46,8 +47,8 @@ saltar al siguiente libre.
 | Ruta            | Stack             | Qué hace                                                                                     |
 | --------------- | ----------------- | -------------------------------------------------------------------------------------------- |
 | `/mexico`       | d3-geo + Canvas2D | El tablero con trenes y barcos. `/` redirige aquí: el juego es lo principal.                 |
-| `/mundo/canvas` | d3-geo + Canvas2D | El mundo plano de `global` (tres proyecciones, mundo repetido) con México en ámbar.          |
-| `/mundo/globo`  | Threlte + three   | El globo de `global`, abre mirando a México; el país va relleno de puntos ámbar. Solo cliente. |
+| `/mundo/canvas` | d3-geo + Canvas2D | El mundo plano de `global` (tres proyecciones, mundo repetido, centrado en 130° O) con México en ámbar y los barcos. |
+| `/mundo/globo`  | Threlte + three   | El globo de `global`, abre mirando a México; el país va relleno de puntos ámbar; los barcos. Solo cliente. |
 
 ### El tablero (`src/lib/map/MexicoMap.svelte`)
 
@@ -96,7 +97,8 @@ saltar al siguiente libre.
   función de avance es pura y va tramo por tramo, porque la velocidad cambia con la clase de
   vía. Mide 1.8 km (~100 carros); en pantalla nunca menos de 18 px.
 - **El reloj** (`state/simulacion.svelte.ts`): 1× = 1 h de juego por segundo; pausa, ¼×, 1×,
-  4× y 16×; la barra espaciadora pausa. Corre solo mientras el tablero está montado.
+  4× y 16×; la barra espaciadora pausa. Corre mientras haya una vista del juego montada (el
+  tablero o cualquiera de las dos del mundo).
 - **8 servicios iniciales** sobre corredores reales: Manzanillo–Guadalajara–CDMX, Lázaro
   Cárdenas–SLP–Monterrey–Nuevo Laredo, Veracruz–Puebla–CDMX, CDMX–Querétaro–Torreón–
   Chihuahua–Cd. Juárez, Guadalajara–Mazatlán–Hermosillo–Nogales, Altamira–Monterrey, el Istmo
@@ -114,28 +116,45 @@ saltar al siguiente libre.
   por tren, 274: el Istmo en números, tal como es.
 - **Cuatro clases** (`domain/barcos.ts`): portacontenedores y ro-ro a 18 nudos, buque tanque
   a 14, granelero a 13; cada una con su tiempo en puerto. En el Canal, 9 km/h.
-- **Servicios circulares** (A → B → C → A), como las líneas de navieras. Un barco que sale
-  por una **salida al mundo** (Asia, Europa) queda fuera del mapa el tiempo real de la
-  travesía al puerto lejano (Shanghái, Róterdam) y de vuelta.
-- **6 barcos iniciales**: Asia–Manzanillo–Lázaro Cárdenas, Europa–Veracruz–Altamira, los
-  combustibles del Pacífico desde Salina Cruz y los del Golfo, autos de costa a costa por
-  Panamá y graneles de Guaymas a Asia. Nombres inventados de la geografía de México.
+- **Servicios circulares** (A → B → C → A), como las líneas de navieras. Una **salida al
+  mundo** (Asia, Europa) es, como escala, su **puerto lejano** (Shanghái-Yangshan, Róterdam):
+  la pierna sigue de la salida por la **travesía oceánica** calculada, el barco la navega a su
+  velocidad y hace 48 h de escala allá. Cada pierna sabe qué parte cae en el tablero
+  (`Trayecto.enTablero`); el tablero dibuja solo esa parte y deja de ver al barco al pasar la
+  salida (`enTravesia()`, `posicionEnTablero()`).
+- **6 barcos iniciales**: Shanghái–Manzanillo–Lázaro Cárdenas, Róterdam–Veracruz–Altamira,
+  los combustibles del Pacífico desde Salina Cruz y los del Golfo, autos de costa a costa por
+  Panamá y graneles de Guaymas a Shanghái. Nombres inventados de la geografía de México.
 - **Un motor de servicios común** (`domain/servicio.ts`) para trenes y barcos: cambia cómo se
   traza cada pierna y cuánto se espera, el paso de simulación es el mismo.
 - **En el tablero**: casco con proa orientado al rumbo y estela; el Canal de Panamá trazado en
   cian; las dos salidas como un anillo con flecha. La lista tiene pestañas Trenes / Barcos, y
-  *＋ Nuevo* en la pestaña Barcos pide la clase y las escalas (puertos o salidas).
+  *＋ Nuevo* en la pestaña Barcos pide la clase y las escalas (puertos o salidas). Con un barco
+  elegido que pasa la salida, la cámara que lo seguía se queda esperándolo ahí y su ficha
+  ofrece **Ver en el globo**.
 
 ### Mundo
 
 - **Canvas** (`CanvasMap.svelte`): México se dibuja encima del mundo con la misma geometría
   detallada del tablero. Al volar hacia él, el relleno cambia al color de tierra del tablero,
-  así el aterrizaje en `/mexico` continúa la imagen en vez de cortarla.
+  así el aterrizaje en `/mexico` continúa la imagen en vez de cortarla. Las tres
+  proyecciones van **rotadas a 130° O**: México al centro, Asia a la izquierda, Europa a la
+  derecha, y las dos travesías enteras (Shanghái queda libre del panel de barcos).
 - **Globo** (`GlobeScene.svelte`): México va como contorno ámbar más una malla de puntos
   (`dotGrid`, por barrido de líneas, no un `geoContains` por punto: dos órdenes de magnitud
   más rápido). Rellenar polígonos sobre la esfera exigiría subdividir triángulos. El clic
   sobre México (que no sea el final de un arrastre: `event.delta`) lanza el vuelo de cámara:
-  la dirección hace *slerp* y la distancia baja, y al terminar navega al tablero.
+  la dirección hace *slerp* y la distancia baja, y al terminar navega al tablero. La costa
+  sube a 50m cuando la cámara baja de 2 radios (la tierra contra la que se auditan las
+  travesías).
+- **Barcos en las dos vistas**: el circuito de cada barco como línea tenue de su color (el
+  elegido se ilumina), casco orientado al rumbo con brillo y estela, Shanghái y Róterdam
+  marcados. Reloj y lista de barcos (`<Flota vista="mundo">`) como en el tablero: clic en un
+  barco (mapa o lista) lo elige y vuela hasta él, *Seguir* lo mantiene al centro. En el globo
+  la capa vive en `GlobeBarcos.svelte`: objetos de three armados a mano y movidos en su lugar
+  cada cuadro, tamaño constante en pantalla (escala = unidades por píxel a la altura de la
+  cámara), selección por distancia en pantalla como en los mapas planos y etiquetas con el
+  `<HTML>` de Threlte ocultas tras el océano.
 
 ## Datos
 
@@ -146,10 +165,10 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `static/data/land-*.json`, `countries-110m.json` | Mundo, de `world-atlas` (heredado de `global`)                     |
 | `static/data/mexico.topo.json`       | Estados y países vecinos en un solo TopoJSON (~350 KB)                         |
 | `static/data/red-ferroviaria.json`   | La red como grafo: 198 nodos, 231 tramos, ~19,200 km (~210 KB)                 |
-| `static/data/rutas-maritimas.json`   | 136 rutas por mar entre puertos y salidas, y el trazo del Canal (~50 KB)       |
+| `static/data/rutas-maritimas.json`   | 136 rutas por mar entre puertos y salidas, el trazo del Canal y las 2 travesías oceánicas (~51 KB) |
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
 | `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
-| `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa), a mano                              |
+| `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
 
 `npm run datos` (`scripts/datos-mexico.mjs`) regenera los cuatro primeros desde **Natural
 Earth 10m**, fijado a un commit de `nvkelso/natural-earth-vector`. Baja ~85 MB una sola vez a
@@ -169,6 +188,16 @@ de tierra y con sobrecosto a menos de ~22 km de la costa; luego se **endereza** 
 rectos con un recorrido exacto de celdas, por corridas de mar y de canal que nunca se
 mezclan. Una **auditoría** en una malla 5 veces más fina confirma que ninguna de las 136
 rutas pisa tierra fuera de la entrada a cada puerto y del Canal.
+
+**Las travesías oceánicas** (`scripts/travesias.mjs`, ~4 s) usan el mismo método sobre el
+mundo: la tierra **50m** de `static/data/land-50m.json` (la que dibujan las vistas del mundo),
+malla de 0.1° de 60° S a 75° N **que da la vuelta** en el antimeridiano (la travesía a Asia lo
+cruza; los anillos que lo saltan se "desenvuelven" para que sigan cerrados en el plano), ruta
+más corta lejos de la costa, enderezada en **arcos de círculo máximo** y auditada kilómetro a
+kilómetro contra los polígonos 50m exactos. Asia → Shanghái: 11,407 km (6,159 mn); Europa →
+Róterdam, por el Canal de la Mancha: 7,108 km (3,838 mn). El JSON guarda solo los vértices;
+`mar.ts` densifica cada arco cada 50 km al cargar y continúa las longitudes más allá de ±180°
+para que distancias e interpolación sigan siendo locales.
 
 **La red ferroviaria** viene de la capa de Norteamérica de Natural Earth, que a su vez sale del
 *Atlas Ambiental de América del Norte* de la CEC (Comisión para la Cooperación Ambiental de
@@ -194,6 +223,7 @@ El script:
 scripts/
   datos-mexico.mjs   Natural Earth → mexico.topo.json + red-ferroviaria.json
                      + rutas-maritimas.json + ciudades.json
+  travesias.mjs      las travesías oceánicas de cada salida, sobre la malla mundial
 src/lib/
   domain/            TypeScript puro, sin nada de UI ni de render
     geo.ts           LonLat, distancia, interpolación por gran círculo, rumbo, lon/lat ↔ vec3
@@ -201,7 +231,7 @@ src/lib/
     trayecto.ts      un recorrido como polilínea con velocidad por segmento; avanzar sobre él
     servicio.ts      el motor común: un vehículo recorriendo sus paradas (ida y vuelta o circuito)
     red.ts           grafo ferroviario, estaciones, ruta más rápida
-    mar.ts           rutas marítimas, Canal de Panamá
+    mar.ts           rutas marítimas, Canal de Panamá, travesías; compone la pierna completa
     trenes.ts        trenes y servicios iniciales
     barcos.ts        clases de barco, travesías, barcos y servicios iniciales
     datos/           datos (generados y curados)
@@ -211,12 +241,13 @@ src/lib/
   map/
     world.ts         carga del mundo (110m / 50m)
     mexico.ts        carga de México: estados, país, costa vs. frontera, vías, vecinos
-    CanvasMap.svelte     mundo plano
+    CanvasMap.svelte     mundo plano (con los barcos)
     GlobeMap.svelte · GlobeScene.svelte · globeGeometry.ts   globo
+    GlobeBarcos.svelte   los barcos sobre el globo
     MexicoMap.svelte     el tablero
   ui/
     ViewNav.svelte   navegación: Mundo (Canvas · Globo) | México
-    Reloj.svelte · Flota.svelte · Trazado.svelte · formato.ts   paneles del tablero
+    Reloj.svelte · Flota.svelte · Trazado.svelte · formato.ts   paneles (Reloj y Flota también en el mundo)
 ```
 
 La regla heredada: **`domain/` no conoce ningún renderer.** Un barco o un tren devolverá
@@ -269,6 +300,17 @@ costa del mundo solo sube de resolución). Además:
   garantiza que una recta no cruza tierra.
 - **Cada puerto entra al mar abierto**, no a la celda de agua más cercana: una bahía de boca
   angosta queda sellada a esta escala y su agua no conecta con nada.
+- **Longitudes más allá de ±180° en las travesías.** La de Asia llega a −238° (Shanghái):
+  `kmEntre` y `lerp` restan longitudes directamente, así que la polilínea tiene que ser
+  continua. d3-geo normaliza al proyectar y `toVector3` es periódica, así que dibujarlas no
+  necesita nada; lo que sí: partir la estela en el mapa plano donde salta de borde a borde.
+- **El mapa plano está rotado**: `projection([-180, 0])` ya no es el borde del mundo. El
+  ancho del mundo repetido sale de `path.bounds({ type: 'Sphere' })`.
+- **En el globo, las tareas del escenario corren en cada cuadro; solo el render es bajo
+  demanda.** La tarea de barcos no se auto-invalida: pide cuadro (`invalidate()`) solo
+  mientras el reloj corre, así un globo en pausa no dibuja a 60 fps.
+- **Seguir en el globo se suelta arrastrando, no con la rueda**: el evento `start` de
+  OrbitControls también salta con la rueda, así que `GlobeMap` mira el arrastre en el DOM.
 - **En Windows el watcher a veces no ve archivos nuevos** (un `+page.ts` recién creado no
   entró al manifiesto de rutas). Si una ruta nueva no se comporta como dice su código:
   `npx svelte-kit sync` y reiniciar el dev server.
@@ -282,6 +324,4 @@ costa del mundo solo sube de resolución). Además:
 - **Carga**: qué lleva cada tren y cada barco (contenedores, granel, autos, combustibles),
   cuánto cabe y quién lo demanda; hoy corren sus servicios sin carga. El puerto es donde
   barco y tren se pasan la carga.
-- **Barcos en las vistas del mundo**: que la travesía a Shanghái o a Róterdam, hoy fuera del
-  mapa, se vea en el globo.
 - **Sitios**: que el jugador pueda colocar los suyos (bodegas, plantas, terminales).

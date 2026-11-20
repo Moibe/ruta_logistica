@@ -83,8 +83,9 @@ export const PUERTOS: readonly Puerto[] = (puertosJson as PuertoJson[]).map((p) 
 
 /**
  * Gateways to the rest of the world, on the edge of the board. A ship that
- * sails out through one is on an ocean crossing to the port it stands for
- * (`hacia`) and back, off the map, for as long as that voyage really takes.
+ * sails out through one crosses the ocean to the port it stands for (`hacia`):
+ * off the board, on the world views. As a stop, a gateway *is* that far port —
+ * a ship "calling at Asia" loads and unloads in Shanghái.
  */
 export type Puerta = {
   id: string;
@@ -93,6 +94,8 @@ export type Puerta = {
   /** The far port the crossing goes to. */
   hacia: string;
   haciaLonLat: LonLat;
+  /** The ocean the crossing goes over. */
+  oceano: string;
 };
 
 type PuertaJson = {
@@ -103,6 +106,7 @@ type PuertaJson = {
   hacia: string;
   haciaLon: number;
   haciaLat: number;
+  oceano: string;
 };
 
 export const PUERTAS: readonly Puerta[] = (puertasJson as PuertaJson[]).map((p) => ({
@@ -111,6 +115,7 @@ export const PUERTAS: readonly Puerta[] = (puertasJson as PuertaJson[]).map((p) 
   lonLat: [p.lon, p.lat],
   hacia: p.hacia,
   haciaLonLat: [p.haciaLon, p.haciaLat],
+  oceano: p.oceano,
 }));
 
 /**
@@ -174,8 +179,13 @@ export function sitio(clave: string): Sitio {
   return s;
 }
 
-/** The name as it fits on a train's board: CDMX, not "Ciudad de México". */
+/**
+ * The name as it fits on a train's board: CDMX, not "Ciudad de México". A
+ * gateway goes by its far port, which is where a ship calling there calls.
+ */
 export function nombreCorto(clave: string): string {
+  const p = puerta(clave);
+  if (p) return p.hacia;
   const s = sitio(clave);
   return s.nombre === 'Ciudad de México' ? 'CDMX' : s.nombre;
 }

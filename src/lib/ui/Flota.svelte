@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { CLASES_BARCO, enElCanal, fueraDelMapa, KM_POR_MILLA } from '$lib/domain/barcos';
+  import { goto } from '$app/navigation';
+  import { CLASES_BARCO, enElCanal, enTravesia, KM_POR_MILLA } from '$lib/domain/barcos';
   import {
     avanceDePierna,
     horasAProxima,
@@ -8,7 +9,7 @@
     proximaParada,
     velocidad,
   } from '$lib/domain/servicio';
-  import { nombreCorto, puerta } from '$lib/domain/sitios';
+  import { nombreCorto } from '$lib/domain/sitios';
   import { sim, type Unidad } from '$lib/state/simulacion.svelte';
   import { tablero, type TipoUnidad } from '$lib/state/tablero.svelte';
   import { duracion, estadoUnidad, horaDeJuego, km, nudos } from './formato';
@@ -18,9 +19,17 @@
    * it is, how far along its leg) and, for the selected one, a card on the
    * right. Both read `sim.horas` so they refresh as vehicles move — they're
    * mutated in place and aren't reactive on their own.
+   *
+   * On the world views (`vista="mundo"`) it lists the ships only — trains
+   * are a board thing — and nothing is off the map there: a ship on an ocean
+   * crossing is followed like any other. On the board, a ship beyond a gateway
+   * offers to be watched on the globe instead.
    */
+  let { vista = 'tablero' }: { vista?: 'tablero' | 'mundo' } = $props();
 
-  const lista = $derived<Unidad[]>(tablero.pestaña === 'tren' ? sim.trenes : sim.barcos);
+  const mundo = $derived(vista === 'mundo');
+  const tipo = $derived<TipoUnidad>(mundo ? 'barco' : tablero.pestaña);
+  const lista = $derived<Unidad[]>(tipo === 'tren' ? sim.trenes : sim.barcos);
 
   const filas = $derived.by(() => {
     sim.horas;
@@ -31,21 +40,25 @@
       linea: estadoUnidad(u),
       avance: avanceDePierna(u),
       parado: u.estado === 'parada',
-      fuera: u.tipo === 'barco' && fueraDelMapa(u),
+      fuera: !mundo && u.tipo === 'barco' && enTravesia(u) !== null,
     }));
   });
 
   const ficha = $derived.by(() => {
     sim.horas;
     const u = sim.seleccionado;
-    if (!u) return null;
+    if (!u || (mundo && u.tipo !== 'barco')) return null;
     const aqui = paradaActual(u);
     const proxima = proximaParada(u);
     const enH = horasAProxima(u);
-    const fuera = u.tipo === 'barco' && fueraDelMapa(u);
+    const travesia = u.tipo === 'barco' ? enTravesia(u) : null;
+    const fuera = !mundo && travesia !== null;
     let estado: { clase: string; texto: string };
-    if (fuera) {
-      estado = { clase: 'fuera', texto: `En travesía a ${puerta(u.destinos[u.pierna])?.hacia ?? 'ultramar'}, fuera del mapa` };
+    if (travesia && travesia.tramo !== 'alla') {
+      estado = {
+        clase: mundo ? 'ruta' : 'fuera',
+        texto: `Cruzando el ${travesia.puerta.oceano} → ${nombreCorto(proxima)}${mundo ? '' : ', fuera del tablero'}`,
+      };
     } else if (aqui) {
       const verbo = u.tipo === 'tren' ? 'sale' : 'zarpa';
       estado = { clase: 'parado', texto: `En ${nombreCorto(aqui)} · cargando, ${verbo} en ${duracion(u.espera)}` };
@@ -80,7 +93,7 @@
       paradas: u.paradas.map((clave) => ({
         clave,
         nombre: nombreCorto(clave),
-        actual: clave === aqui && !fuera,
+        actual: clave === aqui,
         proxima: clave === proxima,
       })),
     };
@@ -101,6 +114,19 @@
   function seguir() {
     sim.siguiendo = !sim.siguiendo;
     if (sim.siguiendo && sim.seleccion) tablero.volarA(sim.seleccion);
+  }
+
+  /** From a world view: lay out a new ship on the board, where stops are picked. */
+  function nuevoEnElTablero() {
+    tablero.pestaña = 'barco';
+    tablero.empezar();
+    goto('/mexico');
+  }
+
+  /** A ship beyond a gateway can't be seen on the board: follow it on the globe. */
+  function verEnElGlobo() {
+    sim.siguiendo = true;
+    goto('/mundo/globo');
   }
 
   // Retiring a vehicle is the one destructive action here: a second click
@@ -131,12 +157,23 @@
   $effect(() => {
     // Selecting a vehicle on the map shows its tab.
     const u = sim.seleccionado;
-    if (u && u.tipo !== tablero.pestaña && !tablero.trazando) tablero.pestaña = u.tipo;
+    if (!mundo && u && u.tipo !== tablero.pestaña && !tablero.trazando) tablero.pestaña = u.tipo;
   });
 </script>
 
 <aside class="flota panel">
   <header>
+    {#if mundo}
+      <span class="titulo">Barcos <span class="mono">{sim.barcos.length}</span></span>
+      <button
+        class="ctl nuevo mar"
+        title="Los barcos se trazan en el tablero"
+        onclick={nuevoEnElTablero}
+        disabled={sim.estado !== 'lista'}
+      >
+        ＋ Nuevo
+      </button>
+    {:else}
     <div class="pestañas" role="tablist">
       <button
         role="tab"
@@ -164,13 +201,14 @@
     >
       ＋ Nuevo
     </button>
+    {/if}
   </header>
   {#if sim.estado === 'cargando'}
     <p class="vacio">Cargando las rutas…</p>
   {:else if sim.estado === 'error'}
     <p class="vacio err">No se pudieron cargar las rutas</p>
   {:else if !filas.length}
-    <p class="vacio">Sin {tablero.pestaña === 'tren' ? 'trenes' : 'barcos'}. Crea uno con «＋ Nuevo».</p>
+    <p class="vacio">Sin {tipo === 'tren' ? 'trenes' : 'barcos'}. Crea uno con «＋ Nuevo» en el tablero.</p>
   {/if}
   <ul>
     {#each filas as f (f.id)}
@@ -178,14 +216,14 @@
         <button
           class="row"
           class:is-selected={sim.seleccion === f.id}
-          class:mar={tablero.pestaña === 'barco'}
+          class:mar={tipo === 'barco'}
           onclick={() => abrir(f.id)}
         >
           <span class="swatch" class:parado={f.parado} class:fuera={f.fuera} style:--c={f.color}></span>
           <span class="names">
             <span class="nombre">{f.nombre}</span>
             <span class="linea">{f.linea}</span>
-            <span class="barra"><span style:width="{f.fuera ? 0 : f.avance * 100}%" style:background={f.color}></span></span>
+            <span class="barra"><span style:width="{f.avance * 100}%" style:background={f.color}></span></span>
           </span>
           <span class="id mono">{f.id}</span>
         </button>
@@ -219,15 +257,15 @@
     </dl>
 
     <div class="acciones">
-      <button
-        class="ctl"
-        aria-pressed={sim.siguiendo}
-        disabled={ficha.fuera}
-        title={ficha.fuera ? 'Está fuera del mapa' : 'Seguir con la cámara'}
-        onclick={seguir}
-      >
-        {sim.siguiendo ? 'Siguiendo' : 'Seguir'}
-      </button>
+      {#if ficha.fuera}
+        <button class="ctl globo" title="Está más allá de la salida: síguelo en el globo" onclick={verEnElGlobo}>
+          Ver en el globo ›
+        </button>
+      {:else}
+        <button class="ctl" aria-pressed={sim.siguiendo} title="Seguir con la cámara" onclick={seguir}>
+          {sim.siguiendo ? 'Siguiendo' : 'Seguir'}
+        </button>
+      {/if}
       <button class="ctl retirar" class:confirmando onclick={retirar}>
         {confirmando ? '¿Retirar? Clic otra vez' : 'Retirar'}
       </button>
@@ -254,6 +292,17 @@
     gap: 0.5rem;
     padding: 0.5rem 0.55rem 0.5rem 0.55rem;
     border-bottom: 1px solid var(--line);
+  }
+
+  .titulo {
+    font-size: 0.76rem;
+    padding-left: 0.3rem;
+  }
+
+  .titulo .mono {
+    font-size: 0.64rem;
+    color: var(--muted);
+    margin-left: 0.15rem;
   }
 
   .pestañas {
@@ -570,6 +619,18 @@
   .acciones .ctl:disabled {
     opacity: 0.4;
     cursor: default;
+  }
+
+  /* To the globe: cyan, the sea and the world views. */
+  .acciones .globo {
+    border-color: rgba(76, 201, 255, 0.45);
+    color: #d6f2ff;
+    background: rgba(76, 201, 255, 0.08);
+  }
+
+  .acciones .globo:hover {
+    background: rgba(76, 201, 255, 0.16);
+    border-color: rgba(76, 201, 255, 0.6);
   }
 
   .retirar:hover {

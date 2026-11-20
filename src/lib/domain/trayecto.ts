@@ -16,6 +16,12 @@ export type Trayecto = {
   acumH: number[];
   km: number;
   horas: number;
+  /**
+   * The stretch on the Mexico board, as [from, to] km along the route. All of
+   * it, except a ship's ocean crossing beyond a gateway: that part only exists
+   * on the world views.
+   */
+  enTablero: [number, number];
 };
 
 const D2R = Math.PI / 180;
@@ -34,17 +40,25 @@ export function acumulado(puntos: LonLat[]): number[] {
 
 export const lerp = (a: LonLat, b: LonLat, u: number): LonLat => [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u];
 
-/** `vel` has one entry per segment (puntos.length - 1). */
-export function crearTrayecto(puntos: LonLat[], vel: number[]): Trayecto {
+/**
+ * `vel` has one entry per segment (puntos.length - 1). `tablero` gives the
+ * vertices where the route enters and leaves the board, when it doesn't lie on
+ * it whole.
+ */
+export function crearTrayecto(puntos: LonLat[], vel: number[], tablero?: [number, number]): Trayecto {
   const acum = acumulado(puntos);
   const acumH = [0];
   for (let i = 1; i < puntos.length; i++) acumH.push(acumH[i - 1] + (acum[i] - acum[i - 1]) / vel[i - 1]);
-  return { puntos, acum, vel, acumH, km: acum[acum.length - 1], horas: acumH[acumH.length - 1] };
+  const km = acum[acum.length - 1];
+  const enTablero: [number, number] = tablero ? [acum[tablero[0]], acum[tablero[1]]] : [0, km];
+  return { puntos, acum, vel, acumH, km, horas: acumH[acumH.length - 1], enTablero };
 }
 
 /** The same path, travelled the other way. */
 export function invertir(t: Trayecto): Trayecto {
-  return crearTrayecto([...t.puntos].reverse(), [...t.vel].reverse());
+  const r = crearTrayecto([...t.puntos].reverse(), [...t.vel].reverse());
+  r.enTablero = [t.km - t.enTablero[1], t.km - t.enTablero[0]];
+  return r;
 }
 
 /** Index of the segment that contains `km` (binary search on `acum`). */
@@ -84,4 +98,9 @@ export function seccion(t: Trayecto, km0: number, km1: number): LonLat[] {
   for (let n = i + 1; n <= j; n++) out.push(t.puntos[n]);
   out.push(puntoEn(t, b));
   return out;
+}
+
+/** The part of the route that lies on the Mexico board. */
+export function tramoEnTablero(t: Trayecto): LonLat[] {
+  return seccion(t, t.enTablero[0], t.enTablero[1]);
 }

@@ -7,7 +7,8 @@
   import { untrack } from 'svelte';
   import type { LonLat } from '$lib/domain/geo';
   import { CLASES_BARCO, fueraDelMapa } from '$lib/domain/barcos';
-  import { esperaTotal, piernasDelRecorrido, posicion, trayectoActual } from '$lib/domain/servicio';
+  import { kmTravesia } from '$lib/domain/mar';
+  import { esperaTotal, piernasDelRecorrido, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
   import {
     CIUDAD_DEL_PUERTO,
     CIUDADES,
@@ -18,7 +19,7 @@
     type Puerta,
     type Puerto,
   } from '$lib/domain/sitios';
-  import { seccion, type Trayecto } from '$lib/domain/trayecto';
+  import { seccion, tramoEnTablero, type Trayecto } from '$lib/domain/trayecto';
   import { LARGO_TREN_KM, type Tren } from '$lib/domain/trenes';
   import type { Barco } from '$lib/domain/barcos';
   import { sim, type Unidad } from '$lib/state/simulacion.svelte';
@@ -331,7 +332,8 @@
     const piernas = piernasDelRecorrido(u);
     rutaSel = {
       id: u.id,
-      path: new Path2D(path({ type: 'MultiLineString', coordinates: piernas.map((p) => p.puntos) }) ?? ''),
+      // The board's stretch of each leg: an ocean crossing belongs to the world views.
+      path: new Path2D(path({ type: 'MultiLineString', coordinates: piernas.map(tramoEnTablero) }) ?? ''),
     };
   }
 
@@ -387,9 +389,8 @@
   }
 
   function flyToUnidad(u: Unidad) {
-    // A ship off the map on a crossing: show where it left from.
-    const lonLat = u.tipo === 'barco' && fueraDelMapa(u) ? sitioLonLat(u.destinos[u.pierna]) : posicion(u);
-    const p = lonLat ? projection?.(lonLat) : null;
+    // A ship on an ocean crossing: the gateway it went through.
+    const p = projection?.(posicionEnTablero(u));
     // Ships sail open water: a train-sized close-up would show nothing but sea.
     if (p) flyTo(p[0], p[1], Math.max(transform.k, u.tipo === 'barco' ? 3 : 5));
   }
@@ -405,7 +406,7 @@
     let [tx, ty, tk] = fly.to;
     // A train keeps moving while the camera flies to it: aim at where it is now.
     if (sim.siguiendo && sim.seleccionado) {
-      const p = projection?.(posicion(sim.seleccionado));
+      const p = projection?.(posicionEnTablero(sim.seleccionado));
       if (p) [tx, ty] = p;
     }
     // Zoom interpolates geometrically: a linear ramp from 1× to 20× spends
@@ -417,11 +418,15 @@
     setTransform(zoomIdentity.translate(width / 2 - k * cx, height / 2 - k * cy).scale(k));
   }
 
-  /** Keep the followed train centred (after any flight has landed). */
+  /**
+   * Keep the followed train or ship centred (after any flight has landed). A
+   * ship that sails out through a gateway leaves the camera waiting there, and
+   * comes back into it.
+   */
   function follow() {
     if (fly || !sim.siguiendo) return;
     const t = sim.seleccionado;
-    const p = t ? projection?.(posicion(t)) : null;
+    const p = t ? projection?.(posicionEnTablero(t)) : null;
     if (!p) return;
     const k = transform.k;
     setTransform(zoomIdentity.translate(width / 2 - k * p[0], height / 2 - k * p[1]).scale(k));
@@ -1250,7 +1255,7 @@
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     for (const leg of tablero.previa as Trayecto[]) {
-      const pts = enPantalla(leg.puntos);
+      const pts = enPantalla(tramoEnTablero(leg));
       if (pts.length < 2) continue;
       ctx.globalCompositeOperation = 'lighter';
       ctx.strokeStyle = mar ? 'rgba(76, 201, 255, 0.2)' : 'rgba(255, 209, 102, 0.18)';
@@ -1626,7 +1631,11 @@
     {:else if hovered.kind === 'puerta'}
       <span class="label tip-kind" style:color="var(--accent)">Salida al mundo</span>
       <strong>Hacia {hovered.puerta.nombre}</strong>
-      <span class="tip-sub">Travesía a {hovered.puerta.hacia}, fuera del mapa</span>
+      <span class="tip-sub">
+        {`Travesía a ${hovered.puerta.hacia} por el ${hovered.puerta.oceano}`}{sim.mar
+          ? ` · ${fmtKm(kmTravesia(sim.mar, `puerta:${hovered.puerta.id}`))}`
+          : ''}
+      </span>
       {#if lineaTrazado}<span class="tip-rail mar">{lineaTrazado}</span>{/if}
     {:else if hovered.kind === 'puerto'}
       <span class="label tip-kind" style:color="var(--accent)">

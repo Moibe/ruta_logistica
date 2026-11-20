@@ -12,8 +12,14 @@
   import { zoom as d3zoom, zoomIdentity, type ZoomTransform } from 'd3-zoom';
   import { untrack } from 'svelte';
   import { goto } from '$app/navigation';
+  import { CLASES_BARCO, type Barco } from '$lib/domain/barcos';
   import type { LonLat } from '$lib/domain/geo';
-  import { CENTRO_MEXICO } from '$lib/domain/sitios';
+  import { esperaTotal, piernasDelRecorrido, posicion, trayectoActual } from '$lib/domain/servicio';
+  import { CENTRO_MEXICO, PUERTAS } from '$lib/domain/sitios';
+  import { puntoEn, seccion } from '$lib/domain/trayecto';
+  import { sim } from '$lib/state/simulacion.svelte';
+  import { tablero } from '$lib/state/tablero.svelte';
+  import { estadoUnidad } from '$lib/ui/formato';
   import { loadWorld, type Resolution, type WorldGeometry } from './world';
   import { loadMexico, type MexicoGeometry } from './mexico';
 
@@ -28,10 +34,12 @@
    * a handful of `fill`/`stroke` calls on cached paths, and panning never
    * re-runs the projection over 25k coastline vertices.
    *
-   * Unlike logistica-oceanica there is nothing moving on this map yet, so there
-   * is no 60 fps loop: a frame is painted only when something changes (zoom,
-   * resize, projection, data) and an idle map costs nothing. A layer that
-   * animates can ask for frames with `requestDraw()`, or bring the loop back.
+   * The ships sail here too — the whole of every service, Shanghái and
+   * Róterdam included — so while the game clock runs there's a frame loop, and
+   * with the clock paused a frame is painted only when something changes
+   * (zoom, resize, projection, data): an idle map costs nothing. Each ship's
+   * loop is baked into a `Path2D` like the coast; only the hulls and their
+   * wakes are drawn per frame, in screen space.
    *
    * Mexico is drawn on top in amber — the board's colour — from the same
    * detailed geometry the board uses. Hovering it lights it up; clicking it
@@ -75,6 +83,13 @@
   let mexico: MexicoGeometry | null = null;
   let mexicoFill: Path2D | null = null;
   let mexicoOutline: Path2D | null = null;
+  /** Each ship's whole loop, in un-zoomed path space like the coast. */
+  let rutasBarcos: { id: string; color: string; path: Path2D }[] = [];
+  /** Where each ship was drawn this frame (every copy of the world), for hit-testing. */
+  let cabezas: { barco: Barco; x: number; y: number }[] = [];
+  let hoverBarco = $state.raw<Barco | null>(null);
+  let pointer = $state({ x: 0, y: 0 });
+  let innerWidth = $state(0);
   let hoverMexico = $state(false);
   /** Set while the camera flies in; the page changes when it lands. */
   let entering = $state(false);
@@ -93,10 +108,18 @@
 
   const wraps = $derived(PROJECTIONS[projectionKey].wraps);
 
+  /**
+   * The map's central meridian: the eastern Pacific, not Greenwich. Mexico sits
+   * just right of the middle with Asia to its left and Europe to its right, so
+   * both ocean crossings run whole instead of being cut at the map's edge —
+   * and far enough west that Shanghái clears the fleet panel on the left.
+   */
+  const MERIDIANO_CENTRAL = -130;
+
   /** Rebuild the projection for the current size and re-bake every static path. */
   function rebuild() {
     if (!width || !height) return;
-    projection = PROJECTIONS[projectionKey].make();
+    projection = PROJECTIONS[projectionKey].make().rotate([-MERIDIANO_CENTRAL, 0]);
     projection.fitExtent(
       [
         [12, 12],
@@ -106,11 +129,11 @@
     );
     path = geoPath(projection);
 
-    const left = projection([-180, 0]);
-    const right = projection([180, 0]);
-    worldX0 = left ? left[0] : 0;
-    worldWidth = left && right ? Math.abs(right[0] - left[0]) : width;
+    // The world's extent from the sphere's outline: with the projection
+    // rotated, ±180° is no longer the edge of the map.
     const bounds = path.bounds({ type: 'Sphere' });
+    worldX0 = bounds[0][0];
+    worldWidth = bounds[1][0] - bounds[0][0] || width;
     worldY0 = bounds[0][1];
     worldY1 = bounds[1][1];
 
@@ -147,6 +170,7 @@
       coastPath = new Path2D(path(world.coastline) ?? '');
       bordersPath = new Path2D(path(world.borders) ?? '');
     }
+    bakeRutas();
     if (mexico) {
       mexicoFill = new Path2D(path(mexico.pais) ?? '');
       mexicoOutline = new Path2D(
@@ -156,6 +180,16 @@
         }) ?? ''
       );
     }
+  }
+
+  /** The ships' loops. d3 follows each leg's great circles and cuts them at the antimeridian. */
+  function bakeRutas() {
+    if (!path) return;
+    rutasBarcos = sim.barcos.map((b) => ({
+      id: b.id,
+      color: b.color,
+      path: new Path2D(path!({ type: 'MultiLineString', coordinates: piernasDelRecorrido(b).map((p) => p.puntos) }) ?? ''),
+    }));
   }
 
   // ---- camera -------------------------------------------------------------
@@ -247,7 +281,13 @@
     return !!p && !!mexico && geoContains(mexico.pais, p);
   }
 
-  type Fly = { from: [number, number, number]; to: [number, number, number]; start: number };
+  type Fly = {
+    from: [number, number, number];
+    to: [number, number, number];
+    start: number;
+    /** What landing does: switch to the board, or nothing. */
+    alLlegar: (() => void) | null;
+  };
   let fly: Fly | null = null;
   const FLY_MS = 1100;
 
@@ -273,12 +313,53 @@
       cx += Math.round((here - cx) / worldWidth) * worldWidth;
     }
     entering = true;
+    // The board opens on the country, not chasing a ship out at sea.
+    sim.siguiendo = false;
     fly = {
       from: [transform.invertX(width / 2), transform.invertY(height / 2), transform.k],
       to: [cx, centre[1], k],
       start: performance.now(),
+      alLlegar: () => goto('/mexico'),
     };
     requestDraw();
+  }
+
+  /** The copy of a projected point nearest the middle of the screen, on a tiled map. */
+  function copiaCercana(p: [number, number]): [number, number] {
+    if (!wraps || worldWidth <= 0) return p;
+    const here = transform.invertX(width / 2);
+    return [p[0] + Math.round((here - p[0]) / worldWidth) * worldWidth, p[1]];
+  }
+
+  /** The selected unit, if it's a ship: the world views show ships only. */
+  function barcoSeleccionado(): Barco | null {
+    const u = sim.seleccionado;
+    return u?.tipo === 'barco' ? u : null;
+  }
+
+  /** Fly to a ship: close enough to see its lane, and never out from where you already are. */
+  function volarABarco(b: Barco) {
+    const p = projection?.(posicion(b));
+    if (!p || entering) return;
+    const [cx, cy] = copiaCercana(p);
+    fly = {
+      from: [transform.invertX(width / 2), transform.invertY(height / 2), transform.k],
+      to: [cx, cy, Math.min(48, Math.max(transform.k, 2.4))],
+      start: performance.now(),
+      alLlegar: null,
+    };
+    requestDraw();
+  }
+
+  /** Keep the followed ship in the middle, at whatever zoom you've set. */
+  function follow() {
+    if (fly || !sim.siguiendo || !canvas || !zoomBehaviour) return;
+    const b = barcoSeleccionado();
+    const p = b ? projection?.(posicion(b)) : null;
+    if (!p) return;
+    const [cx, cy] = copiaCercana(p);
+    const k = transform.k;
+    select(canvas).call(zoomBehaviour.transform, zoomIdentity.translate(width / 2 - k * cx, height / 2 - k * cy).scale(k));
   }
 
   function stepCamera(now: number) {
@@ -287,7 +368,11 @@
     const u = Math.max(0, Math.min(1, (now - fly.start) / FLY_MS));
     const e = u < 0.5 ? 4 * u ** 3 : 1 - (-2 * u + 2) ** 3 / 2;
     const [fx, fy, fk] = fly.from;
-    const [tx, ty, tk] = fly.to;
+    let [tx, ty, tk] = fly.to;
+    // A ship keeps sailing while the camera flies to it: aim at where it is now.
+    const b = !fly.alLlegar && sim.siguiendo ? barcoSeleccionado() : null;
+    const ahora = b ? projection?.(posicion(b)) : null;
+    if (ahora) [tx, ty] = copiaCercana(ahora);
     // Geometric zoom: linear k would spend the whole flight already zoomed in.
     const k = Math.exp(Math.log(fk) + (Math.log(tk) - Math.log(fk)) * e);
     const next = zoomIdentity
@@ -295,12 +380,17 @@
       .scale(k);
     select(canvas).call(zoomBehaviour.transform, next);
     if (u >= 1) {
+      const alLlegar = fly.alLlegar;
       fly = null;
-      goto('/mexico');
+      alLlegar?.();
     }
   }
 
   // ---- drawing ------------------------------------------------------------
+
+  /** Something on screen moves by itself and needs the next frame too. */
+  const animando = () =>
+    !!fly || (sim.corriendo && sim.barcos.length > 0) || (sim.siguiendo && barcoSeleccionado() !== null) || !!hoverBarco;
 
   /** Queue one paint for the next frame; any number of calls before it coalesce. */
   function requestDraw() {
@@ -308,12 +398,13 @@
     frame = requestAnimationFrame((now) => {
       frame = 0;
       stepCamera(now);
-      draw();
-      if (fly) requestDraw();
+      follow();
+      draw(now);
+      if (animando()) requestDraw();
     });
   }
 
-  function draw() {
+  function draw(now = performance.now()) {
     const ctx = canvas?.getContext('2d');
     if (!ctx || !projection) return;
 
@@ -388,10 +479,28 @@
         ctx.restore();
       }
 
+      // ---- the ships' loops ----------------------------------------------
+      // Faint in each ship's colour; the selected (or hovered) one lit up.
+      if (rutasBarcos.length) {
+        const foco = hoverBarco?.id ?? sim.seleccion;
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.lineCap = 'round';
+        for (const r of rutasBarcos) {
+          const lit = r.id === foco;
+          ctx.strokeStyle = conAlfa(r.color, lit ? 0.75 : foco ? 0.12 : 0.22);
+          ctx.lineWidth = (lit ? 1.6 : 0.9) / k;
+          ctx.stroke(r.path);
+        }
+        ctx.restore();
+      }
+
       ctx.restore();
     }
 
     ctx.restore();
+
+    pintarPuertosLejanos(ctx);
 
     // The name sits under Mexico in screen space, so it stays the same size
     // while you zoom; on every copy of the world that's on screen.
@@ -413,28 +522,242 @@
       ctx.letterSpacing = '0px';
       ctx.textAlign = 'left';
     }
+
+    pintarBarcos(ctx, now);
+  }
+
+  // ---- ships ------------------------------------------------------------------
+
+  /** Screen length of a ship's hull at world scale, px. */
+  const CASCO_PX = 9;
+  /** Screen length of the wake behind it, px. */
+  const ESTELA_PX = 46;
+
+  function conAlfa(hex: string, a: number): string {
+    const n = parseInt(hex.slice(1), 16);
+    return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+  }
+
+  /** Screen px per km at the current zoom (true at the equator; enough for sizes and headings). */
+  const pxPorKm = () => (transform.k * (projection?.scale() ?? 1)) / 6371;
+
+  /** Shanghái and Róterdam: where the crossings end. On every copy of the world. */
+  function pintarPuertosLejanos(ctx: CanvasRenderingContext2D) {
+    if (!projection) return;
+    ctx.save();
+    ctx.font = '600 10px Inter, "Segoe UI", system-ui, sans-serif';
+    ctx.letterSpacing = '1px';
+    ctx.lineJoin = 'round';
+    for (const p of PUERTAS) {
+      const q = projection(p.haciaLonLat);
+      if (!q) continue;
+      for (const ox of worldOffsets()) {
+        const x = transform.applyX(q[0] + ox);
+        const y = transform.applyY(q[1]);
+        if (x < -60 || x > width + 60 || y < -20 || y > height + 20) continue;
+        ctx.fillStyle = '#04101f';
+        ctx.strokeStyle = 'rgba(76, 201, 255, 0.9)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.strokeStyle = 'rgba(3, 9, 18, 0.85)';
+        ctx.lineWidth = 3;
+        ctx.strokeText(p.hacia, x + 8, y + 3.5);
+        ctx.fillStyle = '#cfeaff';
+        ctx.fillText(p.hacia, x + 8, y + 3.5);
+      }
+    }
+    ctx.restore();
+  }
+
+  /** A polyline in path space, split wherever it jumps across the map's seam. */
+  function tramos(lonLats: LonLat[]): [number, number][][] {
+    const out: [number, number][][] = [];
+    let run: [number, number][] = [];
+    for (const ll of lonLats) {
+      const q = projection?.(ll);
+      if (!q) continue;
+      const prev = run[run.length - 1];
+      if (prev && Math.abs(q[0] - prev[0]) > worldWidth / 2) {
+        if (run.length > 1) out.push(run);
+        run = [];
+      }
+      run.push(q);
+    }
+    if (run.length > 1) out.push(run);
+    return out;
+  }
+
+  /**
+   * Every ship, the selected one last so it's on top: a fading wake along its
+   * lane, a glow, and a hull pointing where it's headed. In port, a ring that
+   * fills up until it sails. Records each drawn hull for hit-testing.
+   */
+  function pintarBarcos(ctx: CanvasRenderingContext2D, now: number) {
+    cabezas = [];
+    if (!projection) return;
+    const pxKm = pxPorKm();
+    const orden = [...sim.barcos].sort((a, b) => Number(a.id === sim.seleccion) - Number(b.id === sim.seleccion));
+    for (const b of orden) {
+      const leg = trayectoActual(b);
+      const head = projection(posicion(b));
+      if (!head) continue;
+      // Heading from a short stretch behind the bow (ahead of it, right out of port).
+      const d = Math.max(1, 8 / pxKm);
+      const back = projection(b.km > d ? puntoEn(leg, b.km - d) : posicion(b));
+      const fwd = projection(b.km > d ? posicion(b) : puntoEn(leg, b.km + d));
+      let rumbo = 0;
+      if (back && fwd) {
+        let dx = fwd[0] - back[0];
+        if (Math.abs(dx) > worldWidth / 2) dx -= Math.sign(dx) * worldWidth;
+        rumbo = Math.atan2(fwd[1] - back[1], dx);
+      }
+      const estela = b.estado === 'ruta' ? tramos(seccion(leg, b.km - ESTELA_PX / pxKm, b.km)) : [];
+      const sel = sim.seleccion === b.id;
+      const hot = hoverBarco?.id === b.id;
+
+      for (const ox of worldOffsets()) {
+        const hx = transform.applyX(head[0] + ox);
+        const hy = transform.applyY(head[1]);
+        if (hx < -60 || hx > width + 60 || hy < -60 || hy > height + 60) continue;
+        cabezas.push({ barco: b, x: hx, y: hy });
+
+        // Wake: from nothing to the stern, added on like a light trail.
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        for (const run of estela) {
+          const [ax, ay] = run[0];
+          const g = ctx.createLinearGradient(transform.applyX(ax + ox), transform.applyY(ay), hx, hy);
+          g.addColorStop(0, conAlfa(b.color, 0));
+          g.addColorStop(1, conAlfa(b.color, 0.5));
+          ctx.strokeStyle = g;
+          ctx.lineWidth = 2.4;
+          ctx.beginPath();
+          run.forEach(([x, y], i) => {
+            const sx = transform.applyX(x + ox);
+            const sy = transform.applyY(y);
+            if (i) ctx.lineTo(sx, sy);
+            else ctx.moveTo(sx, sy);
+          });
+          ctx.stroke();
+        }
+
+        const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, 13);
+        glow.addColorStop(0, conAlfa(b.color, sel || hot ? 0.6 : 0.35));
+        glow.addColorStop(1, conAlfa(b.color, 0));
+        ctx.fillStyle = glow;
+        ctx.fillRect(hx - 13, hy - 13, 26, 26);
+        ctx.restore();
+
+        // Hull: pointed bow at the ship's position, square stern, a pale bridge aft.
+        const L = CASCO_PX * Math.min(1.7, 0.9 + 0.12 * Math.sqrt(transform.k)) * (sel || hot ? 1.2 : 1);
+        const W = L * 0.42;
+        ctx.save();
+        ctx.translate(hx, hy);
+        ctx.rotate(rumbo);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(-L * 0.3, -W / 2);
+        ctx.lineTo(-L, -W / 2);
+        ctx.lineTo(-L, W / 2);
+        ctx.lineTo(-L * 0.3, W / 2);
+        ctx.closePath();
+        ctx.fillStyle = b.color;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(3, 9, 18, 0.92)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.fillRect(-L * 0.9, -W * 0.3, L * 0.18, W * 0.6);
+        ctx.restore();
+
+        const cx = hx - Math.cos(rumbo) * L * 0.5;
+        const cy = hy - Math.sin(rumbo) * L * 0.5;
+        const radio = Math.max(8, L * 0.7);
+        if (b.estado === 'parada') {
+          const total = esperaTotal(b);
+          const hecho = total > 0 ? 1 - b.espera / total : 1;
+          ctx.lineCap = 'round';
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+          ctx.beginPath();
+          ctx.arc(cx, cy, radio, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.strokeStyle = b.color;
+          ctx.beginPath();
+          ctx.arc(cx, cy, radio, -Math.PI / 2, -Math.PI / 2 + hecho * Math.PI * 2);
+          ctx.stroke();
+        }
+        if (sel) {
+          ctx.strokeStyle = conAlfa(b.color, 0.85);
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(cx, cy, radio + 4 + Math.sin(now / 260) * 1.5, 0, Math.PI * 2);
+          ctx.stroke();
+          // Its name, so the one you picked reads at a glance among the rest.
+          ctx.font = '600 10px Inter, "Segoe UI", system-ui, sans-serif';
+          ctx.lineJoin = 'round';
+          ctx.strokeStyle = 'rgba(3, 9, 18, 0.85)';
+          ctx.lineWidth = 3;
+          ctx.strokeText(b.nombre, cx + radio + 9, cy + 3.5);
+          ctx.fillStyle = conAlfa(b.color, 1);
+          ctx.fillText(b.nombre, cx + radio + 9, cy + 3.5);
+        }
+      }
+    }
+  }
+
+  /** The ship drawn under a screen point, if any (the nearest within reach). */
+  function barcoEn(mx: number, my: number): Barco | null {
+    let mejor: Barco | null = null;
+    let mejorD = 12;
+    for (const c of cabezas) {
+      const d = Math.hypot(c.x - mx, c.y - my);
+      if (d < mejorD) {
+        mejorD = d;
+        mejor = c.barco;
+      }
+    }
+    return mejor;
   }
 
   function onPointerMove(event: PointerEvent) {
     if (!canvas || event.buttons) return;
     const rect = canvas.getBoundingClientRect();
-    const hit = isMexico(event.clientX - rect.left, event.clientY - rect.top);
-    if (hit !== hoverMexico) {
+    const mx = event.clientX - rect.left;
+    const my = event.clientY - rect.top;
+    pointer = { x: event.clientX, y: event.clientY };
+    // A ship off Mexico's coast is a ship, not a way into the board.
+    const barco = barcoEn(mx, my);
+    const hit = !barco && isMexico(mx, my);
+    if (barco !== hoverBarco || hit !== hoverMexico) {
+      hoverBarco = barco;
       hoverMexico = hit;
       requestDraw();
     }
   }
 
   function onPointerLeave() {
-    if (!hoverMexico) return;
+    if (!hoverMexico && !hoverBarco) return;
     hoverMexico = false;
+    hoverBarco = null;
     requestDraw();
   }
 
   function onClick(event: MouseEvent) {
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    if (isMexico(event.clientX - rect.left, event.clientY - rect.top)) enterMexico();
+    const mx = event.clientX - rect.left;
+    const my = event.clientY - rect.top;
+    const barco = barcoEn(mx, my);
+    if (barco) {
+      sim.seleccionar(barco.id);
+      requestDraw();
+    } else if (isMexico(mx, my)) enterMexico();
   }
 
   // ---- lifecycle --------------------------------------------------------
@@ -512,7 +835,15 @@
     zoomBehaviour = d3zoom<HTMLCanvasElement, unknown>()
       .scaleExtent([1, 48])
       // d3's default filter, plus: hands off the map while the camera flies in.
-      .filter((event: MouseEvent) => !entering && (!event.ctrlKey || event.type === 'wheel') && !event.button)
+      // A drag takes the camera back from a flight to a ship or a followed one.
+      .filter((event: MouseEvent) => {
+        if (entering) return false;
+        if (event.type === 'mousedown' || event.type === 'touchstart') {
+          fly = null;
+          sim.siguiendo = false;
+        }
+        return (!event.ctrlKey || event.type === 'wheel') && !event.button;
+      })
       .on('zoom', (event) => {
         transform = event.transform;
         // Only ever step up in detail — dropping back to 110m on zoom-out would
@@ -532,8 +863,63 @@
     };
   });
 
+  // ---- the game -------------------------------------------------------------
+
+  // The clock runs while a world view is open: ships are out there sailing.
+  $effect(() => {
+    sim.cargar();
+  });
+  $effect(() => sim.attach());
+
+  $effect(() => {
+    // A ship put in service or retired: re-bake the loops.
+    sim.barcos;
+    untrack(() => {
+      bakeRutas();
+      if (hoverBarco && !sim.barcos.includes(hoverBarco)) hoverBarco = null;
+      requestDraw();
+    });
+  });
+
+  $effect(() => {
+    // Anything that (re)starts motion, or changes what's lit.
+    sim.corriendo;
+    sim.seleccion;
+    sim.siguiendo;
+    requestDraw();
+  });
+
+  $effect(() => {
+    // Camera requests from the fleet panel. Untracked: flying reads the camera.
+    const pedido = tablero.irA;
+    if (!pedido) return;
+    untrack(() => {
+      const b = sim.barcos.find((x) => x.id === pedido.id);
+      if (b) volarABarco(b);
+    });
+  });
+
+  // Arriving already following a ship (from the board's "Ver en el globo", say):
+  // fly to it once the map has a size and the fleet is loaded.
+  let llegada = true;
+  $effect(() => {
+    if (!llegada || sim.estado !== 'lista') return;
+    untrack(() => {
+      if (!projection) return;
+      llegada = false;
+      const b = sim.siguiendo ? barcoSeleccionado() : null;
+      if (b) volarABarco(b);
+    });
+  });
+
   $effect(() => () => {
     if (frame) cancelAnimationFrame(frame);
+  });
+
+  // Live line for the hovered ship; reads the clock so it updates as it sails.
+  const lineaBarco = $derived.by(() => {
+    sim.horas;
+    return hoverBarco ? estadoUnidad(hoverBarco) : '';
   });
 
   function resetView() {
@@ -542,15 +928,32 @@
   }
 </script>
 
+<svelte:window bind:innerWidth />
+
 <div class="host" bind:this={host}>
   <canvas
     bind:this={canvas}
-    class:pointing={hoverMexico}
+    class:pointing={hoverMexico || hoverBarco !== null}
     onpointermove={onPointerMove}
     onpointerleave={onPointerLeave}
     onclick={onClick}
   ></canvas>
 </div>
+
+{#if hoverBarco}
+  <div
+    class="tip panel"
+    class:flip={pointer.x > innerWidth - 260}
+    style:left="{pointer.x}px"
+    style:top="{pointer.y}px"
+  >
+    <span class="label tip-kind" style:color={hoverBarco.color}>
+      {CLASES_BARCO[hoverBarco.clase].nombre} · {hoverBarco.id}
+    </span>
+    <strong>{hoverBarco.nombre}</strong>
+    <span class="tip-sub">{lineaBarco}</span>
+  </div>
+{/if}
 
 <div class="tools panel">
   <button class="ctl enter" onclick={enterMexico} disabled={entering}>Entrar a México ›</button>
@@ -583,6 +986,36 @@
 
   canvas.pointing {
     cursor: pointer;
+  }
+
+  /* The hovered ship's card, by the cursor: the board's tooltip. */
+  .tip {
+    position: fixed;
+    z-index: 35;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.5rem 0.7rem;
+    min-width: 9rem;
+    max-width: 17rem;
+    background: var(--glass-strong);
+    transform: translate(16px, 14px);
+  }
+
+  /* Near the right edge the tip opens to the left of the cursor instead. */
+  .tip.flip {
+    transform: translate(calc(-100% - 16px), 14px);
+  }
+
+  .tip strong {
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .tip-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
   }
 
   canvas:active {

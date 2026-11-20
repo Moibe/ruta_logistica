@@ -1,6 +1,6 @@
-import { enElCanal, fueraDelMapa, KM_POR_MILLA } from '$lib/domain/barcos';
+import { enElCanal, enTravesia, KM_POR_MILLA } from '$lib/domain/barcos';
 import { horasAProxima, paradaActual, proximaParada } from '$lib/domain/servicio';
-import { nombreCorto, puerta } from '$lib/domain/sitios';
+import { nombreCorto } from '$lib/domain/sitios';
 import type { Unidad } from '$lib/state/simulacion.svelte';
 
 const entero = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 0 });
@@ -31,10 +31,11 @@ export function horaDeJuego(horas: number): string {
 /** One line for a train or ship: where it is or where it's headed, and when. */
 export function estadoUnidad(u: Unidad): string {
   if (u.tipo === 'barco') {
-    if (fueraDelMapa(u)) {
-      const p = puerta(u.destinos[u.pierna]);
-      return `En travesía a ${p?.hacia ?? 'ultramar'} · vuelve en ${duracion(u.espera)}`;
+    const t = enTravesia(u);
+    if (t && t.tramo !== 'alla') {
+      return `Cruzando el ${t.puerta.oceano} → ${nombreCorto(proximaParada(u))} · ${duracion(horasAProxima(u))}`;
     }
+    // At the far port too: a gateway as a stop is named by it ("En Shanghái").
     const aqui = paradaActual(u);
     if (aqui) return `En ${nombreCorto(aqui)} · zarpa en ${duracion(u.espera)}`;
     const destino = nombreCorto(proximaParada(u));

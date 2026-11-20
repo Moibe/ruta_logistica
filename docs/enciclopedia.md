@@ -4,10 +4,10 @@ Referencia de lo que hay en el juego: qué contiene, de dónde sale cada dato, q
 mano y por qué, y con qué reglas se mueve. Por ahora es un documento; más adelante será una
 página web del juego.
 
-> **Cifras al 19 de noviembre de 2026, con trenes y barcos.** No están escritas de memoria:
-> se calcularon ejecutando el mismo código del juego que usa el tablero (`domain/red.ts`,
-> `domain/mar.ts`, `domain/trenes.ts`, `domain/barcos.ts`, `domain/sitios.ts`). Si cambian
-> los datos, se recalculan.
+> **Cifras al 19 de noviembre de 2026, con trenes, barcos y travesías oceánicas.** No están
+> escritas de memoria: se calcularon ejecutando el mismo código del juego que usa el tablero
+> (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`, `domain/barcos.ts`,
+> `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
 **Contenido**
 
@@ -32,9 +32,9 @@ página web del juego.
 | --- | --- | --- | --- |
 | [Natural Earth](https://www.naturalearthdata.com/) 1:10m | Estados, países vecinos, vías férreas y ciudades del tablero de México | Repositorio `nvkelso/natural-earth-vector`, commit `ca96624` del 2 de junio de 2022 (versión 5.2.0-pre) | Dominio público |
 | Atlas Ambiental de América del Norte, de la CCA (Comisión para la Cooperación Ambiental de México, Estados Unidos y Canadá) | Origen de las vías férreas de Norteamérica que trae Natural Earth (así lo registra la bitácora de cambios de Natural Earth); reúne cartografía de INEGI, USGS y Natural Resources Canada | Red de alrededor de 2010 | A través de Natural Earth |
-| [world-atlas](https://github.com/topojson/world-atlas) | Contornos del mundo para las vistas globales (tierra a 110m y 50m, países a 110m) | 2.0.2, que redistribuye Natural Earth 4.1.0 en TopoJSON | ISC (los datos, dominio público) |
-| Curaduría propia | Los 15 puertos, las 2 salidas al mundo, dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#11-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
-| Cálculo propio sobre Natural Earth | Las 136 rutas marítimas entre puertos y salidas (ver [Rutas marítimas](#7-rutas-marítimas)) | Misma tierra 1:10m del tablero | Del proyecto |
+| [world-atlas](https://github.com/topojson/world-atlas) | Contornos del mundo para las vistas globales (tierra a 110m y 50m, países a 110m), y la tierra 50m sobre la que se calculan las travesías oceánicas | 2.0.2, que redistribuye Natural Earth 4.1.0 en TopoJSON | ISC (los datos, dominio público) |
+| Curaduría propia | Los 15 puertos, las 2 salidas al mundo y sus puertos lejanos (Shanghái y Róterdam), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#11-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
+| Cálculo propio sobre Natural Earth | Las 136 rutas marítimas entre puertos y salidas, y las 2 travesías oceánicas de las salidas a sus puertos lejanos (ver [Rutas marítimas](#7-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
 | `logistica-oceanica` (proyecto hermano) | Velocidades de referencia de las clases de barco | — | Del proyecto |
 | INEGI (convención cartográfica) | Parámetros de la proyección del tablero: cónica conforme de Lambert, paralelos 17.5° y 29.5°, meridiano central 102° O | — | — |
 
@@ -49,7 +49,7 @@ Natural Earth una sola vez a `.cache/ne/`, fijadas al commit de arriba, y produc
 | --- | --- |
 | `static/data/mexico.topo.json` | Estados y países vecinos, en un solo TopoJSON que comparte arcos |
 | `static/data/red-ferroviaria.json` | La red ferroviaria como grafo: nodos y tramos |
-| `static/data/rutas-maritimas.json` | Las rutas por mar entre cada par de puertos y salidas, y el trazo del Canal |
+| `static/data/rutas-maritimas.json` | Las rutas por mar entre cada par de puertos y salidas, el trazo del Canal y las travesías oceánicas (estas las calcula `scripts/travesias.mjs`) |
 | `src/lib/domain/datos/ciudades.json` | Las 58 ciudades |
 
 Los puertos y las salidas al mundo no salen del script: viven a mano en
@@ -412,19 +412,59 @@ Algunas distancias, comparadas con las reales en millas náuticas (mn):
 mar** (rodeando por Panamá) y **274 km por tren**. Esa diferencia es la razón de ser del
 corredor interoceánico, y está en el juego tal cual.
 
-### Salidas al mundo
+### Salidas al mundo y travesías oceánicas
 
-Dos "puertas" en el borde del tablero. Un barco que sale por una queda **en travesía fuera
-del mapa** el tiempo real de ir al puerto que representa, hacer escala allá (48 h) y volver:
+Dos "puertas" en el borde del tablero. Cada una representa un **puerto lejano**: un barco que
+sale por ella **cruza el océano de verdad** hasta ese puerto, hace escala allá 48 h y vuelve
+por el mismo camino. En el tablero se pierde de vista al pasar la puerta; en las vistas del
+mundo (mapa plano y globo) se le ve navegar toda la travesía.
 
-| Salida | Dónde | Hacia | Gran círculo | Fuera del mapa (portacontenedores / tanque / granelero) |
-| --- | --- | --- | ---: | --- |
-| Asia | Pacífico, 23.5° N · 118.2° O | Shanghái | 11,221 km | 32.9 d / 41.7 d / 44.7 d |
-| Europa | Atlántico, al norte de las Bahamas, 29.5° N · 77° O | Róterdam | 6,881 km | 20.9 d / 26.3 d / 28.2 d |
+| Salida | Dónde | Puerto lejano | Océano |
+| --- | --- | --- | --- |
+| Asia | Pacífico, 23.5° N · 118.2° O | Shanghái, terminal de aguas profundas de Yangshan (30.627° N, 122.067° E) | Pacífico |
+| Europa | Atlántico, al norte de las Bahamas, 29.5° N · 77° O | Róterdam, Maasvlakte (51.95° N, 4.05° E) | Atlántico |
 
-El tiempo fuera suma ida y vuelta por el gran círculo más un 10 % (las rutas reales nunca
-son la línea más corta) a la velocidad de la clase, más la escala lejana. La salida a Europa
-está pasado el estrecho de Florida, así que la ruta visible desde el Golfo cruza el estrecho.
+**Cómo se calculan las travesías** (`scripts/travesias.mjs`, dentro de `npm run datos`). Con
+el mismo método que las rutas de México, pero sobre el mundo entero:
+
+1. **La tierra** es la 1:50m de world-atlas, la misma que dibujan las vistas del mundo al
+   acercarse: así ningún barco cruza una costa que se vea.
+2. **Una malla de 0.1°** (unos 11 km por celda, 4,860,000 celdas) de 60° S a 75° N que **da
+   la vuelta al mundo**: la columna de 180° E es vecina de la de 180° O, porque la travesía
+   a Asia cruza el antimeridiano. Celda de tierra si su centro cae en tierra o si la toca una
+   costa.
+3. **La ruta más corta por mar**, con el mismo sobrecosto por navegar a menos de ~45 km de la
+   costa.
+4. **Se endereza en arcos de círculo máximo**, no en rectas del mapa: a escala de océano un
+   barco navega el círculo máximo, que en un mapa plano se ve como curva.
+5. **Auditoría exacta**: cada kilómetro de cada arco se prueba contra los polígonos 50m (no
+   contra una malla). Fuera de los últimos 30 km de llegada al puerto lejano, **ninguna
+   travesía pisa tierra**.
+
+| Travesía | Distancia | Gran círculo | Rodeo | Por dónde pasa |
+| --- | ---: | ---: | ---: | --- |
+| Asia → Shanghái | 11,407 km (6,159 mn) | 11,214 km | +1.7 % | Pacífico norte en arco, al sur de Japón y de Kyushu |
+| Europa → Róterdam | 7,108 km (3,838 mn) | 6,881 km | +3.3 % | Al sur de Terranova (cabo Race), el Canal de la Mancha y el estrecho de Dover |
+
+Los vértices del trazo, de la puerta al puerto lejano:
+
+- **Asia**: 118.2° O 23.5° N → 139.45° E 32.65° N → 130.15° E 29.85° N → Yangshan.
+- **Europa**: 77° O 29.5° N → 56.75° O 46.25° N → 52.55° O 46.45° N → 4.75° O 49.65° N →
+  1.15° E 50.65° N → 2.45° E 51.95° N → 3.95° E 51.95° N → Róterdam.
+
+Tiempo de cada travesía, solo de ida (a la velocidad de la clase):
+
+| Travesía | Portacontenedores y ro-ro | Buque tanque | Granelero |
+| --- | ---: | ---: | ---: |
+| Asia → Shanghái | 14.3 d | 18.3 d | 19.7 d |
+| Europa → Róterdam | 8.9 d | 11.4 d | 12.3 d |
+
+De puerto mexicano a puerto lejano, en portacontenedor: **Manzanillo → Shanghái 13,005 km
+(7,022 mn), 16.3 días**; **Veracruz → Róterdam 9,515 km (5,137 mn), 11.9 días**. Las
+distancias reales rondan las 7,000 y las 5,100 mn.
+
+La salida a Europa está pasado el estrecho de Florida, así que la ruta desde el Golfo cruza
+el estrecho antes de salir del tablero.
 
 ---
 
@@ -449,17 +489,18 @@ corte y lago en cerca de 9 horas.
 Los barcos hacen **circuitos**: recorren sus escalas en orden y vuelven a la primera, como
 los servicios regulares de las navieras.
 
-| Barco | Clase | Circuito | Por vuelta | Ciclo completo |
-| --- | --- | --- | ---: | ---: |
-| Mar de Cortés | Portacontenedores | Asia → Manzanillo → Lázaro Cárdenas → Asia | 3,764 km | 39.1 d |
-| Cabo Corrientes | Portacontenedores | Europa → Veracruz → Altamira → Europa | 5,256 km | 29.0 d |
-| Arrecife Alacranes | Buque tanque | Salina Cruz → Lázaro Cárdenas → Manzanillo → Mazatlán → Guaymas → Salina Cruz | 4,781 km | 12.7 d |
-| Isla Tiburón | Buque tanque | Coatzacoalcos → Dos Bocas → Progreso → Coatzacoalcos | 1,311 km | 5.1 d |
-| Bahía de Banderas | Ro-ro de autos | Lázaro Cárdenas → Veracruz → Lázaro Cárdenas, por Panamá | 11,396 km | 16.1 d |
-| Laguna de Términos | Granelero | Guaymas → Asia → Guaymas | 3,024 km | 51.5 d |
+| Barco | Clase | Circuito | Por vuelta | En el tablero | Ciclo completo |
+| --- | --- | --- | ---: | ---: | ---: |
+| Mar de Cortés | Portacontenedores | Shanghái → Manzanillo → Lázaro Cárdenas → Shanghái | 26,578 km | 3,764 km | 36.7 d |
+| Cabo Corrientes | Portacontenedores | Róterdam → Veracruz → Altamira → Róterdam | 19,472 km | 5,256 km | 27.8 d |
+| Arrecife Alacranes | Buque tanque | Salina Cruz → Lázaro Cárdenas → Manzanillo → Mazatlán → Guaymas → Salina Cruz | 4,781 km | 4,781 km | 12.7 d |
+| Isla Tiburón | Buque tanque | Coatzacoalcos → Dos Bocas → Progreso → Coatzacoalcos | 1,311 km | 1,311 km | 5.1 d |
+| Bahía de Banderas | Ro-ro de autos | Lázaro Cárdenas → Veracruz → Lázaro Cárdenas, por Panamá | 11,396 km | 11,396 km | 16.1 d |
+| Laguna de Términos | Granelero | Guaymas → Shanghái → Guaymas | 25,838 km | 3,024 km | 48.2 d |
 
-"Por vuelta" son los km dentro del mapa; el ciclo completo incluye las escalas y el tiempo
-fuera del mapa. Qué representan:
+"Por vuelta" es todo el circuito, travesías incluidas; "en el tablero", la parte entre las
+salidas al mundo. El ciclo completo suma la navegación y todas las escalas. Una escala en
+"Asia" o "Europa" es una escala en Shanghái o Róterdam. Qué representan:
 
 - **Mar de Cortés y Cabo Corrientes**: las líneas regulares de contenedores, que escalan donde
   esos tráficos escalan en la realidad (Asia en Manzanillo y Lázaro Cárdenas; Europa en
@@ -473,24 +514,38 @@ fuera del mapa. Qué representan:
 
 Detalle por tramo:
 
-- **Mar de Cortés**: Asia–Manzanillo 1,598 km (2.0 d) · Manzanillo–Lázaro Cárdenas 299 km
-  (9 h) · Lázaro Cárdenas–Asia 1,866 km (2.3 d).
-- **Cabo Corrientes**: Europa–Veracruz 2,406 km (3.0 d) · Veracruz–Altamira 419 km (13 h) ·
-  Altamira–Europa 2,430 km (3.0 d).
+- **Mar de Cortés**: Shanghái–Manzanillo 13,005 km (16.3 d, de ellos 11,407 km de
+  travesía) · Manzanillo–Lázaro Cárdenas 299 km (9 h) · Lázaro Cárdenas–Shanghái 13,273 km
+  (16.6 d).
+- **Cabo Corrientes**: Róterdam–Veracruz 9,515 km (11.9 d, de ellos 7,108 km de travesía) ·
+  Veracruz–Altamira 419 km (13 h) · Altamira–Róterdam 9,538 km (11.9 d).
 - **Arrecife Alacranes**: Salina Cruz–Lázaro Cárdenas 850 km (1.4 d) · Lázaro Cárdenas–
   Manzanillo 299 km (12 h) · Manzanillo–Mazatlán 570 km (22 h) · Mazatlán–Guaymas 721 km
   (1.2 d) · Guaymas–Salina Cruz 2,341 km (3.8 d).
 - **Isla Tiburón**: Coatzacoalcos–Dos Bocas 157 km (6 h) · Dos Bocas–Progreso 516 km (20 h) ·
   Progreso–Coatzacoalcos 638 km (1.0 d).
 - **Bahía de Banderas**: Lázaro Cárdenas–Veracruz 5,698 km (7.5 d), y de regreso igual.
-- **Laguna de Términos**: Guaymas–Asia 1,512 km (2.6 d), y de regreso igual.
+- **Laguna de Términos**: Guaymas–Shanghái 12,919 km (22.4 d, de ellos 11,407 km de
+  travesía), y de regreso igual.
 
 Los **nombres de los barcos** son inventados, tomados de mares, islas y costas de México
 (Mar de Cortés, Cabo Corrientes, Arrecife Alacranes…). Ninguno es, ni pretende ser, un barco
 real.
 
 El jugador puede crear barcos nuevos (*＋ Nuevo* en la pestaña Barcos): elige la clase y
-las escalas en el mapa, en orden; el circuito se cierra solo de vuelta a la primera.
+las escalas en el mapa, en orden; el circuito se cierra solo de vuelta a la primera. Una
+salida al mundo cuenta como escala en su puerto lejano. En las vistas del mundo, *＋ Nuevo*
+lleva al tablero con el trazado de un barco ya abierto.
+
+### En las vistas del mundo
+
+El mapa plano y el globo muestran **todos los barcos**, con su circuito completo como una
+línea tenue de su color: la del barco elegido (o bajo el cursor) se ilumina. Ahí también
+están Shanghái y Róterdam. Un clic en un barco, o en la lista de la izquierda, lo elige y
+lleva la cámara hasta él; *Seguir* lo mantiene al centro (en el globo, a la altura que tengas;
+arrastrar lo suelta, la rueda no). En el tablero, cuando un barco elegido pasa la salida, su
+ficha cambia *Seguir* por **Ver en el globo**, que abre el globo siguiéndolo a medio océano;
+la cámara del tablero se queda esperándolo en la salida.
 
 ---
 
@@ -500,7 +555,7 @@ las escalas en el mapa, en orden; el circuito se cierra solo de vuelta a la prim
 | --- | --- |
 | Inicio de la partida | Día 1, 06:00 |
 | Reloj | 1× = 1 hora de juego por segundo; velocidades: pausa, ¼×, 1×, 4×, 16×; la barra espaciadora pausa |
-| Cuándo corre | Solo con el tablero de México abierto; en las vistas del mundo el juego se pausa |
+| Cuándo corre | Con cualquier vista del juego abierta: el tablero o las dos vistas del mundo (donde también navegan los barcos) |
 | Velocidad en vía primaria | 60 km/h |
 | Velocidad en vía secundaria | 40 km/h |
 | Espera en terminales | 3 h (carga y descarga completa) |
@@ -520,11 +575,11 @@ como lo haría un despachador.
 | --- | --- |
 | Velocidad | La de su clase (13 a 18 nudos); 9 km/h dentro del Canal de Panamá |
 | Escala en un puerto | La de su clase (14 a 36 h) |
-| Salida al mundo | Fuera del mapa: ida y vuelta al puerto lejano por el gran círculo + 10 %, a la velocidad de la clase, más 48 h de escala allá |
+| Salida al mundo | Escala en su puerto lejano: el barco navega la travesía calculada a la velocidad de su clase, hace 48 h de escala allá (sea cual sea la clase) y vuelve |
 | Servicio | Circular: A → B → C → A… |
-| Cómo se elige la ruta | La ruta marítima calculada para ese par de puntos (ver [Rutas marítimas](#7-rutas-marítimas)) |
-| En pantalla | Un casco con proa, orientado a su rumbo, con estela; crece un poco al acercarte |
-| Resultado medido | En 3,000 h simuladas con los 6 barcos: 170 escalas, 39 % del tiempo en travesías fuera del mapa |
+| Cómo se elige la ruta | La ruta marítima calculada para ese par de puntos, más la travesía si un extremo es una salida (ver [Rutas marítimas](#7-rutas-marítimas)) |
+| En pantalla | Un casco con proa, orientado a su rumbo, con estela; del mismo tamaño en pantalla a cualquier zoom en el globo, y un poco mayor al acercarte en los mapas planos |
+| Resultado medido | En 3,000 h simuladas con los 6 barcos: 166 escalas (10 de ellas en Shanghái o Róterdam), 40 % del tiempo fuera del tablero |
 
 Los trenes y los barcos comparten el mismo motor de servicios (`domain/servicio.ts`): un
 vehículo recorre sus piernas, espera en cada parada lo que le toca y sigue. Solo cambia cómo
@@ -544,8 +599,18 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
 - **Puertos en la terminal o en la bocana**, no en el centro de la ciudad: es a donde llegan
   los barcos.
 - **El juego es México; el mundo entra por dos salidas.** Los barcos que van a Asia o a
-  Europa salen del tablero por una "puerta" y pasan fuera del mapa el tiempo real de la
-  travesía. Lo que pasa allá no se simula.
+  Europa salen del tablero por una "puerta" y cruzan el océano de verdad hasta Shanghái o
+  Róterdam: el tablero solo los pierde de vista, las vistas del mundo los siguen. Allá hacen
+  una escala fija de 48 h; lo que pasa en esos puertos (qué cargan, quién lo pide) no se
+  simula.
+- **Las travesías se calculan como las rutas de México, no se dibujan.** Es el mismo método
+  (malla, ruta más corta lejos de la costa, enderezado, auditoría), solo que sobre el mundo
+  y enderezado en círculos máximos. *(19 nov 2026; reemplaza el tiempo fijo "gran círculo +
+  10 %" que se usaba mientras el barco no se veía.)*
+- **El mapa plano del mundo se centra en 130° O**, no en Greenwich. México queda en medio,
+  con Asia a la izquierda y Europa a la derecha, y las dos travesías se ven enteras en vez
+  de cortarse en el borde. Se corrió al oeste de México para que Shanghái no quede debajo
+  del panel de barcos.
 - **Los trenes van y vuelven; los barcos hacen circuitos.** Así operan una línea de
   ferrocarril y un servicio regular de navieras.
 - **Nombres de barco inventados**, de la geografía de México, para no imitar barcos reales.
@@ -609,6 +674,15 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Salidas al mundo** definidas a mano en `puertas.json`: Asia en 23.5° N · 118.2° O (se
   movió desde 119.5° O para que quede a la vista junto al panel de la izquierda) y Europa en
   29.5° N · 77° O, pasado el estrecho de Florida.
+- **Shanghái pasó del centro de la ciudad a la terminal de Yangshan** (30.627° N,
+  122.067° E), el puerto de contenedores de aguas profundas en las islas frente a la bahía de
+  Hangzhou. Al volverse destino real de las travesías, el punto tenía que estar donde llegan
+  los barcos (la misma regla que los puertos de México), no en el centro de la ciudad, a
+  88 km de la terminal (antes: 31.23° N, 121.47° E).
+- **Cada salida dice qué océano cruza** (`oceano` en `puertas.json`): Pacífico o Atlántico.
+- **Travesías calculadas** de cada salida a su puerto lejano (ver
+  [Salidas al mundo y travesías oceánicas](#salidas-al-mundo-y-travesías-oceánicas)). Las 136
+  rutas de México no cambiaron.
 
 **Vías férreas**
 
@@ -644,8 +718,10 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   vuelta; un barco, en circuito.
 - **Escala**: una parada de barco en un puerto.
 - **Salida al mundo (puerta)**: punto del borde del tablero por donde un barco sale hacia
-  Asia o Europa.
-- **Travesía**: el tiempo que un barco pasa fuera del mapa tras salir por una puerta.
+  Asia o Europa. Como escala, representa a su puerto lejano.
+- **Puerto lejano**: el puerto al que lleva una salida: Shanghái (Yangshan) o Róterdam.
+- **Travesía**: el cruce del océano entre una salida y su puerto lejano. Fuera del tablero,
+  pero a la vista en el mapa plano y en el globo.
 - **Ruta marítima**: el camino por mar, ya calculado, entre dos puertos o salidas.
 - **Pieza conectada**: un conjunto de vías unidas entre sí; un tren no puede pasar de una
   pieza a otra.

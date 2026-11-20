@@ -1,7 +1,7 @@
 import { kmhDe, type ClaseBarco } from '$lib/domain/barcos';
 import { rutaMar } from '$lib/domain/mar';
 import { ruta } from '$lib/domain/red';
-import { nombreCorto, sitio } from '$lib/domain/sitios';
+import { nombreCorto, puerta } from '$lib/domain/sitios';
 import type { Trayecto } from '$lib/domain/trayecto';
 import { sim } from './simulacion.svelte';
 
@@ -184,9 +184,10 @@ class Tablero {
     return a && b ? ruta(red, a.nodo, b.nodo) : null;
   }
 
-  /** Readable name of a stop, for the banner. */
+  /** Readable name of a stop, for the banner. A gateway is named by where it goes. */
   nombre(clave: string): string {
-    return sitio(clave).tipo === 'puerta' ? `${nombreCorto(clave)} (salida)` : nombreCorto(clave);
+    const p = puerta(clave);
+    return p ? `${p.hacia} (vía ${p.nombre})` : nombreCorto(clave);
   }
 }
 

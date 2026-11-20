@@ -30,9 +30,9 @@ export type Unidad = Tren | Barco;
  * would cost more than everything else in a frame. The views that need to
  * re-render as they move also read `horas`, which changes every tick.
  *
- * The rAF loop is reference-counted (as in logistica-oceanica): the board
- * `attach()`es while it's mounted, and with no viewer the clock stops — the
- * world views don't show the fleet, so leaving the board pauses the game.
+ * The rAF loop is reference-counted (as in logistica-oceanica): the board and
+ * the two world views `attach()` while they're mounted — ships sail on all
+ * three — and with no viewer the clock stops.
  */
 class Simulacion {
   estado = $state<'inactiva' | 'cargando' | 'lista' | 'error'>('inactiva');

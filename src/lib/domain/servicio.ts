@@ -149,6 +149,15 @@ export function posicion(m: Marcha): LonLat {
   return puntoEn(m.piernas[m.pierna], m.km);
 }
 
+/**
+ * Where it is as far as the Mexico board is concerned: its position, held at
+ * the gateway while it's on an ocean crossing beyond it.
+ */
+export function posicionEnTablero(m: Marcha): LonLat {
+  const leg = m.piernas[m.pierna];
+  return puntoEn(leg, Math.max(leg.enTablero[0], Math.min(leg.enTablero[1], m.km)));
+}
+
 /** Speed right now, km/h (0 when stopped). */
 export function velocidad(m: Marcha): number {
   if (m.estado === 'parada') return 0;

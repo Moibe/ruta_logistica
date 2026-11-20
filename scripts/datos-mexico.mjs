@@ -5,7 +5,8 @@
 // Outputs (all committed, so the app never needs this script or the network):
 //   static/data/mexico.topo.json         estados + países vecinos
 //   static/data/red-ferroviaria.json     la red como grafo: nodos y tramos
-//   static/data/rutas-maritimas.json     rutas por mar entre cada par de puertos y puertas
+//   static/data/rutas-maritimas.json     rutas por mar entre cada par de puertos y puertas,
+//                                        y la travesía oceánica de cada puerta (travesias.mjs)
 //   src/lib/domain/datos/ciudades.json   ciudades de referencia
 //
 // The Natural Earth sources (~85 MB) are downloaded once into `.cache/ne/`
@@ -25,6 +26,7 @@ import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import mapshaper from 'mapshaper';
+import { EXENTO_KM, MUNDO, tierraMundo, travesias } from './travesias.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CACHE = join(ROOT, '.cache', 'ne');
@@ -1074,13 +1076,20 @@ const mar = rutasMaritimas(
   [JSON.parse(out['tierra-estados.json']), JSON.parse(out['tierra-vecinos.json'])],
   puntosMar
 );
+// The crossings beyond the gateways, on the land the world views draw.
+const t0Mundo = performance.now();
+const mundo = travesias(await tierraMundo(join(ROOT, 'static', 'data', 'land-50m.json')), puertasMar);
+const segMundo = (performance.now() - t0Mundo) / 1000;
 const marJson = JSON.stringify({
   fuente:
     'Rutas calculadas sobre la tierra de Natural Earth 10m (estados y vecinos), malla de ' +
-    `${MAR.res}°, con el Canal de Panamá abierto a mano`,
+    `${MAR.res}°, con el Canal de Panamá abierto a mano. Travesías oceánicas sobre Natural Earth 50m ` +
+    `(world-atlas), malla mundial de ${MUNDO.res}°, en arcos de círculo máximo`,
   malla: MAR,
+  mallaMundo: MUNDO,
   canalPanama: CANAL_PANAMA,
   rutas: mar.rutas,
+  travesias: mundo.travesias.map(({ puerta, hacia, km, coords }) => ({ puerta, hacia, km, coords })),
 });
 await writeFile(join(ROOT, 'static', 'data', 'rutas-maritimas.json'), marJson);
 
@@ -1117,3 +1126,18 @@ console.log(
     (mar.reporte.fallas.length ? `${mar.reporte.fallas.length} con problemas` : 'ninguna')
 );
 for (const f of mar.reporte.fallas) console.log(`    ${f.ruta}: ${f.muestras} muestras en tierra, la primera en ${lugar(f.donde)}`);
+console.log(
+  `  travesías: ${mundo.travesias.length} en ${segMundo.toFixed(1)} s · malla mundial de ` +
+    `${mundo.reporte.celdas.toLocaleString('es-MX')} celdas`
+);
+for (const t of mundo.travesias) {
+  console.log(
+    `    ${t.puerta} → ${t.hacia}: ${Math.round(t.km).toLocaleString('es-MX')} km ` +
+      `(${Math.round(t.km / 1.852).toLocaleString('es-MX')} mn), ${t.coords.length / 2} vértices`
+  );
+}
+console.log(
+  `  auditoría de travesías (contra la costa 50m exacta, salvo los últimos ${EXENTO_KM} km): ` +
+    (mundo.reporte.fallas.length ? `${mundo.reporte.fallas.length} con problemas` : 'ninguna')
+);
+for (const f of mundo.reporte.fallas) console.log(`    ${f.ruta}: ${f.muestras} km en tierra, el primero en ${lugar(f.donde)}`);

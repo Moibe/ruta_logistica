@@ -1,4 +1,3 @@
-import { distanceKm } from './geo';
 import { rutaMar, VELOCIDAD_CANAL, type Mar } from './mar';
 import { armarMarcha, type Marcha } from './servicio';
 import { segmentoEn } from './trayecto';
@@ -6,9 +5,10 @@ import { puerta, type Puerta } from './sitios';
 
 /**
  * Ships: a service (`servicio.ts`) run as a loop along the sea lanes, the way
- * liner services work. A stop is a port or a gateway; sailing out through a
- * gateway puts the ship on an ocean crossing off the map — to Shanghái or
- * Róterdam and back — for as long as that really takes.
+ * liner services work. A stop is a port or a gateway; a gateway stands for a
+ * far port (Shanghái, Róterdam), and the leg to it runs on past the edge of the
+ * board along its ocean crossing — sailed for real, at the ship's speed, and
+ * shown on the world views.
  */
 
 export type ClaseBarco = 'contenedores' | 'tanque' | 'granel' | 'roro';
@@ -34,17 +34,13 @@ export const CLASES_BARCO: Record<ClaseBarco, DatosClase> = {
 };
 
 export const KM_POR_MILLA = 1.852;
-/** Real ocean routes run longer than the great circle between their ends. */
-const RODEO = 1.1;
-/** Days in port at the far end of a crossing (unload and reload). */
-const ESTANCIA_LEJANA_H = 48;
+/**
+ * Hours at the far port of a crossing, whatever the class: unloading and
+ * loading at Shanghái or Róterdam, where the cargo isn't the game's business.
+ */
+export const ESTANCIA_LEJANA_H = 48;
 
 export const kmhDe = (clase: ClaseBarco) => CLASES_BARCO[clase].nudos * KM_POR_MILLA;
-
-/** Hours off the map through a gateway: across, a port call there, and back. */
-export function horasFuera(p: Puerta, clase: ClaseBarco): number {
-  return (2 * distanceKm(p.lonLat, p.haciaLonLat) * RODEO) / kmhDe(clase) + ESTANCIA_LEJANA_H;
-}
 
 export type Barco = Marcha & {
   tipo: 'barco';
@@ -93,10 +89,7 @@ export function crearBarco(mar: Mar, def: NuevoBarco): Barco | null {
     paradas: def.paradas,
     recorrido: 'circular',
     ruta: (a, b) => rutaMar(mar, a, b, kmh),
-    espera: (destino) => {
-      const p = puerta(destino);
-      return p ? horasFuera(p, def.clase) : CLASES_BARCO[def.clase].enPuerto;
-    },
+    espera: (destino) => (puerta(destino) ? ESTANCIA_LEJANA_H : CLASES_BARCO[def.clase].enPuerto),
     zarpando: def.zarpando,
     desfase: def.desfase,
   });
@@ -104,9 +97,34 @@ export function crearBarco(mar: Mar, def: NuevoBarco): Barco | null {
   return { ...marcha, tipo: 'barco', id: def.id, nombre: def.nombre, color: def.color, clase: def.clase };
 }
 
-/** On an ocean crossing beyond a gateway: not on the board at all. */
+/**
+ * Beyond a gateway, off the board: crossing the ocean out (`ida`), at the far
+ * port (`alla`) or crossing back (`vuelta`).
+ */
+export type Travesia = { puerta: Puerta; tramo: 'ida' | 'alla' | 'vuelta' };
+
+export function enTravesia(b: Barco): Travesia | null {
+  const n = b.destinos.length;
+  if (b.estado === 'parada') {
+    const p = puerta(b.destinos[b.pierna]);
+    return p ? { puerta: p, tramo: 'alla' } : null;
+  }
+  const [desde, hasta] = b.piernas[b.pierna].enTablero;
+  if (b.km > hasta) {
+    const p = puerta(b.destinos[b.pierna]);
+    return p ? { puerta: p, tramo: 'ida' } : null;
+  }
+  if (b.km < desde) {
+    // The leg started at the gateway the previous one ended at.
+    const p = puerta(b.destinos[(b.pierna - 1 + n) % n]);
+    return p ? { puerta: p, tramo: 'vuelta' } : null;
+  }
+  return null;
+}
+
+/** Off the Mexico board, on the other side of a gateway. */
 export function fueraDelMapa(b: Barco): boolean {
-  return b.estado === 'parada' && puerta(b.destinos[b.pierna]) !== null;
+  return enTravesia(b) !== null;
 }
 
 /** Going through the Panama Canal right now. */

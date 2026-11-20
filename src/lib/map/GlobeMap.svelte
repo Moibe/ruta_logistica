@@ -1,5 +1,8 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core';
+  import { CLASES_BARCO, type Barco } from '$lib/domain/barcos';
+  import { sim } from '$lib/state/simulacion.svelte';
+  import { estadoUnidad } from '$lib/ui/formato';
   import GlobeScene from './GlobeScene.svelte';
 
   /**
@@ -10,17 +13,62 @@
    *
    * Rotation starts off here (it was on in `global`): the globe opens looking
    * at Mexico and should stay there until you move it.
+   *
+   * The hovered ship's card is DOM, by the cursor, like the 2D views'. Dragging
+   * the globe takes the camera back from a followed ship (the wheel doesn't:
+   * you can zoom in on the ship you follow).
    */
   let autoRotate = $state(false);
   let entering = $state(false);
   let hoverMexico = $state(false);
+  let hoverBarco = $state.raw<Barco | null>(null);
+  let pointer = $state({ x: 0, y: 0 });
+  let innerWidth = $state(0);
+  let abajo: { x: number; y: number } | null = null;
+
+  function onPointerMove(event: PointerEvent) {
+    pointer = { x: event.clientX, y: event.clientY };
+    if (event.buttons && abajo && sim.siguiendo && Math.hypot(event.clientX - abajo.x, event.clientY - abajo.y) > 4) {
+      sim.siguiendo = false;
+    }
+  }
+
+  // Live line for the hovered ship; reads the clock so it updates as it sails.
+  const lineaBarco = $derived.by(() => {
+    sim.horas;
+    return hoverBarco ? estadoUnidad(hoverBarco) : '';
+  });
 </script>
 
-<div class="host" class:pointing={hoverMexico}>
+<svelte:window bind:innerWidth />
+
+<div
+  class="host"
+  class:pointing={hoverMexico || hoverBarco !== null}
+  role="presentation"
+  onpointermove={onPointerMove}
+  onpointerdown={(e) => (abajo = { x: e.clientX, y: e.clientY })}
+  onpointerup={() => (abajo = null)}
+>
   <Canvas>
-    <GlobeScene {autoRotate} bind:entering bind:hoverMexico />
+    <GlobeScene {autoRotate} bind:entering bind:hoverMexico bind:hoverBarco />
   </Canvas>
 </div>
+
+{#if hoverBarco}
+  <div
+    class="tip panel"
+    class:flip={pointer.x > innerWidth - 260}
+    style:left="{pointer.x}px"
+    style:top="{pointer.y}px"
+  >
+    <span class="label tip-kind" style:color={hoverBarco.color}>
+      {CLASES_BARCO[hoverBarco.clase].nombre} · {hoverBarco.id}
+    </span>
+    <strong>{hoverBarco.nombre}</strong>
+    <span class="tip-sub">{lineaBarco}</span>
+  </div>
+{/if}
 
 <div class="tools panel">
   <button class="ctl enter" onclick={() => (entering = true)} disabled={entering}>Entrar a México ›</button>
@@ -41,6 +89,36 @@
 
   .host.pointing {
     cursor: pointer;
+  }
+
+  /* The hovered ship's card, by the cursor: the board's tooltip. */
+  .tip {
+    position: fixed;
+    z-index: 35;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.5rem 0.7rem;
+    min-width: 9rem;
+    max-width: 17rem;
+    background: var(--glass-strong);
+    transform: translate(16px, 14px);
+  }
+
+  /* Near the right edge the tip opens to the left of the cursor instead. */
+  .tip.flip {
+    transform: translate(calc(-100% - 16px), 14px);
+  }
+
+  .tip strong {
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .tip-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
   }
 
   .tools {
