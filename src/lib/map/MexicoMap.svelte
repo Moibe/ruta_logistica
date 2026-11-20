@@ -2026,7 +2026,7 @@
             </li>
           {/if}
         {/each}
-      {:else}
+      {:else if modoVias === 'uso'}
         <li><span class="raya" style:background={COLOR_USO.holgada}></span>Holgada · hasta 60 %</li>
         <li><span class="raya" style:background={COLOR_USO.cargada}></span>Cargada · los trenes frenan</li>
         <li><span class="raya" style:background={COLOR_USO.saturada}></span>Saturada · más de lo que cabe</li>
