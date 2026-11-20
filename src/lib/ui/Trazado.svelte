@@ -93,7 +93,7 @@
 <style>
   .trazado {
     position: fixed;
-    top: 1rem;
+    top: 5.2rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 32;

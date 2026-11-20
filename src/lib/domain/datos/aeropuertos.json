@@ -1,25 +1,621 @@
 {
-  "corte": "2026-11-20",
-  "nota": "Los diez aeropuertos que más carga movieron en 2025, en toneladas, con lo que publica la AFAC de cada uno: el total de 2024 y 2025 y, cuando están entre los diez primeros de su tipo, la carga doméstica y la internacional. El total de un aeropuerto no siempre es la suma de las dos.",
-  "fuente": {
-    "fuente": "SICT, AFAC, Estadística Operacional de Aeropuertos, diciembre de 2025 (acumulado de enero a diciembre; información de los grupos aeroportuarios)",
-    "url": "https://www.gob.mx/cms/uploads/attachment/file/1051974/producto-aeropuertos-es-dic-25-27012026.pdf"
+ "corte": "2026-11-20",
+ "nota": "Los diez aeropuertos que más carga movieron en 2025, en toneladas, con lo que publica la AFAC de cada uno: el total de 2024 y 2025 y, cuando están entre los diez primeros de su tipo, la carga doméstica y la internacional. El total de un aeropuerto no siempre es la suma de las dos.",
+ "fuente": {
+  "fuente": "SICT, AFAC, Estadística Operacional de Aeropuertos, diciembre de 2025 (acumulado de enero a diciembre; información de los grupos aeroportuarios)",
+  "url": "https://www.gob.mx/cms/uploads/attachment/file/1051974/producto-aeropuertos-es-dic-25-27012026.pdf"
+ },
+ "ubicacion": {
+  "fuente": "Estimación del juego",
+  "dato": "El punto de referencia de cada aeropuerto, aproximado a un kilómetro."
+ },
+ "totalPais": {
+  "2024": 1263585.6,
+  "2025": 1232808.4
+ },
+ "aeropuertos": [
+  {
+   "id": "aifa",
+   "nombre": "Aeropuerto Internacional Felipe Ángeles",
+   "corto": "AIFA",
+   "iata": "NLU",
+   "estado": "MEX",
+   "lon": -99.0154,
+   "lat": 19.7458,
+   "t2024": 447341.2,
+   "t2025": 406192.7,
+   "internacional2025": 396590.6,
+   "serie": {
+    "2022": {
+     "nacional": 4.7,
+     "internacional": 0.5,
+     "lugar": 49
+    },
+    "2023": {
+     "nacional": 3869.5,
+     "internacional": 181863.6,
+     "lugar": 2
+    },
+    "2024": {
+     "nacional": 17695.2,
+     "internacional": 429645.9,
+     "lugar": 1
+    },
+    "2025": {
+     "nacional": 9602.2,
+     "internacional": 396590.6,
+     "lugar": 1
+    },
+    "2026": {
+     "nacional": 5408.3,
+     "internacional": 308452.7,
+     "lugar": 1
+    }
+   },
+   "desde": "2022-03"
   },
-  "ubicacion": {
-    "fuente": "Estimación del juego",
-    "dato": "El punto de referencia de cada aeropuerto, aproximado a un kilómetro."
+  {
+   "id": "aicm",
+   "nombre": "Aeropuerto Internacional de la Ciudad de México",
+   "corto": "AICM",
+   "iata": "MEX",
+   "estado": "CDMX",
+   "lon": -99.0721,
+   "lat": 19.4363,
+   "t2024": 240034.8,
+   "t2025": 252555.7,
+   "domestica2025": 62078.3,
+   "internacional2025": 190477.4,
+   "serie": {
+    "2018": {
+     "nacional": 101774.7,
+     "internacional": 479900.6,
+     "lugar": 1
+    },
+    "2019": {
+     "nacional": 104832.5,
+     "internacional": 451309.8,
+     "lugar": 1
+    },
+    "2020": {
+     "nacional": 79536.4,
+     "internacional": 390178.0,
+     "lugar": 1
+    },
+    "2021": {
+     "nacional": 95378.1,
+     "internacional": 472401.3,
+     "lugar": 1
+    },
+    "2022": {
+     "nacional": 87101.2,
+     "internacional": 483707.0,
+     "lugar": 1
+    },
+    "2023": {
+     "nacional": 72921.4,
+     "internacional": 374965.8,
+     "lugar": 1
+    },
+    "2024": {
+     "nacional": 55905.3,
+     "internacional": 184129.5,
+     "lugar": 2
+    },
+    "2025": {
+     "nacional": 59077.4,
+     "internacional": 193478.4,
+     "lugar": 2
+    },
+    "2026": {
+     "nacional": 41571.4,
+     "internacional": 146847.4,
+     "lugar": 2
+    }
+   },
+   "desde": "2006-01"
   },
-  "totalPais": { "2024": 1263585.6, "2025": 1232808.4 },
-  "aeropuertos": [
-    { "id": "aifa", "nombre": "Aeropuerto Internacional Felipe Ángeles", "corto": "AIFA", "iata": "NLU", "estado": "MEX", "lon": -99.0154, "lat": 19.7458, "t2024": 447341.2, "t2025": 406192.7, "internacional2025": 396590.6 },
-    { "id": "aicm", "nombre": "Aeropuerto Internacional de la Ciudad de México", "corto": "AICM", "iata": "MEX", "estado": "CDMX", "lon": -99.0721, "lat": 19.4363, "t2024": 240034.8, "t2025": 252555.7, "domestica2025": 62078.3, "internacional2025": 190477.4 },
-    { "id": "guadalajara", "nombre": "Aeropuerto Internacional de Guadalajara", "corto": "Aerop. Guadalajara", "iata": "GDL", "estado": "JAL", "lon": -103.3112, "lat": 20.5218, "t2024": 173710.6, "t2025": 183409.9, "domestica2025": 43220.0, "internacional2025": 140189.9 },
-    { "id": "monterrey", "nombre": "Aeropuerto Internacional de Monterrey", "corto": "Aerop. Monterrey", "iata": "MTY", "estado": "NL", "lon": -100.1069, "lat": 25.7785, "t2024": 79425.1, "t2025": 76282.3, "domestica2025": 35100.3, "internacional2025": 41182.0 },
-    { "id": "queretaro", "nombre": "Aeropuerto Intercontinental de Querétaro", "corto": "Aerop. Querétaro", "iata": "QRO", "estado": "QRO", "lon": -100.1857, "lat": 20.6173, "t2024": 77390.9, "t2025": 76025.3, "domestica2025": 54611.5 },
-    { "id": "tijuana", "nombre": "Aeropuerto Internacional de Tijuana", "corto": "Aerop. Tijuana", "iata": "TIJ", "estado": "BC", "lon": -116.9701, "lat": 32.5411, "t2024": 38569.7, "t2025": 37893.6, "domestica2025": 34883.9 },
-    { "id": "cancun", "nombre": "Aeropuerto Internacional de Cancún", "corto": "Aerop. Cancún", "iata": "CUN", "estado": "QROO", "lon": -86.8771, "lat": 21.0365, "t2024": 36165.5, "t2025": 36207.3, "domestica2025": 12002.3, "internacional2025": 24204.9 },
-    { "id": "toluca", "nombre": "Aeropuerto Internacional de Toluca", "corto": "Aerop. Toluca", "iata": "TLC", "estado": "MEX", "lon": -99.566, "lat": 19.3371, "t2024": 39109.3, "t2025": 30398.5 },
-    { "id": "san-luis-potosi", "nombre": "Aeropuerto Internacional de San Luis Potosí", "corto": "Aerop. San Luis Potosí", "iata": "SLP", "estado": "SLP", "lon": -100.9308, "lat": 22.2543, "t2024": 27500.4, "t2025": 26619.5, "domestica2025": 25984.4 },
-    { "id": "merida", "nombre": "Aeropuerto Internacional de Mérida", "corto": "Aerop. Mérida", "iata": "MID", "estado": "YUC", "lon": -89.6577, "lat": 20.937, "t2024": 26200.6, "t2025": 25438.7, "domestica2025": 18925.2 }
-  ]
+  {
+   "id": "guadalajara",
+   "nombre": "Aeropuerto Internacional de Guadalajara",
+   "corto": "Aerop. Guadalajara",
+   "iata": "GDL",
+   "estado": "JAL",
+   "lon": -103.3112,
+   "lat": 20.5218,
+   "t2024": 173710.6,
+   "t2025": 183409.9,
+   "domestica2025": 43220.0,
+   "internacional2025": 140189.9,
+   "serie": {
+    "2018": {
+     "nacional": 42524.4,
+     "internacional": 121717.9,
+     "lugar": 2
+    },
+    "2019": {
+     "nacional": 41956.4,
+     "internacional": 119152.3,
+     "lugar": 2
+    },
+    "2020": {
+     "nacional": 39182.6,
+     "internacional": 122410.7,
+     "lugar": 2
+    },
+    "2021": {
+     "nacional": 51827.1,
+     "internacional": 145391.6,
+     "lugar": 2
+    },
+    "2022": {
+     "nacional": 42318.4,
+     "internacional": 134460.4,
+     "lugar": 2
+    },
+    "2023": {
+     "nacional": 44757.6,
+     "internacional": 120248.8,
+     "lugar": 3
+    },
+    "2024": {
+     "nacional": 47310.2,
+     "internacional": 126400.4,
+     "lugar": 3
+    },
+    "2025": {
+     "nacional": 43220.0,
+     "internacional": 140189.9,
+     "lugar": 3
+    },
+    "2026": {
+     "nacional": 31706.8,
+     "internacional": 119888.2,
+     "lugar": 3
+    }
+   },
+   "desde": "2006-01"
+  },
+  {
+   "id": "monterrey",
+   "nombre": "Aeropuerto Internacional de Monterrey",
+   "corto": "Aerop. Monterrey",
+   "iata": "MTY",
+   "estado": "NL",
+   "lon": -100.1069,
+   "lat": 25.7785,
+   "t2024": 79425.1,
+   "t2025": 76282.3,
+   "domestica2025": 35100.3,
+   "internacional2025": 41182.0,
+   "serie": {
+    "2018": {
+     "nacional": 18033.6,
+     "internacional": 38248.5,
+     "lugar": 3
+    },
+    "2019": {
+     "nacional": 17104.6,
+     "internacional": 34878.4,
+     "lugar": 3
+    },
+    "2020": {
+     "nacional": 16724.9,
+     "internacional": 32312.9,
+     "lugar": 3
+    },
+    "2021": {
+     "nacional": 24869.4,
+     "internacional": 42757.3,
+     "lugar": 3
+    },
+    "2022": {
+     "nacional": 30769.0,
+     "internacional": 46995.1,
+     "lugar": 3
+    },
+    "2023": {
+     "nacional": 33366.6,
+     "internacional": 41603.3,
+     "lugar": 5
+    },
+    "2024": {
+     "nacional": 32679.0,
+     "internacional": 46746.0,
+     "lugar": 4
+    },
+    "2025": {
+     "nacional": 35100.3,
+     "internacional": 41182.0,
+     "lugar": 4
+    },
+    "2026": {
+     "nacional": 27037.0,
+     "internacional": 35260.6,
+     "lugar": 4
+    }
+   },
+   "desde": "2006-01"
+  },
+  {
+   "id": "queretaro",
+   "nombre": "Aeropuerto Intercontinental de Querétaro",
+   "corto": "Aerop. Querétaro",
+   "iata": "QRO",
+   "estado": "QRO",
+   "lon": -100.1857,
+   "lat": 20.6173,
+   "t2024": 77390.9,
+   "t2025": 76025.3,
+   "domestica2025": 54611.5,
+   "serie": {
+    "2018": {
+     "nacional": 24480.7,
+     "internacional": 28808.8,
+     "lugar": 4
+    },
+    "2019": {
+     "nacional": 27838.5,
+     "internacional": 22974.4,
+     "lugar": 4
+    },
+    "2020": {
+     "nacional": 30143.0,
+     "internacional": 15001.5,
+     "lugar": 4
+    },
+    "2021": {
+     "nacional": 41913.8,
+     "internacional": 22974.2,
+     "lugar": 4
+    },
+    "2022": {
+     "nacional": 44223.2,
+     "internacional": 28624.1,
+     "lugar": 4
+    },
+    "2023": {
+     "nacional": 49863.6,
+     "internacional": 29960.6,
+     "lugar": 4
+    },
+    "2024": {
+     "nacional": 53564.1,
+     "internacional": 23826.8,
+     "lugar": 5
+    },
+    "2025": {
+     "nacional": 54611.5,
+     "internacional": 21413.8,
+     "lugar": 5
+    },
+    "2026": {
+     "nacional": 43710.8,
+     "internacional": 18011.9,
+     "lugar": 5
+    }
+   },
+   "desde": "2006-01"
+  },
+  {
+   "id": "tijuana",
+   "nombre": "Aeropuerto Internacional de Tijuana",
+   "corto": "Aerop. Tijuana",
+   "iata": "TIJ",
+   "estado": "BC",
+   "lon": -116.9701,
+   "lat": 32.5411,
+   "t2024": 38569.7,
+   "t2025": 37893.6,
+   "domestica2025": 34883.9,
+   "serie": {
+    "2018": {
+     "nacional": 25305.9,
+     "internacional": 1864.6,
+     "lugar": 7
+    },
+    "2019": {
+     "nacional": 26220.1,
+     "internacional": 4486.7,
+     "lugar": 7
+    },
+    "2020": {
+     "nacional": 24266.6,
+     "internacional": 4065.3,
+     "lugar": 6
+    },
+    "2021": {
+     "nacional": 30859.3,
+     "internacional": 4590.0,
+     "lugar": 6
+    },
+    "2022": {
+     "nacional": 34431.6,
+     "internacional": 2995.8,
+     "lugar": 7
+    },
+    "2023": {
+     "nacional": 33808.8,
+     "internacional": 1456.2,
+     "lugar": 8
+    },
+    "2024": {
+     "nacional": 35315.0,
+     "internacional": 3254.8,
+     "lugar": 7
+    },
+    "2025": {
+     "nacional": 34883.9,
+     "internacional": 3009.7,
+     "lugar": 6
+    },
+    "2026": {
+     "nacional": 23615.7,
+     "internacional": 1899.1,
+     "lugar": 6
+    }
+   },
+   "desde": "2006-01"
+  },
+  {
+   "id": "cancun",
+   "nombre": "Aeropuerto Internacional de Cancún",
+   "corto": "Aerop. Cancún",
+   "iata": "CUN",
+   "estado": "QROO",
+   "lon": -86.8771,
+   "lat": 21.0365,
+   "t2024": 36165.5,
+   "t2025": 36207.3,
+   "domestica2025": 12002.3,
+   "internacional2025": 24204.9,
+   "serie": {
+    "2018": {
+     "nacional": 8719.2,
+     "internacional": 24138.7,
+     "lugar": 6
+    },
+    "2019": {
+     "nacional": 8917.7,
+     "internacional": 22558.4,
+     "lugar": 6
+    },
+    "2020": {
+     "nacional": 7093.5,
+     "internacional": 10621.3,
+     "lugar": 9
+    },
+    "2021": {
+     "nacional": 12554.7,
+     "internacional": 18311.9,
+     "lugar": 7
+    },
+    "2022": {
+     "nacional": 13988.8,
+     "internacional": 31878.9,
+     "lugar": 5
+    },
+    "2023": {
+     "nacional": 11712.9,
+     "internacional": 27108.8,
+     "lugar": 6
+    },
+    "2024": {
+     "nacional": 12897.4,
+     "internacional": 23268.2,
+     "lugar": 8
+    },
+    "2025": {
+     "nacional": 12002.3,
+     "internacional": 24204.9,
+     "lugar": 7
+    },
+    "2026": {
+     "nacional": 8262.4,
+     "internacional": 13951.5,
+     "lugar": 7
+    }
+   },
+   "desde": "2006-01"
+  },
+  {
+   "id": "toluca",
+   "nombre": "Aeropuerto Internacional de Toluca",
+   "corto": "Aerop. Toluca",
+   "iata": "TLC",
+   "estado": "MEX",
+   "lon": -99.566,
+   "lat": 19.3371,
+   "t2024": 39109.3,
+   "t2025": 30398.5,
+   "serie": {
+    "2018": {
+     "nacional": 11215.6,
+     "internacional": 25275.8,
+     "lugar": 5
+    },
+    "2019": {
+     "nacional": 13858.5,
+     "internacional": 21920.8,
+     "lugar": 5
+    },
+    "2020": {
+     "nacional": 25549.7,
+     "internacional": 19283.2,
+     "lugar": 5
+    },
+    "2021": {
+     "nacional": 31004.4,
+     "internacional": 23938.5,
+     "lugar": 5
+    },
+    "2022": {
+     "nacional": 20525.0,
+     "internacional": 22679.6,
+     "lugar": 6
+    },
+    "2023": {
+     "nacional": 16310.2,
+     "internacional": 21383.5,
+     "lugar": 7
+    },
+    "2024": {
+     "nacional": 15870.0,
+     "internacional": 23239.3,
+     "lugar": 6
+    },
+    "2025": {
+     "nacional": 10198.0,
+     "internacional": 20200.5,
+     "lugar": 8
+    },
+    "2026": {
+     "nacional": 4087.8,
+     "internacional": 14591.9,
+     "lugar": 8
+    }
+   },
+   "desde": "2006-01"
+  },
+  {
+   "id": "san-luis-potosi",
+   "nombre": "Aeropuerto Internacional de San Luis Potosí",
+   "corto": "Aerop. San Luis Potosí",
+   "iata": "SLP",
+   "estado": "SLP",
+   "lon": -100.9308,
+   "lat": 22.2543,
+   "t2024": 27500.4,
+   "t2025": 26619.5,
+   "domestica2025": 25984.4,
+   "serie": {
+    "2018": {
+     "nacional": 24217.4,
+     "internacional": 542.3,
+     "lugar": 8
+    },
+    "2019": {
+     "nacional": 23154.6,
+     "internacional": 1014.7,
+     "lugar": 8
+    },
+    "2020": {
+     "nacional": 21775.4,
+     "internacional": 228.7,
+     "lugar": 7
+    },
+    "2021": {
+     "nacional": 26609.0,
+     "internacional": 108.5,
+     "lugar": 8
+    },
+    "2022": {
+     "nacional": 28332.0,
+     "internacional": 458.2,
+     "lugar": 8
+    },
+    "2023": {
+     "nacional": 28019.4,
+     "internacional": 717.8,
+     "lugar": 9
+    },
+    "2024": {
+     "nacional": 27163.5,
+     "internacional": 336.9,
+     "lugar": 9
+    },
+    "2025": {
+     "nacional": 25984.4,
+     "internacional": 635.1,
+     "lugar": 9
+    },
+    "2026": {
+     "nacional": 16333.7,
+     "internacional": 847.0,
+     "lugar": 10
+    }
+   },
+   "desde": "2006-01"
+  },
+  {
+   "id": "merida",
+   "nombre": "Aeropuerto Internacional de Mérida",
+   "corto": "Aerop. Mérida",
+   "iata": "MID",
+   "estado": "YUC",
+   "lon": -89.6577,
+   "lat": 20.937,
+   "t2024": 26200.6,
+   "t2025": 25438.7,
+   "domestica2025": 18925.2,
+   "serie": {
+    "2018": {
+     "nacional": 14259.0,
+     "internacional": 6388.8,
+     "lugar": 9
+    },
+    "2019": {
+     "nacional": 15120.7,
+     "internacional": 7323.8,
+     "lugar": 9
+    },
+    "2020": {
+     "nacional": 12968.6,
+     "internacional": 7105.8,
+     "lugar": 8
+    },
+    "2021": {
+     "nacional": 16216.3,
+     "internacional": 6241.7,
+     "lugar": 9
+    },
+    "2022": {
+     "nacional": 16295.8,
+     "internacional": 6349.9,
+     "lugar": 9
+    },
+    "2023": {
+     "nacional": 19626.4,
+     "internacional": 6400.1,
+     "lugar": 10
+    },
+    "2024": {
+     "nacional": 19226.9,
+     "internacional": 6973.7,
+     "lugar": 10
+    },
+    "2025": {
+     "nacional": 18925.2,
+     "internacional": 6513.5,
+     "lugar": 10
+    },
+    "2026": {
+     "nacional": 13613.1,
+     "internacional": 4940.1,
+     "lugar": 9
+    }
+   },
+   "desde": "2006-01"
+  }
+ ],
+ "serie": {
+  "fuente": "AFAC, Estadística operativa de aeropuertos 2006–2026 (archivo Excel, datos a septiembre de 2026): carga nacional e internacional de cada aeropuerto, mes por mes",
+  "url": "https://www.gob.mx/cms/uploads/attachment/file/1112825/producto-aeropuertos-2006-2026-sep-27102026.xlsx",
+  "parcial": {
+   "año": 2026,
+   "meses": 9
+  },
+  "totalPais": {
+   "2018": 1055428.5,
+   "2019": 1025464.5,
+   "2020": 910656.3,
+   "2021": 1136661.0,
+   "2022": 1149877.7,
+   "2023": 1196088.4,
+   "2024": 1263585.6,
+   "2025": 1232808.5,
+   "2026": 946609.9
+  },
+  "aeropuertosEnLaSerie": 67
+ }
 }

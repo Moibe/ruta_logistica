@@ -12,7 +12,7 @@
   import { obraVia } from '$lib/domain/obrasVia';
   import { clavePolo, TEXTO_ETAPA } from '$lib/domain/realidad';
   import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, SUBREGIONES_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
-  import { fechaLarga as fechaDeJuego, horasDeFecha } from '$lib/domain/calendario';
+  import { añoDe, fechaLarga as fechaDeJuego, horasDeFecha } from '$lib/domain/calendario';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
   import { esperaTotal, piernasDelRecorrido, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
   import {
@@ -24,7 +24,9 @@
     PUERTO_DE_LA_CIUDAD,
     PUERTOS,
     AEROPUERTOS,
-    CARGA_AEREA_PAIS,
+    añoDeCarga,
+    SERIE_AEROPUERTOS,
+    toneladas,
     type Aeropuerto,
     type Ciudad,
     type Polo,
@@ -123,6 +125,17 @@
   }
   /** Half-size of an airport's plane by the tonnes it moved: 4.5 px for the smallest, about 9 for the AIFA. */
   const tamañoAvion = (t: number) => 3.6 + Math.sqrt(t / 1000) * 0.27;
+
+  /** The year an airport shows: 2025 in the game, the date's year in Realidad. */
+  const añoAeropuerto = () => (sim.modo === 'realidad' ? añoDeCarga(añoDe(sim.horas)) : 2025);
+  /** Its plane is sized by a whole year: the running one is still partial, so the one before. */
+  const añoTamaño = () => {
+    const a = añoAeropuerto();
+    return a === SERIE_AEROPUERTOS.parcial.año ? a - 1 : a;
+  };
+  /** In Realidad an airport shows from its first month with cargo (the AIFA, from March 2022). */
+  const aeropuertoVisible = (a: Aeropuerto) => sim.modo !== 'realidad' || sim.horas >= horasDeFecha(a.desde);
+  const MESES_CARGA = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
   /** A plant's colour by its technology. */
   function colorTec(t: string): string {
@@ -1339,12 +1352,14 @@
     // Cargo airports: a plane, sized by the tonnes it moved in 2025. Faded
     // while laying out a route: they aren't stops.
     if (layers.aeropuertos) {
+      const año = añoTamaño();
       AEROPUERTOS.forEach((a, i) => {
+        if (!aeropuertoVisible(a)) return;
         const x = sx(aeropuertoPts[i]);
         const y = sy(aeropuertoPts[i]);
         if (!onScreen(x, y)) return;
         const hot = hovered?.kind === 'aeropuerto' && hovered.aeropuerto.id === a.id;
-        const s = tamañoAvion(a.t2025) * (hot ? 1.15 : 1);
+        const s = tamañoAvion(toneladas(a, año)) * (hot ? 1.15 : 1);
         ctx.globalAlpha = trazando ? 0.3 : 1;
         avion(ctx, x, y, s);
         ctx.fillStyle = hot ? '#eef0ff' : AEROPUERTO;
@@ -1840,6 +1855,7 @@
     }
     if (layers.aeropuertos && !tablero.trazando) {
       AEROPUERTOS.forEach((a, i) => {
+        if (!aeropuertoVisible(a)) return;
         const d = Math.hypot(transform.applyX(aeropuertoPts[i][0]) - mx, transform.applyY(aeropuertoPts[i][1]) - my);
         if (d < 10 && d < bestD) {
           best = { kind: 'aeropuerto', aeropuerto: a };
@@ -2149,9 +2165,10 @@
   });
 
   $effect(() => {
-    // Realidad's date moves polos in and out of the board.
+    // Realidad's date moves polos in and out of the board, and resizes the airports.
     sim.real;
     sim.obras;
+    sim.modo;
     ensucia();
   });
 
@@ -2355,25 +2372,31 @@
       {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.pestaña === 'barco'}>{rail}</span>{/if}
     {:else if hovered.kind === 'aeropuerto'}
       {@const a = hovered.aeropuerto}
-      {@const lugar = AEROPUERTOS.indexOf(a) + 1}
-      <span class="label tip-kind" style:color={AEROPUERTO}>Aeropuerto de carga · {lugar}.º del país</span>
+      {@const año = añoAeropuerto()}
+      {@const s = a.serie[String(año)]}
+      {@const t = toneladas(a, año)}
+      {@const antes = toneladas(a, año - 1)}
+      {@const parcial = año === SERIE_AEROPUERTOS.parcial.año}
+      {@const periodo = parcial ? `de enero a ${MESES_CARGA[SERIE_AEROPUERTOS.parcial.meses - 1]} de ${año}` : `en ${año}`}
+      <span class="label tip-kind" style:color={AEROPUERTO}>
+        Aeropuerto de carga{s?.lugar ? ` · ${s.lugar}.º del país ${parcial ? `en ${año}, hasta ${MESES_CARGA[SERIE_AEROPUERTOS.parcial.meses - 1]}` : `en ${año}`}` : ''}
+      </span>
       <strong>{a.nombre} · {a.iata}</strong>
       <span class="tip-sub">{estadoNombre.get(a.estado) ?? a.estado}</span>
       <span class="tip-rail">
-        {fmt.format(Math.round(a.t2025))} toneladas en 2025 · {((a.t2025 / CARGA_AEREA_PAIS['2025']) * 100).toLocaleString('es-MX', { maximumFractionDigits: 1 })} % del país
+        {fmt.format(Math.round(t))} toneladas {periodo} · {((t / SERIE_AEROPUERTOS.totalPais[String(año)]) * 100).toLocaleString('es-MX', { maximumFractionDigits: 1 })} % del país
       </span>
-      <span class="tip-sub">
-        {a.t2025 >= a.t2024 ? '▲' : '▼'} {Math.abs((a.t2025 / a.t2024 - 1) * 100).toLocaleString('es-MX', { maximumFractionDigits: 1 })} % contra 2024
-        ({fmt.format(Math.round(a.t2024))} t)
-      </span>
-      {#if a.internacional2025 !== undefined || a.domestica2025 !== undefined}
+      {#if s}
+        <span class="tip-sub">internacional {fmt.format(Math.round(s.internacional))} t · nacional {fmt.format(Math.round(s.nacional))} t</span>
+      {/if}
+      {#if parcial}
+        <span class="tip-sub">{año - 1} completo: {fmt.format(Math.round(antes))} t</span>
+      {:else if antes > 0 && antes < t * 0.05}
+        <span class="tip-sub">{año - 1}: apenas {fmt.format(Math.round(antes))} t</span>
+      {:else if antes > 0}
         <span class="tip-sub">
-          {[
-            a.internacional2025 !== undefined ? `internacional ${fmt.format(Math.round(a.internacional2025))} t` : '',
-            a.domestica2025 !== undefined ? `doméstica ${fmt.format(Math.round(a.domestica2025))} t` : '',
-          ]
-            .filter(Boolean)
-            .join(' · ')}
+          {t >= antes ? '▲' : '▼'} {Math.abs((t / antes - 1) * 100).toLocaleString('es-MX', { maximumFractionDigits: 1 })} % contra {año - 1}
+          ({fmt.format(Math.round(antes))} t)
         </span>
       {/if}
     {:else if hovered.kind === 'polo'}

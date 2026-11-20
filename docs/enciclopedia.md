@@ -50,6 +50,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [SENER, PRODESEN 2019–2033](https://www.gob.mx/cms/uploads/attachment/file/475497/PRODESEN_V.pdf) | Capacidad por región y centrales principales a diciembre de 2018 (cap. V); márgenes de reserva de 2019 en el pico de la tarde y de la noche (cap. VII, tablas 7.6 y 7.7) | 2019 | Documento oficial público |
 | [SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039](https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297) | Demanda máxima por región de 2018 a 2024; cómo se mide el margen de reserva y sus mínimos; costo de inversión por kW de cada tecnología | DOF, 14 de octubre de 2025 | Documento oficial público |
 | [SICT, AFAC, Estadística Operacional de Aeropuertos, diciembre de 2025](https://www.gob.mx/cms/uploads/attachment/file/1051974/producto-aeropuertos-es-dic-25-27012026.pdf) | Toneladas de carga de 2024 y 2025 de los diez aeropuertos que más mueven; doméstica e internacional de los primeros | Enero de 2026 | Documento oficial público |
+| [AFAC, Estadística operativa de aeropuertos 2006–2026](https://www.gob.mx/cms/uploads/attachment/file/1112825/producto-aeropuertos-2006-2026-sep-27102026.xlsx) | Carga nacional e internacional de cada aeropuerto, mes por mes, de 2006 a septiembre de 2026: la serie del modo Realidad | Octubre de 2026 | Dato oficial público |
 | [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
 | [CNE, lista de permisos de generación](https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx) | Las centrales privadas que entraron (o entrarán) desde 2019: capacidad, tecnología, fecha y municipio; inversión estimada de varias de la CFE | Al 31 de octubre de 2026 | Documento oficial público |
 | [CFE, Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) y [Programa de Desarrollo 2026–2030](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) | Costo de las centrales de la CFE, inicio de obra y avance físico de cada una al cierre de 2024; lo que la CFE invierte al año en centrales propias y cuándo entraron Salamanca, El Sauz II y Villa de Reyes | 2025 y 2026 | Documento oficial público |
@@ -269,6 +270,31 @@ aeropuerto no siempre es la suma de las dos:
 
 El AIFA es el de carga del país: mueve casi la mitad de la carga internacional (46.7 %). Querétaro es el segundo en carga doméstica. La
 ubicación de cada aeropuerto es su punto de referencia, aproximado a un kilómetro.
+
+**Año por año, en el modo Realidad.** La AFAC publica la carga de cada aeropuerto mes por mes
+desde 2006. En Realidad, cada avión tiene el tamaño de lo que movió en el año de la fecha elegida
+(el año en curso, todavía incompleto, usa el anterior), y su ficha dice sus toneladas, su lugar
+en el país ese año y cuánto fue nacional e internacional. El AIFA aparece en marzo de 2022, cuando
+abrió. Toneladas de cada año (y su lugar en el país; * de enero a septiembre):
+
+| Aeropuerto | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 | 2026* |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| AIFA | — | — | — | — | 5 (49.º) | 185,733 (2.º) | 447,341 (1.º) | 406,193 (1.º) | 313,861 (1.º) |
+| AICM | 581,675 (1.º) | 556,142 (1.º) | 469,714 (1.º) | 567,779 (1.º) | 570,808 (1.º) | 447,887 (1.º) | 240,035 (2.º) | 252,556 (2.º) | 188,419 (2.º) |
+| Guadalajara | 164,242 (2.º) | 161,109 (2.º) | 161,593 (2.º) | 197,219 (2.º) | 176,779 (2.º) | 165,006 (3.º) | 173,711 (3.º) | 183,410 (3.º) | 151,595 (3.º) |
+| Monterrey | 56,282 (3.º) | 51,983 (3.º) | 49,038 (3.º) | 67,627 (3.º) | 77,764 (3.º) | 74,970 (5.º) | 79,425 (4.º) | 76,282 (4.º) | 62,298 (4.º) |
+| Querétaro | 53,290 (4.º) | 50,813 (4.º) | 45,145 (4.º) | 64,888 (4.º) | 72,847 (4.º) | 79,824 (4.º) | 77,391 (5.º) | 76,025 (5.º) | 61,723 (5.º) |
+| Tijuana | 27,171 (7.º) | 30,707 (7.º) | 28,332 (6.º) | 35,449 (6.º) | 37,427 (7.º) | 35,265 (8.º) | 38,570 (7.º) | 37,894 (6.º) | 25,515 (6.º) |
+| Cancún | 32,858 (6.º) | 31,476 (6.º) | 17,715 (9.º) | 30,867 (7.º) | 45,868 (5.º) | 38,822 (6.º) | 36,166 (8.º) | 36,207 (7.º) | 22,214 (7.º) |
+| Toluca | 36,491 (5.º) | 35,779 (5.º) | 44,833 (5.º) | 54,943 (5.º) | 43,205 (6.º) | 37,694 (7.º) | 39,109 (6.º) | 30,399 (8.º) | 18,680 (8.º) |
+| San Luis Potosí | 24,760 (8.º) | 24,169 (8.º) | 22,004 (7.º) | 26,718 (8.º) | 28,790 (8.º) | 28,737 (9.º) | 27,500 (9.º) | 26,620 (9.º) | 17,181 (10.º) |
+| Mérida | 20,648 (9.º) | 22,445 (9.º) | 20,074 (8.º) | 22,458 (9.º) | 22,646 (9.º) | 26,027 (10.º) | 26,201 (10.º) | 25,439 (10.º) | 18,553 (9.º) |
+| **País** | 1,055,429 | 1,025,465 | 910,656 | 1,136,661 | 1,149,878 | 1,196,088 | 1,263,586 | 1,232,809 | 946,610 |
+
+Se ve el cambio: el AICM fue el primero del país hasta 2023 y en 2024 bajó a la mitad, el mismo
+año en que el AIFA pasó al primer lugar. En 2022 el AIFA apenas movió 5 toneladas. Las cifras de
+la serie pueden diferir un poco de las del informe de diciembre en la carga nacional e
+internacional de cada aeropuerto, no en su total.
 
 ---
 
@@ -1091,7 +1117,7 @@ producen ni piden carga.
 | Pago | Conforme avanza la obra; sin dinero, la obra se detiene |
 | Estación | Al terminarse, si hay vía a 15 km o menos |
 | Ocupación | 0 a 100 % en 3 años, solo con tren |
-| Marcador | Panel de presupuesto y empleos (permanentes y en obra), arriba a la derecha |
+| Marcador | Barra a lo largo de la parte de arriba: presupuesto, caja de la CFE, empleos (permanentes y en obra), obras y el catálogo |
 
 Los trenes y los barcos comparten el mismo motor de servicios (`domain/servicio.ts`): un
 vehículo recorre sus piernas, espera en cada parada lo que le toca y sigue. Solo cambia cómo
@@ -1167,7 +1193,7 @@ de las concesionarias son los de carga de la tabla A36 del anuario ferroviario 2
 de un año sale a finales de abril del siguiente, el presupuesto se aprueba a más tardar el 15
 de noviembre del año anterior y el proyecto se presenta el 8 de septiembre.
 
-En el panel del presupuesto, arriba a la derecha, junto al saldo va cuánto llega cada mes; al
+En la barra de arriba, junto al saldo va cuánto llega cada mes; al
 pasar el cursor, de dónde sale.
 
 ### La energía
@@ -1392,10 +1418,11 @@ uno renunció), pero no dice cuáles; la ficha de esos cinco lo advierte. Cuánt
 cada polo no se publica: en Realidad no hay ocupación, ni empleos, ni demanda eléctrica de los
 polos, ni ramal a la vía.
 
-El panel de arriba a la derecha cambia: el presupuesto federal real para ferrocarriles de ese
+La barra de arriba cambia: el presupuesto federal real para ferrocarriles de ese
 año, cuántas obras y km están en operación, en obra y anunciadas, y cuántas centrales de la CFE
 operan (con sus MW) y cuántas están en obra. No hay trenes ni barcos: los del juego son
-servicios inventados. También dice cuántos polos operan y cuántos están declarados sin abrir.
+servicios inventados. También dice cuántos polos operan y cuántos están declarados sin abrir, y
+cuánta carga aérea movió el país ese año.
 
 **El margen de cada región es una estimación.** La capa *Energía* pinta las regiones con el
 modelo del juego: los márgenes oficiales de 2019, la demanda creciendo a su ritmo real y las
@@ -1459,6 +1486,11 @@ tienen fecha de corte, a la vista bajo la línea de tiempo.
 - **La partida empieza el 1 de diciembre de 2018.** *(20 nov 2026.)* El día en que empezó el
   sexenio: da un mes más de juego, y el modo Realidad arranca el mismo día (ahí se ve el anuncio
   del Tren Maya, el 16 de diciembre). Diciembre trae la doceava parte del presupuesto de 2018.
+- **El panel del Estado, una barra arriba.** *(20 nov 2026.)* Pedido del usuario: el presupuesto,
+  la CFE, los empleos y las obras van en una fila a lo largo de la parte de arriba, del reloj al
+  librito; las fichas de la derecha empiezan debajo.
+- **Las toneladas de los aeropuertos, año por año en Realidad.** *(20 nov 2026.)* Con la serie
+  mensual de la AFAC desde 2018.
 - **Los aeropuertos de carga, en el tablero.** *(20 nov 2026.)* El usuario preguntó si todos los
   aeropuertos son de carga: no, la carga se concentra en pocos. Entran los diez primeros de la
   AFAC, como sitios con sus toneladas; serán puertos secos cuando se diseñe la carga.

@@ -37,11 +37,24 @@ export type Aeropuerto = {
   /** Only when the AFAC lists it among the top ten of that kind. */
   domestica2025?: number;
   internacional2025?: number;
+  /** Tonnes each year from 2018 (AFAC series), and its place in the country that year. */
+  serie: Record<string, AñoAeropuerto>;
+  /** First month with cargo ("2022-03" for the AIFA, which opened then). */
+  desde: string;
 };
+
+export type AñoAeropuerto = { nacional: number; internacional: number; lugar: number | null };
 
 type AeropuertosJson = {
   fuente: { fuente: string; url: string };
   totalPais: Record<'2024' | '2025', number>;
+  serie: {
+    fuente: string;
+    url: string;
+    /** The last year, still running: how many of its months are in. */
+    parcial: { año: number; meses: number };
+    totalPais: Record<string, number>;
+  };
   aeropuertos: (Omit<Aeropuerto, 'lonLat'> & { lon: number; lat: number })[];
 };
 const AEROPUERTOS_JSON = aeropuertosJson as AeropuertosJson;
@@ -53,6 +66,20 @@ export const AEROPUERTOS: readonly Aeropuerto[] = AEROPUERTOS_JSON.aeropuertos
 export const FUENTE_AEROPUERTOS = AEROPUERTOS_JSON.fuente;
 /** Tonnes of air cargo in the whole country. */
 export const CARGA_AEREA_PAIS = AEROPUERTOS_JSON.totalPais;
+/** The yearly series behind Realidad: source, the partial last year, the country's total each year. */
+export const SERIE_AEROPUERTOS = AEROPUERTOS_JSON.serie;
+export const AÑOS_AEROPUERTOS = Object.keys(SERIE_AEROPUERTOS.totalPais).map(Number);
+
+/** The year whose tonnes an airport shows: 2025 in the game; in Realidad, the date's own year (within the series). */
+export function añoDeCarga(año: number): number {
+  return Math.max(AÑOS_AEROPUERTOS[0], Math.min(año, AÑOS_AEROPUERTOS[AÑOS_AEROPUERTOS.length - 1]));
+}
+
+/** Tonnes of an airport in a year (0 when it had none). */
+export const toneladas = (a: Aeropuerto, año: number) => {
+  const s = a.serie[String(año)];
+  return s ? s.nacional + s.internacional : 0;
+};
 
 export type Ciudad = {
   id: string;

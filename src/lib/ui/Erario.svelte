@@ -7,14 +7,15 @@
   import { añoDe } from '$lib/domain/calendario';
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
   import { OBRAS_ENERGIA } from '$lib/domain/energia';
-  import { POLOS } from '$lib/domain/sitios';
+  import { AÑOS_AEROPUERTOS, POLOS, SERIE_AEROPUERTOS } from '$lib/domain/sitios';
   import { clavePolo } from '$lib/domain/realidad';
 
   /** The last year with a real figure: later years repeat it. */
   const ULTIMO_AÑO = FEDERAL.años[FEDERAL.años.length - 1].año;
 
   /**
-   * The State's ledger, always in view: the money in the till and what comes
+   * The State's ledger, always in view as a bar along the top of the screen,
+   * between the clock and the book: the money in the till and what comes
    * in each month, the jobs the player's works have made, and the way into the
    * catalog of works. Permanent jobs are the ones that last (companies in the
    * polos); jobs on site end with the work. Reads the clock so it moves as
@@ -61,7 +62,11 @@
       else if (e === 'anunciada' || e === 'en-obra') polos.declarados++;
     }
     const serie = a.repetido ? 'sin dato aún: el último publicado' : a.serie === 'ejercido' ? 'ejercido' : a.serie === 'aprobado' ? 'aprobado' : 'proyecto';
-    return { ...cuenta, cfe, polos, año: a.año, federal: a.federal, serie };
+    // Air cargo in the date's year (the series' last year is still running).
+    const añoCarga = Math.min(Math.max(a.año, AÑOS_AEROPUERTOS[0]), AÑOS_AEROPUERTOS[AÑOS_AEROPUERTOS.length - 1]);
+    const parcial = añoCarga === SERIE_AEROPUERTOS.parcial.año;
+    const carga = { año: añoCarga, t: SERIE_AEROPUERTOS.totalPais[String(añoCarga)], parcial };
+    return { ...cuenta, cfe, polos, carga, año: a.año, federal: a.federal, serie };
   });
 
   /** This month's payment and the year it comes from, with the sources in words. */
@@ -104,85 +109,106 @@
 
 <div class="erario panel">
   {#if real}
-  <div class="fila caja" title="Presupuesto federal para ferrocarriles de ese año (Cuenta Pública y Presupuesto de Egresos): subfunción de transporte por ferrocarril, Tren Maya y Ferrocarril del Istmo.">
-    <span class="label">Trenes {real.año}</span>
-    <b class="mono">{mdp(real.federal)}</b>
-    <span class="mes">{real.serie}</span>
-  </div>
-  <div class="fila">
-    <span class="label">En operación</span>
-    <span><b class="mono">{real.enOperacion}</b> obra{real.enOperacion === 1 ? '' : 's'} · <b class="mono">{km(real.kmOperacion)}</b></span>
-  </div>
-  <div class="fila">
-    <span class="label">En obra</span>
-    <span><b class="mono">{real.enObra}</b> obra{real.enObra === 1 ? '' : 's'} · <b class="mono">{km(real.kmObra)}</b></span>
-    <span class="dim">· {real.anunciadas} anunciadas</span>
-  </div>
-  <div class="fila" title="Centrales de la CFE del catálogo, en su etapa real">
-    <span class="label">Centrales CFE</span>
-    <span><b class="mono">{real.cfe.enOperacion}</b> operando · <b class="mono">{personas(real.cfe.mwOperacion)}</b> MW</span>
-    <span class="dim">· {real.cfe.enObra} en obra</span>
-  </div>
-  <div class="fila" title="Polos del Bienestar con declaratoria en el DOF, y los que ya operan">
-    <span class="label">Polos</span>
-    <span><b class="mono">{real.polos.operando}</b> operando</span>
-    <span class="dim">· {real.polos.declarados} declarados sin abrir</span>
-  </div>
-  <button class="fila obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
-    <span class="label">Obras</span>
-    <span>de vía del catálogo</span>
-    <span class="ir">Ver todas {tablero.catalogo ? '×' : '→'}</span>
-  </button>
+    <div class="celda caja" title="Presupuesto federal para ferrocarriles de ese año (Cuenta Pública y Presupuesto de Egresos): subfunción de transporte por ferrocarril, Tren Maya y Ferrocarril del Istmo.">
+      <span class="label">Trenes {real.año} · {real.serie}</span>
+      <span class="valor"><b class="mono">{mdp(real.federal)}</b></span>
+    </div>
+    <div class="celda">
+      <span class="label">Vías en operación</span>
+      <span class="valor"><b class="mono">{real.enOperacion}</b> · <b class="mono">{km(real.kmOperacion)}</b></span>
+    </div>
+    <div class="celda" title={`Además, ${real.anunciadas} vías anunciadas sin obra`}>
+      <span class="label">Vías en obra</span>
+      <span class="valor"><b class="mono">{real.enObra}</b> · <b class="mono">{km(real.kmObra)}</b></span>
+    </div>
+    <div class="celda" title="Centrales de la CFE del catálogo, en su etapa real">
+      <span class="label cfe">Centrales CFE</span>
+      <span class="valor"><b class="mono">{real.cfe.enOperacion}</b> · <b class="mono">{personas(real.cfe.mwOperacion)}</b> MW <span class="dim">· {real.cfe.enObra} en obra</span></span>
+    </div>
+    <div class="celda opcional" title="Polos del Bienestar con declaratoria en el DOF, y los que ya operan">
+      <span class="label">Polos</span>
+      <span class="valor"><b class="mono">{real.polos.operando}</b> operando <span class="dim">· {real.polos.declarados} declarados</span></span>
+    </div>
+    <div class="celda opcional" title={`Carga aérea de todo el país (AFAC)${real.carga.parcial ? ', de enero a septiembre' : ''}`}>
+      <span class="label aereo">Carga aérea {real.carga.año}{real.carga.parcial ? '*' : ''}</span>
+      <span class="valor"><b class="mono">{personas(real.carga.t)}</b> t</span>
+    </div>
+    <button class="celda obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
+      <span class="label">Obras</span>
+      <span class="valor ir">Ver todas {tablero.catalogo ? '×' : '→'}</span>
+    </button>
   {:else}
-  <div class="fila caja" title={llegada?.detalle}>
-    <span class="label">Presupuesto</span>
-    <b class="mono" class:agotado={cuenta.dinero < 1}>{mdp(cuenta.dinero)}</b>
-    {#if llegada}<span class="mes">{alMes(llegada.total)}</span>{/if}
-  </div>
-  <div class="fila caja cfe" title={detalleCfe}>
-    <span class="label">CFE</span>
-    <b class="mono" class:agotado={sim.dineroCfe < 1}>{mdp(sim.dineroCfe)}</b>
-    <span class="mes">{alMes(CAJA_CFE_MES)}</span>
-  </div>
-  <div class="fila">
-    <span class="label">Empleos</span>
-    <span><b class="mono">{personas(cuenta.permanentes)}</b> permanentes</span>
-    <span class="dim">· <b class="mono">{personas(cuenta.enObra)}</b> en obra</span>
-  </div>
-  <button class="fila obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
-    <span class="label">Obras</span>
-    <span>
-      {obrasEnCurso} en obra{#if obrasDetenidas}<span class="alerta"> ({obrasDetenidas} detenida{obrasDetenidas > 1 ? 's' : ''})</span>{/if}
-      · {obrasHechas} hechas
-    </span>
-    <span class="ir">Catálogo {tablero.catalogo ? '×' : '→'}</span>
-  </button>
+    <div class="celda caja" title={llegada?.detalle}>
+      <span class="label">Presupuesto</span>
+      <span class="valor">
+        <b class="mono" class:agotado={cuenta.dinero < 1}>{mdp(cuenta.dinero)}</b>
+        {#if llegada}<span class="mes">{alMes(llegada.total)}</span>{/if}
+      </span>
+    </div>
+    <div class="celda caja" title={detalleCfe}>
+      <span class="label cfe">CFE</span>
+      <span class="valor">
+        <b class="mono" class:agotado={sim.dineroCfe < 1}>{mdp(sim.dineroCfe)}</b>
+        <span class="mes">{alMes(CAJA_CFE_MES)}</span>
+      </span>
+    </div>
+    <div class="celda">
+      <span class="label">Empleos</span>
+      <span class="valor"><b class="mono">{personas(cuenta.permanentes)}</b> permanentes <span class="dim">· <b class="mono">{personas(cuenta.enObra)}</b> en obra</span></span>
+    </div>
+    <div class="celda opcional">
+      <span class="label">Obras</span>
+      <span class="valor">
+        {obrasEnCurso} en obra{#if obrasDetenidas}<span class="alerta"> ({obrasDetenidas} detenida{obrasDetenidas > 1 ? 's' : ''})</span>{/if}
+        · {obrasHechas} hechas
+      </span>
+    </div>
+    <button class="celda obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
+      <span class="label">Catálogo</span>
+      <span class="valor ir">Obras del Estado {tablero.catalogo ? '×' : '→'}</span>
+    </button>
   {/if}
 </div>
 
 <style>
+  /* A bar along the top, from the clock to the book. */
   .erario {
     position: fixed;
     top: 1rem;
+    left: calc(1rem + 260px + 0.5rem);
     right: calc(1rem + var(--libro) + 0.5rem);
     z-index: 30;
-    width: 360px;
-    display: grid;
-    gap: 0.25rem;
-    padding: 0.55rem 0.8rem;
+    display: flex;
+    align-items: stretch;
+    min-height: var(--libro);
+    padding: 0.4rem 0.4rem;
     font-size: 0.76rem;
+    overflow: hidden;
   }
 
-  .fila {
+  .celda {
     display: flex;
-    align-items: baseline;
-    gap: 0.45rem;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.12rem;
+    flex: none;
+    padding: 0 0.75rem;
+    border-left: 1px solid var(--line);
     white-space: nowrap;
   }
 
-  .fila .label {
-    width: 5.6rem;
-    flex: none;
+  .celda:first-child {
+    border-left: 0;
+  }
+
+  .label {
+    font-size: 0.6rem;
+  }
+
+  .valor {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
   }
 
   b {
@@ -193,18 +219,21 @@
     cursor: help;
   }
 
-  .caja .mes {
-    margin-left: auto;
+  .caja b {
+    font-size: 0.9rem;
+  }
+
+  .mes {
     font-size: 0.68rem;
     color: #b7f5cf;
   }
 
-  .cfe .label {
+  .cfe {
     color: #fde68a;
   }
 
-  .caja b {
-    font-size: 0.86rem;
+  .aereo {
+    color: #c7d2fe;
   }
 
   .agotado {
@@ -219,22 +248,20 @@
     color: #ff9b9b;
   }
 
-
-  /* The way into the State's catalog of rail works. */
+  /* The way into the catalog, at the far end of the bar. */
   .obras-via {
-    margin-top: 0.2rem;
-    padding: 0.3rem 0 0;
-    border: 0;
-    border-top: 1px solid var(--line);
+    margin-left: auto;
     background: none;
-    font-size: 0.74rem;
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 0;
     color: var(--muted);
+    font: inherit;
     text-align: left;
     cursor: pointer;
   }
 
   .obras-via .ir {
-    margin-left: auto;
     color: #f4f1de;
   }
 
@@ -244,19 +271,14 @@
     text-underline-offset: 2px;
   }
 
-  /* Between the centred nav bar and the book there is less room on mid-size
-     screens: tighter there, and out of the way below that. */
-  @media (max-width: 1340px) {
-    .erario {
-      width: 260px;
-    }
-
-    .fila .label {
-      width: 4.6rem;
+  /* Less room: the secondary cells give way, then the bar. */
+  @media (max-width: 1360px) {
+    .celda.opcional {
+      display: none;
     }
   }
 
-  @media (max-width: 1240px) {
+  @media (max-width: 1000px) {
     .erario {
       display: none;
     }

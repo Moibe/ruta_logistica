@@ -196,7 +196,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `static/data/rutas-maritimas.json`   | 136 rutas por mar entre puertos y salidas, el trazo del Canal y las 2 travesías oceánicas (~51 KB) |
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
 | `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
-| `src/lib/domain/datos/aeropuertos.json` | Los **10 aeropuertos de carga** de la AFAC, con sus toneladas de 2024 y 2025 |
+| `src/lib/domain/datos/aeropuertos.json` | Los **10 aeropuertos de carga** de la AFAC, con sus toneladas de cada año desde 2018 (serie mensual de la AFAC) para el modo Realidad |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
 | `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
 | `src/lib/domain/datos/obras-via.json` | **Catálogo de obras del Estado**: trazos, paradas o líneas, costo por km y tiempo oficiales, con fuentes |
@@ -232,7 +232,7 @@ doceava parte del presupuesto federal real para ferrocarriles de ese año (lo ej
 Cuenta Pública de 2018 a 2025, lo aprobado en 2026, el proyecto de 2027, que se repite después)
 más el derecho de las concesionarias (1.25 % de sus ingresos, 3 % desde 2027). Lo que no se
 gasta se acumula; polos y vías salen de la misma caja. `sim.#cobrar` paga cada mes que empieza
-y el panel `Erario` muestra lo que llegó. Las fichas avisan cuánto tardaría de verdad una obra
+y la barra `Erario` (a lo largo de la parte de arriba) muestra lo que llegó. Las fichas avisan cuánto tardaría de verdad una obra
 al paso del dinero (`mesesAlRitmoDelDinero`, con el calendario real de mensualidades). La
 tabla por año y el método, en la [enciclopedia](docs/enciclopedia.md#el-presupuesto-del-estado).
 

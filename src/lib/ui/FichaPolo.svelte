@@ -76,7 +76,7 @@
 
 {#if ficha}
   {@const { p, obra } = ficha}
-  <section class="ficha panel" class:realidad={sim.modo === 'realidad'}>
+  <section class="ficha panel">
     <header>
       <span class="nombre">{p.nombre}</span>
       <button class="close" onclick={() => (tablero.poloSel = null)} aria-label="Cerrar">×</button>
@@ -236,7 +236,7 @@
 <style>
   .ficha {
     position: fixed;
-    top: 7.6rem;
+    top: 5.2rem;
     right: 1rem;
     z-index: 30;
     width: 272px;
@@ -398,10 +398,6 @@
     color: var(--accent);
   }
 
-  /* In Realidad the ledger has more rows: start below it. */
-  .ficha.realidad {
-    top: 10.2rem;
-  }
 
   .nota {
     color: var(--muted);

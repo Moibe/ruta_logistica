@@ -481,7 +481,7 @@
 
   .ficha {
     position: fixed;
-    top: 7.6rem;
+    top: 5.2rem;
     right: 1rem;
     z-index: 30;
     width: 272px;

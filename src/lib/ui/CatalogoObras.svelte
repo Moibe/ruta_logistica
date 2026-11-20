@@ -209,7 +209,7 @@
 {/snippet}
 
 {#if tablero.catalogo}
-  <section class="catalogo panel" class:realidad={sim.modo === 'realidad'}>
+  <section class="catalogo panel">
     {#if fichaPlanta}
       {@const { o, estado, region, despues } = fichaPlanta}
       <header>
@@ -514,11 +514,11 @@
     --obra: #f4f1de;
     --obra-suave: rgba(244, 241, 222, 0.12);
     position: fixed;
-    top: 7.6rem;
+    top: 5.2rem;
     right: 1rem;
     z-index: 31;
     width: 320px;
-    max-height: calc(100vh - 7.6rem - 13rem);
+    max-height: calc(100vh - 5.2rem - 13rem);
     overflow-y: auto;
     padding: 0.8rem 0.9rem 0.9rem;
     border-top: 2px solid var(--obra);
@@ -750,11 +750,6 @@
 
   .aviso {
     color: #ffc2c2;
-  }
-
-  .catalogo.realidad {
-    top: 10.2rem;
-    max-height: calc(100vh - 10.2rem - 13rem);
   }
 
   .fuentes {
