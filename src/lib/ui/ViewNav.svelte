@@ -70,7 +70,10 @@
     title="Cambiar de vista"
     onclick={() => (abierto = !abierto)}
   >
-    <span class="dot"></span>
+    <svg class="ojo" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+      <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z" />
+      <circle cx="12" cy="12" r="2.8" />
+    </svg>
     <span class="nombre">{actual}</span>
     <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" /></svg>
   </button>
@@ -111,6 +114,22 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  /* "Views": an eye, lit like the brand dot. */
+  .pastilla .ojo {
+    stroke: var(--warn);
+    stroke-width: 1.8;
+    filter: drop-shadow(0 0 3px var(--warn));
+  }
+
+  .pastilla .ojo circle {
+    fill: var(--warn);
+    stroke: none;
+  }
+
+  .pastilla.abierto .ojo {
+    transform: none;
   }
 
   .pastilla svg {
