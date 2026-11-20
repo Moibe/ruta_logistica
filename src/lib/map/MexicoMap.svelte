@@ -10,7 +10,7 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, type Dueño } from '$lib/domain/red';
   import { obraVia } from '$lib/domain/obrasVia';
-  import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
+  import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, SUBREGIONES_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
   import { fechaLarga as fechaDeJuego } from '$lib/domain/calendario';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
   import { esperaTotal, piernasDelRecorrido, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
@@ -84,6 +84,8 @@
   const VIA_MUERTA = 'rgba(138, 164, 194, 0.3)';
 
   /** Each region painted by how much margin it has at its tighter peak. */
+  /** Mexico's own fill, under every layer of the geography. */
+  const COLOR_PAIS = '#0e2035';
   const COLOR_ENERGIA: Record<NivelEnergia, string> = {
     holgado: 'rgba(74, 222, 128, 0.16)',
     justo: 'rgba(251, 191, 36, 0.2)',
@@ -123,6 +125,8 @@
     desde: number | null;
     /** A CFE work of the player's. */
     obra?: string;
+    /** The CFE hasn't chosen its site: the municipality the game puts it in. */
+    sitioPorDefinir?: string;
   };
   const horasDeFecha = (fecha: string) => (Date.parse(`${fecha}T00:00:00Z`) - Date.UTC(2019, 0, 1)) / 3_600_000;
   const PLANTAS: PlantaMapa[] = [
@@ -135,7 +139,16 @@
       dueño: 'privada' as const,
       desde: horasDeFecha(p.fecha),
     })),
-    ...OBRAS_ENERGIA.map((o) => ({ nombre: o.nombre, tecnologia: o.tecnologia, mw: o.mw, region: o.region, dueño: 'CFE' as const, desde: null, obra: o.id })),
+    ...OBRAS_ENERGIA.map((o) => ({
+      nombre: o.nombre,
+      tecnologia: o.tecnologia,
+      mw: o.mw,
+      region: o.region,
+      dueño: 'CFE' as const,
+      desde: null,
+      obra: o.id,
+      ...(o.sitioPorDefinir ? { sitioPorDefinir: o.municipio } : {}),
+    })),
   ];
   const LONLAT_PLANTAS: LonLat[] = [...ENERGIA.plantas2018, ...ENERGIA.privadas, ...OBRAS_ENERGIA].map((p) => p.lonLat);
   const radioPlanta = (mw: number) => 1.6 + Math.sqrt(mw) / 7;
@@ -244,7 +257,8 @@
     | { kind: 'polo'; polo: Polo }
     | { kind: 'via'; base: number }
     | { kind: 'planta'; indice: number }
-    | { kind: 'estado'; estado: EstadoProps };
+    /** `region`: the pointer is over a system of its own inside the state (Mulegé), with the electricity layer on. */
+    | { kind: 'estado'; estado: EstadoProps; region?: string };
 
   let host = $state.raw<HTMLDivElement>();
   let canvas = $state.raw<HTMLCanvasElement>();
@@ -287,6 +301,8 @@
     frontera: Path2D;
     limites: Path2D;
     estados: { props: EstadoProps; path: Path2D; bounds: [[number, number], [number, number]] }[];
+    /** Electricity systems of their own inside a state (Mulegé): their area, clipped by the state when drawn, and their border. */
+    subregiones: { region: string; estado: string; zona: Path2D; frontera: Path2D }[];
   };
   let baked: Baked | null = null;
   /** The graticule alone, so the first frame isn't empty while the TopoJSON loads. */
@@ -412,6 +428,17 @@
     }
     const g = geo;
     const P = (x: Parameters<GeoPath>[0]) => new Path2D(p(x) ?? '');
+    // Vertex by vertex, not as GeoJSON: a hand-made ring has no winding order to get wrong.
+    const trazo = (pts: LonLat[], cerrado: boolean) => {
+      const q = new Path2D();
+      pts.forEach((c, i) => {
+        const [x, y] = projection!(c) ?? [NaN, NaN];
+        if (i === 0) q.moveTo(x, y);
+        else q.lineTo(x, y);
+      });
+      if (cerrado) q.closePath();
+      return q;
+    };
     baked = {
       graticule,
       vecinos: P(g.vecinos),
@@ -422,6 +449,9 @@
       frontera: P(g.frontera),
       limites: P(g.limites),
       estados: g.estados.features.map((f) => ({ props: f.properties, path: P(f), bounds: p.bounds(f) })),
+      subregiones: ENERGIA.regiones.flatMap((r) =>
+        r.parteDe && r.zona && r.frontera ? [{ region: r.id, estado: r.parteDe, zona: trazo(r.zona, true), frontera: trazo(r.frontera, false) }] : []
+      ),
     };
   }
 
@@ -758,7 +788,7 @@
       ctx.lineWidth = 0.5 / k;
       ctx.stroke(b.vecinosLimites);
 
-      ctx.fillStyle = '#0e2035';
+      ctx.fillStyle = COLOR_PAIS;
       ctx.fill(b.pais);
 
       // Electricity: every state in its region's colour.
@@ -769,6 +799,26 @@
           if (!n) continue;
           ctx.fillStyle = COLOR_ENERGIA[n];
           ctx.fill(est.path);
+        }
+        // A system of its own inside a state (Mulegé): its part of the state
+        // in its own colour, and a dashed line where it ends.
+        for (const s of b.subregiones) {
+          const n = nivel.get(s.region);
+          const est = b.estados.find((x) => x.props.clave === s.estado);
+          if (!n || !est) continue;
+          ctx.save();
+          ctx.clip(est.path);
+          ctx.fillStyle = COLOR_PAIS;
+          ctx.fill(s.zona);
+          ctx.fillStyle = COLOR_ENERGIA[n];
+          ctx.fill(s.zona);
+          ctx.restore();
+          ctx.save();
+          ctx.setLineDash([4 / k, 3 / k]);
+          ctx.strokeStyle = 'rgba(226, 236, 255, 0.45)';
+          ctx.lineWidth = 0.9 / k;
+          ctx.stroke(s.frontera);
+          ctx.restore();
         }
       }
 
@@ -1754,7 +1804,11 @@
     for (const e of baked.estados) {
       const [[x0, y0], [x1, y1]] = e.bounds;
       if (px < x0 || px > x1 || py < y0 || py > y1) continue;
-      if (hitCtx.isPointInPath(e.path, px, py)) return { kind: 'estado', estado: e.props };
+      if (!hitCtx.isPointInPath(e.path, px, py)) continue;
+      if (layers.energia)
+        for (const s of baked.subregiones)
+          if (s.estado === e.props.clave && hitCtx.isPointInPath(s.zona, px, py)) return { kind: 'estado', estado: e.props, region: s.region };
+      return { kind: 'estado', estado: e.props };
     }
     return null;
   }
@@ -1776,7 +1830,7 @@
                 ? `via:${t.base}`
                 : t.kind === 'planta'
                   ? `planta:${t.indice}`
-                : `estado:${t.estado.clave}`;
+                : `estado:${t.estado.clave}${t.region ? `:${t.region}` : ''}`;
 
   /** The site key of a target, if it is a site. */
   const sitioDe = (t: Target | null): string | null =>
@@ -2234,14 +2288,18 @@
             ? 'En servicio desde antes de 2019'
             : `En servicio desde el ${fechaDeJuego(p.desde)}`}
       </span>
+      {#if p.sitioPorDefinir}
+        <span class="tip-sub">Sitio por definir: la CFE aún lo busca; el juego la pone en {p.sitioPorDefinir}.</span>
+      {/if}
     {:else if hovered.kind === 'estado' && layers.energia && sim.energia.length}
-      {@const regionEstado = REGION_DEL_ESTADO.get(hovered.estado.clave)}
+      {@const regionEstado = hovered.region ?? REGION_DEL_ESTADO.get(hovered.estado.clave)}
       {@const reg = sim.energia.find((e) => e.region.id === regionEstado)}
+      {@const aparte = hovered.region ? [] : (SUBREGIONES_DEL_ESTADO.get(hovered.estado.clave) ?? [])}
       <span class="label tip-kind">Estado · {hovered.estado.clave}</span>
       <strong>{hovered.estado.nombre}</strong>
       {#if reg}
         <span class="tip-rail energia-nivel" class:critico={reg.nivel === 'critico'}>
-          Región {reg.region.nombre}: {TEXTO_NIVEL[reg.nivel]}
+          {reg.region.parteDe ? `Sistema aislado de ${reg.region.nombre}` : `Región ${reg.region.nombre}`}: {TEXTO_NIVEL[reg.nivel]}
         </span>
         <span class="tip-sub">
           Margen {reg.margen.tarde.toLocaleString('es-MX', { maximumFractionDigits: 1 })} % en la tarde ·
@@ -2252,6 +2310,12 @@
             ? `, ${reg.demandaPolos.toLocaleString('es-MX', { maximumFractionDigits: 1 })} de polos`
             : ''}
         </span>
+        {#if reg.region.margenCalculado}
+          <span class="tip-sub">Sin enlace con el resto del estado. El PRODESEN no publica su margen: lo calcula el juego.</span>
+        {/if}
+        {#each aparte as a (a.id)}
+          <span class="tip-sub">{a.nombre}, al norte, es un sistema aislado aparte.</span>
+        {/each}
       {/if}
     {:else}
       <span class="label tip-kind">Estado · {hovered.estado.clave}</span>

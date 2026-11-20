@@ -153,11 +153,17 @@
       <h2>{o.nombre}</h2>
       <p class="label">Central de la CFE · {o.tecnologia} · {personas(o.mw)} MW</p>
       <p class="efecto">
-        Región <b>{region.region.nombre}</b>: hoy tiene {pct(region.margen.tarde)} de margen en la tarde y {pct(region.margen.noche)} en
-        la noche. La central suma {personas(aporte(o, 'tarde'))} MW a la tarde y {personas(aporte(o, 'noche'))} a la noche{o.clase === 'solar'
-          ? ' (de noche la solar no da)'
-          : ''}: quedaría en {pct(despues.tarde)} y {pct(despues.noche)}.
+        {region.region.parteDe ? 'Sistema aislado de' : 'Región'} <b>{region.region.nombre}</b>: hoy tiene {pct(region.margen.tarde)} de margen
+        en la tarde y {pct(region.margen.noche)} en la noche. La central suma {personas(aporte(o, 'tarde'))} MW a la tarde y
+        {personas(aporte(o, 'noche'))} a la noche{o.clase === 'solar' && !o.aporte ? ' (de noche la solar no da)' : ''}: quedaría en
+        {pct(despues.tarde)} y {pct(despues.noche)}.
       </p>
+      {#if o.aporteDato}
+        <p class="nota">{o.aporteDato}</p>
+      {/if}
+      {#if o.sitioPorDefinir}
+        <p class="nota">Sitio por definir: la CFE aún lo busca; el juego la pone en {o.municipio}.</p>
+      {/if}
       <p class="real"><span class="label">En la realidad</span> {o.real}</p>
 
       {#if estado.fase === 'por-construir' && planPlanta}
@@ -187,8 +193,15 @@
         {/if}
         <details class="fuentes">
           <summary>De dónde salen las cifras</summary>
+          {#if o.anuncio}
+            <p><b>El proyecto:</b> <a href={o.anuncio.url} target="_blank" rel="noopener noreferrer">{o.anuncio.fuente}</a></p>
+          {/if}
           <p><b>Costo:</b> {o.costo.dato} <a href={o.costo.url} target="_blank" rel="noopener noreferrer">{o.costo.fuente}</a></p>
-          <p><b>Tiempo:</b> {o.tiempo.dato}</p>
+          <p>
+            <b>Tiempo:</b>
+            {o.tiempo.dato}
+            {#if o.tiempo.url}<a href={o.tiempo.url} target="_blank" rel="noopener noreferrer">{o.tiempo.fuente}</a>{/if}
+          </p>
         </details>
         <div class="acciones">
           <button class="ctl construir" onclick={() => (confirmando = true)} disabled={sim.estado !== 'lista'}>

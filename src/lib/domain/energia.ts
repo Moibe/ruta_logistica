@@ -17,16 +17,19 @@ import { presupuestarObra, type PresupuestoObra } from './obrasVia';
  * - **capacity** grows with the private plants on their real dates (the CNE's
  *   permits list) and with the CFE plants the player builds; each counts at
  *   each peak by its technology (firm 90 %, wind 25 %, solar 35 % in the
- *   afternoon and nothing at night).
+ *   afternoon and nothing at night). Storage lets a plant count at night: a
+ *   thermosolar plant with eleven hours of molten salt is firm, and a plant
+ *   with batteries carries its own `aporte` per peak.
  *
  * A polo only fills while its region is above the operating margin (6 % on
  * the interconnected grid, 11 % on the isolated Baja California systems) at
- * both peaks.
+ * both peaks. Mulegé, in the north of Baja California Sur, is a system of its
+ * own, isolated from the rest of the peninsula.
  */
 
 export type Escalon = 'tarde' | 'noche';
 export type ClaseTec = 'firme' | 'eolica' | 'solar';
-export type Sistema = 'SIN' | 'BC' | 'BCS';
+export type Sistema = 'SIN' | 'BC' | 'BCS' | 'MUL';
 export type NivelEnergia = 'holgado' | 'justo' | 'critico';
 type Fuente = { fuente: string; url: string; dato?: string };
 
@@ -39,9 +42,18 @@ export type Region = {
   /** Yearly growth of the peak demand, 2018 to 2024. */
   crecimiento: number;
   margen2019: Record<Escalon, number>;
+  /** The PRODESEN publishes no margin for it: the game works it out from its capacity. */
+  margenCalculado?: boolean;
   capacidad2018: number;
   /** States coloured with this region on the map (a split state goes with its main part). */
   estados: string[];
+  /** A system inside one state's municipalities (Mulegé, in BCS): its state and municipalities. */
+  parteDe?: string;
+  municipios?: string[];
+  /** Its border with the rest of the state (INEGI), west to east… */
+  frontera?: LonLat[];
+  /** …and that border closed over the sea: clipped with the state's outline, it is the system's area. */
+  zona?: LonLat[];
 };
 
 export type Planta = {
@@ -63,6 +75,14 @@ export type ObraEnergia = Planta & {
   mesesGobierno: number;
   tiempo: Fuente & { dato: string };
   real: string;
+  /** MW it adds at each peak when its technology's factor doesn't tell (storage). */
+  aporte?: Record<Escalon, number>;
+  /** Why it counts the way it does at each peak. */
+  aporteDato?: string;
+  /** The CFE hasn't chosen the site yet: the game puts it in `municipio`. */
+  sitioPorDefinir?: boolean;
+  /** Where the project was announced, when it isn't in the CFE's reports yet. */
+  anuncio?: Fuente;
 };
 
 type EnergiaJson = {
@@ -89,6 +109,9 @@ export const obraEnergia = (id: string) => OBRAS_ENERGIA.find((o) => o.id === id
 export const regionDe = (id: string) => REGIONES.find((r) => r.id === id) ?? null;
 /** The region of each state's main part, for colouring the map. */
 export const REGION_DEL_ESTADO = new Map(REGIONES.flatMap((r) => r.estados.map((e) => [e, r.id] as const)));
+/** Systems of their own inside a state (Mulegé inside BCS), by state. */
+export const SUBREGIONES_DEL_ESTADO = new Map<string, Region[]>();
+for (const r of REGIONES) if (r.parteDe) SUBREGIONES_DEL_ESTADO.set(r.parteDe, [...(SUBREGIONES_DEL_ESTADO.get(r.parteDe) ?? []), r]);
 /** What the CFE puts into its own plants each month (millions of pesos). */
 export const CAJA_CFE_MES = ENERGIA.cajaCfeMdpAño / 12;
 
@@ -105,8 +128,9 @@ const CALIBRACION_2019 = `${AÑO_INICIAL}-07-01`;
 const CORTE_2019 = horasDe(CALIBRACION_2019);
 const PRIVADAS = ENERGIA.privadas.map((p) => ({ ...p, desde: horasDe(p.fecha) }));
 
-/** MW a plant adds to its region at one peak. */
-export const aporte = (p: { mw: number; clase: ClaseTec }, e: Escalon) => p.mw * FACTORES[p.clase][e];
+/** MW a plant adds to its region at one peak: its own figure if it has storage, else its technology's factor. */
+export const aporte = (p: { mw: number; clase: ClaseTec; aporte?: Record<Escalon, number> }, e: Escalon) =>
+  p.aporte?.[e] ?? p.mw * FACTORES[p.clase][e];
 
 /** Peak demand of the region (without the polos) at game hour `horas`. */
 export function demandaBase(r: Region, horas: number): number {

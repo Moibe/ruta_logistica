@@ -40,6 +40,7 @@ const MUNICIPIOS = {
     SLP: lista('Ahualulco, Armadillo de los Infante, Catorce, Cedral, Cerro de San Pedro, Charcas, Guadalcázar, Matehuala, Mexquitic de Carmona, Moctezuma, Salinas, San Luis Potosí, San Nicolás Tolentino, Santa María del Río, Santo Domingo, Soledad de Graciano Sánchez, Tierra Nueva, Vanegas, Venado, Villa de Arista, Villa de Arriaga, Villa de Guadalupe, Villa de la Paz, Villa de Ramos, Villa de Reyes, Villa Hidalgo, Zaragoza'),
   },
   'baja-california': { SON: lista('San Luis Río Colorado') },
+  mulege: { BCS: lista('Mulegé') },
 };
 /** The region a whole state goes to when its municipality isn't listed (and its colour on the map). */
 const ESTADO = {
@@ -72,22 +73,35 @@ const REGIONES = [
   ['noreste', 'Noreste', 'SIN', 9202, 11109, 25.4, 26.6, 16463],
   ['peninsular', 'Peninsular', 'SIN', 2061, 2969, 35.8, 23.7, 2336],
   ['baja-california', 'Baja California', 'BC', 2863, 3635, -4.5, -4.5, 2910],
-  ['baja-california-sur', 'Baja California Sur', 'BCS', 529, 723, 35.4, 32.6, 837],
-].map(([id, nombre, sistema, d18, d24, mt, mn, cap]) => ({
-  id,
-  nombre,
-  sistema,
-  demanda2018: d18,
-  demanda2024: d24,
-  crecimiento: Math.round(((d24 / d18) ** (1 / 6) - 1) * 10000) / 10000,
-  margen2019: { tarde: mt, noche: mn },
-  capacidad2018: cap,
-  estados: Object.entries(ESTADO).filter(([, r]) => r === id).map(([e]) => e),
-}));
+  ['baja-california-sur', 'Baja California Sur', 'BCS', 500, 689, 35.4, 32.6, 739],
+  // Mulegé: its own isolated system, not tied to the rest of Baja California Sur.
+  // The PRODESEN publishes no margin for it: it's worked out from its capacity,
+  // nearly all of it firm (combustion and the Tres Vírgenes geothermal plant),
+  // against its 2019 peak.
+  ['mulege', 'Mulegé', 'MUL', 29, 34, null, null, 98],
+].map(([id, nombre, sistema, d18, d24, mt, mn, cap]) => {
+  const crecimiento = Math.round(((d24 / d18) ** (1 / 6) - 1) * 10000) / 10000;
+  const calculado = mt === null;
+  const m = calculado ? r1(((cap * 0.9) / (d18 * (1 + crecimiento)) - 1) * 100) : null;
+  return {
+    id,
+    nombre,
+    sistema,
+    demanda2018: d18,
+    demanda2024: d24,
+    crecimiento,
+    margen2019: calculado ? { tarde: m, noche: m } : { tarde: mt, noche: mn },
+    ...(calculado ? { margenCalculado: true } : {}),
+    capacidad2018: cap,
+    estados: Object.entries(ESTADO).filter(([, r]) => r === id).map(([e]) => e),
+    ...(id === 'mulege' ? { parteDe: 'BCS', municipios: ['Mulegé'] } : {}),
+  };
+});
 const UMBRALES = {
   SIN: { operativo: 6, planeacion: 21.3 },
   BC: { operativo: 11, planeacion: 20.9 },
   BCS: { operativo: 11, planeacion: 35 },
+  MUL: { operativo: 11, planeacion: 35 },
 };
 
 // ---- technology classes and how much each counts at each peak ---------------------------------
@@ -110,6 +124,37 @@ const FACTORES = {
     if (c) return c.lonLat;
     faltan.push(`${quien}: ${municipio}, ${edo}`);
     return capitales[edo];
+  }
+
+  // ---- Mulegé on the map ------------------------------------------------------------------------
+  // Its border with Comondú and Loreto: the vertices of its outline (INEGI) that
+  // those two share. `zona` closes that line to the north over the sea; the map
+  // clips it with Baja California Sur's own outline, so the coast is the map's.
+  {
+    const clave = (v) => v[0].toFixed(6) + ',' + v[1].toFixed(6);
+    const area = (r) => Math.abs(r.reduce((s, v, i) => s + (r.at(i - 1)[0] + v[0]) * (r.at(i - 1)[1] - v[1]), 0) / 2);
+    const anillo = (await geo.contorno('03002')).map((p) => p[0]).sort((a, b) => area(b) - area(a))[0];
+    const vecinos = new Set();
+    for (const c of ['03001', '03009']) for (const p of await geo.contorno(c)) for (const r of p) for (const v of r) vecinos.add(clave(v));
+    // The longest run of shared vertices, walking the ring from a vertex that isn't shared.
+    const n = anillo.length;
+    const desde = anillo.findIndex((v) => !vecinos.has(clave(v)));
+    let tramo = [];
+    for (let t = 0, actual = []; t <= n; t++) {
+      const v = anillo[(desde + t) % n];
+      if (t < n && vecinos.has(clave(v))) actual.push(v);
+      else {
+        if (actual.length > tramo.length) tramo = actual;
+        actual = [];
+      }
+    }
+    const frontera = tramo.map(([x, y]) => [Math.round(x * 1e4) / 1e4, Math.round(y * 1e4) / 1e4]);
+    if (frontera[0][0] > frontera.at(-1)[0]) frontera.reverse(); // west to east
+    const [oeste, este] = [frontera[0], frontera.at(-1)];
+    const mul = REGIONES.find((r) => r.id === 'mulege');
+    mul.frontera = frontera;
+    mul.zona = [...frontera, [-109.5, este[1]], [-109.5, 29.5], [-116, 29.5], [-116, oeste[1]]];
+    console.log('Mulegé: frontera de', frontera.length, 'puntos, de', JSON.stringify(oeste), 'a', JSON.stringify(este));
   }
 
   // ---- the main plants of December 2018 (PRODESEN 2019–2033, table 5.2) ----------------------
@@ -212,10 +257,90 @@ const FACTORES = {
     obra('tg-los-cabos', 'Turbogás de emergencia en Los Cabos', 'Turbogás', 154, 'BCS', 'Los Cabos', 152.65, { ...PERMISO, dato: 'Cinco unidades de unos 31 MW, 30.53 millones de dólares cada una.' }, 'En operación desde el 12 de junio de 2025.'),
     obra('tg-riviera-maya', 'Turbogás aeroderivadas Riviera Maya', 'Turbogás aeroderivada', 100, 'QROO', 'Benito Juárez', null, null, 'Programadas para 2026 (Cancún y Cozumel).'),
   ];
+
+  // ---- clean works for the isolated peninsula, and Chicoasén II: no official cost yet ----------
+  const TERMO = 'https://www.gob.mx/presidencia/prensa/mexico-a-la-vanguardia-cfe-construira-2-centrales-termosolares-en-baja-california-sur-para-beneficiar-hasta-200-mil-hogares?idiom=es';
+  const BOLETIN_095 = { fuente: 'CFE, boletín de prensa 095/26 (1 de junio de 2026)', url: 'https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/260601%20-%20gen%20energias%20limpias%20y%20renovables.pdf' };
+  const BOLETIN_179 = { fuente: 'CFE, boletín de prensa 179/26 (10 de septiembre de 2026)', url: 'https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/179hidrogenoverdevf.pdf' };
+  const IRENA_CSP = { fuente: 'Estimación del juego con IRENA, Renewable Power Generation Costs in 2024 (costo total instalado promedio mundial de la termosolar en 2024: 3,677 dólares por kW)', url: 'https://www.irena.org/Publications/2025/Jun/Renewable-Power-Generation-Costs-in-2024' };
+  // The CFE is still choosing the sites: the game puts them in the system's two
+  // load centres, La Paz and Los Cabos.
+  const termosolar = (id, nombre, mw, municipio, real) => ({
+    id,
+    nombre,
+    tecnologia: 'Termosolar',
+    // Eleven hours of molten-salt storage: it generates at night too, so it counts as firm.
+    clase: 'firme',
+    mw,
+    estado: 'BCS',
+    municipio,
+    sitioPorDefinir: true,
+    costoMusd: Math.round(mw * 3677) / 1000,
+    costo: { ...IRENA_CSP, dato: `La CFE no ha publicado su costo: ${mw} MW a 3,677 dólares por kW, el promedio mundial de la termosolar en 2024 (IRENA).` },
+    mesesGobierno: 42,
+    tiempo: { fuente: 'Presidencia de la República, 26 de agosto de 2025', url: TERMO, dato: 'Su construcción «tardará entre 36 y 48 meses»: el juego usa 42.' },
+    aporteDato: 'Con 11 horas de almacenamiento en sales fundidas genera también de noche: cuenta como central firme.',
+    anuncio: { fuente: 'Presidencia de la República, 26 de agosto de 2025', url: TERMO },
+    real,
+  });
+  obrasCfe.push(
+    termosolar(
+      'termosolar-bcs-i',
+      'Termosolares de Baja California Sur, primera etapa (2 de 50 MW)',
+      100,
+      'La Paz',
+      'Anunciadas el 26 de agosto de 2025: dos centrales de torre central con almacenamiento térmico, 100 MW y 11 horas de operación continua. Primeras de su tipo en México; la CFE aún busca los sitios y las quiere operando al cierre del sexenio.'
+    ),
+    termosolar(
+      'termosolar-bcs-ii',
+      'Termosolar de Baja California Sur, segunda etapa (50 MW)',
+      50,
+      'Los Cabos',
+      'Anunciada el 26 de agosto de 2025 como segunda etapa: «una más de 50 megawatts» para descarbonizar el sistema de Baja California Sur.'
+    ),
+    {
+      id: 'oasis-mulege',
+      nombre: 'Proyecto Oasis: solar, baterías e hidrógeno verde en Mulegé',
+      tecnologia: 'Solar con almacenamiento',
+      clase: 'solar',
+      mw: 60,
+      estado: 'BCS',
+      municipio: 'Mulegé',
+      // 60 MW solar (35 % in the afternoon) plus 20 MW of storage, which also covers the night.
+      aporte: { tarde: 41, noche: 20 },
+      aporteDato: 'Sus 60 MW solares cuentan 35 % en la tarde; sus 20 MW de almacenamiento (baterías, y el hidrógeno de respaldo) cuentan en los dos picos: 41 MW en la tarde y 20 en la noche.',
+      costoMusd: 130,
+      costo: {
+        fuente: 'Estimación del juego con SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039 (tabla 3.1 y A2.2) e IRENA, Green hydrogen cost reduction (2020)',
+        url: 'https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297',
+        dato: 'La CFE no ha publicado su costo. Solar: 60 MW a 1,017 dólares por kW (61 millones); baterías de 4 horas: 20 MW a 1,449 (29 millones), del plan oficial; hidrógeno: un electrolizador de 20 MW a unos 1,000 dólares por kW (IRENA) y celdas de combustible supuestas del mismo costo (40 millones). Total: unos 130 millones de dólares.',
+      },
+      mesesGobierno: 24,
+      tiempo: { fuente: 'Estimación del juego', url: '', dato: 'Sin fecha oficial: 24 meses con 4 cuadrillas, el doble de un parque solar, por las baterías y el hidrógeno.' },
+      anuncio: BOLETIN_179,
+      real: 'Anunciado por la CFE el 10 de septiembre de 2026: el primer proyecto en México que combina solar, baterías e hidrógeno verde en un sistema eléctrico aislado. Abastecerá 40 mil hogares, evitará 23 mil m³ de diésel y combustóleo y 93 mil toneladas de CO₂ al año. En evaluación.',
+    },
+    {
+      id: 'chicoasen-ii',
+      nombre: 'Hidroeléctrica Chicoasén II',
+      tecnologia: 'Hidroeléctrica',
+      clase: 'firme',
+      mw: 240,
+      estado: 'CHIS',
+      municipio: 'Chicoasén',
+      costoMusd: Math.round(240 * 3406) / 1000,
+      costo: { ...PORKW, dato: 'Sin costo oficial publicado: 240 MW a 3,406 dólares por kW, el promedio de la hidroeléctrica en el plan oficial.' },
+      mesesGobierno: 48,
+      tiempo: { fuente: 'Estimación del juego', url: '', dato: 'La CFE la espera a finales de 2028, sin fecha de inicio publicada: 48 meses con 4 cuadrillas.' },
+      anuncio: BOLETIN_095,
+      real: 'En construcción; la CFE la espera a finales de 2028. Turbinas de tipo bulbo: la de mayor capacidad con esa tecnología en Latinoamérica.',
+    }
+  );
+
   for (const o of obrasCfe) {
     o.region = regionDe(o.estado, o.municipio);
     o.lonLat = await ubicar(o.estado, o.municipio, o.nombre);
-    o.tiempo = { fuente: 'Estimación del juego', url: '', dato: `No hay fecha oficial de inicio y fin comparable: ${o.mesesGobierno} meses para ${o.tecnologia.toLowerCase()} con 4 cuadrillas.` };
+    o.tiempo ??= { fuente: 'Estimación del juego', url: '', dato: `No hay fecha oficial de inicio y fin comparable: ${o.mesesGobierno} meses para ${o.tecnologia.toLowerCase()} con 4 cuadrillas.` };
   }
 
   // ---- the polos' electricity demand ------------------------------------------------------------
@@ -252,6 +377,16 @@ const FACTORES = {
       cajaCfe: { ...PROG, dato: 'La CFE paga sus centrales con recursos propios (su Fideicomiso Maestro de Inversión), no con el presupuesto federal. Su Programa de Desarrollo 2026–2030 destina 132 mil millones de pesos en cinco años a proyectos propios de generación: 26.4 mil millones al año. Para 2019–2025 no hay una cifra anual oficial comparable y se usa la misma.' },
       tipoCambio: { fuente: 'SHCP, Cuenta Pública 2024, panorama económico (con datos de Banxico): tipo de cambio promedio de 2024', url: 'https://www.cuentapublica.hacienda.gob.mx/work/models/CP/2024/tomo/I/I50.06.PEF.pdf' },
       polos: { fuente: 'Declaratorias de los polos (DOF) y portal de los Polos de Desarrollo de la Secretaría de Economía', url: 'https://podecobi.economia.gob.mx/polos-de-desarrollo', dato: `Solo cinco polos tienen cifra oficial; los demás usan la razón de esos cinco: ${totalMw} MW entre ${Math.round(totalHa)} ha, ${MW_POR_HA} MW por hectárea.` },
+      mulege: {
+        fuente: 'SENER, PRODESEN 2019–2033 (tablas 5.1 y 6.5) y Plan de Desarrollo del Sector Eléctrico 2025–2039 (tabla A1.6); su límite, INEGI, Marco Geoestadístico de diciembre de 2025',
+        url: PRODESEN + '475497/PRODESEN_V.pdf',
+        dato: `Mulegé es un sistema aislado aparte, sin enlace con el resto de Baja California Sur: demanda máxima de 29 MW en 2018 y 34 MW en 2024; capacidad de 98 MW en 2018, casi toda firme. El PRODESEN no publica su margen de reserva: el juego lo calcula con su capacidad al 90 % contra su demanda de 2019, ${REGIONES.find((r) => r.id === 'mulege').margen2019.tarde} %. Para la reserva usa los mínimos de Baja California Sur.`,
+      },
+      almacenamiento: {
+        fuente: 'Estimación del juego',
+        url: '',
+        dato: 'El almacenamiento deja que una central cuente de noche: una termosolar con 11 horas de sales fundidas cuenta como firme (90 % en los dos picos), y las baterías cuentan sus MW en los dos picos.',
+      },
     },
     umbrales: UMBRALES,
     factores: FACTORES,

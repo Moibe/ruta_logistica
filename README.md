@@ -235,19 +235,24 @@ al paso del dinero (`mesesAlRitmoDelDinero`, con el calendario real de mensualid
 tabla por año y el método, en la [enciclopedia](docs/enciclopedia.md#el-presupuesto-del-estado).
 
 **La energía** (`domain/energia.ts`, `datos/energia.json`): el país en sus 9 regiones del
-sistema eléctrico. Cada una arranca el 1 de julio de 2019 con sus márgenes de reserva oficiales
-de la tarde y de la noche; su demanda crece al ritmo real de 2018–2024 más lo que piden los
-polos operando; su capacidad crece con las centrales privadas en su fecha real (lista de
-permisos de la CNE) y con las centrales de la CFE que construye el jugador, cada tecnología
-contada a su modo en cada pico (la solar no cuenta de noche). `sim.energia` se recalcula una
-vez al día; si el menor de los dos márgenes cae debajo del mínimo (6 %, 11 % en las Bajas
-Californias), los polos de la región dejan de llenarse (`sim.hayEnergia`). Las centrales de la
-CFE están en el catálogo de obras y se pagan de `sim.dineroCfe`, la caja de la CFE (26.4 mil
-millones al año en mensualidades). El tablero tiene la capa *Energía*: estados por nivel de su
-región y centrales por tecnología. Detalle en la [enciclopedia](docs/enciclopedia.md#la-energía).
+sistema eléctrico, más Mulegé, el sistema aislado del norte de Baja California Sur. Cada una
+arranca el 1 de julio de 2019 con sus márgenes de reserva oficiales de la tarde y de la noche
+(el de Mulegé lo calcula el juego); su demanda crece al ritmo real de 2018–2024 más lo que
+piden los polos operando; su capacidad crece con las centrales privadas en su fecha real (lista
+de permisos de la CNE) y con las centrales de la CFE que construye el jugador, cada tecnología
+contada a su modo en cada pico (la solar no cuenta de noche, salvo con almacenamiento: la obra
+puede traer su propio `aporte` por pico). `sim.energia` se recalcula una vez al día; si el
+menor de los dos márgenes cae debajo del mínimo (6 %, 11 % en los sistemas aislados), los polos
+de la región dejan de llenarse (`sim.hayEnergia`). Las centrales de la CFE están en el catálogo
+de obras y se pagan de `sim.dineroCfe`, la caja de la CFE (26.4 mil millones al año en
+mensualidades); las que no tienen costo oficial (las termosolares y el Proyecto Oasis de Baja
+California Sur, Chicoasén II) lo llevan estimado, y la ficha lo dice. El tablero tiene la capa
+*Energía*: estados por nivel de su región (Mulegé aparte, recortado con el contorno del estado) y
+centrales por tecnología. Detalle en la [enciclopedia](docs/enciclopedia.md#la-energía).
 Los datos se arman con `scripts/energia/gen-energia.cjs`, que lee la lista de permisos de la CNE
-(resumida con `permisos_resumen.py`) y la tabla de centrales del PRODESEN transcrita, y ubica cada
-central en la cabecera de su municipio con el servicio del INEGI.
+(resumida con `permisos_resumen.py`) y la tabla de centrales del PRODESEN transcrita, ubica cada
+central en la cabecera de su municipio con el servicio del INEGI y toma de ahí mismo el límite
+de Mulegé con Comondú y Loreto.
 
 **Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado y paga
 con su presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)

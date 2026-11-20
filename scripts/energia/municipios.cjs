@@ -79,7 +79,14 @@ function crear(cacheDir) {
     return l ? { lonLat: [Math.round(+l.longitud * 1e4) / 1e4, Math.round(+l.latitud * 1e4) / 1e4], nombre: m.nomgeo } : null;
   }
 
-  return { cabecera, buscar, municipiosDe };
+  /** Outline of a municipality (GeoJSON MultiPolygon, lon/lat), by its 5-digit INEGI key. */
+  async function contorno(cvegeo) {
+    const j = await json(`https://gaia.inegi.org.mx/wscatgeo/v2/geo/mgem/${cvegeo}`, path.join(cacheDir, `geo_${cvegeo}.json`));
+    const g = j.features[0].geometry;
+    return g.type === 'Polygon' ? [g.coordinates] : g.coordinates;
+  }
+
+  return { cabecera, buscar, municipiosDe, contorno };
 }
 
 module.exports = { crear, estadoDe, norm, CVE };

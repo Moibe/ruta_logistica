@@ -48,6 +48,16 @@
    "fuente": "Declaratorias de los polos (DOF) y portal de los Polos de Desarrollo de la Secretaría de Economía",
    "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo",
    "dato": "Solo cinco polos tienen cifra oficial; los demás usan la razón de esos cinco: 46.7 MW entre 1814 ha, 0.0257 MW por hectárea."
+  },
+  "mulege": {
+   "fuente": "SENER, PRODESEN 2019–2033 (tablas 5.1 y 6.5) y Plan de Desarrollo del Sector Eléctrico 2025–2039 (tabla A1.6); su límite, INEGI, Marco Geoestadístico de diciembre de 2025",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/475497/PRODESEN_V.pdf",
+   "dato": "Mulegé es un sistema aislado aparte, sin enlace con el resto de Baja California Sur: demanda máxima de 29 MW en 2018 y 34 MW en 2024; capacidad de 98 MW en 2018, casi toda firme. El PRODESEN no publica su margen de reserva: el juego lo calcula con su capacidad al 90 % contra su demanda de 2019, 196.2 %. Para la reserva usa los mínimos de Baja California Sur."
+  },
+  "almacenamiento": {
+   "fuente": "Estimación del juego",
+   "url": "",
+   "dato": "El almacenamiento deja que una central cuente de noche: una termosolar con 11 horas de sales fundidas cuenta como firme (90 % en los dos picos), y las baterías cuentan sus MW en los dos picos."
   }
  },
  "umbrales": {
@@ -60,6 +70,10 @@
    "planeacion": 20.9
   },
   "BCS": {
+   "operativo": 11,
+   "planeacion": 35
+  },
+  "MUL": {
    "operativo": 11,
    "planeacion": 35
   }
@@ -237,16 +251,199 @@
    "id": "baja-california-sur",
    "nombre": "Baja California Sur",
    "sistema": "BCS",
-   "demanda2018": 529,
-   "demanda2024": 723,
-   "crecimiento": 0.0534,
+   "demanda2018": 500,
+   "demanda2024": 689,
+   "crecimiento": 0.0549,
    "margen2019": {
     "tarde": 35.4,
     "noche": 32.6
    },
-   "capacidad2018": 837,
+   "capacidad2018": 739,
    "estados": [
     "BCS"
+   ]
+  },
+  {
+   "id": "mulege",
+   "nombre": "Mulegé",
+   "sistema": "MUL",
+   "demanda2018": 29,
+   "demanda2024": 34,
+   "crecimiento": 0.0269,
+   "margen2019": {
+    "tarde": 196.2,
+    "noche": 196.2
+   },
+   "margenCalculado": true,
+   "capacidad2018": 98,
+   "estados": [],
+   "parteDe": "BCS",
+   "municipios": [
+    "Mulegé"
+   ],
+   "frontera": [
+    [
+     -112.9695,
+     26.5307
+    ],
+    [
+     -112.962,
+     26.5309
+    ],
+    [
+     -112.9597,
+     26.5309
+    ],
+    [
+     -112.9383,
+     26.5314
+    ],
+    [
+     -112.9145,
+     26.532
+    ],
+    [
+     -112.776,
+     26.5351
+    ],
+    [
+     -112.7493,
+     26.5357
+    ],
+    [
+     -112.6067,
+     26.5388
+    ],
+    [
+     -112.4098,
+     26.5428
+    ],
+    [
+     -112.4093,
+     26.5428
+    ],
+    [
+     -112.2397,
+     26.5461
+    ],
+    [
+     -112.1171,
+     26.5484
+    ],
+    [
+     -111.878,
+     26.5525
+    ],
+    [
+     -111.8082,
+     26.5536
+    ],
+    [
+     -111.7732,
+     26.5542
+    ],
+    [
+     -111.7714,
+     26.5541
+    ],
+    [
+     -111.7667,
+     26.554
+    ],
+    [
+     -111.7641,
+     26.5539
+    ]
+   ],
+   "zona": [
+    [
+     -112.9695,
+     26.5307
+    ],
+    [
+     -112.962,
+     26.5309
+    ],
+    [
+     -112.9597,
+     26.5309
+    ],
+    [
+     -112.9383,
+     26.5314
+    ],
+    [
+     -112.9145,
+     26.532
+    ],
+    [
+     -112.776,
+     26.5351
+    ],
+    [
+     -112.7493,
+     26.5357
+    ],
+    [
+     -112.6067,
+     26.5388
+    ],
+    [
+     -112.4098,
+     26.5428
+    ],
+    [
+     -112.4093,
+     26.5428
+    ],
+    [
+     -112.2397,
+     26.5461
+    ],
+    [
+     -112.1171,
+     26.5484
+    ],
+    [
+     -111.878,
+     26.5525
+    ],
+    [
+     -111.8082,
+     26.5536
+    ],
+    [
+     -111.7732,
+     26.5542
+    ],
+    [
+     -111.7714,
+     26.5541
+    ],
+    [
+     -111.7667,
+     26.554
+    ],
+    [
+     -111.7641,
+     26.5539
+    ],
+    [
+     -109.5,
+     26.5539
+    ],
+    [
+     -109.5,
+     29.5
+    ],
+    [
+     -116,
+     29.5
+    ],
+    [
+     -116,
+     26.5307
+    ]
    ]
   }
  ],
@@ -5117,6 +5314,139 @@
     "url": "",
     "dato": "No hay fecha oficial de inicio y fin comparable: 12 meses para turbogás con 4 cuadrillas."
    }
+  },
+  {
+   "id": "termosolar-bcs-i",
+   "nombre": "Termosolares de Baja California Sur, primera etapa (2 de 50 MW)",
+   "tecnologia": "Termosolar",
+   "clase": "firme",
+   "mw": 100,
+   "estado": "BCS",
+   "municipio": "La Paz",
+   "sitioPorDefinir": true,
+   "costoMusd": 367.7,
+   "costo": {
+    "fuente": "Estimación del juego con IRENA, Renewable Power Generation Costs in 2024 (costo total instalado promedio mundial de la termosolar en 2024: 3,677 dólares por kW)",
+    "url": "https://www.irena.org/Publications/2025/Jun/Renewable-Power-Generation-Costs-in-2024",
+    "dato": "La CFE no ha publicado su costo: 100 MW a 3,677 dólares por kW, el promedio mundial de la termosolar en 2024 (IRENA)."
+   },
+   "mesesGobierno": 42,
+   "tiempo": {
+    "fuente": "Presidencia de la República, 26 de agosto de 2025",
+    "url": "https://www.gob.mx/presidencia/prensa/mexico-a-la-vanguardia-cfe-construira-2-centrales-termosolares-en-baja-california-sur-para-beneficiar-hasta-200-mil-hogares?idiom=es",
+    "dato": "Su construcción «tardará entre 36 y 48 meses»: el juego usa 42."
+   },
+   "aporteDato": "Con 11 horas de almacenamiento en sales fundidas genera también de noche: cuenta como central firme.",
+   "anuncio": {
+    "fuente": "Presidencia de la República, 26 de agosto de 2025",
+    "url": "https://www.gob.mx/presidencia/prensa/mexico-a-la-vanguardia-cfe-construira-2-centrales-termosolares-en-baja-california-sur-para-beneficiar-hasta-200-mil-hogares?idiom=es"
+   },
+   "real": "Anunciadas el 26 de agosto de 2025: dos centrales de torre central con almacenamiento térmico, 100 MW y 11 horas de operación continua. Primeras de su tipo en México; la CFE aún busca los sitios y las quiere operando al cierre del sexenio.",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -110.3066,
+    24.1487
+   ]
+  },
+  {
+   "id": "termosolar-bcs-ii",
+   "nombre": "Termosolar de Baja California Sur, segunda etapa (50 MW)",
+   "tecnologia": "Termosolar",
+   "clase": "firme",
+   "mw": 50,
+   "estado": "BCS",
+   "municipio": "Los Cabos",
+   "sitioPorDefinir": true,
+   "costoMusd": 183.85,
+   "costo": {
+    "fuente": "Estimación del juego con IRENA, Renewable Power Generation Costs in 2024 (costo total instalado promedio mundial de la termosolar en 2024: 3,677 dólares por kW)",
+    "url": "https://www.irena.org/Publications/2025/Jun/Renewable-Power-Generation-Costs-in-2024",
+    "dato": "La CFE no ha publicado su costo: 50 MW a 3,677 dólares por kW, el promedio mundial de la termosolar en 2024 (IRENA)."
+   },
+   "mesesGobierno": 42,
+   "tiempo": {
+    "fuente": "Presidencia de la República, 26 de agosto de 2025",
+    "url": "https://www.gob.mx/presidencia/prensa/mexico-a-la-vanguardia-cfe-construira-2-centrales-termosolares-en-baja-california-sur-para-beneficiar-hasta-200-mil-hogares?idiom=es",
+    "dato": "Su construcción «tardará entre 36 y 48 meses»: el juego usa 42."
+   },
+   "aporteDato": "Con 11 horas de almacenamiento en sales fundidas genera también de noche: cuenta como central firme.",
+   "anuncio": {
+    "fuente": "Presidencia de la República, 26 de agosto de 2025",
+    "url": "https://www.gob.mx/presidencia/prensa/mexico-a-la-vanguardia-cfe-construira-2-centrales-termosolares-en-baja-california-sur-para-beneficiar-hasta-200-mil-hogares?idiom=es"
+   },
+   "real": "Anunciada el 26 de agosto de 2025 como segunda etapa: «una más de 50 megawatts» para descarbonizar el sistema de Baja California Sur.",
+   "region": "baja-california-sur",
+   "lonLat": [
+    -109.6947,
+    23.0616
+   ]
+  },
+  {
+   "id": "oasis-mulege",
+   "nombre": "Proyecto Oasis: solar, baterías e hidrógeno verde en Mulegé",
+   "tecnologia": "Solar con almacenamiento",
+   "clase": "solar",
+   "mw": 60,
+   "estado": "BCS",
+   "municipio": "Mulegé",
+   "aporte": {
+    "tarde": 41,
+    "noche": 20
+   },
+   "aporteDato": "Sus 60 MW solares cuentan 35 % en la tarde; sus 20 MW de almacenamiento (baterías, y el hidrógeno de respaldo) cuentan en los dos picos: 41 MW en la tarde y 20 en la noche.",
+   "costoMusd": 130,
+   "costo": {
+    "fuente": "Estimación del juego con SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039 (tabla 3.1 y A2.2) e IRENA, Green hydrogen cost reduction (2020)",
+    "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297",
+    "dato": "La CFE no ha publicado su costo. Solar: 60 MW a 1,017 dólares por kW (61 millones); baterías de 4 horas: 20 MW a 1,449 (29 millones), del plan oficial; hidrógeno: un electrolizador de 20 MW a unos 1,000 dólares por kW (IRENA) y celdas de combustible supuestas del mismo costo (40 millones). Total: unos 130 millones de dólares."
+   },
+   "mesesGobierno": 24,
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "Sin fecha oficial: 24 meses con 4 cuadrillas, el doble de un parque solar, por las baterías y el hidrógeno."
+   },
+   "anuncio": {
+    "fuente": "CFE, boletín de prensa 179/26 (10 de septiembre de 2026)",
+    "url": "https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/179hidrogenoverdevf.pdf"
+   },
+   "real": "Anunciado por la CFE el 10 de septiembre de 2026: el primer proyecto en México que combina solar, baterías e hidrógeno verde en un sistema eléctrico aislado. Abastecerá 40 mil hogares, evitará 23 mil m³ de diésel y combustóleo y 93 mil toneladas de CO₂ al año. En evaluación.",
+   "region": "mulege",
+   "lonLat": [
+    -112.2683,
+    27.3369
+   ]
+  },
+  {
+   "id": "chicoasen-ii",
+   "nombre": "Hidroeléctrica Chicoasén II",
+   "tecnologia": "Hidroeléctrica",
+   "clase": "firme",
+   "mw": 240,
+   "estado": "CHIS",
+   "municipio": "Chicoasén",
+   "costoMusd": 817.44,
+   "costo": {
+    "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039, tabla 3.1 (costo de inversión promedio por kW)",
+    "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297",
+    "dato": "Sin costo oficial publicado: 240 MW a 3,406 dólares por kW, el promedio de la hidroeléctrica en el plan oficial."
+   },
+   "mesesGobierno": 48,
+   "tiempo": {
+    "fuente": "Estimación del juego",
+    "url": "",
+    "dato": "La CFE la espera a finales de 2028, sin fecha de inicio publicada: 48 meses con 4 cuadrillas."
+   },
+   "anuncio": {
+    "fuente": "CFE, boletín de prensa 095/26 (1 de junio de 2026)",
+    "url": "https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/260601%20-%20gen%20energias%20limpias%20y%20renovables.pdf"
+   },
+   "real": "En construcción; la CFE la espera a finales de 2028. Turbinas de tipo bulbo: la de mayor capacidad con esa tecnología en Latinoamérica.",
+   "region": "oriental",
+   "lonLat": [
+    -93.1052,
+    16.9673
+   ]
   }
  ]
 }

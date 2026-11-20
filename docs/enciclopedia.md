@@ -51,7 +51,11 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
 | [CNE, lista de permisos de generación](https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx) | Las centrales privadas que entraron (o entrarán) desde 2019: capacidad, tecnología, fecha y municipio; inversión estimada de varias de la CFE | Al 31 de octubre de 2026 | Documento oficial público |
 | [CFE, Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) y [Programa de Desarrollo 2026–2030](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) | Costo de las centrales de la CFE; lo que la CFE invierte al año en centrales propias | 2025 y 2026 | Documento oficial público |
-| [INEGI, servicio del Catálogo Único de Claves Geoestadísticas](https://gaia.inegi.org.mx/wscatgeo/v2/) | Ubicación de cada central: la cabecera de su municipio | Consultado el 20 de noviembre de 2026 | Dato oficial público |
+| [INEGI, servicio del Catálogo Único de Claves Geoestadísticas](https://gaia.inegi.org.mx/wscatgeo/v2/) | Ubicación de cada central: la cabecera de su municipio; el límite de Mulegé con Comondú y Loreto (Marco Geoestadístico, diciembre de 2025) | Consultado el 20 de noviembre de 2026 | Dato oficial público |
+| [Presidencia, «CFE construirá 2 centrales termosolares en Baja California Sur»](https://www.gob.mx/presidencia/prensa/mexico-a-la-vanguardia-cfe-construira-2-centrales-termosolares-en-baja-california-sur-para-beneficiar-hasta-200-mil-hogares?idiom=es) | Las termosolares de Baja California Sur: dos de 50 MW y una segunda etapa de 50 MW, con 11 horas de almacenamiento y de 36 a 48 meses de obra | 26 de agosto de 2025 | Documento oficial público |
+| [CFE, boletín de prensa 095/26](https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/260601%20-%20gen%20energias%20limpias%20y%20renovables.pdf) | Chicoasén II (240 MW, para finales de 2028) y el Proyecto Oasis, en evaluación | 1 de junio de 2026 | Documento oficial público |
+| [CFE, boletín de prensa 179/26](https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/179hidrogenoverdevf.pdf) | El Proyecto Oasis de Mulegé: 60 MW solares, 20 MW de almacenamiento e hidrógeno verde | 10 de septiembre de 2026 | Documento oficial público |
+| [IRENA, Renewable Power Generation Costs in 2024](https://www.irena.org/Publications/2025/Jun/Renewable-Power-Generation-Costs-in-2024) y [Green hydrogen cost reduction](https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2020/Dec/IRENA_Green_hydrogen_cost_2020.pdf) | Costo por kW de la termosolar (3,677 dólares, promedio mundial de 2024) y de un electrolizador (unos 1,000): base de las estimaciones del juego donde la CFE no ha publicado costo | 2025 y 2020 | Organismo intergubernamental, documento público |
 | [Ley Federal de Derechos, art. 232-B](https://www.diputados.gob.mx/LeyesBiblio/pdf/LFD.pdf) y [su reforma (DOF, 13 de noviembre de 2026)](https://dof.gob.mx/nota_detalle.php?codigo=5803759&fecha=13/11/2026) | El derecho que pagan las concesionarias por usar la vía: 1.25 % de sus ingresos, y 3 % desde 2027 | Vigente al 20 de noviembre de 2026 | Documento oficial público |
 | [Bureau of Transportation Statistics (EUA), Border Crossing Entry Data](https://data.bts.gov/resource/keg4-3bc2.json) | Trenes que cruzan a Estados Unidos por cada puerto fronterizo: el tráfico de los corredores de Nuevo Laredo, Piedras Negras y Ciudad Juárez | Datos 2018 y 2025 | Dato oficial público (gobierno de EUA) |
 | AAR / Cambridge Systematics, *National Rail Freight Infrastructure Capacity and Investment Study* (2007), citado por el TRB | Cuántos trenes al día caben en vía sencilla, con control centralizado y en vía doble. Es referencia de Estados Unidos: no hay cifra oficial mexicana | 2007 | Estudio público |
@@ -1132,7 +1136,10 @@ pasar el cursor, de dónde sale.
 Los polos necesitan electricidad. El país se divide en las **regiones del sistema eléctrico**
 que opera el CENACE; cada estado va con su región, y varios están partidos por municipio (la
 Laguna de Coahuila va con el Norte; el norte de Veracruz, el oriente de San Luis Potosí y la
-Huasteca de Hidalgo con el Noreste; San Luis Río Colorado con Baja California).
+Huasteca de Hidalgo con el Noreste; San Luis Río Colorado con Baja California). Baja California
+Sur tiene **dos sistemas aislados**, sin enlace entre ellos: el de La Paz y Los Cabos, que es la
+región *Baja California Sur*, y el de **Mulegé**, en el norte del estado (Santa Rosalía, Guerrero
+Negro), que el juego lleva aparte.
 
 **El margen de reserva.** Es cuánta capacidad disponible sobra en la hora de más demanda:
 (capacidad disponible − demanda máxima) ÷ demanda máxima. El PRODESEN lo mide en dos picos: el
@@ -1140,9 +1147,9 @@ de la **tarde**, donde la solar ayuda, y el de la **noche**, donde no está. Una
 
 | Nivel | Margen (el menor de los dos picos) | Qué pasa |
 | --- | --- | --- |
-| Holgada | Arriba de la reserva de planeación (21.3 %; 20.9 % en Baja California y 35 % en Baja California Sur) | Nada |
+| Holgada | Arriba de la reserva de planeación (21.3 %; 20.9 % en Baja California y 35 % en Baja California Sur y Mulegé) | Nada |
 | Justa | Entre el mínimo para operar y la reserva de planeación | Nada todavía, pero va hacia abajo |
-| Crítica | Debajo del mínimo para operar (6 %; 11 % en los sistemas aislados de las Bajas Californias) | **Los polos de la región no se llenan**: no llegan empresas hasta que haya más generación |
+| Crítica | Debajo del mínimo para operar (6 %; 11 % en los tres sistemas aislados de la península) | **Los polos de la región no se llenan**: no llegan empresas hasta que haya más generación |
 
 **Cómo se mueve.** Cada región arranca el 1 de julio de 2019 con sus márgenes oficiales de ese
 año. Desde ahí:
@@ -1160,8 +1167,15 @@ año. Desde ahí:
   eólica, 25 %; la solar, 35 % en la tarde y nada en la noche. El 35 % sale de la diferencia
   entre los márgenes oficiales de la tarde (23.4 %) y la noche (20.6 %) del sistema
   interconectado en 2019, unos 1,300 MW, entre los ~3,600 MW solares de ese año.
+- **El almacenamiento deja que una central cuente de noche** (estimación del juego): una
+  termosolar con 11 horas de sales fundidas cuenta como firme, 90 % en los dos picos; las
+  baterías cuentan sus MW completos en los dos picos.
 
-Las regiones, en megawatts (calculado con el código del juego):
+Las regiones, en megawatts (calculado con el código del juego). Mulegé sale del PRODESEN
+2019–2033: 29 MW de demanda máxima en 2018 (tabla 6.5) y 98 MW de capacidad (tabla 5.1), casi
+toda firme: combustibles y la geotérmica de Las Tres Vírgenes; 34 MW en 2024 (Plan de Desarrollo
+2025–2039, tabla A1.6). El PRODESEN no publica
+su margen: el juego lo calcula con su capacidad al 90 % contra su demanda de 2019.
 
 | Región | Estados (con partes de otros) | Demanda máxima 2018 → 2024 (MW) | Crece al año | Margen 2019, tarde / noche | Privadas que entran 2019–2026 (MW) | Privadas en construcción 2025–2031 (MW) |
 | --- | --- | --- | ---: | --- | ---: | ---: |
@@ -1173,7 +1187,8 @@ Las regiones, en megawatts (calculado con el código del juego):
 | Noreste | NL, TAMPS, COAH | 9,202 → 11,109 | 3.2 % | 25.4 % / 26.6 % | 6,113 | 748 |
 | Peninsular | CAMP, QROO, YUC | 2,061 → 2,969 | 6.3 % | 35.8 % / 23.7 % | 589 | 149 |
 | Baja California | BC | 2,863 → 3,635 | 4.1 % | -4.5 % / -4.5 % | 747 | 236 |
-| Baja California Sur | BCS | 529 → 723 | 5.3 % | 35.4 % / 32.6 % | 272 | 0 |
+| Baja California Sur | BCS (sin Mulegé) | 500 → 689 | 5.5 % | 35.4 % / 32.6 % | 272 | 0 |
+| Mulegé | BCS (municipio de Mulegé) | 29 → 34 | 2.7 % | 196.2 % / 196.2 % (calculado) | 0 | 0 |
 
 Si el jugador no construye ninguna central, el margen mínimo de cada región va así (✗: crítica,
 los polos se detienen):
@@ -1181,18 +1196,21 @@ los polos se detienen):
 | Región | Margen mínimo, julio de 2021 | 2023 | 2025 | 2027 | 2027, con todas las centrales de la CFE |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Central | 23 % | 23 % | 23.3 % | 23.8 % | 29.6 % |
-| Oriental | 22.6 % | 17.2 % | 10.6 % | 7.5 % | 17.2 % |
+| Oriental | 22.6 % | 17.2 % | 10.6 % | 7.5 % | 19.4 % |
 | Occidental | 18.9 % | 13.8 % | 9.2 % | 5.1 % ✗ | 20.4 % |
 | Noroeste | 34.6 % | 25.3 % | 29.3 % | 20.6 % | 20.6 % |
 | Norte | 25.7 % | 18.5 % | 12.2 % | 6 % ✗ | 11.2 % |
 | Noreste | 38.9 % | 35.6 % | 29.6 % | 23 % | 23 % |
 | Peninsular | 12.4 % | -0.5 % ✗ | -11.9 % ✗ | -20.9 % ✗ | 20 % |
 | Baja California | -6.7 % ✗ | -13.1 % ✗ | -19.6 % ✗ | -22.4 % ✗ | 22.1 % |
-| Baja California Sur | 19.5 % | 9.5 % ✗ | 17.5 % | 5.9 % ✗ | 22.3 % |
+| Baja California Sur | 19.1 % | 9 % ✗ | 17.7 % | 5.8 % ✗ | 39.6 % |
+| Mulegé | 180.9 % | 166.4 % | 152.6 % | 139.5 % | 193.8 % |
 
 La península cae en 2023, como en la realidad (los apagones de Yucatán de 2023–2024). Baja
 California empieza 2019 ya debajo del mínimo. La solar no levanta el margen nocturno: por eso
-el Noroeste queda igual con Puerto Peñasco.
+el Noroeste queda igual con Puerto Peñasco. Baja California Sur cae en 2023, se recupera con una
+turbogás privada de 159 MW que entra en La Paz en noviembre de ese año y vuelve a caer en 2027.
+Mulegé no cae nunca: tiene tres veces la capacidad que pide.
 
 **La caja de la CFE.** Las centrales de la CFE no se pagan con el presupuesto federal de
 trenes: la CFE las paga con recursos propios (su Fideicomiso Maestro de Inversión). Su
@@ -1204,7 +1222,9 @@ con datos de Banxico).
 
 **Las centrales de la CFE**, en el catálogo de obras (grupo *Energía (CFE)*), con cuadrillas
 como las vías; 4 cuadrillas son el costo oficial. El tiempo es una estimación del juego: 36
-meses un ciclo combinado y 12 una solar o unas unidades de emergencia.
+meses un ciclo combinado, 12 una solar o unas unidades de emergencia, 48 una hidroeléctrica y
+24 el Proyecto Oasis; las termosolares, 42, a la mitad de los 36 a 48 meses que dio la
+Presidencia.
 
 | Central | Región | MW | Costo con 4 cuadrillas | Tiempo | De dónde sale el costo | En la realidad |
 | --- | --- | ---: | ---: | ---: | --- | --- |
@@ -1224,6 +1244,33 @@ meses un ciclo combinado y 12 una solar o unas unidades de emergencia.
 | Unidades de combustión interna y turbogás en Mexicali y San Luis Río Colorado | Baja California | 735 | 12.6 mil millones | 12 meses | Permiso de la CNE | En operación desde 2025. |
 | Turbogás de emergencia en Los Cabos | Baja California Sur | 154 | 2.8 mil millones | 12 meses | Permiso de la CNE | En operación desde el 12 de junio de 2025. |
 | Turbogás aeroderivadas Riviera Maya | Peninsular | 100 | 2 mil millones | 12 meses | Costo por kW de su tecnología | Programadas para 2026 (Cancún y Cozumel). |
+| Termosolares de Baja California Sur, primera etapa (2 de 50 MW) | Baja California Sur | 100 | 6.7 mil millones | 42 meses | Estimación con IRENA | Anunciadas el 26 de agosto de 2025: dos centrales de torre central con almacenamiento térmico, 100 MW y 11 horas de operación continua. Primeras de su tipo en México; la CFE aún busca los sitios y las quiere operando al cierre del sexenio. |
+| Termosolar de Baja California Sur, segunda etapa (50 MW) | Baja California Sur | 50 | 3.4 mil millones | 42 meses | Estimación con IRENA | Anunciada el 26 de agosto de 2025 como segunda etapa: «una más de 50 megawatts» para descarbonizar el sistema de Baja California Sur. |
+| Proyecto Oasis: solar, baterías e hidrógeno verde en Mulegé | Mulegé | 60 | 2.4 mil millones | 24 meses | Estimación con el plan de la SENER e IRENA | Anunciado por la CFE el 10 de septiembre de 2026: el primer proyecto en México que combina solar, baterías e hidrógeno verde en un sistema eléctrico aislado. Abastecerá 40 mil hogares, evitará 23 mil m³ de diésel y combustóleo y 93 mil toneladas de CO₂ al año. En evaluación. |
+| Hidroeléctrica Chicoasén II | Oriental | 240 | 15 mil millones | 48 meses | Costo por kW de su tecnología | En construcción; la CFE la espera a finales de 2028. Turbinas de tipo bulbo: la de mayor capacidad con esa tecnología en Latinoamérica. |
+
+**Las obras limpias de Baja California Sur, y Chicoasén II.** Ninguna tiene costo oficial
+publicado; el juego lo **estima** y lo dice en la ficha:
+
+- **Termosolares** (Presidencia, 26 de agosto de 2025): de torre central, con 11 horas de
+  almacenamiento en sales fundidas, las primeras de México. Una primera etapa de dos centrales de
+  50 MW y una segunda de 50 MW más. Costo: 3,677 dólares por kW, el promedio mundial de 2024
+  (IRENA). La CFE aún busca los sitios: el juego pone la primera etapa en La Paz y la segunda en
+  Los Cabos, los dos centros de consumo del sistema.
+- **Proyecto Oasis** (CFE, boletín 179/26): en Mulegé, 60 MW solares, 20 MW de almacenamiento
+  (baterías e hidrógeno verde, con electrolizador y celdas de combustible), para 40 mil hogares;
+  evitaría 23 mil m³ de diésel y combustóleo y 93 mil toneladas de CO₂ al año. Está en
+  evaluación. Costo: la solar y las baterías de 4 horas al costo por kW del plan oficial (1,017 y
+  1,449 dólares), el electrolizador a unos 1,000 dólares por kW (IRENA) y las celdas de
+  combustible supuestas del mismo costo: unos 130 millones de dólares. Cuenta 41 MW en la tarde
+  (35 % de la solar más el almacenamiento) y 20 en la noche.
+- **Chicoasén II** (CFE, boletín 095/26): hidroeléctrica de 240 MW en Chiapas, con turbinas de
+  bulbo; la CFE la espera a finales de 2028. Costo: 3,406 dólares por kW, el de la hidroeléctrica
+  en el plan oficial.
+
+En el juego Oasis casi no se nota: Mulegé ya tiene margen de sobra y no tiene polos. Lo que
+cambia en la realidad es el diésel y el combustóleo que deja de quemar, y el juego todavía no
+mide combustibles ni emisiones.
 
 **Lo que piden los polos.** Solo cinco tienen cifra oficial:
 
@@ -1241,8 +1288,9 @@ decide es el margen de la región, no el polo.
 
 **En el mapa**, el botón *Energía* pinta cada estado con el nivel de su región y muestra las
 centrales por tecnología (llenas las de la CFE, como anillo las privadas; punteadas las obras
-en curso). Al pasar el cursor por un estado, su región dice sus márgenes y su demanda; por una
-central, su capacidad, dueño y fecha. La ficha de cada polo dice si su región tiene energía.
+en curso). Mulegé se pinta aparte, con una línea punteada donde termina: su límite con Comondú
+y Loreto, del Marco Geoestadístico del INEGI. Al pasar el cursor por un estado, su región (o
+Mulegé) dice sus márgenes y su demanda; por una central, su capacidad, dueño y fecha. La ficha de cada polo dice si su región tiene energía.
 
 ---
 
@@ -1296,6 +1344,11 @@ central, su capacidad, dueño y fecha. La ficha de cada polo dice si su región 
   mínimo: explica por qué la solar sola no basta y hubo apagones en Yucatán y Baja California.
 - **La CFE tiene su propia caja.** *(20 nov 2026.)* Es una empresa del Estado con presupuesto
   propio; sus centrales no se pagan con el dinero de los trenes.
+- **Las obras limpias de la península, con costo estimado.** *(20 nov 2026.)* El usuario pidió
+  revisar los planes de Baja California Sur: entran al catálogo las termosolares (dos etapas), el
+  Proyecto Oasis y Chicoasén II. La CFE no ha publicado el costo de ninguna; el juego lo estima
+  con el costo por kW oficial o el de IRENA y lo marca como estimación. Mulegé se separa como
+  sistema aislado propio, y el almacenamiento hace que una central cuente de noche.
 - **El jugador es el Estado.** *(19 nov 2026.)* Tiene un presupuesto que debe usar
   sabiamente. Construir cuesta tiempo y dinero, y lo que se mide no es solo el dinero: también
   los **empleos generados**, que son de valor para el jugador.
@@ -1351,6 +1404,10 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 20 de noviembre de 2026
 
+- **Baja California Sur, en dos sistemas.** La región sumaba el sistema de La Paz y Los Cabos y el
+  de Mulegé (529 MW de demanda en 2018 y 837 MW de capacidad). Ahora van aparte, como los publica
+  el PRODESEN: Baja California Sur con 500 MW y 739 MW, Mulegé con 29 MW y 98 MW. Los márgenes
+  oficiales de 2019 (35.4 % y 32.6 %) se quedan con Baja California Sur.
 - **Dueño de cada tramo.** OpenStreetMap describe 2026; se corrigió a 2018:
   - Coatzacoalcos–Medias Aguas (líneas Z, ZA y FA) era de Ferrosur; pasó al Ferrocarril del
     Istmo por decreto (DOF del 19 de mayo de 2023). En el juego queda dentro del tramo largo
@@ -1509,7 +1566,11 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   región, en porcentaje. Se mide en el pico de la tarde y en el de la noche.
 - **Región del sistema eléctrico**: cada zona que opera un centro de control del CENACE
   (Central, Oriental, Occidental, Noroeste, Norte, Noreste, Peninsular, Baja California y Baja
-  California Sur).
+  California Sur). Mulegé, en el norte de Baja California Sur, es un sistema aparte.
+- **Sistema aislado**: red eléctrica sin enlace con la red nacional. En el juego son tres: Baja
+  California, Baja California Sur y Mulegé.
+- **Termosolar**: central que concentra el sol con espejos sobre una torre y guarda el calor en
+  sales fundidas, con lo que también genera de noche.
 - **Central firme**: la que puede generar cuando se le pide (térmica, hidroeléctrica, nuclear,
   geotérmica), a diferencia de la solar y la eólica, que dependen del sol y del viento.
 - **Obra del Estado**: vía que construye el jugador desde el catálogo: nueva, paralela,
