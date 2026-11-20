@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { geoConicConformal, geoGraticule, geoLength, geoPath } from 'd3-geo';
+  import { geoConicConformal, geoGraticule, geoPath } from 'd3-geo';
   import type { GeoPath, GeoProjection } from 'd3-geo';
   import { select } from 'd3-selection';
   import { zoom as d3zoom, zoomIdentity, type ZoomTransform } from 'd3-zoom';
-  import type { MultiPoint } from 'geojson';
-  import { EARTH_RADIUS_KM, type LonLat } from '$lib/domain/geo';
+  import type { MultiLineString, MultiPoint } from 'geojson';
+  import { untrack } from 'svelte';
+  import type { LonLat } from '$lib/domain/geo';
+  import { seccion, type Trayecto } from '$lib/domain/red';
   import {
     CIUDAD_DEL_PUERTO,
     CIUDADES,
@@ -13,17 +15,28 @@
     type Ciudad,
     type Puerto,
   } from '$lib/domain/sitios';
+  import { esperaTotal, LARGO_TREN_KM, posicion, trayectoActual, type Tren } from '$lib/domain/trenes';
+  import { sim } from '$lib/state/simulacion.svelte';
+  import { tablero } from '$lib/state/tablero.svelte';
+  import { duracion, estadoTren, km as fmtKm } from '$lib/ui/formato';
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
 
   /**
-   * The game board: Mexico alone, in detail. Same machinery as the world
-   * canvas (geometry baked once into `Path2D` in un-zoomed projected space, the
-   * d3-zoom transform applied to the context, paint on demand), with what the
-   * world map doesn't need: estados, the rail network, ports, cities, hover
-   * and a camera that flies to whatever you click.
+   * The game board: Mexico alone, in detail, with the trains running on it.
    *
-   * Colour carries meaning and later layers should keep it: sea things are
-   * cyan (`--accent`), rail things are amber (`--warn`), cities are ink.
+   * Same machinery as the world canvas (geometry baked once into `Path2D` in
+   * un-zoomed projected space, the d3-zoom transform applied to the context),
+   * split in two layers now that things move:
+   *
+   * - the **fondo** — geography, track, sites, labels, the selected train's
+   *   route — is painted into an offscreen canvas only when it changes (camera,
+   *   layers, hover, selection, picking stops);
+   * - every frame copies the fondo and draws the trains and the route preview
+   *   on top. A still camera with the clock running costs one `drawImage` plus
+   *   the trains.
+   *
+   * Colour carries meaning: sea things are cyan (`--accent`), rail things are
+   * amber (`--warn`) — each train gets its own warm tint — and cities are ink.
    */
 
   // ---- constants ---------------------------------------------------------
@@ -67,8 +80,22 @@
   const FLY_MS = 900;
   /** From this zoom the rail lines get crossties. */
   const TIES_AT = 4;
+  /** From this zoom (or while picking stops) stations show on the track. */
+  const ESTACIONES_AT = 3.5;
   /** Below this zoom estados are labelled by abbreviation. */
   const FULL_NAMES_AT = 2.4;
+  /**
+   * Room the left column (clock + roster) takes, so the country is framed to
+   * its right. Below the breakpoint the panels hide and the map uses it all.
+   */
+  const PANEL_IZQ = 290;
+  const PANELES_DESDE = 900;
+  /** A train is never drawn shorter than this, or it would be a dot at country scale. */
+  const TREN_MIN_PX = 18;
+  /** Glowing wake behind a moving train, in screen px so it reads at any zoom. */
+  const ESTELA_PX = 46;
+  /** How far the camera can slide before the geography layer is repainted. */
+  const MARGEN = 256;
 
   const SEAS: { text: string; at: LonLat; size: number; along?: [LonLat, LonLat] }[] = [
     { text: 'OCÉANO PACÍFICO', at: [-107.5, 16.6], size: 13 },
@@ -93,6 +120,7 @@
   let layers = $state<Layers>({ estados: true, vias: true, puertos: true, ciudades: true });
 
   type Target =
+    | { kind: 'tren'; tren: Tren }
     | { kind: 'puerto'; puerto: Puerto }
     | { kind: 'ciudad'; ciudad: Ciudad }
     | { kind: 'estado'; estado: EstadoProps };
@@ -104,7 +132,6 @@
   let pointer = $state({ x: 0, y: 0 });
   let innerWidth = $state(0);
   let status = $state<'cargando' | 'listo' | 'error'>('cargando');
-  let railKm = $state(0);
 
   // Plain locals: read only when painting, rebuilt imperatively.
   let width = 0;
@@ -116,6 +143,19 @@
   let zoomBehaviour: ReturnType<typeof d3zoom<HTMLCanvasElement, unknown>> | null = null;
   let frame = 0;
 
+  /** The offscreen layer and whether it must be repainted before the next frame. */
+  let fondo: HTMLCanvasElement | null = null;
+  let fondoSucio = true;
+  /**
+   * Geography + track, painted MARGEN px beyond the view on every side, and
+   * the camera it was painted for. While the zoom holds and the camera stays
+   * within the margin (a drag, a followed train) the fondo reuses it, slid —
+   * the coast's glow alone costs more than everything else in the fondo.
+   */
+  let capa: HTMLCanvasElement | null = null;
+  let capaVista: { k: number; x: number; y: number } | null = null;
+  let capaSucia = true;
+
   type Baked = {
     graticule: Path2D;
     vecinos: Path2D;
@@ -125,33 +165,53 @@
     costa: Path2D;
     frontera: Path2D;
     limites: Path2D;
-    troncales: Path2D;
-    ramales: Path2D;
     estados: { props: EstadoProps; path: Path2D; bounds: [[number, number], [number, number]] }[];
   };
   let baked: Baked | null = null;
   /** The graticule alone, so the first frame isn't empty while the TopoJSON loads. */
   let graticuleOnly: Path2D | null = null;
+  /** Track, by class; baked from the simulation's network. */
+  let viaPrimaria: Path2D | null = null;
+  let viaSecundaria: Path2D | null = null;
+  /** The selected train's route (one direction), baked when the selection changes. */
+  let rutaSel: { id: string; path: Path2D } | null = null;
 
   /** Projected (un-zoomed path space) positions, rebuilt with the projection. */
   let ciudadPts: [number, number][] = [];
   let puertoPts: [number, number][] = [];
+  /** Station on the track and the site it serves, both in path space. */
+  let estacionPts: { clave: string; via: [number, number]; sitio: [number, number]; km: number }[] = [];
+  /** Where each train's head was drawn last frame, for hit-testing. */
+  let cabezas: { tren: Tren; x: number; y: number }[] = [];
 
   const estadoNombre = new Map<string, string>();
 
   // A detached context for `isPointInPath`, so hit-testing never touches the
-  // transform or state of the one we paint with.
+  // transform or state of the ones we paint with.
   let hitCtx: CanvasRenderingContext2D | null = null;
+
+  const ensucia = () => {
+    fondoSucio = true;
+    requestDraw();
+  };
+
+  /** Something in the geography layer itself changed (not just the camera). */
+  const ensuciaCapa = () => {
+    capaSucia = true;
+    ensucia();
+  };
 
   // ---- projection & baking -------------------------------------------------
 
   function rebuild() {
     if (!width || !height) return;
     projection = makeProjection();
-    // Room for the nav bar on top and the tool strips below.
+    // Room for the nav bar on top, the tool strips below, and the clock and
+    // roster on the left when they're showing.
+    const izq = width >= PANELES_DESDE ? PANEL_IZQ : 28;
     projection.fitExtent(
       [
-        [28, 88],
+        [izq, 88],
         [width - 28, height - 76],
       ],
       FRAME
@@ -161,6 +221,10 @@
     puertoPts = PUERTOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     applyTranslateExtent();
     bake();
+    bakeRed();
+    rutaSel = null;
+    fondoSucio = true;
+    capaSucia = true;
   }
 
   function regionBounds(): [[number, number], [number, number]] | null {
@@ -210,9 +274,40 @@
       costa: P(g.costa),
       frontera: P(g.frontera),
       limites: P(g.limites),
-      troncales: P(g.viasTroncales),
-      ramales: P(g.viasRamales),
       estados: g.estados.features.map((f) => ({ props: f.properties, path: P(f), bounds: p.bounds(f) })),
+    };
+  }
+
+  function bakeRed() {
+    const red = sim.red;
+    if (!path || !projection || !red) return;
+    const lineas = (clase: 'primaria' | 'secundaria'): MultiLineString => ({
+      type: 'MultiLineString',
+      coordinates: red.tramos.filter((t) => t.clase === clase).map((t) => t.puntos),
+    });
+    viaPrimaria = new Path2D(path(lineas('primaria')) ?? '');
+    viaSecundaria = new Path2D(path(lineas('secundaria')) ?? '');
+    estacionPts = [];
+    for (const e of red.estaciones.values()) {
+      const s = sitioLonLat(e.sitio);
+      const v = projection(red.nodos[e.nodo]);
+      const q = s ? projection(s) : null;
+      if (v && q) estacionPts.push({ clave: e.sitio, via: v, sitio: q, km: e.distanciaKm });
+    }
+  }
+
+  function sitioLonLat(clave: string): LonLat | null {
+    const [tipo, id] = clave.split(':');
+    if (tipo === 'puerto') return PUERTOS.find((p) => p.id === id)?.lonLat ?? null;
+    return CIUDADES.find((c) => c.id === id)?.lonLat ?? null;
+  }
+
+  function bakeRutaSel(t: Tren) {
+    if (!path) return;
+    const ida = t.piernas.slice(0, t.piernas.length / 2);
+    rutaSel = {
+      id: t.id,
+      path: new Path2D(path({ type: 'MultiLineString', coordinates: ida.map((p) => p.puntos) }) ?? ''),
     };
   }
 
@@ -220,6 +315,14 @@
 
   function setTransform(next: ZoomTransform) {
     if (!canvas || !zoomBehaviour) return;
+    // d3 enforces scaleExtent on gestures only; a programmatic transform (a
+    // flight, a followed train) is clamped here, keeping the same centre.
+    const k = Math.max(1, Math.min(MAX_ZOOM, next.k));
+    if (k !== next.k) {
+      const cx = (width / 2 - next.x) / next.k;
+      const cy = (height / 2 - next.y) / next.k;
+      next = zoomIdentity.translate(width / 2 - k * cx, height / 2 - k * cy).scale(k);
+    }
     next = zoomBehaviour.constrain()(
       next,
       [
@@ -259,12 +362,25 @@
     flyTo((x0 + x1) / 2, (y0 + y1) / 2, k);
   }
 
+  function flyToTren(t: Tren) {
+    const p = projection?.(posicion(t));
+    if (p) flyTo(p[0], p[1], Math.max(transform.k, 5));
+  }
+
   function stepCamera(now: number) {
     if (!fly) return;
-    const u = Math.min(1, (now - fly.start) / FLY_MS);
+    // Clamped at 0 too: a rAF timestamp is the frame's start, which can be
+    // earlier than the performance.now() the flight was stamped with. A
+    // negative step, run through the geometric zoom below, zooms *out*.
+    const u = Math.max(0, Math.min(1, (now - fly.start) / FLY_MS));
     const e = 1 - (1 - u) ** 3;
     const [fx, fy, fk] = fly.from;
-    const [tx, ty, tk] = fly.to;
+    let [tx, ty, tk] = fly.to;
+    // A train keeps moving while the camera flies to it: aim at where it is now.
+    if (sim.siguiendo && sim.seleccionado) {
+      const p = projection?.(posicion(sim.seleccionado));
+      if (p) [tx, ty] = p;
+    }
     // Zoom interpolates geometrically: a linear ramp from 1× to 20× spends
     // almost the whole flight already zoomed in, which reads as a lurch.
     const k = Math.exp(Math.log(fk) + (Math.log(tk) - Math.log(fk)) * e);
@@ -274,23 +390,57 @@
     setTransform(zoomIdentity.translate(width / 2 - k * cx, height / 2 - k * cy).scale(k));
   }
 
+  /** Keep the followed train centred (after any flight has landed). */
+  function follow() {
+    if (fly || !sim.siguiendo) return;
+    const t = sim.seleccionado;
+    const p = t ? projection?.(posicion(t)) : null;
+    if (!p) return;
+    const k = transform.k;
+    setTransform(zoomIdentity.translate(width / 2 - k * p[0], height / 2 - k * p[1]).scale(k));
+  }
+
   function resetView() {
     // The framing transform is the identity: `rebuild` fits Mexico at k = 1.
     if (!width) return;
+    sim.siguiendo = false;
     flyTo(width / 2, height / 2, 1);
   }
 
-  // ---- drawing ------------------------------------------------------------
+  // ---- frame loop -------------------------------------------------------------
+
+  /** Something on screen is moving and needs the next frame too. */
+  const animando = () =>
+    !!fly || (sim.corriendo && sim.trenes.length > 0) || tablero.trazando || sim.siguiendo;
 
   function requestDraw() {
     if (frame) return;
     frame = requestAnimationFrame((now) => {
       frame = 0;
       stepCamera(now);
-      draw();
-      if (fly) requestDraw();
+      follow();
+      draw(now);
+      if (animando()) requestDraw();
     });
   }
+
+  function draw(now: number) {
+    const ctx = canvas?.getContext('2d');
+    if (!ctx || !projection || !fondo) return;
+    if (fondoSucio) {
+      const f = fondo.getContext('2d');
+      if (f) pintarFondo(f);
+      fondoSucio = false;
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas!.width, canvas!.height);
+    ctx.drawImage(fondo, 0, 0);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    pintarPrevia(ctx, now);
+    pintarTrenes(ctx, now);
+  }
+
+  // ---- labels -------------------------------------------------------------------
 
   type Spot = { x: number; y: number; align: CanvasTextAlign };
   type Label = {
@@ -375,26 +525,21 @@
     { x, y: y + r + 13, align: 'center' },
   ];
 
-  function draw() {
-    const ctx = canvas?.getContext('2d');
-    if (!ctx || !projection) return;
+  // ---- the fondo: everything that only changes when something happens -------------------
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, width, height);
-
-    const sea = ctx.createLinearGradient(0, 0, 0, height);
-    sea.addColorStop(0, '#061225');
-    sea.addColorStop(0.55, '#04101f');
-    sea.addColorStop(1, '#020a14');
-    ctx.fillStyle = sea;
-    ctx.fillRect(0, 0, width, height);
-
+  /**
+   * Geography and track, in zoomed path space, into the capa: an offscreen
+   * canvas MARGEN px larger than the view on every side, painted transparent
+   * where the sea is. The sea itself is screen-fixed and painted under it.
+   */
+  function pintarCapa(ctx: CanvasRenderingContext2D) {
     const k = transform.k;
     const b = baked;
-
-    // ---- geography, in zoomed path space ---------------------------------
+    const trazando = tablero.trazando;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width + 2 * MARGEN, height + 2 * MARGEN);
     ctx.save();
-    ctx.translate(transform.x, transform.y);
+    ctx.translate(transform.x + MARGEN, transform.y + MARGEN);
     ctx.scale(k, k);
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
@@ -421,12 +566,10 @@
       ctx.fill(b.pais);
 
       const hoveredEstado = hovered?.kind === 'estado' ? hovered.estado.clave : null;
-      if (hoveredEstado) {
-        const e = b.estados.find((x) => x.props.clave === hoveredEstado);
-        if (e) {
-          ctx.fillStyle = 'rgba(76, 201, 255, 0.07)';
-          ctx.fill(e.path);
-        }
+      const e = hoveredEstado ? b.estados.find((x) => x.props.clave === hoveredEstado) : null;
+      if (e) {
+        ctx.fillStyle = 'rgba(76, 201, 255, 0.07)';
+        ctx.fill(e.path);
       }
 
       if (layers.estados) {
@@ -455,41 +598,134 @@
       ctx.stroke(b.costa);
       ctx.restore();
 
-      if (hoveredEstado) {
-        const e = b.estados.find((x) => x.props.clave === hoveredEstado);
-        if (e) {
-          ctx.strokeStyle = 'rgba(160, 220, 255, 0.55)';
-          ctx.lineWidth = 1.1 / k;
-          ctx.stroke(e.path);
-        }
+      if (e) {
+        ctx.strokeStyle = 'rgba(160, 220, 255, 0.55)';
+        ctx.lineWidth = 1.1 / k;
+        ctx.stroke(e.path);
       }
+    }
 
-      if (layers.vias) {
-        if (k >= TIES_AT) {
-          // Crossties: a wide stroke dashed into short bars, under the rail.
-          ctx.save();
-          ctx.lineCap = 'butt';
-          ctx.strokeStyle = 'rgba(255, 209, 102, 0.32)';
-          ctx.lineWidth = 3.6 / k;
-          ctx.setLineDash([0.9 / k, 3.4 / k]);
-          ctx.stroke(b.troncales);
-          ctx.stroke(b.ramales);
-          ctx.restore();
-        }
-        ctx.strokeStyle = 'rgba(255, 209, 102, 0.36)';
-        ctx.lineWidth = 0.8 / k;
-        ctx.stroke(b.ramales);
-        ctx.strokeStyle = 'rgba(255, 209, 102, 0.72)';
-        ctx.lineWidth = 1.15 / k;
-        ctx.stroke(b.troncales);
+    if (layers.vias && viaPrimaria && viaSecundaria) {
+      if (k >= TIES_AT) {
+        // Crossties: a wide stroke dashed into short bars, under the rail.
+        ctx.save();
+        ctx.lineCap = 'butt';
+        ctx.strokeStyle = 'rgba(255, 209, 102, 0.32)';
+        ctx.lineWidth = 3.6 / k;
+        ctx.setLineDash([0.9 / k, 3.4 / k]);
+        ctx.stroke(viaPrimaria);
+        ctx.stroke(viaSecundaria);
+        ctx.restore();
+      }
+      ctx.strokeStyle = 'rgba(255, 209, 102, 0.36)';
+      ctx.lineWidth = 0.8 / k;
+      ctx.stroke(viaSecundaria);
+      ctx.strokeStyle = 'rgba(255, 209, 102, 0.72)';
+      ctx.lineWidth = 1.15 / k;
+      ctx.stroke(viaPrimaria);
+    }
+
+    // The selected train's route, in its colour, over the track.
+    const sel = sim.seleccionado;
+    if (sel && !trazando) {
+      if (rutaSel?.id !== sel.id) bakeRutaSel(sel);
+      if (rutaSel) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.strokeStyle = conAlfa(sel.color, 0.16);
+        ctx.lineWidth = 7 / k;
+        ctx.stroke(rutaSel.path);
+        ctx.restore();
+        ctx.strokeStyle = conAlfa(sel.color, 0.95);
+        ctx.lineWidth = 1.8 / k;
+        ctx.stroke(rutaSel.path);
       }
     }
     ctx.restore();
+    capaVista = { k, x: transform.x, y: transform.y };
+    capaSucia = false;
+  }
+
+  /**
+   * Repaint the capa only when it can't be reused: the zoom changed, the camera
+   * slid past the margin, or something in it changed. A followed train or a
+   * drag only slides the camera, so most frames reuse it.
+   */
+  function asegurarCapa() {
+    if (!capa) return;
+    const v = capaVista;
+    const vale =
+      !capaSucia &&
+      v !== null &&
+      v.k === transform.k &&
+      Math.abs(transform.x - v.x) <= MARGEN &&
+      Math.abs(transform.y - v.y) <= MARGEN;
+    if (vale) return;
+    const g = capa.getContext('2d');
+    if (g) pintarCapa(g);
+  }
+
+  function pintarFondo(ctx: CanvasRenderingContext2D) {
+    if (!projection) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+
+    const sea = ctx.createLinearGradient(0, 0, 0, height);
+    sea.addColorStop(0, '#061225');
+    sea.addColorStop(0.55, '#04101f');
+    sea.addColorStop(1, '#020a14');
+    ctx.fillStyle = sea;
+    ctx.fillRect(0, 0, width, height);
+
+    const k = transform.k;
+    const b = baked;
+    const trazando = tablero.trazando;
+
+    // The capa, slid by however far the camera moved since it was painted.
+    // Whole device pixels: a fractional offset would resample every hairline.
+    asegurarCapa();
+    if (capa && capaVista) {
+      const dx = transform.x - capaVista.x;
+      const dy = transform.y - capaVista.y;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(capa, Math.round((dx - MARGEN) * dpr), Math.round((dy - MARGEN) * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
 
     // ---- sites & labels, in screen space (crisp at any zoom) --------------
     const sx = (p: [number, number]) => transform.applyX(p[0]);
     const sy = (p: [number, number]) => transform.applyY(p[1]);
     const onScreen = (x: number, y: number) => x > -20 && x < width + 20 && y > -20 && y < height + 20;
+    const conEstacion = (clave: string) => !!sim.red?.estaciones.has(clave);
+
+    // Stations: a small square on the track, tied to its site by a faint
+    // dashed line when the track passes at a distance.
+    if (layers.vias && sim.red && (k >= ESTACIONES_AT || trazando)) {
+      ctx.save();
+      for (const e of estacionPts) {
+        const vx = sx(e.via);
+        const vy = sy(e.via);
+        if (!onScreen(vx, vy)) continue;
+        const px = sx(e.sitio);
+        const py = sy(e.sitio);
+        if (Math.hypot(px - vx, py - vy) > 6) {
+          ctx.setLineDash([2, 3]);
+          ctx.strokeStyle = 'rgba(255, 209, 102, 0.4)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          ctx.lineTo(vx, vy);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+        ctx.fillStyle = '#ffd166';
+        ctx.strokeStyle = 'rgba(3, 9, 18, 0.95)';
+        ctx.lineWidth = 1.2;
+        ctx.fillRect(vx - 2.5, vy - 2.5, 5, 5);
+        ctx.strokeRect(vx - 2.5, vy - 2.5, 5, 5);
+      }
+      ctx.restore();
+    }
 
     const taken: Box[] = [];
     const labels: Label[] = [];
@@ -501,6 +737,8 @@
         if (!onScreen(x, y)) return;
         const r = cityRadius(c);
         const hot = hovered?.kind === 'ciudad' && hovered.ciudad.id === c.id;
+        // Picking stops: sites the train can't reach fade back.
+        ctx.globalAlpha = trazando && !conEstacion(`ciudad:${c.id}`) ? 0.3 : 1;
         if (c.capital) {
           // Capitals: a ring around a dot, the cartographic convention.
           ctx.beginPath();
@@ -513,6 +751,7 @@
         ctx.arc(x, y, c.capital ? r * 0.55 : r * 0.75, 0, Math.PI * 2);
         ctx.fillStyle = hot ? '#ffffff' : 'rgba(233, 243, 255, 0.88)';
         ctx.fill();
+        ctx.globalAlpha = 1;
         const R = r + 2;
         taken.push([x - R, y - R, x + R, y + R]);
         // A port city is labelled once, by its port.
@@ -537,6 +776,7 @@
         if (!onScreen(x, y)) return;
         const hot = hovered?.kind === 'puerto' && hovered.puerto.id === p.id;
         const s = p.principal ? 5.2 : 3.8;
+        ctx.globalAlpha = trazando && !conEstacion(`puerto:${p.id}`) ? 0.3 : 1;
         // Glow first, added on top of the coast so it blooms like a beacon.
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
@@ -558,6 +798,7 @@
         ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
         ctx.lineWidth = 1;
         ctx.stroke();
+        ctx.globalAlpha = 1;
         const R = s + 2;
         taken.push([x - R, y - R, x + R, y + R]);
         labels.push({
@@ -572,6 +813,39 @@
           halo: true,
         });
       });
+    }
+
+    // Picking stops: the chosen ones numbered, the one under the cursor ringed.
+    if (trazando) {
+      tablero.paradas.forEach((clave, i) => {
+        const e = estacionPts.find((x) => x.clave === clave);
+        if (!e) return;
+        const x = sx(e.via);
+        const y = sy(e.via);
+        ctx.beginPath();
+        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffd166';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(3, 9, 18, 0.95)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.fillStyle = '#1a1205';
+        ctx.font = '700 10px Inter, "Segoe UI", system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(i + 1), x, y + 0.5);
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'alphabetic';
+        taken.push([x - 9, y - 9, x + 9, y + 9]);
+      });
+      const cand = tablero.candidato ? estacionPts.find((x) => x.clave === tablero.candidato) : null;
+      if (cand) {
+        ctx.beginPath();
+        ctx.arc(sx(cand.via), sy(cand.via), 9, 0, Math.PI * 2);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
     }
 
     if (b && layers.estados) {
@@ -632,13 +906,196 @@
     placeLabels(ctx, labels, taken);
   }
 
+  // ---- the moving layer ----------------------------------------------------------------
+
+  function aPantalla(p: LonLat): [number, number] | null {
+    const q = projection?.(p);
+    return q ? [transform.applyX(q[0]), transform.applyY(q[1])] : null;
+  }
+
+  function enPantalla(lonLats: LonLat[]): [number, number][] {
+    const out: [number, number][] = [];
+    for (const p of lonLats) {
+      const q = aPantalla(p);
+      if (q) out.push(q);
+    }
+    return out;
+  }
+
+  function trazar(ctx: CanvasRenderingContext2D, pts: [number, number][]) {
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  }
+
+  /** The point `px` screen pixels back from the end of a screen polyline. */
+  function atras(pts: [number, number][], px: number): [number, number] {
+    let falta = px;
+    for (let i = pts.length - 1; i > 0; i--) {
+      const [x1, y1] = pts[i];
+      const [x0, y0] = pts[i - 1];
+      const d = Math.hypot(x1 - x0, y1 - y0);
+      if (d >= falta && d > 0) return [x1 + ((x0 - x1) * falta) / d, y1 + ((y0 - y1) * falta) / d];
+      falta -= d;
+    }
+    return pts[0];
+  }
+
+  function conAlfa(hex: string, a: number): string {
+    const n = parseInt(hex.slice(1), 16);
+    return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+  }
+
+  /** Screen px per km at the current zoom (the projection is conformal: near enough everywhere). */
+  const pxPorKm = () => (transform.k * (projection?.scale() ?? 1)) / 6371;
+
+  function pintarTrenes(ctx: CanvasRenderingContext2D, now: number) {
+    cabezas = [];
+    if (!projection || !sim.red) return;
+    const pxKm = pxPorKm();
+    const largo = Math.max(LARGO_TREN_KM, TREN_MIN_PX / pxKm);
+    const estela = ESTELA_PX / pxKm;
+    const orden = [...sim.trenes].sort((a, b) => (a.id === sim.seleccion ? 1 : b.id === sim.seleccion ? -1 : 0));
+
+    for (const t of orden) {
+      const leg = trayectoActual(t);
+      const cuerpo = enPantalla(seccion(leg, t.km - largo, t.km));
+      if (!cuerpo.length) continue;
+      const [hx, hy] = cuerpo[cuerpo.length - 1];
+      cabezas.push({ tren: t, x: hx, y: hy });
+      if (hx < -80 || hx > width + 80 || hy < -80 || hy > height + 80) continue;
+      const sel = sim.seleccion === t.id;
+      const hot = hovered?.kind === 'tren' && hovered.tren.id === t.id;
+      ctx.lineJoin = 'round';
+
+      // Wake: fades from nothing to the tail, added onto the map like a light trail.
+      if (t.estado === 'ruta') {
+        const rastro = enPantalla(seccion(leg, t.km - largo - estela, t.km - largo));
+        if (rastro.length >= 2) {
+          const [ax, ay] = rastro[0];
+          const [bx, by] = rastro[rastro.length - 1];
+          const g = ctx.createLinearGradient(ax, ay, bx, by);
+          g.addColorStop(0, conAlfa(t.color, 0));
+          g.addColorStop(1, conAlfa(t.color, 0.55));
+          ctx.save();
+          ctx.globalCompositeOperation = 'lighter';
+          ctx.strokeStyle = g;
+          ctx.lineWidth = 2.4;
+          ctx.lineCap = 'round';
+          trazar(ctx, rastro);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      // Body: a dark casing, then the cars as dashes along the track.
+      if (cuerpo.length >= 2) {
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = 'rgba(3, 9, 18, 0.92)';
+        ctx.lineWidth = sel || hot ? 7.5 : 6.5;
+        trazar(ctx, cuerpo);
+        ctx.stroke();
+        ctx.save();
+        ctx.lineCap = 'butt';
+        ctx.setLineDash([4.2, 1.4]);
+        ctx.strokeStyle = t.color;
+        ctx.lineWidth = 3.8;
+        trazar(ctx, cuerpo);
+        ctx.stroke();
+        ctx.restore();
+        // Locomotive: the front few pixels, solid and bright.
+        const [lx, ly] = atras(cuerpo, 6);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 4.6;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(lx, ly);
+        ctx.lineTo(hx, hy);
+        ctx.stroke();
+      }
+
+      // Headlight.
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, 12);
+      glow.addColorStop(0, conAlfa(t.color, sel || hot ? 0.7 : 0.45));
+      glow.addColorStop(1, conAlfa(t.color, 0));
+      ctx.fillStyle = glow;
+      ctx.fillRect(hx - 12, hy - 12, 24, 24);
+      ctx.restore();
+
+      // Loading at a station: a ring that fills up until departure.
+      if (t.estado === 'estacion') {
+        const total = esperaTotal(t);
+        const hecho = total > 0 ? 1 - t.espera / total : 1;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(hx, hy, 9, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.strokeStyle = t.color;
+        ctx.beginPath();
+        ctx.arc(hx, hy, 9, -Math.PI / 2, -Math.PI / 2 + hecho * Math.PI * 2);
+        ctx.stroke();
+      }
+
+      if (sel) {
+        // A slow pulse, so the selected train is findable at a glance.
+        const r = 13 + Math.sin(now / 260) * 1.5;
+        ctx.strokeStyle = conAlfa(t.color, 0.85);
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(hx, hy, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+  }
+
+  /** While picking stops: the route so far, as marching dashes. */
+  function pintarPrevia(ctx: CanvasRenderingContext2D, now: number) {
+    if (!tablero.trazando || !tablero.previa.length) return;
+    ctx.save();
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    for (const leg of tablero.previa as Trayecto[]) {
+      const pts = enPantalla(leg.puntos);
+      if (pts.length < 2) continue;
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.strokeStyle = 'rgba(255, 209, 102, 0.18)';
+      ctx.lineWidth = 8;
+      trazar(ctx, pts);
+      ctx.stroke();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = '#fff4d6';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([7, 6]);
+      ctx.lineDashOffset = -now / 40;
+      trazar(ctx, pts);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    ctx.restore();
+  }
+
   // ---- hover & click ----------------------------------------------------------
 
   function targetAt(mx: number, my: number): Target | null {
     if (!projection) return null;
-    // Sites first, nearest within a few pixels: they sit on top of estados.
     let best: Target | null = null;
     let bestD = Infinity;
+    // Trains first: they move over everything else.
+    if (!tablero.trazando) {
+      for (const c of cabezas) {
+        const d = Math.hypot(c.x - mx, c.y - my);
+        if (d < 12 && d < bestD) {
+          best = { kind: 'tren', tren: c.tren };
+          bestD = d;
+        }
+      }
+      if (best) return best;
+    }
+    // Sites next, nearest within a few pixels: they sit on top of estados.
     if (layers.puertos) {
       PUERTOS.forEach((p, i) => {
         const d = Math.hypot(transform.applyX(puertoPts[i][0]) - mx, transform.applyY(puertoPts[i][1]) - my);
@@ -657,7 +1114,7 @@
         }
       });
     }
-    if (best) return best;
+    if (best || tablero.trazando) return best;
     if (!baked) return null;
     hitCtx ??= document.createElement('canvas').getContext('2d');
     if (!hitCtx) return null;
@@ -672,40 +1129,66 @@
     return null;
   }
 
-  const sameTarget = (a: Target | null, b: Target | null) =>
-    a === b ||
-    (!!a &&
-      !!b &&
-      a.kind === b.kind &&
-      (a.kind === 'puerto'
-        ? a.puerto.id === (b as typeof a).puerto.id
-        : a.kind === 'ciudad'
-          ? a.ciudad.id === (b as typeof a).ciudad.id
-          : a.estado.clave === (b as typeof a).estado.clave));
+  const claveDe = (t: Target | null): string | null =>
+    !t
+      ? null
+      : t.kind === 'tren'
+        ? `tren:${t.tren.id}`
+        : t.kind === 'puerto'
+          ? `puerto:${t.puerto.id}`
+          : t.kind === 'ciudad'
+            ? `ciudad:${t.ciudad.id}`
+            : `estado:${t.estado.clave}`;
+
+  /** The site key of a target, if it is a site. */
+  const sitioDe = (t: Target | null): string | null =>
+    t?.kind === 'puerto' ? `puerto:${t.puerto.id}` : t?.kind === 'ciudad' ? `ciudad:${t.ciudad.id}` : null;
 
   function onPointerMove(event: PointerEvent) {
     if (!canvas || event.buttons) return; // no hover while dragging the map
     const rect = canvas.getBoundingClientRect();
     pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
     const next = targetAt(pointer.x, pointer.y);
-    if (!sameTarget(next, hovered)) {
+    if (claveDe(next) !== claveDe(hovered)) {
+      // A hovered estado is lit in the geography layer; sites in the fondo;
+      // trains only in the moving layer.
+      const capaCambia = hovered?.kind === 'estado' || next?.kind === 'estado';
+      const fondoCambia = hovered?.kind !== 'tren' || next?.kind !== 'tren';
       hovered = next;
-      requestDraw();
+      if (tablero.trazando) tablero.señalar(sitioDe(next));
+      if (capaCambia) ensuciaCapa();
+      else if (fondoCambia) ensucia();
+      else requestDraw();
     }
   }
 
   function onPointerLeave() {
-    if (hovered) {
-      hovered = null;
-      requestDraw();
-    }
+    if (!hovered) return;
+    const eraEstado = hovered.kind === 'estado';
+    hovered = null;
+    if (tablero.trazando) tablero.señalar(null);
+    if (eraEstado) ensuciaCapa();
+    else ensucia();
   }
 
   function onClick(event: MouseEvent) {
     if (!canvas || !projection) return;
     const rect = canvas.getBoundingClientRect();
     const target = targetAt(event.clientX - rect.left, event.clientY - rect.top);
-    if (!target) return;
+
+    if (tablero.trazando) {
+      const clave = sitioDe(target);
+      if (clave) tablero.elegir(clave);
+      return;
+    }
+    if (!target) {
+      sim.seleccionar(null);
+      return;
+    }
+    if (target.kind === 'tren') {
+      sim.seleccionar(target.tren.id);
+      return;
+    }
     if (target.kind === 'estado') {
       const e = baked?.estados.find((x) => x.props.clave === target.estado.clave);
       if (e) flyToBounds(e.bounds);
@@ -720,6 +1203,8 @@
 
   $effect(() => {
     if (!host || !canvas) return;
+    fondo ??= document.createElement('canvas');
+    capa ??= document.createElement('canvas');
     const observer = new ResizeObserver(() => {
       const first = !width;
       const centre = viewCentre();
@@ -727,13 +1212,20 @@
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = Math.max(1, Math.round(rect.width));
       height = Math.max(1, Math.round(rect.height));
-      canvas!.width = Math.round(width * dpr);
-      canvas!.height = Math.round(height * dpr);
+      for (const c of [canvas!, fondo!]) {
+        c.width = Math.round(width * dpr);
+        c.height = Math.round(height * dpr);
+      }
+      capa!.width = Math.round((width + 2 * MARGEN) * dpr);
+      capa!.height = Math.round((height + 2 * MARGEN) * dpr);
+      capaSucia = true;
       canvas!.style.width = `${width}px`;
       canvas!.style.height = `${height}px`;
       rebuild();
       if (!first) lookAt(centre, transform.k);
-      draw();
+      // Paint now, inside the observer callback (before the browser paints):
+      // resizing wipes the backing store, and a queued frame would flash empty.
+      draw(performance.now());
     });
     observer.observe(host);
     return () => observer.disconnect();
@@ -746,12 +1238,9 @@
         if (cancelled) return;
         geo = g;
         for (const f of g.estados.features) estadoNombre.set(f.properties.clave, f.properties.nombre);
-        railKm = Math.round(
-          (geoLength(g.viasTroncales) + geoLength(g.viasRamales)) * EARTH_RADIUS_KM
-        );
         status = 'listo';
         bake();
-        requestDraw();
+        ensuciaCapa();
       })
       .catch(() => {
         if (!cancelled) status = 'error';
@@ -761,18 +1250,33 @@
     };
   });
 
+  // The simulation: load the network and the opening fleet, run the clock
+  // while the board is mounted.
+  $effect(() => {
+    sim.cargar();
+  });
+  $effect(() => sim.attach());
+
+  $effect(() => {
+    if (sim.estado !== 'lista') return;
+    bakeRed();
+    ensuciaCapa();
+  });
+
   $effect(() => {
     if (!canvas) return;
     zoomBehaviour = d3zoom<HTMLCanvasElement, unknown>()
       .scaleExtent([1, MAX_ZOOM])
-      // A wheel or drag takes the camera back from any flight in progress.
+      // A drag takes the camera back from a flight or a followed train; the
+      // wheel only cancels flights, so you can zoom in on a train you follow.
       .filter((event: Event) => {
         if (event.type === 'wheel' || event.type === 'mousedown' || event.type === 'touchstart') fly = null;
+        if (event.type === 'mousedown' || event.type === 'touchstart') sim.siguiendo = false;
         return (!(event as MouseEvent).ctrlKey || event.type === 'wheel') && !(event as MouseEvent).button;
       })
       .on('zoom', (event) => {
         transform = event.transform;
-        requestDraw();
+        ensucia();
       });
     const selection = select(canvas);
     selection.call(zoomBehaviour);
@@ -786,24 +1290,94 @@
   });
 
   $effect(() => {
-    // Layer toggles repaint.
+    // What's drawn in the geography layer: estado borders, track, the
+    // selected train's route (hidden while picking stops).
     layers.estados;
     layers.vias;
+    sim.seleccion;
+    tablero.trazando;
+    ensuciaCapa();
+  });
+
+  $effect(() => {
+    // What's drawn in the fondo over it: sites, stations, picked stops.
     layers.puertos;
     layers.ciudades;
+    tablero.paradas;
+    tablero.candidato;
+    ensucia();
+  });
+
+  $effect(() => {
+    // Anything that (re)starts motion: the clock, the fleet, following.
+    sim.corriendo;
+    const trenes = sim.trenes;
+    sim.siguiendo;
+    // A retired train can't stay under the cursor.
+    untrack(() => {
+      if (hovered?.kind === 'tren' && !trenes.includes(hovered.tren)) hovered = null;
+    });
     requestDraw();
+  });
+
+  $effect(() => {
+    // Camera requests from the panels. Untracked: flying reads the camera
+    // transform, and tracking it would relaunch the flight on every frame of
+    // the flight itself.
+    const pedido = tablero.irA;
+    if (!pedido) return;
+    untrack(() => {
+      const t = sim.trenes.find((x) => x.id === pedido.tren);
+      if (t) flyToTren(t);
+    });
   });
 
   $effect(() => () => {
     if (frame) cancelAnimationFrame(frame);
+    // Leaving the board mid-pick drops the half-built train.
+    tablero.cancelar();
   });
 
   // ---- tooltip text -------------------------------------------------------------
 
   const fmt = new Intl.NumberFormat('es-MX');
   function poblacion(n: number): string {
-    return n >= 1e6 ? `${(n / 1e6).toLocaleString('es-MX', { maximumFractionDigits: 1 })} M hab.` : `${fmt.format(Math.round(n / 1000))} mil hab.`;
+    return n >= 1e6
+      ? `${(n / 1e6).toLocaleString('es-MX', { maximumFractionDigits: 1 })} M hab.`
+      : `${fmt.format(Math.round(n / 1000))} mil hab.`;
   }
+
+  /** The rail line under a site's card: whether a train can call there. */
+  function servicio(clave: string): string {
+    const red = sim.red;
+    if (!red) return '';
+    const e = red.estaciones.get(clave);
+    if (e) return e.distanciaKm > 3 ? `Estación a ${Math.round(e.distanciaKm)} km` : 'Estación ferroviaria';
+    const lejos = red.sinEstacion.get(clave);
+    return lejos === undefined ? '' : `Sin vía férrea · a ${Math.round(lejos)} km`;
+  }
+
+  /** Live line for a hovered train; reads the clock so it updates as the train moves. */
+  const lineaTren = $derived.by(() => {
+    sim.horas;
+    return hovered?.kind === 'tren' ? estadoTren(hovered.tren) : '';
+  });
+
+  /** While picking stops, what clicking the hovered site would do. */
+  const lineaTrazado = $derived.by(() => {
+    const clave = sitioDe(hovered);
+    if (!tablero.trazando || !clave) return '';
+    const problema = tablero.motivo(clave);
+    if (problema) return problema;
+    const n = tablero.paradas.length;
+    if (!n) return 'Clic: origen del tren';
+    return `Clic: parada ${n + 1} · ${fmtKm(tablero.kmPrevia)} · ${duracion(tablero.horasPrevia)}`;
+  });
+
+  const kmDeVia = $derived.by(() => {
+    if (sim.estado !== 'lista' || !sim.red) return 0;
+    return Math.round(sim.red.tramos.reduce((s, t) => s + t.km, 0));
+  });
 </script>
 
 <svelte:window bind:innerWidth />
@@ -812,20 +1386,25 @@
   <canvas
     bind:this={canvas}
     class:pointing={hovered !== null}
+    class:picking={tablero.trazando}
     onpointermove={onPointerMove}
     onpointerleave={onPointerLeave}
     onclick={onClick}
   ></canvas>
 </div>
 
-{#if hovered}
+{#if hovered && (hovered.kind !== 'estado' || !tablero.trazando)}
   <div
     class="tip panel"
-    class:flip={pointer.x > innerWidth - 240}
+    class:flip={pointer.x > innerWidth - 260}
     style:left="{pointer.x}px"
     style:top="{pointer.y}px"
   >
-    {#if hovered.kind === 'puerto'}
+    {#if hovered.kind === 'tren'}
+      <span class="label tip-kind" style:color={hovered.tren.color}>Tren · {hovered.tren.id}</span>
+      <strong>{hovered.tren.nombre}</strong>
+      <span class="tip-sub">{lineaTren}</span>
+    {:else if hovered.kind === 'puerto'}
       <span class="label tip-kind" style:color="var(--accent)">
         Puerto{hovered.puerto.principal ? ' principal' : ''} · {hovered.puerto.litoral === 'pacifico' ? 'Pacífico' : 'Golfo'}
       </span>
@@ -836,6 +1415,8 @@
           · {poblacion(CIUDAD_DEL_PUERTO.get(hovered.puerto.id)!.poblacion)}
         {/if}
       </span>
+      {@const rail = lineaTrazado || servicio(`puerto:${hovered.puerto.id}`)}
+      {#if rail}<span class="tip-rail">{rail}</span>{/if}
     {:else if hovered.kind === 'ciudad'}
       <span class="label tip-kind">
         {hovered.ciudad.capital === 'pais' ? 'Capital del país' : hovered.ciudad.capital === 'estado' ? 'Capital estatal' : 'Ciudad'}
@@ -844,6 +1425,8 @@
       <span class="tip-sub">
         {estadoNombre.get(hovered.ciudad.estado) ?? hovered.ciudad.estado} · {poblacion(hovered.ciudad.poblacion)}
       </span>
+      {@const rail = lineaTrazado || servicio(`ciudad:${hovered.ciudad.id}`)}
+      {#if rail}<span class="tip-rail">{rail}</span>{/if}
     {:else}
       <span class="label tip-kind">Estado · {hovered.estado.clave}</span>
       <strong>{hovered.estado.nombre}</strong>
@@ -856,13 +1439,13 @@
   <span class="label">México</span>
   {#if status === 'cargando'}
     <span class="mono dim">cargando geografía…</span>
-  {:else if status === 'error'}
+  {:else if status === 'error' || sim.estado === 'error'}
     <span class="mono err">no se pudo cargar la geografía</span>
   {:else}
-    <span class="stat"><b class="mono">32</b> estados</span>
     <span class="stat"><b class="mono">{PUERTOS.length}</b> puertos</span>
     <span class="stat"><b class="mono">{CIUDADES.length}</b> ciudades</span>
-    <span class="stat"><b class="mono">{fmt.format(railKm)}</b> km de vía</span>
+    <span class="stat"><b class="mono">{fmt.format(kmDeVia)}</b> km de vía</span>
+    <span class="stat"><b class="mono">{sim.trenes.length}</b> trenes</span>
   {/if}
 </div>
 
@@ -900,6 +1483,14 @@
     cursor: pointer;
   }
 
+  canvas.picking {
+    cursor: crosshair;
+  }
+
+  canvas.picking.pointing {
+    cursor: copy;
+  }
+
   canvas:active {
     cursor: grabbing;
   }
@@ -913,6 +1504,7 @@
     gap: 0.15rem;
     padding: 0.5rem 0.7rem;
     min-width: 9rem;
+    max-width: 17rem;
     background: var(--glass-strong);
     transform: translate(16px, 14px);
   }
@@ -930,6 +1522,11 @@
   .tip-sub {
     font-size: 0.72rem;
     color: var(--muted);
+  }
+
+  .tip-rail {
+    font-size: 0.7rem;
+    color: #ffe2a3;
   }
 
   .stats {
@@ -1027,7 +1624,7 @@
     margin: 0 0.25rem;
   }
 
-  @media (max-width: 1100px) {
+  @media (max-width: 1240px) {
     .stats {
       display: none;
     }

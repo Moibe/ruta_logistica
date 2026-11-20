@@ -2,15 +2,23 @@
 //
 //   npm run datos
 //
-// Outputs (both committed, so the app never needs this script or the network):
-//   static/data/mexico.topo.json        estados + vías férreas + países vecinos
-//   src/lib/domain/datos/ciudades.json  ciudades de referencia
+// Outputs (all committed, so the app never needs this script or the network):
+//   static/data/mexico.topo.json         estados + países vecinos
+//   static/data/red-ferroviaria.json     la red como grafo: nodos y tramos
+//   src/lib/domain/datos/ciudades.json   ciudades de referencia
 //
 // The Natural Earth sources (~85 MB) are downloaded once into `.cache/ne/`
 // (gitignored), pinned to one commit of nvkelso/natural-earth-vector so a rerun
 // produces the same files. Attribute logic (Spanish names, which cities make the
-// cut) lives here in plain JS; mapshaper only does geometry: dissolve, clip,
-// simplify and the TopoJSON encoding.
+// cut) and the rail graph live here in plain JS; mapshaper only does geometry:
+// dissolve, buffer, clip, simplify and the TopoJSON encoding.
+//
+// The rail lines are Natural Earth's North America railroads, which come from
+// the CEC North American Environmental Atlas (INEGI, USGS and NRCan's joint
+// atlas). `scalerank` is Natural Earth's cartographic ranking — the smallest
+// scale at which a line still deserves to be drawn — not an operator's
+// classification; it still tracks the main corridors closely, so the app uses
+// it to tell trunk lines from branches.
 
 import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -94,6 +102,48 @@ function estados(admin1) {
 
 // ---- vías férreas ---------------------------------------------------------
 
+/**
+ * Track the source leaves out, drawn by hand. Each one is a real line that
+ * exists on the ground and matters to the game; the first point sits on (or
+ * within welding distance of) the Natural Earth line it continues.
+ */
+const VIAS_A_MANO = [
+  {
+    nombre: 'Cuyutlán – Manzanillo',
+    // Natural Earth's Guadalajara–Colima line stops near Cuyutlán, 34 km short
+    // of the busiest container port in the country. The real line runs on
+    // along the sand bar between the Laguna de Cuyutlán and the sea (it has
+    // since 1908); traced ~1.3 km inland of the 10m coast, like the source's
+    // own last kilometres, then north into the port at San Pedrito.
+    rango: 6,
+    coords: [
+      [-104.0258, 18.9092],
+      [-104.09, 18.94],
+      [-104.18, 18.984],
+      [-104.24, 19.004],
+      [-104.29, 19.022],
+      [-104.3, 19.04],
+      [-104.299, 19.058],
+    ],
+  },
+  {
+    nombre: 'Ramal del puerto de Altamira',
+    // The source has the Tampico–Ciudad Mante line passing Altamira but not
+    // the spur into the industrial port, 13 km away, which in reality has rail
+    // terminals. Leaves the line just north-west of Tampico and ends at the
+    // port basin, a couple of kilometres inland of the harbour mouth.
+    rango: 8,
+    coords: [
+      [-97.9208, 22.3883],
+      [-97.912, 22.41],
+      [-97.898, 22.435],
+      [-97.884, 22.457],
+      [-97.87, 22.474],
+      [-97.856, 22.482],
+    ],
+  },
+];
+
 function vias(railroads) {
   const [w, s, e, n] = MEXICO_BBOX;
   const touches = (g) =>
@@ -102,15 +152,240 @@ function vias(railroads) {
     );
   return {
     type: 'FeatureCollection',
-    features: railroads.features
-      .filter((f) => f.geometry && touches(f.geometry))
-      .map((f) => ({
+    features: [
+      ...railroads.features
+        .filter((f) => f.geometry && touches(f.geometry))
+        .map((f) => ({
+          type: 'Feature',
+          // scalerank: lower = more important line. Kept to draw trunk lines
+          // heavier than branches, and to run trains faster on them.
+          properties: { rango: f.properties.scalerank, doble: f.properties.mult_track ? 1 : 0 },
+          geometry: f.geometry,
+        })),
+      ...VIAS_A_MANO.map((v) => ({
         type: 'Feature',
-        // scalerank: lower = more important line. Kept to draw trunk lines
-        // heavier than branches.
-        properties: { rango: f.properties.scalerank, doble: f.properties.mult_track ? 1 : 0 },
-        geometry: f.geometry,
+        properties: { rango: v.rango, doble: 0 },
+        geometry: { type: 'LineString', coordinates: v.coords },
       })),
+    ],
+  };
+}
+
+// ---- red ferroviaria (grafo) -------------------------------------------------
+
+/** A loose end this close to another line is a gap in the source, not a terminus: weld it. */
+const SOLDAR_KM = 1.6;
+/** Pieces of network shorter than this are clipping debris, not lines anyone runs trains on. */
+const MIN_COMPONENTE_KM = 10;
+
+const D2R = Math.PI / 180;
+const kmEntre = (a, b) =>
+  6371 * Math.hypot((b[0] - a[0]) * D2R * Math.cos(((a[1] + b[1]) / 2) * D2R), (b[1] - a[1]) * D2R);
+
+/** Nearest point of segment a–b to p, in a local planar frame (fine at these lengths). */
+function sobreSegmento(p, a, b) {
+  const cx = Math.cos(p[1] * D2R) * 111.32;
+  const cy = 110.57;
+  const ax = (a[0] - p[0]) * cx;
+  const ay = (a[1] - p[1]) * cy;
+  const dx = (b[0] - a[0]) * cx;
+  const dy = (b[1] - a[1]) * cy;
+  const l2 = dx * dx + dy * dy;
+  const u = l2 ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / l2)) : 0;
+  return { km: Math.hypot(ax + u * dx, ay + u * dy), u, punto: [a[0] + u * (b[0] - a[0]), a[1] + u * (b[1] - a[1])] };
+}
+
+/**
+ * Lines → graph. Vertices are identified by their coordinates (mapshaper has
+ * already made shared junctions share vertices); a node is any vertex that is
+ * not a plain pass-through: a line end, a junction, or a point where the rank
+ * or the track count changes. A tramo is the polyline between two nodes.
+ *
+ * Returns the graph plus a report, printed by the caller, because every number
+ * in it (welds, dropped fragments, components) is a claim about the source
+ * data that is worth reading after a rerun.
+ */
+function red(fc) {
+  const r5 = (x) => Math.round(x * 1e5) / 1e5;
+  const ids = new Map();
+  const pos = [];
+  const vertice = ([lon, lat]) => {
+    const p = [r5(lon), r5(lat)];
+    const k = p[0] + ',' + p[1];
+    let i = ids.get(k);
+    if (i === undefined) {
+      i = pos.length;
+      ids.set(k, i);
+      pos.push(p);
+    }
+    return i;
+  };
+
+  /** Undirected segments keyed "i-j" (i < j); attributes of the most important line using it. */
+  const segs = new Map();
+  const ady = [];
+  const unir = (i, j, rango, doble) => {
+    if (i === j) return;
+    const k = i < j ? `${i}-${j}` : `${j}-${i}`;
+    const s = segs.get(k);
+    if (s) {
+      s.rango = Math.min(s.rango, rango);
+      s.doble = Math.max(s.doble, doble);
+      return;
+    }
+    segs.set(k, { i: Math.min(i, j), j: Math.max(i, j), rango, doble });
+    (ady[i] ??= new Set()).add(j);
+    (ady[j] ??= new Set()).add(i);
+  };
+  const quitar = (i, j) => {
+    segs.delete(i < j ? `${i}-${j}` : `${j}-${i}`);
+    ady[i]?.delete(j);
+    ady[j]?.delete(i);
+  };
+
+  for (const f of fc.features) {
+    const g = f.geometry;
+    if (!g) continue;
+    for (const line of g.type === 'LineString' ? [g.coordinates] : g.coordinates) {
+      for (let n = 1; n < line.length; n++) {
+        unir(vertice(line[n - 1]), vertice(line[n]), f.properties.rango, f.properties.doble);
+      }
+    }
+  }
+
+  // ---- weld loose ends --------------------------------------------------------
+  const grado = (i) => ady[i]?.size ?? 0;
+  const soldaduras = [];
+  const puntas = pos.map((_, i) => i).filter((i) => grado(i) === 1);
+  for (const v of puntas) {
+    if (grado(v) !== 1) continue; // already welded from the other side
+    // Exclude the loose end's own line: walk it back to the first junction.
+    const propia = new Set([v]);
+    for (let prev = -1, cur = v; ; ) {
+      const next = [...ady[cur]].filter((x) => x !== prev);
+      if (next.length !== 1 || propia.has(next[0])) break;
+      prev = cur;
+      cur = next[0];
+      propia.add(cur);
+      if (grado(cur) !== 2) break;
+    }
+    let mejor = null;
+    for (const s of segs.values()) {
+      // Touching its own line at all counts as its own: a short spur would
+      // otherwise weld back onto the junction it starts from.
+      if (propia.has(s.i) || propia.has(s.j)) continue;
+      const hit = sobreSegmento(pos[v], pos[s.i], pos[s.j]);
+      if (hit.km <= SOLDAR_KM && (!mejor || hit.km < mejor.km)) mejor = { ...hit, s };
+    }
+    if (!mejor) continue;
+    const { s } = mejor;
+    const propio = [...ady[v]][0];
+    const attrs = segs.get(v < propio ? `${v}-${propio}` : `${propio}-${v}`);
+    // Within 60 m of an existing vertex, use it; otherwise split the segment.
+    let destino;
+    if (kmEntre(mejor.punto, pos[s.i]) < 0.06) destino = s.i;
+    else if (kmEntre(mejor.punto, pos[s.j]) < 0.06) destino = s.j;
+    else {
+      destino = vertice(mejor.punto);
+      quitar(s.i, s.j);
+      unir(s.i, destino, s.rango, s.doble);
+      unir(destino, s.j, s.rango, s.doble);
+    }
+    unir(v, destino, attrs.rango, attrs.doble);
+    soldaduras.push({ km: mejor.km, en: pos[v] });
+  }
+
+  // ---- components; drop debris ----------------------------------------------------
+  const comp = new Array(pos.length).fill(-1);
+  const componentes = [];
+  for (let start = 0; start < pos.length; start++) {
+    if (comp[start] !== -1 || !grado(start)) continue;
+    const c = { id: componentes.length, km: 0, vertices: [] };
+    const pila = [start];
+    comp[start] = c.id;
+    while (pila.length) {
+      const i = pila.pop();
+      c.vertices.push(i);
+      for (const j of ady[i]) {
+        if (i < j) c.km += kmEntre(pos[i], pos[j]);
+        if (comp[j] === -1) {
+          comp[j] = c.id;
+          pila.push(j);
+        }
+      }
+    }
+    componentes.push(c);
+  }
+  const descartados = componentes.filter((c) => c.km < MIN_COMPONENTE_KM);
+  for (const c of descartados) for (const i of c.vertices) for (const j of [...(ady[i] ?? [])]) quitar(i, j);
+
+  // ---- nodes and tramos -------------------------------------------------------------
+  const seg = (i, j) => segs.get(i < j ? `${i}-${j}` : `${j}-${i}`);
+  const esNodo = (i) => {
+    if (grado(i) !== 2) return true;
+    const [a, b] = [...ady[i]];
+    const sa = seg(i, a);
+    const sb = seg(i, b);
+    return sa.rango !== sb.rango || sa.doble !== sb.doble;
+  };
+  const nodoId = new Map();
+  const nodos = [];
+  const nodo = (i) => {
+    let n = nodoId.get(i);
+    if (n === undefined) {
+      n = nodos.length;
+      nodoId.set(i, n);
+      nodos.push(pos[i]);
+    }
+    return n;
+  };
+
+  const usados = new Set();
+  const tramos = [];
+  const recorrer = (desde, primero) => {
+    const linea = [desde];
+    let prev = desde;
+    let cur = primero;
+    const { rango, doble } = seg(desde, primero);
+    let km = 0;
+    for (;;) {
+      const k = prev < cur ? `${prev}-${cur}` : `${cur}-${prev}`;
+      usados.add(k);
+      km += kmEntre(pos[prev], pos[cur]);
+      linea.push(cur);
+      if (esNodo(cur) || cur === desde) break;
+      const next = [...ady[cur]].find((x) => x !== prev);
+      prev = cur;
+      cur = next;
+    }
+    tramos.push({
+      a: nodo(desde),
+      b: nodo(cur),
+      km: Math.round(km * 1000) / 1000,
+      rango,
+      doble,
+      coords: linea.flatMap((i) => pos[i]),
+    });
+  };
+  for (let i = 0; i < pos.length; i++) {
+    if (!grado(i) || !esNodo(i)) continue;
+    for (const j of ady[i]) if (!usados.has(i < j ? `${i}-${j}` : `${j}-${i}`)) recorrer(i, j);
+  }
+  // Closed loops with no node on them (none expected, but never lose track).
+  for (const s of segs.values()) if (!usados.has(`${s.i}-${s.j}`)) recorrer(s.i, s.j);
+
+  const vivos = componentes.filter((c) => c.km >= MIN_COMPONENTE_KM).sort((a, b) => b.km - a.km);
+  return {
+    grafo: { nodos, tramos },
+    reporte: {
+      soldaduras,
+      descartados: descartados.map((c) => ({ km: c.km, en: pos[c.vertices[0]] })),
+      componentes: vivos.map((c) => {
+        const xs = c.vertices.map((i) => pos[i][0]);
+        const ys = c.vertices.map((i) => pos[i][1]);
+        return { km: c.km, caja: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)] };
+      }),
+    },
   };
 }
 
@@ -292,20 +567,36 @@ const out = await mapshaper.applyCommands(
     '-dissolve2 clave copy-fields=nombre,abrev,lon,lat target=estados',
     // US states, Guatemalan departments… → one shape per country.
     '-dissolve2 pais copy-fields=nombre target=vecinos',
-    // Mexico as one polygon, only to clip the rail lines at the border.
+    // The rail lines are cut at the land border only. Clipping them to Mexico's
+    // outline also cut them at the 10m coast, which drops every bridge and
+    // causeway over coastal water — the Guaymas–Empalme crossing went that
+    // way. So the mask is Mexico grown 3 km out to sea, minus the neighbours.
     '-dissolve target=estados + name=pais',
-    '-clip pais target=vias',
-    '-drop target=pais',
+    '-buffer target=pais radius=3000 + name=mascara',
+    '-erase vecinos target=mascara',
+    '-clip mascara target=vias',
+    '-drop target=pais,mascara',
     `-clip bbox=${w},${s},${e},${n} target=vecinos`,
     // ~250 m: below a pixel at the deepest zoom of the Mexico view.
     '-simplify interval=250 keep-shapes',
     '-filter-slivers min-area=2km2 target=vecinos',
-    '-o format=topojson quantization=100000 mexico.topo.json target=estados,vias,vecinos',
+    '-o format=topojson quantization=100000 mexico.topo.json target=estados,vecinos',
+    '-o format=geojson precision=0.00001 vias.json target=vias',
   ].join(' '),
   inputs
 );
 
 await writeFile(join(ROOT, 'static', 'data', 'mexico.topo.json'), out['mexico.topo.json']);
+
+const { grafo, reporte } = red(JSON.parse(out['vias.json']));
+const redJson = JSON.stringify({
+  fuente:
+    'Natural Earth 10m railroads (CEC North American Environmental Atlas), recortada a México; ' +
+    `tramos agregados a mano: ${VIAS_A_MANO.map((v) => v.nombre).join(', ')}`,
+  nodos: grafo.nodos,
+  tramos: grafo.tramos,
+});
+await writeFile(join(ROOT, 'static', 'data', 'red-ferroviaria.json'), redJson);
 
 const lista = ciudades(places);
 await mkdir(join(ROOT, 'src', 'lib', 'domain', 'datos'), { recursive: true });
@@ -315,5 +606,18 @@ await writeFile(
 );
 
 const kb = (x) => `${(Buffer.byteLength(x) / 1024).toFixed(0)} KB`;
-console.log(`mexico.topo.json  ${kb(out['mexico.topo.json'])}`);
-console.log(`ciudades.json     ${lista.length} ciudades`);
+const lugar = ([lon, lat]) => `${lon.toFixed(3)}, ${lat.toFixed(3)}`;
+const kmTotal = grafo.tramos.reduce((sum, t) => sum + t.km, 0);
+console.log(`mexico.topo.json      ${kb(out['mexico.topo.json'])}`);
+console.log(`ciudades.json         ${lista.length} ciudades`);
+console.log(
+  `red-ferroviaria.json  ${kb(redJson)} · ${grafo.nodos.length} nodos · ${grafo.tramos.length} tramos · ${Math.round(kmTotal)} km`
+);
+console.log(`  soldaduras (puntas sueltas a ≤ ${SOLDAR_KM} km de otra vía): ${reporte.soldaduras.length}`);
+for (const s of reporte.soldaduras) console.log(`    ${s.km.toFixed(2)} km en ${lugar(s.en)}`);
+console.log(`  pedazos descartados (< ${MIN_COMPONENTE_KM} km): ${reporte.descartados.length}`);
+for (const d of reporte.descartados) console.log(`    ${d.km.toFixed(1)} km en ${lugar(d.en)}`);
+console.log(`  componentes conectados: ${reporte.componentes.length}`);
+for (const c of reporte.componentes) {
+  console.log(`    ${Math.round(c.km)} km  caja ${lugar(c.caja.slice(0, 2))} → ${lugar(c.caja.slice(2))}`);
+}

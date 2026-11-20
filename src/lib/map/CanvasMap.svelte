@@ -283,7 +283,8 @@
 
   function stepCamera(now: number) {
     if (!fly || !canvas || !zoomBehaviour) return;
-    const u = Math.min(1, (now - fly.start) / FLY_MS);
+    // Clamped at 0 too: a rAF timestamp can predate the flight's start stamp.
+    const u = Math.max(0, Math.min(1, (now - fly.start) / FLY_MS));
     const e = u < 0.5 ? 4 * u ** 3 : 1 - (-2 * u + 2) ** 3 / 2;
     const [fx, fy, fk] = fly.from;
     const [tx, ty, tk] = fly.to;

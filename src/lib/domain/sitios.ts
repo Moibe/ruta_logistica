@@ -94,3 +94,41 @@ export const PUERTO_DE_LA_CIUDAD: ReadonlyMap<string, Puerto> = new Map(
 
 /** Geographic centre of mass of the country, where cameras aim when they "look at Mexico". */
 export const CENTRO_MEXICO: LonLat = [-102.5, 23.6];
+
+// ---- one registry for every kind of site ------------------------------------
+
+export type TipoSitio = 'ciudad' | 'puerto';
+
+/**
+ * Any place on the board, whatever its kind, under one key. Ids alone clash
+ * ("veracruz" is a city and a port), so the key is `tipo:id` — `puerto:veracruz`,
+ * `ciudad:veracruz`. Stations, train stops and (later) player-built sites all
+ * refer to places by this key.
+ */
+export type Sitio = {
+  clave: string;
+  tipo: TipoSitio;
+  id: string;
+  nombre: string;
+  estado: ClaveEstado;
+  lonLat: LonLat;
+};
+
+export const SITIOS: readonly Sitio[] = [
+  ...PUERTOS.map((p) => ({ clave: `puerto:${p.id}`, tipo: 'puerto' as const, id: p.id, nombre: p.nombre, estado: p.estado, lonLat: p.lonLat })),
+  ...CIUDADES.map((c) => ({ clave: `ciudad:${c.id}`, tipo: 'ciudad' as const, id: c.id, nombre: c.nombre, estado: c.estado, lonLat: c.lonLat })),
+];
+
+const POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
+
+export function sitio(clave: string): Sitio {
+  const s = POR_CLAVE.get(clave);
+  if (!s) throw new Error(`Sitio desconocido: ${clave}`);
+  return s;
+}
+
+/** The name as it fits on a train's board: CDMX, not "Ciudad de México". */
+export function nombreCorto(clave: string): string {
+  const s = sitio(clave);
+  return s.nombre === 'Ciudad de México' ? 'CDMX' : s.nombre;
+}
