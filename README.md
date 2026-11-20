@@ -10,6 +10,10 @@ país. Dos escalas de la misma geografía:
   en la proyección cónica de Lambert del INEGI, con **trenes de carga** corriendo por las
   vías reales bajo un reloj de juego.
 
+**[Enciclopedia del juego](docs/enciclopedia.md)**: qué puertos, ciudades, vías y servicios
+hay, de qué fuente sale cada dato, qué se corrigió a mano y las reglas de la simulación. Se
+actualiza con cada cosa que entra al juego; más adelante será una página web.
+
 Scaffold basado en `global`, que a su vez salió de
 [`logistica-oceanica`](https://github.com/Moibe/logistica-oceanica): mismo stack, misma
 paleta, mismas versiones mayores (Kit 2, TypeScript 6, Vite 8, three 0.185), para que el
@@ -222,6 +226,10 @@ costa del mundo solo sube de resolución). Además:
 
 ## Siguiente
 
+- **Construir vías.** La red base es la anterior a 2018 a propósito: lo que se construyó de
+  2018 en adelante (el Tren Maya, las líneas nuevas del Corredor Interoceánico…) lo
+  construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
+  cambia sola.
 - **Carga**: qué lleva cada tren (contenedores, granel, autos), cuánto cabe y quién lo
   demanda; hoy los trenes corren su servicio sin carga.
 - **Barcos**: rutas entre puertos por mar, y de puertos del mundo a México en las vistas
