@@ -1292,6 +1292,41 @@ en curso). Mulegé se pinta aparte, con una línea punteada donde termina: su l�
 y Loreto, del Marco Geoestadístico del INEGI. Al pasar el cursor por un estado, su región (o
 Mulegé) dice sus márgenes y su demanda; por una central, su capacidad, dueño y fecha. La ficha de cada polo dice si su región tiene energía.
 
+### El modo Realidad
+
+El tablero tiene dos modos, con el interruptor *Juego / Realidad* del reloj. En **Realidad** no
+se juega: el tablero muestra lo que de verdad pasó con cada obra de vía del catálogo, hoy o en
+cualquier fecha desde 2019 (la línea de tiempo del reloj). La partida queda guardada y sigue
+donde estaba al volver a *Juego*.
+
+Cada obra tiene sus fechas reales, con fuente (`datos/obras-via-real.json`): cuándo se anunció,
+cuándo arrancó, sus avances oficiales y cuándo entró en operación. En la fecha elegida, la obra
+está:
+
+| Etapa | En el mapa |
+| --- | --- |
+| Sin anunciar, o sin proyecto oficial (las vías muertas por rehabilitar) | No se dibuja |
+| Anunciada | Línea de puntos tenue |
+| En obra | Línea punteada, con su avance en la ficha |
+| En operación | Vía del Estado; la red y sus km cambian |
+
+**El avance entre dos datos es una estimación.** El gobierno publica avances en fechas sueltas
+(«32 % al 31 de octubre de 2026»). Entre el arranque (0 %), cada dato oficial y la apertura
+(100 %), el visor interpola en línea recta y lo marca con «≈». Después del último dato se queda
+en él: no adivina.
+
+**Las fechas tienen la precisión de su fuente:** un día, un mes o solo un año (entonces cuenta
+desde el día 1). El tramo 5 Sur del Tren Maya no tiene fecha exacta de apertura en fuente
+oficial: se toma la del circuito completo, el 15 de diciembre de 2024.
+
+El panel de arriba a la derecha cambia: el presupuesto federal real para ferrocarriles de ese
+año y cuántas obras y km están en operación, en obra y anunciadas. No hay trenes ni barcos (los
+del juego son servicios inventados), ni capa de energía (la del juego es un modelo). **Las
+centrales de la CFE y los polos todavía no están en este modo.**
+
+No es una transmisión en vivo: no hay fuente oficial en línea del avance de las obras. Los datos
+tienen fecha de corte, a la vista bajo la línea de tiempo.
+
 ---
 
 ## 11. Decisiones de diseño
@@ -1342,6 +1377,9 @@ Mulegé) dice sus márgenes y su demanda; por una central, su capacidad, dueño 
   capacidad inicial.
 - **Dos márgenes, tarde y noche.** *(20 nov 2026.)* La región necesita los dos arriba del
   mínimo: explica por qué la solar sola no basta y hubo apagones en Yucatán y Baja California.
+- **Dos modos: Juego y Realidad.** *(20 nov 2026.)* El usuario vio que el tablero también sirve
+  como visor de lo que se va haciendo de verdad. El mismo mapa, con las mismas obras: en un modo
+  decides tú, en el otro se ve lo que pasó. Empieza por las obras de vía, con línea de tiempo.
 - **La CFE tiene su propia caja.** *(20 nov 2026.)* Es una empresa del Estado con presupuesto
   propio; sus centrales no se pagan con el dinero de los trenes.
 - **Las obras limpias de la península, con costo estimado.** *(20 nov 2026.)* El usuario pidió
@@ -1404,6 +1442,9 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 20 de noviembre de 2026
 
+- **Tren Maya, tramos 1 y 2.** Decían «inaugurado el 15 de diciembre de 2023», que fue la ruta
+  Campeche–Cancún. Palenque–Campeche (el tramo 1 y el resto del 2) entró en servicio el 1 de
+  enero de 2024.
 - **Baja California Sur, en dos sistemas.** La región sumaba el sistema de La Paz y Los Cabos y el
   de Mulegé (529 MW de demanda en 2018 y 837 MW de capacidad). Ahora van aparte, como los publica
   el PRODESEN: Baja California Sur con 500 MW y 739 MW, Mulegé con 29 MW y 98 MW. Los márgenes

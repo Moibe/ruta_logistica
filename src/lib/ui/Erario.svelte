@@ -3,7 +3,9 @@
   import { tablero } from '$lib/state/tablero.svelte';
   import { añoCompleto, FEDERAL } from '$lib/domain/presupuesto';
   import { CAJA_CFE_MES, ENERGIA } from '$lib/domain/energia';
-  import { mdp, personas } from './formato';
+  import { km, mdp, personas } from './formato';
+  import { añoDe } from '$lib/domain/calendario';
+  import { OBRAS_VIA } from '$lib/domain/obrasVia';
 
   /** The last year with a real figure: later years repeat it. */
   const ULTIMO_AÑO = FEDERAL.años[FEDERAL.años.length - 1].año;
@@ -29,6 +31,22 @@
       viasDetenidas: [...sim.obrasVia.values()].filter((o) => o.fase === 'en-obra' && o.detenida).length,
       viasEnServicio: [...sim.obrasVia.values()].filter((o) => o.fase === 'en-servicio').length,
     };
+  });
+
+  /** In Realidad: the year's real rail budget and where the catalog's rail works really stand. */
+  const real = $derived.by(() => {
+    if (sim.modo !== 'realidad') return null;
+    const a = añoCompleto(añoDe(sim.horas));
+    const cuenta = { anunciadas: 0, enObra: 0, enOperacion: 0, kmObra: 0, kmOperacion: 0 };
+    for (const o of OBRAS_VIA) {
+      const e = sim.real.get(o.id)?.etapa;
+      const largo = sim.medidas.get(o.id)?.km ?? 0;
+      if (e === 'anunciada') cuenta.anunciadas++;
+      else if (e === 'en-obra') (cuenta.enObra++, (cuenta.kmObra += largo));
+      else if (e === 'en-operacion') (cuenta.enOperacion++, (cuenta.kmOperacion += largo));
+    }
+    const serie = a.repetido ? 'sin dato aún: el último publicado' : a.serie === 'ejercido' ? 'ejercido' : a.serie === 'aprobado' ? 'aprobado' : 'proyecto';
+    return { ...cuenta, año: a.año, federal: a.federal, serie };
   });
 
   /** This month's payment and the year it comes from, with the sources in words. */
@@ -70,6 +88,27 @@
 </script>
 
 <div class="erario panel">
+  {#if real}
+  <div class="fila caja" title="Presupuesto federal para ferrocarriles de ese año (Cuenta Pública y Presupuesto de Egresos): subfunción de transporte por ferrocarril, Tren Maya y Ferrocarril del Istmo.">
+    <span class="label">Trenes {real.año}</span>
+    <b class="mono">{mdp(real.federal)}</b>
+    <span class="mes">{real.serie}</span>
+  </div>
+  <div class="fila">
+    <span class="label">En operación</span>
+    <span><b class="mono">{real.enOperacion}</b> obra{real.enOperacion === 1 ? '' : 's'} · <b class="mono">{km(real.kmOperacion)}</b></span>
+  </div>
+  <div class="fila">
+    <span class="label">En obra</span>
+    <span><b class="mono">{real.enObra}</b> obra{real.enObra === 1 ? '' : 's'} · <b class="mono">{km(real.kmObra)}</b></span>
+    <span class="dim">· {real.anunciadas} anunciadas</span>
+  </div>
+  <button class="fila obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
+    <span class="label">Obras</span>
+    <span>de vía, desde 2019</span>
+    <span class="ir">Ver todas {tablero.catalogo ? '×' : '→'}</span>
+  </button>
+  {:else}
   <div class="fila caja" title={llegada?.detalle}>
     <span class="label">Presupuesto</span>
     <b class="mono" class:agotado={cuenta.dinero < 1}>{mdp(cuenta.dinero)}</b>
@@ -93,6 +132,7 @@
     </span>
     <span class="ir">Catálogo {tablero.catalogo ? '×' : '→'}</span>
   </button>
+  {/if}
 </div>
 
 <style>

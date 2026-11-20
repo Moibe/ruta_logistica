@@ -6,6 +6,7 @@
   import Flota from '$lib/ui/Flota.svelte';
   import Reloj from '$lib/ui/Reloj.svelte';
   import Trazado from '$lib/ui/Trazado.svelte';
+  import { sim } from '$lib/state/simulacion.svelte';
 </script>
 
 <svelte:head>
@@ -15,7 +16,9 @@
 <MexicoMap />
 <Reloj />
 <Erario />
-<Flota />
+{#if sim.modo === 'juego'}
+  <Flota />
+  <Trazado />
+{/if}
 <FichaPolo />
 <CatalogoObras />
-<Trazado />

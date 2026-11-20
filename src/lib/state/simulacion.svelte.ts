@@ -27,6 +27,7 @@ import {
   regionDelPolo,
   type EstadoRegion,
 } from '$lib/domain/energia';
+import { estadoReal, horasDeHoy, type EstadoReal } from '$lib/domain/realidad';
 import { avanzar } from '$lib/domain/servicio';
 import {
   avanzarObra,
@@ -53,6 +54,13 @@ export const VELOCIDADES = [0, 0.25, 1, 4, 16] as const;
 const HORA_INICIAL = 6;
 
 export type Unidad = Tren | Barco;
+
+/**
+ * Two ways to look at the same board. In **juego** the player is the State and
+ * builds; in **realidad** nothing is played: the board shows what was really
+ * announced, under way and open on a date (`realidad.ts`), today by default.
+ */
+export type Modo = 'juego' | 'realidad';
 
 /**
  * The one clock and the one fleet. The board reads trains and ships from here
@@ -121,6 +129,18 @@ class Simulacion {
   versionRed = $state(0);
   /** The camera keeps the selected vehicle centred. */
   siguiendo = $state(false);
+  modo = $state<Modo>('juego');
+  /** In Realidad, each rail work as it really stood on the date shown (`horas`). Empty in the game. */
+  real = $state.raw<Map<string, EstadoReal>>(new Map());
+  /** The game, set aside while Realidad is on. */
+  #juego: {
+    horas: number;
+    obras: Map<string, ObraPolo>;
+    obrasVia: Map<string, ObraViaEstado>;
+    obrasEnergia: Map<string, ObraViaEstado>;
+    trenes: Tren[];
+    barcos: Barco[];
+  } | null = null;
   /**
    * The player's trains a day on each rail line (by `Via.base`). Recounted
    * whenever the fleet or the network changes; the board repaints line use
@@ -145,7 +165,8 @@ class Simulacion {
   }
 
   get corriendo(): boolean {
-    return this.estado === 'lista' && this.multiplicador > 0;
+    // Realidad shows a date; its clock doesn't run.
+    return this.estado === 'lista' && this.modo === 'juego' && this.multiplicador > 0;
   }
 
   /** "3 mar 2019": the game opens on 1 January 2019 (`calendario.ts`). */
@@ -269,6 +290,63 @@ class Simulacion {
   seleccionar(id: string | null) {
     this.seleccion = id;
     if (!id) this.siguiendo = false;
+  }
+
+  // ---- Realidad ---------------------------------------------------------------------------------
+
+  /**
+   * Set the game aside and show the real board, as of today. The game's
+   * fleet, works and clock wait untouched for `salirRealidad`; the money isn't
+   * touched because nothing is paid or built here.
+   */
+  entrarRealidad() {
+    if (this.modo === 'realidad' || this.estado !== 'lista') return;
+    this.#juego = { horas: this.horas, obras: this.obras, obrasVia: this.obrasVia, obrasEnergia: this.obrasEnergia, trenes: this.trenes, barcos: this.barcos };
+    this.seleccionar(null);
+    this.modo = 'realidad';
+    // The game's trains and ships are made-up services: none of them here.
+    this.trenes = [];
+    this.barcos = [];
+    this.obras = new Map(POLOS.map((p) => [p.id, obraNueva(p.id)]));
+    this.obrasEnergia = new Map(OBRAS_ENERGIA.map((o) => [o.id, obraViaNueva(o.id)]));
+    this.irA(horasDeHoy(), true);
+  }
+
+  /** In Realidad, show the board as it stood at game hour `horas` (2019 to today). */
+  irA(horas: number, forzar = false) {
+    if (this.modo !== 'realidad') return;
+    this.horas = Math.max(0, Math.min(horas, horasDeHoy()));
+    const real = new Map(OBRAS_VIA.map((o) => [o.id, estadoReal(o.id, this.horas)]));
+    const enServicio = (m: Map<string, ObraViaEstado>) => [...m.values()].filter((o) => o.fase === 'en-servicio').map((o) => o.id).join();
+    const antes = enServicio(this.obrasVia);
+    this.obrasVia = new Map(
+      OBRAS_VIA.map((o) => {
+        const r = real.get(o.id)!;
+        const fase = r.etapa === 'en-operacion' ? 'en-servicio' : r.etapa === 'en-obra' ? 'en-obra' : 'por-construir';
+        return [o.id, { ...obraViaNueva(o.id), fase, avance: r.avance ?? 0 }];
+      })
+    );
+    this.real = real;
+    // The track itself changes only when a work opens (or, going back, un-opens).
+    if (forzar || enServicio(this.obrasVia) !== antes) this.#reconstruirRed();
+    this.#actualizarEnergia(true);
+  }
+
+  /** Back to the game, exactly where it was left. */
+  salirRealidad() {
+    const j = this.#juego;
+    if (this.modo !== 'realidad' || !j) return;
+    this.modo = 'juego';
+    this.real = new Map();
+    this.horas = j.horas;
+    this.obras = j.obras;
+    this.obrasVia = j.obrasVia;
+    this.obrasEnergia = j.obrasEnergia;
+    this.trenes = j.trenes;
+    this.barcos = j.barcos;
+    this.#juego = null;
+    this.#reconstruirRed();
+    this.#actualizarEnergia(true);
   }
 
   alternarPausa() {

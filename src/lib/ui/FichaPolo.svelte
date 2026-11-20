@@ -92,7 +92,9 @@
       </p>
     {/if}
 
-    {#if obra.fase === 'por-construir' && plan}
+    {#if sim.modo === 'realidad'}
+      <p class="nota">Modo Realidad: el avance real de los polos todavía no está en el visor; por ahora muestra las obras de vía.</p>
+    {:else if obra.fase === 'por-construir' && plan}
       <p class="status por-construir">Por construir</p>
       <div class="cuadrillas" role="radiogroup" aria-label="Cuadrillas">
         <span class="label">Cuadrillas</span>

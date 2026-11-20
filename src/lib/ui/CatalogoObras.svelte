@@ -4,6 +4,8 @@
   import { CAPACIDAD } from '$lib/domain/red';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
   import { aporte, CAJA_CFE_MES, mesesConCajaCfe, OBRAS_ENERGIA, obraEnergia, type ObraEnergia } from '$lib/domain/energia';
+  import { fechaLarga } from '$lib/domain/calendario';
+  import { fechaEnPalabras, fichaReal, HORAS_DEL_CORTE, TEXTO_ETAPA } from '$lib/domain/realidad';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
   import { horaDeJuego, km, mdp, meses, personas } from './formato';
@@ -67,7 +69,7 @@
 
   // ---- the CFE's plants ---------------------------------------------------------------------
 
-  const planta = $derived(tablero.obraSel ? obraEnergia(tablero.obraSel) : null);
+  const planta = $derived(tablero.obraSel && sim.modo === 'juego' ? obraEnergia(tablero.obraSel) : null);
   const planPlanta = $derived(planta ? sim.presupuestoPlanta(planta.id, cuadrillas) : null);
 
   const fichaPlanta = $derived.by(() => {
@@ -236,10 +238,52 @@
       </header>
       <h2>{o.nombre}</h2>
       <p class="label">{TIPOS_OBRA[o.tipo]} · {km(sim.medidas.get(o.id)?.km ?? 0)}</p>
-      <p class="efecto">{efecto(o)}</p>
+      {#if sim.modo === 'juego'}<p class="efecto">{efecto(o)}</p>{/if}
       <p class="real"><span class="label">En la realidad</span> {o.real}</p>
 
-      {#if estado.fase === 'por-construir' && plan}
+      {#if sim.modo === 'realidad'}
+        {@const r = sim.real.get(o.id)}
+        {@const fr = fichaReal(o.id)}
+        {#if r}
+          <p class="status" class:en-obra={r.etapa === 'en-obra'} class:en-servicio={r.etapa === 'en-operacion'}>
+            {TEXTO_ETAPA[r.etapa].charAt(0).toUpperCase() + TEXTO_ETAPA[r.etapa].slice(1)} · al {fechaLarga(sim.horas)}
+          </p>
+          {#if r.etapa === 'en-obra' && r.avance !== null}
+            <div class="barra"><span style:width="{r.avance * 100}%"></span></div>
+          {/if}
+          <dl>
+            {#if r.etapa === 'en-obra' && r.avance !== null}
+              <div>
+                <dt>Avance{r.estimado ? ' (estimado entre datos oficiales)' : ''}</dt>
+                <dd class="mono">{r.estimado ? '≈ ' : ''}{(r.avance * 100).toFixed(r.estimado ? 0 : 1)} %</dd>
+              </div>
+            {/if}
+            {#if r.parcial}<div><dt>Ya abrió una parte</dt><dd>{r.parcial}</dd></div>{/if}
+            {#if fr?.anuncio}<div><dt>Anunciada</dt><dd class="mono">{fechaEnPalabras(fr.anuncio)}</dd></div>{/if}
+            {#if fr?.inicio}<div><dt>Inicio de obra</dt><dd class="mono">{fechaEnPalabras(fr.inicio)}</dd></div>{/if}
+            {#each fr?.avances ?? [] as a (a.fecha)}
+              <div><dt>Avance oficial al {fechaEnPalabras(a.fecha)}</dt><dd class="mono">{a.pct} %</dd></div>
+            {/each}
+            {#if fr?.operacion}
+              <div><dt>En operación desde</dt><dd class="mono">{fechaEnPalabras(fr.operacion)}</dd></div>
+            {:else if fr?.prevista}
+              <div><dt>Apertura prevista</dt><dd class="mono">{fr.prevista}</dd></div>
+            {/if}
+          </dl>
+          {#if fr?.situacion && sim.horas >= HORAS_DEL_CORTE - 24 * 90}<p class="nota">{fr.situacion}</p>{/if}
+          {#if fr?.nota}<p class="nota">{fr.nota}</p>{/if}
+          {#if !fr}
+            <p class="nota">No hay un proyecto oficial para esta vía: está en el catálogo del juego como obra posible.</p>
+          {:else}
+            <details class="fuentes" open>
+              <summary>Fuentes</summary>
+              {#each fr.fuentesCitadas as c (c.url + c.fuente)}
+                <p><a href={c.url} target="_blank" rel="noopener noreferrer">{c.fuente}</a></p>
+              {/each}
+            </details>
+          {/if}
+        {/if}
+      {:else if estado.fase === 'por-construir' && plan}
         <div class="cuadrillas" role="radiogroup" aria-label="Cuadrillas">
           <span class="label">Cuadrillas</span>
           {#each Array.from({ length: MAX_CUADRILLAS }, (_, i) => i + 1) as n (n)}
@@ -301,7 +345,11 @@
         <button class="close" onclick={() => tablero.cerrarCatalogo()} aria-label="Cerrar">×</button>
       </header>
       <p class="sub">
-        {resumen.enObra} en obra · {resumen.enServicio} en servicio · costos con 4 cuadrillas, el ritmo del gobierno
+        {#if sim.modo === 'realidad'}
+          {resumen.enObra} en obra · {resumen.enServicio} en operación · lo que pasó de verdad, al {fechaLarga(sim.horas)}
+        {:else}
+          {resumen.enObra} en obra · {resumen.enServicio} en servicio · costos con 4 cuadrillas, el ritmo del gobierno
+        {/if}
       </p>
       <div class="lista">
         {#each filas as g (g.id)}
@@ -313,7 +361,14 @@
                 <button class="obra" onclick={() => (tablero.obraSel = o.id)}>
                   <span class="nombre">{corto(o.nombre)}</span>
                   <span class="datos mono">
-                    {#if estado?.fase === 'en-obra'}
+                    {#if sim.modo === 'realidad'}
+                      {@const r = sim.real.get(o.id)}
+                      {#if r}
+                        <span class="fase" class:en-obra={r.etapa === 'en-obra'} class:en-servicio={r.etapa === 'en-operacion'}>
+                          {TEXTO_ETAPA[r.etapa]}{r.etapa === 'en-obra' && r.avance !== null ? ` ${r.estimado ? '≈ ' : ''}${(r.avance * 100).toFixed(0)} %` : ''}
+                        </span>
+                      {/if}
+                    {:else if estado?.fase === 'en-obra'}
                       <span class="fase en-obra" class:detenida={estado.detenida}>
                         {estado.detenida ? 'detenida' : 'en obra'} {(estado.avance * 100).toFixed(0)} %
                       </span>
@@ -328,6 +383,7 @@
             {/each}
           </ul>
         {/each}
+        {#if sim.modo === 'juego'}
         <h3 class="energia">Energía (CFE)</h3>
         <p class="texto">
           Centrales de la CFE desde 2019. Se pagan con la caja de la CFE, no con el presupuesto de trenes. Suben el margen de su región;
@@ -353,6 +409,9 @@
             </li>
           {/each}
         </ul>
+        {:else}
+          <p class="texto">Las centrales de la CFE y los polos todavía no están en el modo Realidad.</p>
+        {/if}
       </div>
     {/if}
   </section>

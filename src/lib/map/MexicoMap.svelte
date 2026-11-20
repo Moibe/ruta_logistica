@@ -881,6 +881,18 @@
         ctx.lineWidth = 3.6 / k;
         ctx.stroke(viaDelEstado);
       }
+      // Realidad: works announced and not begun, as a faint dotted line.
+      for (const [id, r] of sim.real) {
+        if (r.etapa !== 'anunciada') continue;
+        const op = obraPaths.get(id);
+        if (!op) continue;
+        ctx.save();
+        ctx.setLineDash([1.2 / k, 3.2 / k]);
+        ctx.strokeStyle = 'rgba(244, 241, 222, 0.5)';
+        ctx.lineWidth = 1.3 / k;
+        ctx.stroke(op.path);
+        ctx.restore();
+      }
       // Works under way: their line dashed in ink-white.
       for (const [id, o] of sim.obrasVia) {
         if (o.fase !== 'en-obra') continue;
@@ -2034,7 +2046,13 @@
   $effect(() => {
     // A work ordered, stopped or finished: its dashed line changes.
     sim.obrasVia;
+    sim.real;
     ensuciaCapa();
+  });
+
+  $effect(() => {
+    // The electricity shown is the game's model, not the real grid: off in Realidad.
+    if (sim.modo === 'realidad') layers.energia = false;
   });
 
   $effect(() => {
@@ -2375,7 +2393,11 @@
         <li><span class="raya" style:background={COLOR_USO.cargada}></span>Cargada · los trenes frenan</li>
         <li><span class="raya" style:background={COLOR_USO.saturada}></span>Saturada · más de lo que cabe</li>
       {/if}
-      <li><span class="raya estado"></span>Obra del Estado</li>
+      <li><span class="raya estado"></span>Obra del Estado{sim.modo === 'realidad' ? ' en operación' : ''}</li>
+      {#if sim.modo === 'realidad'}
+        <li><span class="raya en-obra"></span>En obra</li>
+        <li><span class="raya anunciada"></span>Anunciada</li>
+      {/if}
       <li><span class="raya muerta"></span>Fuera de operación</li>
     </ul>
   </div>
@@ -2405,7 +2427,13 @@
       />
     </svg>Polos
   </button>
-  <button class="ctl" aria-pressed={layers.energia} onclick={() => (layers.energia = !layers.energia)}>
+  <button
+    class="ctl"
+    aria-pressed={layers.energia}
+    disabled={sim.modo === 'realidad'}
+    title={sim.modo === 'realidad' ? 'La energía todavía no está en el modo Realidad' : undefined}
+    onclick={() => (layers.energia = !layers.energia)}
+  >
     <svg class="sw" width="10" height="13" viewBox="0 0 10 13" aria-hidden="true">
       <path d="M6 0 0 7.5h4L3 13l7-8H6z" fill="#facc15" />
     </svg>Energía
@@ -2648,6 +2676,18 @@
     height: 4px;
     background: #f4f1de;
     box-shadow: 0 0 0 1px rgba(244, 241, 222, 0.35);
+  }
+
+  .raya.en-obra {
+    height: 0;
+    background: none;
+    border-top: 2px dashed rgba(244, 241, 222, 0.85);
+  }
+
+  .raya.anunciada {
+    height: 0;
+    background: none;
+    border-top: 2px dotted rgba(244, 241, 222, 0.5);
   }
 
   .raya.muerta {

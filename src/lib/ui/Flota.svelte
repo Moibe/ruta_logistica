@@ -276,7 +276,7 @@
 <style>
   .flota {
     position: fixed;
-    top: 4.6rem;
+    top: 6.55rem;
     left: 1rem;
     z-index: 30;
     width: 260px;
