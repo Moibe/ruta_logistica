@@ -3,7 +3,16 @@ import { COLORES_BARCO, crearBarco, NOMBRES_BARCO, SERVICIOS_BARCO, type Barco, 
 import { construirMar, type Mar, type RutasMarJson } from '$lib/domain/mar';
 import { construirRed, type Red, type RedJson } from '$lib/domain/red';
 import { avanzar } from '$lib/domain/servicio';
-import { SITIOS } from '$lib/domain/sitios';
+import {
+  avanzarObra,
+  empleosPermanentes,
+  obraNueva,
+  personasTrabajando,
+  presupuestar,
+  presupuestoInicialMdp,
+  type ObraPolo,
+} from '$lib/domain/obras';
+import { POLOS, SITIOS } from '$lib/domain/sitios';
 import { COLORES_TREN, crearTren, ESPERA_TERMINAL_H, SERVICIOS, type Tren } from '$lib/domain/trenes';
 
 /**
@@ -43,11 +52,25 @@ class Simulacion {
   barcos = $state.raw<Barco[]>([]);
   /** Id of the selected train or ship. */
   seleccion = $state<string | null>(null);
+
+  /**
+   * The State's money, millions of pesos. Works are paid out of it as they
+   * advance; nothing pays in yet (the budget comes later).
+   */
+  dinero = $state(presupuestoInicialMdp());
+  /**
+   * Every Polo del Bienestar's work and occupancy, by polo id. Mutated in place
+   * by the clock like the fleet; views that show it also read `horas`.
+   */
+  obras = $state.raw<Map<string, ObraPolo>>(new Map(POLOS.map((p) => [p.id, obraNueva(p.id)])));
+  /** Bumped when the rail network is rebuilt (a finished polo got its station): the board re-bakes the track. */
+  versionRed = $state(0);
   /** The camera keeps the selected vehicle centred. */
   siguiendo = $state(false);
 
   /** The rail network with stations, and the sea lanes. Static once loaded, so not reactive. */
   red: Red | null = null;
+  #redJson: RedJson | null = null;
   mar: Mar | null = null;
 
   #carga: Promise<void> | null = null;
@@ -93,7 +116,8 @@ class Simulacion {
         const [redRes, marRes] = await Promise.all([fetch('/data/red-ferroviaria.json'), fetch('/data/rutas-maritimas.json')]);
         if (!redRes.ok) throw new Error(`red ferroviaria: HTTP ${redRes.status}`);
         if (!marRes.ok) throw new Error(`rutas marítimas: HTTP ${marRes.status}`);
-        this.red = construirRed((await redRes.json()) as RedJson, SITIOS);
+        this.#redJson = (await redRes.json()) as RedJson;
+        this.red = construirRed(this.#redJson, SITIOS);
         this.mar = construirMar((await marRes.json()) as RutasMarJson);
 
         const trenes: Tren[] = [];
@@ -181,6 +205,62 @@ class Simulacion {
     this.velocidad = this.velocidad === 0 ? 2 : 0;
   }
 
+  // ---- the Polos del Bienestar ------------------------------------------------------------
+
+  /** Order a polo built with `cuadrillas` crews. Paid as it advances; false if it can't start. */
+  construirPolo(id: string, cuadrillas: number): boolean {
+    const obra = this.obras.get(id);
+    const polo = POLOS.find((p) => p.id === id);
+    if (!obra || !polo || obra.fase !== 'por-construir') return false;
+    obra.plan = presupuestar(polo, cuadrillas);
+    obra.fase = 'en-obra';
+    this.obras = new Map(this.obras);
+    return true;
+  }
+
+  /** Whether a train can reach the polo: it has its station on the network. */
+  conectado(id: string): boolean {
+    return !!this.red?.estaciones.has(`polo:${id}`);
+  }
+
+  /** People working on polo sites right now. */
+  get empleosEnObra(): number {
+    let n = 0;
+    for (const o of this.obras.values()) n += personasTrabajando(o);
+    return n;
+  }
+
+  /** Permanent jobs in the operating polos right now. */
+  get empleosPermanentes(): number {
+    let n = 0;
+    for (const p of POLOS) {
+      const o = this.obras.get(p.id);
+      if (o) n += empleosPermanentes(o, p);
+    }
+    return n;
+  }
+
+  #avanzarObras(horas: number) {
+    const caja = { mdp: this.dinero };
+    let terminadas = false;
+    for (const o of this.obras.values()) {
+      if (o.fase === 'por-construir') continue;
+      if (avanzarObra(o, horas, caja, this.conectado(o.id))) terminadas = true;
+    }
+    if (caja.mdp !== this.dinero) this.dinero = caja.mdp;
+    if (terminadas) this.#reconstruirRed();
+  }
+
+  /** A finished polo within reach of the track gets its spur and station: rebuild the network with it. */
+  #reconstruirRed() {
+    if (!this.#redJson) return;
+    const enServicio = new Set(
+      [...this.obras.values()].filter((o) => o.fase === 'operando').map((o) => `polo:${o.id}`)
+    );
+    this.red = construirRed(this.#redJson, SITIOS, enServicio);
+    this.versionRed++;
+  }
+
   /** Register a viewer; returns the teardown, so call sites read `$effect(() => sim.attach())`. */
   attach(): () => void {
     if (!browser) return () => {};
@@ -203,6 +283,7 @@ class Simulacion {
       if (horas > 0) {
         for (const t of this.trenes) avanzar(t, horas);
         for (const b of this.barcos) avanzar(b, horas);
+        this.#avanzarObras(horas);
         this.horas += horas;
       }
       this.#frame = requestAnimationFrame(tick);

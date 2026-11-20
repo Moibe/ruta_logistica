@@ -1,0 +1,71 @@
+{
+ "corte": "2026-11-19",
+ "nota": "Cada cifra del juego que sale del mundo real, con su fuente oficial y la fecha en que se consultó. `npm run al-dia` revisa el DOF desde la fecha de corte y avisa qué cifras llevan más de seis meses sin revisarse.",
+ "cifras": {
+  "costoMdpPorHa": {
+   "valor": 5.49,
+   "unidad": "millones de pesos por hectárea",
+   "dato": "Reserva Zapotlán (910.82 ha): «Requiere obras de infraestructura, previamente identificadas por el estado de Hidalgo, de alrededor de 5 mil millones de pesos»",
+   "fuente": "DOF, declaratoria del PODECOBI Reserva Zapotlán, 30 jun 2025",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5761461&fecha=30/06/2025",
+   "consultado": "2026-11-19"
+  },
+  "mesesObraTipica": {
+   "valor": 24,
+   "unidad": "meses para un polo de 53 ha con 1 cuadrilla",
+   "dato": "Un parque industrial «en promedio toma 2 años, cuando menos» (Marcelo Ebrard, inauguración de Huamantla)",
+   "fuente": "Presidencia, versión estenográfica de la inauguración del PODECOBI Huamantla, 12 abr 2026",
+   "url": "https://www.gob.mx/presidencia/es/articulos/version-estenografica-inauguracion-del-polo-de-desarrollo-economico-para-el-bienestar-podecobi-huamantla?idiom=es",
+   "consultado": "2026-11-19"
+  },
+  "mesesObraRecord": {
+   "valor": 8.5,
+   "unidad": "meses para un polo de 53 ha (el récord, que 4 cuadrillas igualan)",
+   "dato": "Huamantla: compromiso de entrega el 28 jul 2025, 20 % de avance el 14 oct 2025, inaugurado el 12 abr 2026, «una obra récord»",
+   "fuente": "Presidencia (inauguración, 12 abr 2026) y Gobierno de Tlaxcala (Coracyt, 14 oct 2025)",
+   "url": "https://www.coracyt.gob.mx/noticias/locales/18191-registra-20-la-construccion-del-polo-de-desarrollo-para-el-bienestar-en-huamantla",
+   "consultado": "2026-11-19"
+  },
+  "haReferencia": {
+   "valor": 53,
+   "unidad": "hectáreas del polo de referencia (Huamantla)",
+   "dato": "El PODECOBI Huamantla mide 53 hectáreas",
+   "fuente": "DOF, declaratoria del PODECOBI Huamantla, 14 ago 2025",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5765468&fecha=14/08/2025",
+   "consultado": "2026-11-19"
+  },
+  "empleosPorHa": {
+   "valor": 94.3,
+   "unidad": "empleos permanentes (directos e indirectos) por hectárea con el polo lleno",
+   "dato": "Huamantla, 53 ha: «generará más de 5 mil empleos directos e indirectos»",
+   "fuente": "Presidencia, comunicado de la inauguración del PODECOBI Huamantla, 12 abr 2026",
+   "url": "https://www.gob.mx/presidencia/prensa/plan-mexico-presidenta-inaugura-primer-polo-de-desarrollo-economico-para-el-bienestar-en-huamantla-tlaxcala-con-inversion-de-540-mdd",
+   "consultado": "2026-11-19"
+  },
+  "empleosAnioPorMdp": {
+   "valor": 1.187,
+   "unidad": "empleos durante un año por cada millón de pesos de obra",
+   "dato": "Construcción en Veracruz, 2023: 26,482 personas ocupadas y 22,308 millones de pesos de producción bruta total",
+   "fuente": "INEGI, Censos Económicos 2024, resultados de Veracruz",
+   "url": "https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mver_ce24.pdf",
+   "consultado": "2026-11-19"
+  },
+  "aniosOcupacion": {
+   "valor": 3,
+   "unidad": "años para que un polo conectado por vía se llene de empresas",
+   "dato": "Supuesto del juego: no hay una cifra oficial de cuánto tarda un polo en ocuparse. Referencia: Huamantla tenía sus terrenos «100 por ciento vendidos» al inaugurarse, pero vender un terreno no es operar en él.",
+   "fuente": "Supuesto del juego",
+   "url": "",
+   "consultado": "2026-11-19"
+  },
+  "presupuestoInicialMdp": {
+   "valor": 20000,
+   "unidad": "millones de pesos al empezar la partida",
+   "dato": "Valor provisional, mientras se diseña el presupuesto del Estado: alcanza para unos cuantos polos medianos, no para todos.",
+   "fuente": "Supuesto del juego",
+   "url": "",
+   "consultado": "2026-11-19"
+  }
+ },
+ "dofRevisados": [5764006, 5764007, 5786253, 5764497, 5794523, 5758077, 5758079, 5762117, 5763477, 5764317, 5766905, 5785820, 5796626, 5700705, 5691049, 5689265, 5758477, 5779946]
+}

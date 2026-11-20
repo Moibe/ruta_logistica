@@ -103,7 +103,12 @@ function nuevoTramo(id: number, a: number, b: number, clase: Clase, doble: boole
   return { id, a, b, clase, doble, puntos, acum, km: acum[acum.length - 1] };
 }
 
-export function construirRed(json: RedJson, sitios: readonly Sitio[]): Red {
+/**
+ * `polosEnServicio`: keys of the Polos del Bienestar already built; within
+ * reach of the track they get a station like any city. The rest only get
+ * their distance to the track measured (`aLaVia`).
+ */
+export function construirRed(json: RedJson, sitios: readonly Sitio[], polosEnServicio: ReadonlySet<string> = new Set()): Red {
   const nodos: LonLat[] = json.nodos.map(([lon, lat]) => [lon, lat]);
   const tramos: Tramo[] = json.tramos.map((t, id) => {
     const puntos: LonLat[] = [];
@@ -127,7 +132,8 @@ export function construirRed(json: RedJson, sitios: readonly Sitio[]): Red {
     }
     if (s.tipo === 'polo') {
       aLaVia.set(s.clave, best.km);
-      continue;
+      // Only a polo the player has built gets its station (its spur).
+      if (!polosEnServicio.has(s.clave)) continue;
     }
     if (best.km > ESTACION_MAX_KM) {
       sinEstacion.set(s.clave, best.km);

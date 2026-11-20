@@ -7,6 +7,27 @@ const entero = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 0 });
 
 export const km = (n: number) => `${entero.format(n)} km`;
 
+/** Millions of pesos as people say them: "850 millones", "1.3 mil millones". */
+export function mdp(n: number): string {
+  if (Math.abs(n) >= 1000) {
+    // Two decimals: 20,000 → 19,991 has to show that the money is going.
+    return `${(n / 1000).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} mil millones`;
+  }
+  return `${entero.format(n)} millones`;
+}
+
+/** A count of people. */
+export const personas = (n: number) => entero.format(Math.round(n));
+
+/** Months of game time as "8.5 meses", "2 años 3 meses". */
+export function meses(m: number): string {
+  if (m < 12) return `${m.toLocaleString('es-MX', { maximumFractionDigits: 1 })} meses`;
+  const años = Math.floor(m / 12);
+  const resto = Math.round(m - años * 12);
+  const a = `${años} año${años > 1 ? 's' : ''}`;
+  return resto ? `${a} ${resto} mes${resto > 1 ? 'es' : ''}` : a;
+}
+
 /** km/h as knots, the way ships' speeds are given. */
 export const nudos = (kmh: number) => `${entero.format(kmh / KM_POR_MILLA)} nudos`;
 

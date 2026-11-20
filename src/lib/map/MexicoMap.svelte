@@ -455,7 +455,10 @@
 
   /** Something on screen is moving and needs the next frame too. */
   const animando = () =>
-    !!fly || (sim.corriendo && (sim.trenes.length > 0 || sim.barcos.length > 0)) || tablero.trazando || sim.siguiendo;
+    !!fly ||
+    (sim.corriendo && (sim.trenes.length > 0 || sim.barcos.length > 0 || [...sim.obras.values()].some((o) => o.fase !== 'por-construir'))) ||
+    tablero.trazando ||
+    sim.siguiendo;
 
   function requestDraw() {
     if (frame) return;
@@ -481,6 +484,7 @@
     ctx.drawImage(fondo, 0, 0);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     pintarPrevia(ctx, now);
+    pintarObras(ctx);
     pintarUnidades(ctx, now);
   }
 
@@ -848,32 +852,47 @@
       });
     }
 
-    // Polos del Bienestar: a dashed hexagon — a lot with nothing built on it
-    // yet. Never a stop, so faded while picking stops.
+    // Polos del Bienestar: a hexagon — dashed while it's an empty lot, solid
+    // once work starts, filled once it operates (the moving layer adds the
+    // progress and occupancy rings). Faded while picking stops, unless built
+    // with a station and a train is being laid out.
     if (layers.polos) {
       POLOS.forEach((p, i) => {
         const x = sx(poloPts[i]);
         const y = sy(poloPts[i]);
         if (!onScreen(x, y)) return;
-        const hot = hovered?.kind === 'polo' && hovered.polo.id === p.id;
+        const hot = (hovered?.kind === 'polo' && hovered.polo.id === p.id) || tablero.poloSel === p.id;
+        const fase = sim.obras.get(p.id)?.fase ?? 'por-construir';
+        const parada = trazaTren && conEstacion(`polo:${p.id}`);
         const r = hot ? 6.4 : 5.4;
-        ctx.globalAlpha = trazando ? 0.3 : 1;
+        ctx.globalAlpha = trazando && !parada ? 0.3 : 1;
         hexagono(ctx, x, y, r);
-        ctx.fillStyle = hot ? 'rgba(244, 114, 182, 0.3)' : 'rgba(244, 114, 182, 0.14)';
+        ctx.fillStyle =
+          fase === 'operando'
+            ? hot
+              ? POLO_CLARO
+              : POLO
+            : hot
+              ? 'rgba(244, 114, 182, 0.3)'
+              : fase === 'en-obra'
+                ? 'rgba(244, 114, 182, 0.22)'
+                : 'rgba(244, 114, 182, 0.14)';
         ctx.fill();
-        ctx.setLineDash([2.2, 1.6]);
-        ctx.strokeStyle = hot ? POLO_CLARO : POLO;
-        ctx.lineWidth = 1.4;
+        if (fase === 'por-construir') ctx.setLineDash([2.2, 1.6]);
+        ctx.strokeStyle = fase === 'operando' ? 'rgba(3, 9, 18, 0.9)' : hot ? POLO_CLARO : POLO;
+        ctx.lineWidth = fase === 'operando' ? 1.1 : 1.4;
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.beginPath();
-        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = hot ? POLO_CLARO : POLO;
-        ctx.fill();
+        if (fase !== 'operando') {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = hot ? POLO_CLARO : POLO;
+          ctx.fill();
+        }
         ctx.globalAlpha = 1;
         const R = r + 2;
         taken.push([x - R, y - R, x + R, y + R]);
-        if (trazando) return;
+        if (trazando && !parada) return;
         labels.push({
           text: `Polo ${p.corto}`,
           spots: spotsAround(x, y, R),
@@ -1311,6 +1330,42 @@
     pintarAnillos(ctx, b, hx - Math.cos(rumbo) * L * 0.5, hy - Math.sin(rumbo) * L * 0.5, now, Math.max(9, L * 0.62));
   }
 
+  /**
+   * The polos' living part, every frame: a ring that fills as the work
+   * advances (red when it has stopped for lack of money), and, once
+   * operating, one that fills with occupancy. A built polo no train reaches
+   * gets a dashed grey ring: nobody moves in there yet.
+   */
+  function pintarObras(ctx: CanvasRenderingContext2D) {
+    if (!layers.polos || !projection) return;
+    POLOS.forEach((p, i) => {
+      const o = sim.obras.get(p.id);
+      if (!o || o.fase === 'por-construir') return;
+      const x = transform.applyX(poloPts[i][0]);
+      const y = transform.applyY(poloPts[i][1]);
+      if (x < -20 || x > width + 20 || y < -20 || y > height + 20) return;
+      const r = 9.5;
+      const parte = o.fase === 'en-obra' ? o.avance : o.ocupacion;
+      const aislado = o.fase === 'operando' && !sim.conectado(p.id);
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+      if (aislado) ctx.setLineDash([2, 2.5]);
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      if (parte > 0) {
+        ctx.strokeStyle = o.fase === 'en-obra' && o.detenida ? '#ff8a8a' : o.fase === 'en-obra' ? POLO : POLO_CLARO;
+        ctx.beginPath();
+        ctx.arc(x, y, r, -Math.PI / 2, -Math.PI / 2 + parte * Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    });
+  }
+
   /** While picking stops: the route so far, as marching dashes. */
   function pintarPrevia(ctx: CanvasRenderingContext2D, now: number) {
     if (!tablero.trazando || !tablero.previa.length) return;
@@ -1387,8 +1442,9 @@
     }
     // A polo is never a stop: while picking stops it can't steal the click
     // from the port or station next to it.
-    if (layers.polos && !tablero.trazando) {
+    if (layers.polos) {
       POLOS.forEach((p, i) => {
+        if (tablero.trazando && !(tablero.pestaña === 'tren' && sim.red?.estaciones.has(`polo:${p.id}`))) return;
         const d = Math.hypot(transform.applyX(poloPts[i][0]) - mx, transform.applyY(poloPts[i][1]) - my);
         if (d < 9 && d < bestD) {
           best = { kind: 'polo', polo: p };
@@ -1477,11 +1533,16 @@
     }
     if (!target) {
       sim.seleccionar(null);
+      tablero.poloSel = null;
       return;
     }
     if (target.kind === 'unidad') {
       sim.seleccionar(target.unidad.id);
       return;
+    }
+    if (target.kind === 'polo') {
+      sim.seleccionar(null);
+      tablero.poloSel = target.polo.id;
     }
     if (target.kind === 'estado') {
       const e = baked?.estados.find((x) => x.props.clave === target.estado.clave);
@@ -1559,9 +1620,20 @@
   $effect(() => sim.attach());
 
   $effect(() => {
+    // Loaded, or rebuilt because a finished polo got its station.
     if (sim.estado !== 'lista') return;
-    bakeRed();
-    ensuciaCapa();
+    sim.versionRed;
+    untrack(() => {
+      bakeRed();
+      ensuciaCapa();
+    });
+  });
+
+  $effect(() => {
+    // A work ordered, a polo's card opened or closed: the polos' symbols change.
+    sim.obras;
+    tablero.poloSel;
+    ensucia();
   });
 
   $effect(() => {
@@ -1669,6 +1741,15 @@
     return km <= 2 ? 'Junto a la vía férrea' : `Vía férrea a ${Math.round(km)} km`;
   }
 
+  /** The polo's phase as its card's kind line says it; reads the clock for the percentages. */
+  function faseDelPolo(id: string): string {
+    sim.horas;
+    const o = sim.obras.get(id);
+    if (!o || o.fase === 'por-construir') return 'por construir';
+    if (o.fase === 'en-obra') return o.detenida ? `obra detenida al ${Math.round(o.avance * 100)} %` : `en obra, ${Math.round(o.avance * 100)} %`;
+    return sim.conectado(id) ? `operando, ${Math.round(o.ocupacion * 100)} % ocupado` : 'construido, sin tren';
+  }
+
   const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const fechaLarga = (iso: string) => {
     const [a, m, d] = iso.split('-').map(Number);
@@ -1751,11 +1832,11 @@
       {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.pestaña === 'barco'}>{rail}</span>{/if}
     {:else if hovered.kind === 'polo'}
       {@const p = hovered.polo}
-      <span class="label tip-kind" style:color={POLO}>Polo del Bienestar · por construir</span>
+      <span class="label tip-kind" style:color={POLO}>Polo del Bienestar · {faseDelPolo(p.id)}</span>
       <strong>{p.nombre}</strong>
       <span class="tip-sub">{PROGRAMAS_POLO[p.programa]} · {p.municipio}, {estadoNombre.get(p.estado) ?? p.estado}</span>
       <span class="tip-sub">{fmt.format(Math.round(p.hectareas))} ha · declaratoria del {fechaLarga(p.dof)}</span>
-      {@const via = viaDelPolo(p)}
+      {@const via = lineaTrazado || viaDelPolo(p)}
       {#if via}<span class="tip-rail">{via}</span>{/if}
     {:else if hovered.kind === 'ciudad'}
       <span class="label tip-kind">

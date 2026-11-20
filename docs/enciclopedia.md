@@ -41,6 +41,19 @@ página web del juego.
 | Secretaría de Economía | Lámina "Polos de Desarrollo Económico para el Bienestar" (22 de mayo de 2025): los polos anunciados por etapa | — | Documento oficial público |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) | El trazo de la autopista MEX-185D, para ubicar dos polos cuyas coordenadas no traen meridiano (ver la nota ¹ de los polos) | Consultado el 19 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 | INEGI (convención cartográfica) | Parámetros de la proyección del tablero: cónica conforme de Lambert, paralelos 17.5° y 29.5°, meridiano central 102° O | — | — |
+| [INEGI, Censos Económicos 2024](https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mver_ce24.pdf) | Empleos que da la obra por cada millón de pesos (construcción en Veracruz, 2023) | Resultados definitivos, 2025 | Documento oficial público |
+| Presidencia de la República y Gobierno de Tlaxcala | Tiempos y empleos del polo de Huamantla, el único terminado: su ritmo de obra y su proyección de empleos | Comunicados del 14 oct 2025 al 12 abr 2026 | Documento oficial público |
+
+**Regla de fuentes.** Las cifras del juego salen de fuentes oficiales (DOF, Presidencia,
+dependencias, INEGI, gobiernos estatales). La prensa solo entra como complemento, y solo de
+medios no corporativos (La Jornada, La Base América Latina, noticieros ciudadanos).
+
+**Mantener el juego al día.** Las cifras que vienen del mundo real viven, cada una con su fuente
+y la fecha en que se consultó, en `src/lib/domain/datos/calibracion.json`. `npm run al-dia`
+(`scripts/al-dia.mjs`) revisa el DOF desde la fecha de corte hasta hoy buscando acuerdos sobre
+los Polos del Bienestar que el juego no haya revisado (declaratorias nuevas, modificaciones,
+notas aclaratorias, abrogaciones) y marca las cifras que llevan más de seis meses sin revisarse.
+No cambia nada por sí mismo: dice qué revisar. Al terminar la revisión se mueve la fecha de corte.
 
 Herramientas que procesan los datos (no aportan datos): mapshaper 0.7.101 (MPL-2.0) para
 disolver, recortar y simplificar la geometría; d3-geo 3.1.2 y topojson-client 3.1.0 (ISC)
@@ -280,10 +293,10 @@ una cifra del censo del INEGI. Sirve para ordenar y dimensionar, no como dato de
 ## 5. Polos del Bienestar
 
 Parques industriales que el gobierno federal ha declarado en el Diario Oficial desde 2023.
-**En el juego están por construir**: el tablero los muestra donde estarán, como hexágonos
-rosas punteados (capa *Polos*), y **construirlos será cosa del jugador**, como todo lo hecho de
-2018 en adelante. Mientras tanto no reciben trenes ni barcos ni tienen estación; su ficha dice
-a cuántos kilómetros pasa la vía.
+**En el juego empiezan por construir**: el tablero los muestra donde estarán, como hexágonos
+rosas punteados (capa *Polos*), y **construirlos es cosa del jugador**, como todo lo hecho de
+2018 en adelante (ver [Construirlos](#construirlos)). Hasta que se construyen no reciben trenes
+ni tienen estación; su ficha dice a cuántos kilómetros pasa la vía.
 
 ### Tres programas
 
@@ -410,6 +423,55 @@ y una tercera etapa por estados. Otros sí se declararon, pero con otro nombre o
 municipio: "Juárez" es San Jerónimo, "AIFA" es Reserva Zapotlán, "Ciudad Modelo" es Capital de
 la Tecnología (San José Chiapa), "Celaya" es Puerta Logística del Bajío y "Morelia" es el Parque
 Industrial Bajío, en Zinapécuaro. El de Cancún no estaba en esa lámina.
+
+### Construirlos
+
+El jugador es **el Estado**: tiene un presupuesto y lo usa para construir polos. Cada polo pasa
+por tres fases:
+
+1. **Por construir.** Su ficha (clic en el polo) deja elegir de 1 a 4 **cuadrillas** y muestra
+   el costo, la duración, la gente que trabajará en la obra y los empleos que dará lleno.
+   *Construir* pide confirmación.
+2. **En obra.** Se paga conforme avanza, como la obra pública. Si el presupuesto se acaba, la
+   obra **se detiene** donde va. Un anillo alrededor del polo muestra el avance (rojo si está
+   detenida).
+3. **Operando.** Si hay vía a 15 km o menos, al terminarse le nace su **estación** y recibe
+   trenes. Las empresas llegan **solo si hay tren**: la ocupación crece en una curva lenta al
+   principio, rápida a la mitad y lenta al final, y llena el polo en tres años. Un polo construido
+   sin vía cercana queda vacío hasta que el jugador lleve el tren.
+
+**Cómo se calculan** (`domain/obras.ts`, con las cifras de `datos/calibracion.json`):
+
+| Qué | Fórmula | De dónde sale |
+| --- | --- | --- |
+| Costo | 5.49 millones de pesos por hectárea, +15 % por cada cuadrilla extra | Reserva Zapotlán: «alrededor de 5 mil millones de pesos» en obras de infraestructura para 910.82 ha (su declaratoria, DOF 30 jun 2025) |
+| Duración, 1 cuadrilla | 24 meses × (hectáreas ÷ 53)^0.3 | Un parque industrial «en promedio toma 2 años, cuando menos» (inauguración de Huamantla, 12 abr 2026). El exponente 0.3 hace que los polos grandes tarden más pero no en proporción, porque se construyen por frentes y fases a la vez |
+| Duración, n cuadrillas | la de una ÷ n^0.75 | El exponente sale de pedir que 4 cuadrillas igualen el récord de Huamantla: 53 ha en 8.5 meses (compromiso del 28 jul 2025, 20 % el 14 oct 2025, inaugurado el 12 abr 2026) |
+| Gente trabajando en la obra | 1.187 empleos-año por millón de pesos, repartidos en lo que dura | Construcción en Veracruz, 2023: 26,482 personas ocupadas con 22,308 millones de pesos de producción (INEGI, Censos Económicos 2024) |
+| Empleos permanentes | 94.3 por hectárea × ocupación | Huamantla «generará más de 5 mil empleos directos e indirectos» en 53 ha (Presidencia, 12 abr 2026) |
+| Ocupación | de 0 a 100 % en 3 años, solo con tren | Supuesto del juego: no hay cifra oficial de cuánto tarda un polo en llenarse |
+| Presupuesto inicial | 20,000 millones de pesos | Supuesto provisional, mientras se diseña el presupuesto del Estado |
+
+Ejemplos (calculados con el código del juego):
+
+| Polo | Superficie | Cuadrillas | Costo | Duración | Gente en la obra | Empleos lleno |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Huamantla | 53 ha | 1 | 291 millones | 24 meses | 173 | 4,998 |
+| Huamantla | 53 ha | 4 | 422 millones | 8.5 meses | 707 | 4,998 |
+| Tuxpan | 235 ha | 1 | 1,291 millones | 37.5 meses | 490 | 22,170 |
+| Tuxpan | 235 ha | 4 | 1,872 millones | 13.3 meses | 2,006 | 22,170 |
+| Reserva Zapotlán | 911 ha | 1 | 5,000 millones | 56.3 meses | 1,264 | 85,890 |
+| Reserva Zapotlán | 911 ha | 4 | 7,251 millones | 20 meses | 5,177 | 85,890 |
+| Altamira | 1,638 ha | 1 | 8,991 millones | 67.2 meses | 1,907 | 154,443 |
+| Altamira | 1,638 ha | 4 | 13,038 millones | 23.8 meses | 7,806 | 154,443 |
+
+**Lo que se sabe y lo que no.** El costo sale de un solo polo (Zapotlán) y los empleos
+permanentes de otro (Huamantla); estos últimos son una proyección e incluyen indirectos. La
+razón de empleos de obra es la de la construcción en Veracruz, no la nacional. Cuando el
+gobierno publique más polos terminados, se recalibra (ver *Mantener el juego al día* en
+[Fuentes](#1-fuentes)). Dato de contexto del informe 2025–2026 del Corredor Interoceánico: sus
+polos se concesionan a desarrolladores privados, y de nueve concesionados en 2025 quedaron cinco
+en 2026 (tres concesionarios incumplieron y uno renunció).
 
 ---
 
@@ -723,10 +785,19 @@ como lo haría un despachador.
 | En pantalla | Un casco con proa, orientado a su rumbo, con estela; del mismo tamaño en pantalla a cualquier zoom en el globo, y un poco mayor al acercarte en los mapas planos |
 | Resultado medido | En 3,000 h simuladas con los 6 barcos: 166 escalas (10 de ellas en Shanghái o Róterdam), 40 % del tiempo fuera del tablero |
 
-**Polos del Bienestar:** por construir. No son parada de trenes ni escala de barcos, no tienen
-estación y no producen ni piden carga todavía. Al trazar un servicio se atenúan, y elegirlos
-dice "Polo por construir". Su ficha dice el programa, la superficie, la fecha de su
-declaratoria y a cuántos km pasa la vía.
+**Polos del Bienestar:** el jugador los construye (ver [Construirlos](#construirlos)). Por
+construir o en obra no son parada de nada; ya operando, si tienen vía a 15 km o menos, tienen
+estación y son parada de trenes como cualquier ciudad. Nunca son escala de barcos. Todavía no
+producen ni piden carga.
+
+| Regla | Valor |
+| --- | --- |
+| Presupuesto inicial | 20,000 millones de pesos; por ahora no entra dinero |
+| Cuadrillas | 1 a 4; cada una extra acorta la obra y la encarece 15 % |
+| Pago | Conforme avanza la obra; sin dinero, la obra se detiene |
+| Estación | Al terminarse, si hay vía a 15 km o menos |
+| Ocupación | 0 a 100 % en 3 años, solo con tren |
+| Marcador | Panel de presupuesto y empleos (permanentes y en obra), arriba a la derecha |
 
 Los trenes y los barcos comparten el mismo motor de servicios (`domain/servicio.ts`): un
 vehículo recorre sus piernas, espera en cada parada lo que le toca y sigue. Solo cambia cómo
@@ -743,6 +814,15 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
   trazos, fechas y longitudes de esas obras se documentarán aquí cuando se diseñe la mecánica
   de construcción. Los dos tramos trazados a mano (Cuyutlán–Manzanillo y el ramal de
   Altamira) son anteriores a 2018, así que respetan la regla.
+- **El jugador es el Estado.** *(19 nov 2026.)* Tiene un presupuesto que debe usar
+  sabiamente. Construir cuesta tiempo y dinero, y lo que se mide no es solo el dinero: también
+  los **empleos generados**, que son de valor para el jugador.
+- **Cuadrillas: tiempo contra costo.** *(19 nov 2026.)* Más cuadrillas terminan antes pero
+  cuestan más.
+- **Un polo no arranca lleno.** *(19 nov 2026.)* Se va ocupando con empresas, y solo empieza a
+  llenarse cuando hay vía para llegar.
+- **Cifras reales, simplificadas, de fuentes oficiales.** *(19 nov 2026.)* Y un mecanismo para
+  mantenerlas al día (`npm run al-dia`), porque la realidad cambia con el tiempo.
 - **Los Polos del Bienestar los construye el jugador; el juego solo dice dónde estarán.**
   *(19 nov 2026.)* Es la misma regla que las vías: lo hecho de 2018 en adelante es del
   jugador. Cada polo está donde lo pone su declaratoria en el DOF (el centroide de su
@@ -892,6 +972,11 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Polo del Bienestar**: parque industrial declarado por el gobierno federal en el DOF; en el
   juego, un sitio por construir.
 - **Declaratoria**: el acuerdo publicado en el DOF que crea un polo y delimita su terreno.
+- **Cuadrilla**: un equipo de obra. Más cuadrillas en un polo lo terminan antes y cuestan más.
+- **Ocupación**: qué tanto de un polo operando ya tienen las empresas; da los empleos
+  permanentes.
+- **Calibración**: las cifras reales que mueven la mecánica, con su fuente y fecha
+  (`datos/calibracion.json`).
 - **Cuadro de construcción**: la tabla de una declaratoria con los vértices del polígono del
   terreno: rumbos, distancias y coordenadas.
 - **TME (Transversal Modificado Ejidal)**: sistema de coordenadas del Registro Agrario

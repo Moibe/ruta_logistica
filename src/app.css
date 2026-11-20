@@ -13,6 +13,8 @@
   --accent: #4cc9ff;
   --accent-soft: rgba(76, 201, 255, 0.16);
   --warn: #ffd166;
+  /* The Polos del Bienestar: a light guinda (MexicoMap's POLO). */
+  --polo: #f472b6;
   --line: rgba(126, 190, 255, 0.14);
   --glass: rgba(10, 24, 42, 0.62);
   --glass-strong: rgba(8, 20, 36, 0.86);

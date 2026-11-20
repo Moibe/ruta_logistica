@@ -30,6 +30,8 @@ class Tablero {
   elegida = $state.raw<Trayecto[]>([]);
   /** The picked legs plus the leg to the candidate. Raw: route geometry is big and immutable. */
   previa = $state.raw<Trayecto[]>([]);
+  /** The Polo del Bienestar whose card is open (its id), if any. */
+  poloSel = $state<string | null>(null);
   /** Bumped to ask the map to fly to a vehicle; the map watches it. */
   irA = $state<{ id: string; n: number } | null>(null);
 
@@ -37,6 +39,7 @@ class Tablero {
 
   empezar() {
     sim.seleccionar(null);
+    this.poloSel = null;
     this.trazando = true;
     this.#limpiar();
   }
@@ -56,7 +59,12 @@ class Tablero {
 
   /** Why `clave` can't be the next stop, or null if it can. */
   motivo(clave: string): string | null {
-    if (clave.startsWith('polo:')) return 'Polo por construir: todavía no recibe trenes ni barcos';
+    if (clave.startsWith('polo:')) {
+      const obra = sim.obras.get(clave.slice(5));
+      if (obra?.fase === 'por-construir') return 'Polo por construir: todavía no recibe trenes';
+      if (obra?.fase === 'en-obra') return 'Polo en obra: recibirá trenes al terminarse';
+      if (this.pestaña === 'barco') return 'Los barcos solo hacen escala en puertos';
+    }
     return this.pestaña === 'tren' ? this.#motivoTren(clave) : this.#motivoBarco(clave);
   }
 

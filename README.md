@@ -43,6 +43,7 @@ saltar al siguiente libre.
 | `npm run build` | Build de producción (`adapter-auto`, sin destino de deploy aún) |
 | `npm run check` | `svelte-check` sobre todo el proyecto                           |
 | `npm run datos` | Regenera geografía, red ferroviaria y rutas marítimas (~15 s)   |
+| `npm run al-dia` | Revisa el DOF y la vigencia de las cifras reales (ver abajo)  |
 
 ## Vistas
 
@@ -193,8 +194,25 @@ va en el centroide del mayor, comprobando el área contra la declarada y que cai
 estado. Las excepciones (dos en coordenadas TME sin meridiano, uno con el cuadro en imagen, uno
 al pie de la frontera, dos erratas del DOF) y la tabla completa están en la
 [enciclopedia](docs/enciclopedia.md#5-polos-del-bienestar). En el juego son sitios
-(`polo:<id>`) **por construir**: no son parada ni tienen estación; la red solo mide a cuántos
-km pasa la vía (`Red.aLaVia`).
+(`polo:<id>`) que el jugador **construye**.
+
+**Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado, con
+un presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)
+elige de 1 a 4 cuadrillas y confirma en un cuadro propio; la obra se paga conforme avanza
+(`avanzarObra`, en el tick del reloj) y se detiene si se acaba el dinero. Al terminarse, si
+hay vía a ≤ 15 km, la red se reconstruye con el polo en servicio (`construirRed(json, sitios,
+polosEnServicio)`) y nace su estación (`sim.versionRed` avisa al tablero que re-hornee la
+vía). Ya operando y con tren, se llena de empresas en tres años; los empleos (en obra y
+permanentes) van al panel `Erario`. Las cifras salen de fuentes oficiales y viven en
+`datos/calibracion.json`; la tabla y sus fuentes, en la
+[enciclopedia](docs/enciclopedia.md#construirlos).
+
+**Mantener el juego al día**: `npm run al-dia` (`scripts/al-dia.mjs`) busca en el DOF, desde la
+fecha de corte de `calibracion.json` hasta hoy, los acuerdos sobre Polos del Bienestar que el
+juego aún no revisó (partiendo el rango de fechas cuando hay más de diez resultados, porque la
+paginación del buscador del DOF no funciona sin sesión de navegador), y marca las cifras de
+calibración con más de seis meses sin revisarse. `--desde aaaa-mm-dd` revisa otro periodo. No
+cambia nada: dice qué revisar.
 
 **Las rutas marítimas** se calculan sobre la misma tierra del tablero: malla de 0.05° (~5.5
 km) donde una celda es tierra si su centro cae en tierra o si la toca una costa; el **Canal de
@@ -243,6 +261,7 @@ src/lib/
   domain/            TypeScript puro, sin nada de UI ni de render
     geo.ts           LonLat, distancia, interpolación por gran círculo, rumbo, lon/lat ↔ vec3
     sitios.ts        ciudades, puertos, salidas al mundo, polos y un registro común por clave
+    obras.ts         construir polos: presupuesto, cuadrillas, avance, ocupación y empleos
     trayecto.ts      un recorrido como polilínea con velocidad por segmento; avanzar sobre él
     servicio.ts      el motor común: un vehículo recorriendo sus paradas (ida y vuelta o circuito)
     red.ts           grafo ferroviario, estaciones, ruta más rápida
@@ -263,6 +282,7 @@ src/lib/
   ui/
     ViewNav.svelte   navegación: Mundo (Canvas · Globo) | México
     Reloj.svelte · Flota.svelte · Trazado.svelte · formato.ts   paneles (Reloj y Flota también en el mundo)
+    Erario.svelte · FichaPolo.svelte   presupuesto y empleos; la ficha del polo y su construcción
 ```
 
 La regla heredada: **`domain/` no conoce ningún renderer.** Un barco o un tren devolverá
@@ -335,8 +355,9 @@ costa del mundo solo sube de resolución). Además:
 - **Construir.** La red base es la anterior a 2018 a propósito: lo que se construyó de
   2018 en adelante (el Tren Maya, las líneas nuevas del Corredor Interoceánico…) lo
   construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
-  cambia sola. Los Polos del Bienestar ya están ubicados y esperan lo mismo: construir uno le
-  daría estación (27 de los 32 quedan a 15 km o menos de una vía) y, con la carga, producción.
+  cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
+  Tuxpan…).
+- **Presupuesto del Estado**: de dónde y cada cuánto llega el dinero (hoy solo se gasta).
 - **Carga**: qué lleva cada tren y cada barco (contenedores, granel, autos, combustibles),
   cuánto cabe y quién lo demanda; hoy corren sus servicios sin carga. El puerto es donde
   barco y tren se pasan la carga.
