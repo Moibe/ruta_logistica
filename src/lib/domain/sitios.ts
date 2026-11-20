@@ -1,5 +1,6 @@
 import type { LonLat } from './geo';
 import ciudadesJson from './datos/ciudades.json';
+import polosJson from './datos/polos.json';
 import puertasJson from './datos/puertas.json';
 import puertosJson from './datos/puertos.json';
 
@@ -138,12 +139,82 @@ export const PUERTO_DE_LA_CIUDAD: ReadonlyMap<string, Puerto> = new Map(
   })
 );
 
+/**
+ * The Polos del Bienestar: industrial estates the federal government has
+ * declared in the DOF since 2023, under three programmes. On the board they
+ * are sites **for the player to build**, like any work from 2018 on; this is
+ * only where they'll be. Every one sits where its own declaratoria puts it: the
+ * centroid of the biggest polygon of its "cuadro de construcción" (see
+ * `datos/polos.json` and the encyclopedia for the method and the exceptions).
+ */
+export type ProgramaPolo = 'interoceanico' | 'plan-mexico' | 'economia-circular';
+
+export const PROGRAMAS_POLO: Record<ProgramaPolo, string> = {
+  interoceanico: 'Corredor Interoceánico',
+  'plan-mexico': 'Plan México',
+  'economia-circular': 'Economía circular',
+};
+
+export type Polo = {
+  id: string;
+  /** As the declaratoria names it. */
+  nombre: string;
+  /** For the map label: where it is, when the official name doesn't say. */
+  corto: string;
+  programa: ProgramaPolo;
+  estado: ClaveEstado;
+  municipio: string;
+  lonLat: LonLat;
+  /** Surface the declaratoria gives. */
+  hectareas: number;
+  /** Publication date of the declaratoria in the DOF (yyyy-mm-dd) and the note's code there. */
+  dof: string;
+  codigoDof: number;
+  /** How the point was obtained: from the coordinate table, or one of the documented exceptions. */
+  ubicacion: 'cuadro' | 'tme' | 'imagen' | 'frontera';
+};
+
+type PoloJson = {
+  id: string;
+  nombre: string;
+  corto: string;
+  programa: ProgramaPolo;
+  estado: string;
+  municipio: string;
+  lon: number;
+  lat: number;
+  ha: number;
+  dof: string;
+  codigo: number;
+  ubicacion: Polo['ubicacion'];
+};
+
+export const POLOS: readonly Polo[] = (polosJson as PoloJson[]).map((p) => ({
+  id: p.id,
+  nombre: p.nombre,
+  corto: p.corto,
+  programa: p.programa,
+  estado: p.estado,
+  municipio: p.municipio,
+  lonLat: [p.lon, p.lat],
+  hectareas: p.ha,
+  dof: p.dof,
+  codigoDof: p.codigo,
+  ubicacion: p.ubicacion,
+}));
+
+/** The declaratoria in the DOF's own site. */
+export function urlDof(p: Polo): string {
+  const [a, m, d] = p.dof.split('-');
+  return `https://dof.gob.mx/nota_detalle.php?codigo=${p.codigoDof}&fecha=${d}/${m}/${a}`;
+}
+
 /** Geographic centre of mass of the country, where cameras aim when they "look at Mexico". */
 export const CENTRO_MEXICO: LonLat = [-102.5, 23.6];
 
 // ---- one registry for every kind of site ------------------------------------
 
-export type TipoSitio = 'ciudad' | 'puerto' | 'puerta';
+export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo';
 
 /**
  * Any place on the board, whatever its kind, under one key. Ids alone clash
@@ -165,7 +236,12 @@ export const SITIOS: readonly Sitio[] = [
   ...CIUDADES.map((c) => ({ clave: `ciudad:${c.id}`, tipo: 'ciudad' as const, id: c.id, nombre: c.nombre, estado: c.estado, lonLat: c.lonLat })),
   // Gateways belong to no estado.
   ...PUERTAS.map((p) => ({ clave: `puerta:${p.id}`, tipo: 'puerta' as const, id: p.id, nombre: p.nombre, estado: '', lonLat: p.lonLat })),
+  ...POLOS.map((p) => ({ clave: `polo:${p.id}`, tipo: 'polo' as const, id: p.id, nombre: `Polo ${p.corto}`, estado: p.estado, lonLat: p.lonLat })),
 ];
+
+export function polo(clave: string): Polo | null {
+  return clave.startsWith('polo:') ? (POLOS.find((p) => `polo:${p.id}` === clave) ?? null) : null;
+}
 
 export function puerta(clave: string): Puerta | null {
   return clave.startsWith('puerta:') ? (PUERTAS.find((p) => `puerta:${p.id}` === clave) ?? null) : null;

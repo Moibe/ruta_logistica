@@ -56,6 +56,7 @@ class Tablero {
 
   /** Why `clave` can't be the next stop, or null if it can. */
   motivo(clave: string): string | null {
+    if (clave.startsWith('polo:')) return 'Polo por construir: todavía no recibe trenes ni barcos';
     return this.pestaña === 'tren' ? this.#motivoTren(clave) : this.#motivoBarco(clave);
   }
 

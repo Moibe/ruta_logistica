@@ -4,10 +4,10 @@ Referencia de lo que hay en el juego: qué contiene, de dónde sale cada dato, q
 mano y por qué, y con qué reglas se mueve. Por ahora es un documento; más adelante será una
 página web del juego.
 
-> **Cifras al 19 de noviembre de 2026, con trenes, barcos y travesías oceánicas.** No están
-> escritas de memoria: se calcularon ejecutando el mismo código del juego que usa el tablero
-> (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`, `domain/barcos.ts`,
-> `domain/sitios.ts`). Si cambian los datos, se recalculan.
+> **Cifras al 19 de noviembre de 2026, con trenes, barcos, travesías oceánicas y los Polos del
+> Bienestar.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
+> `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
 **Contenido**
 
@@ -15,14 +15,15 @@ página web del juego.
 2. [Geografía](#2-geografía)
 3. [Puertos](#3-puertos)
 4. [Ciudades](#4-ciudades)
-5. [Red ferroviaria](#5-red-ferroviaria)
-6. [Servicios de tren](#6-servicios-de-tren)
-7. [Rutas marítimas](#7-rutas-marítimas)
-8. [Barcos](#8-barcos)
-9. [Reglas de la simulación](#9-reglas-de-la-simulación)
-10. [Decisiones de diseño](#10-decisiones-de-diseño)
-11. [Bitácora de correcciones a los datos](#11-bitácora-de-correcciones-a-los-datos)
-12. [Glosario](#12-glosario)
+5. [Polos del Bienestar](#5-polos-del-bienestar)
+6. [Red ferroviaria](#6-red-ferroviaria)
+7. [Servicios de tren](#7-servicios-de-tren)
+8. [Rutas marítimas](#8-rutas-marítimas)
+9. [Barcos](#9-barcos)
+10. [Reglas de la simulación](#10-reglas-de-la-simulación)
+11. [Decisiones de diseño](#11-decisiones-de-diseño)
+12. [Bitácora de correcciones a los datos](#12-bitácora-de-correcciones-a-los-datos)
+13. [Glosario](#13-glosario)
 
 ---
 
@@ -33,9 +34,12 @@ página web del juego.
 | [Natural Earth](https://www.naturalearthdata.com/) 1:10m | Estados, países vecinos, vías férreas y ciudades del tablero de México | Repositorio `nvkelso/natural-earth-vector`, commit `ca96624` del 2 de junio de 2022 (versión 5.2.0-pre) | Dominio público |
 | Atlas Ambiental de América del Norte, de la CCA (Comisión para la Cooperación Ambiental de México, Estados Unidos y Canadá) | Origen de las vías férreas de Norteamérica que trae Natural Earth (así lo registra la bitácora de cambios de Natural Earth); reúne cartografía de INEGI, USGS y Natural Resources Canada | Red de alrededor de 2010 | A través de Natural Earth |
 | [world-atlas](https://github.com/topojson/world-atlas) | Contornos del mundo para las vistas globales (tierra a 110m y 50m, países a 110m), y la tierra 50m sobre la que se calculan las travesías oceánicas | 2.0.2, que redistribuye Natural Earth 4.1.0 en TopoJSON | ISC (los datos, dominio público) |
-| Curaduría propia | Los 15 puertos, las 2 salidas al mundo y sus puertos lejanos (Shanghái y Róterdam), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#11-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
-| Cálculo propio sobre Natural Earth | Las 136 rutas marítimas entre puertos y salidas, y las 2 travesías oceánicas de las salidas a sus puertos lejanos (ver [Rutas marítimas](#7-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
+| Curaduría propia | Los 15 puertos, las 2 salidas al mundo y sus puertos lejanos (Shanghái y Róterdam), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
+| Cálculo propio sobre Natural Earth | Las 136 rutas marítimas entre puertos y salidas, y las 2 travesías oceánicas de las salidas a sus puertos lejanos (ver [Rutas marítimas](#8-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
 | `logistica-oceanica` (proyecto hermano) | Velocidades de referencia de las clases de barco | — | Del proyecto |
+| [Diario Oficial de la Federación](https://dof.gob.mx) | Las declaratorias de los 32 Polos del Bienestar vigentes: polígono, superficie, municipio y fecha de cada uno (ver [Polos del Bienestar](#5-polos-del-bienestar)) | Declaratorias del 12 de mayo de 2023 al 7 de agosto de 2026, con sus notas aclaratorias y modificaciones; consultadas el 19 de noviembre de 2026 | Documento oficial público |
+| Secretaría de Economía | Lámina "Polos de Desarrollo Económico para el Bienestar" (22 de mayo de 2025): los polos anunciados por etapa | — | Documento oficial público |
+| [OpenStreetMap](https://www.openstreetmap.org/copyright) | El trazo de la autopista MEX-185D, para ubicar dos polos cuyas coordenadas no traen meridiano (ver la nota ¹ de los polos) | Consultado el 19 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 | INEGI (convención cartográfica) | Parámetros de la proyección del tablero: cónica conforme de Lambert, paralelos 17.5° y 29.5°, meridiano central 102° O | — | — |
 
 Herramientas que procesan los datos (no aportan datos): mapshaper 0.7.101 (MPL-2.0) para
@@ -54,7 +58,9 @@ Natural Earth una sola vez a `.cache/ne/`, fijadas al commit de arriba, y produc
 
 Los puertos y las salidas al mundo no salen del script: viven a mano en
 `src/lib/domain/datos/puertos.json` y `puertas.json`. Están en JSON para que el script los
-pueda leer y calcular las rutas marítimas entre ellos.
+pueda leer y calcular las rutas marítimas entre ellos. Los Polos del Bienestar también son un
+archivo curado, `src/lib/domain/datos/polos.json`, sacado una vez de sus declaratorias (ver su
+sección).
 
 Capas de Natural Earth que se usan: `ne_10m_admin_1_states_provinces` (estados y vecinos),
 `ne_10m_railroads` (vías) y `ne_10m_populated_places_simple` (ciudades). Se consultó
@@ -125,7 +131,7 @@ oficiales:
 Se dibujan de fondo, un paso atrás de México: Estados Unidos, Guatemala y Belice (con
 frontera terrestre) y, en el horizonte, Honduras, El Salvador, Cuba y el resto del Caribe y
 Centroamérica. Vienen del mismo archivo que los estados (ver la
-[bitácora](#11-bitácora-de-correcciones-a-los-datos)) y se recortan a una caja de
+[bitácora](#12-bitácora-de-correcciones-a-los-datos)) y se recortan a una caja de
 -134° a -64° de longitud y 0° a 46° de latitud, mucho más grande de lo que la cámara del
 tablero puede ver, para que el borde del recorte nunca aparezca en pantalla.
 
@@ -271,14 +277,150 @@ una cifra del censo del INEGI. Sirve para ordenar y dimensionar, no como dato de
 
 ---
 
-## 5. Red ferroviaria
+## 5. Polos del Bienestar
+
+Parques industriales que el gobierno federal ha declarado en el Diario Oficial desde 2023.
+**En el juego están por construir**: el tablero los muestra donde estarán, como hexágonos
+rosas punteados (capa *Polos*), y **construirlos será cosa del jugador**, como todo lo hecho de
+2018 en adelante. Mientras tanto no reciben trenes ni barcos ni tienen estación; su ficha dice
+a cuántos kilómetros pasa la vía.
+
+### Tres programas
+
+| Programa | Nombre oficial | Polos vigentes | Primer y último declarado |
+| --- | --- | ---: | --- |
+| Corredor Interoceánico | Polos de Desarrollo para el Bienestar, del organismo Corredor Interoceánico del Istmo de Tehuantepec | 14 | 12 may 2023 · 8 jun 2026 |
+| Plan México | Polos de Desarrollo Económico para el Bienestar (PODECOBI), de la Secretaría de Economía | 15 | 30 jun 2025 · 7 ago 2026 |
+| Economía circular | Polos de Desarrollo de Economía Circular para el Bienestar, de la Semarnat | 3 | 2 mar 2026 · 27 jul 2026 |
+
+Se tomaron **todos los declarados en el DOF hasta el 19 de noviembre de 2026**, buscando en el
+propio Diario Oficial "Polo de Desarrollo … Bienestar": 33 declaratorias, de las que una (el
+polo de economía circular Parque Hidalgo) fue abrogada. Un polo anunciado sin declaratoria no
+tiene todavía terreno ni ubicación, así que no entra (ver al final de la sección).
+
+### Cómo se ubicaron
+
+Cada declaratoria trae un **cuadro de construcción**: la lista de vértices del polígono del
+terreno, con sus coordenadas. Se leyeron con un programa —no a mano— desde la página de cada
+nota en el DOF, se cerró cada polígono y se calcularon su área y su centroide:
+
+1. **El punto del polo es el centroide de su polígono más grande.** Un polo puede ser varios
+   terrenos (Altamira son cuatro en 18 km); el centroide de todos juntos podría caer en un
+   terreno ajeno.
+2. **Sistemas de coordenadas**: casi todas en UTM (WGS84), con la zona que dice el texto o, si
+   no la dice, la que pone el punto en el estado declarado. La de Cancún viene en la cónica
+   conforme de Lambert del INEGI, la misma proyección del tablero.
+3. **Comprobación**: el área calculada del polígono contra la superficie que declara el
+   documento. Coinciden dentro de ±5 % en 27 de los 29 cuadros leídos, muchas al centésimo de
+   hectárea (Tuxpan 235.10 ha, Reserva Zapotlán 910.82, Chetumal 87.80). Las dos excepciones
+   no afectan la ubicación: Texistepec da 9 % de más porque el DOF le descuenta 14 ha de derecho
+   de vía del tren, y del de Puebla se leyó el 79 % de sus cinco polígonos. Además, **los 32 caen
+   dentro de su estado** en el tablero.
+4. **Erratas del DOF**: un vértice a kilómetros de sus dos vecinos, que están cerca entre sí, es
+   un dígito equivocado en el documento y se descarta. Hubo dos: el vértice 81 de Ciudad Ixtepec
+   (20 km fuera) y el cierre de Matías Romero, donde el vértice 1A se repite 57 km al sur de donde
+   empezó la tabla.
+
+Notas de la tabla:
+
+- ¹ **Santa María Mixtequilla y Ciudad Ixtepec** traen sus coordenadas en el sistema **TME
+  (Transversal Modificado Ejidal)** del Registro Agrario, cuyo meridiano central es el de cada
+  ejido y no se publica. La latitud sí es exacta. La longitud se fijó poniendo el vértice sur
+  de cada polígono sobre la autopista MEX-185D (trazo de OpenStreetMap), que es donde lo muestran
+  los croquis de las declaratorias. Comprobación: en Ixtepec, alinear en cambio el polígono con
+  el entronque MEX-185D / OAX 49 del croquis da un punto a 160 m de este.
+- ² **Economía Circular Quintana Roo** publica su cuadro como imagen: se transcribieron sus
+  vértices (UTM zona 16) y el área calculada, 39.90 ha, es exactamente la de la imagen.
+- ³ **San Jerónimo** está al pie de la frontera, que ahí corre por el paralelo 31°47′ N. La
+  frontera de Natural Earth que dibuja el tablero va ~1 km más al sur en ese tramo, así que el
+  centroide (al sur de la línea real) quedaba del lado de Estados Unidos del dibujo: el
+  marcador se bajó 750 m.
+
+**Corredor Interoceánico**
+
+| Polo | Municipio, estado | Superficie | Declaratoria (DOF) | Vía férrea más cercana |
+| --- | --- | ---: | --- | ---: |
+| Coatzacoalcos I | Coatzacoalcos, Veracruz | 258 ha | [12 may 2023](https://dof.gob.mx/nota_detalle.php?codigo=5688608&fecha=12/05/2023) | 1 km |
+| Coatzacoalcos II | Coatzacoalcos, Veracruz | 132 ha | [12 may 2023](https://dof.gob.mx/nota_detalle.php?codigo=5688609&fecha=12/05/2023) | < 1 km |
+| Salina Cruz | Salina Cruz, Oaxaca | 82.1 ha | [12 may 2023](https://dof.gob.mx/nota_detalle.php?codigo=5688610&fecha=12/05/2023) | 1 km |
+| San Blas Atempa | San Blas Atempa, Oaxaca | 332 ha | [12 may 2023](https://dof.gob.mx/nota_detalle.php?codigo=5688611&fecha=12/05/2023) | 3 km |
+| San Juan Evangelista | San Juan Evangelista, Veracruz | 360 ha | [12 may 2023](https://dof.gob.mx/nota_detalle.php?codigo=5688612&fecha=12/05/2023) | < 1 km |
+| Texistepec | Texistepec y Jáltipan de Morelos, Veracruz | 462 ha | [12 may 2023](https://dof.gob.mx/nota_detalle.php?codigo=5688613&fecha=12/05/2023) | 2 km |
+| Matías Romero Avendaño | Matías Romero Avendaño, Oaxaca | 179 ha | [11 oct 2023](https://dof.gob.mx/nota_detalle.php?codigo=5704695&fecha=11/10/2023) | 1 km |
+| Santa María Mixtequilla ¹ | Santa María Mixtequilla, Oaxaca | 502 ha | [11 oct 2023](https://dof.gob.mx/nota_detalle.php?codigo=5704696&fecha=11/10/2023) | 7 km |
+| Ciudad Ixtepec ¹ | Ciudad Ixtepec, Oaxaca | 413 ha | [11 oct 2023](https://dof.gob.mx/nota_detalle.php?codigo=5704697&fecha=11/10/2023) | 6 km |
+| Asunción Ixtaltepec | Asunción Ixtaltepec, Oaxaca | 246 ha | [16 oct 2023](https://dof.gob.mx/nota_detalle.php?codigo=5705269&fecha=16/10/2023) | 3 km |
+| Tapachula I | Tapachula, Chiapas | 263 ha | [8 abr 2025](https://dof.gob.mx/nota_detalle.php?codigo=5754325&fecha=08/04/2025) | 8 km |
+| Tapachula II | Tapachula, Chiapas | 150 ha | [8 abr 2025](https://dof.gob.mx/nota_detalle.php?codigo=5754326&fecha=08/04/2025) | 10 km |
+| Arriaga | Arriaga, Chiapas | 48.8 ha | [8 jun 2026](https://dof.gob.mx/nota_detalle.php?codigo=5789894&fecha=08/06/2026) | < 1 km |
+| Teapa | Teapa, Tabasco | 96.1 ha | [8 jun 2026](https://dof.gob.mx/nota_detalle.php?codigo=5789895&fecha=08/06/2026) | 1 km |
+
+**Plan México**
+
+| Polo | Municipio, estado | Superficie | Declaratoria (DOF) | Vía férrea más cercana |
+| --- | --- | ---: | --- | ---: |
+| Seybaplaya I | Seybaplaya, Campeche | 100 ha | [30 jun 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761459&fecha=30/06/2025) | 22 km |
+| San Jerónimo ³ | Juárez, Chihuahua | 60.3 ha | [30 jun 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761460&fecha=30/06/2025) | 10 km |
+| Reserva Zapotlán | Zapotlán de Juárez, Hidalgo | 911 ha | [30 jun 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761461&fecha=30/06/2025) | 1 km |
+| Capital de la Tecnología y la Sostenibilidad | San José Chiapa y Nopalucan, Puebla | 275 ha | [1 jul 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761567&fecha=01/07/2025) | 2 km |
+| Chetumal | Othón P. Blanco, Quintana Roo | 87.8 ha | [1 jul 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761568&fecha=01/07/2025) | 191 km |
+| Parque Industrial Bajío | Zinapécuaro, Michoacán | 342 ha | [7 jul 2025](https://dof.gob.mx/nota_detalle.php?codigo=5762147&fecha=07/07/2025) | 2 km |
+| Puerta Logística del Bajío | Celaya, Guanajuato | 52.4 ha | [21 jul 2025](https://dof.gob.mx/nota_detalle.php?codigo=5763405&fecha=21/07/2025) | 4 km |
+| Nezahualcóyotl | Nezahualcóyotl, Estado de México | 68.4 ha | [7 ago 2025](https://dof.gob.mx/nota_detalle.php?codigo=5764903&fecha=07/08/2025) | 6 km |
+| Huamantla | Huamantla, Tlaxcala | 53 ha | [14 ago 2025](https://dof.gob.mx/nota_detalle.php?codigo=5765468&fecha=14/08/2025) | < 1 km |
+| Tuxpan | Tuxpan, Veracruz | 235 ha | [26 ago 2025](https://dof.gob.mx/nota_detalle.php?codigo=5766562&fecha=26/08/2025) | 93 km |
+| Centro Logístico e Industrial de Durango | Durango, Durango | 315 ha | [26 ago 2025](https://dof.gob.mx/nota_detalle.php?codigo=5766563&fecha=26/08/2025) | 2 km |
+| Bienestar e Innovación de Hermosillo | Hermosillo, Sonora | 546 ha | [26 ago 2025](https://dof.gob.mx/nota_detalle.php?codigo=5766564&fecha=26/08/2025) | 3 km |
+| Altamira | Altamira, Tamaulipas | 1,638 ha | [21 oct 2025](https://dof.gob.mx/nota_detalle.php?codigo=5770448&fecha=21/10/2025) | 5 km |
+| Topolobampo | Ahome, Sinaloa | 278 ha | [20 mar 2026](https://dof.gob.mx/nota_detalle.php?codigo=5782770&fecha=20/03/2026) | < 1 km |
+| Distrito Financiero y Tecnológico de Cancún | Benito Juárez, Quintana Roo | 60.8 ha | [7 ago 2026](https://dof.gob.mx/nota_detalle.php?codigo=5795731&fecha=07/08/2026) | 128 km |
+
+**Economía circular**
+
+| Polo | Municipio, estado | Superficie | Declaratoria (DOF) | Vía férrea más cercana |
+| --- | --- | ---: | --- | ---: |
+| Economía Circular Puebla | San José Chiapa, Puebla | 40.4 ha | [2 mar 2026](https://dof.gob.mx/nota_detalle.php?codigo=5781224&fecha=02/03/2026) | < 1 km |
+| Economía Circular Tlaxcala | Atlangatepec, Tlaxcala | 20 ha | [8 jun 2026](https://dof.gob.mx/nota_detalle.php?codigo=5789881&fecha=08/06/2026) | 1 km |
+| Economía Circular Quintana Roo ² | Puerto Morelos, Quintana Roo | 39.9 ha | [27 jul 2026](https://dof.gob.mx/nota_detalle.php?codigo=5794759&fecha=27/07/2026) | 128 km |
+
+Total: 32 polos, 8,647 ha.
+
+Los enlaces llevan a cada declaratoria en el DOF. Topolobampo usa el polígono del acuerdo que la
+modificó el 29 de abril de 2026; Reserva Zapotlán y Capital de la Tecnología tienen notas
+aclaratorias (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+
+### Lo que dicen
+
+- **Casi todos están junto al tren**: 27 de los 32 quedan a 15 km o menos de una vía (el
+  alcance de una estación en el juego) y 15 a 2 km o menos. Los del Istmo están literalmente
+  sobre la Línea Z.
+- **Los que no tienen vía**: Chetumal (191 km), Cancún (128) y Economía Circular Quintana Roo
+  (128) esperan al Tren Maya, que es posterior a 2018 y por lo tanto le toca al jugador; Tuxpan
+  (93 km) y Seybaplaya (22 km) no tienen vía en la red base.
+- **Nueve quedan a 25 km o menos de un puerto del juego**: los dos de Coatzacoalcos, Salina
+  Cruz, San Blas Atempa, los dos de Tapachula (junto a Puerto Chiapas), Tuxpan, Altamira y
+  Topolobampo.
+
+### Anunciados sin declaratoria
+
+La lámina de la Secretaría de Economía del 22 de mayo de 2025 mostraba polos que no tienen
+declaratoria al 19 de noviembre de 2026 y por eso no están en el tablero: Tula (Hidalgo),
+zona metropolitana de Mérida, Lázaro Cárdenas–La Unión (Guerrero), Zona Carbonífera (Coahuila)
+y una tercera etapa por estados. Otros sí se declararon, pero con otro nombre o en otro
+municipio: "Juárez" es San Jerónimo, "AIFA" es Reserva Zapotlán, "Ciudad Modelo" es Capital de
+la Tecnología (San José Chiapa), "Celaya" es Puerta Logística del Bajío y "Morelia" es el Parque
+Industrial Bajío, en Zinapécuaro. El de Cancún no estaba en esa lámina.
+
+---
+
+## 6. Red ferroviaria
 
 ### Origen
 
 Las vías son las de Norteamérica de Natural Earth, que provienen del Atlas Ambiental de
 América del Norte de la CCA ([Fuentes](#1-fuentes)). Es una red de **alrededor de 2010**: no
 incluye obras recientes como el Tren Maya. Eso es deliberado en el juego: ver
-[Decisiones de diseño](#10-decisiones-de-diseño).
+[Decisiones de diseño](#11-decisiones-de-diseño).
 
 ### Vías primarias y secundarias
 
@@ -327,7 +469,7 @@ Villahermosa.
 
 ---
 
-## 6. Servicios de tren
+## 7. Servicios de tren
 
 El tablero arranca con **8 servicios de carga** sobre corredores reales. Solo se definen las
 paradas: el camino entre ellas lo calcula el juego (la ruta más rápida por la red).
@@ -367,7 +509,7 @@ operadores no aparecen en el juego.
 
 ---
 
-## 7. Rutas marítimas
+## 8. Rutas marítimas
 
 ### Cómo se calculan
 
@@ -468,7 +610,7 @@ el estrecho antes de salir del tablero.
 
 ---
 
-## 8. Barcos
+## 9. Barcos
 
 ### Clases
 
@@ -549,7 +691,7 @@ la cámara del tablero se queda esperándolo en la salida.
 
 ---
 
-## 9. Reglas de la simulación
+## 10. Reglas de la simulación
 
 | Regla | Valor |
 | --- | --- |
@@ -577,9 +719,14 @@ como lo haría un despachador.
 | Escala en un puerto | La de su clase (14 a 36 h) |
 | Salida al mundo | Escala en su puerto lejano: el barco navega la travesía calculada a la velocidad de su clase, hace 48 h de escala allá (sea cual sea la clase) y vuelve |
 | Servicio | Circular: A → B → C → A… |
-| Cómo se elige la ruta | La ruta marítima calculada para ese par de puntos, más la travesía si un extremo es una salida (ver [Rutas marítimas](#7-rutas-marítimas)) |
+| Cómo se elige la ruta | La ruta marítima calculada para ese par de puntos, más la travesía si un extremo es una salida (ver [Rutas marítimas](#8-rutas-marítimas)) |
 | En pantalla | Un casco con proa, orientado a su rumbo, con estela; del mismo tamaño en pantalla a cualquier zoom en el globo, y un poco mayor al acercarte en los mapas planos |
 | Resultado medido | En 3,000 h simuladas con los 6 barcos: 166 escalas (10 de ellas en Shanghái o Róterdam), 40 % del tiempo fuera del tablero |
+
+**Polos del Bienestar:** por construir. No son parada de trenes ni escala de barcos, no tienen
+estación y no producen ni piden carga todavía. Al trazar un servicio se atenúan, y elegirlos
+dice "Polo por construir". Su ficha dice el programa, la superficie, la fecha de su
+declaratoria y a cuántos km pasa la vía.
 
 Los trenes y los barcos comparten el mismo motor de servicios (`domain/servicio.ts`): un
 vehículo recorre sus piernas, espera en cada parada lo que le toca y sigue. Solo cambia cómo
@@ -587,7 +734,7 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
 
 ---
 
-## 10. Decisiones de diseño
+## 11. Decisiones de diseño
 
 - **La red base es la anterior a 2018; lo posterior lo construye el jugador.** *(19 nov
   2026.)* Las vías hechas de 2018 en adelante no están en el mapa a propósito: construirlas
@@ -596,6 +743,11 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
   trazos, fechas y longitudes de esas obras se documentarán aquí cuando se diseñe la mecánica
   de construcción. Los dos tramos trazados a mano (Cuyutlán–Manzanillo y el ramal de
   Altamira) son anteriores a 2018, así que respetan la regla.
+- **Los Polos del Bienestar los construye el jugador; el juego solo dice dónde estarán.**
+  *(19 nov 2026.)* Es la misma regla que las vías: lo hecho de 2018 en adelante es del
+  jugador. Cada polo está donde lo pone su declaratoria en el DOF (el centroide de su
+  polígono), no en el centro de su municipio. Solo entran los declarados: un polo anunciado
+  sin declaratoria no tiene terreno todavía.
 - **Puertos en la terminal o en la bocana**, no en el centro de la ciudad: es a donde llegan
   los barcos.
 - **El juego es México; el mundo entra por dos salidas.** Los barcos que van a Asia o a
@@ -619,13 +771,15 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
   cambian solas.
 - **Sin nombres de empresas.** Los corredores son reales; los operadores no aparecen.
 - **El color significa algo.** Lo marítimo es cian (cada barco tiene su propio tono frío), lo
-  ferroviario es ámbar (cada tren tiene su propio tono cálido) y las ciudades son tinta clara.
+  ferroviario es ámbar (cada tren tiene su propio tono cálido), las ciudades son tinta clara y
+  los Polos del Bienestar, rosa guinda (el color del programa, aclarado para leerse sobre el
+  mar oscuro), punteados mientras no se construyan.
 - **Las estaciones llegan hasta 15 km.** Más lejos, el sitio no tiene servicio de tren y su
   ficha dice a cuántos km queda la vía.
 
 ---
 
-## 11. Bitácora de correcciones a los datos
+## 12. Bitácora de correcciones a los datos
 
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
@@ -669,7 +823,7 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 
 **Rutas marítimas**
 
-- **Canal de Panamá abierto a mano** sobre su trazo real (ver [Rutas marítimas](#7-rutas-marítimas)):
+- **Canal de Panamá abierto a mano** sobre su trazo real (ver [Rutas marítimas](#8-rutas-marítimas)):
   en la fuente, y a esta escala, el istmo es tierra continua.
 - **Salidas al mundo** definidas a mano en `puertas.json`: Asia en 23.5° N · 118.2° O (se
   movió desde 119.5° O para que quede a la vista junto al panel de la izquierda) y Europa en
@@ -683,6 +837,26 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Travesías calculadas** de cada salida a su puerto lejano (ver
   [Salidas al mundo y travesías oceánicas](#salidas-al-mundo-y-travesías-oceánicas)). Las 136
   rutas de México no cambiaron.
+
+**Polos del Bienestar**
+
+- Se ubicaron con el **cuadro de construcción de su declaratoria** (ver
+  [Polos del Bienestar](#5-polos-del-bienestar)).
+- **Erratas del DOF descartadas**: el vértice 81 de Ciudad Ixtepec (un dígito de más en el
+  norte lo mandaba 20 km fuera) y el vértice de cierre de Matías Romero (1A repetido con
+  y = 1,847,912.785 en lugar de 1,905,075.739: 57 km al sur).
+- **Ciudad Ixtepec y Santa María Mixtequilla**, en coordenadas TME sin meridiano publicado: la
+  longitud se fijó contra la autopista MEX-185D de OpenStreetMap.
+- **Economía Circular Quintana Roo**: cuadro transcrito de la imagen del DOF.
+- **San Jerónimo**: el marcador se bajó 750 m para quedar del lado mexicano de la frontera del
+  tablero (la de Natural Earth corre ahí ~1 km al sur de la real).
+- **Topolobampo**: se usa el polígono del acuerdo que modificó su declaratoria (29 abr 2026).
+- **Reserva Zapotlán**: su nota aclaratoria (29 jul 2025) corrige la superficie a 9,108,169.94
+  m² (910.82 ha) y el municipio a Zapotlán de Juárez; el polígono calculado da exactamente eso.
+- **Capital de la Tecnología y la Sostenibilidad** (Puebla): su nota aclaratoria (29 jul 2025)
+  le quita el "Futura" del nombre.
+- **Parque Hidalgo** (economía circular, Tlaxcoapan y Atitalaquia, 275 ha), declarado el 1 de
+  agosto de 2025, **no está**: su declaratoria se abrogó el 23 de julio de 2026.
 
 **Vías férreas**
 
@@ -706,14 +880,22 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ---
 
-## 12. Glosario
+## 13. Glosario
 
 - **Nodo**: punto de la red donde algo cambia: un entronque, el final de una línea o el
   punto donde una vía pasa de primaria a secundaria.
 - **Tramo**: la vía entre dos nodos.
 - **Estación**: el punto de la vía que da servicio a un sitio; puede partir un tramo en dos.
-- **Sitio**: una ciudad, un puerto o una salida al mundo. Cada uno tiene una clave única,
-  como `puerto:veracruz`, `ciudad:veracruz` o `puerta:asia`.
+- **Sitio**: una ciudad, un puerto, una salida al mundo o un Polo del Bienestar. Cada uno
+  tiene una clave única, como `puerto:veracruz`, `ciudad:veracruz`, `puerta:asia` o
+  `polo:tuxpan`.
+- **Polo del Bienestar**: parque industrial declarado por el gobierno federal en el DOF; en el
+  juego, un sitio por construir.
+- **Declaratoria**: el acuerdo publicado en el DOF que crea un polo y delimita su terreno.
+- **Cuadro de construcción**: la tabla de una declaratoria con los vértices del polígono del
+  terreno: rumbos, distancias y coordenadas.
+- **TME (Transversal Modificado Ejidal)**: sistema de coordenadas del Registro Agrario
+  Nacional, con el meridiano central de cada ejido.
 - **Servicio**: la lista de paradas que recorre un vehículo. Un tren las recorre de ida y de
   vuelta; un barco, en circuito.
 - **Escala**: una parada de barco en un puerto.

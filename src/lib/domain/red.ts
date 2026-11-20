@@ -70,6 +70,11 @@ export type Red = {
   estaciones: Map<string, Estacion>;
   /** By site key; sites out of reach, with how far the nearest track is. */
   sinEstacion: Map<string, number>;
+  /**
+   * By site key, for the Polos del Bienestar: how far the nearest track is.
+   * They get no station yet — nothing is built there until the player builds it.
+   */
+  aLaVia: Map<string, number>;
 };
 
 // ---- geometry helpers -------------------------------------------------------------
@@ -108,6 +113,7 @@ export function construirRed(json: RedJson, sitios: readonly Sitio[]): Red {
 
   const estaciones = new Map<string, Estacion>();
   const sinEstacion = new Map<string, number>();
+  const aLaVia = new Map<string, number>();
 
   // Gateways are out at sea and never get a station.
   for (const s of sitios.filter((x) => x.tipo !== 'puerta')) {
@@ -118,6 +124,10 @@ export function construirRed(json: RedJson, sitios: readonly Sitio[]): Red {
         const hit = sobreSegmento(s.lonLat, t.puntos[i], t.puntos[i + 1]);
         if (hit.km < best.km) best = { km: hit.km, tramo: t.id, seg: i, u: hit.u };
       }
+    }
+    if (s.tipo === 'polo') {
+      aLaVia.set(s.clave, best.km);
+      continue;
     }
     if (best.km > ESTACION_MAX_KM) {
       sinEstacion.set(s.clave, best.km);
@@ -168,7 +178,7 @@ export function construirRed(json: RedJson, sitios: readonly Sitio[]): Red {
     c++;
   }
 
-  return { nodos, tramos, ady, componente, estaciones, sinEstacion };
+  return { nodos, tramos, ady, componente, estaciones, sinEstacion, aLaVia };
 }
 
 // ---- routing ------------------------------------------------------------------------------

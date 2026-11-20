@@ -11,6 +11,8 @@ país. Dos escalas de la misma geografía:
   en la proyección cónica de Lambert del INEGI, con **trenes de carga** corriendo por las
   vías reales y **barcos** navegando rutas marítimas calculadas (por el Canal de Panamá de
   costa a costa, y hacia Asia y Europa por dos salidas al mundo), bajo un reloj de juego.
+  Encima, los **32 Polos del Bienestar** declarados en el DOF, donde dicen sus declaratorias,
+  esperando a que el jugador los construya.
 
 **[Enciclopedia del juego](docs/enciclopedia.md)**: qué puertos, ciudades, vías, rutas y
 servicios hay, de qué fuente sale cada dato, qué se corrigió a mano y las reglas de la simulación. Se
@@ -58,11 +60,12 @@ saltar al siguiente libre.
 - Misma maquinaria que el mundo plano: la geometría se hornea en `Path2D` una sola vez y el
   zoom se aplica al contexto; pinta solo cuando algo cambia. Zoom hasta 40×.
 - **El color significa algo** y las capas que vengan deben respetarlo: lo marítimo es cian
-  (`--accent`), lo ferroviario es ámbar (`--warn`), las ciudades son tinta clara.
+  (`--accent`), lo ferroviario es ámbar (`--warn`), las ciudades son tinta clara y los Polos
+  del Bienestar rosa guinda (`POLO`), punteados mientras estén por construir.
 - Capas: estados (con hover y clic para acercar), frontera terrestre punteada, costa como
   línea de luz, vías férreas (primarias más intensas y gruesas que secundarias; con
   durmientes a partir de 4×; estaciones sobre la vía a partir de 3.5×), puertos (rombo con halo; los cuatro principales más grandes), ciudades (anillo + punto
-  para capitales). Cada capa se apaga desde el panel.
+  para capitales), polos (hexágono punteado). Cada capa se apaga desde el panel.
 - Etiquetas con colisión: cada una prueba cuatro posiciones alrededor de su punto y gana la
   de mayor prioridad (puertos > capital del país > capitales > ciudades por población >
   estados > mares y países). Una ciudad portuaria (Veracruz, Mazatlán…) se etiqueta una sola
@@ -169,6 +172,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
 | `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
+| `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
 
 `npm run datos` (`scripts/datos-mexico.mjs`) regenera los cuatro primeros desde **Natural
 Earth 10m**, fijado a un commit de `nvkelso/natural-earth-vector`. Baja ~85 MB una sola vez a
@@ -180,6 +184,17 @@ Los puertos van a mano porque la capa de puertos de Natural Earth no trae ni Lá
 ni Altamira. Coordenadas de la terminal; los puertos de río (Altamira, Tampico, Tuxpan) y
 Topolobampo, al fondo de una bahía, están en su bocana, que es a donde llega un barco. Están
 en JSON (no en TS) porque el script los lee para calcular las rutas marítimas.
+
+**Los Polos del Bienestar** (`polos.json`) no los genera `npm run datos`: se sacaron una vez
+de sus declaratorias en el DOF (los tres programas: Corredor Interoceánico, Plan México y
+economía circular, todos los declarados al 19 de noviembre de 2026). Cada declaratoria trae el
+cuadro de construcción del terreno; se leyó con un programa, se cerró cada polígono y el polo
+va en el centroide del mayor, comprobando el área contra la declarada y que caiga en su
+estado. Las excepciones (dos en coordenadas TME sin meridiano, uno con el cuadro en imagen, uno
+al pie de la frontera, dos erratas del DOF) y la tabla completa están en la
+[enciclopedia](docs/enciclopedia.md#5-polos-del-bienestar). En el juego son sitios
+(`polo:<id>`) **por construir**: no son parada ni tienen estación; la red solo mide a cuántos
+km pasa la vía (`Red.aLaVia`).
 
 **Las rutas marítimas** se calculan sobre la misma tierra del tablero: malla de 0.05° (~5.5
 km) donde una celda es tierra si su centro cae en tierra o si la toca una costa; el **Canal de
@@ -227,7 +242,7 @@ scripts/
 src/lib/
   domain/            TypeScript puro, sin nada de UI ni de render
     geo.ts           LonLat, distancia, interpolación por gran círculo, rumbo, lon/lat ↔ vec3
-    sitios.ts        ciudades, puertos, salidas al mundo y un registro común por clave
+    sitios.ts        ciudades, puertos, salidas al mundo, polos y un registro común por clave
     trayecto.ts      un recorrido como polilínea con velocidad por segmento; avanzar sobre él
     servicio.ts      el motor común: un vehículo recorriendo sus paradas (ida y vuelta o circuito)
     red.ts           grafo ferroviario, estaciones, ruta más rápida
@@ -317,11 +332,13 @@ costa del mundo solo sube de resolución). Además:
 
 ## Siguiente
 
-- **Construir vías.** La red base es la anterior a 2018 a propósito: lo que se construyó de
+- **Construir.** La red base es la anterior a 2018 a propósito: lo que se construyó de
   2018 en adelante (el Tren Maya, las líneas nuevas del Corredor Interoceánico…) lo
   construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
-  cambia sola.
+  cambia sola. Los Polos del Bienestar ya están ubicados y esperan lo mismo: construir uno le
+  daría estación (27 de los 32 quedan a 15 km o menos de una vía) y, con la carga, producción.
 - **Carga**: qué lleva cada tren y cada barco (contenedores, granel, autos, combustibles),
   cuánto cabe y quién lo demanda; hoy corren sus servicios sin carga. El puerto es donde
   barco y tren se pasan la carga.
-- **Sitios**: que el jugador pueda colocar los suyos (bodegas, plantas, terminales).
+- **Sitios**: que el jugador pueda colocar los suyos (bodegas, plantas, terminales), además de
+  los polos.

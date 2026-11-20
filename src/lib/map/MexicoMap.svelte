@@ -12,10 +12,13 @@
   import {
     CIUDAD_DEL_PUERTO,
     CIUDADES,
+    POLOS,
+    PROGRAMAS_POLO,
     PUERTAS,
     PUERTO_DE_LA_CIUDAD,
     PUERTOS,
     type Ciudad,
+    type Polo,
     type Puerta,
     type Puerto,
   } from '$lib/domain/sitios';
@@ -44,10 +47,15 @@
    *
    * Colour carries meaning: sea things are cyan (`--accent`) — each ship gets
    * its own cool tint — rail things are amber (`--warn`) — each train its own
-   * warm tint — and cities are ink.
+   * warm tint — cities are ink, and the Polos del Bienestar, still to be built
+   * by the player, are rose (`POLO`) and dashed.
    */
 
   // ---- constants ---------------------------------------------------------
+
+  /** The Polos del Bienestar's colour: a light guinda, the programme's own hue made to read on the dark sea. */
+  const POLO = '#f472b6';
+  const POLO_CLARO = '#ffe4f1';
 
   /**
    * INEGI's Lambert conformal conic for the whole country (standard parallels
@@ -133,14 +141,15 @@
 
   // ---- state --------------------------------------------------------------
 
-  type Layers = { estados: boolean; vias: boolean; puertos: boolean; ciudades: boolean };
-  let layers = $state<Layers>({ estados: true, vias: true, puertos: true, ciudades: true });
+  type Layers = { estados: boolean; vias: boolean; puertos: boolean; ciudades: boolean; polos: boolean };
+  let layers = $state<Layers>({ estados: true, vias: true, puertos: true, ciudades: true, polos: true });
 
   type Target =
     | { kind: 'unidad'; unidad: Unidad }
     | { kind: 'puerta'; puerta: Puerta }
     | { kind: 'puerto'; puerto: Puerto }
     | { kind: 'ciudad'; ciudad: Ciudad }
+    | { kind: 'polo'; polo: Polo }
     | { kind: 'estado'; estado: EstadoProps };
 
   let host = $state.raw<HTMLDivElement>();
@@ -200,6 +209,7 @@
   let ciudadPts: [number, number][] = [];
   let puertoPts: [number, number][] = [];
   let puertaPts: [number, number][] = [];
+  let poloPts: [number, number][] = [];
   /** Station on the track and the site it serves, both in path space. */
   let estacionPts: { clave: string; via: [number, number]; sitio: [number, number]; km: number }[] = [];
   /** Where each vehicle's head was drawn last frame, for hit-testing. */
@@ -241,6 +251,7 @@
     ciudadPts = CIUDADES.map((c) => projection!(c.lonLat) ?? [NaN, NaN]);
     puertoPts = PUERTOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     puertaPts = PUERTAS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
+    poloPts = POLOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     applyTranslateExtent();
     bake();
     bakeRed();
@@ -324,6 +335,7 @@
     const [tipo, id] = clave.split(':');
     if (tipo === 'puerto') return PUERTOS.find((p) => p.id === id)?.lonLat ?? null;
     if (tipo === 'puerta') return PUERTAS.find((p) => p.id === id)?.lonLat ?? null;
+    if (tipo === 'polo') return POLOS.find((p) => p.id === id)?.lonLat ?? null;
     return CIUDADES.find((c) => c.id === id)?.lonLat ?? null;
   }
 
@@ -548,6 +560,19 @@
   function cityRadius(c: Ciudad): number {
     if (c.capital === 'pais') return 4.2;
     return Math.min(3.6, 1.7 + Math.max(0, Math.log10(c.poblacion / 1e5)) * 1.1);
+  }
+
+  /** A flat-topped hexagon: the polos' symbol, an industrial lot rather than a town or a port. */
+  function hexagono(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = (i * Math.PI) / 3;
+      const px = x + r * Math.cos(a);
+      const py = y + r * Math.sin(a);
+      if (i) ctx.lineTo(px, py);
+      else ctx.moveTo(px, py);
+    }
+    ctx.closePath();
   }
 
   const spotsAround = (x: number, y: number, r: number): Spot[] => [
@@ -818,6 +843,45 @@
           font: `${big ? 700 : c.capital ? 600 : 500} ${big ? 12 : 11}px Inter, "Segoe UI", system-ui, sans-serif`,
           color: hot ? '#ffffff' : c.capital ? 'rgba(233, 243, 255, 0.92)' : 'rgba(200, 220, 240, 0.78)',
           priority: (hot ? 1e9 : 0) + (big ? 1e8 : 0) + c.poblacion / 10 + (c.capital ? 2e6 : 0),
+          halo: true,
+        });
+      });
+    }
+
+    // Polos del Bienestar: a dashed hexagon — a lot with nothing built on it
+    // yet. Never a stop, so faded while picking stops.
+    if (layers.polos) {
+      POLOS.forEach((p, i) => {
+        const x = sx(poloPts[i]);
+        const y = sy(poloPts[i]);
+        if (!onScreen(x, y)) return;
+        const hot = hovered?.kind === 'polo' && hovered.polo.id === p.id;
+        const r = hot ? 6.4 : 5.4;
+        ctx.globalAlpha = trazando ? 0.3 : 1;
+        hexagono(ctx, x, y, r);
+        ctx.fillStyle = hot ? 'rgba(244, 114, 182, 0.3)' : 'rgba(244, 114, 182, 0.14)';
+        ctx.fill();
+        ctx.setLineDash([2.2, 1.6]);
+        ctx.strokeStyle = hot ? POLO_CLARO : POLO;
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = hot ? POLO_CLARO : POLO;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        const R = r + 2;
+        taken.push([x - R, y - R, x + R, y + R]);
+        if (trazando) return;
+        labels.push({
+          text: `Polo ${p.corto}`,
+          spots: spotsAround(x, y, R),
+          size: 10,
+          font: '600 10px Inter, "Segoe UI", system-ui, sans-serif',
+          color: hot ? '#ffffff' : 'rgba(249, 168, 212, 0.92)',
+          // Under ports, capitals and big cities; over estados, seas and countries.
+          priority: (hot ? 1e9 : 0) + 3e4 + p.hectareas,
           halo: true,
         });
       });
@@ -1321,6 +1385,17 @@
         }
       });
     }
+    // A polo is never a stop: while picking stops it can't steal the click
+    // from the port or station next to it.
+    if (layers.polos && !tablero.trazando) {
+      POLOS.forEach((p, i) => {
+        const d = Math.hypot(transform.applyX(poloPts[i][0]) - mx, transform.applyY(poloPts[i][1]) - my);
+        if (d < 9 && d < bestD) {
+          best = { kind: 'polo', polo: p };
+          bestD = d;
+        }
+      });
+    }
     if (best || tablero.trazando) return best;
     if (!baked) return null;
     hitCtx ??= document.createElement('canvas').getContext('2d');
@@ -1347,7 +1422,9 @@
           ? `puerto:${t.puerto.id}`
           : t.kind === 'ciudad'
             ? `ciudad:${t.ciudad.id}`
-            : `estado:${t.estado.clave}`;
+            : t.kind === 'polo'
+              ? `polo:${t.polo.id}`
+              : `estado:${t.estado.clave}`;
 
   /** The site key of a target, if it is a site. */
   const sitioDe = (t: Target | null): string | null =>
@@ -1357,7 +1434,9 @@
         ? `ciudad:${t.ciudad.id}`
         : t?.kind === 'puerta'
           ? `puerta:${t.puerta.id}`
-          : null;
+          : t?.kind === 'polo'
+            ? `polo:${t.polo.id}`
+            : null;
 
   function onPointerMove(event: PointerEvent) {
     if (!canvas || event.buttons) return; // no hover while dragging the map
@@ -1410,7 +1489,13 @@
       return;
     }
     const lonLat =
-      target.kind === 'puerto' ? target.puerto.lonLat : target.kind === 'puerta' ? target.puerta.lonLat : target.ciudad.lonLat;
+      target.kind === 'puerto'
+        ? target.puerto.lonLat
+        : target.kind === 'puerta'
+          ? target.puerta.lonLat
+          : target.kind === 'polo'
+            ? target.polo.lonLat
+            : target.ciudad.lonLat;
     const p = projection(lonLat);
     if (p) flyTo(p[0], p[1], Math.max(transform.k, target.kind === 'puerta' ? 3 : 9));
   }
@@ -1519,6 +1604,7 @@
     // What's drawn in the fondo over it: sites, stations, picked stops.
     layers.puertos;
     layers.ciudades;
+    layers.polos;
     tablero.paradas;
     tablero.candidato;
     ensucia();
@@ -1575,6 +1661,19 @@
     const lejos = red.sinEstacion.get(clave);
     return lejos === undefined ? '' : `Sin vía férrea · a ${Math.round(lejos)} km`;
   }
+
+  /** A polo's rail access, as its card says it: no station yet, only how far the track runs. */
+  function viaDelPolo(p: Polo): string {
+    const km = sim.red?.aLaVia.get(`polo:${p.id}`);
+    if (km === undefined) return '';
+    return km <= 2 ? 'Junto a la vía férrea' : `Vía férrea a ${Math.round(km)} km`;
+  }
+
+  const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  const fechaLarga = (iso: string) => {
+    const [a, m, d] = iso.split('-').map(Number);
+    return `${d} de ${MESES[m - 1]} de ${a}`;
+  };
 
   /** Live line for a hovered vehicle; reads the clock so it updates as it moves. */
   const lineaUnidad = $derived.by(() => {
@@ -1650,6 +1749,14 @@
       </span>
       {@const rail = lineaTrazado || servicio(`puerto:${hovered.puerto.id}`)}
       {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.pestaña === 'barco'}>{rail}</span>{/if}
+    {:else if hovered.kind === 'polo'}
+      {@const p = hovered.polo}
+      <span class="label tip-kind" style:color={POLO}>Polo del Bienestar · por construir</span>
+      <strong>{p.nombre}</strong>
+      <span class="tip-sub">{PROGRAMAS_POLO[p.programa]} · {p.municipio}, {estadoNombre.get(p.estado) ?? p.estado}</span>
+      <span class="tip-sub">{fmt.format(Math.round(p.hectareas))} ha · declaratoria del {fechaLarga(p.dof)}</span>
+      {@const via = viaDelPolo(p)}
+      {#if via}<span class="tip-rail">{via}</span>{/if}
     {:else if hovered.kind === 'ciudad'}
       <span class="label tip-kind">
         {hovered.ciudad.capital === 'pais' ? 'Capital del país' : hovered.ciudad.capital === 'estado' ? 'Capital estatal' : 'Ciudad'}
@@ -1677,6 +1784,7 @@
   {:else}
     <span class="stat"><b class="mono">{PUERTOS.length}</b> puertos</span>
     <span class="stat"><b class="mono">{CIUDADES.length}</b> ciudades</span>
+    <span class="stat"><b class="mono">{POLOS.length}</b> polos</span>
     <span class="stat"><b class="mono">{fmt.format(kmDeVia)}</b> km de vía</span>
     <span class="stat"><b class="mono">{sim.trenes.length}</b> trenes</span>
     <span class="stat"><b class="mono">{sim.barcos.length}</b> barcos</span>
@@ -1695,6 +1803,17 @@
   </button>
   <button class="ctl" aria-pressed={layers.ciudades} onclick={() => (layers.ciudades = !layers.ciudades)}>
     <span class="sw sw-ciudades"></span>Ciudades
+  </button>
+  <button class="ctl" aria-pressed={layers.polos} onclick={() => (layers.polos = !layers.polos)}>
+    <svg class="sw" width="12" height="11" viewBox="0 0 12 11" aria-hidden="true">
+      <polygon
+        points="11,5.5 8.5,9.8 3.5,9.8 1,5.5 3.5,1.2 8.5,1.2"
+        fill="rgba(244, 114, 182, 0.16)"
+        stroke={POLO}
+        stroke-width="1.3"
+        stroke-dasharray="2 1.4"
+      />
+    </svg>Polos
   </button>
   <span class="sep"></span>
   <span class="label mono">{transform.k.toFixed(1)}×</span>
