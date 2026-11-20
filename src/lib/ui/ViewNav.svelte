@@ -72,7 +72,7 @@
   >
     <!-- An eye under a stepped brow: the stepped fret of Mesoamerican temples
          and codices, read as "looking out" over the land. -->
-    <svg class="ojo" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <svg class="ojo" viewBox="0 0 24 24" width="25" height="25" aria-hidden="true">
       <path d="M3 7.5h3.5v-2h3v-2h5v2h3v2H21" />
       <path d="M2.5 14c3.5-4.6 15.5-4.6 19 0-3.5 4-15.5 4-19 0Z" />
       <circle cx="12" cy="12.9" r="2.7" />

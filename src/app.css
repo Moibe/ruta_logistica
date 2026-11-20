@@ -18,7 +18,7 @@
   /* The encyclopedia button in the top-right corner (Libro); Erario sits left of it. */
   --libro: 3.55rem;
   /* The views pill in the bottom-left corner (ViewNav); the board stats sit right of it. */
-  --vistas: 8.9rem;
+  --vistas: 9.2rem;
   --vistas-alto: 2.35rem;
   --line: rgba(126, 190, 255, 0.14);
   --glass: rgba(10, 24, 42, 0.62);
