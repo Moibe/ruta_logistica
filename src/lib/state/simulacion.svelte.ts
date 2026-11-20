@@ -15,6 +15,7 @@ import {
   type ObraViaEstado,
   type PresupuestoVia,
 } from '$lib/domain/obrasVia';
+import { fechaCorta, horaDelDia } from '$lib/domain/calendario';
 import { avanzar } from '$lib/domain/servicio';
 import {
   avanzarObra,
@@ -38,7 +39,7 @@ const HORAS_POR_SEGUNDO = 1;
 
 export const VELOCIDADES = [0, 0.25, 1, 4, 16] as const;
 
-/** The game opens on day 1 at six in the morning. */
+/** The game opens on 1 January 2019 at six in the morning. */
 const HORA_INICIAL = 6;
 
 export type Unidad = Tren | Barco;
@@ -117,14 +118,13 @@ class Simulacion {
     return this.estado === 'lista' && this.multiplicador > 0;
   }
 
-  get dia(): number {
-    return Math.floor(this.horas / 24) + 1;
+  /** "3 mar 2019": the game opens on 1 January 2019 (`calendario.ts`). */
+  get fecha(): string {
+    return fechaCorta(this.horas);
   }
 
   get reloj(): string {
-    const h = Math.floor(this.horas % 24);
-    const m = Math.floor((this.horas % 1) * 60);
-    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    return horaDelDia(this.horas);
   }
 
   get unidades(): Unidad[] {

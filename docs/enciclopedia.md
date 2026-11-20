@@ -991,7 +991,7 @@ la cámara del tablero se queda esperándolo en la salida.
 
 | Regla | Valor |
 | --- | --- |
-| Inicio de la partida | Día 1, 06:00 |
+| Inicio de la partida | 1 de enero de 2019, 06:00: la red es la de 2018 y lo que sigue lo construye el jugador |
 | Reloj | 1× = 1 hora de juego por segundo; velocidades: pausa, ¼×, 1×, 4×, 16×; la barra espaciadora pausa |
 | Cuándo corre | Con cualquier vista del juego abierta: el tablero o las dos vistas del mundo (donde también navegan los barcos) |
 | Velocidad en vía primaria | 60 km/h |

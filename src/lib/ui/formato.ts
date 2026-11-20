@@ -1,3 +1,4 @@
+import { fechaCorta, horaDelDia } from '$lib/domain/calendario';
 import { enElCanal, enTravesia, KM_POR_MILLA } from '$lib/domain/barcos';
 import { horasAProxima, paradaActual, proximaParada } from '$lib/domain/servicio';
 import { nombreCorto } from '$lib/domain/sitios';
@@ -41,12 +42,9 @@ export function duracion(horas: number): string {
   return h % 24 ? `${d} d ${h % 24} h` : `${d} d`;
 }
 
-/** A moment of game time as "Día 3 · 14:05". */
+/** A moment of game time as "3 mar 2019 · 14:05". */
 export function horaDeJuego(horas: number): string {
-  const dia = Math.floor(horas / 24) + 1;
-  const h = Math.floor(horas % 24);
-  const m = Math.floor((horas % 1) * 60);
-  return `Día ${dia} · ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  return `${fechaCorta(horas)} · ${horaDelDia(horas)}`;
 }
 
 /** One line for a train or ship: where it is or where it's headed, and when. */

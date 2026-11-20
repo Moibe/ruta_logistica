@@ -2,7 +2,7 @@
   import { sim, VELOCIDADES } from '$lib/state/simulacion.svelte';
 
   /**
-   * The game clock: day and time, and how fast it runs. 1× is one game hour
+   * The game clock: date and time (from 1 January 2019), and how fast it runs. 1× is one game hour
    * per second; the space bar pauses and resumes.
    */
   const etiqueta = (v: number) => (v === 0 ? '❚❚' : v === 0.25 ? '¼×' : `${v}×`);
@@ -22,9 +22,8 @@
 
 <div class="reloj panel">
   <div class="tiempo">
-    <span class="label">Día</span>
-    <span class="mono big">{sim.dia}</span>
-    <span class="mono big dim">{sim.reloj}</span>
+    <span class="label fecha">{sim.fecha}</span>
+    <span class="mono big">{sim.reloj}</span>
   </div>
   <div class="velocidades">
     {#each VELOCIDADES as v, i (v)}
@@ -57,17 +56,18 @@
 
   .tiempo {
     display: flex;
-    align-items: baseline;
-    gap: 0.4rem;
+    flex-direction: column;
+    gap: 0.05rem;
     white-space: nowrap;
   }
 
   .big {
     font-size: 1rem;
+    line-height: 1.1;
   }
 
-  .dim {
-    color: var(--muted);
+  .fecha {
+    font-size: 0.6rem;
   }
 
   .velocidades {
