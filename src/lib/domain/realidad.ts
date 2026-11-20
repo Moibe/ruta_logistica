@@ -1,5 +1,7 @@
 import VIAS from './datos/obras-via-real.json';
 import CENTRALES from './datos/centrales-real.json';
+import POLOS_REAL from './datos/polos-real.json';
+import POLOS_JSON from './datos/polos.json';
 import { horasDeFecha } from './calendario';
 
 /**
@@ -23,6 +25,8 @@ type ObraRealJson = {
   /** The start isn't published: the first date a source reports it under way. */
   enObraAl?: string;
   operacion?: string;
+  /** Steps that don't change its stage (a tender awarded), oldest first. */
+  hitos?: { fecha: string; texto: string }[];
   /** A part of it opened before the whole. */
   parcial?: { fecha: string; texto: string };
   /** Official progress figures, oldest first. */
@@ -35,17 +39,37 @@ type ObraRealJson = {
   fuentes: string[];
 };
 type RealJson = { corte: string; nota: string; fuentes: Record<string, Fuente>; obras: Record<string, ObraRealJson> };
+const MESES_DOF = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const vias = VIAS as unknown as RealJson;
 const centrales = CENTRALES as unknown as RealJson;
-/** Both records in one: rail works and plants have different ids, and the sources different keys. */
+const polos = POLOS_REAL as unknown as RealJson;
+/**
+ * Every record in one: rail works and plants by their own ids, polos as
+ * `polo:<id>`. A polo is announced on the day of its declaratoria in the DOF
+ * (`polos.json`); `polos-real.json` adds what happened after.
+ */
 const REAL: RealJson = {
   corte: vias.corte,
   nota: vias.nota,
-  fuentes: { ...vias.fuentes, ...centrales.fuentes },
+  fuentes: { ...vias.fuentes, ...centrales.fuentes, ...polos.fuentes },
   obras: { ...vias.obras, ...centrales.obras },
 };
+for (const p of POLOS_JSON as { id: string; nombre: string; dof: string; codigo: number }[]) {
+  const [a, m, d] = p.dof.split('-');
+  REAL.fuentes[`dof:${p.id}`] = {
+    fuente: `DOF, ${+d} de ${MESES_DOF[+m - 1]} de ${a}: declaratoria del polo ${p.nombre}`,
+    url: `https://www.dof.gob.mx/nota_detalle.php?codigo=${p.codigo}&fecha=${d}/${m}/${a}`,
+  };
+  const extra = polos.obras[p.id];
+  REAL.obras[clavePolo(p.id)] = { anuncio: p.dof, ...extra, fuentes: [`dof:${p.id}`, ...(extra?.fuentes ?? [])] };
+}
 
 export const CORTE_REAL = REAL.corte;
+
+/** A polo's key among the real records (rail works and plants use their own ids). */
+export function clavePolo(id: string): string {
+  return `polo:${id}`;
+}
 
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 

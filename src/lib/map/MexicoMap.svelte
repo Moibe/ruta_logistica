@@ -10,7 +10,7 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, type Dueño } from '$lib/domain/red';
   import { obraVia } from '$lib/domain/obrasVia';
-  import { TEXTO_ETAPA } from '$lib/domain/realidad';
+  import { clavePolo, TEXTO_ETAPA } from '$lib/domain/realidad';
   import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, SUBREGIONES_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
   import { fechaLarga as fechaDeJuego, horasDeFecha } from '$lib/domain/calendario';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
@@ -1211,6 +1211,7 @@
     // with a station and a train is being laid out.
     if (layers.polos) {
       POLOS.forEach((p, i) => {
+        if (!poloVisible(p.id)) return;
         const x = sx(poloPts[i]);
         const y = sy(poloPts[i]);
         if (!onScreen(x, y)) return;
@@ -1690,7 +1691,8 @@
    * gets a dashed grey ring: nobody moves in there yet.
    */
   function pintarObras(ctx: CanvasRenderingContext2D) {
-    if (!layers.polos || !projection) return;
+    // In Realidad there's no published progress or occupancy to ring.
+    if (!layers.polos || !projection || sim.modo === 'realidad') return;
     POLOS.forEach((p, i) => {
       const o = sim.obras.get(p.id);
       if (!o || o.fase === 'por-construir') return;
@@ -1798,6 +1800,7 @@
     if (layers.polos) {
       POLOS.forEach((p, i) => {
         if (tablero.trazando && !(tablero.pestaña === 'tren' && sim.red?.estaciones.has(`polo:${p.id}`))) return;
+        if (!poloVisible(p.id)) return;
         const d = Math.hypot(transform.applyX(poloPts[i][0]) - mx, transform.applyY(poloPts[i][1]) - my);
         if (d < 9 && d < bestD) {
           best = { kind: 'polo', polo: p };
@@ -2069,6 +2072,13 @@
     ensuciaCapa();
   });
 
+  $effect(() => {
+    // Realidad's date moves polos in and out of the board.
+    sim.real;
+    sim.obras;
+    ensucia();
+  });
+
 
   $effect(() => {
     // A work's card opened: light its line and fly to it. A CFE plant also
@@ -2166,8 +2176,17 @@
   }
 
   /** The polo's phase as its card's kind line says it; reads the clock for the percentages. */
+  /** In Realidad a polo shows from its declaratoria on. */
+  function poloVisible(id: string): boolean {
+    return sim.modo !== 'realidad' || sim.real.get(clavePolo(id))?.etapa !== 'sin-anunciar';
+  }
+
   function faseDelPolo(id: string): string {
     sim.horas;
+    if (sim.modo === 'realidad') {
+      const e = sim.real.get(clavePolo(id))?.etapa;
+      return e === 'en-operacion' ? 'en operación' : e === 'en-obra' ? 'en obra' : 'declarado';
+    }
     const o = sim.obras.get(id);
     if (!o || o.fase === 'por-construir') return 'por construir';
     if (o.fase === 'en-obra') return o.detenida ? `obra detenida al ${Math.round(o.avance * 100)} %` : `en obra, ${Math.round(o.avance * 100)} %`;

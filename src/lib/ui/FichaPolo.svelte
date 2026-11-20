@@ -4,6 +4,8 @@
   import { PROGRAMAS_POLO, POLOS } from '$lib/domain/sitios';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
   import { mwDelPolo, UMBRALES } from '$lib/domain/energia';
+  import { clavePolo, fechaEnPalabras, fichaReal } from '$lib/domain/realidad';
+  import { fechaLarga, horasDeFecha } from '$lib/domain/calendario';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
   import { mdp, meses, personas } from './formato';
@@ -74,7 +76,7 @@
 
 {#if ficha}
   {@const { p, obra } = ficha}
-  <section class="ficha panel">
+  <section class="ficha panel" class:realidad={sim.modo === 'realidad'}>
     <header>
       <span class="nombre">{p.nombre}</span>
       <button class="close" onclick={() => (tablero.poloSel = null)} aria-label="Cerrar">×</button>
@@ -93,7 +95,35 @@
     {/if}
 
     {#if sim.modo === 'realidad'}
-      <p class="nota">Modo Realidad: el avance real de los polos todavía no está en el visor; por ahora muestra las obras de vía.</p>
+      {@const r = sim.real.get(clavePolo(p.id))}
+      {@const fr = fichaReal(clavePolo(p.id))}
+      <p class="status" class:operando={r?.etapa === 'en-operacion'} class:por-construir={r?.etapa !== 'en-operacion'}>
+        {r?.etapa === 'en-operacion' ? 'En operación' : r?.etapa === 'en-obra' ? 'En obra' : 'Declarado, sin obra reportada'} · al {fechaLarga(sim.horas)}
+      </p>
+      {#if fr}
+        <dl>
+          {#if fr.anuncio}<div><dt>Declaratoria (DOF)</dt><dd>{fechaEnPalabras(fr.anuncio)}</dd></div>{/if}
+          {#each fr.hitos ?? [] as h (h.fecha + h.texto)}
+            <div><dt>{h.texto}</dt><dd>{fechaEnPalabras(h.fecha)}</dd></div>
+          {/each}
+          {#if fr.operacion}
+            <div>
+              <dt>{sim.horas >= horasDeFecha(fr.operacion) ? 'En operación desde' : 'Abrió, más adelante, el'}</dt>
+              <dd>{fechaEnPalabras(fr.operacion)}</dd>
+            </div>
+          {/if}
+        </dl>
+        {#if fr.nota}<p class="nota">{fr.nota}</p>{/if}
+        <p class="nota">
+          Cuántas empresas tiene no se publica polo por polo: el visor no muestra ocupación ni empleos.
+        </p>
+        <details class="fuentes">
+          <summary>Fuentes</summary>
+          {#each fr.fuentesCitadas as c (c.url + c.fuente)}
+            <p><a href={c.url} target="_blank" rel="noopener noreferrer">{c.fuente}</a></p>
+          {/each}
+        </details>
+      {/if}
     {:else if obra.fase === 'por-construir' && plan}
       <p class="status por-construir">Por construir</p>
       <div class="cuadrillas" role="radiogroup" aria-label="Cuadrillas">
@@ -346,6 +376,31 @@
     margin: 0.6rem 0 0;
     font-size: 0.68rem;
     line-height: 1.4;
+  }
+
+  .fuentes {
+    margin-top: 0.6rem;
+    font-size: 0.66rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .fuentes summary {
+    cursor: pointer;
+    color: var(--dim);
+  }
+
+  .fuentes p {
+    margin: 0.35rem 0 0;
+  }
+
+  .fuentes a {
+    color: var(--accent);
+  }
+
+  /* In Realidad the ledger has more rows: start below it. */
+  .ficha.realidad {
+    top: 10.2rem;
   }
 
   .nota {

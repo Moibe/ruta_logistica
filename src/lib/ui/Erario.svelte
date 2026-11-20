@@ -7,6 +7,8 @@
   import { añoDe } from '$lib/domain/calendario';
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
   import { OBRAS_ENERGIA } from '$lib/domain/energia';
+  import { POLOS } from '$lib/domain/sitios';
+  import { clavePolo } from '$lib/domain/realidad';
 
   /** The last year with a real figure: later years repeat it. */
   const ULTIMO_AÑO = FEDERAL.años[FEDERAL.años.length - 1].año;
@@ -52,8 +54,14 @@
       if (e === 'en-operacion') (cfe.enOperacion++, (cfe.mwOperacion += o.mw));
       else if (e === 'en-obra') cfe.enObra++;
     }
+    const polos = { declarados: 0, operando: 0 };
+    for (const p of POLOS) {
+      const e = sim.real.get(clavePolo(p.id))?.etapa;
+      if (e === 'en-operacion') polos.operando++;
+      else if (e === 'anunciada' || e === 'en-obra') polos.declarados++;
+    }
     const serie = a.repetido ? 'sin dato aún: el último publicado' : a.serie === 'ejercido' ? 'ejercido' : a.serie === 'aprobado' ? 'aprobado' : 'proyecto';
-    return { ...cuenta, cfe, año: a.año, federal: a.federal, serie };
+    return { ...cuenta, cfe, polos, año: a.año, federal: a.federal, serie };
   });
 
   /** This month's payment and the year it comes from, with the sources in words. */
@@ -114,6 +122,11 @@
     <span class="label">Centrales CFE</span>
     <span><b class="mono">{real.cfe.enOperacion}</b> operando · <b class="mono">{personas(real.cfe.mwOperacion)}</b> MW</span>
     <span class="dim">· {real.cfe.enObra} en obra</span>
+  </div>
+  <div class="fila" title="Polos del Bienestar con declaratoria en el DOF, y los que ya operan">
+    <span class="label">Polos</span>
+    <span><b class="mono">{real.polos.operando}</b> operando</span>
+    <span class="dim">· {real.polos.declarados} declarados sin abrir</span>
   </div>
   <button class="fila obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
     <span class="label">Obras</span>

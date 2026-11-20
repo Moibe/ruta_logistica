@@ -27,7 +27,7 @@ import {
   regionDelPolo,
   type EstadoRegion,
 } from '$lib/domain/energia';
-import { estadoReal, type EstadoReal } from '$lib/domain/realidad';
+import { clavePolo, estadoReal, type EstadoReal } from '$lib/domain/realidad';
 import { avanzar } from '$lib/domain/servicio';
 import {
   avanzarObra,
@@ -315,7 +315,7 @@ class Simulacion {
   irA(horas: number, forzar = false) {
     if (this.modo !== 'realidad') return;
     this.horas = Math.max(0, Math.min(horas, horasDeHoy()));
-    const real = new Map([...OBRAS_VIA, ...OBRAS_ENERGIA].map((o) => [o.id, estadoReal(o.id, this.horas)]));
+    const real = new Map([...[...OBRAS_VIA, ...OBRAS_ENERGIA].map((o) => o.id), ...POLOS.map((p) => clavePolo(p.id))].map((id) => [id, estadoReal(id, this.horas)]));
     const fase = (id: string) => {
       const e = real.get(id)!.etapa;
       return e === 'en-operacion' ? 'en-servicio' : e === 'en-obra' ? 'en-obra' : 'por-construir';
@@ -325,6 +325,13 @@ class Simulacion {
     this.obrasVia = new Map(OBRAS_VIA.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
     // The CFE's plants as they really stood: the map draws them and the regions count the ones in service.
     this.obrasEnergia = new Map(OBRAS_ENERGIA.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
+    // The polos too: built or not. How full they are isn't published, so they stay at 0 % (no demand, no jobs counted).
+    this.obras = new Map(
+      POLOS.map((p) => {
+        const f = fase(clavePolo(p.id));
+        return [p.id, { ...obraNueva(p.id), fase: f === 'en-servicio' ? 'operando' : f }];
+      })
+    );
     this.real = real;
     // The track itself changes only when a work opens (or, going back, un-opens).
     if (forzar || enServicio(this.obrasVia) !== antes) this.#reconstruirRed();
@@ -517,8 +524,9 @@ class Simulacion {
    */
   #reconstruirRed() {
     if (!this.#redJson) return;
+    // In Realidad a polo gets no spur: whether a real one has rail isn't in the data.
     const enServicio = new Set(
-      [...this.obras.values()].filter((o) => o.fase === 'operando').map((o) => `polo:${o.id}`)
+      this.modo === 'realidad' ? [] : [...this.obras.values()].filter((o) => o.fase === 'operando').map((o) => `polo:${o.id}`)
     );
     const hechas = OBRAS_VIA.filter((o) => this.obrasVia.get(o.id)?.fase === 'en-servicio');
     this.red = construirRed(this.#redJson, SITIOS, enServicio, hechas);

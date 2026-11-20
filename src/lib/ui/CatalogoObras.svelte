@@ -209,7 +209,7 @@
 {/snippet}
 
 {#if tablero.catalogo}
-  <section class="catalogo panel">
+  <section class="catalogo panel" class:realidad={sim.modo === 'realidad'}>
     {#if fichaPlanta}
       {@const { o, estado, region, despues } = fichaPlanta}
       <header>
@@ -443,9 +443,6 @@
             </li>
           {/each}
         </ul>
-        {#if sim.modo === 'realidad'}
-          <p class="texto">Los polos todavía no están en el modo Realidad.</p>
-        {/if}
       </div>
     {/if}
   </section>
@@ -753,6 +750,11 @@
 
   .aviso {
     color: #ffc2c2;
+  }
+
+  .catalogo.realidad {
+    top: 10.2rem;
+    max-height: calc(100vh - 10.2rem - 13rem);
   }
 
   .fuentes {

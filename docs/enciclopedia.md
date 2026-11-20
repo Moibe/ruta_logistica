@@ -55,6 +55,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [CFE, boletines de Manzanillo III](https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=10527), [Elvia Carrillo Puerto](https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=10576) y [Puerto Peñasco](https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=3788) | Fecha y MW de entrada en operación de esas centrales | 2023 y 2026 | Documento oficial público |
 | [CFE, Informe de la Gestión Gubernamental 2018–2024, EPS Generación I](https://www.cfe.gob.mx/nuestraempresa/Informe%20de%20gestion%201824/EPS%20Generaci%C3%B3n%20I.pdf) | El ciclo combinado Tula: contrato de 2014, sin terminar en 2018, en operación en 2020 | Septiembre de 2024 | Documento oficial público |
 | [Presidencia, «Cumplimos con el rescate de CFE»](https://www.gob.mx/amlo/prensa/cumplimos-con-el-rescate-de-cfe-presidente-amlo) y [La Jornada, «CFE construye planta de energía en Mexicali»](https://www.jornada.com.mx/notas/2022/04/10/estados/cfe-construye-planta-de-energia-en-mexicali-ante-riesgo-de-escasez/) | Las unidades de emergencia de Mexicali: en obra en abril de 2022, en operación en julio de 2024; avance de San Luis Río Colorado | 2022 y 2024 | Comunicado oficial; prensa |
+| [Presidencia, inauguración del polo de Huamantla](https://www.gob.mx/presidencia/prensa/plan-mexico-presidenta-inaugura-primer-polo-de-desarrollo-economico-para-el-bienestar-en-huamantla-tlaxcala-con-inversion-de-540-mdd) y [La Jornada, 13 de abril de 2026](https://www.jornada.com.mx/2026/04/13/politica/003n1pol) | El primer polo en operación: Huamantla, inaugurado el 12 de abril de 2026 y terminado a finales de febrero | 2026 | Comunicado oficial; prensa |
+| DOF, avisos de fallo de las licitaciones de los polos [Salina Cruz](https://sidof.segob.gob.mx/notas/5709738), [Texistepec](https://sidof.segob.gob.mx/notas/5709825), [San Juan Evangelista](https://sidofqa.segob.gob.mx/notas/5729079), [Asunción Ixtaltepec](https://sidof.segob.gob.mx/notas/5738700) y [San Blas Atempa](https://sidof.segob.gob.mx/notas/5763741) | Cuándo se adjudicó cada uno a un desarrollador | 2023–2025 | Documento oficial público |
 | [INEGI, servicio del Catálogo Único de Claves Geoestadísticas](https://gaia.inegi.org.mx/wscatgeo/v2/) | Ubicación de cada central: la cabecera de su municipio; el límite de Mulegé con Comondú y Loreto (Marco Geoestadístico, diciembre de 2025) | Consultado el 20 de noviembre de 2026 | Dato oficial público |
 | [Presidencia, «CFE construirá 2 centrales termosolares en Baja California Sur»](https://www.gob.mx/presidencia/prensa/mexico-a-la-vanguardia-cfe-construira-2-centrales-termosolares-en-baja-california-sur-para-beneficiar-hasta-200-mil-hogares?idiom=es) | Las termosolares de Baja California Sur: dos de 50 MW y una segunda etapa de 50 MW, con 11 horas de almacenamiento y de 36 a 48 meses de obra | 26 de agosto de 2025 | Documento oficial público |
 | [CFE, boletín de prensa 095/26](https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/260601%20-%20gen%20energias%20limpias%20y%20renovables.pdf) | Chicoasén II (240 MW, para finales de 2028) y el Proyecto Oasis, en evaluación | 1 de junio de 2026 | Documento oficial público |
@@ -1303,8 +1305,8 @@ Mulegé) dice sus márgenes y su demanda; por una central, su capacidad, dueño 
 ### El modo Realidad
 
 El tablero tiene dos modos, con el interruptor *Juego / Realidad* del reloj. En **Realidad** no
-se juega: el tablero muestra lo que de verdad pasó con cada obra de vía y cada central de la CFE
-del catálogo, hoy o en
+se juega: el tablero muestra lo que de verdad pasó con cada obra de vía, cada central de la CFE
+y cada Polo del Bienestar, hoy o en
 cualquier fecha desde el 1 de diciembre de 2018, el mismo arranque de la partida (la línea de
 tiempo del reloj). La partida queda guardada y sigue
 donde estaba al volver a *Juego*.
@@ -1345,10 +1347,26 @@ en él: no adivina.
 desde el día 1). El tramo 5 Sur del Tren Maya no tiene fecha exacta de apertura en fuente
 oficial: se toma la del circuito completo, el 15 de diciembre de 2024.
 
+Y un Polo del Bienestar:
+
+| Etapa | En el mapa |
+| --- | --- |
+| Sin declaratoria | No se dibuja |
+| Declarado (desde su declaratoria en el DOF) | Hexágono punteado |
+| En operación | Hexágono lleno |
+
+De los polos solo entra lo que una fuente oficial dice de cada uno: su declaratoria, el fallo de
+su licitación (cinco del Istmo, de noviembre de 2023 a julio de 2025) y su inauguración. Al 20 de
+noviembre de 2026 opera uno, **Huamantla**, desde el 12 de abril de 2026. El Corredor reporta
+que en 2026 solo cinco polos del Istmo siguen concesionados (tres concesionarios incumplieron y
+uno renunció), pero no dice cuáles; la ficha de esos cinco lo advierte. Cuántas empresas tiene
+cada polo no se publica: en Realidad no hay ocupación, ni empleos, ni demanda eléctrica de los
+polos, ni ramal a la vía.
+
 El panel de arriba a la derecha cambia: el presupuesto federal real para ferrocarriles de ese
 año, cuántas obras y km están en operación, en obra y anunciadas, y cuántas centrales de la CFE
 operan (con sus MW) y cuántas están en obra. No hay trenes ni barcos: los del juego son
-servicios inventados. **Los polos todavía no están en este modo.**
+servicios inventados. También dice cuántos polos operan y cuántos están declarados sin abrir.
 
 **El margen de cada región es una estimación.** La capa *Energía* pinta las regiones con el
 modelo del juego: los márgenes oficiales de 2019, la demanda creciendo a su ritmo real y las
@@ -1412,6 +1430,9 @@ tienen fecha de corte, a la vista bajo la línea de tiempo.
 - **La partida empieza el 1 de diciembre de 2018.** *(20 nov 2026.)* El día en que empezó el
   sexenio: da un mes más de juego, y el modo Realidad arranca el mismo día (ahí se ve el anuncio
   del Tren Maya, el 16 de diciembre). Diciembre trae la doceava parte del presupuesto de 2018.
+- **Los polos, también en Realidad, solo con lo que se publica de cada uno.** *(20 nov 2026.)*
+  Declaratoria, fallo de su licitación e inauguración. Un avance general («90 % de avance») que
+  no dice de qué polo es no se asigna a ninguno.
 - **Las centrales de la CFE, también en Realidad.** *(20 nov 2026.)* Con sus fechas oficiales y
   la capa de energía encendida; el margen de las regiones se marca como estimado, porque es el
   modelo del juego con las centrales reales.
