@@ -1,0 +1,46 @@
+{
+  "corte": "2026-11-20",
+  "nota": "El dinero del Estado en el juego: cada año, el presupuesto federal real para ferrocarriles, más el derecho que pagan las concesionarias por usar la vía. Llega en doce mensualidades iguales y lo que no se gasta se acumula. Millones de pesos corrientes.",
+  "federal": {
+    "dato": "Gasto federal en ferrocarriles: todo lo clasificado en la subfunción «Transporte por Ferrocarril» (SICT y Defensa, incluidos los trenes de pasajeros y El Insurgente), más el Tren Maya (Fonatur, Tren Maya S.A. de C.V.) y el Ferrocarril del Istmo de Tehuantepec. No incluye las pensiones de Ferrocarriles Nacionales de México, la Agencia del Corredor Interoceánico (puertos y polos) ni la empresa de la Defensa que opera el Tren Maya y aeropuertos. De 2019 a 2025 se usa lo ejercido (Cuenta Pública), que es lo que de verdad se gastó, con las ampliaciones del año; 2026 es lo aprobado (su Cuenta Pública sale en 2027) y 2027 es el proyecto que envió el Ejecutivo. De 2028 en adelante se repite 2027.",
+    "fuente": "SHCP, Transparencia Presupuestaria, datos abiertos: Cuenta Pública 2019–2025, PEF 2020–2026 y PPEF 2027 (bases por clave presupuestaria)",
+    "url": "https://www.transparenciapresupuestaria.gob.mx/Datos-Abiertos",
+    "consultado": "2026-11-20",
+    "archivos": {
+      "cuentaPublica": "https://www.transparenciapresupuestaria.gob.mx/work/models/PTP/DatosAbiertos/BD_Cuenta_Publica/CSV/cuenta_publica_{año}_gf_ecd_epe.csv",
+      "pef": "https://www.transparenciapresupuestaria.gob.mx/work/models/PTP/DatosAbiertos/Bases_de_datos_presupuesto/CSV/PEF_{año}.csv",
+      "ppef": "https://www.transparenciapresupuestaria.gob.mx/work/models/PTP/DatosAbiertos/Bases_de_datos_presupuesto/CSV/PPEF_{año}.csv"
+    },
+    "años": [
+      { "año": 2019, "mdp": 11039.1, "serie": "ejercido", "aprobado": 14309.7, "desglose": { "sict": 9831.8, "trenMaya": 0, "istmo": 1207.3 }, "nota": "Los 5,820 millones aprobados a Fonatur para el Tren Maya no se ejercieron." },
+      { "año": 2020, "mdp": 13425.5, "serie": "ejercido", "aprobado": 6731.1, "desglose": { "sict": 4344.8, "trenMaya": 7509, "istmo": 1571.7 } },
+      { "año": 2021, "mdp": 37721.8, "serie": "ejercido", "aprobado": 45191.9, "desglose": { "sict": 2822.7, "trenMaya": 33801.8, "istmo": 1097.3 } },
+      { "año": 2022, "mdp": 185243.5, "serie": "ejercido", "aprobado": 78357.9, "desglose": { "sict": 2903.2, "trenMaya": 179727.6, "istmo": 2612.7 }, "nota": "El Tren Maya recibió más del doble de lo aprobado." },
+      { "año": 2023, "mdp": 115723.3, "serie": "ejercido", "aprobado": 155522.9, "desglose": { "sict": 4136.2, "trenMaya": 108052.9, "istmo": 3534.2 } },
+      { "año": 2024, "mdp": 207391.6, "serie": "ejercido", "aprobado": 139139.2, "desglose": { "sict": 12395.7, "trenMaya": 164063.6, "istmo": 30932.3 } },
+      { "año": 2025, "mdp": 99225.3, "serie": "ejercido", "aprobado": 158115.4, "desglose": { "sict": 67084.4, "trenMaya": 28386.5, "istmo": 3754.3 } },
+      { "año": 2026, "mdp": 146395.4, "serie": "aprobado", "desglose": { "sict": 92599.6, "trenMaya": 30744.1, "istmo": 23051.6 } },
+      { "año": 2027, "mdp": 152120.3, "serie": "proyecto", "desglose": { "sict": 108792.8, "trenMaya": 18180.4, "istmo": 25147 } }
+    ]
+  },
+  "derecho": {
+    "dato": "Las concesionarias privadas (Ferromex, Ferrosur, Kansas City de México y Coahuila–Durango) pagan un derecho por usar la vía: 0.5 % de sus ingresos brutos los primeros 15 años de la concesión y 1.25 % después (todas pasaron los 15 años antes de 2019). Desde el 1 de enero de 2027, 3 %. Los ingresos son los de carga de cada año; de 2026 en adelante se repiten los de 2025.",
+    "fuente": "Ley Federal de Derechos, art. 232-B; reforma del DOF del 13 de noviembre de 2026; ATTRAPI, Anuario Estadístico Ferroviario 2025, tabla A36",
+    "url": "https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf",
+    "urlReforma": "https://dof.gob.mx/nota_detalle.php?codigo=5803759&fecha=13/11/2026",
+    "consultado": "2026-11-20",
+    "tasas": [
+      { "desde": 2019, "tasa": 0.0125 },
+      { "desde": 2027, "tasa": 0.03 }
+    ],
+    "ingresos": [
+      { "año": 2019, "mdp": 65272.1, "porEmpresa": { "FXE": 32314.7, "FSRR": 6052.3, "KCSM": 26394.9, "LCD": 510.1 } },
+      { "año": 2020, "mdp": 64210.4, "porEmpresa": { "FXE": 31730.9, "FSRR": 5637.5, "KCSM": 26496.7, "LCD": 345.4 } },
+      { "año": 2021, "mdp": 69976.6, "porEmpresa": { "FXE": 35704.5, "FSRR": 6252.5, "KCSM": 27675.9, "LCD": 343.7 } },
+      { "año": 2022, "mdp": 76619.3, "porEmpresa": { "FXE": 37462, "FSRR": 7441.1, "KCSM": 31361.7, "LCD": 354.5 } },
+      { "año": 2023, "mdp": 81945.8, "porEmpresa": { "FXE": 41436.7, "FSRR": 8557, "KCSM": 31657, "LCD": 295.2 } },
+      { "año": 2024, "mdp": 89236.6, "porEmpresa": { "FXE": 45394.7, "FSRR": 8538.6, "KCSM": 34985.2, "LCD": 318.1 } },
+      { "año": 2025, "mdp": 93682.4, "porEmpresa": { "FXE": 47757.1, "FSRR": 8380.4, "KCSM": 37223.5, "LCD": 321.4 } }
+    ]
+  }
+}

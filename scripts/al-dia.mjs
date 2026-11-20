@@ -9,6 +9,12 @@
 //    datos/polos.json), modifications, clarifying notes, abrogations.
 // 2. Lists every calibrated figure (costs, times, jobs) with its official
 //    source, flagging the ones not checked in more than six months.
+// 3. Checks the State's budget (datos/presupuesto.json) against the federal
+//    calendar: the Cuenta Pública of a year comes out by the end of April of
+//    the next, the budget is approved by 15 November of the year before, and
+//    the next year's proposal is presented by 8 September. It flags the years
+//    that should already have a better figure, and the concessionaires'
+//    revenue once a newer rail yearbook should be out.
 //
 // It changes nothing: it says what to review. After reviewing, record it:
 // new polos go to datos/polos.json (with the method in docs/enciclopedia.md,
@@ -29,6 +35,7 @@ const MESES_VIGENCIA = 6;
 
 const calibracion = JSON.parse(await readFile(join(DATOS, 'calibracion.json'), 'utf8'));
 const polos = JSON.parse(await readFile(join(DATOS, 'polos.json'), 'utf8'));
+const presupuesto = JSON.parse(await readFile(join(DATOS, 'presupuesto.json'), 'utf8'));
 
 const conocidos = new Set([
   ...polos.map((p) => p.codigo),
@@ -127,6 +134,29 @@ for (const [clave, c] of Object.entries(calibracion.cifras)) {
   console.log(`              ${c.fuente} · consultado ${c.consultado}${c.url ? `\n              ${c.url}` : ''}`);
 }
 
+console.log(`\nPresupuesto del Estado (presupuesto.json), contra el calendario de Hacienda:\n`);
+const desde = (iso) => hoy >= new Date(`${iso}T00:00:00`);
+for (const a of presupuesto.federal.años) {
+  let aviso = '';
+  if (a.serie !== 'ejercido' && desde(`${a.año + 1}-05-01`)) {
+    aviso = `ya debe estar la Cuenta Pública ${a.año}: cambiar a lo ejercido`;
+  } else if (a.serie === 'proyecto' && desde(`${a.año - 1}-11-15`)) {
+    aviso = `el PEF ${a.año} ya debió aprobarse (15 de noviembre de ${a.año - 1}): cambiar a lo aprobado en cuanto esté en datos abiertos`;
+  }
+  console.log(`  ${aviso ? '⚠ REVISAR' : '✓ al día '}  ${a.año}: ${a.mdp.toLocaleString('es-MX')} millones (${a.serie})`);
+  if (aviso) console.log(`              ${aviso}`);
+}
+const ultimoAño = presupuesto.federal.años.at(-1).año;
+if (desde(`${ultimoAño}-09-08`)) {
+  console.log(`  ⚠ REVISAR  ${ultimoAño + 1}: el proyecto de presupuesto ${ultimoAño + 1} ya debió presentarse (8 de septiembre de ${ultimoAño})`);
+}
+const ultimoIngreso = presupuesto.derecho.ingresos.at(-1).año;
+const yaAnuario = desde(`${ultimoIngreso + 2}-07-01`);
+console.log(
+  `  ${yaAnuario ? '⚠ REVISAR' : '✓ al día '}  ingresos de las concesionarias hasta ${ultimoIngreso}${yaAnuario ? ` (ya debe estar el anuario ferroviario ${ultimoIngreso + 1})` : ''}`
+);
+console.log(`              ${presupuesto.federal.url}`);
+
 console.log(`
 Qué hacer con lo que salga:
   · Declaratoria nueva: ubicar el polo con su cuadro de construcción y agregarlo a datos/polos.json
@@ -134,4 +164,7 @@ Qué hacer con lo que salga:
   · Modificación, nota aclaratoria o abrogación: revisarla contra el polo que toca y anotar su código en
     "dofRevisados" de calibracion.json (con la corrección en la bitácora de la enciclopedia).
   · Cifra por revisar: buscar el dato oficial más reciente; actualizar "valor" y "consultado".
+  · Presupuesto: bajar la Cuenta Pública o el PEF del año de datos abiertos y sumar la subfunción
+    "Transporte por Ferrocarril", el Tren Maya y el Ferrocarril del Istmo (método en
+    docs/enciclopedia.md, "El presupuesto del Estado"); actualizar presupuesto.json.
   · Al terminar: mover "corte" a la fecha de hoy.`);

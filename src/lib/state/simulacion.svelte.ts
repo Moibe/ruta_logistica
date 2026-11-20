@@ -15,7 +15,8 @@ import {
   type ObraViaEstado,
   type PresupuestoVia,
 } from '$lib/domain/obrasVia';
-import { fechaCorta, horaDelDia } from '$lib/domain/calendario';
+import { fechaCorta, horaDelDia, mesDe } from '$lib/domain/calendario';
+import { mensualidad, type Mensualidad } from '$lib/domain/presupuesto';
 import { avanzar } from '$lib/domain/servicio';
 import {
   avanzarObra,
@@ -23,7 +24,6 @@ import {
   obraNueva,
   personasTrabajando,
   presupuestar,
-  presupuestoInicialMdp,
   type ObraPolo,
 } from '$lib/domain/obras';
 import { POLOS, SITIOS } from '$lib/domain/sitios';
@@ -68,10 +68,16 @@ class Simulacion {
   seleccion = $state<string | null>(null);
 
   /**
-   * The State's money, millions of pesos. Works are paid out of it as they
-   * advance; nothing pays in yet (the budget comes later).
+   * The State's money, millions of pesos. It comes in at the start of every
+   * month (the year's federal rail budget and the concession fees, in twelfths:
+   * `presupuesto.ts`) and works are paid out of it as they advance. What isn't
+   * spent stays.
    */
-  dinero = $state(presupuestoInicialMdp());
+  dinero = $state(0);
+  /** The latest monthly payment, for the ledger. */
+  ultimaMensualidad = $state.raw<Mensualidad | null>(null);
+  /** Months already paid in (0 is January 2019): the next one to pay. */
+  #mesesCobrados = 0;
   /**
    * Every Polo del Bienestar's work and occupancy, by polo id. Mutated in place
    * by the clock like the fleet; views that show it also read `horas`.
@@ -167,6 +173,7 @@ class Simulacion {
         this.trenes = trenes;
         this.barcos = barcos;
         this.#saturar();
+        this.#cobrar();
         this.estado = 'lista';
       } catch (err) {
         console.error(err);
@@ -306,6 +313,20 @@ class Simulacion {
     return n;
   }
 
+  /** Pay in every month that has begun and isn't paid yet (several, after a long frame at 16×). */
+  #cobrar() {
+    const mes = mesDe(this.horas);
+    if (this.#mesesCobrados > mes) return;
+    let caja = this.dinero;
+    let ultima: Mensualidad | null = null;
+    while (this.#mesesCobrados <= mes) {
+      ultima = mensualidad(this.#mesesCobrados++);
+      caja += ultima.total;
+    }
+    this.dinero = caja;
+    this.ultimaMensualidad = ultima;
+  }
+
   #avanzarObras(horas: number) {
     const caja = { mdp: this.dinero };
     let terminadas = false;
@@ -400,6 +421,7 @@ class Simulacion {
       if (horas > 0) {
         for (const t of this.trenes) avanzar(t, horas);
         for (const b of this.barcos) avanzar(b, horas);
+        this.#cobrar();
         this.#avanzarObras(horas);
         this.horas += horas;
       }

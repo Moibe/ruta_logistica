@@ -5,7 +5,8 @@ mano y por qué, y con qué reglas se mueve. Vive también dentro del juego: el 
 superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`), que se arma con este archivo.
 
 > **Cifras al 20 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
-> Bienestar y los dueños, el tráfico y la capacidad de cada vía.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado y su
+> presupuesto.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -43,7 +44,9 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [ARTF, Anuario Estadístico Ferroviario 2018](https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf) | Los km de vía de cada empresa en 2018, para comprobar el reparto de dueños | 2019 | Documento oficial público |
 | [ARTF, Sistema Nacional de Indicadores Ferroviarios 2022](https://www.gob.mx/cms/uploads/attachment/file/789599/SNIF_2022.pdf) | Densidad de tráfico y carga por tren de cada empresa (2018–2021): de ahí salen los trenes privados al día | 2022 | Documento oficial público |
 | [ARTF, Pulso de Interconexión, 1er semestre 2024](https://www.gob.mx/cms/uploads/attachment/file/947545/Pulso_Interconexion_VF7.pdf) | La tabla de derechos de paso obligatorios: quién es dueño de cada línea y kilómetro, donde OpenStreetMap no lo dice | 2024 | Documento oficial público |
-| [ATTRAPI, Anuario Estadístico Ferroviario 2025](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas por par origen–destino, para estimar cuántos trenes de Nuevo Laredo siguen al sur de Monterrey | 2026 | Documento oficial público |
+| [ATTRAPI, Anuario Estadístico Ferroviario 2025](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas por par origen–destino, para estimar cuántos trenes de Nuevo Laredo siguen al sur de Monterrey; los ingresos de cada concesionaria de 2019 a 2025 (tabla A36), sobre los que pagan su derecho | 2026 | Documento oficial público |
+| [SHCP, Transparencia Presupuestaria, datos abiertos](https://www.transparenciapresupuestaria.gob.mx/Datos-Abiertos) | El presupuesto federal para ferrocarriles de cada año: lo ejercido de 2019 a 2025 (Cuenta Pública), lo aprobado en 2026 (PEF) y el proyecto 2027 (PPEF), por clave presupuestaria | Bases consultadas el 20 de noviembre de 2026 | Datos abiertos del gobierno federal |
+| [Ley Federal de Derechos, art. 232-B](https://www.diputados.gob.mx/LeyesBiblio/pdf/LFD.pdf) y [su reforma (DOF, 13 de noviembre de 2026)](https://dof.gob.mx/nota_detalle.php?codigo=5803759&fecha=13/11/2026) | El derecho que pagan las concesionarias por usar la vía: 1.25 % de sus ingresos, y 3 % desde 2027 | Vigente al 20 de noviembre de 2026 | Documento oficial público |
 | [Bureau of Transportation Statistics (EUA), Border Crossing Entry Data](https://data.bts.gov/resource/keg4-3bc2.json) | Trenes que cruzan a Estados Unidos por cada puerto fronterizo: el tráfico de los corredores de Nuevo Laredo, Piedras Negras y Ciudad Juárez | Datos 2018 y 2025 | Dato oficial público (gobierno de EUA) |
 | AAR / Cambridge Systematics, *National Rail Freight Infrastructure Capacity and Investment Study* (2007), citado por el TRB | Cuántos trenes al día caben en vía sencilla, con control centralizado y en vía doble. Es referencia de Estados Unidos: no hay cifra oficial mexicana | 2007 | Estudio público |
 | [Auditoría Superior de la Federación](https://www.asf.gob.mx/) | Costo por km del Tren Maya: sobre el derecho de vía viejo, vía nueva a nivel y viaducto | Cuenta Pública 2021 (auditoría 114) y 2024 (auditoría 126) | Documento oficial público |
@@ -462,7 +465,7 @@ por tres fases:
 | Gente trabajando en la obra | 1.187 empleos-año por millón de pesos, repartidos en lo que dura | Construcción en Veracruz, 2023: 26,482 personas ocupadas con 22,308 millones de pesos de producción (INEGI, Censos Económicos 2024) |
 | Empleos permanentes | 94.3 por hectárea × ocupación | Huamantla «generará más de 5 mil empleos directos e indirectos» en 53 ha (Presidencia, 12 abr 2026) |
 | Ocupación | de 0 a 100 % en 3 años, solo con tren | Supuesto del juego: no hay cifra oficial de cuánto tarda un polo en llenarse |
-| Presupuesto inicial | 20,000 millones de pesos | Supuesto provisional, mientras se diseña el presupuesto del Estado |
+| Dinero para construir | El presupuesto del Estado: llega cada mes (ver [El presupuesto del Estado](#el-presupuesto-del-estado)) | Presupuesto federal real para ferrocarriles y derecho de las concesionarias |
 
 Ejemplos (calculados con el código del juego):
 
@@ -757,9 +760,14 @@ Todo el catálogo: 41 obras, 9,630 km, 2,865.8 mil millones al ritmo del gobiern
 Lo que el Tren Maya costó de verdad incluye trenes, estaciones y talleres (Presidencia: "un
 poco más de 500 mil millones"); el juego solo cobra la vía.
 
-**Con 20,000 millones de presupuesto** solo caben las obras chicas (Dos Bocas, el tramo 5
-Norte, las rehabilitaciones más cortas). Las grandes se pueden empezar, pero se detienen
-cuando se acaba el dinero: el ingreso del Estado se diseña después.
+**El dinero marca el ritmo.** Las obras se pagan del presupuesto del Estado, que llega cada
+mes (ver [El presupuesto del Estado](#el-presupuesto-del-estado)). Si el ritmo elegido cuesta
+más al mes de lo que llega, la obra se detiene cuando se vacía la caja y sigue con cada
+mensualidad. La ficha avisa cuánto tardaría de verdad al paso del dinero, con el presupuesto
+real de cada año y si no hay otras obras: México–Querétaro, empezada en enero de 2019 con 4
+cuadrillas, tardaría unos 4 años 5 meses en vez de 2 años 8, porque 2019 y 2020 fueron años
+flacos y 2022 uno muy gordo. Del 1 de enero de 2019 al 31 de diciembre de 2027 llegan unos
+979 mil millones: alcanza para un tercio del catálogo.
 
 ---
 
@@ -1033,7 +1041,7 @@ producen ni piden carga.
 
 | Regla | Valor |
 | --- | --- |
-| Presupuesto inicial | 20,000 millones de pesos; por ahora no entra dinero |
+| Dinero | El presupuesto del Estado, que llega cada mes; polos y vías se pagan de la misma caja |
 | Cuadrillas | 1 a 4; cada una extra acorta la obra y la encarece 15 % |
 | Pago | Conforme avanza la obra; sin dinero, la obra se detiene |
 | Estación | Al terminarse, si hay vía a 15 km o menos |
@@ -1043,6 +1051,75 @@ producen ni piden carga.
 Los trenes y los barcos comparten el mismo motor de servicios (`domain/servicio.ts`): un
 vehículo recorre sus piernas, espera en cada parada lo que le toca y sigue. Solo cambia cómo
 se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
+
+### El presupuesto del Estado
+
+El jugador es el Estado y su dinero es el de verdad. La partida empieza el **1 de enero de
+2019** y cada año recibe:
+
+1. **El presupuesto federal para ferrocarriles de ese año.** Todo lo que la federación gastó
+   en la subfunción «Transporte por Ferrocarril» (SICT y Defensa: trenes de pasajeros, El
+   Insurgente, vías de carga), más el Tren Maya (Fonatur y Tren Maya S.A. de C.V.) y el
+   Ferrocarril del Istmo de Tehuantepec. De 2019 a 2025 es **lo ejercido**, según la Cuenta
+   Pública: lo que de verdad se gastó, con las ampliaciones que hubo en el año. 2026 es lo
+   aprobado en el Presupuesto de Egresos (su Cuenta Pública sale en 2027) y 2027 es el
+   proyecto que envió el Ejecutivo. De 2028 en adelante se repite 2027.
+2. **El derecho de las concesionarias.** Las cuatro privadas (Ferromex, Ferrosur, Kansas City
+   de México y Coahuila–Durango) pagan por usar la vía un porcentaje de sus ingresos: 1.25 %
+   (todas tienen más de 15 años de concesión), y 3 % desde el 1 de enero de 2027 por la
+   reforma del DOF del 13 de noviembre de 2026. Los ingresos son los reales de cada año; de
+   2026 en adelante se repiten los de 2025.
+
+El año llega en **doce mensualidades iguales**, el día 1 de cada mes, como el calendario de
+gasto de Hacienda. **Lo que no se gasta se acumula.** Polos y vías se pagan **de la misma
+caja**. Los impuestos que pagan las concesionarias (ISR) quedan fuera por ahora: no hay cifra
+pública por empresa.
+
+Millones de pesos de cada año (calculado con el código del juego):
+
+| Año | Trenes: presupuesto federal | De dónde | Derecho de las concesionarias | Total al año | Cada mes |
+| --- | ---: | --- | ---: | ---: | ---: |
+| 2019 | 11,039 | Ejercido (Cuenta Pública) | 816 (1.25 %) | 11,855 | 988 |
+| 2020 | 13,426 | Ejercido (Cuenta Pública) | 803 (1.25 %) | 14,228 | 1,186 |
+| 2021 | 37,722 | Ejercido (Cuenta Pública) | 875 (1.25 %) | 38,597 | 3,216 |
+| 2022 | 185,244 | Ejercido (Cuenta Pública) | 958 (1.25 %) | 186,201 | 15,517 |
+| 2023 | 115,723 | Ejercido (Cuenta Pública) | 1,024 (1.25 %) | 116,748 | 9,729 |
+| 2024 | 207,392 | Ejercido (Cuenta Pública) | 1,115 (1.25 %) | 208,507 | 17,376 |
+| 2025 | 99,225 | Ejercido (Cuenta Pública) | 1,171 (1.25 %) | 100,396 | 8,366 |
+| 2026 | 146,395 | Aprobado (PEF) | 1,171 (1.25 %) | 147,566 | 12,297 |
+| 2027 | 152,120 | Proyecto (PPEF) | 2,810 (3 %) | 154,931 | 12,911 |
+| 2028 en adelante | 152,120 | Se repite 2027 | 2,810 (3 %) | 154,931 | 12,911 |
+
+Lo que se suma cada año, también en millones de pesos de cada año:
+
+| Año | Lo aprobado | Lo ejercido | Tren Maya | Ferrocarril del Istmo | SICT y Defensa (subfunción ferrocarril) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 2019 | 14,310 | 11,039 | 0 | 1,207 | 9,832 |
+| 2020 | 6,731 | 13,426 | 7,509 | 1,572 | 4,345 |
+| 2021 | 45,192 | 37,722 | 33,802 | 1,097 | 2,823 |
+| 2022 | 78,358 | 185,244 | 179,728 | 2,613 | 2,903 |
+| 2023 | 155,523 | 115,723 | 108,053 | 3,534 | 4,136 |
+| 2024 | 139,139 | 207,392 | 164,064 | 30,932 | 12,396 |
+| 2025 | 158,115 | 99,225 | 28,387 | 3,754 | 67,084 |
+| 2026 | 146,395 | — | 30,744 | 23,052 | 92,600 |
+| 2027 | 152,120 (proyecto) | — | 18,180 | 25,147 | 108,793 |
+
+Cómo se leen: en 2019 se aprobaron 5,820 millones para el Tren Maya que no se ejercieron; en
+2022 el Tren Maya recibió más del doble de lo aprobado. La subfunción ferrocarril de 2025 en
+adelante crece por los trenes de pasajeros. No entran las pensiones de Ferrocarriles
+Nacionales de México, la Agencia del Corredor Interoceánico (sus puertos y polos) ni la
+empresa de la Defensa que opera el Tren Maya y aeropuertos.
+
+**Cómo se calculó.** Con las bases de datos abiertos de Hacienda (una fila por clave
+presupuestaria): se suma la subfunción «Transporte por Ferrocarril» de todos los ramos, las
+unidades del Tren Maya en sus programas ferroviarios y el Ferrocarril del Istmo. Los ingresos
+de las concesionarias son los de carga de la tabla A36 del anuario ferroviario 2025.
+`npm run al-dia` avisa cuando Hacienda ya debió publicar una cifra mejor: la Cuenta Pública
+de un año sale a finales de abril del siguiente, el presupuesto se aprueba a más tardar el 15
+de noviembre del año anterior y el proyecto se presenta el 8 de septiembre.
+
+En el panel del presupuesto, arriba a la derecha, *Cada mes* dice cuánto llegó este mes; al
+pasar el cursor, de dónde sale.
 
 ---
 
@@ -1081,6 +1158,14 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
 - **Dueños por OpenStreetMap**, corregido a 2018 y cotejado con el anuario oficial.
   *(20 nov 2026.)* El gobierno publica la red con su concesionario, pero su servidor no
   permite la descarga automática; OpenStreetMap cuadra con los km oficiales.
+- **El presupuesto es el real.** *(20 nov 2026.)* La partida empieza el 1 de enero de 2019 y
+  cada año llega el presupuesto federal para ferrocarriles de ese año (lo ejercido, mientras
+  haya Cuenta Pública), más el derecho de las concesionarias, en mensualidades. Lo que no se
+  gasta se acumula, y polos y vías salen de una sola caja. Así el jugador vive el mismo margen
+  que tuvo el gobierno: años flacos al principio y muy gordos con el Tren Maya.
+- **La energía viene después del presupuesto, en dos capas.** *(20 nov 2026.)* Primero la
+  electricidad como requisito de los polos, por región del sistema eléctrico, con plantas que
+  el Estado puede construir; después, las refinerías como origen de carga, junto con la carga.
 - **El jugador es el Estado.** *(19 nov 2026.)* Tiene un presupuesto que debe usar
   sabiamente. Construir cuesta tiempo y dinero, y lo que se mide no es solo el dinero: también
   los **empleos generados**, que son de valor para el jugador.
@@ -1284,6 +1369,12 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Corredor**: una ruta de mucho tráfico (por ejemplo, Nuevo Laredo–Monterrey) cuyas vías
   llevan más trenes que el promedio de su empresa.
 - **Fuera de operación**: vía que sigue en el mapa pero no tenía trenes en 2018.
+- **PEF**: el Presupuesto de Egresos de la Federación, lo que la Cámara de Diputados aprueba
+  gastar en el año. **PPEF**: el proyecto que envía el Ejecutivo antes de aprobarse.
+- **Cuenta Pública**: el informe de lo que de verdad se gastó en el año (lo **ejercido**), que
+  puede ser más o menos que lo aprobado.
+- **Derecho por uso de vía**: lo que paga cada concesionaria al Estado por operar la vía, un
+  porcentaje de sus ingresos.
 - **Obra del Estado**: vía que construye el jugador desde el catálogo: nueva, paralela,
   modernizada o rehabilitada. Siempre es del Estado.
 - **Doble vía paralela**: la vía del Estado junto a una vía concesionada; los trenes del

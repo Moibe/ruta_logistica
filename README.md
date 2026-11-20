@@ -199,6 +199,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
 | `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
 | `src/lib/domain/datos/obras-via.json` | **Catálogo de obras del Estado**: trazos, paradas o líneas, costo por km y tiempo oficiales, con fuentes |
+| `src/lib/domain/datos/presupuesto.json` | **Presupuesto del Estado**: lo federal para ferrocarriles por año (2019–2027) y los ingresos de las concesionarias, con fuentes |
 | `src/lib/domain/datos/vias.json`     | **Dueño y estado de cada tramo**, trenes privados por empresa y por corredor, capacidades; con fuentes |
 
 `npm run datos` (`scripts/datos-mexico.mjs`) regenera los cuatro primeros desde **Natural
@@ -222,8 +223,18 @@ al pie de la frontera, dos erratas del DOF) y la tabla completa están en la
 [enciclopedia](docs/enciclopedia.md#5-polos-del-bienestar). En el juego son sitios
 (`polo:<id>`) que el jugador **construye**.
 
-**Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado, con
-un presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)
+**El presupuesto del Estado** (`domain/presupuesto.ts`, `datos/presupuesto.json`): la partida
+empieza el 1 de enero de 2019 (`domain/calendario.ts`) y cada mes llega a `sim.dinero` una
+doceava parte del presupuesto federal real para ferrocarriles de ese año (lo ejercido según la
+Cuenta Pública de 2019 a 2025, lo aprobado en 2026, el proyecto de 2027, que se repite después)
+más el derecho de las concesionarias (1.25 % de sus ingresos, 3 % desde 2027). Lo que no se
+gasta se acumula; polos y vías salen de la misma caja. `sim.#cobrar` paga cada mes que empieza
+y el panel `Erario` muestra lo que llegó. Las fichas avisan cuánto tardaría de verdad una obra
+al paso del dinero (`mesesAlRitmoDelDinero`, con el calendario real de mensualidades). La
+tabla por año y el método, en la [enciclopedia](docs/enciclopedia.md#el-presupuesto-del-estado).
+
+**Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado y paga
+con su presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)
 elige de 1 a 4 cuadrillas y confirma en un cuadro propio; la obra se paga conforme avanza
 (`avanzarObra`, en el tick del reloj) y se detiene si se acaba el dinero. Al terminarse, si
 hay vía a ≤ 15 km, la red se reconstruye con el polo en servicio (`construirRed(json, sitios,
@@ -237,8 +248,9 @@ permanentes) van al panel `Erario`. Las cifras salen de fuentes oficiales y vive
 fecha de corte de `calibracion.json` hasta hoy, los acuerdos sobre Polos del Bienestar que el
 juego aún no revisó (partiendo el rango de fechas cuando hay más de diez resultados, porque la
 paginación del buscador del DOF no funciona sin sesión de navegador), y marca las cifras de
-calibración con más de seis meses sin revisarse. `--desde aaaa-mm-dd` revisa otro periodo. No
-cambia nada: dice qué revisar.
+calibración con más de seis meses sin revisarse y los años del presupuesto que ya deberían
+tener una cifra mejor (Cuenta Pública, PEF o proyecto nuevos). `--desde aaaa-mm-dd` revisa otro
+periodo. No cambia nada: dice qué revisar.
 
 **Las rutas marítimas** se calculan sobre la misma tierra del tablero: malla de 0.05° (~5.5
 km) donde una celda es tierra si su centro cae en tierra o si la toca una costa; el **Canal de
@@ -293,6 +305,8 @@ src/lib/
     red.ts           grafo ferroviario, dueños y estado de cada vía, estaciones, ruta más rápida
     saturacion.ts    uso de cada vía (privados + trenes del jugador) y cuánto frena a los trenes
     obrasVia.ts      catálogo de obras del Estado: medirlas, presupuestarlas, avanzarlas
+    calendario.ts    fechas del juego (desde el 1 de enero de 2019) y el mes de cada momento
+    presupuesto.ts   el dinero del Estado: mensualidades por año y cuánto tarda una obra al paso del dinero
     mar.ts           rutas marítimas, Canal de Panamá, travesías; compone la pierna completa
     trenes.ts        trenes y servicios iniciales
     barcos.ts        clases de barco, travesías, barcos y servicios iniciales
@@ -385,11 +399,12 @@ costa del mundo solo sube de resolución). Además:
   2018 en adelante (el Tren Maya, las líneas nuevas del Corredor Interoceánico…) lo
   construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
   cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
-  Tuxpan…). Ya está el catálogo de obras del Estado; falta que el presupuesto alcance para
-  las grandes (ver abajo).
-- **Presupuesto del Estado**: de dónde y cada cuánto llega el dinero (hoy solo se gasta): los
-  derechos de las concesionarias (3 % de sus ingresos desde 2027), los impuestos, lo que
-  cobran los trenes del Estado y lo que pagan por pasar por vía privada.
+  Tuxpan…). Ya están el catálogo de obras del Estado y su presupuesto real.
+- **Energía** (acordada, va después): la electricidad como requisito de los polos, por región
+  del sistema eléctrico (CENACE), con plantas que el Estado construye; después, las refinerías
+  como origen de carga.
+- **Más dinero del Estado**, con la carga: lo que cobran los trenes del Estado, lo que pagan
+  sus trenes por pasar por vía privada y los impuestos de las concesionarias.
 - **Carga**: qué lleva cada tren y cada barco (contenedores, granel, autos, combustibles),
   cuánto cabe y quién lo demanda; hoy corren sus servicios sin carga. El puerto es donde
   barco y tren se pasan la carga.

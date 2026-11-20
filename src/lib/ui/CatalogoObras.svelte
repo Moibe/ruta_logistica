@@ -2,6 +2,7 @@
   import { MAX_CUADRILLAS, HORAS_POR_MES } from '$lib/domain/obras';
   import { GRUPOS_OBRA, obraVia, OBRAS_VIA, TIPOS_OBRA, type ObraVia } from '$lib/domain/obrasVia';
   import { CAPACIDAD } from '$lib/domain/red';
+  import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
   import { horaDeJuego, km, mdp, meses, personas } from './formato';
@@ -85,6 +86,10 @@
     return n.charAt(0).toUpperCase() + n.slice(1);
   }
 
+/** How long it really takes when the money sets the pace (`presupuesto.ts`). */
+  const alRitmo = (p: { costoMdp: number; meses: number }) =>
+    mesesAlRitmoDelDinero(p.costoMdp, p.meses, sim.dinero, sim.ultimaMensualidad?.mes ?? 0);
+
   function construir() {
     if (!obra) return;
     sim.construirObraVia(obra.id, cuadrillas);
@@ -132,9 +137,11 @@
             ? 'Cuatro cuadrillas: el ritmo y el costo del gobierno.'
             : 'Menos cuadrillas que el gobierno: más barata y más lenta.'}
         </p>
-        {#if plan.costoMdp > sim.dinero}
+        {#if alRitmo(plan) > plan.meses * 1.02}
           <p class="aviso">
-            El presupuesto ({mdp(sim.dinero)}) no alcanza: la obra se detendrá al {personas((sim.dinero / plan.costoMdp) * 100)} %.
+            {Number.isFinite(alRitmo(plan))
+              ? `Ese ritmo cuesta ${mdp(plan.costoMdp / plan.meses)} al mes y hoy llegan ${mdp(sim.ultimaMensualidad?.total ?? 0)}: con lo que hay y el presupuesto de cada año, tardaría unos ${meses(alRitmo(plan))}, si no hay otras obras.`
+              : `El presupuesto (${mdp(sim.dinero)}) no alcanza: la obra se detendrá al ${personas((sim.dinero / plan.costoMdp) * 100)} %.`}
           </p>
         {/if}
         <details class="fuentes">
@@ -221,8 +228,11 @@
           Con {plan.cuadrillas} cuadrilla{plan.cuadrillas > 1 ? 's' : ''}: <b>{mdp(plan.costoMdp)}</b> en <b>{meses(plan.meses)}</b>, con
           {personas(plan.personasEnObra)} personas trabajando. Se paga conforme avanza.
         </p>
-        {#if plan.costoMdp > sim.dinero}
-          <p class="aviso">Con el presupuesto actual la obra se detendrá antes de terminarse.</p>
+        {#if alRitmo(plan) > plan.meses * 1.02}
+          <p class="aviso">
+            Con el dinero de hoy no alcanza a ese ritmo: la obra irá al paso de lo que llega cada mes (unos
+            {Number.isFinite(alRitmo(plan)) ? meses(alRitmo(plan)) : 'sin fin'}, si no hay otras obras).
+          </p>
         {/if}
         <div class="acciones">
           <button class="ctl" onclick={() => (confirmando = false)}>Cancelar</button>

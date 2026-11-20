@@ -156,4 +156,3 @@ export function empleosPermanentes(o: ObraPolo, polo: Polo): number {
   return o.fase === 'operando' ? o.ocupacion * polo.hectareas * c('empleosPorHa') : 0;
 }
 
-export const presupuestoInicialMdp = () => c('presupuestoInicialMdp');

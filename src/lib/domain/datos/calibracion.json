@@ -57,14 +57,6 @@
    "fuente": "Supuesto del juego",
    "url": "",
    "consultado": "2026-11-19"
-  },
-  "presupuestoInicialMdp": {
-   "valor": 20000,
-   "unidad": "millones de pesos al empezar la partida",
-   "dato": "Valor provisional, mientras se diseña el presupuesto del Estado: alcanza para unos cuantos polos medianos, no para todos.",
-   "fuente": "Supuesto del juego",
-   "url": "",
-   "consultado": "2026-11-19"
   }
  },
  "dofRevisados": [5764006, 5764007, 5786253, 5764497, 5794523, 5758077, 5758079, 5762117, 5763477, 5764317, 5766905, 5785820, 5796626, 5700705, 5691049, 5689265, 5758477, 5779946]
