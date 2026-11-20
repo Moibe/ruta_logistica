@@ -2,8 +2,8 @@
   "corte": "2026-11-20",
   "nota": "El dinero del Estado en el juego: cada año, el presupuesto federal real para ferrocarriles, más el derecho que pagan las concesionarias por usar la vía. Llega en doce mensualidades iguales y lo que no se gasta se acumula. Millones de pesos corrientes.",
   "federal": {
-    "dato": "Gasto federal en ferrocarriles: todo lo clasificado en la subfunción «Transporte por Ferrocarril» (SICT y Defensa, incluidos los trenes de pasajeros y El Insurgente), más el Tren Maya (Fonatur, Tren Maya S.A. de C.V.) y el Ferrocarril del Istmo de Tehuantepec. No incluye las pensiones de Ferrocarriles Nacionales de México, la Agencia del Corredor Interoceánico (puertos y polos) ni la empresa de la Defensa que opera el Tren Maya y aeropuertos. De 2019 a 2025 se usa lo ejercido (Cuenta Pública), que es lo que de verdad se gastó, con las ampliaciones del año; 2026 es lo aprobado (su Cuenta Pública sale en 2027) y 2027 es el proyecto que envió el Ejecutivo. De 2028 en adelante se repite 2027.",
-    "fuente": "SHCP, Transparencia Presupuestaria, datos abiertos: Cuenta Pública 2019–2025, PEF 2020–2026 y PPEF 2027 (bases por clave presupuestaria)",
+    "dato": "Gasto federal en ferrocarriles: todo lo clasificado en la subfunción «Transporte por Ferrocarril» (SICT y Defensa, incluidos los trenes de pasajeros y El Insurgente), más el Tren Maya (Fonatur, Tren Maya S.A. de C.V.) y el Ferrocarril del Istmo de Tehuantepec. No incluye las pensiones de Ferrocarriles Nacionales de México, la Agencia del Corredor Interoceánico (puertos y polos) ni la empresa de la Defensa que opera el Tren Maya y aeropuertos. De 2018 a 2025 se usa lo ejercido (Cuenta Pública), que es lo que de verdad se gastó, con las ampliaciones del año; 2026 es lo aprobado (su Cuenta Pública sale en 2027) y 2027 es el proyecto que envió el Ejecutivo. De 2028 en adelante se repite 2027.",
+    "fuente": "SHCP, Transparencia Presupuestaria, datos abiertos: Cuenta Pública 2018–2025, PEF 2020–2026 y PPEF 2027 (bases por clave presupuestaria)",
     "url": "https://www.transparenciapresupuestaria.gob.mx/Datos-Abiertos",
     "consultado": "2026-11-20",
     "archivos": {
@@ -12,6 +12,7 @@
       "ppef": "https://www.transparenciapresupuestaria.gob.mx/work/models/PTP/DatosAbiertos/Bases_de_datos_presupuesto/CSV/PPEF_{año}.csv"
     },
     "años": [
+      { "año": 2018, "mdp": 26847.3, "serie": "ejercido", "aprobado": 21046.4, "desglose": { "sict": 26100.9, "trenMaya": 0, "istmo": 746.4 }, "nota": "La partida empieza en diciembre: de este año solo llega esa doceava parte. Casi todo es el programa de proyectos de infraestructura ferroviaria de la SCT: 24,341 millones." },
       { "año": 2019, "mdp": 11039.1, "serie": "ejercido", "aprobado": 14309.7, "desglose": { "sict": 9831.8, "trenMaya": 0, "istmo": 1207.3 }, "nota": "Los 5,820 millones aprobados a Fonatur para el Tren Maya no se ejercieron." },
       { "año": 2020, "mdp": 13425.5, "serie": "ejercido", "aprobado": 6731.1, "desglose": { "sict": 4344.8, "trenMaya": 7509, "istmo": 1571.7 } },
       { "año": 2021, "mdp": 37721.8, "serie": "ejercido", "aprobado": 45191.9, "desglose": { "sict": 2822.7, "trenMaya": 33801.8, "istmo": 1097.3 } },
@@ -24,16 +25,17 @@
     ]
   },
   "derecho": {
-    "dato": "Las concesionarias privadas (Ferromex, Ferrosur, Kansas City de México y Coahuila–Durango) pagan un derecho por usar la vía: 0.5 % de sus ingresos brutos los primeros 15 años de la concesión y 1.25 % después (todas pasaron los 15 años antes de 2019). Desde el 1 de enero de 2027, 3 %. Los ingresos son los de carga de cada año; de 2026 en adelante se repiten los de 2025.",
+    "dato": "Las concesionarias privadas (Ferromex, Ferrosur, Kansas City de México y Coahuila–Durango) pagan un derecho por usar la vía: 0.5 % de sus ingresos brutos los primeros 15 años de la concesión y 1.25 % después (todas pasaron los 15 años antes de 2018). Desde el 1 de enero de 2027, 3 %. Los ingresos son los de carga de cada año (2018, los totales del anuario 2019, porque la serie de carga empieza en 2019); de 2026 en adelante se repiten los de 2025.",
     "fuente": "Ley Federal de Derechos, art. 232-B; reforma del DOF del 13 de noviembre de 2026; ATTRAPI, Anuario Estadístico Ferroviario 2025, tabla A36",
     "url": "https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf",
     "urlReforma": "https://dof.gob.mx/nota_detalle.php?codigo=5803759&fecha=13/11/2026",
     "consultado": "2026-11-20",
     "tasas": [
-      { "desde": 2019, "tasa": 0.0125 },
+      { "desde": 2018, "tasa": 0.0125 },
       { "desde": 2027, "tasa": 0.03 }
     ],
     "ingresos": [
+      { "año": 2018, "mdp": 61979.9, "porEmpresa": { "FXE": 30400.8, "FSRR": 6143.5, "KCSM": 24769.5, "LCD": 666.1 }, "fuente": "ARTF, Anuario Estadístico Ferroviario 2019, tabla 4-2 (ingresos totales de 2018; la serie de carga del anuario 2025 empieza en 2019)", "url": "https://www.gob.mx/cms/uploads/attachment/file/574090/Anuario_Estadi_stico_Ferroviario_2019__2_.pdf" },
       { "año": 2019, "mdp": 65272.1, "porEmpresa": { "FXE": 32314.7, "FSRR": 6052.3, "KCSM": 26394.9, "LCD": 510.1 } },
       { "año": 2020, "mdp": 64210.4, "porEmpresa": { "FXE": 31730.9, "FSRR": 5637.5, "KCSM": 26496.7, "LCD": 345.4 } },
       { "año": 2021, "mdp": 69976.6, "porEmpresa": { "FXE": 35704.5, "FSRR": 6252.5, "KCSM": 27675.9, "LCD": 343.7 } },

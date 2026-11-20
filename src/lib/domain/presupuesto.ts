@@ -1,15 +1,16 @@
 import DATOS from './datos/presupuesto.json';
-import { AÑO_INICIAL } from './calendario';
+import { mesCalendario } from './calendario';
 
 /**
  * The State's money. Each year it gets what the federal government really
- * put into railways that year (`datos/presupuesto.json`: spent from 2019 to
+ * put into railways that year (`datos/presupuesto.json`: spent from 2018 to
  * 2025, approved for 2026, proposed for 2027, and 2027 again after that), plus
  * the fee the private concessionaires pay for using the track: a share of
  * their revenue, 1.25 % and 3 % from 2027.
  *
  * It arrives in twelve equal monthly payments, like the government's spending
- * calendar, and whatever isn't spent stays in the till. Polos and rail works
+ * calendar, and whatever isn't spent stays in the till. The game opens in
+ * December 2018, so of that year only December's twelfth comes in. Polos and rail works
  * are paid from the same till.
  */
 
@@ -31,7 +32,8 @@ export const FEDERAL = DATOS.federal as Fuente & { años: AñoFederal[] };
 export const DERECHO = DATOS.derecho as Fuente & {
   urlReforma: string;
   tasas: { desde: number; tasa: number }[];
-  ingresos: { año: number; mdp: number; porEmpresa: Record<string, number> }[];
+  /** `fuente`/`url` when a year comes from elsewhere than the main source. */
+  ingresos: { año: number; mdp: number; porEmpresa: Record<string, number>; fuente?: string; url?: string }[];
 };
 
 const ultimo = <T>(xs: T[]) => xs[xs.length - 1];
@@ -55,7 +57,7 @@ export function ingresosPrivadas(año: number): number {
 }
 
 export type Mensualidad = {
-  /** Months since the start (0 is January 2019). */
+  /** Months since the start (0 is December 2018). */
   mes: number;
   año: number;
   /** One twelfth of the year's federal rail budget. */
@@ -70,7 +72,7 @@ export type Mensualidad = {
 
 /** What comes in at the start of month `mes`. */
 export function mensualidad(mes: number): Mensualidad {
-  const año = AÑO_INICIAL + Math.floor(mes / 12);
+  const { año } = mesCalendario(mes);
   const f = federalDe(año);
   const federal = f.mdp / 12;
   const derecho = (ingresosPrivadas(año) * tasaDerecho(año)) / 12;

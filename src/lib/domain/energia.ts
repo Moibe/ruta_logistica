@@ -1,5 +1,5 @@
 import DATOS from './datos/energia.json';
-import { AÑO_INICIAL } from './calendario';
+import { añoDecimal, horasDeFecha } from './calendario';
 import type { LonLat } from './geo';
 import { presupuestarObra, type PresupuestoObra } from './obrasVia';
 
@@ -116,17 +116,13 @@ for (const r of REGIONES) if (r.parteDe) SUBREGIONES_DEL_ESTADO.set(r.parteDe, [
 export const CAJA_CFE_MES = ENERGIA.cajaCfeMdpAño / 12;
 
 const ESCALONES: Escalon[] = ['tarde', 'noche'];
-const HORAS_AÑO = 365.25 * 24;
-/** Game hours of a calendar date ("2019-10-22"): the private plants' dates. */
-const horasDe = (fecha: string) => (Date.parse(`${fecha}T00:00:00Z`) - Date.UTC(AÑO_INICIAL, 0, 1)) / 3_600_000;
 /**
  * The official 2019 margins are those of the May–August peak; the game pins
  * them to 1 July 2019, so the private plants in service by then count in them
  * already (the rest come in on their own dates).
  */
-const CALIBRACION_2019 = `${AÑO_INICIAL}-07-01`;
-const CORTE_2019 = horasDe(CALIBRACION_2019);
-const PRIVADAS = ENERGIA.privadas.map((p) => ({ ...p, desde: horasDe(p.fecha) }));
+const CORTE_2019 = horasDeFecha('2019-07-01');
+const PRIVADAS = ENERGIA.privadas.map((p) => ({ ...p, desde: horasDeFecha(p.fecha) }));
 
 /** MW a plant adds to its region at one peak: its own figure if it has storage, else its technology's factor. */
 export const aporte = (p: { mw: number; clase: ClaseTec; aporte?: Record<Escalon, number> }, e: Escalon) =>
@@ -134,7 +130,8 @@ export const aporte = (p: { mw: number; clase: ClaseTec; aporte?: Record<Escalon
 
 /** Peak demand of the region (without the polos) at game hour `horas`. */
 export function demandaBase(r: Region, horas: number): number {
-  const años = AÑO_INICIAL + horas / HORAS_AÑO - (2018 + 0.5);
+  // The 2018 peak stands for the middle of 2018.
+  const años = añoDecimal(horas) - (2018 + 0.5);
   return r.demanda2018 * (1 + r.crecimiento) ** años;
 }
 

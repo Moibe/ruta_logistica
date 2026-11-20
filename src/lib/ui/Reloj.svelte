@@ -1,16 +1,16 @@
 <script lang="ts">
   import { sim, VELOCIDADES } from '$lib/state/simulacion.svelte';
-  import { AÑO_INICIAL, fechaLarga } from '$lib/domain/calendario';
-  import { CORTE_REAL, fechaEnPalabras, HORAS_DEL_CORTE, horasDeFecha, horasDeHoy } from '$lib/domain/realidad';
+  import { fechaLarga, horasDeFecha, horasDeHoy, INICIO } from '$lib/domain/calendario';
+  import { CORTE_REAL, fechaEnPalabras, HORAS_DEL_CORTE } from '$lib/domain/realidad';
 
   /**
    * The clock, and the switch between the two ways of looking at the board.
    *
-   * In the game: date and time (from 1 January 2019) and how fast it runs; 1×
+   * In the game: date and time (from 1 December 2018) and how fast it runs; 1×
    * is one game hour per second, and the space bar pauses and resumes.
    *
    * In Realidad the clock doesn't run: it shows a date, today by default, and
-   * a timeline from 2019 to today to see how things stood on any other day.
+   * a timeline from 1 December 2018 to today to see how things stood on any other day.
    */
   const etiqueta = (v: number) => (v === 0 ? '❚❚' : v === 0.25 ? '¼×' : `${v}×`);
   const ayuda = (v: number) => (v === 0 ? 'Pausa (espacio)' : `${v} h de juego por segundo`);
@@ -21,11 +21,10 @@
   const dias = Math.floor(hoy / 24);
   const dia = $derived(Math.min(dias, Math.floor(sim.horas / 24)));
   const enHoy = $derived(dia >= dias);
-  /** The years along the timeline, each at its place. */
-  const años = Array.from({ length: new Date().getUTCFullYear() - AÑO_INICIAL + 1 }, (_, i) => AÑO_INICIAL + i).map((a) => ({
-    año: a,
-    pos: (horasDeFecha(String(a)) / 24 / dias) * 100,
-  }));
+  /** The years along the timeline, each at its 1 January (the first one falls a month in). */
+  const años = Array.from({ length: new Date().getUTCFullYear() - INICIO.año + 1 }, (_, i) => INICIO.año + i)
+    .map((a) => ({ año: a, pos: (horasDeFecha(String(a)) / 24 / dias) * 100 }))
+    .filter((a) => a.pos >= 0);
 
   function onKey(event: KeyboardEvent) {
     if (event.code !== 'Space' || event.repeat || realidad) return;

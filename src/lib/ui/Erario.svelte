@@ -105,7 +105,7 @@
   </div>
   <button class="fila obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
     <span class="label">Obras</span>
-    <span>de vía, desde 2019</span>
+    <span>de vía del catálogo</span>
     <span class="ir">Ver todas {tablero.catalogo ? '×' : '→'}</span>
   </button>
   {:else}

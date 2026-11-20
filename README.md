@@ -225,9 +225,10 @@ al pie de la frontera, dos erratas del DOF) y la tabla completa están en la
 (`polo:<id>`) que el jugador **construye**.
 
 **El presupuesto del Estado** (`domain/presupuesto.ts`, `datos/presupuesto.json`): la partida
-empieza el 1 de enero de 2019 (`domain/calendario.ts`) y cada mes llega a `sim.dinero` una
+empieza el 1 de diciembre de 2018, el día en que empezó el sexenio (`domain/calendario.ts`), y
+cada mes llega a `sim.dinero` una
 doceava parte del presupuesto federal real para ferrocarriles de ese año (lo ejercido según la
-Cuenta Pública de 2019 a 2025, lo aprobado en 2026, el proyecto de 2027, que se repite después)
+Cuenta Pública de 2018 a 2025, lo aprobado en 2026, el proyecto de 2027, que se repite después)
 más el derecho de las concesionarias (1.25 % de sus ingresos, 3 % desde 2027). Lo que no se
 gasta se acumula; polos y vías salen de la misma caja. `sim.#cobrar` paga cada mes que empieza
 y el panel `Erario` muestra lo que llegó. Las fichas avisan cuánto tardaría de verdad una obra
@@ -236,7 +237,7 @@ tabla por año y el método, en la [enciclopedia](docs/enciclopedia.md#el-presup
 
 **Dos modos** (`sim.modo`): *Juego* y *Realidad*, con el interruptor del reloj. En Realidad
 (`domain/realidad.ts`, `datos/obras-via-real.json`) el tablero muestra cómo estaba de verdad cada
-obra de vía (anunciada, en obra con su avance, en operación) hoy o en cualquier fecha desde 2019:
+obra de vía (anunciada, en obra con su avance, en operación) hoy o en cualquier fecha desde el 1 de diciembre de 2018:
 `sim.entrarRealidad()` guarda la partida, `sim.irA(horas)` pone la fecha y rehace la red cuando
 cambia lo que está en operación, y `sim.salirRealidad()` devuelve la partida intacta. El reloj no
 corre, no hay flota ni energía, y nada se paga. Por ahora solo las obras de vía; faltan las
@@ -334,7 +335,7 @@ src/lib/
     red.ts           grafo ferroviario, dueños y estado de cada vía, estaciones, ruta más rápida
     saturacion.ts    uso de cada vía (privados + trenes del jugador) y cuánto frena a los trenes
     obrasVia.ts      catálogo de obras del Estado: medirlas, presupuestarlas, avanzarlas
-    calendario.ts    fechas del juego (desde el 1 de enero de 2019) y el mes de cada momento
+    calendario.ts    fechas del juego (desde el 1 de diciembre de 2018) y el mes de cada momento
     presupuesto.ts   el dinero del Estado: mensualidades por año y cuánto tarda una obra al paso del dinero
     energia.ts       regiones eléctricas: demanda, capacidad y márgenes; centrales de la CFE
     mar.ts           rutas marítimas, Canal de Panamá, travesías; compone la pierna completa

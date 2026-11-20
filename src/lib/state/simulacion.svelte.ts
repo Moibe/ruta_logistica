@@ -15,7 +15,7 @@ import {
   type ObraViaEstado,
   type PresupuestoVia,
 } from '$lib/domain/obrasVia';
-import { fechaCorta, horaDelDia, mesDe } from '$lib/domain/calendario';
+import { fechaCorta, horaDelDia, horasDeHoy, mesDe } from '$lib/domain/calendario';
 import { mensualidad, type Mensualidad } from '$lib/domain/presupuesto';
 import {
   CAJA_CFE_MES,
@@ -27,7 +27,7 @@ import {
   regionDelPolo,
   type EstadoRegion,
 } from '$lib/domain/energia';
-import { estadoReal, horasDeHoy, type EstadoReal } from '$lib/domain/realidad';
+import { estadoReal, type EstadoReal } from '$lib/domain/realidad';
 import { avanzar } from '$lib/domain/servicio';
 import {
   avanzarObra,
@@ -50,7 +50,7 @@ const HORAS_POR_SEGUNDO = 1;
 
 export const VELOCIDADES = [0, 0.25, 1, 4, 16] as const;
 
-/** The game opens on 1 January 2019 at six in the morning. */
+/** The game opens on 1 December 2018, the day the government took office, at six in the morning. */
 const HORA_INICIAL = 6;
 
 export type Unidad = Tren | Barco;
@@ -108,7 +108,7 @@ class Simulacion {
    */
   energia = $state.raw<EstadoRegion[]>([]);
   #diaEnergia = -1;
-  /** Months already paid in (0 is January 2019): the next one to pay. */
+  /** Months already paid in (0 is December 2018): the next one to pay. */
   #mesesCobrados = 0;
   /**
    * Every Polo del Bienestar's work and occupancy, by polo id. Mutated in place
@@ -169,7 +169,7 @@ class Simulacion {
     return this.estado === 'lista' && this.modo === 'juego' && this.multiplicador > 0;
   }
 
-  /** "3 mar 2019": the game opens on 1 January 2019 (`calendario.ts`). */
+  /** "3 mar 2019": the game opens on 1 December 2018 (`calendario.ts`). */
   get fecha(): string {
     return fechaCorta(this.horas);
   }
@@ -312,7 +312,7 @@ class Simulacion {
     this.irA(horasDeHoy(), true);
   }
 
-  /** In Realidad, show the board as it stood at game hour `horas` (2019 to today). */
+  /** In Realidad, show the board as it stood at game hour `horas` (1 December 2018 to today). */
   irA(horas: number, forzar = false) {
     if (this.modo !== 'realidad') return;
     this.horas = Math.max(0, Math.min(horas, horasDeHoy()));

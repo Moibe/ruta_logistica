@@ -1,10 +1,11 @@
 import DATOS from './datos/obras-via-real.json';
-import { AÑO_INICIAL } from './calendario';
+import { horasDeFecha } from './calendario';
 
 /**
  * What really happened with each rail work of the catalog
  * (`datos/obras-via-real.json`, every date with its source): the Realidad
- * mode shows the board as it stood on any date since 2019, instead of what
+ * mode shows the board as it stood on any date since 1 December 2018, the day
+ * the government took office (the game's own start), instead of what
  * the player builds.
  *
  * A work is announced, then under way, then in operation. Official progress
@@ -36,20 +37,12 @@ export const CORTE_REAL = REAL.corte;
 
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
-/** Game hours of a date as precise as given: a year or a month count from their first day. */
-export function horasDeFecha(fecha: string): number {
-  const [a, m = '01', d = '01'] = fecha.split('-');
-  return (Date.UTC(+a, +m - 1, +d) - Date.UTC(AÑO_INICIAL, 0, 1)) / 3_600_000;
-}
-
 /** "15 de diciembre de 2023", "marzo de 2023" or "2020": no more precise than the data. */
 export function fechaEnPalabras(fecha: string): string {
   const [a, m, d] = fecha.split('-');
   return d ? `${+d} de ${MESES[+m - 1]} de ${a}` : m ? `${MESES[+m - 1]} de ${a}` : a;
 }
 
-/** The real moment, as game hours. */
-export const horasDeHoy = () => (Date.now() - Date.UTC(AÑO_INICIAL, 0, 1)) / 3_600_000;
 export const HORAS_DEL_CORTE = horasDeFecha(REAL.corte) + 24;
 
 export type EtapaReal = 'sin-proyecto' | 'sin-anunciar' | 'anunciada' | 'en-obra' | 'en-operacion';

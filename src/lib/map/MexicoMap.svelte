@@ -11,7 +11,7 @@
   import { CAPACIDAD, DUEÑOS, type Dueño } from '$lib/domain/red';
   import { obraVia } from '$lib/domain/obrasVia';
   import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, SUBREGIONES_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
-  import { fechaLarga as fechaDeJuego } from '$lib/domain/calendario';
+  import { fechaLarga as fechaDeJuego, horasDeFecha } from '$lib/domain/calendario';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
   import { esperaTotal, piernasDelRecorrido, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
   import {
@@ -128,7 +128,6 @@
     /** The CFE hasn't chosen its site: the municipality the game puts it in. */
     sitioPorDefinir?: string;
   };
-  const horasDeFecha = (fecha: string) => (Date.parse(`${fecha}T00:00:00Z`) - Date.UTC(2019, 0, 1)) / 3_600_000;
   const PLANTAS: PlantaMapa[] = [
     ...ENERGIA.plantas2018.map((p) => ({ nombre: p.nombre, tecnologia: p.tecnologia, mw: p.mw, region: p.region, dueño: p.dueño, desde: null })),
     ...ENERGIA.privadas.map((p) => ({

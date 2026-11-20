@@ -42,10 +42,11 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | Secretaría de Economía | Lámina "Polos de Desarrollo Económico para el Bienestar" (22 de mayo de 2025): los polos anunciados por etapa | — | Documento oficial público |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) | El trazo de la autopista MEX-185D, para ubicar dos polos cuyas coordenadas no traen meridiano (ver la nota ¹ de los polos); el operador y el estado (en uso, en desuso, abandonada) de cada vía, para saber de quién es cada tramo de la red | Consultado el 19 y el 20 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 | [ARTF, Anuario Estadístico Ferroviario 2018](https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf) | Los km de vía de cada empresa en 2018, para comprobar el reparto de dueños | 2019 | Documento oficial público |
+| [ARTF, Anuario Estadístico Ferroviario 2019](https://www.gob.mx/cms/uploads/attachment/file/574090/Anuario_Estadi_stico_Ferroviario_2019__2_.pdf) | Los ingresos de cada concesionaria en 2018 (tabla 4-2), para el derecho de diciembre de 2018 | 2020 | Documento oficial público |
 | [ARTF, Sistema Nacional de Indicadores Ferroviarios 2022](https://www.gob.mx/cms/uploads/attachment/file/789599/SNIF_2022.pdf) | Densidad de tráfico y carga por tren de cada empresa (2018–2021): de ahí salen los trenes privados al día | 2022 | Documento oficial público |
 | [ARTF, Pulso de Interconexión, 1er semestre 2024](https://www.gob.mx/cms/uploads/attachment/file/947545/Pulso_Interconexion_VF7.pdf) | La tabla de derechos de paso obligatorios: quién es dueño de cada línea y kilómetro, donde OpenStreetMap no lo dice | 2024 | Documento oficial público |
 | [ATTRAPI, Anuario Estadístico Ferroviario 2025](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas por par origen–destino, para estimar cuántos trenes de Nuevo Laredo siguen al sur de Monterrey; los ingresos de cada concesionaria de 2019 a 2025 (tabla A36), sobre los que pagan su derecho | 2026 | Documento oficial público |
-| [SHCP, Transparencia Presupuestaria, datos abiertos](https://www.transparenciapresupuestaria.gob.mx/Datos-Abiertos) | El presupuesto federal para ferrocarriles de cada año: lo ejercido de 2019 a 2025 (Cuenta Pública), lo aprobado en 2026 (PEF) y el proyecto 2027 (PPEF), por clave presupuestaria | Bases consultadas el 20 de noviembre de 2026 | Datos abiertos del gobierno federal |
+| [SHCP, Transparencia Presupuestaria, datos abiertos](https://www.transparenciapresupuestaria.gob.mx/Datos-Abiertos) | El presupuesto federal para ferrocarriles de cada año: lo ejercido de 2018 a 2025 (Cuenta Pública), lo aprobado en 2026 (PEF) y el proyecto 2027 (PPEF), por clave presupuestaria | Bases consultadas el 20 de noviembre de 2026 | Datos abiertos del gobierno federal |
 | [SENER, PRODESEN 2019–2033](https://www.gob.mx/cms/uploads/attachment/file/475497/PRODESEN_V.pdf) | Capacidad por región y centrales principales a diciembre de 2018 (cap. V); márgenes de reserva de 2019 en el pico de la tarde y de la noche (cap. VII, tablas 7.6 y 7.7) | 2019 | Documento oficial público |
 | [SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039](https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297) | Demanda máxima por región de 2018 a 2024; cómo se mide el margen de reserva y sus mínimos; costo de inversión por kW de cada tecnología | DOF, 14 de octubre de 2025 | Documento oficial público |
 | [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
@@ -774,10 +775,10 @@ poco más de 500 mil millones"); el juego solo cobra la vía.
 mes (ver [El presupuesto del Estado](#el-presupuesto-del-estado)). Si el ritmo elegido cuesta
 más al mes de lo que llega, la obra se detiene cuando se vacía la caja y sigue con cada
 mensualidad. La ficha avisa cuánto tardaría de verdad al paso del dinero, con el presupuesto
-real de cada año y si no hay otras obras: México–Querétaro, empezada en enero de 2019 con 4
-cuadrillas, tardaría unos 4 años 5 meses en vez de 2 años 8, porque 2019 y 2020 fueron años
-flacos y 2022 uno muy gordo. Del 1 de enero de 2019 al 31 de diciembre de 2027 llegan unos
-979 mil millones: alcanza para un tercio del catálogo.
+real de cada año y si no hay otras obras: México–Querétaro, empezada al arrancar la partida
+con 4 cuadrillas, tardaría unos 4 años 5 meses en vez de 2 años 8, porque 2019 y 2020 fueron
+años flacos y 2022 uno muy gordo. Del 1 de diciembre de 2018 al 31 de diciembre de 2027 llegan
+unos 981 mil millones: alcanza para un tercio del catálogo.
 
 ---
 
@@ -1009,7 +1010,7 @@ la cámara del tablero se queda esperándolo en la salida.
 
 | Regla | Valor |
 | --- | --- |
-| Inicio de la partida | 1 de enero de 2019, 06:00: la red es la de 2018 y lo que sigue lo construye el jugador |
+| Inicio de la partida | 1 de diciembre de 2018, 06:00, el día en que empezó el sexenio: la red es la de 2018 y lo que sigue lo construye el jugador |
 | Reloj | 1× = 1 hora de juego por segundo; velocidades: pausa, ¼×, 1×, 4×, 16×; la barra espaciadora pausa |
 | Cuándo corre | Con cualquier vista del juego abierta: el tablero o las dos vistas del mundo (donde también navegan los barcos) |
 | Velocidad en vía primaria | 60 km/h |
@@ -1064,21 +1065,23 @@ se traza cada pierna (red ferroviaria o rutas marítimas) y cuánto espera.
 
 ### El presupuesto del Estado
 
-El jugador es el Estado y su dinero es el de verdad. La partida empieza el **1 de enero de
-2019** y cada año recibe:
+El jugador es el Estado y su dinero es el de verdad. La partida empieza el **1 de diciembre
+de 2018**, el día en que empezó el sexenio, y cada año recibe:
 
 1. **El presupuesto federal para ferrocarriles de ese año.** Todo lo que la federación gastó
    en la subfunción «Transporte por Ferrocarril» (SICT y Defensa: trenes de pasajeros, El
    Insurgente, vías de carga), más el Tren Maya (Fonatur y Tren Maya S.A. de C.V.) y el
-   Ferrocarril del Istmo de Tehuantepec. De 2019 a 2025 es **lo ejercido**, según la Cuenta
-   Pública: lo que de verdad se gastó, con las ampliaciones que hubo en el año. 2026 es lo
+   Ferrocarril del Istmo de Tehuantepec. De 2018 a 2025 es **lo ejercido**, según la Cuenta
+   Pública: lo que de verdad se gastó, con las ampliaciones que hubo en el año. De 2018 solo
+   llega la doceava parte de diciembre. 2026 es lo
    aprobado en el Presupuesto de Egresos (su Cuenta Pública sale en 2027) y 2027 es el
    proyecto que envió el Ejecutivo. De 2028 en adelante se repite 2027.
 2. **El derecho de las concesionarias.** Las cuatro privadas (Ferromex, Ferrosur, Kansas City
    de México y Coahuila–Durango) pagan por usar la vía un porcentaje de sus ingresos: 1.25 %
    (todas tienen más de 15 años de concesión), y 3 % desde el 1 de enero de 2027 por la
-   reforma del DOF del 13 de noviembre de 2026. Los ingresos son los reales de cada año; de
-   2026 en adelante se repiten los de 2025.
+   reforma del DOF del 13 de noviembre de 2026. Los ingresos son los reales de cada año (los
+   de 2018, del Anuario Estadístico Ferroviario 2019); de 2026 en adelante se repiten los de
+   2025.
 
 El año llega en **doce mensualidades iguales**, el día 1 de cada mes, como el calendario de
 gasto de Hacienda. **Lo que no se gasta se acumula.** Polos y vías se pagan **de la misma
@@ -1089,6 +1092,7 @@ Millones de pesos de cada año (calculado con el código del juego):
 
 | Año | Trenes: presupuesto federal | De dónde | Derecho de las concesionarias | Total al año | Cada mes |
 | --- | ---: | --- | ---: | ---: | ---: |
+| 2018 (solo diciembre) | 26,847 | Ejercido (Cuenta Pública) | 775 (1.25 %) | 27,622 | 2,302 |
 | 2019 | 11,039 | Ejercido (Cuenta Pública) | 816 (1.25 %) | 11,855 | 988 |
 | 2020 | 13,426 | Ejercido (Cuenta Pública) | 803 (1.25 %) | 14,228 | 1,186 |
 | 2021 | 37,722 | Ejercido (Cuenta Pública) | 875 (1.25 %) | 38,597 | 3,216 |
@@ -1104,6 +1108,7 @@ Lo que se suma cada año, también en millones de pesos de cada año:
 
 | Año | Lo aprobado | Lo ejercido | Tren Maya | Ferrocarril del Istmo | SICT y Defensa (subfunción ferrocarril) |
 | --- | ---: | ---: | ---: | ---: | ---: |
+| 2018 | 21,046 | 26,847 | 0 | 746 | 26,101 |
 | 2019 | 14,310 | 11,039 | 0 | 1,207 | 9,832 |
 | 2020 | 6,731 | 13,426 | 7,509 | 1,572 | 4,345 |
 | 2021 | 45,192 | 37,722 | 33,802 | 1,097 | 2,823 |
@@ -1296,7 +1301,8 @@ Mulegé) dice sus márgenes y su demanda; por una central, su capacidad, dueño 
 
 El tablero tiene dos modos, con el interruptor *Juego / Realidad* del reloj. En **Realidad** no
 se juega: el tablero muestra lo que de verdad pasó con cada obra de vía del catálogo, hoy o en
-cualquier fecha desde 2019 (la línea de tiempo del reloj). La partida queda guardada y sigue
+cualquier fecha desde el 1 de diciembre de 2018, el mismo arranque de la partida (la línea de
+tiempo del reloj). La partida queda guardada y sigue
 donde estaba al volver a *Juego*.
 
 Cada obra tiene sus fechas reales, con fuente (`datos/obras-via-real.json`): cuándo se anunció,
@@ -1364,7 +1370,7 @@ tienen fecha de corte, a la vista bajo la línea de tiempo.
 - **Dueños por OpenStreetMap**, corregido a 2018 y cotejado con el anuario oficial.
   *(20 nov 2026.)* El gobierno publica la red con su concesionario, pero su servidor no
   permite la descarga automática; OpenStreetMap cuadra con los km oficiales.
-- **El presupuesto es el real.** *(20 nov 2026.)* La partida empieza el 1 de enero de 2019 y
+- **El presupuesto es el real.** *(20 nov 2026.)* La partida empieza el 1 de diciembre de 2018 y
   cada año llega el presupuesto federal para ferrocarriles de ese año (lo ejercido, mientras
   haya Cuenta Pública), más el derecho de las concesionarias, en mensualidades. Lo que no se
   gasta se acumula, y polos y vías salen de una sola caja. Así el jugador vive el mismo margen
@@ -1377,6 +1383,9 @@ tienen fecha de corte, a la vista bajo la línea de tiempo.
   capacidad inicial.
 - **Dos márgenes, tarde y noche.** *(20 nov 2026.)* La región necesita los dos arriba del
   mínimo: explica por qué la solar sola no basta y hubo apagones en Yucatán y Baja California.
+- **La partida empieza el 1 de diciembre de 2018.** *(20 nov 2026.)* El día en que empezó el
+  sexenio: da un mes más de juego, y el modo Realidad arranca el mismo día (ahí se ve el anuncio
+  del Tren Maya, el 16 de diciembre). Diciembre trae la doceava parte del presupuesto de 2018.
 - **Dos modos: Juego y Realidad.** *(20 nov 2026.)* El usuario vio que el tablero también sirve
   como visor de lo que se va haciendo de verdad. El mismo mapa, con las mismas obras: en un modo
   decides tú, en el otro se ve lo que pasó. Empieza por las obras de vía, con línea de tiempo.
