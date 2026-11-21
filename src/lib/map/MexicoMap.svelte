@@ -13,6 +13,15 @@
   import { clavePolo, TEXTO_ETAPA } from '$lib/domain/realidad';
   import { ADUANA_DEL_SITIO, EXPORTACIONES, SALIDAS } from '$lib/domain/exportaciones';
   import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, SUBREGIONES_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
+  import {
+    OBRAS_DE_REFINERIA,
+    obraPemex,
+    obraPrincipal,
+    procesoReal,
+    REFINERIAS,
+    refineria as refineriaPorId,
+    type Refineria,
+  } from '$lib/domain/petroleo';
   import { añoDe, fechaLarga as fechaDeJuego, horasDeFecha } from '$lib/domain/calendario';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
   import { esperaTotal, piernasDelRecorrido, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
@@ -137,6 +146,34 @@
   /** In Realidad an airport shows from its first month with cargo (the AIFA, from March 2022). */
   const aeropuertoVisible = (a: Aeropuerto) => sim.modo !== 'realidad' || sim.horas >= horasDeFecha(a.desde);
   const MESES_CARGA = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+  /** Refineries: crude's own brown-gold, apart from the plants' orange and the exits' amber. */
+  const REFINERIA = '#e0a458';
+  /** A drop of oil, point up, half-size `s`. */
+  function gota(ctx: CanvasRenderingContext2D, x: number, y: number, s: number) {
+    ctx.beginPath();
+    ctx.moveTo(x, y - s * 1.15);
+    ctx.bezierCurveTo(x + s * 0.35, y - s * 0.55, x + s * 0.85, y - s * 0.05, x + s * 0.85, y + s * 0.35);
+    ctx.arc(x, y + s * 0.35, s * 0.85, 0, Math.PI, false);
+    ctx.bezierCurveTo(x - s * 0.85, y - s * 0.05, x - s * 0.35, y - s * 0.55, x, y - s * 1.15);
+    ctx.closePath();
+  }
+  const GOTA_SVG = 'M0 -1.15 C0.35 -0.55 0.85 -0.05 0.85 0.35 A0.85 0.85 0 0 1 -0.85 0.35 C-0.85 -0.05 -0.35 -0.55 0 -1.15 Z';
+  /** Half-size of a refinery's drop by the crude it runs (Mbd): 3.4 px empty, about 9 at 250. */
+  const tamañoGota = (mbd: number) => 3.4 + Math.sqrt(Math.max(0, mbd)) * 0.36;
+  /** The Olmeca runs once it's built (game) or opened (Realidad); the others always run. */
+  function refineriaOpera(r: Refineria): boolean {
+    if (!r.nueva) return true;
+    return sim.modo === 'realidad' ? sim.real.get(r.id)?.etapa === 'en-operacion' : sim.obrasPemex.get(r.id)?.fase === 'en-servicio';
+  }
+  /** A refinery's crude run on the board: the game's, or the real one that month or year in Realidad (null when unpublished). */
+  function procesoMapa(r: Refineria): number | null {
+    if (sim.modo === 'realidad') return procesoReal(r, sim.horas)?.mbd ?? null;
+    return sim.refinacion?.porRefineria.get(r.id)?.proceso ?? r.proceso2018;
+  }
+  /** The catalog card a refinery opens on: Deer Park's purchase until it's Pemex's, else its first work. */
+  const fichaDeRefineria = (r: Refineria) =>
+    r.extranjera ? (sim.modo === 'juego' && sim.deerParkPropia ? 'deer-park-mejora' : 'deer-park-compra') : obraPrincipal(r.id);
 
   /** A plant's colour by its technology. */
   function colorTec(t: string): string {
@@ -284,8 +321,17 @@
 
   // ---- state --------------------------------------------------------------
 
-  type Layers = { estados: boolean; vias: boolean; puertos: boolean; aeropuertos: boolean; ciudades: boolean; polos: boolean; energia: boolean };
-  let layers = $state<Layers>({ estados: true, vias: true, puertos: true, aeropuertos: true, ciudades: true, polos: true, energia: false });
+  type Layers = {
+    estados: boolean;
+    vias: boolean;
+    puertos: boolean;
+    aeropuertos: boolean;
+    ciudades: boolean;
+    polos: boolean;
+    energia: boolean;
+    refinerias: boolean;
+  };
+  let layers = $state<Layers>({ estados: true, vias: true, puertos: true, aeropuertos: true, ciudades: true, polos: true, energia: false, refinerias: true });
   /** What the track's colour says: its class (the default), its owner, or how full it is. */
   let modoVias = $state<ModoVias>('clase');
 
@@ -298,6 +344,7 @@
     | { kind: 'polo'; polo: Polo }
     | { kind: 'via'; base: number }
     | { kind: 'planta'; indice: number }
+    | { kind: 'refineria'; refineria: Refineria }
     /** `region`: the pointer is over a system of its own inside the state (Mulegé), with the electricity layer on. */
     | { kind: 'estado'; estado: EstadoProps; region?: string };
 
@@ -371,6 +418,7 @@
   let puertaPts: [number, number][] = [];
   let poloPts: [number, number][] = [];
   let plantaPts: [number, number][] = [];
+  let refineriaPts: [number, number][] = [];
   /** Station on the track and the site it serves, both in path space. */
   let estacionPts: { clave: string; via: [number, number]; sitio: [number, number]; km: number }[] = [];
   /** Where each vehicle's head was drawn last frame, for hit-testing. */
@@ -439,6 +487,7 @@
     puertaPts = PUERTAS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     poloPts = POLOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     plantaPts = LONLAT_PLANTAS.map((p) => projection!(p) ?? [NaN, NaN]);
+    refineriaPts = REFINERIAS.map((r) => projection!(r.lonLat) ?? [NaN, NaN]);
     applyTranslateExtent();
     bake();
     bakeRed();
@@ -1388,6 +1437,52 @@
       });
     }
 
+    // Refineries: a drop of oil, sized by the crude it runs. The Olmeca is
+    // hollow and dashed until it runs; Deer Park is dim until it's all Pemex's.
+    // Faded while laying out a route: they aren't stops.
+    if (layers.refinerias) {
+      REFINERIAS.forEach((r, i) => {
+        const x = sx(refineriaPts[i]);
+        const y = sy(refineriaPts[i]);
+        if (!onScreen(x, y)) return;
+        const hot = hovered?.kind === 'refineria' && hovered.refineria.id === r.id;
+        const opera = refineriaOpera(r);
+        const p = procesoMapa(r);
+        const s = tamañoGota(opera ? (p ?? 150) : r.capacidad * 0.5) * (hot ? 1.15 : 1);
+        ctx.globalAlpha = tablero.trazando ? 0.3 : r.extranjera && !sim.deerParkPropia ? 0.55 : 1;
+        gota(ctx, x, y, s);
+        if (opera) {
+          ctx.fillStyle = hot ? '#fff1dc' : REFINERIA;
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
+          ctx.lineWidth = 0.9;
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = 'rgba(224, 164, 88, 0.14)';
+          ctx.fill();
+          ctx.setLineDash([2, 1.6]);
+          ctx.strokeStyle = hot ? '#fff1dc' : REFINERIA;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+        ctx.globalAlpha = 1;
+        const R = s + 1.5;
+        taken.push([x - R, y - R, x + R, y + R]);
+        if (tablero.trazando) return;
+        labels.push({
+          text: r.corto,
+          spots: spotsAround(x, y, R),
+          size: 10,
+          font: '600 10px Inter, "Segoe UI", system-ui, sans-serif',
+          color: hot ? '#ffffff' : 'rgba(240, 205, 160, 0.92)',
+          // Under ports and airports; over polos and most cities.
+          priority: (hot ? 1e9 : 0) + 3.5e7 + (p ?? 0),
+          halo: true,
+        });
+      });
+    }
+
     // Exits for exports: a small amber square at the corner of the site,
     // the customs office a train can leave the country through.
     for (const clave of SALIDAS) {
@@ -1926,6 +2021,15 @@
         }
       });
     }
+    if (layers.refinerias && !tablero.trazando) {
+      REFINERIAS.forEach((r, i) => {
+        const d = Math.hypot(transform.applyX(refineriaPts[i][0]) - mx, transform.applyY(refineriaPts[i][1]) - my);
+        if (d < 9 && d < bestD) {
+          best = { kind: 'refineria', refineria: r };
+          bestD = d;
+        }
+      });
+    }
     if (layers.energia && !tablero.trazando) {
       PLANTAS.forEach((p, i) => {
         if (!plantaVisible(p)) return;
@@ -1984,6 +2088,8 @@
                 ? `via:${t.base}`
                 : t.kind === 'planta'
                   ? `planta:${t.indice}`
+                : t.kind === 'refineria'
+                  ? `refineria:${t.refineria.id}`
                 : `estado:${t.estado.clave}${t.region ? `:${t.region}` : ''}`;
 
   /** The site key of a target, if it is a site. */
@@ -2049,6 +2155,12 @@
     if (target.kind === 'polo') {
       sim.seleccionar(null);
       tablero.poloSel = target.polo.id;
+    }
+    // A refinery opens its card in the catalog of works.
+    if (target.kind === 'refineria') {
+      tablero.abrirCatalogo();
+      tablero.obraSel = fichaDeRefineria(target.refineria);
+      return;
     }
     // A rail line or a power plant only shows its card on hover.
     if (target.kind === 'via' || target.kind === 'planta') return;
@@ -2220,7 +2332,23 @@
         const p = projection(planta.lonLat);
         if (p) flyTo(p[0], p[1], Math.max(transform.k, 5));
       }
+      // A Pemex work: its refinery, with the refineries layer on.
+      const ref = refineriaPorId(id === 'deer-park-compra' ? 'deer-park' : (obraPemex(id)?.refineria ?? ''));
+      if (ref && projection) {
+        layers.refinerias = true;
+        const p = projection(ref.lonLat);
+        if (p) flyTo(p[0], p[1], Math.max(transform.k, 4));
+      }
     });
+  });
+
+  $effect(() => {
+    // The refineries: their runs change daily as rehabilitations advance, and with the date in Realidad.
+    layers.refinerias;
+    sim.refinacion;
+    sim.deerParkPropia;
+    sim.obrasPemex;
+    ensucia();
   });
 
   $effect(() => {
@@ -2453,6 +2581,55 @@
           ({fmt.format(Math.round(antes))} t)
         </span>
       {/if}
+    {:else if hovered.kind === 'refineria'}
+      {@const r = hovered.refineria}
+      {@const opera = refineriaOpera(r)}
+      {@const ajena = r.extranjera && !sim.deerParkPropia}
+      <span class="label tip-kind" style:color={REFINERIA}>
+        Refinería{r.extranjera ? (ajena ? ' · Pemex socio al 49.995 %' : ' de Pemex en Texas') : ''}{r.nueva && !opera
+          ? sim.modo === 'realidad'
+            ? ` · ${TEXTO_ETAPA[sim.real.get(r.id)?.etapa ?? 'sin-datos']}`
+            : sim.obrasPemex.get(r.id)?.fase === 'en-obra'
+              ? ` · en obra ${((sim.obrasPemex.get(r.id)?.avance ?? 0) * 100).toFixed(0)} %`
+              : ' · por construir'
+          : ''}
+      </span>
+      <strong>{r.nombre}</strong>
+      <span class="tip-sub">{r.lugar} · capacidad de {fmt.format(r.capacidad)} mil barriles diarios</span>
+      {#if sim.modo === 'realidad'}
+        {@const pr = procesoReal(r, sim.horas)}
+        {#if pr && opera}
+          <span class="tip-rail">
+            Procesó {fmt.format(Math.round(pr.mbd))} mil barriles diarios en {pr.cuando} · {Math.round((pr.mbd / r.capacidad) * 100)} % de su capacidad
+          </span>
+        {:else if opera}
+          <span class="tip-sub">Sin dato publicado por refinería para esa fecha</span>
+        {/if}
+      {:else}
+        {@const e = sim.refinacion?.porRefineria.get(r.id)}
+        {#if e && opera}
+          <span class="tip-rail">Procesa {fmt.format(Math.round(e.proceso))} mil barriles diarios · {Math.round((e.proceso / r.capacidad) * 100)} % de su capacidad</span>
+          {#if ajena}
+            <span class="tip-sub">Lo que produce no cuenta para el país hasta comprar la parte de Shell</span>
+          {:else}
+            <span class="tip-sub">{fmt.format(Math.round(e.combustibles))} mil barriles diarios de gasolina, diésel y turbosina</span>
+          {/if}
+        {/if}
+        {#each OBRAS_DE_REFINERIA.get(r.id) ?? [] as o (o.id)}
+          {@const est = sim.obrasPemex.get(o.id)}
+          {#if est && o.id !== r.id}
+            <span class="tip-sub">
+              {o.tipo === 'coquizadora' ? 'Coquizadora' : o.tipo === 'mejora' ? 'Confiabilidad' : 'Rehabilitación'}:
+              {est.fase === 'en-servicio'
+                ? 'terminada'
+                : est.fase === 'en-obra'
+                  ? `${est.detenida ? 'detenida' : 'en obra'} ${(est.avance * 100).toFixed(0)} %`
+                  : 'por hacer'}
+            </span>
+          {/if}
+        {/each}
+      {/if}
+      <span class="tip-sub">Clic: abrir su ficha</span>
     {:else if hovered.kind === 'polo'}
       {@const p = hovered.polo}
       <span class="label tip-kind" style:color={POLO}>Polo del Bienestar · {faseDelPolo(p.id)}</span>
@@ -2660,6 +2837,11 @@
     <svg class="sw" width="10" height="13" viewBox="0 0 10 13" aria-hidden="true">
       <path d="M6 0 0 7.5h4L3 13l7-8H6z" fill="#facc15" />
     </svg>Energía
+  </button>
+  <button class="ctl" aria-pressed={layers.refinerias} onclick={() => (layers.refinerias = !layers.refinerias)}>
+    <svg class="sw" width="10" height="13" viewBox="-1 -1.3 2 2.6" aria-hidden="true">
+      <path d={GOTA_SVG} fill={REFINERIA} />
+    </svg>Refinerías
   </button>
   <span class="sep"></span>
   <span class="label mono">{transform.k.toFixed(1)}×</span>

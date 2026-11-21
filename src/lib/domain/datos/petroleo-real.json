@@ -1,0 +1,55 @@
+{
+  "corte": "2026-11-20",
+  "nota": "Lo que pasó de verdad con cada obra de Pemex del catálogo. La rehabilitación de las seis refinerías empezó en septiembre de 2019 y sigue: el Plan de Trabajo 2025–2030 le destina 105 mil millones de pesos más.",
+  "fuentes": {
+    "pmx-20f-2019": { "fuente": "Pemex, Form 20-F 2019 ante la SEC: el Programa de Rehabilitación del Sistema Nacional de Refinación empezó en septiembre de 2019; la Olmeca, autorizada el 7 de diciembre de 2018", "url": "https://www.sec.gov/Archives/edgar/data/932782/000119312520136835/d850870d20f.htm" },
+    "asf-2021-0219": { "fuente": "ASF, auditoría 2021-0219, Programa de Rehabilitaciones del Sistema Nacional de Refinación (Cuenta Pública 2021)", "url": "https://www.asf.gob.mx/Trans/Informes/IR2021c/Documentos/Auditorias/2021_0219_a.pdf" },
+    "pmx-c9-2025": { "fuente": "Pemex, comunicado 9/2025 (12 de febrero de 2025): Plan de Trabajo 2025–2030", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1440766_1.pdf" },
+    "pmx-c24-2019": { "fuente": "Pemex, comunicado 24 (2 de junio de 2019): arrancan los trabajos de la refinería de Dos Bocas", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_928185_1.pdf" },
+    "pmx-c38-2022": { "fuente": "Pemex, comunicado 38/2022 (1 de julio de 2022): primera etapa de la Olmeca; acuerdos para las coquizadoras de Tula y Salina Cruz", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1202976_1.pdf" },
+    "cpm-2024": { "fuente": "Presidencia de la República, presentación de resultados de Pemex (3 de mayo de 2024): arranque de la Olmeca en junio de 2024", "url": "https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf" },
+    "ig1-2025": { "fuente": "Primer Informe de Gobierno 2024–2025: la Olmeca procesó 197 Mbd en junio de 2025, con su segundo tren", "url": "https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf" },
+    "ig2-2026": { "fuente": "Segundo Informe de Gobierno 2025–2026: avance de 97 % y 80.1 % de los proyectos de residuales de Tula y Salina Cruz al cierre de junio de 2026", "url": "https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf" },
+    "pmx-20f-2020": { "fuente": "Pemex, Form 20-F 2020 ante la SEC: la coquizadora de Tula, 63 % construida y suspendida", "url": "https://www.sec.gov/Archives/edgar/data/932782/000119312521162651/d106092d20f.htm" },
+    "pmx-c37-2025": { "fuente": "Pemex, comunicado 37/2025 (24 de octubre de 2025): coquizadoras de Tula y Salina Cruz en 87 % y 74 %", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1501814_1.pdf" },
+    "pmx-c51-2026": { "fuente": "Pemex, comunicado 51/2026 (14 de mayo de 2026): la coquizadora de Tula, en marcha desde julio de 2025", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1560083_1.pdf" },
+    "pmx-c159-2021": { "fuente": "Pemex, comunicado 159/2021 (26 de mayo de 2021): Pemex comprará la parte de Shell en Deer Park", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1102962_1.pdf" },
+    "pmx-c6-2022": { "fuente": "Pemex, comunicado 6/2022 (20 de enero de 2022): concreta la compra de Deer Park", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1159261_1.pdf" }
+  },
+  "obras": {
+    "rehab-cadereyta": { "inicio": "2019-09", "situacion": "Sigue en rehabilitación: el Plan de Trabajo 2025–2030 destina 105 mil millones de pesos a las seis refinerías.", "fuentes": ["pmx-20f-2019", "asf-2021-0219", "pmx-c9-2025"] },
+    "rehab-madero": { "inicio": "2019-09", "situacion": "Sigue en rehabilitación: el Plan de Trabajo 2025–2030 destina 105 mil millones de pesos a las seis refinerías.", "fuentes": ["pmx-20f-2019", "asf-2021-0219", "pmx-c9-2025"] },
+    "rehab-minatitlan": { "inicio": "2019-09", "situacion": "Sigue en rehabilitación: el Plan de Trabajo 2025–2030 destina 105 mil millones de pesos a las seis refinerías.", "fuentes": ["pmx-20f-2019", "asf-2021-0219", "pmx-c9-2025"] },
+    "rehab-salamanca": { "inicio": "2019-09", "situacion": "Sigue en rehabilitación: el Plan de Trabajo 2025–2030 destina 105 mil millones de pesos a las seis refinerías.", "fuentes": ["pmx-20f-2019", "asf-2021-0219", "pmx-c9-2025"] },
+    "rehab-salina-cruz": { "inicio": "2019-09", "situacion": "Sigue en rehabilitación: el Plan de Trabajo 2025–2030 destina 105 mil millones de pesos a las seis refinerías.", "fuentes": ["pmx-20f-2019", "asf-2021-0219", "pmx-c9-2025"] },
+    "rehab-tula": { "inicio": "2019-09", "situacion": "Sigue en rehabilitación: el Plan de Trabajo 2025–2030 destina 105 mil millones de pesos a las seis refinerías.", "fuentes": ["pmx-20f-2019", "asf-2021-0219", "pmx-c9-2025"] },
+    "olmeca": {
+      "anuncio": "2018-12-07",
+      "inicio": "2019-06-02",
+      "parcial": { "fecha": "2022-07-01", "texto": "Se inauguró su primera etapa constructiva; empezó a recibir crudo en pruebas en 2023." },
+      "operacion": "2024-06",
+      "nota": "Arrancó en junio de 2024, con meses sin procesar (octubre de 2024, enero de 2025); su segundo tren entró en junio de 2025 y su mejor mes fue diciembre de 2025, con 263 Mbd.",
+      "fuentes": ["pmx-20f-2019", "pmx-c24-2019", "pmx-c38-2022", "cpm-2024", "ig1-2025", "ig2-2026"]
+    },
+    "coquizadora-tula": {
+      "inicio": "2022-07-01",
+      "operacion": "2025-07",
+      "nota": "En 2018 estaba 63 % construida y suspendida por falta de presupuesto; se retomó con los acuerdos de julio de 2022.",
+      "fuentes": ["pmx-20f-2020", "pmx-c38-2022", "pmx-c51-2026"]
+    },
+    "coquizadora-salina-cruz": {
+      "inicio": "2022-07-01",
+      "avances": [
+        { "fecha": "2025-10-24", "pct": 74 },
+        { "fecha": "2026-06-30", "pct": 80.1 }
+      ],
+      "prevista": "2026, según el Plan de Trabajo 2025–2030",
+      "fuentes": ["pmx-c38-2022", "pmx-c9-2025", "pmx-c37-2025", "ig2-2026"]
+    },
+    "deer-park-compra": {
+      "anuncio": "2021-05",
+      "operacion": "2022-01-20",
+      "fuentes": ["pmx-c159-2021", "pmx-c6-2022"]
+    }
+  }
+}

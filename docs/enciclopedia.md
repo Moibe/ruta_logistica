@@ -54,6 +54,13 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [INEGI, Exportaciones por Entidad Federativa](https://www.inegi.org.mx/programas/exporta_ef/) | Valor de lo que exporta cada estado, por subsector, de 2007 a 2025 (datos abiertos) | 2026 | Dato oficial público |
 | [ANAM, informe mensual de diciembre de 2025](https://www.anam.gob.mx/wp-content/uploads/IM_12_2025-.pdf) y [decreto de creación (DOF, 14 de julio de 2021)](https://www.dof.gob.mx/nota_detalle.php?codigo=5623945&fecha=14/07/2021) | Recaudación, operaciones y valor de las operaciones de cada aduana en 2025; la creación de la ANAM | 2021 y 2026 | Documento oficial público |
 | [ATTRAPI, Anuario Estadístico Ferroviario 2025, tablas A9 a A13](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas que salen del país por tren cada año (2017–2025), por frontera y por puerto; el tráfico interior (carga nacional) | 2026 | Documento oficial público |
+| Pemex, Form 20-F ante la SEC de [2018](https://www.sec.gov/Archives/edgar/data/0000932782/000119312519129698/d632951d20f.htm), [2019](https://www.sec.gov/Archives/edgar/data/932782/000119312520136835/d850870d20f.htm) y [2020](https://www.sec.gov/Archives/edgar/data/932782/000119312521162651/d106092d20f.htm) | Crudo procesado por cada refinería de 2018 a 2020 y su estado en 2018; el inicio del Programa de Rehabilitación; la Olmeca autorizada; la coquizadora de Tula suspendida | 2019–2021 | Documento oficial público |
+| [ASF, auditoría 2021-0219, Programa de Rehabilitaciones del Sistema Nacional de Refinación](https://www.asf.gob.mx/Trans/Informes/IR2021c/Documentos/Auditorias/2021_0219_a.pdf) | Capacidad de diseño, utilizada en 2021 y óptima de cada refinería; lo que el programa requería, lo que se le dio y lo que cubrió | Cuenta Pública 2021 (enero de 2023) | Documento oficial público |
+| [Pemex, Informe Anual 2023](https://gaceta.diputados.gob.mx/PDF/65/2024/may/Pemex-20240514.pdf) (enviado al Congreso) | Proceso de 2022 y 2023; Tula, Salina Cruz y Minatitlán en 2023; Deer Park en 2022 y 2023; la producción que sustenta la Olmeca | Mayo de 2024 | Documento oficial público |
+| [Presidencia, presentación de resultados de Pemex](https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf) | Combustibles producidos y déficit desde diciembre de 2018; transferencias del Gobierno Federal a Pemex 2019–abril de 2024; costo de la Olmeca y de las coquizadoras | 3 de mayo de 2024 | Documento oficial público |
+| Pemex, comunicados en la Bolsa Mexicana de Valores: [24/2019](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_928185_1.pdf), [159/2021](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1102962_1.pdf), [6/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1159261_1.pdf), [38/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1202976_1.pdf), [9/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1440766_1.pdf), [11/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1444789_1.pdf), [37/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1501814_1.pdf), [51/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1560083_1.pdf) y [87/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1602784_1.pdf) | Arranque de la Olmeca; compra de Deer Park; acuerdos de las coquizadoras; Plan de Trabajo 2025–2030; proceso de 2024; avance de las coquizadoras; Deer Park en 2026 | 2019–2026 | Comunicado oficial |
+| [Primer](https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf) y [Segundo Informe de Gobierno](https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf) | Crudo procesado por cada refinería, mes por mes, de octubre de 2024 a junio de 2026 (SENER con datos de Pemex) | Septiembre de 2025 y de 2026 | Documento oficial público |
+| [OpenStreetMap](https://www.openstreetmap.org/) | El predio de cada refinería | Consultado el 20 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 | [INEGI, PIB por Entidad Federativa, base 2018](https://www.inegi.org.mx/programas/pibent/2018/) | Valor agregado de las actividades primarias y secundarias de cada estado y de la extracción de petróleo, 2018–2023 (2023 preliminar): el reparto de la carga nacional | 2024 | Dato oficial público |
 | [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
 | [CNE, lista de permisos de generación](https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx) | Las centrales privadas que entraron (o entrarán) desde 2019: capacidad, tecnología, fecha y municipio; inversión estimada de varias de la CFE | Al 31 de octubre de 2026 | Documento oficial público |
@@ -1380,6 +1387,132 @@ en curso). Mulegé se pinta aparte, con una línea punteada donde termina: su l�
 y Loreto, del Marco Geoestadístico del INEGI. Al pasar el cursor por un estado, su región (o
 Mulegé) dice sus márgenes y su demanda; por una central, su capacidad, dueño y fecha. La ficha de cada polo dice si su región tiene energía.
 
+### El petróleo
+
+La segunda capa de la energía son las refinerías de Pemex. El juego mide lo que el gobierno se
+propuso arreglar: **cuánto crudo refina el país** (en miles de barriles diarios, Mbd) y **qué
+parte de la gasolina, el diésel y la turbosina que usa hace él mismo**. Lo demás se importa.
+
+**Cómo estaban en 2018.** Las seis refinerías del Sistema Nacional de Refinación procesaron
+611.9 Mbd de 1,640 de capacidad: el 37 %. Madero y Minatitlán casi no trabajaban (Pemex, 20-F
+2018). El Programa de Rehabilitaciones empezó en septiembre de 2019 (Pemex, 20-F 2019).
+Requería 65,692 millones de pesos de 2019 a 2021, pero se le dieron 27,425, el 41.7 %, y cubrió
+el 29.7 % de las reparaciones mayores (ASF). En mayo de 2022 cada refinería declaró a la ASF su
+**capacidad óptima**, lo que puede procesar con sus plantas en orden. Eso es lo que el juego
+alcanza al rehabilitarla:
+
+| Refinería | Lugar | Capacidad (Mbd) | Proceso 2018 | Del total | Capacidad óptima | Rehabilitarla cuesta |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Cadereyta | Nuevo León | 275 | 118.0 | 43 % | 180 | 6,742 millones |
+| Madero | Tamaulipas | 190 | 19.2 | 10 % | 120 | 10,961 millones |
+| Minatitlán | Veracruz | 285 | 26.2 | 9 % | 246 | 23,902 millones |
+| Salamanca | Guanajuato | 245 | 140.5 | 57 % | 170 | 3,208 millones |
+| Salina Cruz | Oaxaca | 330 | 165.2 | 50 % | 260 | 10,309 millones |
+| Tula | Hidalgo | 315 | 142.8 | 45 % | 240 | 10,570 millones |
+
+**Las obras de Pemex** (en el catálogo, en su propia sección):
+
+- **Rehabilitar** cada una de las seis lleva su proceso de lo de 2018 a su capacidad óptima,
+  conforme avanza la obra. Cuesta lo que el programa 2019–2021 requería repartido por lo que
+  recupera cada una: unos 109 millones de pesos por cada mil barriles diarios recuperados, una
+  **estimación del juego** con cifras oficiales. Tarda 36 meses con 4 cuadrillas, lo que se
+  planeó que durara el programa.
+- **La refinería Olmeca** (Dos Bocas): 16,816 millones de dólares de inversión actualizada a
+  marzo de 2024 (Presidencia), 308 mil millones de pesos. Tarda 60 meses, del arranque de la obra
+  (2 de junio de 2019) a su arranque como refinería (junio de 2024). Terminada, procesa 263 Mbd,
+  su mejor mes: diciembre de 2025, el 77 % de su capacidad (Segundo Informe de Gobierno).
+- **Las coquizadoras** convierten el combustóleo que sobra en gasolina y diésel. La de **Tula**
+  cuesta 5,146 millones de dólares y suma 80 Mbd de combustibles; tarda 36 meses, de los
+  acuerdos del 1 de julio de 2022 a su puesta en marcha en julio de 2025. La de **Salina Cruz**
+  cuesta 3,501 millones de dólares y suma 74 Mbd; el Plan de Trabajo 2025–2030 la esperaba en
+  2026, así que el juego cuenta 53 meses. En 2018 la de Tula estaba 63 % construida y suspendida
+  por falta de presupuesto (Pemex, 20-F 2020).
+- **Deer Park**, en Texas: desde 1993 Pemex tiene el 49.995 % y Shell el resto. Lo que produce no
+  cuenta para el país hasta **comprar la parte de Shell**: 23 mil millones de pesos de la caja de
+  Pemex, de una vez. Es lo que el Gobierno Federal transfirió para esa compra: 596 millones de
+  dólares por las acciones y otros 596 por la deuda que le tocaba a Pemex (Pemex, comunicado
+  6/2022; Presidencia). Ya comprada, se puede **mejorar su confiabilidad**: de 267 a 309 Mbd, lo
+  que procesó de enero a septiembre de 2026, 15.6 % más que cuando la compró (Pemex, comunicado
+  87/2026). No hay un costo oficial: el juego usa el mismo costo por barril recuperado (4,567
+  millones) y un año de obra, **estimaciones del juego**.
+
+Los costos en dólares se pasan a pesos a 18.33, el promedio de 2024.
+
+**Los combustibles.** Cada refinería da gasolina, diésel y turbosina por barril de crudo:
+
+- **Las seis:** 0.55. Es un cálculo del juego: 1,933 Mbd producidos sobre 3,503 procesados de
+  2019 a 2023, con cifras de Presidencia.
+- **La Olmeca:** 0.844. Sus 340 Mbd sustentan 165 de gasolina y 122 de diésel (Informe Anual
+  2023 de Pemex).
+- **Deer Park:** 0.93. En 2023 sacó 239 Mbd de combustibles de 259 de crudo, y en 2026, 289 de
+  309; también procesa otros insumos.
+
+El consumo del país queda fijo en el de diciembre de 2018: 1,231 Mbd, los 304 que hacía el
+sistema más los 927 que se importaban (Presidencia).
+
+| | Crudo en México (Mbd) | Combustibles (Mbd) | Del consumo |
+| --- | ---: | ---: | ---: |
+| Al empezar la partida | 612 | 337 | 27 % |
+| Todo hecho, sin Deer Park | 1,479 | 1,045 | 85 % |
+| Todo hecho, con Deer Park | 1,479 | 1,332 | 108 % |
+
+Cálculos del juego. En la realidad, el sistema con la Olmeca procesó 1,015 Mbd en 2025.
+
+**La caja de Pemex.** Pemex paga sus obras con lo que el Gobierno Federal le transfiere para
+refinación, aparte del presupuesto de trenes y de la caja de la CFE:
+
+- **De 2019 a 2024:** 6,109 millones al mes. De enero de 2019 a abril de 2024 le transfirió 391
+  mil millones de pesos para infraestructura: 320 para la Olmeca, 48 para las refinerías y los
+  fertilizantes y 23 para Deer Park (Presidencia). Son 64 meses; el juego sigue a ese paso hasta
+  diciembre de 2024.
+- **Desde 2025:** 2,181 millones al mes. El Plan de Trabajo 2025–2030 destina 105 mil millones
+  a rehabilitar las seis refinerías y 52 mil millones a las coquizadoras (Pemex, comunicado
+  9/2025).
+
+Todas las obras juntas cuestan más de lo que llega. Hacerlo todo pide escoger un orden, como
+pasó en la realidad.
+
+**En el mapa**, el botón *Refinerías* muestra cada una como una gota, del tamaño del crudo que
+procesa. La Olmeca está hueca y punteada hasta que opera. Deer Park está tenue mientras sea de
+los dos socios. Al pasar el cursor, cada refinería dice su proceso, su parte de la capacidad, sus
+combustibles y sus obras; un clic abre su ficha en el catálogo.
+
+**La barra de arriba** junta las cajas de la CFE y de Pemex en una celda de dos líneas. Una
+celda *Refinación* dice el crudo y la parte del consumo.
+
+**En Realidad**, la ficha y el cursor dicen lo que cada refinería procesó de verdad:
+
+- **De 2018 a 2020**, por año (Pemex, 20-F).
+- **2021:** la capacidad que usaron sus plantas primarias (ASF).
+- **De octubre de 2024 a junio de 2026**, mes por mes, salvo julio y agosto de 2025 (Primer y
+  Segundo Informe de Gobierno, con datos de Pemex).
+
+De 2022 a septiembre de 2024 no hay cifras publicadas por refinería en las fuentes consultadas,
+solo del sistema, y la ficha lo dice. Las de Pemex no se pueden bajar automáticamente.
+
+La barra da el total de cada año:
+
+| Año | Crudo procesado (Mbd) | Fuente |
+| --- | ---: | --- |
+| 2018 | 611.9 | Pemex, 20-F |
+| 2019 | 592.0 | Pemex, 20-F |
+| 2020 | 590.6 | Pemex, 20-F |
+| 2021 | 711.6 | ASF |
+| 2022 | 815.8 | Pemex, Informe Anual 2023 |
+| 2023 | 792.0 | Pemex, Informe Anual 2023 |
+| 2024 | 906 | Pemex, comunicado 11/2025 (con la Olmeca) |
+| 2025 | 1,014.9 | Promedio de los diez meses de los Informes de Gobierno (faltan julio y agosto) |
+| 2026 | 1,075.3 | Enero a junio, Segundo Informe de Gobierno |
+
+Las obras de Pemex tienen su etapa real:
+
+- **Las seis rehabilitaciones:** en obra desde septiembre de 2019, y siguen.
+- **La Olmeca:** autorizada el 7 de diciembre de 2018, en obra desde el 2 de junio de 2019, en
+  operación desde junio de 2024.
+- **La coquizadora de Tula:** en obra desde julio de 2022, en operación desde julio de 2025.
+- **La de Salina Cruz:** en obra, con 80.1 % de avance en junio de 2026.
+- **Deer Park:** de Pemex desde el 20 de enero de 2022.
+
 ### El modo Realidad
 
 El tablero tiene dos modos, con el interruptor *Juego / Realidad* del reloj. En **Realidad** no
@@ -1661,6 +1794,26 @@ en 2025.
 - **Las exportaciones, con un enfoque mixto.** *(20 nov 2026.)* El usuario quiere medir
   exportaciones. La carga nacional será un número; la exportación va de un origen a una salida.
   Se mide en toneladas; el valor en dólares espera un valor por tonelada de fuente oficial.
+- **El petróleo, con caja propia de Pemex.** *(20 nov 2026.)* El usuario aprobó el orden
+  (fuentes, refinerías como sitios, Pemex y sus obras, y los combustibles como carga junto con los
+  barcos) y que Pemex pague con su propia caja, como la CFE. Pidió además dos cosas:
+  - Deer Park se puede comprar y mejorar durante el partido.
+  - El mal estado de las refinerías en 2018, y lo que se invirtió en rehabilitarlas, son parte
+    del juego.
+
+  Lo que se mide es el crudo refinado y la parte del consumo de combustibles que el país hace
+  él mismo: es la meta que el gobierno se puso. Los ductos y el robo de combustible se dejan
+  fuera: no son ni tren ni barco.
+- **Una refinería rehabilitada llega a su capacidad óptima, no a su capacidad de diseño.**
+  *(20 nov 2026.)* Es lo que cada una declaró a la ASF que podía procesar con sus plantas en
+  orden. Así la meta es la de Pemex y no una que nunca se planteó.
+- **Por refinería, solo los años y meses publicados.** *(20 nov 2026.)* En Realidad, donde no hay
+  cifra de una refinería (2022 a septiembre de 2024), la ficha lo dice en vez de estimarla.
+- **La barra de arriba, en celdas de dos líneas.** *(20 nov 2026.)* Con la caja de Pemex y la
+  refinación ya no cabía. Las cifras que van juntas comparten celda: las dos cajas, los dos
+  empleos, las dos cargas, el crudo y los combustibles. En Realidad comparten las vías, las
+  centrales y los polos, y la refinación y la carga aérea. Abajo de 1,400 px de ancho se ocultan
+  las secundarias.
 - **La carga nacional, un número.** *(20 nov 2026.)* Pedido del usuario. Cada estado la genera a
   su parte del campo y la industria, sin la extracción de petróleo (que inflaría a Campeche y
   Tabasco, cuyo crudo no viaja por tren). Va de una parada a la siguiente y se cuenta en
@@ -1926,6 +2079,13 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Región del sistema eléctrico**: cada zona que opera un centro de control del CENACE
   (Central, Oriental, Occidental, Noroeste, Norte, Noreste, Peninsular, Baja California y Baja
   California Sur). Mulegé, en el norte de Baja California Sur, es un sistema aparte.
+- **Mbd**: miles de barriles diarios, la medida del crudo que procesa una refinería.
+- **Sistema Nacional de Refinación**: las refinerías de Pemex en México: las seis de antes de
+  2018 (Cadereyta, Madero, Minatitlán, Salamanca, Salina Cruz y Tula) y, desde 2024, la Olmeca.
+- **Capacidad óptima**: lo que una refinería puede procesar con sus plantas en orden, según lo
+  que cada una declaró a la ASF en mayo de 2022.
+- **Coquizadora**: planta que convierte el residuo pesado del crudo (el que acaba en combustóleo)
+  en coque, gas y destilados como gasolina y diésel.
 - **Sistema aislado**: red eléctrica sin enlace con la red nacional. En el juego son tres: Baja
   California, Baja California Sur y Mulegé.
 - **Termosolar**: central que concentra el sol con espejos sobre una torre y guarda el calor en

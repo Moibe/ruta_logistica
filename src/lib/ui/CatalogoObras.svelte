@@ -4,7 +4,20 @@
   import { CAPACIDAD } from '$lib/domain/red';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
   import { aporte, CAJA_CFE_MES, mesesConCajaCfe, OBRAS_ENERGIA, obraEnergia, type ObraEnergia } from '$lib/domain/energia';
-  import { fechaLarga, horasDeFecha } from '$lib/domain/calendario';
+  import { fechaLarga, horasDeFecha, mesDe } from '$lib/domain/calendario';
+  import {
+    COMPRA_DEER_PARK,
+    DEER_PARK,
+    fuentePetroleo,
+    mesesConCajaPemex,
+    OBRAS_PEMEX,
+    obraPemex,
+    procesoReal,
+    refineria,
+    rendimiento,
+    type ObraPemex,
+    type Refineria,
+  } from '$lib/domain/petroleo';
   import { fechaEnPalabras, fichaReal, HORAS_DEL_CORTE, TEXTO_ETAPA } from '$lib/domain/realidad';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
@@ -103,6 +116,66 @@
     confirmando = false;
   }
 
+  // ---- Pemex's works ---------------------------------------------------------------------------
+
+  /** Deer Park's purchase isn't a work with crews: its card has an id of its own. */
+  const COMPRA = 'deer-park-compra';
+  let confirmandoCompra = $state(false);
+  $effect(() => {
+    tablero.obraSel;
+    confirmandoCompra = false;
+  });
+
+  const obraP = $derived(tablero.obraSel ? obraPemex(tablero.obraSel) : null);
+  const planPemex = $derived(obraP ? sim.presupuestoObraPemex(obraP.id, cuadrillas) : null);
+
+  const fichaPemex = $derived.by(() => {
+    sim.horas;
+    sim.obrasPemex;
+    sim.refinacion;
+    sim.deerParkPropia;
+    const compra = tablero.obraSel === COMPRA;
+    const o = obraP;
+    if (!o && !compra) return null;
+    const r = refineria(compra ? DEER_PARK : o!.refineria);
+    if (!r) return null;
+    return { o, r, compra, estado: o ? (sim.obrasPemex.get(o.id) ?? null) : null, ahora: sim.refinacion?.porRefineria.get(r.id) ?? null };
+  });
+
+  const filasPemex = $derived.by(() => {
+    sim.horas;
+    sim.obrasPemex;
+    return OBRAS_PEMEX.map((o) => ({ o, estado: sim.obrasPemex.get(o.id), plan: sim.presupuestoObraPemex(o.id, MAX_CUADRILLAS) }));
+  });
+
+  /** How long a Pemex work really takes when Pemex's till sets the pace. */
+  const alRitmoPemex = (p: { costoMdp: number; meses: number }) => mesesConCajaPemex(p.costoMdp, p.meses, sim.dineroPemex, mesDe(sim.horas));
+  /** Thousand barrels a day, short for the card's figures. */
+  const mbdCorto = (n: number) => `${Math.round(n).toLocaleString('es-MX')} mil b/d`;
+  const mbd = (n: number) => `${Math.round(n).toLocaleString('es-MX')} mil barriles diarios`;
+
+  /** What a Pemex work does, in one sentence. */
+  function efectoPemex(o: ObraPemex, r: Refineria): string {
+    if (o.tipo === 'rehabilitar')
+      return `Lleva la refinería de ${mbd(r.proceso2018)} a ${mbd(r.optima)} conforme avanza la obra: unos ${Math.round((r.optima - r.proceso2018) * rendimiento(r))} mil barriles diarios más de gasolina, diésel y turbosina.`;
+    if (o.tipo === 'nueva')
+      return `Al terminarla procesa ${mbd(r.optima)} y da unos ${Math.round(r.optima * rendimiento(r))} mil de gasolina y diésel.`;
+    if (o.tipo === 'coquizadora')
+      return `Al terminarla, la refinería da ${mbd(o.combustiblesExtra ?? 0)} más de gasolina y diésel con el combustóleo que hoy le sobra.`;
+    return `Lleva Deer Park de ${mbd(r.proceso2018)} a ${mbd(r.optima)} conforme avanza la obra.`;
+  }
+
+  function construirPemex() {
+    if (!obraP) return;
+    sim.construirObraPemex(obraP.id, cuadrillas);
+    confirmando = false;
+  }
+
+  function comprarDeerPark() {
+    if (sim.comprarDeerPark()) tablero.obraSel = 'deer-park-mejora';
+    confirmandoCompra = false;
+  }
+
   const capacidad = (o: ObraVia) =>
     o.capacidad === 'doble'
       ? `vía doble, ${CAPACIDAD.doble} trenes al día`
@@ -137,7 +210,8 @@
 
   function onKey(event: KeyboardEvent) {
     if (event.key !== 'Escape') return;
-    if (confirmando) confirmando = false;
+    if (confirmandoCompra) confirmandoCompra = false;
+    else if (confirmando) confirmando = false;
     else if (tablero.obraSel) tablero.obraSel = null;
   }
 </script>
@@ -208,9 +282,159 @@
   {/if}
 {/snippet}
 
+<!-- A refinery as it stands: in the game, with the player's works; in Realidad, what it really ran. -->
+{#snippet bloqueRefineria(r: Refineria, ahora: { proceso: number; combustibles: number } | null)}
+  <dl class="refineria">
+    <div><dt>Capacidad</dt><dd class="mono">{mbdCorto(r.capacidad)}</dd></div>
+    {#if sim.modo === 'realidad'}
+      {@const pr = procesoReal(r, sim.horas)}
+      <div>
+        <dt>Procesó</dt>
+        <dd class="mono">{pr ? `${mbdCorto(pr.mbd)} · ${pr.cuando}` : 'sin dato publicado por refinería'}</dd>
+      </div>
+    {:else if ahora}
+      <div><dt>Procesa hoy</dt><dd class="mono">{mbdCorto(ahora.proceso)} · {Math.round((ahora.proceso / r.capacidad) * 100)} %</dd></div>
+      <div>
+        <dt>Combustibles para el país</dt>
+        <dd class="mono">{r.extranjera && !sim.deerParkPropia ? 'no cuentan: es de Shell y Pemex' : mbdCorto(ahora.combustibles)}</dd>
+      </div>
+    {/if}
+  </dl>
+  {#if r.situacion2018}<p class="nota"><b>En 2018:</b> {r.situacion2018}</p>{/if}
+{/snippet}
+
 {#if tablero.catalogo}
   <section class="catalogo panel">
-    {#if fichaPlanta}
+    {#if fichaPemex}
+      {@const { o, r, compra, estado, ahora } = fichaPemex}
+      <header>
+        <button class="volver" onclick={() => (tablero.obraSel = null)}>← Obras del Estado</button>
+        <button class="close" onclick={() => tablero.cerrarCatalogo()} aria-label="Cerrar">×</button>
+      </header>
+      <h2>{compra ? 'Comprar la parte de Shell en Deer Park' : o!.nombre}</h2>
+      <p class="label pemex">Pemex · {r.nombre}</p>
+      {@render bloqueRefineria(r, ahora)}
+
+      {#if compra}
+        {#if sim.modo === 'realidad'}
+          {@render fichaRealidad(COMPRA)}
+          <p class="nota">{COMPRA_DEER_PARK.dato}</p>
+        {:else if sim.deerParkPropia}
+          <p class="status en-servicio">Ya es toda de Pemex: lo que produce cuenta para el país.</p>
+          <div class="acciones">
+            <button class="ctl construir" onclick={() => (tablero.obraSel = 'deer-park-mejora')}>Mejorar su confiabilidad →</button>
+          </div>
+        {:else}
+          <p class="efecto">
+            Pemex tiene el 49.995 % desde 1993. Con la parte de Shell, lo que Deer Park produce (unos {Math.round(r.proceso2018 * rendimiento(r))} mil
+            barriles diarios de gasolina, diésel y turbosina) cuenta para el país, y se puede mejorar.
+          </p>
+          <p class="real">
+            <span class="label">En la realidad</span> Pemex anunció la compra en mayo de 2021 y la cerró el 20 de enero de 2022, cuando el comité de inversión
+            extranjera de Estados Unidos la aprobó.
+          </p>
+          <dl>
+            <div><dt>Costo (caja de Pemex)</dt><dd class="mono">{mdp(COMPRA_DEER_PARK.costoMdp)}</dd></div>
+            <div><dt>Pemex tiene</dt><dd class="mono">{mdp(sim.dineroPemex)}</dd></div>
+          </dl>
+          {#if sim.dineroPemex < COMPRA_DEER_PARK.costoMdp}
+            <p class="aviso">
+              A Pemex le faltan {mdp(COMPRA_DEER_PARK.costoMdp - sim.dineroPemex)}; le llegan {mdp(sim.cajaPemexMes)} al mes, si no las gasta en otras obras.
+            </p>
+          {/if}
+          <details class="fuentes">
+            <summary>De dónde salen las cifras</summary>
+            <p>
+              {COMPRA_DEER_PARK.dato}
+              {#each COMPRA_DEER_PARK.fuentes as k (k)}
+                <a href={fuentePetroleo(k).url} target="_blank" rel="noopener noreferrer">{fuentePetroleo(k).fuente}</a>.
+              {/each}
+            </p>
+          </details>
+          <div class="acciones">
+            <button
+              class="ctl construir"
+              onclick={() => (confirmandoCompra = true)}
+              disabled={sim.estado !== 'lista' || sim.dineroPemex < COMPRA_DEER_PARK.costoMdp}
+            >
+              Comprar · {mdp(COMPRA_DEER_PARK.costoMdp)}
+            </button>
+          </div>
+        {/if}
+      {:else if o}
+        {#if sim.modo === 'juego'}<p class="efecto">{efectoPemex(o, r)}</p>{/if}
+        {#if r.optimaDato && sim.modo === 'juego'}<p class="nota">{r.optimaDato}</p>{/if}
+        <p class="real"><span class="label">En la realidad</span> {o.real}</p>
+
+        {#if sim.modo === 'realidad'}
+          {@render fichaRealidad(o.id)}
+        {:else if estado?.fase === 'por-construir' && r.extranjera && !sim.deerParkPropia}
+          <p class="aviso">Primero hay que comprar la parte de Shell: mientras sea de los dos, Pemex no decide sus obras.</p>
+          <div class="acciones">
+            <button class="ctl construir" onclick={() => (tablero.obraSel = COMPRA)}>Comprar Deer Park →</button>
+          </div>
+        {:else if estado?.fase === 'por-construir' && planPemex}
+          <div class="cuadrillas" role="radiogroup" aria-label="Cuadrillas">
+            <span class="label">Cuadrillas</span>
+            {#each Array.from({ length: MAX_CUADRILLAS }, (_, i) => i + 1) as n (n)}
+              <button class="ctl" class:is-active={cuadrillas === n} role="radio" aria-checked={cuadrillas === n} onclick={() => (cuadrillas = n)}>
+                {n}
+              </button>
+            {/each}
+          </div>
+          <dl>
+            <div><dt>Costo (caja de Pemex)</dt><dd class="mono">{mdp(planPemex.costoMdp)}</dd></div>
+            <div><dt>Duración</dt><dd class="mono">{meses(planPemex.meses)}</dd></div>
+            <div><dt>Empleos en obra</dt><dd class="mono">{personas(planPemex.personasEnObra)}</dd></div>
+          </dl>
+          <p class="nota">
+            {cuadrillas === MAX_CUADRILLAS
+              ? 'Cuatro cuadrillas: el ritmo y el costo del gobierno.'
+              : 'Menos cuadrillas que el gobierno: más barata y más lenta.'}
+          </p>
+          {#if alRitmoPemex(planPemex) > planPemex.meses * 1.02}
+            <p class="aviso">
+              Ese ritmo cuesta {mdp(planPemex.costoMdp / planPemex.meses)} al mes y a Pemex le llegan {mdp(sim.cajaPemexMes)}: con lo que tiene
+              ({mdp(sim.dineroPemex)}), tardaría unos {Number.isFinite(alRitmoPemex(planPemex)) ? meses(alRitmoPemex(planPemex)) : 'sin fin'}, si no
+              hay otras obras de Pemex.
+            </p>
+          {/if}
+          <details class="fuentes">
+            <summary>De dónde salen las cifras</summary>
+            <p><b>Costo:</b> {o.costo.dato} <a href={o.costo.url} target="_blank" rel="noopener noreferrer">{o.costo.fuente}</a></p>
+            <p>
+              <b>Tiempo:</b>
+              {o.tiempo.dato}
+              {#if o.tiempo.url}<a href={o.tiempo.url} target="_blank" rel="noopener noreferrer">{o.tiempo.fuente}</a>{/if}
+            </p>
+          </details>
+          <div class="acciones">
+            <button class="ctl construir" onclick={() => (confirmando = true)} disabled={sim.estado !== 'lista'}>
+              {o.tipo === 'rehabilitar' || o.tipo === 'mejora' ? 'Rehabilitar' : 'Construir'} · {mdp(planPemex.costoMdp)}
+            </button>
+          </div>
+        {:else if estado?.fase === 'en-obra' && estado.plan}
+          {@const faltanMeses = ((1 - estado.avance) * estado.plan.horas) / HORAS_POR_MES}
+          <p class="status" class:detenida={estado.detenida} class:en-obra={!estado.detenida}>
+            {estado.detenida
+              ? 'Obra detenida: se acabó el dinero de Pemex'
+              : `En obra · ${estado.plan.cuadrillas} cuadrilla${estado.plan.cuadrillas > 1 ? 's' : ''}`}
+          </p>
+          <div class="barra"><span style:width="{estado.avance * 100}%"></span></div>
+          <dl>
+            <div><dt>Avance</dt><dd class="mono">{(estado.avance * 100).toFixed(1)} %</dd></div>
+            <div><dt>Termina en</dt><dd class="mono">{meses(faltanMeses)}</dd></div>
+            <div><dt>Pagado</dt><dd class="mono">{mdp(estado.pagadoMdp)} de {mdp(estado.plan.costoMdp)}</dd></div>
+            <div><dt>Trabajando en la obra</dt><dd class="mono">{personas(estado.detenida ? 0 : estado.plan.personasEnObra)}</dd></div>
+          </dl>
+        {:else if estado?.fase === 'en-servicio'}
+          <p class="status en-servicio">Terminada el {horaDeJuego(estado.enServicioDesde ?? 0)}</p>
+          <dl>
+            <div><dt>Costó</dt><dd class="mono">{mdp(estado.pagadoMdp)}</dd></div>
+          </dl>
+        {/if}
+      {/if}
+    {:else if fichaPlanta}
       {@const { o, estado, region, despues } = fichaPlanta}
       <header>
         <button class="volver" onclick={() => (tablero.obraSel = null)}>← Obras del Estado</button>
@@ -443,11 +667,115 @@
             </li>
           {/each}
         </ul>
+        <h3 class="pemex">Pemex · refinación</h3>
+        <p class="texto">
+          {#if sim.modo === 'realidad'}
+            Las obras de Pemex desde 2018, en su etapa real: la rehabilitación de las seis refinerías, la Olmeca, las coquizadoras y la compra de Deer
+            Park.
+          {:else}
+            Las seis refinerías estaban casi paradas en 2018. Rehabilitarlas, la Olmeca, las coquizadoras y Deer Park se pagan con la caja de Pemex.
+            Suben los combustibles que el país hace él mismo.
+          {/if}
+        </p>
+        <ul>
+          {#each filasPemex as { o, estado, plan } (o.id)}
+            {#if o.id === 'deer-park-mejora'}
+              <li>
+                <button class="obra" onclick={() => (tablero.obraSel = COMPRA)}>
+                  <span class="nombre">Comprar la parte de Shell en Deer Park</span>
+                  <span class="datos mono">
+                    {#if sim.modo === 'realidad'}
+                      {@render etapaReal(COMPRA)}
+                    {:else if sim.deerParkPropia}
+                      <span class="fase en-servicio">comprada</span>
+                    {:else}
+                      {mdp(COMPRA_DEER_PARK.costoMdp)}
+                    {/if}
+                  </span>
+                </button>
+              </li>
+            {/if}
+            <li>
+              <button class="obra" onclick={() => (tablero.obraSel = o.id)}>
+                <span class="nombre">{o.nombre}</span>
+                <span class="datos mono">
+                  {#if sim.modo === 'realidad'}
+                    {@render etapaReal(o.id)}
+                  {:else if estado?.fase === 'en-obra'}
+                    <span class="fase en-obra" class:detenida={estado.detenida}>
+                      {estado.detenida ? 'detenida' : 'en obra'} {(estado.avance * 100).toFixed(0)} %
+                    </span>
+                  {:else if estado?.fase === 'en-servicio'}
+                    <span class="fase en-servicio">terminada</span>
+                  {:else if plan}
+                    {mdp(plan.costoMdp)}
+                  {/if}
+                </span>
+              </button>
+            </li>
+          {/each}
+        </ul>
       </div>
     {/if}
   </section>
 
-  {#if confirmando && planPlanta && planta}
+  {#if confirmandoCompra}
+    <div class="fondo-modal" role="presentation" onclick={() => (confirmandoCompra = false)}>
+      <div
+        class="modal panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-compra"
+        tabindex="-1"
+        onclick={(e) => e.stopPropagation()}
+        onkeydown={(e) => e.stopPropagation()}
+      >
+        <p class="label">Comprar · Pemex</p>
+        <h2 id="titulo-compra">La parte de Shell en Deer Park</h2>
+        <p>
+          <b>{mdp(COMPRA_DEER_PARK.costoMdp)}</b> de la caja de Pemex, de una vez. Desde ese día la refinería es toda de Pemex y lo que produce cuenta
+          para el país.
+        </p>
+        <div class="acciones">
+          <button class="ctl" onclick={() => (confirmandoCompra = false)}>Cancelar</button>
+          <button class="ctl construir" onclick={comprarDeerPark}>Comprar</button>
+        </div>
+      </div>
+    </div>
+  {/if}
+
+  {#if confirmando && planPemex && obraP}
+    <div class="fondo-modal" role="presentation" onclick={() => (confirmando = false)}>
+      <div
+        class="modal panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-pemex"
+        tabindex="-1"
+        onclick={(e) => e.stopPropagation()}
+        onkeydown={(e) => e.stopPropagation()}
+      >
+        <p class="label">{obraP.tipo === 'rehabilitar' || obraP.tipo === 'mejora' ? 'Rehabilitar' : 'Construir'} · Pemex</p>
+        <h2 id="titulo-pemex">{obraP.nombre}</h2>
+        <p>
+          Con {planPemex.cuadrillas} cuadrilla{planPemex.cuadrillas > 1 ? 's' : ''}: <b>{mdp(planPemex.costoMdp)}</b> de la caja de Pemex en
+          <b>{meses(planPemex.meses)}</b>, con {personas(planPemex.personasEnObra)} personas trabajando. Se paga conforme avanza.
+        </p>
+        {#if alRitmoPemex(planPemex) > planPemex.meses * 1.02}
+          <p class="aviso">
+            Con el dinero de Pemex no alcanza a ese ritmo: la obra irá al paso de lo que le llega cada mes (unos
+            {Number.isFinite(alRitmoPemex(planPemex)) ? meses(alRitmoPemex(planPemex)) : 'sin fin'}).
+          </p>
+        {/if}
+        <div class="acciones">
+          <button class="ctl" onclick={() => (confirmando = false)}>Cancelar</button>
+          <button class="ctl construir" onclick={construirPemex}>
+            {obraP.tipo === 'rehabilitar' || obraP.tipo === 'mejora' ? 'Rehabilitar' : 'Construir'}
+          </button>
+        </div>
+      </div>
+    </div>
+  {:else if confirmando && planPlanta && planta}
     <div class="fondo-modal" role="presentation" onclick={() => (confirmando = false)}>
       <div
         class="modal panel"
@@ -575,6 +903,20 @@
 
   h3.energia {
     color: #fde68a;
+  }
+
+  h3.pemex,
+  .label.pemex {
+    color: #e0a458;
+  }
+
+  dl.refineria {
+    margin-top: 0.55rem;
+  }
+
+  .nota b {
+    color: var(--dim);
+    font-weight: 600;
   }
 
   h3 {

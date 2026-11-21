@@ -1,0 +1,264 @@
+{
+  "corte": "2026-11-20",
+  "nota": "El petróleo en el juego: las refinerías de Pemex, su estado en 2018, lo que cuesta rehabilitarlas, la Olmeca, las coquizadoras y Deer Park. Cada cifra trae su fuente; lo que es estimación del juego lo dice. Procesos en miles de barriles diarios (Mbd), dinero en millones de pesos (mdp).",
+  "fuentes": {
+    "pmx-20f-2018": { "fuente": "Pemex, Form 20-F 2018 ante la SEC: crudo procesado por refinería en 2018 y el estado de cada una", "url": "https://www.sec.gov/Archives/edgar/data/0000932782/000119312519129698/d632951d20f.htm" },
+    "pmx-20f-2019": { "fuente": "Pemex, Form 20-F 2019 ante la SEC: crudo procesado por refinería en 2019; el Programa de Rehabilitación empezó en septiembre de 2019", "url": "https://www.sec.gov/Archives/edgar/data/932782/000119312520136835/d850870d20f.htm" },
+    "pmx-20f-2020": { "fuente": "Pemex, Form 20-F 2020 ante la SEC: crudo procesado por refinería en 2020; la coquizadora de Tula, 63 % construida y suspendida", "url": "https://www.sec.gov/Archives/edgar/data/932782/000119312521162651/d106092d20f.htm" },
+    "asf-2021-0219": { "fuente": "ASF, auditoría 2021-0219, Programa de Rehabilitaciones del Sistema Nacional de Refinación (Cuenta Pública 2021): capacidad de diseño, utilizada en 2021 y óptima de cada refinería; lo que el programa requería y lo que se le dio", "url": "https://www.asf.gob.mx/Trans/Informes/IR2021c/Documentos/Auditorias/2021_0219_a.pdf" },
+    "pmx-ia2023": { "fuente": "Pemex, Informe Anual 2023 (enviado al Congreso): proceso de 2022 y 2023, Tula, Salina Cruz y Minatitlán en 2023, Deer Park en 2022 y 2023, la producción que la Olmeca sustenta", "url": "https://gaceta.diputados.gob.mx/PDF/65/2024/may/Pemex-20240514.pdf" },
+    "cpm-2024": { "fuente": "Presidencia de la República, presentación de resultados de Pemex (3 de mayo de 2024): combustibles producidos y déficit desde diciembre de 2018, transferencias del Gobierno Federal a Pemex 2019–abril de 2024, costo de las coquizadoras y de la Olmeca", "url": "https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf" },
+    "pmx-c24-2019": { "fuente": "Pemex, comunicado 24 (2 de junio de 2019): arrancan los trabajos de la refinería de Dos Bocas", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_928185_1.pdf" },
+    "pmx-c159-2021": { "fuente": "Pemex, comunicado 159/2021 (26 de mayo de 2021): Pemex comprará la parte de Shell en Deer Park", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1102962_1.pdf" },
+    "pmx-c6-2022": { "fuente": "Pemex, comunicado 6/2022 (20 de enero de 2022): concreta la compra de Deer Park", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1159261_1.pdf" },
+    "pmx-c38-2022": { "fuente": "Pemex, comunicado 38/2022 (1 de julio de 2022): inaugurada la primera etapa constructiva de la Olmeca; firma de acuerdos para construir las coquizadoras de Tula y Salina Cruz", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1202976_1.pdf" },
+    "pmx-c9-2025": { "fuente": "Pemex, comunicado 9/2025 (12 de febrero de 2025): Plan de Trabajo 2025–2030, 105 mil millones de pesos para rehabilitar las seis refinerías y 52 mil millones para las coquizadoras", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1440766_1.pdf" },
+    "pmx-c11-2025": { "fuente": "Pemex, comunicado 11/2025 (27 de febrero de 2025): resultados de 2024, proceso de crudo de 906 Mbd", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1444789_1.pdf" },
+    "pmx-c37-2025": { "fuente": "Pemex, comunicado 37/2025 (24 de octubre de 2025): las coquizadoras de Tula y Salina Cruz van en 87 % y 74 %", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1501814_1.pdf" },
+    "pmx-c51-2026": { "fuente": "Pemex, comunicado 51/2026 (14 de mayo de 2026): la coquizadora de Tula se puso en marcha en julio de 2025", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1560083_1.pdf" },
+    "pmx-c87-2026": { "fuente": "Pemex, comunicado 87/2026 (9 de noviembre de 2026): Deer Park procesó 309 Mbd de enero a septiembre de 2026, 15.6 % más que cuando se compró", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1602784_1.pdf" },
+    "ig1-2025": { "fuente": "Primer Informe de Gobierno 2024–2025: procesamiento de crudo por refinería, de octubre de 2024 a junio de 2025 (SENER con datos de Pemex)", "url": "https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf" },
+    "ig2-2026": { "fuente": "Segundo Informe de Gobierno 2025–2026: procesamiento de crudo por refinería, de septiembre de 2025 a junio de 2026 (SENER con la Base de Datos Institucional de Pemex); avance de las coquizadoras", "url": "https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf" },
+    "osm": { "fuente": "OpenStreetMap: el predio de cada refinería (consultado el 20 de noviembre de 2026)", "url": "https://www.openstreetmap.org/" }
+  },
+  "cajaPemex": {
+    "tramos": [
+      { "desde": "2019-01-01", "mdpMes": 6109.4 },
+      { "desde": "2025-01-01", "mdpMes": 2180.6 }
+    ],
+    "dato": "De enero de 2019 a abril de 2024 el Gobierno Federal transfirió a Pemex 391 mil millones de pesos para infraestructura: 320 para la Olmeca, 48 para el Sistema Nacional de Refinación y fertilizantes y 23 para Deer Park (Presidencia, 3 de mayo de 2024). Son 6,109 millones al mes en 64 meses; el juego sigue a ese paso hasta diciembre de 2024. Desde 2025, el Plan de Trabajo 2025–2030 de Pemex destina 105 mil millones a rehabilitar las seis refinerías y 52 mil millones a las coquizadoras: 157 mil millones en seis años, 2,181 millones al mes.",
+    "fuentes": ["cpm-2024", "pmx-c9-2025"]
+  },
+  "demanda": {
+    "mbd": 1231,
+    "dato": "Lo que el país consume de gasolina, diésel y turbosina: en diciembre de 2018 el Sistema Nacional de Refinación producía 304 Mbd y faltaban 927 (el déficit que se importaba). El juego la deja fija.",
+    "fuentes": ["cpm-2024"]
+  },
+  "rendimientos": {
+    "snr": 0.55,
+    "olmeca": 0.844,
+    "deerPark": 0.93,
+    "dato": "Barriles de gasolina, diésel y turbosina por barril de crudo. Las seis refinerías: 1,933 Mbd producidos sobre 3,503 procesados de 2019 a 2023 (0.55, cálculo del juego con las cifras de Presidencia). La Olmeca: 340 Mbd de crudo sustentan 165 de gasolina y 122 de diésel (0.844, Informe Anual 2023 de Pemex). Deer Park: 239 Mbd de combustibles sobre 259 de crudo en 2023, y 289 sobre 309 en 2026 (0.93; también procesa otros insumos).",
+    "fuentes": ["cpm-2024", "pmx-ia2023", "pmx-c87-2026"]
+  },
+  "rehabilitacion": {
+    "costoRequeridoMdp": 65692.02,
+    "ejercidoMdp": 27424.75,
+    "dato": "El Programa de Rehabilitaciones requería 65,692 millones de pesos de 2019 a 2021 para llevar las seis refinerías a su capacidad óptima; se le dieron 27,425 (41.7 %) y cubrió el 29.7 % de las reparaciones mayores (ASF). El juego reparte lo requerido entre las seis por lo que cada una recupera, de su proceso de 2018 a su capacidad óptima: unos 109 millones de pesos por cada mil barriles diarios recuperados (cálculo del juego).",
+    "meses": 36,
+    "mesesDato": "El programa se planeó para 2019–2021 (ASF): 36 meses con 4 cuadrillas.",
+    "fuentes": ["asf-2021-0219"]
+  },
+  "refinerias": [
+    {
+      "id": "cadereyta",
+      "nombre": "Refinería Ing. Héctor R. Lara Sosa",
+      "corto": "Cadereyta",
+      "estado": "NL",
+      "lugar": "Cadereyta Jiménez, Nuevo León",
+      "lonLat": [-99.94148, 25.5856],
+      "capacidad": 275,
+      "proceso2018": 118,
+      "optima": 180,
+      "situacion2018": "Procesó 118 Mbd en 2018, el 43 % de su capacidad.",
+      "anual": { "2018": 118.0, "2019": 103.2, "2020": 102.7, "2021": 124.5 },
+      "mensual": {
+        "2024-10": [166, 96, 134, 165, 164, 130, 138, 170, 161],
+        "2025-09": [98, 146, 169, 180, 152, 163, 173, 165, 172, 149]
+      }
+    },
+    {
+      "id": "madero",
+      "nombre": "Refinería Francisco I. Madero",
+      "corto": "Madero",
+      "estado": "TAMPS",
+      "lugar": "Ciudad Madero, Tamaulipas",
+      "lonLat": [-97.81264, 22.26949],
+      "capacidad": 190,
+      "proceso2018": 19.2,
+      "optima": 120,
+      "situacion2018": "Casi parada: 19 Mbd en 2018, el 10 % de su capacidad, por el bajo desempeño de su planta de destilación atmosférica (Pemex, 20-F).",
+      "anual": { "2018": 19.2, "2019": 58.0, "2020": 89.8, "2021": 75.9 },
+      "mensual": {
+        "2024-10": [97, 108, 103, 97, 100, 101, 106, 104, 96],
+        "2025-09": [92, 101, 104, 102, 101, 111, 118, 110, 93, 102]
+      }
+    },
+    {
+      "id": "minatitlan",
+      "nombre": "Refinería General Lázaro Cárdenas",
+      "corto": "Minatitlán",
+      "estado": "VER",
+      "lugar": "Minatitlán, Veracruz",
+      "lonLat": [-94.52695, 17.97986],
+      "capacidad": 285,
+      "proceso2018": 26.2,
+      "optima": 246,
+      "situacion2018": "26 Mbd en 2018, el 9 % de su capacidad: un incendio en octubre de 2018 dañó su planta combinada Maya de destilación atmosférica (Pemex, 20-F).",
+      "anual": { "2018": 26.2, "2019": 91.6, "2020": 78.5, "2021": 98.3, "2023": 115.9 },
+      "mensual": {
+        "2024-10": [119, 126, 125, 89, 121, 110, 72, 72, 127],
+        "2025-09": [91, 76, 124, 129, 125, 117, 124, 119, 57, 50]
+      }
+    },
+    {
+      "id": "salamanca",
+      "nombre": "Refinería Ing. Antonio M. Amor",
+      "corto": "Salamanca",
+      "estado": "GTO",
+      "lugar": "Salamanca, Guanajuato",
+      "lonLat": [-101.17848, 20.57981],
+      "capacidad": 245,
+      "proceso2018": 140.5,
+      "optima": 170,
+      "situacion2018": "La que mejor estaba: 140 Mbd en 2018, el 57 % de su capacidad. Su capacidad óptima es menor a lo que procesaba, por el combustóleo que no tiene salida (ASF).",
+      "anual": { "2018": 140.5, "2019": 92.9, "2020": 96.5, "2021": 106.6 },
+      "mensual": {
+        "2024-10": [107, 101, 130, 147, 113, 111, 133, 125, 100],
+        "2025-09": [81, 98, 93, 116, 116, 136, 123, 56, 94, 128]
+      }
+    },
+    {
+      "id": "salina-cruz",
+      "nombre": "Refinería Ing. Antonio Dovalí Jaime",
+      "corto": "Salina Cruz",
+      "estado": "OAX",
+      "lugar": "Salina Cruz, Oaxaca",
+      "lonLat": [-95.17692, 16.20647],
+      "capacidad": 330,
+      "proceso2018": 165.2,
+      "optima": 260,
+      "situacion2018": "165 Mbd en 2018, el 50 % de su capacidad, recuperándose de los paros de emergencia de 2017 por la tormenta Calvin y el sismo (Pemex, 20-F).",
+      "anual": { "2018": 165.2, "2019": 125.1, "2020": 125.4, "2021": 178.8, "2023": 178.2 },
+      "mensual": {
+        "2024-10": [116, 138, 178, 196, 221, 227, 188, 150, 193],
+        "2025-09": [145, 224, 197, 210, 137, 207, 202, 207, 124, 202]
+      }
+    },
+    {
+      "id": "tula",
+      "nombre": "Refinería Miguel Hidalgo",
+      "corto": "Tula",
+      "estado": "HGO",
+      "lugar": "Tula de Allende, Hidalgo",
+      "lonLat": [-99.27663, 20.04369],
+      "capacidad": 315,
+      "proceso2018": 142.8,
+      "optima": 240,
+      "situacion2018": "143 Mbd en 2018, el 45 % de su capacidad: de enero a septiembre operó a ratos, por falta de crudo ligero, equipos descompuestos y exceso de combustóleo (Pemex, 20-F).",
+      "anual": { "2018": 142.8, "2019": 121.2, "2020": 97.7, "2021": 143.2, "2023": 190.9 },
+      "mensual": {
+        "2024-10": [127, 124, 162, 198, 173, 233, 208, 212, 237],
+        "2025-09": [248, 208, 249, 221, 222, 252, 250, 263, 257, 243]
+      }
+    },
+    {
+      "id": "olmeca",
+      "nombre": "Refinería Olmeca",
+      "corto": "Olmeca",
+      "estado": "TAB",
+      "lugar": "Dos Bocas, Paraíso, Tabasco",
+      "lonLat": [-93.19561, 18.4228],
+      "capacidad": 340,
+      "proceso2018": 0,
+      "optima": 263,
+      "optimaDato": "Su mejor mes: 263 Mbd en diciembre de 2025, el 77 % de su capacidad (Segundo Informe de Gobierno). El juego la deja ahí al terminarla.",
+      "nueva": true,
+      "anual": {},
+      "mensual": {
+        "2024-10": [0, 59, 43, 0, 6, 103, 84, 117, 197],
+        "2025-09": [191, 192, 207, 263, 206, 205, 187, 147, 144, 141]
+      }
+    },
+    {
+      "id": "deer-park",
+      "nombre": "Refinería Deer Park",
+      "corto": "Deer Park",
+      "estado": "TX",
+      "lugar": "Deer Park, Texas (Estados Unidos)",
+      "lonLat": [-95.12407, 29.71312],
+      "capacidad": 340,
+      "proceso2018": 267,
+      "optima": 309,
+      "optimaDato": "De enero a septiembre de 2026 procesó 309 Mbd, 15.6 % más que cuando Pemex la compró (unos 267, cálculo del juego).",
+      "extranjera": true,
+      "situacion2018": "Desde 1993 Pemex tiene el 49.995 % y Shell el resto: cada socio pone la mitad del crudo y se queda con la mitad de lo que sale. Lo que produce no cuenta para el abasto del país hasta que es de Pemex.",
+      "anual": { "2022": 277, "2023": 259, "2026": 309 },
+      "mensual": {}
+    }
+  ],
+  "totales": {
+    "anual": { "2018": 611.9, "2019": 592.0, "2020": 590.6, "2021": 711.6, "2022": 815.8, "2023": 792.0, "2024": 906, "2025": 1014.9, "2026": 1075.3 },
+    "parcial": { "2025": "promedio de los diez meses publicados en los Informes de Gobierno (faltan julio y agosto)", "2026": "de enero a junio" },
+    "mensual": {
+      "2024-10": [731, 752, 875, 891, 898, 1015, 930, 949, 1112],
+      "2025-09": [946, 1043, 1144, 1221, 1058, 1190, 1178, 1068, 941, 1017]
+    },
+    "dato": "Crudo procesado por el Sistema Nacional de Refinación; desde 2024 incluye la Olmeca. 2018–2020: Pemex, 20-F; 2021: ASF; 2022 y 2023: Informe Anual 2023 de Pemex; 2024: Pemex, comunicado 11/2025; 2025 y 2026: los Informes de Gobierno.",
+    "fuentes": ["pmx-20f-2018", "pmx-20f-2019", "pmx-20f-2020", "asf-2021-0219", "pmx-ia2023", "pmx-c11-2025", "ig1-2025", "ig2-2026"]
+  },
+  "obras": [
+    {
+      "id": "rehab-cadereyta", "refineria": "cadereyta", "tipo": "rehabilitar", "nombre": "Rehabilitar la refinería de Cadereyta",
+      "real": "En el Programa de Rehabilitaciones desde 2019. En 2021 usaba 124.5 Mbd de sus 275; en mayo de 2022 declaraba 127 y una capacidad óptima de 180 (ASF). En 2025 promedió unos 150."
+    },
+    {
+      "id": "rehab-madero", "refineria": "madero", "tipo": "rehabilitar", "nombre": "Rehabilitar la refinería de Madero",
+      "real": "Su rehabilitación empezó en septiembre de 2019 (Pemex, 20-F). Pasó de 19 Mbd en 2018 a 90 en 2020; en 2023 sus trabajos se alargaron en las plantas combinadas (Informe Anual 2023). Desde finales de 2024 ronda los 100."
+    },
+    {
+      "id": "rehab-minatitlan", "refineria": "minatitlan", "tipo": "rehabilitar", "nombre": "Rehabilitar la refinería de Minatitlán",
+      "real": "De 26 Mbd en 2018 a 92 en 2019 y 116 en 2023. Es la más irregular: en mayo de 2026 bajó a 57 por mantenimientos mayores (Segundo Informe)."
+    },
+    {
+      "id": "rehab-salamanca", "refineria": "salamanca", "tipo": "rehabilitar", "nombre": "Rehabilitar la refinería de Salamanca",
+      "real": "Bajó de 140 Mbd en 2018 a 93 en 2019 y 107 en 2021; en 2023 tuvo problemas en sus plantas primarias y combinadas (Informe Anual 2023). En 2025 y 2026 ronda los 110."
+    },
+    {
+      "id": "rehab-salina-cruz", "refineria": "salina-cruz", "tipo": "rehabilitar", "nombre": "Rehabilitar la refinería de Salina Cruz",
+      "real": "De 165 Mbd en 2018 a 179 en 2021 y 178 en 2023; en 2025–2026 llegó a más de 200 en sus mejores meses. Los sismos, ciclones y marejadas la afectan más que a ninguna (ASF)."
+    },
+    {
+      "id": "rehab-tula", "refineria": "tula", "tipo": "rehabilitar", "nombre": "Rehabilitar la refinería de Tula",
+      "real": "De 143 Mbd en 2018 a 191 en 2023, la que mejor desempeño tuvo (Informe Anual 2023); con la coquizadora, desde julio de 2025, ronda los 240."
+    },
+    {
+      "id": "olmeca", "refineria": "olmeca", "tipo": "nueva", "nombre": "Construir la refinería Olmeca (Dos Bocas)",
+      "costoMusd": 16816,
+      "costo": { "dato": "16,816 millones de dólares de inversión actualizada a marzo de 2024.", "fuente": "Presidencia, presentación de resultados de Pemex (3 de mayo de 2024)", "url": "https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf" },
+      "meses": 60,
+      "tiempo": { "dato": "Del arranque de la obra (2 de junio de 2019) a su arranque como refinería (junio de 2024): 60 meses.", "fuente": "Pemex, comunicado 24/2019; Presidencia, 3 de mayo de 2024", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_928185_1.pdf" },
+      "real": "El Consejo de Pemex la autorizó el 7 de diciembre de 2018 y la obra arrancó el 2 de junio de 2019. Su primera etapa se inauguró el 1 de julio de 2022; empezó a procesar a mediados de 2024, con meses en cero, y su segundo tren entró en junio de 2025. Su mejor mes fue diciembre de 2025: 263 Mbd."
+    },
+    {
+      "id": "coquizadora-tula", "refineria": "tula", "tipo": "coquizadora", "nombre": "Coquizadora de Tula",
+      "costoMusd": 5146,
+      "combustiblesExtra": 80,
+      "costo": { "dato": "5,146 millones de dólares; suma 80 Mbd de gasolina y diésel y reduce el combustóleo de Tula y Salamanca.", "fuente": "Presidencia, presentación de resultados de Pemex (3 de mayo de 2024)", "url": "https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf" },
+      "meses": 36,
+      "tiempo": { "dato": "De los acuerdos para construirla (1 de julio de 2022) a su puesta en marcha (julio de 2025): 36 meses.", "fuente": "Pemex, comunicados 38/2022 y 51/2026", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1560083_1.pdf" },
+      "real": "En 2018 estaba 63 % construida y suspendida por falta de presupuesto (Pemex, 20-F). Se retomó con los acuerdos de julio de 2022 y se puso en marcha en julio de 2025; con ella Tula procesa unos 39 Mbd más."
+    },
+    {
+      "id": "coquizadora-salina-cruz", "refineria": "salina-cruz", "tipo": "coquizadora", "nombre": "Coquizadora de Salina Cruz",
+      "costoMusd": 3501,
+      "combustiblesExtra": 74,
+      "costo": { "dato": "3,501 millones de dólares; suma 74 Mbd de gasolina y diésel.", "fuente": "Presidencia, presentación de resultados de Pemex (3 de mayo de 2024)", "url": "https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf" },
+      "meses": 53,
+      "tiempo": { "dato": "Acordada el 1 de julio de 2022; el Plan de Trabajo 2025–2030 la esperaba en operación en 2026: el juego cuenta hasta diciembre de 2026, 53 meses.", "fuente": "Pemex, comunicados 38/2022 y 9/2025", "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1440766_1.pdf" },
+      "real": "Acordada en julio de 2022. Iba en 74 % en octubre de 2025 y en 80.1 % al cierre de junio de 2026; aún no opera."
+    },
+    {
+      "id": "deer-park-mejora", "refineria": "deer-park", "tipo": "mejora", "nombre": "Mejorar la confiabilidad de Deer Park",
+      "meses": 12,
+      "tiempo": { "dato": "Estimación del juego: un año de mantenimiento mayor.", "fuente": "Estimación del juego", "url": "" },
+      "real": "Pemex la compró el 20 de enero de 2022 y la sostuvo sin deuda; de enero a septiembre de 2026 procesó 309 Mbd, 15.6 % más que cuando la compró. No hay un proyecto oficial con costo: el juego usa el costo por barril recuperado de las otras seis."
+    }
+  ],
+  "compraDeerPark": {
+    "costoMdp": 23000,
+    "fecha": "2022-01-20",
+    "dato": "596 millones de dólares por la parte de Shell, más otros 596 para liquidar la deuda que le tocaba a Pemex, pagados con el Fondo Nacional de Infraestructura (Pemex, comunicado 6/2022). En pesos, las transferencias del Gobierno Federal para Deer Park sumaron 23 mil millones (Presidencia, 3 de mayo de 2024).",
+    "fuentes": ["pmx-c6-2022", "cpm-2024"]
+  }
+}

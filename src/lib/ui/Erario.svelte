@@ -10,6 +10,7 @@
   import { AÑOS_AEROPUERTOS, POLOS, SERIE_AEROPUERTOS } from '$lib/domain/sitios';
   import { EXPORTACIONES } from '$lib/domain/exportaciones';
   import { clavePolo } from '$lib/domain/realidad';
+  import { DEMANDA_COMBUSTIBLES, PETROLEO, totalReal } from '$lib/domain/petroleo';
 
   /** The last year with a real figure: later years repeat it. */
   const ULTIMO_AÑO = FEDERAL.años[FEDERAL.años.length - 1].año;
@@ -70,7 +71,9 @@
     // Rail exports that year (ATTRAPI), when the yearbook has it.
     const ferro = EXPORTACIONES.ferrocarril.exportacion[String(a.año)] ?? null;
     const ferroNacional = EXPORTACIONES.ferrocarril.nacional[String(a.año)] ?? null;
-    return { ...cuenta, cfe, polos, carga, ferro, ferroNacional, año: a.año, federal: a.federal, serie };
+    // Crude the refineries really ran that year.
+    const refino = totalReal(a.año);
+    return { ...cuenta, cfe, polos, carga, ferro, ferroNacional, refino, año: a.año, federal: a.federal, serie };
   });
 
   /** This month's payment and the year it comes from, with the sources in words. */
@@ -100,11 +103,37 @@
     `La CFE paga sus centrales con recursos propios, no con el presupuesto federal: ${mdp(ENERGIA.cajaCfeMdpAño)} al año ` +
     '(Programa de Desarrollo CFE 2026–2030, proyectos propios de generación). Solo las centrales de la CFE se pagan de aquí.';
 
+  const detallePemex =
+    'Pemex paga sus refinerías con lo que el Gobierno Federal le transfiere para refinación: 6.1 mil millones al mes de 2019 a 2024 ' +
+    '(391 mil millones de enero de 2019 a abril de 2024) y 2.2 mil millones desde 2025 (Plan de Trabajo 2025–2030). Solo las obras de Pemex se pagan de aquí.';
+
+  /** Millions of pesos, short for the two-till cell: "2.20 mil M", "850 M". */
+  const corto = (n: number) =>
+    Math.abs(n) >= 1000
+      ? `${(n / 1000).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} mil M`
+      : `${Math.round(n).toLocaleString('es-MX')} M`;
+
   const enObraCfe = $derived.by(() => {
     sim.horas;
-    return [...sim.obrasEnergia.values()].filter((o) => o.fase === 'en-obra').length;
+    return [...sim.obrasEnergia.values(), ...sim.obrasPemex.values()].filter((o) => o.fase === 'en-obra').length;
   });
-  const hechasCfe = $derived([...sim.obrasEnergia.values()].filter((o) => o.fase === 'en-servicio').length);
+  const hechasCfe = $derived([...sim.obrasEnergia.values(), ...sim.obrasPemex.values()].filter((o) => o.fase === 'en-servicio').length);
+
+  /** What Pemex's refineries run and make in the game, for the bar. */
+  const refino = $derived.by(() => {
+    const r = sim.refinacion;
+    if (!r) return null;
+    const pct = Math.round(r.autosuficiencia * 100);
+    const deerPark = r.procesoDeerPark > 0 ? `, más ${Math.round(r.procesoDeerPark)} en Deer Park` : '';
+    return {
+      proceso: Math.round(r.proceso),
+      pct,
+      detalle:
+        `Crudo que procesan las refinerías de Pemex en México: ${Math.round(r.proceso)} mil barriles diarios${deerPark}.\n` +
+        `Hacen ${Math.round(r.combustibles)} mil barriles diarios de gasolina, diésel y turbosina: el ${pct} % de los ` +
+        `${DEMANDA_COMBUSTIBLES.toLocaleString('es-MX')} mil que el país usaba en diciembre de 2018. El resto se importa.`,
+    };
+  });
 
   /** What the player's trains have exported this game year, and in all. */
   const exportado = $derived.by(() => {
@@ -130,70 +159,83 @@
 
 <div class="erario panel">
   {#if real}
-    <div class="celda caja" title="Presupuesto federal para ferrocarriles de ese año (Cuenta Pública y Presupuesto de Egresos): subfunción de transporte por ferrocarril, Tren Maya y Ferrocarril del Istmo.">
+    <div class="celda caja" title={`Presupuesto federal para ferrocarriles de ese año: ${mdp(real.federal)} de pesos (Cuenta Pública y Presupuesto de Egresos): subfunción de transporte por ferrocarril, Tren Maya y Ferrocarril del Istmo.`}>
       <span class="label">Trenes {real.año} · {real.serie}</span>
-      <span class="valor"><b class="mono">{mdp(real.federal)}</b></span>
+      <span class="valor"><b class="mono">{corto(real.federal)}</b></span>
     </div>
-    <div class="celda">
-      <span class="label">Vías en operación</span>
+    <div class="celda doble" title={`Vías del catálogo en su etapa real. Además, ${real.anunciadas} vías anunciadas sin obra.`}>
+      <span class="label">Vías operando</span>
       <span class="valor"><b class="mono">{real.enOperacion}</b> · <b class="mono">{km(real.kmOperacion)}</b></span>
-    </div>
-    <div class="celda" title={`Además, ${real.anunciadas} vías anunciadas sin obra`}>
-      <span class="label">Vías en obra</span>
+      <span class="label">En obra</span>
       <span class="valor"><b class="mono">{real.enObra}</b> · <b class="mono">{km(real.kmObra)}</b></span>
     </div>
-    <div class="celda" title="Centrales de la CFE del catálogo, en su etapa real">
+    <div class="celda doble" title={`Centrales de la CFE del catálogo en su etapa real: ${real.cfe.enOperacion} en operación, ${real.cfe.enObra} en obra. Polos del Bienestar con declaratoria en el DOF, y los que ya operan.`}>
       <span class="label cfe">Centrales CFE</span>
-      <span class="valor"><b class="mono">{real.cfe.enOperacion}</b> · <b class="mono">{personas(real.cfe.mwOperacion)}</b> MW <span class="dim">· {real.cfe.enObra} en obra</span></span>
-    </div>
-    <div class="celda opcional" title="Polos del Bienestar con declaratoria en el DOF, y los que ya operan">
+      <span class="valor"><b class="mono">{personas(real.cfe.mwOperacion)}</b> MW <span class="dim">· {real.cfe.enObra} en obra</span></span>
       <span class="label">Polos</span>
-      <span class="valor"><b class="mono">{real.polos.operando}</b> operando <span class="dim">· {real.polos.declarados} declarados</span></span>
+      <span class="valor"><b class="mono">{real.polos.operando}</b> de {real.polos.operando + real.polos.declarados} operando</span>
     </div>
-    <div class="celda opcional" title="Toneladas que llevó el tren ese año: las que salieron del país por fronteras y puertos, y la carga nacional (ATTRAPI)">
-      <span class="label export">Carga por tren {real.año}</span>
-      <span class="valor">
-        {#if real.ferro !== null && real.ferroNacional !== null}
-          <b class="mono">{real.ferro.toLocaleString('es-MX')}</b> Mt exportadas · <b class="mono">{real.ferroNacional.toLocaleString('es-MX')}</b> nacionales
-        {:else}<span class="dim">sin dato aún</span>{/if}
-      </span>
+    <div class="celda opcional" class:doble={real.ferro !== null && real.ferroNacional !== null} title="Millones de toneladas que llevó el tren ese año: las que salieron del país por fronteras y puertos, y la carga nacional (ATTRAPI)">
+      {#if real.ferro !== null && real.ferroNacional !== null}
+        <span class="label export">Tren · exportado</span>
+        <span class="valor"><b class="mono">{real.ferro.toLocaleString('es-MX')}</b> Mt</span>
+        <span class="label">Tren · nacional</span>
+        <span class="valor"><b class="mono">{real.ferroNacional.toLocaleString('es-MX')}</b> Mt</span>
+      {:else}
+        <span class="label export">Carga por tren {real.año}</span>
+        <span class="valor dim">sin dato aún</span>
+      {/if}
     </div>
-    <div class="celda opcional" title={`Carga aérea de todo el país (AFAC)${real.carga.parcial ? ', de enero a septiembre' : ''}`}>
+    <div class="celda doble opcional" title={`${PETROLEO.totales.dato}${real.refino?.parcial ? `\n${real.año}: ${real.refino.parcial}.` : ''}\nCarga aérea de todo el país (AFAC)${real.carga.parcial ? ', de enero a septiembre' : ''}.`}>
+      <span class="label pemex">Refinación {real.año}{real.refino?.parcial ? '*' : ''}</span>
+      <span class="valor">{#if real.refino}<b class="mono">{Math.round(real.refino.mbd).toLocaleString('es-MX')}</b> mil b/d{:else}<span class="dim">sin dato aún</span>{/if}</span>
       <span class="label aereo">Carga aérea {real.carga.año}{real.carga.parcial ? '*' : ''}</span>
-      <span class="valor"><b class="mono">{personas(real.carga.t)}</b> t</span>
+      <span class="valor"><b class="mono">{toneladas(real.carga.t)}</b> t</span>
     </div>
     <button class="celda obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
       <span class="label">Obras</span>
       <span class="valor ir">Ver todas {tablero.catalogo ? '×' : '→'}</span>
     </button>
   {:else}
-    <div class="celda caja" title={llegada?.detalle}>
+    <div class="celda caja" title={`En caja: ${mdp(cuenta.dinero)} de pesos (M: millones).` + (llegada ? String.fromCharCode(10) + llegada.detalle : '')}>
       <span class="label">Presupuesto</span>
       <span class="valor">
-        <b class="mono" class:agotado={cuenta.dinero < 1}>{mdp(cuenta.dinero)}</b>
+        <b class="mono" class:agotado={cuenta.dinero < 1}>{corto(cuenta.dinero)}</b>
         {#if llegada}<span class="mes">{alMes(llegada.total)}</span>{/if}
       </span>
     </div>
-    <div class="celda caja" title={detalleCfe}>
+    <!-- The two state companies' tills, one over the other. -->
+    <div class="celda caja doble tres" title={`${detalleCfe}\n\n${detallePemex}`}>
       <span class="label cfe">CFE</span>
-      <span class="valor">
-        <b class="mono" class:agotado={sim.dineroCfe < 1}>{mdp(sim.dineroCfe)}</b>
-        <span class="mes">{alMes(CAJA_CFE_MES)}</span>
-      </span>
+      <b class="mono" class:agotado={sim.dineroCfe < 1}>{corto(sim.dineroCfe)}</b>
+      <span class="mes">{alMes(CAJA_CFE_MES)}</span>
+      <span class="label pemex">Pemex</span>
+      <b class="mono" class:agotado={sim.dineroPemex < 1 && sim.cajaPemexMes > 0}>{corto(sim.dineroPemex)}</b>
+      <span class="mes">{alMes(sim.cajaPemexMes)}</span>
     </div>
-    <div class="celda">
-      <span class="label">Empleos</span>
-      <span class="valor"><b class="mono">{personas(cuenta.permanentes)}</b> permanentes <span class="dim">· <b class="mono">{personas(cuenta.enObra)}</b> en obra</span></span>
+    <div class="celda doble opcional" title="Permanentes: los que dan las empresas de los polos que operan. En obra: los que trabajan en las obras del Estado mientras duran.">
+      <span class="label">Empleos fijos</span>
+      <span class="valor"><b class="mono">{personas(cuenta.permanentes)}</b></span>
+      <span class="label">En obra</span>
+      <span class="valor"><b class="mono">{personas(cuenta.enObra)}</b></span>
     </div>
     <div
-      class="celda"
+      class="celda doble"
       title={`Exportado: lo que tus trenes llevaron de un origen a una salida del país (aduana fronteriza, puerto o aeropuerto); en total, ${personas(exportado.total)} t.\nNacional: lo que entregaron de una parada a la siguiente; este año ${personas(nacional.tkm / 1e6)} millones de toneladas-km, en total ${personas(nacional.total)} t.`}
     >
-      <span class="label">Carga {exportado.año}</span>
-      <span class="valor">
-        <b class="mono export">{toneladas(exportado.t)}</b> t exportadas <span class="dim">·</span> <b class="mono">{toneladas(nacional.t)}</b> t nacionales
-      </span>
+      <span class="label export">Exportado {exportado.año}</span>
+      <span class="valor"><b class="mono export">{toneladas(exportado.t)}</b> t</span>
+      <span class="label">Carga nacional</span>
+      <span class="valor"><b class="mono">{toneladas(nacional.t)}</b> t</span>
     </div>
+    {#if refino}
+      <div class="celda doble" title={refino.detalle}>
+        <span class="label pemex">Refinación</span>
+        <span class="valor"><b class="mono">{refino.proceso}</b> mil b/d</span>
+        <span class="label pemex">Combustibles</span>
+        <span class="valor"><b class="mono">{refino.pct} %</b> del consumo</span>
+      </div>
+    {/if}
     <!-- The State's works and the way into their catalog, in one cell. -->
     <button
       class="celda obras-via"
@@ -235,7 +277,7 @@
     justify-content: center;
     gap: 0.12rem;
     flex: none;
-    padding: 0 0.65rem;
+    padding: 0 0.55rem;
     border-left: 1px solid var(--line);
     white-space: nowrap;
   }
@@ -273,6 +315,32 @@
 
   .cfe {
     color: #fde68a;
+  }
+
+  .pemex {
+    color: #e0a458;
+  }
+
+  /* Two figures in one cell, label and value on each line (three columns for the tills: label, money, monthly payment). */
+  .doble {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 0.4rem;
+    row-gap: 0.12rem;
+    align-content: center;
+    align-items: baseline;
+  }
+
+  .doble.tres {
+    grid-template-columns: auto auto auto;
+  }
+
+  .doble .valor {
+    gap: 0.3rem;
+  }
+
+  .doble.caja b {
+    font-size: 0.78rem;
   }
 
   .aereo {
@@ -319,7 +387,7 @@
   }
 
   /* Less room: the secondary cells give way, then the bar. */
-  @media (max-width: 1360px) {
+  @media (max-width: 1400px) {
     .celda.opcional {
       display: none;
     }

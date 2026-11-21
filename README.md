@@ -197,6 +197,8 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
 | `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
 | `src/lib/domain/datos/aeropuertos.json` | Los **10 aeropuertos de carga** de la AFAC, con sus toneladas de cada año desde 2018 (serie mensual de la AFAC) para el modo Realidad. Son sitios (`aeropuerto:<id>`): con vía a 15 km o menos tienen estación y son paradas de tren (puertos secos) |
+| `src/lib/domain/datos/petroleo.json` | **Petróleo**: las seis refinerías de Pemex, la Olmeca y Deer Park con su capacidad, su proceso de 2018 y su capacidad óptima (Pemex 20-F, ASF), su proceso real por año y por mes, las obras de Pemex con costo y tiempo, la caja de Pemex, rendimientos y consumo de combustibles |
+| `src/lib/domain/datos/petroleo-real.json` | Etapa real de cada obra de Pemex (rehabilitaciones, Olmeca, coquizadoras, compra de Deer Park) |
 | `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
@@ -281,6 +283,23 @@ Los datos se arman con `scripts/energia/gen-energia.cjs`, que lee la lista de pe
 (resumida con `permisos_resumen.py`) y la tabla de centrales del PRODESEN transcrita, ubica cada
 central en la cabecera de su municipio con el servicio del INEGI y toma de ahí mismo el límite
 de Mulegé con Comondú y Loreto.
+
+**El petróleo** (`domain/petroleo.ts`, `datos/petroleo.json`, `datos/petroleo-real.json`): las
+seis refinerías de Pemex arrancan con su proceso de 2018 (611.9 Mbd de 1,640). Sus obras están
+en `sim.obrasPemex` y se pagan de `sim.dineroPemex`, la caja de Pemex (`cajaPemexDelMes`: 6.1 mil
+millones al mes de 2019 a 2024 y 2.2 mil millones desde 2025):
+- rehabilitar cada refinería la lleva a su capacidad óptima (ASF) conforme avanza;
+- la Olmeca procesa 263 Mbd terminada;
+- las coquizadoras suman combustibles;
+- `sim.comprarDeerPark()` compra la parte de Shell, y entonces Deer Park cuenta y se puede mejorar.
+
+`sim.refinacion` (`refinacionJuego`) se recalcula una vez al día: el crudo procesado, la gasolina,
+diésel y turbosina que salen y la parte del consumo de 2018 (1,231 Mbd) que cubren.
+
+En Realidad, `procesoReal` da lo que cada refinería procesó ese mes o año, donde está publicado,
+y `totalReal` el total del año. El tablero tiene la capa *Refinerías* (gotas del tamaño de su
+proceso; un clic abre su ficha en el catálogo). Detalle en la
+[enciclopedia](docs/enciclopedia.md#el-petróleo).
 
 **Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado y paga
 con su presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)
@@ -450,10 +469,14 @@ costa del mundo solo sube de resolución). Además:
   construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
   cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
   Tuxpan…). Ya están el catálogo de obras del Estado y su presupuesto real.
-- **Energía, segunda capa**: las refinerías (las seis del sistema nacional y la Olmeca) como
-  origen de carga, junto con la carga. Y el Plan de Expansión de la CFE 2026–2030 (52 proyectos)
-  en el catálogo, cuando se publique la lista por central: sin él, de 2028 en adelante varias
-  regiones se quedan sin margen.
+- **Petróleo, lo que sigue**:
+  - los combustibles como carga: de las refinerías en tren (carros tanque) y en buque tanque;
+  - el crudo de exportación y las importaciones por barco, junto con los barcos;
+  - las cifras por refinería de 2022 a septiembre de 2024, si se consigue el Anuario Estadístico
+    de Pemex (su sitio no deja bajarlo automáticamente).
+- **Energía**: el Plan de Expansión de la CFE 2026–2030 (52 proyectos) en el catálogo, cuando se
+  publique la lista por central. Sin él, de 2028 en adelante varias regiones se quedan sin
+  margen.
 - **Más dinero del Estado**, con la carga: lo que cobran los trenes del Estado, lo que pagan
   sus trenes por pasar por vía privada y los impuestos de las concesionarias.
 - **Carga**: qué lleva cada tren y cada barco (contenedores, granel, autos, combustibles),

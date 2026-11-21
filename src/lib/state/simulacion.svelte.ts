@@ -28,6 +28,16 @@ import {
   type EstadoRegion,
 } from '$lib/domain/energia';
 import { clavePolo, estadoReal, type EstadoReal } from '$lib/domain/realidad';
+import {
+  cajaPemexDelMes,
+  COMPRA_DEER_PARK,
+  HORAS_COMPRA_DEER_PARK,
+  OBRAS_PEMEX,
+  obraPemex,
+  presupuestarObraPemex,
+  refinacionJuego,
+  type Refinacion,
+} from '$lib/domain/petroleo';
 import { avanzar } from '$lib/domain/servicio';
 import {
   CARGA_POR_TREN,
@@ -119,6 +129,19 @@ class Simulacion {
    */
   energia = $state.raw<EstadoRegion[]>([]);
   #diaEnergia = -1;
+  /**
+   * Pemex's till, millions of pesos: what the federal government puts into
+   * refining each month (`petroleo.ts`). Only Pemex's works are paid from here.
+   */
+  dineroPemex = $state(0);
+  /** This month's payment into Pemex's till, for the ledger. */
+  cajaPemexMes = $state(0);
+  /** Every Pemex work of the catalog, by id: phase, progress, payments. */
+  obrasPemex = $state.raw<Map<string, ObraViaEstado>>(new Map(OBRAS_PEMEX.map((o) => [o.id, obraViaNueva(o.id)])));
+  /** Deer Park is all Pemex's (Shell's half bought): what it makes counts for the country. */
+  deerParkPropia = $state(false);
+  /** What the refineries run and make with the works as they stand. Recomputed once a game day and when a work ends. */
+  refinacion = $state.raw<Refinacion | null>(null);
   /** Months already paid in (0 is December 2018): the next one to pay. */
   #mesesCobrados = 0;
   /**
@@ -173,6 +196,8 @@ class Simulacion {
     obras: Map<string, ObraPolo>;
     obrasVia: Map<string, ObraViaEstado>;
     obrasEnergia: Map<string, ObraViaEstado>;
+    obrasPemex: Map<string, ObraViaEstado>;
+    deerParkPropia: boolean;
     trenes: Tren[];
     barcos: Barco[];
   } | null = null;
@@ -338,7 +363,16 @@ class Simulacion {
    */
   entrarRealidad() {
     if (this.modo === 'realidad' || this.estado !== 'lista') return;
-    this.#juego = { horas: this.horas, obras: this.obras, obrasVia: this.obrasVia, obrasEnergia: this.obrasEnergia, trenes: this.trenes, barcos: this.barcos };
+    this.#juego = {
+      horas: this.horas,
+      obras: this.obras,
+      obrasVia: this.obrasVia,
+      obrasEnergia: this.obrasEnergia,
+      obrasPemex: this.obrasPemex,
+      deerParkPropia: this.deerParkPropia,
+      trenes: this.trenes,
+      barcos: this.barcos,
+    };
     this.seleccionar(null);
     this.modo = 'realidad';
     // The game's trains and ships are made-up services: none of them here.
@@ -352,7 +386,8 @@ class Simulacion {
   irA(horas: number, forzar = false) {
     if (this.modo !== 'realidad') return;
     this.horas = Math.max(0, Math.min(horas, horasDeHoy()));
-    const real = new Map([...[...OBRAS_VIA, ...OBRAS_ENERGIA].map((o) => o.id), ...POLOS.map((p) => clavePolo(p.id))].map((id) => [id, estadoReal(id, this.horas)]));
+    const ids = [...[...OBRAS_VIA, ...OBRAS_ENERGIA, ...OBRAS_PEMEX].map((o) => o.id), 'deer-park-compra', ...POLOS.map((p) => clavePolo(p.id))];
+    const real = new Map(ids.map((id) => [id, estadoReal(id, this.horas)]));
     const fase = (id: string) => {
       const e = real.get(id)!.etapa;
       return e === 'en-operacion' ? 'en-servicio' : e === 'en-obra' ? 'en-obra' : 'por-construir';
@@ -362,6 +397,9 @@ class Simulacion {
     this.obrasVia = new Map(OBRAS_VIA.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
     // The CFE's plants as they really stood: the map draws them and the regions count the ones in service.
     this.obrasEnergia = new Map(OBRAS_ENERGIA.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
+    // Pemex's works too; the map and the bar read the refineries' real runs from `petroleo.ts`.
+    this.obrasPemex = new Map(OBRAS_PEMEX.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
+    this.deerParkPropia = this.horas >= HORAS_COMPRA_DEER_PARK;
     // The polos too: built or not. How full they are isn't published, so they stay at 0 % (no demand, no jobs counted).
     this.obras = new Map(
       POLOS.map((p) => {
@@ -385,6 +423,8 @@ class Simulacion {
     this.obras = j.obras;
     this.obrasVia = j.obrasVia;
     this.obrasEnergia = j.obrasEnergia;
+    this.obrasPemex = j.obrasPemex;
+    this.deerParkPropia = j.deerParkPropia;
     this.trenes = j.trenes;
     this.barcos = j.barcos;
     this.#juego = null;
@@ -422,6 +462,7 @@ class Simulacion {
     for (const o of this.obras.values()) n += personasTrabajando(o);
     for (const o of this.obrasVia.values()) n += personasEnObraVia(o);
     for (const o of this.obrasEnergia.values()) n += personasEnObraVia(o);
+    for (const o of this.obrasPemex.values()) n += personasEnObraVia(o);
     return n;
   }
 
@@ -466,14 +507,20 @@ class Simulacion {
     if (this.#mesesCobrados > mes) return;
     let caja = this.dinero;
     let cajaCfe = this.dineroCfe;
+    let cajaPemex = this.dineroPemex;
+    let pemexMes = 0;
     let ultima: Mensualidad | null = null;
     while (this.#mesesCobrados <= mes) {
+      pemexMes = cajaPemexDelMes(this.#mesesCobrados);
       ultima = mensualidad(this.#mesesCobrados++);
       caja += ultima.total;
       cajaCfe += CAJA_CFE_MES;
+      cajaPemex += pemexMes;
     }
     this.dinero = caja;
     this.dineroCfe = cajaCfe;
+    this.dineroPemex = cajaPemex;
+    this.cajaPemexMes = pemexMes;
     this.ultimaMensualidad = ultima;
   }
 
@@ -507,7 +554,7 @@ class Simulacion {
     return this.energiaDelPolo(id)?.alcanza ?? true;
   }
 
-  /** Recompute the regions once a game day (or now, with `forzar`). */
+  /** Recompute the regions and the refineries once a game day (or now, with `forzar`). */
   #actualizarEnergia(forzar = false) {
     const dia = Math.floor(this.horas / 24);
     if (!forzar && dia === this.#diaEnergia) return;
@@ -516,6 +563,42 @@ class Simulacion {
     const polos = new Map<string, number>();
     for (const o of this.obras.values()) if (o.fase === 'operando' && o.ocupacion > 0) polos.set(o.id, mwDelPolo(o.id) * o.ocupacion);
     this.energia = estadoEnergia(this.horas, hechas, polos);
+    this.refinacion = refinacionJuego({
+      avance: (id) => {
+        const o = this.obrasPemex.get(id);
+        return !o ? 0 : o.fase === 'en-servicio' ? 1 : o.avance;
+      },
+      deerParkPropia: this.deerParkPropia,
+    });
+  }
+
+  // ---- oil ----------------------------------------------------------------------------------------
+
+  /** What Pemex work `id` takes with `cuadrillas` crews. */
+  presupuestoObraPemex(id: string, cuadrillas: number) {
+    const o = obraPemex(id);
+    return o ? presupuestarObraPemex(o, cuadrillas) : null;
+  }
+
+  /** Order a Pemex work, paid from Pemex's till as it advances. Deer Park's needs Deer Park bought first. */
+  construirObraPemex(id: string, cuadrillas: number): boolean {
+    const estado = this.obrasPemex.get(id);
+    const plan = this.presupuestoObraPemex(id, cuadrillas);
+    if (!estado || !plan || estado.fase !== 'por-construir' || this.modo !== 'juego') return false;
+    if (obraPemex(id)?.refineria === 'deer-park' && !this.deerParkPropia) return false;
+    estado.plan = plan;
+    estado.fase = 'en-obra';
+    this.obrasPemex = new Map(this.obrasPemex);
+    return true;
+  }
+
+  /** Buy Shell's half of Deer Park, paid at once from Pemex's till. False if there isn't the money. */
+  comprarDeerPark(): boolean {
+    if (this.deerParkPropia || this.modo !== 'juego' || this.dineroPemex < COMPRA_DEER_PARK.costoMdp) return false;
+    this.dineroPemex -= COMPRA_DEER_PARK.costoMdp;
+    this.deerParkPropia = true;
+    this.#actualizarEnergia(true);
+    return true;
   }
 
   #avanzarObras(horas: number) {
@@ -547,6 +630,19 @@ class Simulacion {
     if (cajaCfe.mdp !== this.dineroCfe) this.dineroCfe = cajaCfe.mdp;
     if (plantasTerminadas) {
       this.obrasEnergia = new Map(this.obrasEnergia);
+      this.#actualizarEnergia(true);
+    }
+
+    // Pemex's works, from Pemex's own till.
+    const cajaPemex = { mdp: this.dineroPemex };
+    let pemexTerminadas = false;
+    for (const o of this.obrasPemex.values()) {
+      if (o.fase !== 'en-obra') continue;
+      if (avanzarObraVia(o, horas, cajaPemex, this.horas + horas)) pemexTerminadas = true;
+    }
+    if (cajaPemex.mdp !== this.dineroPemex) this.dineroPemex = cajaPemex.mdp;
+    if (pemexTerminadas) {
+      this.obrasPemex = new Map(this.obrasPemex);
       this.#actualizarEnergia(true);
     }
 

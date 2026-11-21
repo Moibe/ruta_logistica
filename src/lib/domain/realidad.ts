@@ -2,6 +2,7 @@ import VIAS from './datos/obras-via-real.json';
 import CENTRALES from './datos/centrales-real.json';
 import POLOS_REAL from './datos/polos-real.json';
 import POLOS_JSON from './datos/polos.json';
+import PETROLEO_REAL from './datos/petroleo-real.json';
 import { horasDeFecha } from './calendario';
 
 /**
@@ -43,16 +44,17 @@ const MESES_DOF = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio
 const vias = VIAS as unknown as RealJson;
 const centrales = CENTRALES as unknown as RealJson;
 const polos = POLOS_REAL as unknown as RealJson;
+const petroleo = PETROLEO_REAL as unknown as RealJson;
 /**
- * Every record in one: rail works and plants by their own ids, polos as
- * `polo:<id>`. A polo is announced on the day of its declaratoria in the DOF
- * (`polos.json`); `polos-real.json` adds what happened after.
+ * Every record in one: rail works, plants and Pemex's works by their own ids,
+ * polos as `polo:<id>`. A polo is announced on the day of its declaratoria in
+ * the DOF (`polos.json`); `polos-real.json` adds what happened after.
  */
 const REAL: RealJson = {
   corte: vias.corte,
   nota: vias.nota,
-  fuentes: { ...vias.fuentes, ...centrales.fuentes, ...polos.fuentes },
-  obras: { ...vias.obras, ...centrales.obras },
+  fuentes: { ...vias.fuentes, ...centrales.fuentes, ...polos.fuentes, ...petroleo.fuentes },
+  obras: { ...vias.obras, ...centrales.obras, ...petroleo.obras },
 };
 for (const p of POLOS_JSON as { id: string; nombre: string; dof: string; codigo: number }[]) {
   const [a, m, d] = p.dof.split('-');
