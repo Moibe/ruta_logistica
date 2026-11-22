@@ -99,7 +99,8 @@ type EnergiaJson = {
   factores: Record<ClaseTec, Record<Escalon, number>>;
   cajaCfeMdpAño: number;
   tipoCambio: number;
-  mwPorHa: number;
+  /** MW of a polo without an official figure: the median of the official ones. */
+  mwSinCifra: number;
   regiones: Region[];
   polos: Record<string, { region: string; mw: number; oficial: boolean; dato?: string }>;
   plantas2018: Planta2018[];

@@ -704,14 +704,15 @@ como vocaciones productivas. Solo llegan empresas a un lote promovido.
   reparte entre los lotes promovidos **en el orden en que se promovieron**; el último en llenarse
   va a medias mientras su empresa se instala. Un lote sin promover se queda vacío, y el interés
   que no encuentra lote espera: si el jugador promueve tarde, las empresas llegan de golpe.
-- **La energía del polo es un tope.** La ficha de Economía le da al polo 8 MVA. Lleno de
-  empresas de consumo promedio, pediría 8 MW (lo que el juego ya contaba); cada sector pide su
-  parte de eso por cuánto gasta en electricidad contra el promedio de la manufactura. **Un lote
-  cuya empresa no cabe en lo que queda se queda sin ella**: una metalúrgica en el lote de 20 ha
-  pediría 13 MW. Los lotes se acomodan en el orden en que se promovieron, y uno que no cabe no
-  aparta nada. Comprobación: los 5 mil empleos del polo, al gasto promedio de la manufactura en
-  2018 (24,753 pesos por trabajador) y a unos 1.8 pesos el kWh, dan unos 8 MW, la cifra de
-  Economía.
+- **La energía del polo es un tope.** La ficha de Economía le da al polo 8 MVA. **Cada empleo
+  pide 1.6 kW** al promedio de la manufactura (los 8 MW de Huamantla entre sus 5 mil empleos),
+  por cuánto gasta su sector en electricidad contra ese promedio. Así un trabajador pide lo mismo
+  en cualquier polo.
+  - **Comprobación:** con el gasto del censo (24,753 pesos por trabajador en 2018), 1.6 kW todo
+    el año es un kWh de unos 1.77 pesos, un precio industrial razonable.
+  - **Un lote cuya empresa no cabe en lo que queda se queda sin ella:** una metalúrgica en el lote
+    de 20 ha pediría 15 MW.
+  - Los lotes se acomodan en el orden en que se promovieron, y uno que no cabe no aparta nada.
 - **Cada empresa da empleo**: los del polo por hectárea, repartidos por la superficie de su lote
   (un lote de 20 ha, 2,226 empleos). Los mismos para todos los sectores: el censo no dice
   cuántos trabajadores caben por hectárea en cada uno.
@@ -732,14 +733,14 @@ anuario 2018, tablas 6-1, 6-2 y 10). Las dos últimas columnas son una empresa e
 
 | Sector | SCIAN | Personal ocupado (2018) | Luz | Agua | t por trabajador al año | Exporta | MW | t al año por tren |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Industria textil | 313, 314 | 215,967 | 0.87× | 0.24× | 1.49* | 30 % | 2.6 MW | 3,317 t |
-| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 13.0 MW | 151,006 t |
-| Fabricación de productos metálicos | 332 | 454,118 | 0.65× | 0.26× | 1.49* | 30 % | 2.0 MW | 3,317 t |
-| Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 3.5 MW | 3,317 t |
-| Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 2.2 MW | 3,317 t |
-| Aparatos eléctricos | 335 | 241,221 | 0.99× | 0.53× | 1.91** | 45 % | 3.0 MW | 4,252 t |
-| Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 3.7 MW | 11,198 t |
-| Bebidas y tabaco | 312 | 188,656 | 0.92× | 2.77× | 18.94 | 98 % | 2.8 MW | 42,165 t |
+| Industria textil | 313, 314 | 215,967 | 0.87× | 0.24× | 1.49* | 30 % | 3.1 MW | 3,317 t |
+| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 15.4 MW | 151,006 t |
+| Fabricación de productos metálicos | 332 | 454,118 | 0.65× | 0.26× | 1.49* | 30 % | 2.3 MW | 3,317 t |
+| Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 4.2 MW | 3,317 t |
+| Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 2.6 MW | 3,317 t |
+| Aparatos eléctricos | 335 | 241,221 | 0.99× | 0.53× | 1.91** | 45 % | 3.5 MW | 4,252 t |
+| Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 4.3 MW | 11,198 t |
+| Bebidas y tabaco | 312 | 188,656 | 0.92× | 2.77× | 18.94 | 98 % | 3.3 MW | 42,165 t |
 
 - **Productos de cada sector en el anuario**: equipo de transporte, los vehículos armados (5.43
   millones de toneladas), el material de ensamble, los vehículos desarmados y las ruedas;
@@ -791,28 +792,30 @@ juego ya tenía.
   Ferroistmo**, a 2.14 km en línea recta, más cerca que la Línea Z que mide el DOF.
 - **Los frentes** son los mismos que en Huamantla, con las mismas partes del costo. La
   declaratoria no dice qué obras necesita el polo.
-- **La energía:** no hay cifra oficial. Le toca la estimación por hectárea de todos los polos
-  sin cifra, 0.0257 MW, que da 6.6 MW, y el juego la toma como lo que da su subestación.
-  - Esa razón sale de cinco polos, y los grandes (Zapotlán: 20 MW en 911 ha) piden poco por
-    hectárea. Con la de Huamantla, Coatzacoalcos I tendría unos 39 MW.
-  - Por eso aquí una empresa pide pocos MW por trabajador comparada con una de Huamantla. Aun así,
-    dos petroquímicas grandes y una metalúrgica llenan su subestación.
+- **La energía:** no hay cifra oficial. Le toca la de un polo sin cifra, la mediana de los siete
+  que la tienen: **8 MW**, lo que da su subestación en su primera fase.
+  - Sus empresas piden lo mismo por empleo que en Huamantla, 1.6 kW al promedio. Lleno de
+    industria promedio, el polo pediría **39 MW**.
+  - Con 8 MW caben unos dos lotes de 20 ha de industria promedio. Una petroquímica o una
+    metalúrgica de ese tamaño (17 MW) no caben.
+  - Es lo que dicen las cifras oficiales: los polos arrancan con 4 a 20 MW, y uno grande necesitará
+    más subestación para llenarse.
 
 Lo que pide cada uno de sus sectores en un lote de 20 ha (2,467 empleos: los del polo
 repartidos en sus 197 ha de lotes):
 
 | Sector | SCIAN | Personal ocupado (2018) | Luz | Agua | t por trabajador al año | Exporta | MW | t al año por tren |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 0.37 MW | 3,676 t |
-| Semiconductores (componentes electrónicos) | 3344 | 196,205 | 0.67× | 0.96× | 1.49* | 30 % | 0.34 MW | 3,676 t |
-| Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 0.62 MW | 12,410 t |
-| Dispositivos médicos | 3391 | 172,298 | 0.46× | 0.37× | 1.49* | 30 % | 0.24 MW | 3,676 t |
-| Farmacéutica | 3254 | 88,699 | 0.84× | 0.89× | 1.49* | 30 % | 0.43 MW | 3,676 t |
-| Agroindustria (industria alimentaria) | 311 | 1,092,943 | 0.66× | 0.57× | 2.70 | 3 % | 0.34 MW | 6,661 t |
-| Equipo de generación y distribución de electricidad | 3353 | 74,641 | 0.87× | 0.35× | 1.49* | 30 % | 0.45 MW | 3,676 t |
-| Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 0.60 MW | 3,676 t |
-| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 2.21 MW | 167,351 t |
-| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 2.19 MW | 370,846 t |
+| Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 2.9 MW | 3,676 t |
+| Semiconductores (componentes electrónicos) | 3344 | 196,205 | 0.67× | 0.96× | 1.49* | 30 % | 2.6 MW | 3,676 t |
+| Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 4.8 MW | 12,410 t |
+| Dispositivos médicos | 3391 | 172,298 | 0.46× | 0.37× | 1.49* | 30 % | 1.8 MW | 3,676 t |
+| Farmacéutica | 3254 | 88,699 | 0.84× | 0.89× | 1.49* | 30 % | 3.3 MW | 3,676 t |
+| Agroindustria (industria alimentaria) | 311 | 1,092,943 | 0.66× | 0.57× | 2.70 | 3 % | 2.6 MW | 6,661 t |
+| Equipo de generación y distribución de electricidad | 3353 | 74,641 | 0.87× | 0.35× | 1.49* | 30 % | 3.4 MW | 3,676 t |
+| Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 4.6 MW | 3,676 t |
+| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 17.1 MW | 167,351 t |
+| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 16.9 MW | 370,846 t |
 
 - **Agroindustria** es la industria alimentaria (SCIAN 311). En el anuario ferroviario de 2018
   sus productos son el jarabe de maíz (1.29 millones de toneladas), los aceites y grasas
@@ -1625,19 +1628,34 @@ En el juego Oasis casi no se nota: Mulegé ya tiene margen de sobra y no tiene p
 cambia en la realidad es el diésel y el combustóleo que deja de quemar, y el juego todavía no
 mide combustibles ni emisiones.
 
-**Lo que piden los polos.** Solo cinco tienen cifra oficial:
+**Lo que piden los polos.** Siete tienen cifra oficial. Las declaratorias dan lo que pedirán y el
+portal de Economía lo que tendrán disponible, siempre en su primera fase; el juego toma una u
+otra como la electricidad del polo:
 
-| Polo | MW con el polo lleno | De dónde |
-| --- | ---: | --- |
-| Reserva Zapotlán | 20 | Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 20 MW». |
-| Nezahualcóyotl | 7.7 | Declaratoria (DOF): «crecimiento en su demanda de electricidad de 5 a 7.7 MW de 2027 a 2030». |
-| Huamantla | 8 | Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: 8 MW». |
-| Tuxpan | 4 | Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 4 MW». |
-| Hermosillo | 7 | Declaratoria (DOF): «una demanda de electricidad de 1 MW a 7 MW de 2026 a 2030». |
+| Polo | Hectáreas | MW | MW por hectárea | De dónde |
+| --- | ---: | ---: | ---: | --- |
+| Reserva Zapotlán | 910.8 | 20 | 0.022 | Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 20 MW»; portal de Economía: «producción desde 20 MW en primera fase». |
+| Hermosillo | 546.5 | 7 | 0.013 | Declaratoria (DOF): «una demanda de electricidad de 1 MW a 7 MW de 2026 a 2030». |
+| Parque Industrial Bajío | 342.1 | 12.9 | 0.038 | Portal de Economía: «Energía: 12.9 MW disponible (hidroeléctrica y geotérmica)». |
+| Tuxpan | 235.1 | 4 | 0.017 | Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 4 MW». |
+| Nezahualcóyotl | 68.4 | 7.7 | 0.113 | Declaratoria (DOF): «crecimiento en su demanda de electricidad de 5 a 7.7 MW de 2027 a 2030». |
+| San Jerónimo | 60.3 | 20 | 0.332 | Portal de Economía: «Energía: Disponibilidad de hasta 20MW». |
+| Huamantla | 53 | 8 | 0.151 | Portal de Economía: «Energía: 8 MW». |
 
-Los demás usan la proporción de esos cinco: 46.7 MW entre 1,813.7 hectáreas, **0.0257 MW por
-hectárea**. Los 32 polos juntos piden unos 223 MW: poco frente a una región, así que lo que
-decide es el margen de la región, no el polo.
+**La cifra no crece con la superficie.** Va de 4 a 20 MW en polos de 53 a 911 hectáreas. Por
+hectárea cambia 25 veces de uno a otro, y su correlación con el tamaño es nula (0.10 en escala
+logarítmica). Por eso **un polo sin cifra recibe la mediana de los siete: 8 MW**, sin importar
+su tamaño (estimación del juego).
+
+- **Antes** el juego daba a cada polo sin cifra 0.0257 MW por hectárea (la razón de los primeros
+  cinco). Así Altamira (1,638 ha) pedía 42 MW y Arriaga (49 ha) 1.3, con una precisión que las
+  cifras oficiales no sostienen.
+- **Con el cambio**, los 32 polos juntos piden unos 280 MW: poco frente a una región. Lo que
+  decide es el margen de la región, no el polo.
+- **Adentro de un polo** la electricidad se cuenta por empleo (ver
+  [Los lotes y sus empresas](#los-lotes-y-sus-empresas)). La cifra del polo es lo que da su
+  subestación en su primera fase. Un polo grande lleno de empresas pediría mucho más de lo que su
+  primera fase trae.
 
 **En el mapa**, el botón *Energía* pinta cada estado con el nivel de su región y muestra las
 centrales por tecnología (llenas las de la CFE, como anillo las privadas; punteadas las obras
@@ -2690,6 +2708,10 @@ los otros dos aún no se capturan.
   ámbar y rojo.
 - **Las estaciones llegan hasta 15 km.** Más lejos, el sitio no tiene servicio de tren y su
   ficha dice a cuántos km queda la vía.
+- **La energía de un polo no se reparte por hectárea.** *(22 nov 2026.)* Las cifras oficiales
+  (siete polos) van de 4 a 20 MW sin importar si el polo tiene 53 o 911 hectáreas. Un polo sin
+  cifra recibe la mediana, 8 MW, y adentro las empresas piden por empleo. Así un polo grande
+  arranca con lo que arrancan los demás y necesita más subestación para llenarse.
 - **En un polo, las empresas las atrae el Estado.** *(22 nov 2026.)* El jugador no pone
   empresas: promueve cada lote para un sector de las vocaciones de la declaratoria, y las
   empresas llegan solas si hay tren y energía. Cada sector pide distinto (electricidad, agua,
@@ -2714,6 +2736,13 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 22 de noviembre de 2026
+
+**La energía de los polos**
+
+- **Dos cifras oficiales que faltaban:** San Jerónimo (20 MW disponibles) y el Parque Industrial
+  Bajío (12.9 MW), del portal de Economía. Antes usaban la estimación por hectárea: 1.6 y 8.8 MW.
+- **Los polos sin cifra** pasan de 0.0257 MW por hectárea a la mediana de los siete oficiales, 8
+  MW. Ver [La energía](#la-energía).
 
 **Coatzacoalcos I por dentro (DOF)**
 

@@ -47,7 +47,7 @@
   "polos": {
    "fuente": "Declaratorias de los polos (DOF) y portal de los Polos de Desarrollo de la Secretaría de Economía",
    "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo",
-   "dato": "Solo cinco polos tienen cifra oficial; los demás usan la razón de esos cinco: 46.7 MW entre 1814 ha, 0.0257 MW por hectárea."
+   "dato": "Siete polos tienen cifra oficial: lo que pedirán o tendrán disponible en su primera fase, de 4 a 20 MW. No crece con la superficie, así que los demás usan la mediana de los siete: 8 MW (estimación del juego)."
   },
   "mulege": {
    "fuente": "SENER, PRODESEN 2019–2033 (tablas 5.1 y 6.5) y Plan de Desarrollo del Sector Eléctrico 2025–2039 (tabla A1.6); su límite, INEGI, Marco Geoestadístico de diciembre de 2025",
@@ -94,7 +94,7 @@
  },
  "cajaCfeMdpAño": 26400,
  "tipoCambio": 18.33,
- "mwPorHa": 0.0257,
+ "mwSinCifra": 8,
  "regiones": [
   {
    "id": "central",
@@ -450,108 +450,110 @@
  "polos": {
   "coatzacoalcos-i": {
    "region": "oriental",
-   "mw": 6.6,
+   "mw": 8,
    "oficial": false
   },
   "coatzacoalcos-ii": {
    "region": "oriental",
-   "mw": 3.4,
+   "mw": 8,
    "oficial": false
   },
   "salina-cruz": {
    "region": "oriental",
-   "mw": 2.1,
+   "mw": 8,
    "oficial": false
   },
   "san-blas-atempa": {
    "region": "oriental",
-   "mw": 8.5,
+   "mw": 8,
    "oficial": false
   },
   "san-juan-evangelista": {
    "region": "oriental",
-   "mw": 9.3,
+   "mw": 8,
    "oficial": false
   },
   "texistepec": {
    "region": "oriental",
-   "mw": 11.9,
+   "mw": 8,
    "oficial": false
   },
   "matias-romero": {
    "region": "oriental",
-   "mw": 4.6,
+   "mw": 8,
    "oficial": false
   },
   "mixtequilla": {
    "region": "oriental",
-   "mw": 12.9,
+   "mw": 8,
    "oficial": false
   },
   "ciudad-ixtepec": {
    "region": "oriental",
-   "mw": 10.6,
+   "mw": 8,
    "oficial": false
   },
   "ixtaltepec": {
    "region": "oriental",
-   "mw": 6.3,
+   "mw": 8,
    "oficial": false
   },
   "tapachula-i": {
    "region": "oriental",
-   "mw": 6.8,
+   "mw": 8,
    "oficial": false
   },
   "tapachula-ii": {
    "region": "oriental",
-   "mw": 3.8,
+   "mw": 8,
    "oficial": false
   },
   "arriaga": {
    "region": "oriental",
-   "mw": 1.3,
+   "mw": 8,
    "oficial": false
   },
   "teapa": {
    "region": "oriental",
-   "mw": 2.5,
+   "mw": 8,
    "oficial": false
   },
   "seybaplaya": {
    "region": "peninsular",
-   "mw": 2.6,
+   "mw": 8,
    "oficial": false
   },
   "san-jeronimo": {
    "region": "norte",
-   "mw": 1.6,
-   "oficial": false
+   "mw": 20,
+   "oficial": true,
+   "dato": "Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: Disponibilidad de hasta 20MW»."
   },
   "reserva-zapotlan": {
    "region": "central",
    "mw": 20,
    "oficial": true,
-   "dato": "Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 20 MW»."
+   "dato": "Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 20 MW»; portal de Economía: «Acceso a subestaciones CFE: producción desde 20 MW en primera fase»."
   },
   "capital-tecnologia": {
    "region": "oriental",
-   "mw": 7.1,
+   "mw": 8,
    "oficial": false
   },
   "chetumal": {
    "region": "peninsular",
-   "mw": 2.3,
+   "mw": 8,
    "oficial": false
   },
   "parque-industrial-bajio": {
    "region": "occidental",
-   "mw": 8.8,
-   "oficial": false
+   "mw": 12.9,
+   "oficial": true,
+   "dato": "Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: 12.9 MW disponible (hidroeléctrica y geotérmica)»."
   },
   "puerta-logistica-bajio": {
    "region": "occidental",
-   "mw": 1.3,
+   "mw": 8,
    "oficial": false
   },
   "nezahualcoyotl": {
@@ -574,7 +576,7 @@
   },
   "durango": {
    "region": "norte",
-   "mw": 8.1,
+   "mw": 8,
    "oficial": false
   },
   "hermosillo": {
@@ -585,32 +587,32 @@
   },
   "altamira": {
    "region": "noreste",
-   "mw": 42.1,
+   "mw": 8,
    "oficial": false
   },
   "topolobampo": {
    "region": "noroeste",
-   "mw": 7.1,
+   "mw": 8,
    "oficial": false
   },
   "cancun": {
    "region": "peninsular",
-   "mw": 1.6,
+   "mw": 8,
    "oficial": false
   },
   "circular-puebla": {
    "region": "oriental",
-   "mw": 1,
+   "mw": 8,
    "oficial": false
   },
   "circular-tlaxcala": {
    "region": "oriental",
-   "mw": 0.5,
+   "mw": 8,
    "oficial": false
   },
   "circular-quintana-roo": {
    "region": "peninsular",
-   "mw": 1,
+   "mw": 8,
    "oficial": false
   }
  },

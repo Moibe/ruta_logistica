@@ -14,6 +14,10 @@
    "fuente": "DOF, declaratoria del Polo de Desarrollo Económico para el Bienestar Huamantla (14 de agosto de 2025): sus vocaciones productivas",
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5765468&fecha=14/08/2025"
   },
+  "economia-huamantla": {
+   "fuente": "Secretaría de Economía, portal de los Polos de Desarrollo: Huamantla, «Energía: 8 MW»; Presidencia, inauguración (12 de abril de 2026): «más de 5 mil empleos directos e indirectos»",
+   "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo"
+  },
   "juego": {
    "fuente": "Estimación del juego",
    "url": ""
@@ -241,10 +245,13 @@
   "juego"
  ],
  "reglas": {
-  "dato": "Reglas del juego: una empresa ocupa un lote y da los empleos por hectárea del polo; su consumo de electricidad es la parte de su lote de la demanda del polo lleno (los 8 MW de Economía) por cuánto gasta su sector contra el promedio. Su carga espera en la estación del polo hasta un mes.",
+  "dato": "Reglas del juego: una empresa ocupa un lote y da los empleos por hectárea del polo. Cada empleo pide 1.6 kW de electricidad al promedio de la manufactura (los 8 MW de Huamantla para sus 5 mil empleos; con el gasto del censo, 24,753 pesos por trabajador al año, eso es un kWh de unos 1.77 pesos), por cuánto gasta su sector contra el promedio. Su carga espera en la estación del polo hasta un mes.",
   "fuentes": [
+   "economia-huamantla",
+   "inegi-ce2019",
    "juego"
   ],
-  "diasPatio": 30
+  "diasPatio": 30,
+  "kwPorEmpleo": 1.6
  }
 }

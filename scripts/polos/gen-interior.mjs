@@ -17,6 +17,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const ENERGIA = JSON.parse(await readFile(join(ROOT, 'src', 'lib', 'domain', 'datos', 'energia.json'), 'utf8'));
 
 // ---- UTM (WGS84) -------------------------------------------------------------------------------
 
@@ -530,7 +531,7 @@ const FUENTES = {
     url: 'https://dof.gob.mx/nota_detalle.php?codigo=5688608&fecha=12/05/2023',
   },
   'energia-polos': {
-    fuente: 'Estimación del juego con las declaratorias y el portal de Economía: los polos sin cifra oficial de energía usan 0.0257 MW por hectárea, la razón de los cinco que sí la tienen (ver La energía)',
+    fuente: 'Estimación del juego con las declaratorias y el portal de Economía: un polo sin cifra oficial de energía usa la mediana de los siete que sí la tienen, 8 MW (ver La energía)',
     url: '',
   },
   'sict-dos-bocas': { fuente: 'SICT: costo del ramal ferroviario a Dos Bocas, base del costo por km de la espuela (ver la sección de obras del Estado)', url: 'https://www.gob.mx/sct/prensa/precisa-sict-que-ramal-ferroviario-roberto-ayala-dos-bocas-tiene-un-costo-estimado-de-6-mil-54-mdp' },
@@ -585,7 +586,7 @@ function interiorHuamantla(g) {
 }
 
 function interiorCoatzacoalcosI(g) {
-  const mw = 6.6;
+  const mw = ENERGIA.polos['coatzacoalcos-i'].mw;
   return {
     nombre: 'Coatzacoalcos I',
     lugar: 'Coatzacoalcos, Veracruz',
@@ -615,7 +616,7 @@ function interiorCoatzacoalcosI(g) {
       mva: mw,
       fuenteCorta: 'estimación del juego',
       kmLinea: g.conexionElectrica.km,
-      dato: `No hay cifra oficial de su energía: el juego le da 0.0257 MW por hectárea, la razón de los cinco polos que sí la tienen (${mw.toLocaleString('es-MX')} MW), y la toma como lo que da su subestación. La línea de alta tensión más cercana queda a ${g.conexionElectrica.km.toLocaleString('es-MX')} km (OpenStreetMap).`,
+      dato: `No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, ${mw.toLocaleString('es-MX')} MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana queda a ${g.conexionElectrica.km.toLocaleString('es-MX')} km (OpenStreetMap).`,
       fuentes: ['energia-polos', 'osm'],
     },
     lotes: {

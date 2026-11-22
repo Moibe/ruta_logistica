@@ -345,21 +345,26 @@ const FACTORES = {
 
   // ---- the polos' electricity demand ------------------------------------------------------------
   const polos = require(ROOT + '/src/lib/domain/datos/polos.json');
+  // What a polo will use, or has available, in its first phase: the declaratorias give demand, the
+  // portal gives what's available. The game takes either as the polo's electricity when full.
   const OFICIAL = {
-    'reserva-zapotlan': [20, 'Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 20 MW».'],
+    'reserva-zapotlan': [20, 'Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 20 MW»; portal de Economía: «Acceso a subestaciones CFE: producción desde 20 MW en primera fase».'],
     nezahualcoyotl: [7.7, 'Declaratoria (DOF): «crecimiento en su demanda de electricidad de 5 a 7.7 MW de 2027 a 2030».'],
     tuxpan: [4, 'Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 4 MW».'],
     hermosillo: [7, 'Declaratoria (DOF): «una demanda de electricidad de 1 MW a 7 MW de 2026 a 2030».'],
     huamantla: [8, 'Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: 8 MW».'],
+    'san-jeronimo': [20, 'Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: Disponibilidad de hasta 20MW».'],
+    'parque-industrial-bajio': [12.9, 'Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: 12.9 MW disponible (hidroeléctrica y geotérmica)».'],
   };
-  const totalMw = Object.values(OFICIAL).reduce((s, [m]) => s + m, 0);
-  const totalHa = Object.keys(OFICIAL).reduce((s, id) => s + polos.find((p) => p.id === id).ha, 0);
-  const MW_POR_HA = Math.round((totalMw / totalHa) * 10000) / 10000;
+  // The official figures don't grow with the land (53 to 911 ha, 4 to 20 MW: no correlation), so a
+  // polo without one gets their median, not a share per hectare.
+  const oficiales = Object.values(OFICIAL).map(([m]) => m).sort((a, b) => a - b);
+  const MW_SIN_CIFRA = oficiales.length % 2 ? oficiales[(oficiales.length - 1) / 2] : (oficiales[oficiales.length / 2 - 1] + oficiales[oficiales.length / 2]) / 2;
   const polosEnergia = {};
   for (const p of polos) {
     const municipio = p.municipio.split(/ y |,/)[0];
     const o = OFICIAL[p.id];
-    polosEnergia[p.id] = { region: regionDe(p.estado, municipio), mw: o ? o[0] : r1(p.ha * MW_POR_HA), oficial: !!o, ...(o ? { dato: o[1] } : {}) };
+    polosEnergia[p.id] = { region: regionDe(p.estado, municipio), mw: o ? o[0] : MW_SIN_CIFRA, oficial: !!o, ...(o ? { dato: o[1] } : {}) };
   }
 
   const out = {
@@ -376,7 +381,7 @@ const FACTORES = {
       factores: { fuente: 'Estimación del juego', url: '', dato: 'La metodología oficial cuenta la solar y la eólica con su disponibilidad horaria de cinco años, sin publicar un porcentaje fijo. El juego usa: centrales firmes (térmicas, hidroeléctricas, nuclear, geotérmicas) 90 % en los dos picos; eólica 25 %; solar 35 % en la tarde y 0 % en la noche. El 35 % sale de la diferencia entre el margen de la tarde (23.4 %) y el de la noche (20.6 %) del sistema interconectado en 2019, unos 1,300 MW, entre los ~3,600 MW solares de ese año.' },
       cajaCfe: { ...PROG, dato: 'La CFE paga sus centrales con recursos propios (su Fideicomiso Maestro de Inversión), no con el presupuesto federal. Su Programa de Desarrollo 2026–2030 destina 132 mil millones de pesos en cinco años a proyectos propios de generación: 26.4 mil millones al año. Para 2019–2025 no hay una cifra anual oficial comparable y se usa la misma.' },
       tipoCambio: { fuente: 'SHCP, Cuenta Pública 2024, panorama económico (con datos de Banxico): tipo de cambio promedio de 2024', url: 'https://www.cuentapublica.hacienda.gob.mx/work/models/CP/2024/tomo/I/I50.06.PEF.pdf' },
-      polos: { fuente: 'Declaratorias de los polos (DOF) y portal de los Polos de Desarrollo de la Secretaría de Economía', url: 'https://podecobi.economia.gob.mx/polos-de-desarrollo', dato: `Solo cinco polos tienen cifra oficial; los demás usan la razón de esos cinco: ${totalMw} MW entre ${Math.round(totalHa)} ha, ${MW_POR_HA} MW por hectárea.` },
+      polos: { fuente: 'Declaratorias de los polos (DOF) y portal de los Polos de Desarrollo de la Secretaría de Economía', url: 'https://podecobi.economia.gob.mx/polos-de-desarrollo', dato: `Siete polos tienen cifra oficial: lo que pedirán o tendrán disponible en su primera fase, de ${oficiales[0]} a ${oficiales[oficiales.length - 1]} MW. No crece con la superficie, así que los demás usan la mediana de los siete: ${MW_SIN_CIFRA} MW (estimación del juego).` },
       mulege: {
         fuente: 'SENER, PRODESEN 2019–2033 (tablas 5.1 y 6.5) y Plan de Desarrollo del Sector Eléctrico 2025–2039 (tabla A1.6); su límite, INEGI, Marco Geoestadístico de diciembre de 2025',
         url: PRODESEN + '475497/PRODESEN_V.pdf',
@@ -392,7 +397,7 @@ const FACTORES = {
     factores: FACTORES,
     cajaCfeMdpAño: 26400,
     tipoCambio: 18.33,
-    mwPorHa: MW_POR_HA,
+    mwSinCifra: MW_SIN_CIFRA,
     regiones: REGIONES,
     polos: polosEnergia,
     plantas2018,
@@ -400,7 +405,7 @@ const FACTORES = {
     obras: obrasCfe,
   };
   fs.writeFileSync(ROOT + '/src/lib/domain/datos/energia.json', JSON.stringify(out, null, 1) + '\n');
-  console.log('plantas 2018', plantas2018.length, '| privadas', privadas.length, Math.round(privadas.reduce((s, p) => s + p.mw, 0)), 'MW | obras CFE', obrasCfe.length, '| MW/ha', MW_POR_HA);
+  console.log('plantas 2018', plantas2018.length, '| privadas', privadas.length, Math.round(privadas.reduce((s, p) => s + p.mw, 0)), 'MW | obras CFE', obrasCfe.length, '| MW de un polo sin cifra', MW_SIN_CIFRA);
   console.log('por región, privadas:', JSON.stringify(privadas.reduce((a, p) => ((a[p.region] = Math.round((a[p.region] ?? 0) + p.mw)), a), {})));
   console.log('polos por región:', JSON.stringify(Object.entries(polosEnergia).reduce((a, [, p]) => ((a[p.region] = (a[p.region] ?? 0) + 1), a), {})));
   console.log('sin ubicar (' + faltan.length + '):', faltan.slice(0, 30).join(' | '));

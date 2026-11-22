@@ -442,8 +442,11 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
   `scripts/polos/gen-sectores.mjs`: INEGI Censos Económicos 2019 y ARTF 2018). `ObraPolo.lotes`
   guarda, por lote, el sector para el que se promovió, su orden y cuánto se ha llenado.
   `sim.promoverLote` es la acción. `ocuparLotes` reparte la curva de ocupación de siempre entre los
-  lotes promovidos, en orden, saltando los que no caben en los 8 MVA del polo
-  (`lotesQueCaben`, `demandaLote`). La energía de la región usa `mwEnUso`. La carga de las
+  lotes promovidos, en orden, saltando los que no caben en la electricidad del polo
+  (`capacidadMw`: su cifra oficial o, sin ella, la mediana de las siete oficiales, 8 MW;
+  `lotesQueCaben`). Cada empresa pide por empleo (`demandaLote`: 1.6 kW por empleo,
+  `KW_POR_EMPLEO`, por el factor de su sector), así que un trabajador pide lo mismo en cualquier
+  polo. La energía de la región usa `mwEnUso`. La carga de las
   empresas (`cargaDelPolo`) espera en `#patiosPolo`, y un tren en la estación `polo:<id>` la
   carga antes que la del estado (`#cargarDelPolo`); `sim.cargaPolos` cuenta lo que se llevó.
 - **Vista** (`map/InteriorPolo.svelte`, SVG en metros; `ui/FrentesPolo.svelte`, el panel con las

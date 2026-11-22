@@ -30,8 +30,19 @@ const FUENTES = {
     fuente: 'DOF, declaratoria del Polo de Desarrollo Económico para el Bienestar Huamantla (14 de agosto de 2025): sus vocaciones productivas',
     url: 'https://dof.gob.mx/nota_detalle.php?codigo=5765468&fecha=14/08/2025',
   },
+  'economia-huamantla': {
+    fuente: 'Secretaría de Economía, portal de los Polos de Desarrollo: Huamantla, «Energía: 8 MW»; Presidencia, inauguración (12 de abril de 2026): «más de 5 mil empleos directos e indirectos»',
+    url: 'https://podecobi.economia.gob.mx/polos-de-desarrollo',
+  },
   juego: { fuente: 'Estimación del juego', url: '' },
 };
+
+/**
+ * Electricity per job at the manufacturing average: Huamantla's 8 MW for its 5 thousand jobs. The
+ * census says the same: 24,753 pesos of electricity per worker a year is 14 thousand kWh at about
+ * 1.77 pesos the kWh, an industrial price.
+ */
+const KW_POR_EMPLEO = (8 * 1000) / 5000;
 
 /** CE 2019, national, 2018: [personal ocupado, electricity (million pesos), water (million pesos)]. */
 const CENSO = {
@@ -178,10 +189,10 @@ const datos = {
     'Lo que pide una empresa de cada sector, por trabajador, en 2018: su gasto en electricidad y en agua contra el promedio de la manufactura (INEGI, Censos Económicos 2019), y las toneladas que movió el tren de sus productos entre su personal ocupado, con la parte que salió del país (ARTF, anuario 2018). Los sectores sin productos propios en el anuario mandan su carga en contenedores: les toca lo que llevaron los contenedores por trabajador de la manufactura (estimación del juego).',
   fuentesDato: ['inegi-ce2019', 'artf-2018', 'juego'],
   reglas: {
-    dato:
-      'Reglas del juego: una empresa ocupa un lote y da los empleos por hectárea del polo; su consumo de electricidad es la parte de su lote de la demanda del polo lleno (los 8 MW de Economía) por cuánto gasta su sector contra el promedio. Su carga espera en la estación del polo hasta un mes.',
-    fuentes: ['juego'],
+    dato: `Reglas del juego: una empresa ocupa un lote y da los empleos por hectárea del polo. Cada empleo pide ${KW_POR_EMPLEO.toLocaleString('es-MX')} kW de electricidad al promedio de la manufactura (los 8 MW de Huamantla para sus 5 mil empleos; con el gasto del censo, 24,753 pesos por trabajador al año, eso es un kWh de unos 1.77 pesos), por cuánto gasta su sector contra el promedio. Su carga espera en la estación del polo hasta un mes.`,
+    fuentes: ['economia-huamantla', 'inegi-ce2019', 'juego'],
     diasPatio: 30,
+    kwPorEmpleo: KW_POR_EMPLEO,
   },
 };
 

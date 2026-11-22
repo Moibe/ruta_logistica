@@ -35,7 +35,7 @@ type SectoresJson = {
   sectores: Sector[];
   dato: string;
   fuentesDato: string[];
-  reglas: { dato: string; fuentes: string[]; diasPatio: number };
+  reglas: { dato: string; fuentes: string[]; diasPatio: number; kwPorEmpleo: number };
 };
 
 const D = DATOS as unknown as SectoresJson;
@@ -45,3 +45,5 @@ export const sector = (id: string | null | undefined) => (id ? (SECTORES.find((s
 export const fuenteSector = (k: string) => D.fuentes[k];
 /** A polo's freight waits at its station this many days of it. */
 export const DIAS_PATIO_POLO = D.reglas.diasPatio;
+/** kW a job asks at the manufacturing average (Huamantla: 8 MW for 5 thousand jobs). */
+export const KW_POR_EMPLEO = D.reglas.kwPorEmpleo;

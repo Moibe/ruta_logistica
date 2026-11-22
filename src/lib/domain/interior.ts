@@ -1,6 +1,6 @@
 import DATOS from './datos/interiores.json';
 import { mwDelPolo } from './energia';
-import { sector as sectorDe } from './sectores';
+import { KW_POR_EMPLEO, sector as sectorDe } from './sectores';
 import {
   cifra,
   costoBaseMdp,
@@ -122,8 +122,9 @@ export function obraDelPolo(id: string): ObraPolo {
 /**
  * What the company in lot `n` (index into the list) of a polo asks with sector
  * `s`, the lot full: its people (the polo's jobs shared out by area), MW (its
- * share of the polo's demand when full, times how much its sector spends on
- * electricity against the average) and tonnes by rail a year.
+ * people at the manufacturing average per job, times how much its sector
+ * spends on electricity against the average) and tonnes by rail a year. Per
+ * job, so a worker asks the same in any polo.
  */
 export function demandaLote(polo: Polo, n: number, s: string | null) {
   const i = interior(polo.id);
@@ -132,13 +133,13 @@ export function demandaLote(polo: Polo, n: number, s: string | null) {
   if (!i || !l) return null;
   const areaEmpresas = i.lotes.lista.reduce((t, x) => t + x.ha, 0);
   const personas = (l.ha * cifra('empleosPorHa') * polo.hectareas) / areaEmpresas;
-  const mw = mwDelPolo(polo.id) * (l.ha / polo.hectareas) * (sec?.energia ?? 1);
+  const mw = ((personas * KW_POR_EMPLEO) / 1000) * (sec?.energia ?? 1);
   const toneladas = personas * (sec?.toneladas ?? 0);
   return { ha: l.ha, personas, mw, toneladas, exportacion: sec?.exportacion ?? 0, agua: sec?.agua ?? 1 };
 }
 
-/** MW the polo has for its companies (its substation). */
-export const capacidadMw = (id: string) => interior(id)?.energia.mva ?? Infinity;
+/** MW the polo has for its companies (its substation): its official figure, or the median of the official ones. */
+export const capacidadMw = (id: string) => (interior(id) ? mwDelPolo(id) : Infinity);
 
 /** MW its companies use now (in as far as they've moved in). */
 export function mwEnUso(o: ObraPolo, polo: Polo): number {
