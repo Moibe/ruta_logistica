@@ -75,6 +75,7 @@
   import { tablero } from '$lib/state/tablero.svelte';
   import { duracion, estadoUnidad, km as fmtKm } from '$lib/ui/formato';
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
+  import { AEROPUERTO, COMBUSTIBLE, CRUDO, GAS, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
 
   /**
    * The game board: Mexico alone, in detail, with the trains and ships running
@@ -99,8 +100,6 @@
 
   // ---- constants ---------------------------------------------------------
 
-  /** The Polos del Bienestar's colour: a light guinda, the programme's own hue made to read on the dark sea. */
-  const POLO = '#f472b6';
   const POLO_CLARO = '#ffe4f1';
 
   /**
@@ -138,14 +137,6 @@
     critico: 'Crítica · debajo del mínimo: los polos no se llenan',
   };
 
-  /** Cargo airports: periwinkle, apart from ports (cyan), polos (pink) and plants. */
-  const AEROPUERTO = '#a5b4fc';
-  /** A plane seen from above, nose up, in a unit box: right half, mirrored for the left. */
-  const MEDIO_AVION: [number, number][] = [
-    [0, -1], [0.13, -0.8], [0.13, -0.28], [1, 0.18], [1, 0.36], [0.13, 0.12], [0.13, 0.62], [0.42, 0.84], [0.42, 1], [0, 0.9],
-  ];
-  const PUNTOS_AVION: [number, number][] = [...MEDIO_AVION, ...MEDIO_AVION.slice(1, -1).reverse().map(([x, y]) => [-x, y] as [number, number])];
-  const AVION_SVG = 'M' + PUNTOS_AVION.map(([x, y]) => `${x} ${y}`).join(' L') + ' Z';
   /** The plane on the canvas, heading north-east, half-size `s` px. */
   function avion(ctx: CanvasRenderingContext2D, x: number, y: number, s: number) {
     const c = Math.SQRT1_2;
@@ -172,11 +163,6 @@
   const aeropuertoVisible = (a: Aeropuerto) => sim.modo !== 'realidad' || sim.horas >= horasDeFecha(a.desde);
   const MESES_CARGA = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
-  /** Refineries: crude's own brown-gold, apart from the plants' orange and the exits' amber. */
-  const REFINERIA = '#e0a458';
-  /** Gas pipelines: a pale green, apart from the sea's cyan and the rail's amber. Petroleum ones in the refineries' brown-gold, crude darker. */
-  const GAS = '#6ee7b7';
-  const CRUDO = '#c2672a';
   const colorDucto = (d: Ducto) => (d.tipo === 'gas' ? GAS : d.tipo === 'crudo' ? CRUDO : REFINERIA);
   /** A pipeline on the board now: those after 2018 by their real dates, in the game as in Realidad. */
   const situacionAhora = (d: Ducto): SituacionDucto => situacionDucto(d, d.real ? estadoReal(d.id, sim.horas).etapa : null);
@@ -191,7 +177,6 @@
     ctx.bezierCurveTo(x - s * 0.85, y - s * 0.05, x - s * 0.35, y - s * 0.55, x, y - s * 1.15);
     ctx.closePath();
   }
-  const GOTA_SVG = 'M0 -1.15 C0.35 -0.55 0.85 -0.05 0.85 0.35 A0.85 0.85 0 0 1 -0.85 0.35 C-0.85 -0.05 -0.35 -0.55 0 -1.15 Z';
   /** Half-size of a refinery's drop by the crude it runs (Mbd): 3.4 px empty, about 9 at 250. */
   const tamañoGota = (mbd: number) => 3.4 + Math.sqrt(Math.max(0, mbd)) * 0.36;
   /** The Olmeca runs once it's built (game) or opened (Realidad); the others always run. */
@@ -354,35 +339,10 @@
 
   // ---- state --------------------------------------------------------------
 
-  type Layers = {
-    estados: boolean;
-    vias: boolean;
-    puertos: boolean;
-    aeropuertos: boolean;
-    ciudades: boolean;
-    polos: boolean;
-    energia: boolean;
-    refinerias: boolean;
-    ductos: boolean;
-    combustibles: boolean;
-  };
-  let layers = $state<Layers>({
-    estados: true,
-    vias: true,
-    puertos: true,
-    aeropuertos: true,
-    ciudades: true,
-    polos: true,
-    energia: false,
-    refinerias: true,
-    ductos: false,
-    combustibles: false,
-  });
+  /** The layers live in `tablero`: the layers panel toggles them, the map draws them. */
+  const layers = tablero.capas;
 
   // ---- fuel ---------------------------------------------------------------------------------
-
-  /** Fuel's own amber, a step lighter than the refineries' brown-gold. */
-  const COMBUSTIBLE = '#f5b971';
 
   /**
    * Share of a state's fuel this game year that came from the country's
@@ -445,11 +405,6 @@
     );
   });
 
-  /** The two states' fills paint the same polygons: one layer at a time. */
-  function alternarCapa(capa: 'energia' | 'combustibles') {
-    layers[capa] = !layers[capa];
-    if (layers[capa]) layers[capa === 'energia' ? 'combustibles' : 'energia'] = false;
-  }
   /** What the track's colour says: its class (the default), its owner, or how full it is. */
   let modoVias = $state<ModoVias>('clase');
 
@@ -1238,7 +1193,7 @@
     // ship's whole loop — dashed, sea lanes aren't track.
     const sel = sim.seleccionado;
     // Without the track layer, trains (and their line) go too; ships stay.
-    if (sel && !trazando && (sel.tipo === 'barco' || layers.vias)) {
+    if (sel && !trazando && (sel.tipo === 'barco' ? layers.barcos : layers.trenes)) {
       if (rutaSel?.id !== sel.id) bakeRutaSel(sel);
       if (rutaSel) {
         ctx.save();
@@ -1918,8 +1873,9 @@
     const sel = (u: Unidad) => sim.seleccion === u.id;
     const orden = [...sim.barcos, ...sim.trenes].sort((a, b) => Number(sel(a)) - Number(sel(b)));
     for (const u of orden) {
-      if (u.tipo === 'barco') pintarBarco(ctx, u, pxKm, now);
-      else if (layers.vias) pintarTren(ctx, u, pxKm, now);
+      if (u.tipo === 'barco') {
+        if (layers.barcos) pintarBarco(ctx, u, pxKm, now);
+      } else if (layers.trenes) pintarTren(ctx, u, pxKm, now);
     }
   }
 
@@ -2651,16 +2607,18 @@
   });
 
   $effect(() => {
-    // Anything that (re)starts motion: the clock, the fleet, following.
+    // Anything that (re)starts motion: the clock, the fleet, following, the fleet's layers.
     sim.corriendo;
     const trenes = sim.trenes;
     const barcos = sim.barcos;
     sim.siguiendo;
-    // A retired vehicle can't stay under the cursor.
+    const verTrenes = layers.trenes;
+    const verBarcos = layers.barcos;
+    // A retired (or hidden) vehicle can't stay under the cursor.
     untrack(() => {
       if (hovered?.kind !== 'unidad') return;
       const u = hovered.unidad;
-      if (!(u.tipo === 'tren' ? trenes.includes(u) : barcos.includes(u))) hovered = null;
+      if (!(u.tipo === 'tren' ? verTrenes && trenes.includes(u) : verBarcos && barcos.includes(u))) hovered = null;
     });
     requestDraw();
   });
@@ -3209,7 +3167,10 @@
       <li><span class="raya en-obra"></span>En obra</li>
       <li><span class="raya fuera"></span>Fuera de operación</li>
     </ul>
-    <p class="nota-leyenda">Trazos aproximados de la CNH. Los gasoductos posteriores a 2018 llegan en su fecha real; el Cuxtal II lo construye el Estado.</p>
+    <p class="nota-leyenda">
+      Trazos aproximados: los de la CNH y, donde faltan, los poliductos que lista el mapa de la SENER de 2018, unidos por el juego. Los
+      gasoductos posteriores a 2018 llegan en su fecha real; el Cuxtal II lo construye el Estado.
+    </p>
   </div>
 {:else if layers.vias && !tablero.catalogo}
   <div class="vias panel">
@@ -3243,62 +3204,6 @@
 {/if}
 
 <div class="tools panel">
-  <button class="ctl" aria-pressed={layers.estados} title="Estados" onclick={() => (layers.estados = !layers.estados)}>
-    <span class="sw sw-estados"></span><span class="txt">Estados</span>
-  </button>
-  <button class="ctl" aria-pressed={layers.vias} title="Vías férreas" onclick={() => (layers.vias = !layers.vias)}>
-    <span class="sw sw-vias"></span><span class="txt">Vías férreas</span>
-  </button>
-  <button class="ctl" aria-pressed={layers.puertos} title="Puertos" onclick={() => (layers.puertos = !layers.puertos)}>
-    <span class="sw sw-puertos"></span><span class="txt">Puertos</span>
-  </button>
-  <button class="ctl" aria-pressed={layers.aeropuertos} title="Aeropuertos" onclick={() => (layers.aeropuertos = !layers.aeropuertos)}>
-    <svg class="sw" width="12" height="12" viewBox="-1.2 -1.2 2.4 2.4" aria-hidden="true">
-      <path d={AVION_SVG} fill={AEROPUERTO} transform="rotate(45)" />
-    </svg><span class="txt">Aeropuertos</span>
-  </button>
-  <button class="ctl" aria-pressed={layers.ciudades} title="Ciudades" onclick={() => (layers.ciudades = !layers.ciudades)}>
-    <span class="sw sw-ciudades"></span><span class="txt">Ciudades</span>
-  </button>
-  <button class="ctl" aria-pressed={layers.polos} title="Polos" onclick={() => (layers.polos = !layers.polos)}>
-    <svg class="sw" width="12" height="11" viewBox="0 0 12 11" aria-hidden="true">
-      <polygon
-        points="11,5.5 8.5,9.8 3.5,9.8 1,5.5 3.5,1.2 8.5,1.2"
-        fill="rgba(244, 114, 182, 0.16)"
-        stroke={POLO}
-        stroke-width="1.3"
-        stroke-dasharray="2 1.4"
-      />
-    </svg><span class="txt">Polos</span>
-  </button>
-  <button
-    class="ctl"
-    aria-pressed={layers.energia} title="Energía"
-    onclick={() => alternarCapa('energia')}
-  >
-    <svg class="sw" width="10" height="13" viewBox="0 0 10 13" aria-hidden="true">
-      <path d="M6 0 0 7.5h4L3 13l7-8H6z" fill="#facc15" />
-    </svg><span class="txt">Energía</span>
-  </button>
-  <button class="ctl" aria-pressed={layers.refinerias} title="Refinerías" onclick={() => (layers.refinerias = !layers.refinerias)}>
-    <svg class="sw" width="10" height="13" viewBox="-1 -1.3 2 2.6" aria-hidden="true">
-      <path d={GOTA_SVG} fill={REFINERIA} />
-    </svg><span class="txt">Refinerías</span>
-  </button>
-  <button class="ctl" aria-pressed={layers.ductos} title="Ductos" onclick={() => (layers.ductos = !layers.ductos)}>
-    <svg class="sw" width="14" height="10" viewBox="0 0 14 10" aria-hidden="true">
-      <path d="M1 3h12" stroke={GAS} stroke-width="1.8" />
-      <path d="M1 7.5h12" stroke={REFINERIA} stroke-width="1.4" />
-    </svg><span class="txt">Ductos</span>
-  </button>
-  <button class="ctl" aria-pressed={layers.combustibles} title="Combustibles" onclick={() => alternarCapa('combustibles')}>
-    <svg class="sw" width="12" height="13" viewBox="0 0 12 13" aria-hidden="true">
-      <rect x="1" y="1" width="6.5" height="11" rx="1" fill={COMBUSTIBLE} />
-      <rect x="2.3" y="2.4" width="3.9" height="3" rx="0.5" fill="rgba(3, 9, 18, 0.85)" />
-      <path d="M7.5 4.2h1.6l1.4 1.5v4.6a0.9 0.9 0 0 1-1.8 0V7.6H7.5" fill="none" stroke={COMBUSTIBLE} stroke-width="1.1" />
-    </svg><span class="txt">Combustibles</span>
-  </button>
-  <span class="sep"></span>
   <span class="label mono">{transform.k.toFixed(1)}×</span>
   <button class="ctl" onclick={resetView}>Reencuadrar</button>
 </div>
@@ -3415,56 +3320,14 @@
     font-size: 0.72rem;
   }
 
-  .tools .ctl[aria-pressed='false'] {
-    color: var(--dim);
-  }
+  /* ---- track colour switch and legend ------------------------------------ */
 
-  .tools .ctl[aria-pressed='false'] .sw {
-    opacity: 0.3;
-  }
-
-  .sw {
-    flex: none;
-    display: inline-block;
-  }
-
-  .sw-estados {
-    width: 11px;
-    height: 9px;
-    border: 1px solid rgba(126, 190, 255, 0.55);
-    background: #0e2035;
-    border-radius: 2px;
-  }
-
-  .sw-vias {
-    width: 14px;
-    height: 2px;
-    background: var(--warn);
-    box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.18);
-  }
-
-  .sw-puertos {
-    width: 7px;
-    height: 7px;
-    background: var(--accent);
-    transform: rotate(45deg);
-    box-shadow: 0 0 8px var(--accent);
-  }
-
-  .sw-ciudades {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--ink);
-  }
-
-  /* ---- track colour switch and legend, above the tools ------------------ */
-
-  /* Bottom-left, over the Pacific: the panel on the right would cover the
-     peninsula, the region that runs short first. */
+  /* Bottom left, just right of the left column (clock, layers, fleet), over
+     the Pacific: on the right it would cover the peninsula, the region that
+     runs short first. */
   .vias {
     position: fixed;
-    left: 1rem;
+    left: calc(1rem + 260px + 0.75rem);
     bottom: 4.4rem;
     z-index: 30;
     width: 13.5rem;
@@ -3659,21 +3522,7 @@
     color: #fca5a5;
   }
 
-  .sep {
-    width: 1px;
-    align-self: stretch;
-    background: var(--line);
-    margin: 0 0.25rem;
-  }
-
-  /* The stats share the bottom edge with the layer buttons: they give way first. */
-  /* Less room: the layer buttons keep only their swatch (the name is in their title). */
-  @media (max-width: 1700px) {
-    .tools .ctl .txt {
-      display: none;
-    }
-  }
-
+  /* The stats share the bottom edge with the legend: they give way first. */
   @media (max-width: 1600px) {
     .stat.opcional {
       display: none;

@@ -167,7 +167,7 @@
   });
 </script>
 
-<aside class="flota panel">
+<aside class="flota panel" class:en-columna={!mundo}>
   <header>
     {#if mundo}
       <span class="titulo">Barcos <span class="mono">{sim.barcos.length}</span></span>
@@ -180,23 +180,28 @@
         ＋ Nuevo
       </button>
     {:else}
+    <!-- A tab for each of the two layers that's on. -->
     <div class="pestañas" role="tablist">
-      <button
-        role="tab"
-        class:activa={tablero.pestaña === 'tren'}
-        aria-selected={tablero.pestaña === 'tren'}
-        onclick={() => pestaña('tren')}
-      >
-        Trenes <span class="mono">{sim.trenes.length}</span>
-      </button>
-      <button
-        role="tab"
-        class:activa={tablero.pestaña === 'barco'}
-        aria-selected={tablero.pestaña === 'barco'}
-        onclick={() => pestaña('barco')}
-      >
-        Barcos <span class="mono">{sim.barcos.length}</span>
-      </button>
+      {#if tablero.capas.trenes}
+        <button
+          role="tab"
+          class:activa={tablero.pestaña === 'tren'}
+          aria-selected={tablero.pestaña === 'tren'}
+          onclick={() => pestaña('tren')}
+        >
+          Trenes <span class="mono">{sim.trenes.length}</span>
+        </button>
+      {/if}
+      {#if tablero.capas.barcos}
+        <button
+          role="tab"
+          class:activa={tablero.pestaña === 'barco'}
+          aria-selected={tablero.pestaña === 'barco'}
+          onclick={() => pestaña('barco')}
+        >
+          Barcos <span class="mono">{sim.barcos.length}</span>
+        </button>
+      {/if}
     </div>
     <button
       class="ctl nuevo"
@@ -308,6 +313,15 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+  }
+
+  /* On the board it sits in the left column, under the layers, and takes what height is left. */
+  .flota.en-columna {
+    position: static;
+    width: auto;
+    max-height: none;
+    flex: 0 1 auto;
+    min-height: 0;
   }
 
   .flota header {

@@ -7,6 +7,21 @@ import { sim } from './simulacion.svelte';
 
 export type TipoUnidad = 'tren' | 'barco';
 
+/** The board's layers, as the layers panel toggles them and the map draws them. */
+export type Capa =
+  | 'trenes'
+  | 'barcos'
+  | 'estados'
+  | 'vias'
+  | 'puertos'
+  | 'aeropuertos'
+  | 'ciudades'
+  | 'polos'
+  | 'energia'
+  | 'refinerias'
+  | 'ductos'
+  | 'combustibles';
+
 /**
  * UI state of the board that both the map and the panels touch: laying out a
  * new train or ship, and camera requests from the panels (the roster asks,
@@ -14,8 +29,50 @@ export type TipoUnidad = 'tren' | 'barco';
  * simulation.
  */
 class Tablero {
+  /**
+   * Which layers are on. Trains and ships are layers too: off, they leave the
+   * map and the roster. The fleet starts on: it's the game's opening.
+   */
+  capas = $state<Record<Capa, boolean>>({
+    trenes: true,
+    barcos: true,
+    estados: true,
+    vias: true,
+    puertos: true,
+    aeropuertos: true,
+    ciudades: true,
+    polos: true,
+    energia: false,
+    refinerias: true,
+    ductos: false,
+    combustibles: false,
+  });
   /** Which kind of vehicle the roster is showing, and what "＋ Nuevo" makes. */
   pestaña = $state<TipoUnidad>('tren');
+
+  /**
+   * Turn a layer on or off. Electricity and fuel paint the same states: one
+   * at a time. Turning trains or ships off closes their card and any route
+   * being laid out for them; turning them on shows them in the roster.
+   */
+  alternar(capa: Capa) {
+    const on = !this.capas[capa];
+    this.capas[capa] = on;
+    if (on && capa === 'energia') this.capas.combustibles = false;
+    if (on && capa === 'combustibles') this.capas.energia = false;
+    if (capa !== 'trenes' && capa !== 'barcos') return;
+    const tipo: TipoUnidad = capa === 'trenes' ? 'tren' : 'barco';
+    if (on) {
+      if (!this.trazando) this.pestaña = tipo;
+      return;
+    }
+    if (sim.seleccionado?.tipo === tipo) sim.seleccionar(null);
+    if (this.trazando && this.pestaña === tipo) this.cancelar();
+    if (this.pestaña === tipo) this.pestaña = tipo === 'tren' ? 'barco' : 'tren';
+  }
+
+  /** The layer a kind of vehicle lives in. */
+  capaDe = (tipo: TipoUnidad): Capa => (tipo === 'tren' ? 'trenes' : 'barcos');
   /** Picking stops on the map for a new vehicle of kind `pestaña`. */
   trazando = $state(false);
   /** The kind of ship being laid out. */

@@ -68,7 +68,14 @@ saltar al siguiente libre.
 - Capas: estados (con hover y clic para acercar), frontera terrestre punteada, costa como
   línea de luz, vías férreas (primarias más intensas y gruesas que secundarias; con
   durmientes a partir de 4×; estaciones sobre la vía a partir de 3.5×), puertos (rombo con halo; los cuatro principales más grandes), ciudades (anillo + punto
-  para capitales), polos (hexágono punteado). Cada capa se apaga desde el panel.
+  para capitales), polos (hexágono punteado). Cada capa se apaga desde el panel **Capas**
+  (`ui/Capas.svelte`), arriba a la izquierda bajo el reloj, en tres grupos: movimiento (trenes y
+  barcos, solo en el juego), territorio, y energía y petróleo. El estado de las capas vive en
+  `tablero.capas`, que comparten el mapa, el panel y la lista de vehículos (`tablero.alternar`:
+  energía y combustibles se excluyen; apagar trenes o barcos cierra su ficha y su trazado). La
+  lista de trenes y barcos va debajo de las capas, solo con alguna de las dos encendida. Las
+  leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, y abajo a la derecha
+  solo el zoom y *Reencuadrar*. Colores e íconos compartidos: `map/simbolos.ts`.
 - Etiquetas con colisión: cada una prueba cuatro posiciones alrededor de su punto y gana la
   de mayor prioridad (puertos > capital del país > capitales > ciudades por población >
   estados > mares y países). Una ciudad portuaria (Veracruz, Mazatlán…) se etiqueta una sola
@@ -197,7 +204,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
 | `src/lib/domain/datos/puertos.json`  | Los **17 puertos, curados a mano**                                             |
 | `src/lib/domain/datos/aeropuertos.json` | Los **10 aeropuertos de carga** de la AFAC, con sus toneladas de cada año desde 2018 (serie mensual de la AFAC) para el modo Realidad. Son sitios (`aeropuerto:<id>`): con vía a 15 km o menos tienen estación y son paradas de tren (puertos secos) |
-| `src/lib/domain/datos/ductos.json` | **Ductos**: gasoductos, poliductos y el oleoducto Nuevo Teapa–Salina Cruz con su trazo aproximado (CNH, OpenStreetMap), operador, km y capacidad; la obra Cuxtal II y el gas de la península (CFE, EIA); totales de la red (SENER, Proyectos México, Pemex). Lo genera `scripts/ductos/gen-ductos.mjs` |
+| `src/lib/domain/datos/ductos.json` | **Ductos**: gasoductos, poliductos y el oleoducto Nuevo Teapa–Salina Cruz con su trazo aproximado (CNH, OpenStreetMap; los poliductos que la CNH no trae, unidos por el juego con las tablas del mapa de la SENER de 2018), operador, km y capacidad; la obra Cuxtal II y el gas de la península (CFE, EIA); totales de la red (SENER, Proyectos México, Pemex). Lo genera `scripts/ductos/gen-ductos.mjs` |
 | `src/lib/domain/datos/ductos-real.json` | Fecha real de cada gasoducto que llegó, o llega, después de 2018 |
 | `src/lib/domain/datos/petroleo.json` | **Petróleo**: las seis refinerías de Pemex, la Olmeca y Deer Park con su capacidad, su proceso de 2018 y su capacidad óptima (Pemex 20-F, ASF), su proceso real por año y por mes, las obras de Pemex con costo y tiempo, la caja de Pemex, rendimientos y consumo de combustibles |
 | `src/lib/domain/datos/petroleo-real.json` | Etapa real de cada obra de Pemex (rehabilitaciones, Olmeca, coquizadoras, compra de Deer Park) |
@@ -305,7 +312,7 @@ proceso; un clic abre su ficha en el catálogo). Detalle en la
 [enciclopedia](docs/enciclopedia.md#el-petróleo).
 
 **Los ductos** (`domain/ductos.ts`, `datos/ductos.json` y `datos/ductos-real.json`, generados por
-`scripts/ductos/gen-ductos.mjs` a partir de las capas de la CNH y de OpenStreetMap). Son
+`scripts/ductos/gen-ductos.mjs` a partir de las capas de la CNH, de OpenStreetMap y de las tablas del mapa de petrolíferos de la SENER de 2018). Son
 gasoductos (del Estado, privados y de importación), poliductos de Pemex y el oleoducto Nuevo
 Teapa–Salina Cruz:
 
@@ -518,9 +525,8 @@ costa del mundo solo sube de resolución). Además:
   cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
   Tuxpan…). Ya están el catálogo de obras del Estado y su presupuesto real.
 - **Petróleo, lo que sigue**:
-  - dibujar los poliductos del noreste y del occidente: el mapa de la SENER de 2018 trae sus
-    tablas (origen, destino, km y capacidad), aunque no su trazo; faltan también los oleoductos
-    troncales;
+  - los oleoductos troncales, que no están en las fuentes abiertas (los poliductos que faltaban
+    ya se dibujan con las tablas del mapa de la SENER de 2018);
   - el combustóleo, el gas LP y la turbosina como cargas aparte; hoy los combustibles son una sola
     mezcla;
   - las cifras por refinería de 2022 a septiembre de 2024, si se consigue el Anuario Estadístico

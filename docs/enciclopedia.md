@@ -720,7 +720,7 @@ camino. Al arrancar la partida, con los 8 servicios iniciales, 1,654 km quedan c
 (casi toda la troncal México–Querétaro–San Luis Potosí–Monterrey y Nuevo Laredo–Monterrey) y
 5 km saturados (un tramo de Ferrovalle en la Ciudad de México).
 
-**En el mapa.** El panel de vías, sobre los botones de capas, cambia el color de la red:
+**En el mapa.** El panel de vías, abajo junto a la columna de capas, cambia el color de la red:
 **Clase** (troncal o secundaria, como siempre), **Dueño** o **Uso**. Al pasar el cursor por
 una vía, su ficha dice de quién es, cómo se opera, cuántos trenes lleva (privados y del
 jugador) de cuántos caben, y cuánto más lento van los trenes si está cargada o saturada.
@@ -1646,11 +1646,24 @@ lo que sobra.
 
 El tablero traza:
 
-- **los poliductos del centro, el golfo y Chihuahua**, unos 4,600 km (CNH);
+- **los poliductos del centro, el golfo y Chihuahua**, unos 4,200 km (CNH);
+- **los demás poliductos del mapa de la SENER de 2018**, 25 líneas y 3,595 km. Las capas de la CNH
+  no los traen, así que el juego los dibuja uniendo las terminales que el mapa dice que unen y los
+  pueblos de en medio; la longitud y la capacidad son las de sus tablas. Son:
+  - en el noroeste, los que salen de Rosarito (a Mexicali y Ensenada), de Guaymas (a Hermosillo y
+    Ciudad Obregón) y de Topolobampo (a Culiacán, con el ramal a Guamúchil);
+  - en el noreste, Cadereyta–Santa Catarina, Cadereyta–Reynosa–Brownsville, los dos Santa
+    Catarina–Gómez Palacio con el ramal a Saltillo y Santa Catarina–Monclova–Sabinas;
+  - en el occidente, los que salen de Salamanca a Irapuato (cinco, uno por producto), León,
+    Morelia, Aguascalientes–Zacatecas y Guadalajara, con el ramal de Degollado a Zamora;
+  - en el Golfo, Minatitlán–Salina Cruz, los tres de Minatitlán a Pajaritos, Minatitlán–Villahermosa
+    y el ramal de Castañito a Dos Bocas;
+  - en el sureste, los dos de Progreso a Mérida;
 - **el oleoducto Nuevo Teapa–Salina Cruz** (OpenStreetMap).
 
-Faltan los poliductos del noreste y del occidente y los oleoductos troncales: no están en las
-fuentes abiertas que se encontraron.
+En total, unos 7,800 km de petrolíferos, de los 9,582 que la SENER contaba en 2024. Faltan los
+oleoductos troncales, que no están en las fuentes abiertas que se encontraron, y las líneas internas
+de la refinería de Salina Cruz y los ramales de menos de 2 km del mapa de 2018, que no se verían.
 
 **Cómo se generan.** Todo lo arma `scripts/ductos/gen-ductos.mjs`:
 
@@ -1855,9 +1868,8 @@ cuánto han entregado.
 - **Los patios y las terminales:** los 15 días son reglas del juego.
 - **La carga nacional:** el tráfico interior por tren de la ATTRAPI ya incluye algo de combustible,
   así que cuenta un poco doble.
-- **Lo que no está todavía:** el combustóleo, el gas LP y la turbosina como carga aparte, la
-  logística de las importaciones (en el juego llegan solas) y los poliductos del noreste y el
-  occidente en el mapa. El mapa de la SENER de 2018 sí trae sus tablas, para dibujarlos después.
+- **Lo que no está todavía:** el combustóleo, el gas LP y la turbosina como carga aparte, y la
+  logística de las importaciones (en el juego llegan solas).
 
 **Cómo se generan.** `scripts/combustibles/gen-combustibles.mjs` escribe
 `src/lib/domain/datos/combustibles.json` con todo lo de arriba y la fuente de cada cifra. Es
@@ -2161,16 +2173,21 @@ en 2025.
   llega por un solo ducto con capacidad oficial (el Mayakan) y donde la CFE documenta la falta. En
   Baja California la capacidad de importación oficial sobra. En el resto no hay un tope oficial
   por región.
-- **Botones de capas compactos.** *(22 nov 2026.)* Con el botón *Ductos* la barra de herramientas
-  ya no cabía junto al panel de cifras. Abajo de 1,700 px de ancho, los botones de capas muestran
-  solo su icono, y su nombre queda en el tooltip.
+- **Las capas, arriba a la izquierda; trenes y barcos también son capas.** *(22 nov 2026; reemplaza
+  los botones compactos de abajo a la derecha.)* Lo pidió el usuario: los vehículos solo se ven con
+  su capa encendida, y su lista aparece debajo de las capas. En una columna los botones llevan
+  siempre su nombre. Las leyendas quedaron abajo, junto a esa columna, sobre el Pacífico: abajo a la
+  derecha, como se había propuesto, tapaban la península.
+- **Los poliductos que faltaban, dibujados por el juego.** *(22 nov 2026.)* El mapa de la SENER de
+  2018 trae en tablas cada ducto con su origen, su destino, su longitud y su capacidad, pero no su
+  trazo. El juego los une por las terminales y los pueblos de en medio y los marca como aproximados.
 - **Los combustibles: producir no basta, hay que llevarlo.** *(22 nov 2026.)* El paso 4 que aprobó
   el usuario. Lo que hacen las refinerías llega solo por ducto a su zona. Lo que les sobra espera en
   su patio a los trenes y buques tanque del jugador, que lo llevan a donde falta. Lo que nadie lleva
   se importa. Así la logística se nota justo donde se notó en la realidad: en Salina Cruz y en la
   Olmeca, que hacen más de lo que su región usa, y en el noroeste y la península, que se surten por mar.
 - **Las zonas salen del mapa oficial de 2018, no de las líneas del tablero.** *(22 nov 2026.)* Al
-  tablero le faltan los poliductos del noreste y el occidente, pero el mapa de la SENER dice cómo se
+  tablero le faltaban los poliductos del noreste y el occidente, pero el mapa de la SENER dice cómo se
   surtía cada terminal de Pemex y de dónde sale cada ducto. Una terminal surtida por ducto desde una
   terminal marítima (Rosarito, Guaymas, Topolobampo, Progreso) cuenta como surtida por mar.
 - **Salina Cruz y la Olmeca, aparte del centro.** *(22 nov 2026.)* Salina Cruz está unida a

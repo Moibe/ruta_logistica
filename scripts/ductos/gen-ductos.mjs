@@ -10,6 +10,9 @@
 //   poliductos.geojson    CNH, poliductos de Chihuahua (copia de la app de Energía Regional)
 //   osm-geom.json         OpenStreetMap (Overpass), para el oleoducto Nuevo Teapa–Salina Cruz
 //
+// The poliductos the CNH layers lack are written here as data (SENER_2018), from the tables of SENER's
+// 2018 map of petroleum infrastructure.
+//
 // Writes src/lib/domain/datos/ductos.json (lines, works, the peninsula's gas)
 // and src/lib/domain/datos/ductos-real.json (what really happened with each
 // pipeline that came, or is coming, after 2018), with every figure's source.
@@ -146,6 +149,11 @@ const FUENTES = {
     url: 'https://services6.arcgis.com/th3TMn162i37A876/ArcGIS/rest/services/AppMote/FeatureServer/14',
   },
   osm: { fuente: 'OpenStreetMap, oleoducto Nuevo Teapa–Salina Cruz (consultado el 22 de noviembre de 2026)', url: 'https://www.openstreetmap.org/' },
+  'sener-mapa-2018': {
+    fuente:
+      'SENER, mapa «Infraestructura Nacional de Petrolíferos, 2018» (31 de octubre de 2018), tablas de ductos de cada región: origen y destino, diámetro, km y capacidad nominal. El trazo lo dibuja el juego uniendo las terminales que dice el mapa. Copia del Internet Archive',
+    url: 'http://web.archive.org/web/20220326183525/https://www.gob.mx/cms/uploads/attachment/file/416897/Mapa_log_stica_Sener_8_Reg_31-10-2018_Nueva_numeraci_n_VF.pdf',
+  },
   'cfe-pn2021': {
     fuente: 'CFE, Plan de Negocios 2021–2025: red de gasoductos de la CFE con capacidad y longitud; los que entraron en 2018 y 2019 y los detenidos',
     url: 'https://www.cfe.gob.mx/finanzas/Documents/Plan%20de%20Negocios%20CFE%202021.pdf',
@@ -444,6 +452,53 @@ ductos.push({
   fuente: 'osm',
   trazo: limpiar(teapa.map((e) => e.geometry.map((g) => [g.lon, g.lat]))),
 });
+
+// Petroleum products the CNH's layers don't carry: the northwest, the northeast beyond Madero–Cadereyta,
+// the west out of Salamanca, Minatitlán's lines to the isthmus, Pajaritos and Tabasco, and Progreso–Mérida.
+// Their length, diameter and capacity are SENER's 2018 map's; the game draws them through the terminals
+// they join and the towns between (the terminals' points are the CNH's). The map's own lines inside the
+// Salina Cruz refinery (up to 12.5 km) and the ramales under 2 km are left out.
+// [id, nombre, km, capacidad nominal (mbd), puntos]
+const AGUASCALIENTES = [-102.2234, 21.7576];
+const SANTA_CATARINA = [-100.4856, 25.7048];
+const SALAMANCA = [-101.17848, 20.57981];
+const MINATITLAN = [-94.52695, 17.97986];
+const OJO_CALIENTE = [-101.05, 25.67];
+const CASTANITO = [-93.45, 17.98];
+const DEGOLLADO = [-102.155, 20.465];
+const A_GOMEZ_PALACIO = [SANTA_CATARINA, [-100.75, 25.62], OJO_CALIENTE, [-101.6, 25.62], [-102.2, 25.62], [-102.8, 25.6], [-103.4682, 25.5629]];
+const A_PAJARITOS = [MINATITLAN, [-94.47, 18.05], [-94.39, 18.11]];
+const A_MERIDA = [[-89.6612, 21.2499], [-89.67, 21.1], [-89.6931, 20.9241]];
+const SENER_2018 = [
+  ['pemex-rosarito-mexicali', 'Poliducto Rosarito–Mexicali', 148.4, 31, [[-117.07, 32.3749], [-116.92, 32.47], [-116.63, 32.56], [-116.1, 32.58], [-115.6715, 32.5806]]],
+  ['pemex-rosarito-ensenada', 'Poliducto Rosarito–Ensenada', 74.8, 20, [[-117.07, 32.3749], [-116.98, 32.2], [-116.8, 31.99], [-116.6825, 31.882]]],
+  ['pemex-guaymas-hermosillo', 'Poliducto Guaymas–Hermosillo', 129, 31, [[-110.8658, 27.9305], [-110.82, 28.1], [-110.9, 28.55], [-110.9036, 29.0245]]],
+  ['pemex-guaymas-ciudad-obregon', 'Poliducto Guaymas–Ciudad Obregón', 120.3, 24, [[-110.8658, 27.9305], [-110.7, 27.88], [-110.3, 27.68], [-109.9256, 27.5457]]],
+  ['pemex-topolobampo-culiacan', 'Poliducto Topolobampo–Culiacán, con el ramal a Guamúchil', 222.3, 34, [[-109.0467, 25.6154], [-108.95, 25.7], [-108.47, 25.57], [-108.111, 25.4715], [-107.75, 25.1], [-107.4333, 24.7728]]],
+  ['pemex-cadereyta-santa-catarina', 'Poliducto Cadereyta–Santa Catarina', 83.6, 148, [[-99.94148, 25.5856], [-100.15, 25.66], [-100.31, 25.67], SANTA_CATARINA]],
+  ['pemex-cadereyta-reynosa-brownsville', 'Bidireccional Cadereyta–Reynosa–Brownsville', 270.9, 55, [[-99.94148, 25.5856], [-99.55, 25.72], [-99.18, 25.8], [-98.7, 25.98], [-98.2786, 26.0754], [-97.9, 25.98], [-97.5, 25.9]]],
+  ['pemex-santa-catarina-gomez-palacio-10', 'Poliducto Santa Catarina–Gómez Palacio (10 pulgadas)', 321.3, 32, A_GOMEZ_PALACIO],
+  ['pemex-santa-catarina-gomez-palacio-14', 'Poliducto Santa Catarina–Gómez Palacio (14 pulgadas)', 319.6, 58, A_GOMEZ_PALACIO],
+  ['pemex-ojo-caliente-saltillo', 'Ramal Ojo Caliente–Saltillo', 24.9, 26, [OJO_CALIENTE, [-100.9714, 25.4892]]],
+  ['pemex-santa-catarina-monclova-sabinas', 'Poliducto Santa Catarina–Monclova–Sabinas', 323.6, 20, [SANTA_CATARINA, [-100.55, 25.95], [-100.95, 26.45], [-101.43, 26.79], [-101.4258, 26.9581], [-101.3, 27.4], [-101.1343, 27.832]]],
+  ['pemex-minatitlan-salina-cruz', 'Bidireccional Minatitlán–Salina Cruz', 249.4, 73, [MINATITLAN, [-94.72, 17.95], [-94.92, 17.9], [-95.0, 17.55], [-95.03, 17.1], [-95.04, 16.88], [-95.1, 16.56], [-95.12, 16.38], [-95.17692, 16.20647]]],
+  ['pemex-minatitlan-pajaritos-combustoleo', 'Combustoleoducto Refinería Minatitlán–Pajaritos', 33, 72, A_PAJARITOS],
+  ['pemex-minatitlan-pajaritos-bidireccional', 'Bidireccional Minatitlán–Pajaritos', 24.4, 41, A_PAJARITOS],
+  ['pemex-minatitlan-pajaritos', 'Poliducto Minatitlán–Pajaritos', 27.5, 73, A_PAJARITOS],
+  ['pemex-minatitlan-villahermosa', 'Poliducto Minatitlán–Villahermosa', 174.2, 55, [MINATITLAN, [-94.2, 18.05], [-93.8, 18.05], CASTANITO, [-93.2, 17.98], [-92.9953, 17.9977]]],
+  ['pemex-castanito-dos-bocas', 'Ramal Castañito–Dos Bocas', 59.6, 55, [CASTANITO, [-93.3, 18.2], [-93.19561, 18.4228]]],
+  ['pemex-salamanca-morelia', 'Poliducto Salamanca–Morelia', 90.7, 28, [SALAMANCA, [-101.2, 20.3], [-101.15, 19.98], [-101.1475, 19.8442]]],
+  ['pemex-salamanca-irapuato', 'Ductos Salamanca–Irapuato (cinco, uno por producto: magna, premium, turbosina, diésel y combustóleo)', 19, 159, [SALAMANCA, [-101.2977, 20.6372]]],
+  ['pemex-salamanca-leon', 'Poliducto Salamanca–León', 94.3, 24, [SALAMANCA, [-101.2977, 20.6372], [-101.43, 20.94], [-101.7126, 21.0991]]],
+  ['pemex-salamanca-aguascalientes-zacatecas', 'Poliducto Salamanca–Aguascalientes–Zacatecas', 319.9, 28, [SALAMANCA, [-101.29, 20.66], [-101.44, 20.95], [-101.7, 21.11], [-101.93, 21.36], AGUASCALIENTES, [-102.33, 22.2], [-102.4378, 22.7497]]],
+  ['pemex-salamanca-guadalajara', 'Poliducto Salamanca–Guadalajara', 345, 85, [SALAMANCA, [-101.5, 20.45], [-101.85, 20.43], DEGOLLADO, [-102.55, 20.3], [-102.77, 20.35], [-103.2266, 20.5055]]],
+  ['pemex-degollado-zamora', 'Ramal Degollado–Zamora', 44.5, 26, [DEGOLLADO, [-102.2691, 20.0876]]],
+  ['pemex-progreso-merida-10', 'Poliducto Progreso–Mérida (10 pulgadas)', 37.1, 36, A_MERIDA],
+  ['pemex-progreso-merida-8', 'Poliducto Progreso–Mérida (8 pulgadas)', 37.2, 22, A_MERIDA],
+];
+for (const [id, nombre, km, mbd, puntos] of SENER_2018) {
+  ductos.push({ id, nombre, tipo: 'petroliferos', red: 'pemex', operador: 'Pemex Logística', km, capacidad: mbd * 1000, aproximado: true, fuente: 'sener-mapa-2018', trazo: [puntos] });
+}
 
 // After 2019: drawn by the game. Check the sea legs of Puerta al Sureste don't touch land.
 const topo = JSON.parse(await readFile(join(ROOT, 'static', 'data', 'mexico.topo.json'), 'utf8'));
