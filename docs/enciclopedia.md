@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 22 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y Huamantla por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y los polos de Huamantla y Coatzacoalcos I por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -629,8 +629,8 @@ en 2026 (tres concesionarios incumplieron y uno renunció).
 ### Huamantla por dentro
 
 Un polo puede tener **vista por dentro**: en su ficha, *Entrar al polo ›* lleva la cámara del
-tablero hasta él y abre su acercamiento (`/mexico/polo/huamantla`). Por ahora solo Huamantla
-la tiene; es la prueba antes de dársela a los demás. El reloj sigue corriendo adentro, con el
+tablero hasta él y abre su acercamiento (`/mexico/polo/huamantla`). Por ahora la tienen
+Huamantla y [Coatzacoalcos I](#coatzacoalcos-i-por-dentro). El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
 **Qué se ve.** El terreno tal como lo declara el DOF, y lo que hay alrededor según
@@ -758,10 +758,82 @@ En el mapa, cada lote promovido toma el color de su sector y se llena conforme l
 uno que no cabe se marca en rojo. Un clic en un lote lo abre en el panel. En Realidad los lotes
 llevan el nombre de su empresa: su giro no se publica.
 
-Los datos del interior los arma `scripts/polos/gen-interior.mjs`: el contorno en
-`static/data/polos/huamantla.json` (lo baja la vista al entrar) y los frentes y sus fuentes en
+Los datos del interior los arma `scripts/polos/gen-interior.mjs`: el contorno de cada polo en
+`static/data/polos/<polo>.json` (lo baja la vista al entrar) y los frentes y sus fuentes en
 `src/lib/domain/datos/interiores.json`. Lo de OpenStreetMap se consulta en Overpass en partes
 chicas (la consulta completa da error 502) y se guarda en `.cache/osm/`.
+
+### Coatzacoalcos I por dentro
+
+El segundo polo con vista por dentro (`/mexico/polo/coatzacoalcos-i`), del Corredor
+Interoceánico: 257.71 ha al sureste de Coatzacoalcos, entre la carretera MEX-180 y el complejo
+petroquímico de Braskem-Idesa. Funciona igual que Huamantla; lo que cambia son sus datos.
+
+**El terreno**, de su declaratoria (DOF, 12 de mayo de 2023): un cuadro de construcción en UTM
+zona 15 que da, además de cada vértice, el rumbo y la distancia de cada lado. Con ellos se
+corrigieron dos erratas (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)); así el
+área da 257.62 ha contra las 257.71 declaradas, y el centro cae a 123 m del marcador que el
+juego ya tenía.
+
+**Lo que dice la declaratoria**:
+- **Tren:** está «a 3.1 km de la vía férrea, línea Z, en su tramo Medias Aguas–Coatzacoalcos».
+- **Carretera, puerto y aeropuerto:** tiene frente sobre la MEX-180, y está a 9 km del puerto y a
+  41.5 km del aeropuerto de Minatitlán.
+- **Uso de suelo:** el 76.46 % del terreno es industrial, unas 197 ha.
+- **Propietario:** es del Corredor Interoceánico.
+- **Vocaciones:** son once, con fuerte peso de la petroquímica, que ya domina la zona.
+
+**Lo que es del juego**:
+- **Los lotes:** no hay lotes ni empresas publicados. El juego parte las 197 ha industriales en
+  12 lotes de 8 a 30 ha. A los servicios les da 3 ha a la entrada, sobre la MEX-180. Lo demás,
+  38 ha, es área común y reserva.
+- **La espuela** va a la vía principal más cercana según OpenStreetMap. Es la **Línea FA de
+  Ferroistmo**, a 2.14 km en línea recta, más cerca que la Línea Z que mide el DOF.
+- **Los frentes** son los mismos que en Huamantla, con las mismas partes del costo. La
+  declaratoria no dice qué obras necesita el polo.
+- **La energía:** no hay cifra oficial. Le toca la estimación por hectárea de todos los polos
+  sin cifra, 0.0257 MW, que da 6.6 MW, y el juego la toma como lo que da su subestación.
+  - Esa razón sale de cinco polos, y los grandes (Zapotlán: 20 MW en 911 ha) piden poco por
+    hectárea. Con la de Huamantla, Coatzacoalcos I tendría unos 39 MW.
+  - Por eso aquí una empresa pide pocos MW por trabajador comparada con una de Huamantla. Aun así,
+    dos petroquímicas grandes y una metalúrgica llenan su subestación.
+
+Lo que pide cada uno de sus sectores en un lote de 20 ha (2,467 empleos: los del polo
+repartidos en sus 197 ha de lotes):
+
+| Sector | SCIAN | Personal ocupado (2018) | Luz | Agua | t por trabajador al año | Exporta | MW | t al año por tren |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 0.37 MW | 3,676 t |
+| Semiconductores (componentes electrónicos) | 3344 | 196,205 | 0.67× | 0.96× | 1.49* | 30 % | 0.34 MW | 3,676 t |
+| Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 0.62 MW | 12,410 t |
+| Dispositivos médicos | 3391 | 172,298 | 0.46× | 0.37× | 1.49* | 30 % | 0.24 MW | 3,676 t |
+| Farmacéutica | 3254 | 88,699 | 0.84× | 0.89× | 1.49* | 30 % | 0.43 MW | 3,676 t |
+| Agroindustria (industria alimentaria) | 311 | 1,092,943 | 0.66× | 0.57× | 2.70 | 3 % | 0.34 MW | 6,661 t |
+| Equipo de generación y distribución de electricidad | 3353 | 74,641 | 0.87× | 0.35× | 1.49* | 30 % | 0.45 MW | 3,676 t |
+| Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 0.60 MW | 3,676 t |
+| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 2.21 MW | 167,351 t |
+| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 2.19 MW | 370,846 t |
+
+- **Agroindustria** es la industria alimentaria (SCIAN 311). En el anuario ferroviario de 2018
+  sus productos son el jarabe de maíz (1.29 millones de toneladas), los aceites y grasas
+  vegetales, las harinas, el azúcar, los lácteos y otros. Solo el azúcar sale del país.
+- **Petroquímica** es la química básica y las resinas (3251 y 3252). Por tren mueve:
+  - polietileno, 2.33 millones de toneladas;
+  - productos químicos industriales, 1.42;
+  - carbonato de sodio, 1.32;
+  - polipropileno, 0.88;
+  - ácido sulfúrico, 0.70;
+  - y otros ácidos, cloro, cloruro de vinilo, sosa cáustica y resinas.
+
+  Por trabajador es lo más pesado del juego: 150 toneladas al año. Un lote de 25 ha de
+  petroquímica manda unas 460 mil toneladas al año, casi 190 trenes.
+- **Farmacéutica** (3254), **dispositivos médicos** (3391), **semiconductores** (3344) y **equipo
+  eléctrico** (3353) no tienen productos propios en el anuario: van en contenedores.
+- **Tecnologías de la información** no es manufactura, así que el juego no la ofrece para un lote.
+- \* En contenedores (estimación del juego, como en Huamantla).
+
+En Realidad el polo está declarado y sin obra reportada; sus lotes dicen «Sin empresa
+reportada».
 
 ---
 
@@ -2642,6 +2714,16 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 22 de noviembre de 2026
+
+**Coatzacoalcos I por dentro (DOF)**
+
+- **Vértice 9:** dice 1,999,815.5086 de norte, pero el lado que llega a él desde el vértice 8
+  («S 04°57'42.44" E, 552.834 m») termina en 1,998,815.51. Es un dígito equivocado; con el número
+  original el polígono hacía un pico de un kilómetro.
+- **Último renglón:** cierra en «vértice 1» con 357,910.7404 de este, pero el último lado («N
+  02°59'51.53" E, 77.381 m») termina en 357,166.74, que es el vértice 1 tal como abre la tabla.
+  El renglón repite el vértice 1 con una errata, y se deja fuera.
+- **Resultado:** con las dos correcciones el área da 257.62 ha contra las 257.71 declaradas.
 
 **Huamantla por dentro (DOF)**
 

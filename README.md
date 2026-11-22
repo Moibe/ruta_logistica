@@ -54,7 +54,7 @@ saltar al siguiente libre.
 | `/mexico`       | d3-geo + Canvas2D | El tablero con trenes y barcos. `/` redirige aquí: el juego es lo principal.                 |
 | `/mundo/canvas` | d3-geo + Canvas2D | El mundo plano de `global` (tres proyecciones, mundo repetido, centrado en 130° O) con México en ámbar y los barcos. |
 | `/mundo/globo`  | Threlte + three   | El globo de `global`, abre mirando a México; el país va relleno de puntos ámbar; los barcos. Solo cliente. |
-| `/mexico/polo/[id]` | SVG          | Un polo por dentro (por ahora solo `huamantla`): su terreno del DOF, sus alrededores de OpenStreetMap y su obra por frentes. Se entra desde la ficha del polo. Solo cliente. |
+| `/mexico/polo/[id]` | SVG          | Un polo por dentro (por ahora `huamantla` y `coatzacoalcos-i`): su terreno del DOF, sus alrededores de OpenStreetMap y su obra por frentes. Se entra desde la ficha del polo. Solo cliente. |
 
 ### El tablero (`src/lib/map/MexicoMap.svelte`)
 
@@ -215,7 +215,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
 | `src/lib/domain/datos/interiores.json` | **Polos por dentro**: los frentes de obra de Huamantla y su parte del costo, la espuela, la energía, los lotes vendidos y las vocaciones, con sus fuentes. Lo genera `scripts/polos/gen-interior.mjs` |
 | `src/lib/domain/datos/sectores.json` | **Sectores**: lo que pide una empresa de cada vocación de un polo, por trabajador: electricidad y agua contra el promedio de la manufactura (INEGI, Censos Económicos 2019) y toneladas por tren con su parte exportada (ARTF 2018). Lo genera `scripts/polos/gen-sectores.mjs` |
-| `static/data/polos/huamantla.json` | El dibujo de Huamantla por dentro: terreno del DOF, lotes, avenida, espuela, conexión eléctrica y alrededores de OpenStreetMap, en metros (~70 KB). Lo genera el mismo script |
+| `static/data/polos/<polo>.json` | El dibujo de cada polo por dentro (Huamantla, Coatzacoalcos I): terreno del DOF, lotes, avenida, espuela, conexión eléctrica y alrededores de OpenStreetMap, en metros (~70 KB cada uno). Lo genera el mismo script |
 | `src/lib/domain/datos/comercio-mar.json` | **Comercio por mar**: lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (SEMAR), lo que entra y sale por tren (ATTRAPI 2025), la carga de cada clase de barco y las reglas de los patios. Lo genera `scripts/comercio/gen-comercio-mar.mjs` |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
@@ -411,18 +411,26 @@ permanentes) van al panel `Erario`. Las cifras salen de fuentes oficiales y vive
 `datos/calibracion.json`; la tabla y sus fuentes, en la
 [enciclopedia](docs/enciclopedia.md#construirlos).
 
-**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla). *Entrar al polo ›* en su ficha
+**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla y Coatzacoalcos I). *Entrar al polo ›* en su ficha
 pide a la cámara del tablero que baje hasta él (`tablero.entrarPolo`, pedido `polo:<id>`) y abre
 la ruta; *← México* o Esc vuelven sobre él (`tablero.salirPolo`, pedido `polo-fuera:<id>`). El
 tablero atiende un pedido de cámara una sola vez, cuando su proyección ya existe
 (`proyeccionLista`).
 
-- **Datos:** `scripts/polos/gen-interior.mjs` lee el cuadro de construcción del DOF (UTM zona 14,
-  con su conversión comprobada contra el área y un vértice en grados) y los alrededores de
-  OpenStreetMap (Overpass en consultas chicas, guardadas en `.cache/osm/<polo>/`). Acomoda los
-  lotes con las superficies que dio el gobierno, traza la espuela a la vía principal más cercana
-  y la conexión a la línea de 115 kV. Escribe `static/data/polos/<id>.json` (metros alrededor
-  del polo, lo baja la vista) y `src/lib/domain/datos/interiores.json` (los frentes y sus fuentes).
+- **Datos:** `scripts/polos/gen-interior.mjs` tiene una configuración por polo (`HUAMANTLA`,
+  `COATZACOALCOS_I`, con los vértices del DOF ya corregidos) y un texto por polo
+  (`interiorHuamantla`, `interiorCoatzacoalcosI`).
+  - Comprueba la conversión UTM contra el área declarada y contra un vértice en grados o el
+    marcador del polo.
+  - Lee los alrededores de OpenStreetMap (Overpass en consultas chicas, guardadas en
+    `.cache/osm/<polo>/`).
+  - Acomoda los lotes: las superficies que dio el gobierno, o las del juego.
+  - Traza la espuela a la vía principal con nombre más cercana y la conexión a la línea de alta
+    tensión.
+  - Escribe `static/data/polos/<id>.json` (metros alrededor del polo, lo baja la vista) y
+    `src/lib/domain/datos/interiores.json` (los frentes, el lugar, los sectores que se pueden
+    promover, la nota de Realidad y las fuentes de cada polo).
+  - Para dar vista por dentro a otro polo: su configuración, su texto, y correr el script.
 - **Obra por frentes** (`domain/interior.ts`): `ObraPolo.frentes` lleva, por frente, cuadrillas,
   avance, pagado y si está detenido. Los cuatro frentes urbanos reparten el costo y el tiempo del
   polo (`costoBaseMdp`, `mesesUnaCuadrilla`) y comparten sus 4 cuadrillas (`maxCuadrillas`); la

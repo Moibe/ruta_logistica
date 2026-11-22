@@ -143,6 +143,95 @@
    "agua": 2.77,
    "toneladas": 18.94,
    "exportacion": 0.98
+  },
+  {
+   "id": "alimentos",
+   "nombre": "Agroindustria (industria alimentaria)",
+   "corto": "Agroindustria",
+   "scian": [
+    "311"
+   ],
+   "color": "#bef264",
+   "personal": 1092943,
+   "energia": 0.66,
+   "agua": 0.57,
+   "toneladas": 2.7,
+   "exportacion": 0.03
+  },
+  {
+   "id": "petroquimica",
+   "nombre": "Petroquímica (química básica y resinas)",
+   "corto": "Petroquímica",
+   "scian": [
+    "3251",
+    "3252"
+   ],
+   "color": "#f0a27a",
+   "personal": 56630,
+   "energia": 4.28,
+   "agua": 2.92,
+   "toneladas": 150.31,
+   "exportacion": 0.11
+  },
+  {
+   "id": "farmaceutica",
+   "nombre": "Farmacéutica",
+   "corto": "Farmacéutica",
+   "scian": [
+    "3254"
+   ],
+   "color": "#5eead4",
+   "personal": 88699,
+   "energia": 0.84,
+   "agua": 0.89,
+   "toneladas": 1.49,
+   "exportacion": 0.3,
+   "enContenedores": true
+  },
+  {
+   "id": "dispositivos-medicos",
+   "nombre": "Dispositivos médicos",
+   "corto": "Dispositivos médicos",
+   "scian": [
+    "3391"
+   ],
+   "color": "#99f6e4",
+   "personal": 172298,
+   "energia": 0.46,
+   "agua": 0.37,
+   "toneladas": 1.49,
+   "exportacion": 0.3,
+   "enContenedores": true
+  },
+  {
+   "id": "semiconductores",
+   "nombre": "Semiconductores (componentes electrónicos)",
+   "corto": "Semiconductores",
+   "scian": [
+    "3344"
+   ],
+   "color": "#4ade80",
+   "personal": 196205,
+   "energia": 0.67,
+   "agua": 0.96,
+   "toneladas": 1.49,
+   "exportacion": 0.3,
+   "enContenedores": true
+  },
+  {
+   "id": "generacion-electrica",
+   "nombre": "Equipo de generación y distribución de electricidad",
+   "corto": "Equipo eléctrico",
+   "scian": [
+    "3353"
+   ],
+   "color": "#38bdf8",
+   "personal": 74641,
+   "energia": 0.87,
+   "agua": 0.35,
+   "toneladas": 1.49,
+   "exportacion": 0.3,
+   "enContenedores": true
   }
  ],
  "dato": "Lo que pide una empresa de cada sector, por trabajador, en 2018: su gasto en electricidad y en agua contra el promedio de la manufactura (INEGI, Censos Económicos 2019), y las toneladas que movió el tren de sus productos entre su personal ocupado, con la parte que salió del país (ARTF, anuario 2018). Los sectores sin productos propios en el anuario mandan su carga en contenedores: les toca lo que llevaron los contenedores por trabajador de la manufactura (estimación del juego).",

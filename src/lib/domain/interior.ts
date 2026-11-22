@@ -46,11 +46,19 @@ export type FrenteUrbano = { id: string; nombre: string; corto: string; parte: n
 
 export type Interior = {
   nombre: string;
+  /** «Huamantla, Tlaxcala». */
+  lugar: string;
+  /** The sectors a lot can be promoted for: its vocations (`sectores.ts`). */
+  sectores: string[];
+  /** Its sources, for the panel. */
+  fuentesLista: string[];
+  /** How the real polo stands, for Realidad. */
+  realNota: string;
   frentes: FrenteUrbano[];
   frentesDato: Dato;
   espuela: { km: number; via: string; operador: string; mesesMinimos: number } & Dato;
-  energia: { mva: number; kmLinea: number } & Dato;
-  lotes: { lista: { n: number; ha: number; empresa: string }[] } & Dato;
+  energia: { mva: number; fuenteCorta: string; kmLinea: number } & Dato;
+  lotes: { lista: { n: number; ha: number; empresa: string | null }[] } & Dato;
   vocaciones: string[];
   vocacionesDato: Dato;
 };

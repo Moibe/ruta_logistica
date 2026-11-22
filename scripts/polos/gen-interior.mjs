@@ -4,8 +4,8 @@
 //
 //   node scripts/polos/gen-interior.mjs
 //
-// For now only Huamantla. Writes:
-//   static/data/polos/huamantla.json       the geometry, in metres around the polo (fetched by the view)
+// Huamantla and Coatzacoalcos I. Writes:
+//   static/data/polos/<id>.json            the geometry, in metres around the polo (fetched by the view)
 //   src/lib/domain/datos/interiores.json   the works by front and the real facts (read by the game)
 //
 // OpenStreetMap comes from Overpass, in small queries (the big one gets a 502), cached in
@@ -203,6 +203,62 @@ const HUAMANTLA = {
   /** OpenStreetMap queries: the near box for streets and land use, the wide one for track, power and places. */
   cerca: '19.325,-97.975,19.385,-97.900',
   lejos: '19.30,-98.00,19.41,-97.87',
+  /** The federal highway the entrance faces. */
+  carretera: /136|119/,
+};
+
+/**
+ * Coatzacoalcos I, from its declaratoria (DOF, 12 May 2023): a construction table in UTM zone 15
+ * with the bearing and length of every side, which shows two typos and fixes them:
+ * - vertex 9 is written 1,999,815.5086 north; the side from vertex 8 («S 04°57'42.44" E, 552.834
+ *   m») ends at 1,998,815.5: a wrong digit;
+ * - the table closes on «vertex 1» at 357,910.7404 east, but the last side («N 02°59'51.53" E,
+ *   77.381 m») ends at 357,166.74, vertex 1 as the table starts it: the closing row is vertex 1
+ *   repeated with a typo, and is left out.
+ * With both, the area is 257.62 ha against the 257.71 declared.
+ */
+const COATZACOALCOS_I = {
+  id: 'coatzacoalcos-i',
+  zona: 15,
+  vertices: [
+    [357166.7404, 1999910.1451], [357336.2968, 1999820.1184], [357616.9853, 1999672.0739], [357859.6123, 1999540.3502],
+    [358055.382, 1999455.055], [358150.79, 1999410.767], [358237.896, 1999381.266], [358323.482, 1999366.271],
+    [358371.2974, 1998815.5086], [358386.3344, 1998813.289], [358402.6743, 1998841.6819], [358457.6249, 1998814.4615],
+    [358662.038, 1999199.278], [358670.8498, 1999142.7778], [358923.1651, 1999139.9833], [358936.7159, 1999137.3362],
+    [358953.3341, 1999156.8915], [358997.503, 1999160.197], [359013.48, 1999204.434], [359057.183, 1999197.857],
+    [359136.1535, 1999216.8963], [359211.657, 1999107.5612], [359291.0074, 1998982.4459], [359106.319, 1998620.7407],
+    [358906.4707, 1998243.9735], [358749.6326, 1998289.4991], [358700.63, 1998218.9618], [358460.217, 1997891.469],
+    [358405.5016, 1997899.3817], [358376.6346, 1997903.1079], [358335.8762, 1997890.1079], [358303.6685, 1997864.8984],
+    [358298.0628, 1997863.1681], [358146.39, 1997873.6891], [358138.8317, 1997873.5014], [358093.935, 1997915.859],
+    [358077.4616, 1997968.1733], [358051.4731, 1998034.4339], [358024.5797, 1998046.1691], [357971.926, 1998117.788],
+    [357795.9985, 1998227.2009], [357724.9726, 1998252.0504], [357596.5897, 1998241.632], [357547.0966, 1998198.5015],
+    [357499.9298, 1998211.656], [357443.0177, 1998204.4419], [357372.123, 1998304.981], [357401.0191, 1998415.7157],
+    [357363.4419, 1998548.8279], [357332.429, 1998666.756], [357274.0493, 1998745.5503], [357183.5165, 1998812.2498],
+    [357105.984, 1998877.527], [357048.3628, 1998904.1058], [356997.2281, 1998908.6297], [356931.249, 1998937.923],
+    [356944.394, 1999115.335], [356952.989, 1999202.096], [356960.558, 1999343.317], [356980.8049, 1999926.6442],
+    [357162.6938, 1999832.8704],
+  ],
+  areaDof: 2577096.57,
+  /** The DOF gives no geographic coordinates: the check is the marker the game already had (polos.json). */
+  control: null,
+  marcador: { lat: 18.0737, lon: -94.3418 },
+  /**
+   * No lots are published. The declaratoria says 76.46 % of the land is zoned industrial: 197 ha.
+   * The game splits them into 12 lots of 8 to 30 ha (an estimate).
+   */
+  lotes: [
+    { ha: 30, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 18, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 9, lado: 'a' },
+    { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' }, { ha: 16, lado: 'b' }, { ha: 14, lado: 'b' }, { ha: 10, lado: 'b' }, { ha: 8, lado: 'b' },
+  ],
+  serviciosHa: 3,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  caja: { x0: -4500, x1: 4500, y0: -4500, y1: 4500 },
+  cerca: '18.035,-94.385,18.115,-94.295',
+  lejos: '18.00,-94.42,18.15,-94.26',
+  carretera: /180/,
+  /** A city outskirts: its many service lanes are left out to keep the drawing light. */
+  sinServicio: true,
 };
 
 // ---- OpenStreetMap ----------------------------------------------------------------------------
@@ -254,12 +310,18 @@ async function construir(p) {
   const cy = v.reduce((s, q) => s + q[1], 0) / v.length;
   const poligono = v.map(([x, y]) => [x - cx, y - cy]);
   const [lon0, lat0] = deUtm(cx, cy, p.zona);
-  const [clon, clat] = deUtm(v[0][0], v[0][1], p.zona);
-  const errorControl = Math.hypot((clon - p.control.lon) * 104900, (clat - p.control.lat) * 110600);
   const a = area(poligono);
-  console.log(`área ${a.toFixed(0)} m² (DOF ${p.areaDof}) · perímetro ${perimetro(poligono).toFixed(1)} m · vértice 1 a ${errorControl.toFixed(2)} m de sus coordenadas geográficas`);
+  if (p.control) {
+    const [clon, clat] = deUtm(v[0][0], v[0][1], p.zona);
+    const errorControl = Math.hypot((clon - p.control.lon) * 104900, (clat - p.control.lat) * 110600);
+    console.log(`${p.id}: área ${a.toFixed(0)} m² (DOF ${p.areaDof}) · perímetro ${perimetro(poligono).toFixed(1)} m · vértice 1 a ${errorControl.toFixed(2)} m de sus coordenadas geográficas`);
+    if (errorControl > 1) throw new Error('La conversión UTM no cuadra con el vértice de control');
+  } else {
+    const d = Math.hypot((lon0 - p.marcador.lon) * 105700, (lat0 - p.marcador.lat) * 110600);
+    console.log(`${p.id}: área ${a.toFixed(0)} m² (DOF ${p.areaDof}) · perímetro ${perimetro(poligono).toFixed(1)} m · centro a ${d.toFixed(0)} m del marcador`);
+    if (d > 300) throw new Error('El polígono no cae donde el marcador del polo');
+  }
   if (Math.abs(a - p.areaDof) / p.areaDof > 0.005) throw new Error('El área no cuadra con la del DOF');
-  if (errorControl > 1) throw new Error('La conversión UTM no cuadra con el vértice de control');
 
   const local = (lon, lat) => { const [x, y] = aUtm(lon, lat, p.zona); return [x - cx, y - cy]; };
   const { x0, x1, y0, y1 } = p.caja;
@@ -281,7 +343,8 @@ async function construir(p) {
   const caminos = [];
   for (const e of datos.caminos) {
     const t = e.tags ?? {};
-    if (!e.geometry || ['footway', 'path', 'steps', 'cycleway'].includes(t.highway)) continue;
+    if (!e.geometry || ['footway', 'path', 'steps', 'cycleway', 'pedestrian', 'construction', 'proposed'].includes(t.highway)) continue;
+    if (p.sinServicio && t.highway === 'service') continue;
     for (const puntos of trazos(e.geometry)) caminos.push({ tipo: t.highway, ...(t.name ? { nombre: t.name } : {}), ...(t.ref ? { ref: t.ref } : {}), puntos });
   }
   const vias = [];
@@ -315,8 +378,10 @@ async function construir(p) {
       lugares.push({ nombre: t.name, tipo: t.place, x: r0(x), y: r0(y) });
     } else if (e.geometry) for (const puntos of trazos(e.geometry, 3)) agua.push({ tipo: t.waterway, puntos });
   }
+  // One label per name (a plant's cooling towers come in sets), and none of the bare «building=yes» ones.
+  const vistos = new Set();
   const edificios = datos.edificios
-    .filter((e) => e.geometry && e.tags?.name)
+    .filter((e) => e.geometry && e.tags?.name && e.tags.building !== 'yes' && !vistos.has(e.tags.name) && vistos.add(e.tags.name))
     .map((e) => {
       const g = e.geometry;
       const [x, y] = local(g.reduce((s, q) => s + q.lon, 0) / g.length, g.reduce((s, q) => s + q.lat, 0) / g.length);
@@ -341,7 +406,7 @@ async function construir(p) {
   const deUV = ([u, w]) => [u * Math.cos(th) - w * Math.sin(th), u * Math.sin(th) + w * Math.cos(th)];
 
   // The entrance: the end of the axis nearest the federal highway.
-  const carretera = caminos.filter((c) => c.ref && /136|119/.test(c.ref));
+  const carretera = caminos.filter((c) => c.ref && p.carretera.test(c.ref));
   let P = poligono.map(aUV);
   const extremo = (lado) => { const us = P.map((q) => q[0]); return lado < 0 ? Math.min(...us) : Math.max(...us); };
   const distA = (u) => Math.min(...carretera.flatMap((c) => c.puntos).map((q) => Math.hypot(...deUV([u, 0]).map((z, i) => z - q[i]))));
@@ -396,7 +461,7 @@ async function construir(p) {
   const centro = cerca((Math.min(...servUV.map((q) => q[0])) + su) / 2 - 20, s - W - 45);
 
   // The rail spur: from the nearest main track to the boundary.
-  const principales = vias.filter((x) => x.estado === 'rail' && x.servicio !== 'siding' && x.servicio !== 'yard');
+  const principales = vias.filter((x) => x.estado === 'rail' && !['siding', 'yard', 'spur'].includes(x.servicio ?? '') && x.nombre);
   let espuela = null;
   for (const via of principales) {
     const m = masCercanos(poligono, via.puntos, true);
@@ -423,6 +488,8 @@ async function construir(p) {
     servicios: { centro, subestacion, tanque },
     espuela: { puntos: [espuela.pa, espuela.pb].map(([x, y]) => [r1(x), r1(y)]), km: Number((espuela.d / 1000).toFixed(2)), via: espuela.via.nombre ?? '', operador: espuela.via.operador ?? '' },
     conexionElectrica: { puntos: [conexion.pa, conexion.pb].map(([x, y]) => [r1(x), r1(y)]), km: Number((conexion.d / 1000).toFixed(2)), kv: conexion.linea.kv },
+    /** The highway the polo faces, for its label. */
+    carretera: carretera[0]?.ref ?? null,
     caminos,
     vias,
     lineas,
@@ -457,14 +524,29 @@ const FUENTES = {
     fuente: 'Secretaría de Economía, «Plan México avanza: Polo de Desarrollo Económico en Tlaxcala» (18 de diciembre de 2025): la obra concluirá el 28 de febrero de 2026, tendrá un CECI; Knipping Automotive y otras con cartas de intención',
     url: 'https://podecobi.economia.gob.mx/en/news/plan-mexico-avanza-polo-de-desarrollo-economico-en-tlaxcala/',
   },
-  osm: { fuente: 'OpenStreetMap (ODbL, © colaboradores de OpenStreetMap): calles, vías, líneas eléctricas, subestaciones de la CFE, poblados y la Ciudad Industrial Xicohténcatl II alrededor del polo', url: 'https://www.openstreetmap.org/copyright' },
+  osm: { fuente: 'OpenStreetMap (ODbL, © colaboradores de OpenStreetMap): calles, vías, líneas eléctricas, subestaciones de la CFE, poblados y zonas industriales alrededor del polo', url: 'https://www.openstreetmap.org/copyright' },
+  'dof-coatzacoalcos-i': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Coatzacoalcos I (12 de mayo de 2023): cuadro de construcción (62 renglones en UTM 15, con rumbo y distancia de cada lado), 257.71 ha, a 3.1 km de la línea Z, frente a la MEX-180, 76.46 % de uso de suelo industrial, sus vocaciones productivas y su propiedad (el Corredor Interoceánico)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5688608&fecha=12/05/2023',
+  },
+  'energia-polos': {
+    fuente: 'Estimación del juego con las declaratorias y el portal de Economía: los polos sin cifra oficial de energía usan 0.0257 MW por hectárea, la razón de los cinco que sí la tienen (ver La energía)',
+    url: '',
+  },
   'sict-dos-bocas': { fuente: 'SICT: costo del ramal ferroviario a Dos Bocas, base del costo por km de la espuela (ver la sección de obras del Estado)', url: 'https://www.gob.mx/sct/prensa/precisa-sict-que-ramal-ferroviario-roberto-ayala-dos-bocas-tiene-un-costo-estimado-de-6-mil-54-mdp' },
   juego: { fuente: 'Estimación del juego', url: '' },
 };
 
-function interior(g) {
+const HUAMANTLA_SECTORES = ['textil', 'metalicas', 'productos-metalicos', 'maquinaria', 'computacion', 'electricos', 'transporte', 'bebidas'];
+
+function interiorHuamantla(g) {
   return {
     nombre: 'Huamantla',
+    lugar: 'Huamantla, Tlaxcala',
+    sectores: HUAMANTLA_SECTORES,
+    fuentesLista: ['dof-huamantla', 'presidencia-inauguracion', 'economia-ficha', 'economia-nota', 'osm', 'sict-dos-bocas'],
+    realNota:
+      'El polo real: compromiso de obra el 28 de julio de 2025, al 20 % el 14 de octubre, inaugurado el 12 de abril de 2026. Los siete lotes vendidos llevan el nombre de su empresa; su giro no se publica. No se ha reportado una espuela.',
     frentes: [
       { id: 'vialidades', nombre: 'Vialidades e iluminación', corto: 'Vialidades', parte: 0.4 },
       { id: 'agua', nombre: 'Agua potable y drenaje', corto: 'Agua y drenaje', parte: 0.25 },
@@ -486,6 +568,7 @@ function interior(g) {
     },
     energia: {
       mva: 8,
+      fuenteCorta: 'Economía',
       kmLinea: g.conexionElectrica.km,
       dato: `Energía disponible de 8 MVA (Economía). La línea de 115 kV de la CFE más cercana queda a ${g.conexionElectrica.km.toLocaleString('es-MX')} km (OpenStreetMap).`,
       fuentes: ['economia-ficha', 'osm'],
@@ -501,10 +584,77 @@ function interior(g) {
   };
 }
 
-const g = await construir(HUAMANTLA);
+function interiorCoatzacoalcosI(g) {
+  const mw = 6.6;
+  return {
+    nombre: 'Coatzacoalcos I',
+    lugar: 'Coatzacoalcos, Veracruz',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-coatzacoalcos-i', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota:
+      'El polo real: declarado el 12 de mayo de 2023 (DOF). En lo que el juego consultó no hay obra, licitación ni empresas reportadas; el Corredor Interoceánico reporta en 2026 cinco polos del Istmo concesionados sin decir cuáles. Sus lotes y su acomodo son del juego.',
+    frentes: [
+      { id: 'vialidades', nombre: 'Vialidades e iluminación', corto: 'Vialidades', parte: 0.4 },
+      { id: 'agua', nombre: 'Agua potable y drenaje', corto: 'Agua y drenaje', parte: 0.25 },
+      { id: 'energia', nombre: 'Energía eléctrica', corto: 'Energía', parte: 0.25 },
+      { id: 'servicios', nombre: 'Centro de servicios', corto: 'Servicios', parte: 0.1 },
+    ],
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo «se encuentra a 3.1 km de la vía férrea, línea Z, en su tramo Medias Aguas–Coatzacoalcos» (DOF). La espuela del juego va a la ${g.espuela.via} (${g.espuela.operador}) más cercana: ${g.espuela.km.toLocaleString('es-MX')} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y se hace a su paso, con un mínimo de 2 meses: estimación del juego.`,
+      fuentes: ['dof-coatzacoalcos-i', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: {
+      mva: mw,
+      fuenteCorta: 'estimación del juego',
+      kmLinea: g.conexionElectrica.km,
+      dato: `No hay cifra oficial de su energía: el juego le da 0.0257 MW por hectárea, la razón de los cinco polos que sí la tienen (${mw.toLocaleString('es-MX')} MW), y la toma como lo que da su subestación. La línea de alta tensión más cercana queda a ${g.conexionElectrica.km.toLocaleString('es-MX')} km (OpenStreetMap).`,
+      fuentes: ['energia-polos', 'osm'],
+    },
+    lotes: {
+      lista: g.lotes.filter((l) => l.tipo === 'empresa').map((l, i) => ({ n: i + 1, ha: l.ha, empresa: null })),
+      dato: 'La declaratoria dice que el 76.46 % del terreno tiene uso de suelo industrial: 197 ha. El juego las parte en 12 lotes de 8 a 30 ha y les da 3 ha a los servicios, a la entrada sobre la MEX-180; lo demás es área común y reserva (estimación del juego). No hay lotes ni empresas publicados.',
+      fuentes: ['dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: [
+      'Eléctrica y electrónica',
+      'Semiconductores',
+      'Automotriz (electromovilidad), autopartes y equipo de transporte',
+      'Dispositivos médicos',
+      'Farmacéutica',
+      'Agroindustria',
+      'Equipo de generación y distribución de energía eléctrica (energías limpias)',
+      'Maquinaria y equipo',
+      'Tecnologías de la Información y la Comunicación',
+      'Metales',
+      'Petroquímica',
+    ],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-coatzacoalcos-i'],
+    },
+  };
+}
+
+const POLOS_INTERIOR = [
+  [HUAMANTLA, interiorHuamantla],
+  [COATZACOALCOS_I, interiorCoatzacoalcosI],
+];
 await mkdir(join(ROOT, 'static', 'data', 'polos'), { recursive: true });
-await writeFile(join(ROOT, 'static', 'data', 'polos', 'huamantla.json'), JSON.stringify(g) + '\n');
+const polos = {};
+for (const [p, interior] of POLOS_INTERIOR) {
+  const g = await construir(p);
+  await writeFile(join(ROOT, 'static', 'data', 'polos', `${p.id}.json`), JSON.stringify(g) + '\n');
+  polos[p.id] = interior(g);
+}
 await writeFile(
   join(ROOT, 'src', 'lib', 'domain', 'datos', 'interiores.json'),
-  JSON.stringify({ corte: '2026-11-22', nota: 'Generado por scripts/polos/gen-interior.mjs.', fuentes: FUENTES, polos: { huamantla: interior(g) } }, null, 1) + '\n'
+  JSON.stringify({ corte: '2026-11-22', nota: 'Generado por scripts/polos/gen-interior.mjs.', fuentes: FUENTES, polos }, null, 1) + '\n'
 );

@@ -121,7 +121,7 @@
     return [...porNombre].map(([texto, pts]) => ({ texto, p: etiquetaDe(pts) }));
   });
   const etiquetaCarretera = $derived.by(() => {
-    const c = geo.caminos.filter((x) => x.ref && /136/.test(x.ref));
+    const c = geo.carretera ? geo.caminos.filter((x) => x.ref === geo.carretera) : [];
     // Clear of the polo, which it runs along: about 900 m from its centre.
     const pts = c.flatMap((x) => x.puntos);
     const p = pts.reduce((m, q) => (Math.abs(Math.hypot(...q) - 900) < Math.abs(Math.hypot(...m) - 900) ? q : m), pts[0]);
@@ -205,8 +205,10 @@
   const ver = (titulo: string, ...lineas: string[]) => () => (tip = { titulo, lineas: lineas.filter(Boolean) });
   const salir = () => (tip = null);
 
+  /** The services front's own name («Centro de negocios, comedor y CECI» in Huamantla). */
+  const nombreServicios = $derived(datos?.frentes.find((f) => f.id === 'servicios')?.nombre ?? 'Servicios');
   const nombreLote = (l: Lote, i: number) =>
-    l.tipo === 'servicios' ? 'Centro de negocios, comedor y CECI' : l.tipo === 'reserva' ? 'Área común y reserva' : realidad ? (l.empresa ?? `Lote ${i}`) : `Lote ${i}`;
+    l.tipo === 'servicios' ? nombreServicios : l.tipo === 'reserva' ? 'Área común y reserva' : realidad ? (l.empresa ?? `Lote ${i}`) : `Lote ${i}`;
   const numeroLote = $derived(new Map(geo.lotes.filter((l) => l.tipo === 'empresa').map((l, i) => [l, i + 1])));
 
   // ---- the scale bar ------------------------------------------------------------------------
@@ -270,7 +272,7 @@
         onpointerleave={salir}
       />
     {/each}
-    {#each geo.subestaciones as s (s.nombre + s.x)}
+    {#each geo.subestaciones as s, i (i)}
       <rect
         x={s.x - 6 * fs}
         y={-s.y - 6 * fs}
@@ -325,8 +327,10 @@
           `${l.ha.toLocaleString('es-MX')} ha${sec ? ` · ${sec.nombre}` : ''}`,
           l.tipo === 'empresa'
             ? realidad
-              ? 'Vendido (Presidencia, inauguración del 12 de abril de 2026). Dónde queda en el polo es del juego.'
-              : `${lleno >= 1 ? 'Con empresa' : lleno > 0 ? 'Instalándose una empresa' : o?.sinEnergia ? 'Promovido, pero no cabe: al polo no le alcanza la energía' : sec ? 'Promovido' : 'Sin promover'}. Clic para verlo. En la realidad lo compró ${l.empresa} (Presidencia); dónde queda es del juego.`
+              ? l.empresa
+                ? 'Vendido (Presidencia, inauguración del 12 de abril de 2026). Dónde queda en el polo es del juego.'
+                : 'Sin empresa reportada. El lote y su lugar son del juego.'
+              : `${lleno >= 1 ? 'Con empresa' : lleno > 0 ? 'Instalándose una empresa' : o?.sinEnergia ? 'Promovido, pero no cabe: al polo no le alcanza la energía' : sec ? 'Promovido' : 'Sin promover'}. Clic para verlo. ${l.empresa ? `En la realidad lo compró ${l.empresa} (Presidencia); dónde queda es del juego.` : 'Su tamaño y su lugar son del juego.'}`
             : l.tipo === 'servicios'
               ? 'Su tamaño y lugar son del juego'
               : 'Lo que queda del terreno'
@@ -337,7 +341,7 @@
         {@const c = l.puntos.reduce((s, p) => [s[0] + p[0] / l.puntos.length, s[1] + p[1] / l.puntos.length], [0, 0])}
         {#if l.ha >= 2 || vista.mpp < 0.9}
           <text x={c[0]} y={-c[1]} font-size={10 * fs} class="rotulo lote-rotulo" text-anchor="middle">
-            {realidad ? l.empresa : `Lote ${n}`} · {sec ? sec.corto : `${l.ha.toLocaleString('es-MX')} ha`}
+            {realidad && l.empresa ? l.empresa : `Lote ${n}`} · {sec ? sec.corto : `${l.ha.toLocaleString('es-MX')} ha`}
           </text>
         {/if}
       {/if}
@@ -389,9 +393,9 @@
       role="presentation"
       onpointerenter={ver(
         'Subestación del polo',
-        `${datos?.energia.mva ?? 8} MVA disponibles (Economía)`,
+        `${(datos?.energia.mva ?? 0).toLocaleString('es-MX')} MVA disponibles (${datos?.energia.fuenteCorta ?? ''})`,
         `Energía: ${estado.av.energia >= 1 ? 'terminada' : `${Math.round(estado.av.energia * 100)} %`}`,
-        `Se conecta a la línea de 115 kV a ${geo.conexionElectrica.km.toLocaleString('es-MX')} km`
+        `Se conecta a la línea de ${Number(geo.conexionElectrica.kv) / 1000 || 115} kV a ${geo.conexionElectrica.km.toLocaleString('es-MX')} km`
       )}
       onpointerleave={salir}
     />
@@ -406,7 +410,7 @@
       class="edificio"
       style:--av={estado.av.servicios}
       role="presentation"
-      onpointerenter={ver('Centro de negocios, comedor y CECI', `${Math.round(estado.av.servicios * 100)} % construido`)}
+      onpointerenter={ver(nombreServicios, `${Math.round(estado.av.servicios * 100)} % construido`)}
       onpointerleave={salir}
     />
 
@@ -447,10 +451,10 @@
     {#if etiquetaCarretera}
       <text x={etiquetaCarretera.p[0] + 10 * fs} y={-etiquetaCarretera.p[1]} font-size={11 * fs} class="rotulo carretera">{etiquetaCarretera.texto}</text>
     {/if}
-    {#each geo.lugares as l (l.nombre + l.x)}
+    {#each geo.lugares as l, i (i)}
       <text x={l.x} y={-l.y} font-size={(l.tipo === 'town' ? 13 : 10) * fs} class="rotulo lugar" class:pueblo={l.tipo === 'town'} text-anchor="middle">{l.nombre}</text>
     {/each}
-    {#each geo.edificios as b (b.nombre)}
+    {#each geo.edificios as b, i (i)}
       <circle cx={b.x} cy={-b.y} r={3 * fs} class="edificio-osm" />
       <text x={b.x + 6 * fs} y={-b.y + 3.5 * fs} font-size={9.5 * fs} class="rotulo lugar">{b.nombre}</text>
     {/each}

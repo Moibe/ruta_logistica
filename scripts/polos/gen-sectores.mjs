@@ -45,6 +45,13 @@ const CENSO = {
   334: [377625, 6830.559, 2061.709],
   335: [241221, 5921.874, 878.746],
   336: [1292372, 39068.277, 13368.527],
+  311: [1092943, 17833.01, 4260.86],
+  3251: [38098, 3203.831, 930.858],
+  3252: [18532, 2789.304, 211.388],
+  3254: [88699, 1833.739, 542.717],
+  3344: [196205, 3259.038, 1300.765],
+  3353: [74641, 1606.412, 181.077],
+  3391: [172298, 1946.929, 438.187],
 };
 
 /** ARTF 2018, tonnes by rail (tables 6-1 and 6-2) and million tonnes exported (table 10). */
@@ -63,6 +70,34 @@ const TREN = {
   hojaAluminio: { t: 16482, exp: 0 },
   barrasPlomo: { t: 5492, exp: 0 },
   aparatosDomesticos: { t: 101720, exp: 0.1 },
+  // Food.
+  jarabeMaiz: { t: 1290754, exp: 0 },
+  aceiteGrasasVegetales: { t: 547553, exp: 0 },
+  harinas: { t: 497624, exp: 0 },
+  azucar: { t: 270406, exp: 0.1 },
+  lacteos: { t: 99702, exp: 0 },
+  harinaTrigo: { t: 93951, exp: 0 },
+  alimentoAnimales: { t: 62247, exp: 0 },
+  almidonMaiz: { t: 46543, exp: 0 },
+  abarrotes: { t: 28255, exp: 0 },
+  harinaGluten: { t: 13124, exp: 0 },
+  mielCana: { t: 5365, exp: 0 },
+  conservas: { t: 148, exp: 0 },
+  // Basic chemicals and resins.
+  polietileno: { t: 2325455, exp: 0 },
+  quimicosIndustriales: { t: 1424899, exp: 0.3 },
+  carbonatoSodio: { t: 1318937, exp: 0 },
+  polipropileno: { t: 877031, exp: 0 },
+  acidoSulfurico: { t: 695333, exp: 0.6 },
+  acidos: { t: 560327, exp: 0 },
+  cloroLiquido: { t: 278683, exp: 0 },
+  cloruroVinilo: { t: 237537, exp: 0 },
+  sosaCaustica: { t: 187727, exp: 0 },
+  resinaAdhesivo: { t: 176246, exp: 0 },
+  tereftalato: { t: 164556, exp: 0 },
+  productosSodio: { t: 152194, exp: 0 },
+  oxidoEtileno: { t: 100103, exp: 0 },
+  plasticosGranulos: { t: 13163, exp: 0 },
 };
 
 /**
@@ -79,6 +114,27 @@ const SECTORES = [
   { id: 'electricos', nombre: 'Aparatos eléctricos', corto: 'Aparatos eléctricos', scian: ['335'], productos: ['aparatosDomesticos'], contenedores: true, color: '#7dd3fc' },
   { id: 'transporte', nombre: 'Equipo de transporte', corto: 'Equipo de transporte', scian: ['336'], productos: ['vehiculos', 'ensamble', 'desarmados', 'ruedas'], color: '#a5b4fc' },
   { id: 'bebidas', nombre: 'Bebidas y tabaco', corto: 'Bebidas', scian: ['312'], productos: ['cerveza', 'vinos'], color: '#d8b4fe' },
+  // Coatzacoalcos I's vocations.
+  {
+    id: 'alimentos',
+    nombre: 'Agroindustria (industria alimentaria)',
+    corto: 'Agroindustria',
+    scian: ['311'],
+    productos: ['jarabeMaiz', 'aceiteGrasasVegetales', 'harinas', 'azucar', 'lacteos', 'harinaTrigo', 'alimentoAnimales', 'almidonMaiz', 'abarrotes', 'harinaGluten', 'mielCana', 'conservas'],
+    color: '#bef264',
+  },
+  {
+    id: 'petroquimica',
+    nombre: 'Petroquímica (química básica y resinas)',
+    corto: 'Petroquímica',
+    scian: ['3251', '3252'],
+    productos: ['polietileno', 'quimicosIndustriales', 'carbonatoSodio', 'polipropileno', 'acidoSulfurico', 'acidos', 'cloroLiquido', 'cloruroVinilo', 'sosaCaustica', 'resinaAdhesivo', 'tereftalato', 'productosSodio', 'oxidoEtileno', 'plasticosGranulos'],
+    color: '#f0a27a',
+  },
+  { id: 'farmaceutica', nombre: 'Farmacéutica', corto: 'Farmacéutica', scian: ['3254'], productos: [], color: '#5eead4' },
+  { id: 'dispositivos-medicos', nombre: 'Dispositivos médicos', corto: 'Dispositivos médicos', scian: ['3391'], productos: [], color: '#99f6e4' },
+  { id: 'semiconductores', nombre: 'Semiconductores (componentes electrónicos)', corto: 'Semiconductores', scian: ['3344'], productos: [], color: '#4ade80' },
+  { id: 'generacion-electrica', nombre: 'Equipo de generación y distribución de electricidad', corto: 'Equipo eléctrico', scian: ['3353'], productos: [], color: '#38bdf8' },
 ];
 
 const [pMan, eMan, aMan] = CENSO['31-33'];

@@ -24,6 +24,8 @@ export type GeoInterior = {
   espuela: { puntos: [Pt, Pt]; km: number; via: string; operador: string };
   /** From the substation (first point) to the high-voltage line (second). */
   conexionElectrica: { puntos: [Pt, Pt]; km: number; kv: string };
+  /** The highway the polo faces (its OpenStreetMap ref), for its label. */
+  carretera: string | null;
   caminos: (Linea & { tipo: string; nombre?: string; ref?: string })[];
   vias: (Linea & { estado: string; nombre?: string; operador?: string; servicio?: string })[];
   lineas: (Linea & { kv: string })[];

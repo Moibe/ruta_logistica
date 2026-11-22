@@ -10,7 +10,7 @@
    * each lot for one of the polo's vocations; companies come only to promoted
    * lots, in the order they were promoted, once the polo operates with a train
    * and electricity. Each sector asks for its own: electricity (and the polo
-   * has 8 MVA for all of them), water, and freight by rail, which waits at the
+   * has its substation for all of them), water, and freight by rail, which waits at the
    * polo's station for the player's trains.
    */
   let { id, loteSel = $bindable(null) }: { id: string; loteSel?: number | null } = $props();
@@ -18,6 +18,8 @@
   const polo = $derived(POLOS.find((p) => p.id === id)!);
   const datos = $derived(interior(id)!);
   const realidad = $derived(sim.modo === 'realidad');
+  /** The sectors this polo's lots can be promoted for: its vocations. */
+  const suyos = $derived(SECTORES.filter((x) => datos.sectores.includes(x.id)));
 
   const vista = $derived.by(() => {
     sim.horas;
@@ -30,7 +32,7 @@
       const d = demandaLote(polo, n, e.sector);
       let estado: string;
       let clase = '';
-      if (realidad) estado = o.fase === 'operando' ? 'Vendido · su giro no se publica' : 'Vendido';
+      if (realidad) estado = l.empresa ? (o.fase === 'operando' ? 'Vendido · su giro no se publica' : 'Vendido') : 'Sin empresa reportada';
       else if (e.lleno >= 1) {
         estado = 'Con empresa';
         clase = 'lleno';
@@ -88,7 +90,7 @@
         <span class="uso" style:width="{Math.min(100, (vista.enUso / vista.cap) * 100)}%"></span>
       </div>
       <p class="detalle">
-        Con todo lo promovido lleno pediría {mw(vista.promovido)} MW. La subestación del polo da {mw(vista.cap)} MVA (Economía): un lote que no cabe se queda sin empresa.
+        Con todo lo promovido lleno pediría {mw(vista.promovido)} MW. La subestación del polo da {mw(vista.cap)} MVA ({datos.energia.fuenteCorta}): un lote que no cabe se queda sin empresa.
       </p>
     </div>
     {#if vista.sinPromover}
@@ -102,7 +104,7 @@
       <li bind:this={filas[l.n]} class:sel={loteSel === l.n} style:--c={s?.color ?? 'rgba(244, 114, 182, 0.6)'}>
         <button class="cabeza" onclick={() => (loteSel = loteSel === l.n ? null : l.n)}>
           <span class="muestra" class:vacia={!s} class:lleno={l.e.lleno >= 1}></span>
-          <span class="nombre">{realidad ? l.empresa : `Lote ${l.n + 1}`}</span>
+          <span class="nombre">{realidad && l.empresa ? l.empresa : `Lote ${l.n + 1}`}</span>
           <span class="ha mono">{l.ha.toLocaleString('es-MX')} ha</span>
         </button>
         {#if !realidad}
@@ -113,7 +115,7 @@
             aria-label="Sector para el lote {l.n + 1}"
           >
             <option value="">Sin promover</option>
-            {#each SECTORES as x (x.id)}
+            {#each suyos as x (x.id)}
               <option value={x.id}>{x.nombre}</option>
             {/each}
           </select>
@@ -144,7 +146,7 @@
         <tr><th>Sector</th><th title="Gasto en electricidad por trabajador contra el promedio de la manufactura">Luz</th><th title="Gasto en agua por trabajador contra el promedio">Agua</th><th title="Toneladas por tren al año por trabajador">t/trab.</th><th title="Parte de su carga por tren que sale del país">Exporta</th></tr>
       </thead>
       <tbody>
-        {#each SECTORES as x (x.id)}
+        {#each suyos as x (x.id)}
           <tr>
             <td><span class="punto" style:background={x.color}></span>{x.corto}</td>
             <td class="mono">{veces(x.energia)}</td>

@@ -68,7 +68,7 @@
     if (loteSel !== null) pestaña = 'lotes';
   });
 
-  const fuentes = $derived(['dof-huamantla', 'presidencia-inauguracion', 'economia-ficha', 'economia-nota', 'osm', 'sict-dos-bocas'].map((k) => fuenteInterior(k)).filter(Boolean));
+  const fuentes = $derived(datos.fuentesLista.map((k) => fuenteInterior(k)).filter((f) => f?.url));
 </script>
 
 {#if vista}
@@ -76,7 +76,7 @@
     <header>
       <span class="label">Polo del Bienestar · {PROGRAMAS_POLO[polo.programa]}</span>
       <h2>{polo.nombre}</h2>
-      <p class="donde">{polo.municipio}, Tlaxcala · {personas(polo.hectareas)} ha</p>
+      <p class="donde">{datos.lugar} · {personas(polo.hectareas)} ha</p>
     </header>
 
     <p
@@ -152,7 +152,7 @@
       </p>
     {:else}
       <p class="nota">
-        El polo real: compromiso de obra el 28 de julio de 2025, al 20 % el 14 de octubre, inaugurado el 12 de abril de 2026. Los siete lotes vendidos llevan el nombre de su empresa. No se ha reportado una espuela.
+        {datos.realNota}
       </p>
     {/if}
     {/if}
