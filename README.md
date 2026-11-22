@@ -193,14 +193,15 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `static/data/land-*.json`, `countries-110m.json` | Mundo, de `world-atlas` (heredado de `global`)                     |
 | `static/data/mexico.topo.json`       | Estados y países vecinos en un solo TopoJSON (~350 KB)                         |
 | `static/data/red-ferroviaria.json`   | La red como grafo: 198 nodos, 231 tramos, ~19,200 km (~210 KB)                 |
-| `static/data/rutas-maritimas.json`   | 136 rutas por mar entre puertos y salidas, el trazo del Canal y las 2 travesías oceánicas (~51 KB) |
+| `static/data/rutas-maritimas.json`   | 171 rutas por mar entre puertos y salidas, el trazo del Canal y las 2 travesías oceánicas (~64 KB) |
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
-| `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
+| `src/lib/domain/datos/puertos.json`  | Los **17 puertos, curados a mano**                                             |
 | `src/lib/domain/datos/aeropuertos.json` | Los **10 aeropuertos de carga** de la AFAC, con sus toneladas de cada año desde 2018 (serie mensual de la AFAC) para el modo Realidad. Son sitios (`aeropuerto:<id>`): con vía a 15 km o menos tienen estación y son paradas de tren (puertos secos) |
 | `src/lib/domain/datos/ductos.json` | **Ductos**: gasoductos, poliductos y el oleoducto Nuevo Teapa–Salina Cruz con su trazo aproximado (CNH, OpenStreetMap), operador, km y capacidad; la obra Cuxtal II y el gas de la península (CFE, EIA); totales de la red (SENER, Proyectos México, Pemex). Lo genera `scripts/ductos/gen-ductos.mjs` |
 | `src/lib/domain/datos/ductos-real.json` | Fecha real de cada gasoducto que llegó, o llega, después de 2018 |
 | `src/lib/domain/datos/petroleo.json` | **Petróleo**: las seis refinerías de Pemex, la Olmeca y Deer Park con su capacidad, su proceso de 2018 y su capacidad óptima (Pemex 20-F, ASF), su proceso real por año y por mes, las obras de Pemex con costo y tiempo, la caja de Pemex, rendimientos y consumo de combustibles |
 | `src/lib/domain/datos/petroleo-real.json` | Etapa real de cada obra de Pemex (rehabilitaciones, Olmeca, coquizadoras, compra de Deer Park) |
+| `src/lib/domain/datos/combustibles.json` | **Combustibles**: consumo por estado (CNE, SENER), las 78 terminales de Pemex con su medio de suministro y las zonas de ductos (SENER, mapa de 2018), petróleo por puerto (SEMAR), barriles por tonelada (EIA), capacidad del buque tanque, y las series reales de crudo producido y exportado y de combustibles hechos e importados (Segundo Informe de Gobierno). Lo genera `scripts/combustibles/gen-combustibles.mjs` |
 | `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
@@ -319,6 +320,32 @@ Teapa–Salina Cruz:
 
 El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedia.md#los-ductos).
 
+**Los combustibles** (`domain/combustibles.ts`, `datos/combustibles.json`, generado por
+`scripts/combustibles/gen-combustibles.mjs`). La gasolina, el diésel y la turbosina son carga:
+
+- **Consumo:** cada estado usa su parte del consumo del país (CNE, abril a diciembre de 2018).
+- **Zonas de ductos:** `abastoJuego` reparte lo que hace cada zona entre sus estados, hasta lo que
+  usan. Salen del mapa de la SENER de 2018 (cómo se surte cada terminal de Pemex y de dónde sale
+  cada ducto): Centro, Golfo y Occidente; Noreste y Norte; Salina Cruz. La Olmeca no tiene zona:
+  todo lo suyo sale por mar.
+- **Lo que sobra** a una zona (`sobrante`) espera en el patio de sus refinerías (`#patios`, hasta 15
+  días de producción).
+- **Lo que falta** (`hueco`) lo cubren las terminales de cada estado (`#inventarios`) con lo que
+  dejan los trenes y buques tanque del jugador; sin eso, se importa. `#abastecer` corre en cada
+  tick y lleva las cuentas del año (`cuentaCombustibles`, `diasContados`).
+- **Los vehículos:**
+  - las refinerías son sitios (`refineria:<id>`) y paradas de tren donde hay vía a ≤ 15 km;
+  - las de la costa cargan también en su puerto (`PUERTO_DE_REFINERIA`);
+  - un tren comparte sus 2,436 t con exportaciones y carga nacional (~19,800 barriles con los
+    factores de la EIA);
+  - un buque tanque lleva 320 mil barriles;
+  - `Barco` y `Tren` llevan `combustible`, `combustibleDe` y `entregadoCombustible`, y los buques
+    tanque tienen `llegadas` como los trenes.
+- **El crudo** se produce al ritmo real (anexo del Segundo Informe) y se exporta lo que no se refina.
+
+El tablero tiene la capa *Combustibles*: los estados por la parte que vino del país y las 78
+terminales de Pemex. Detalle en la [enciclopedia](docs/enciclopedia.md#los-combustibles).
+
 **Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado y paga
 con su presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)
 elige de 1 a 4 cuadrillas y confirma en un cuadro propio; la obra se paga conforme avanza
@@ -343,7 +370,7 @@ km) donde una celda es tierra si su centro cae en tierra o si la toca una costa;
 Panamá** se abre a mano sobre su trazo real; ruta más corta (Dijkstra) sin cortar esquinas
 de tierra y con sobrecosto a menos de ~22 km de la costa; luego se **endereza** en tramos
 rectos con un recorrido exacto de celdas, por corridas de mar y de canal que nunca se
-mezclan. Una **auditoría** en una malla 5 veces más fina confirma que ninguna de las 136
+mezclan. Una **auditoría** en una malla 5 veces más fina confirma que ninguna de las 171
 rutas pisa tierra fuera de la entrada a cada puerto y del Canal.
 
 **Las travesías oceánicas** (`scripts/travesias.mjs`, ~4 s) usan el mismo método sobre el
@@ -479,6 +506,9 @@ costa del mundo solo sube de resolución). Además:
 - **En Windows el watcher a veces no ve archivos nuevos** (un `+page.ts` recién creado no
   entró al manifiesto de rutas). Si una ruta nueva no se comporta como dice su código:
   `npx svelte-kit sync` y reiniciar el dev server.
+- **El CSS de un componente a veces se queda viejo en el dev server** después de dos ediciones
+  seguidas: el marcado cambia y su `<style>` no. Volver a guardar el archivo (o `touch`) lo
+  recompila.
 
 ## Siguiente
 
@@ -488,11 +518,11 @@ costa del mundo solo sube de resolución). Además:
   cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
   Tuxpan…). Ya están el catálogo de obras del Estado y su presupuesto real.
 - **Petróleo, lo que sigue**:
-  - los combustibles como carga: casi todo va por poliducto (2,082 Mbd en 2023 contra 166 en
-    buque tanque); el tren (carros tanque) y el buque tanque llevan el resto;
-  - los poliductos del noreste y del occidente y los oleoductos troncales, que faltan en el mapa
-    porque no están en las fuentes abiertas;
-  - el crudo de exportación y las importaciones por barco, junto con los barcos;
+  - dibujar los poliductos del noreste y del occidente: el mapa de la SENER de 2018 trae sus
+    tablas (origen, destino, km y capacidad), aunque no su trazo; faltan también los oleoductos
+    troncales;
+  - el combustóleo, el gas LP y la turbosina como cargas aparte; hoy los combustibles son una sola
+    mezcla;
   - las cifras por refinería de 2022 a septiembre de 2024, si se consigue el Anuario Estadístico
     de Pemex (su sitio no deja bajarlo automáticamente).
 - **Energía**: el Plan de Expansión de la CFE 2026–2030 (52 proyectos) en el catálogo, cuando se
@@ -500,8 +530,8 @@ costa del mundo solo sube de resolución). Además:
   margen.
 - **Más dinero del Estado**, con la carga: lo que cobran los trenes del Estado, lo que pagan
   sus trenes por pasar por vía privada y los impuestos de las concesionarias.
-- **Carga**: qué lleva cada tren y cada barco (contenedores, granel, autos, combustibles),
-  cuánto cabe y quién lo demanda; hoy corren sus servicios sin carga. El puerto es donde
-  barco y tren se pasan la carga.
+- **Carga en los demás barcos**: los portacontenedores, graneleros y ro-ro todavía van vacíos
+  (los buques tanque ya llevan combustible). El puerto como trasbordo: hoy un tren que llega a un
+  puerto exporta en ese momento; con barcos, la carga esperaría ahí a que un barco se la lleve.
 - **Sitios**: que el jugador pueda colocar los suyos (bodegas, plantas, terminales), además de
   los polos.

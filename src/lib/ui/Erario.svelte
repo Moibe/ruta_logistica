@@ -5,6 +5,7 @@
   import { CAJA_CFE_MES, ENERGIA } from '$lib/domain/energia';
   import { km, mdp, personas } from './formato';
   import { añoDe } from '$lib/domain/calendario';
+  import { delPais, exportacionCrudoJuego, produccionCrudo, REAL_COMBUSTIBLES, realDelAño } from '$lib/domain/combustibles';
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
   import { OBRAS_ENERGIA } from '$lib/domain/energia';
   import { AÑOS_AEROPUERTOS, POLOS, SERIE_AEROPUERTOS } from '$lib/domain/sitios';
@@ -73,7 +74,9 @@
     const ferroNacional = EXPORTACIONES.ferrocarril.nacional[String(a.año)] ?? null;
     // Crude the refineries really ran that year.
     const refino = totalReal(a.año);
-    return { ...cuenta, cfe, polos, carga, ferro, ferroNacional, refino, año: a.año, federal: a.federal, serie };
+    // Crude exported, and the fuels Pemex made and imported that year.
+    const petroleo = realDelAño(a.año);
+    return { ...cuenta, cfe, polos, carga, ferro, ferroNacional, refino, petroleo, año: a.año, federal: a.federal, serie };
   });
 
   /** This month's payment and the year it comes from, with the sources in words. */
@@ -131,7 +134,57 @@
       detalle:
         `Crudo que procesan las refinerías de Pemex en México: ${Math.round(r.proceso)} mil barriles diarios${deerPark}.\n` +
         `Hacen ${Math.round(r.combustibles)} mil barriles diarios de gasolina, diésel y turbosina: el ${pct} % de los ` +
-        `${DEMANDA_COMBUSTIBLES.toLocaleString('es-MX')} mil que el país usaba en diciembre de 2018. El resto se importa.`,
+        `${DEMANDA_COMBUSTIBLES.toLocaleString('es-MX')} mil que el país usaba en diciembre de 2018. ` +
+        'Lo que llega a los estados depende de los ductos, los trenes y los buques tanque (celda Combustibles).',
+    };
+  });
+
+  const mil = (n: number) => Math.round(n).toLocaleString('es-MX');
+
+  /** In Realidad, the year's oil in words: crude run, fuels made and imported, crude exported. */
+  const realPetroleo = $derived.by(() => {
+    if (!real) return '';
+    const p = real.petroleo;
+    const refino = real.refino ? `${real.año}: las refinerías procesaron ${mil(real.refino.mbd)} mil barriles diarios de crudo.\n` : '';
+    const comb =
+      p?.hecho != null && p.importado != null
+        ? `Pemex produjo ${mil(p.hecho)} mil barriles diarios de gasolina, diésel y turbosina e importó ${mil(p.importado)} mil: ` +
+          `hizo aquí el ${Math.round((p.hecho / (p.hecho + p.importado)) * 100)} %.\n`
+        : '';
+    const crudo = p?.exportado != null ? `Exportó ${mil(p.exportado)} mil barriles diarios de crudo, de ${mil(p.crudo ?? 0)} que produjo.\n` : '';
+    const parcial = p?.parcial ? `${real.año}: ${p.parcial}.\n` : '';
+    return `${refino}${comb}${crudo}${parcial}\n${PETROLEO.totales.dato}\n${REAL_COMBUSTIBLES.combustibles.dato}`;
+  });
+
+  /**
+   * Fuel this game year (`combustibles.ts`): the share of what the country
+   * used that came from its own refineries, how it came, and what was
+   * imported (Mbd, the year's average so far); and the crude exported now.
+   */
+  const combustible = $derived.by(() => {
+    sim.horas;
+    const r = sim.refinacion;
+    if (!r) return null;
+    const año = añoDe(sim.horas);
+    const c = sim.cuentaCombustibles(año);
+    const dias = sim.diasContados(año);
+    const mbd = (barriles: number) => barriles / dias / 1000;
+    const pct = Math.round(delPais(c) * 100);
+    const sinSalida = sim.sinSalida(año);
+    const crudo = exportacionCrudoJuego(sim.horas, r.proceso);
+    return {
+      año,
+      pct,
+      importado: mbd(c.importado),
+      crudo,
+      detalle:
+        `En ${año}, en promedio por día: el país usa ${mil(mbd(c.consumo))} mil barriles de gasolina, diésel y turbosina. ` +
+        `Del país llega el ${pct} %: ${mil(mbd(c.ducto))} mil por ducto, ${mil(mbd(c.tren))} mil en tus trenes y ${mil(mbd(c.barco))} mil en tus buques tanque.\n` +
+        `Se importan ${mil(mbd(c.importado))} mil.` +
+        (sinSalida > 0 ? `\nLas refinerías se quedaron sin salida para ${mil(sinSalida / 1000)} mil barriles: su patio se llenó.` : ''),
+      detalleCrudo:
+        `Crudo exportado: lo que Pemex produce (${mil(produccionCrudo(año))} mil barriles diarios, su producción real de ${año}; ` +
+        'después de 2026 se repite la última) y no procesan las refinerías del país. Se lo llevan los barcos de los compradores.',
     };
   });
 
@@ -186,15 +239,31 @@
         <span class="valor dim">sin dato aún</span>
       {/if}
     </div>
-    <div class="celda doble opcional" title={`${PETROLEO.totales.dato}${real.refino?.parcial ? `\n${real.año}: ${real.refino.parcial}.` : ''}\nCarga aérea de todo el país (AFAC)${real.carga.parcial ? ', de enero a septiembre' : ''}.`}>
+    <!-- Crude run that year, and the share of the gasoline, diesel and jet fuel Pemex sold that it made (imports and crude exports: in the title). -->
+    <div class="celda doble" title={realPetroleo}>
       <span class="label pemex">Refinación {real.año}{real.refino?.parcial ? '*' : ''}</span>
-      <span class="valor">{#if real.refino}<b class="mono">{Math.round(real.refino.mbd).toLocaleString('es-MX')}</b> mil b/d{:else}<span class="dim">sin dato aún</span>{/if}</span>
+      <span class="valor">{#if real.refino}<b class="mono">{mil(real.refino.mbd)}</b> mil b/d{:else}<span class="dim">sin dato aún</span>{/if}</span>
+      <span class="label combustible">Combustibles{real.petroleo?.parcial ? '*' : ''}</span>
+      <span class="valor">
+        {#if real.petroleo?.hecho != null && real.petroleo.importado != null}
+          <b class="mono">{Math.round((real.petroleo.hecho / (real.petroleo.hecho + real.petroleo.importado)) * 100)} %</b> hechos aquí
+        {:else}
+          <span class="dim">sin dato aún</span>
+        {/if}
+      </span>
+    </div>
+    <div class="celda opcional ancha" title={`Carga aérea de todo el país (AFAC)${real.carga.parcial ? ', de enero a septiembre' : ''}.`}>
       <span class="label aereo">Carga aérea {real.carga.año}{real.carga.parcial ? '*' : ''}</span>
       <span class="valor"><b class="mono">{toneladas(real.carga.t)}</b> t</span>
     </div>
-    <button class="celda obras-via" class:abierto={tablero.catalogo} onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}>
+    <button
+      class="celda obras-via"
+      class:abierto={tablero.catalogo}
+      title="Catálogo de obras, en su etapa real"
+      onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}
+    >
       <span class="label">Obras</span>
-      <span class="valor ir">Ver todas {tablero.catalogo ? '×' : '→'}</span>
+      <span class="valor ir"><span class="conteo">Ver todas</span> {tablero.catalogo ? '×' : '→'}</span>
     </button>
   {:else}
     <div class="celda caja" title={`En caja: ${mdp(cuenta.dinero)} de pesos (M: millones).` + (llegada ? String.fromCharCode(10) + llegada.detalle : '')}>
@@ -228,27 +297,30 @@
       <span class="label">Carga nacional</span>
       <span class="valor"><b class="mono">{toneladas(nacional.t)}</b> t</span>
     </div>
-    {#if refino}
-      <div class="celda doble" title={refino.detalle}>
+    {#if refino && combustible}
+      <!-- Crude run, and the share of the fuel the states got this year that came from the country (the rest, imported: in the title). -->
+      <div class="celda doble" title={`${refino.detalle}\n\n${combustible.detalle}\n\n${combustible.detalleCrudo}`}>
         <span class="label pemex">Refinación</span>
         <span class="valor"><b class="mono">{refino.proceso}</b> mil b/d</span>
-        <span class="label pemex">Combustibles</span>
-        <span class="valor"><b class="mono">{refino.pct} %</b> del consumo</span>
+        <span class="label combustible">Combustibles</span>
+        <span class="valor"><b class="mono">{combustible.pct} %</b> del país</span>
       </div>
     {/if}
     <!-- The State's works and the way into their catalog, in one cell. -->
     <button
       class="celda obras-via"
       class:abierto={tablero.catalogo}
-      title="Catálogo de obras del Estado"
+      title={`Catálogo de obras del Estado: ${obrasEnCurso} en obra${obrasDetenidas ? ` (${obrasDetenidas} detenida${obrasDetenidas > 1 ? 's' : ''})` : ''}, ${obrasHechas} hechas`}
       onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}
     >
       <span class="label">Obras del Estado</span>
       <span class="valor">
-        <span>
+        <!-- With less room the counts go to the title; a stopped work still shows. -->
+        <span class="conteo">
           {obrasEnCurso} en obra{#if obrasDetenidas}<span class="alerta"> ({obrasDetenidas} detenida{obrasDetenidas > 1 ? 's' : ''})</span>{/if}
           · {obrasHechas} hechas
         </span>
+        {#if obrasDetenidas}<span class="alerta solo-angosto">{obrasDetenidas} detenida{obrasDetenidas > 1 ? 's' : ''}</span>{/if}
         <span class="ir">{tablero.catalogo ? '×' : '→'}</span>
       </span>
     </button>
@@ -347,6 +419,10 @@
     color: #c7d2fe;
   }
 
+  .combustible {
+    color: #f5b971;
+  }
+
   .export {
     color: #fcd34d;
   }
@@ -386,7 +462,22 @@
     text-underline-offset: 2px;
   }
 
-  /* Less room: the secondary cells give way, then the bar. */
+  .solo-angosto {
+    display: none;
+  }
+
+  /* Less room: the works' counts go to the cell's title, then the secondary cells give way, then the bar. */
+  @media (max-width: 1500px) {
+    .obras-via .conteo,
+    .celda.ancha {
+      display: none;
+    }
+
+    .obras-via .solo-angosto {
+      display: inline;
+    }
+  }
+
   @media (max-width: 1400px) {
     .celda.opcional {
       display: none;

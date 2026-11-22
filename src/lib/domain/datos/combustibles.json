@@ -1,0 +1,1701 @@
+{
+ "corte": "2026-11-22",
+ "nota": "Generado por scripts/combustibles/gen-combustibles.mjs. Lo que se calcula aquí son estimaciones del juego con cifras oficiales; cada dato dice de dónde sale.",
+ "fuentes": {
+  "cne-expendio": {
+   "fuente": "Comisión Nacional de Energía (antes CRE), datos abiertos «Volúmenes de venta de expendio al público»: litros de gasolina regular y premium y de diésel (automotriz, agrícola y marino) vendidos en las estaciones de servicio de cada estado, abril a diciembre de 2018",
+   "url": "https://www.gob.mx/cne/articulos/consulta-de-datos-abiertos"
+  },
+  "cne-aerodromos": {
+   "fuente": "Comisión Nacional de Energía, datos abiertos «Volúmenes entregados de expendio en aeródromos»: litros de turbosina entregados en cada estado, abril a diciembre de 2018 (la serie empieza en abril de 2018)",
+   "url": "https://www.gob.mx/cne/articulos/consulta-de-datos-abiertos"
+  },
+  "sener-ph2026": {
+   "fuente": "SENER, Plan de Desarrollo del Sector Hidrocarburos (4 de agosto de 2026): tabla 2.24, demanda nacional de petrolíferos 2010–2024 (2018: gasolinas 787, diésel 387 y turbosina 86 Mbd); en 2024 Pemex movió el 69.7 % de sus combustibles por ducto y el 15.3 % en autotanque",
+   "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5798065"
+  },
+  "ig2-2026": {
+   "fuente": "Segundo Informe de Gobierno 2025–2026, anexo estadístico (SENER y Pemex): «Producción, importación y exportación de productos petrolíferos de PEMEX», «Precios y exportaciones de petróleo crudo» y «Producción de petróleo crudo por activos de PEMEX»; 2026, de enero a junio",
+   "url": "https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf"
+  },
+  "pmx-ia2023": {
+   "fuente": "Pemex, Informe Anual 2023: en 2023 movió 2,082 Mbd por ducto, 451 por autotanque y carro tanque y 166 en buque tanque (crudo, petrolíferos y petroquímicos); tiene 16 buques tanque, 1,800 autotanques y 525 carros tanque",
+   "url": "https://gaceta.diputados.gob.mx/PDF/65/2024/may/Pemex-20240514.pdf"
+  },
+  "attrapi-2018": {
+   "fuente": "ATTRAPI, Anuario Estadístico Ferroviario 2018, tabla 6-4: carga transportada por producto (diésel, combustóleo y gasolina)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf"
+  },
+  "attrapi-2025": {
+   "fuente": "ATTRAPI, Anuario Estadístico Ferroviario 2025, carga transportada por producto (p. 72): gasolina, diésel y combustóleo",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf"
+  },
+  "eia-unidades": {
+   "fuente": "EIA (gobierno de EUA), International Energy Statistics, unidades: barriles por tonelada métrica de gasolina (8.53), destilados o diésel (7.46) y turbosina (7.93)",
+   "url": "https://www.eia.gov/cfapps/ipdbproject/docs/unitswithpetro.php"
+  },
+  "pmx-buques": {
+   "fuente": "Pemex, boletines regionales de Tampico 2019-004 (el buque tanque Rarámuri, uno de los 16 de su flota, carga 320 mil barriles) y 2024-005 (el Miguel Hidalgo II, de 50 mil toneladas de peso muerto, unos 320 mil barriles). El sitio de Pemex no deja leerlos automáticamente: la cifra es la que muestra el buscador",
+   "url": "https://www.pemex.com/saladeprensa/boletines_regionales/Paginas/2024-005_tampico.aspx"
+  },
+  "sener-mapa-2018": {
+   "fuente": "SENER, mapa «Infraestructura Nacional de Petrolíferos, 2018» (31 de octubre de 2018): las 73 terminales de almacenamiento y las 5 terminales marítimas de Pemex, con su capacidad y su medio de suministro, y los poliductos por región. Ya no está en gob.mx: copia del Internet Archive del 26 de marzo de 2022",
+   "url": "http://web.archive.org/web/20220326183525/https://www.gob.mx/cms/uploads/attachment/file/416897/Mapa_log_stica_Sener_8_Reg_31-10-2018_Nueva_numeraci_n_VF.pdf"
+  },
+  "cnh-tar": {
+   "fuente": "CNH, capa «Terminal de almacenamiento Pemex» (73 terminales), copia en el servidor de la SEMARNAT: la ubicación de cada terminal",
+   "url": "https://geomaticasig1.semarnat.gob.mx/arcgis/rest/services/Hosted/Terminal_de_almacenamiento_Pemex/FeatureServer/1"
+  },
+  "asf-2018-0474": {
+   "fuente": "ASF, auditoría 474-DE «Desempeño de Pemex Logística», Cuenta Pública 2018: en 2018 movió 1,743.4 Mbd por ducto, 340.8 en autotanque, 77.0 en carro tanque y 182.8 en buque tanque (crudo y petrolíferos); sus buques tanque podían mover 294.4 Mbd",
+   "url": "https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0474_a.pdf"
+  },
+  "asf-2018-0476": {
+   "fuente": "ASF, auditoría 476 «Utilización de la infraestructura de Pemex Logística», Cuenta Pública 2018: al cierre de 2018 tenía 16 buques tanque (2 propios), 1,485 autotanques y 511 carros tanque",
+   "url": "https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0476_a.pdf"
+  },
+  "semar-puertos-2024": {
+   "fuente": "SEMAR, Anuario Estadístico de los Puertos de México 2024, serie histórica del movimiento de carga de cada puerto (2017–2024): petróleo y derivados de importación, exportación y cabotaje",
+   "url": "https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024"
+  }
+ },
+ "densidad": {
+  "tPorBarril": 0.123,
+  "dato": "Toneladas por barril de la mezcla que usaba el país en 2018 (787 Mbd de gasolina, 387 de diésel y 86 de turbosina), con los barriles por tonelada de la EIA: 8.53, 7.46 y 7.93. Un tren de 2,436 toneladas lleva así unos 19,805 barriles. Cálculo del juego.",
+  "fuentes": [
+   "eia-unidades",
+   "sener-ph2026"
+  ]
+ },
+ "tanque": {
+  "barriles": 320000,
+  "dato": "Lo que carga un buque tanque de la flota de Pemex: 320 mil barriles.",
+  "fuentes": [
+   "pmx-buques"
+  ]
+ },
+ "consumo": {
+  "año": 2018,
+  "parte": {
+   "AGS": 0.01389,
+   "BC": 0.04308,
+   "BCS": 0.01203,
+   "CAMP": 0.00731,
+   "COAH": 0.02812,
+   "COL": 0.00922,
+   "CHIS": 0.02313,
+   "CHIH": 0.04235,
+   "CDMX": 0.0824,
+   "DGO": 0.01516,
+   "GTO": 0.04386,
+   "GRO": 0.01643,
+   "HGO": 0.02013,
+   "JAL": 0.07803,
+   "MEX": 0.10632,
+   "MICH": 0.03484,
+   "MOR": 0.01337,
+   "NAY": 0.00987,
+   "NL": 0.05166,
+   "OAX": 0.02053,
+   "PUE": 0.03439,
+   "QRO": 0.02691,
+   "QROO": 0.03091,
+   "SLP": 0.02559,
+   "SIN": 0.03395,
+   "SON": 0.03522,
+   "TAB": 0.01454,
+   "TAMPS": 0.03531,
+   "TLAX": 0.00631,
+   "VER": 0.05064,
+   "YUC": 0.01863,
+   "ZAC": 0.01586
+  },
+  "dato": "Lo que usa cada estado: su parte de lo que se vendió de gasolina, diésel y turbosina de abril a diciembre de 2018 (CNE), ponderada con lo que el país usó de cada uno ese año (SENER). Del diésel solo se cuenta el de las gasolineras (el 60 % del total); el de la industria, la minería y el campo comprado fuera de ellas no está por estado. Enero a marzo de 2018 se deja fuera porque al registro le faltan reportes del norte. Cálculo del juego.",
+  "fuentes": [
+   "cne-expendio",
+   "cne-aerodromos",
+   "sener-ph2026"
+  ]
+ },
+ "zonas": [
+  {
+   "id": "centro",
+   "nombre": "Centro, Golfo y Occidente",
+   "refinerias": [
+    "tula",
+    "salamanca",
+    "minatitlan",
+    "deer-park"
+   ],
+   "dato": "Tula, Salamanca y Minatitlán están unidas por sus poliductos, que llegan del Golfo a Jalisco y Michoacán; Tuxpan, la terminal de importación, entra a la misma red. Lo que hace Deer Park entra al país por esa terminal (estimación del juego).",
+   "estados": {
+    "AGS": 1,
+    "CDMX": 1,
+    "GTO": 1,
+    "HGO": 1,
+    "JAL": 1,
+    "MEX": 1,
+    "MICH": 0.302,
+    "MOR": 1,
+    "PUE": 1,
+    "QRO": 1,
+    "SLP": 0.463,
+    "TAB": 1,
+    "TLAX": 1,
+    "VER": 1,
+    "ZAC": 1
+   },
+   "fuentes": [
+    "sener-mapa-2018"
+   ]
+  },
+  {
+   "id": "noreste",
+   "nombre": "Noreste y Norte",
+   "refinerias": [
+    "cadereyta",
+    "madero"
+   ],
+   "dato": "Cadereyta y Madero, unidas por su bidireccional; por Santa Catarina–Gómez Palacio y Gómez Palacio–Chihuahua llegan a la Laguna y a Chihuahua.",
+   "estados": {
+    "COAH": 1,
+    "CHIH": 1,
+    "DGO": 0.867,
+    "NL": 1,
+    "SLP": 0.168,
+    "TAMPS": 0.975
+   },
+   "fuentes": [
+    "sener-mapa-2018"
+   ]
+  },
+  {
+   "id": "sur",
+   "nombre": "Salina Cruz",
+   "refinerias": [
+    "salina-cruz"
+   ],
+   "dato": "Salina Cruz surte por carretera a Oaxaca y Chiapas; lo demás sale en buque tanque al Pacífico, como dibuja el mapa de la SENER.",
+   "estados": {
+    "CHIS": 1,
+    "OAX": 1
+   },
+   "fuentes": [
+    "sener-mapa-2018"
+   ]
+  }
+ ],
+ "reparto": {
+  "porEstado": {
+   "AGS": {
+    "centro": 1
+   },
+   "BC": {
+    "mar": 1
+   },
+   "BCS": {
+    "mar": 1
+   },
+   "CAMP": {
+    "mar": 1
+   },
+   "COAH": {
+    "noreste": 1
+   },
+   "COL": {
+    "mar": 1
+   },
+   "CHIS": {
+    "sur": 1
+   },
+   "CHIH": {
+    "noreste": 1
+   },
+   "CDMX": {
+    "centro": 1
+   },
+   "DGO": {
+    "tren": 0.133,
+    "noreste": 0.867
+   },
+   "GTO": {
+    "centro": 1
+   },
+   "GRO": {
+    "mar": 1
+   },
+   "HGO": {
+    "centro": 1
+   },
+   "JAL": {
+    "centro": 1
+   },
+   "MEX": {
+    "centro": 1
+   },
+   "MICH": {
+    "mar": 0.698,
+    "centro": 0.302
+   },
+   "MOR": {
+    "centro": 1
+   },
+   "NAY": {
+    "mar": 1
+   },
+   "NL": {
+    "noreste": 1
+   },
+   "OAX": {
+    "sur": 1
+   },
+   "PUE": {
+    "centro": 1
+   },
+   "QRO": {
+    "centro": 1
+   },
+   "QROO": {
+    "mar": 1
+   },
+   "SLP": {
+    "tren": 0.369,
+    "noreste": 0.168,
+    "centro": 0.463
+   },
+   "SIN": {
+    "mar": 1
+   },
+   "SON": {
+    "mar": 1
+   },
+   "TAB": {
+    "centro": 1
+   },
+   "TAMPS": {
+    "tren": 0.025,
+    "noreste": 0.975
+   },
+   "TLAX": {
+    "centro": 1
+   },
+   "VER": {
+    "centro": 1
+   },
+   "YUC": {
+    "mar": 1
+   },
+   "ZAC": {
+    "centro": 1
+   }
+  },
+  "dato": "Cómo se surte cada estado: la parte de su consumo que llega por los ductos de una zona de refinerías, por mar o por tren. Pesa cada terminal de Pemex del estado por su capacidad operativa (el mapa no da sus ventas); la que se surte por carretera toma el medio de la terminal más cercana de su región que no se surte así; Tlaxcala, sin terminal, se surte de Puebla, y Quintana Roo de Mérida. Estimación del juego.",
+  "fuentes": [
+   "sener-mapa-2018",
+   "cnh-tar"
+  ]
+ },
+ "terminales": [
+  {
+   "nombre": "Ciudad Obregón",
+   "estado": "SON",
+   "region": "Noroeste",
+   "medio": "ducto",
+   "capacidad": 112,
+   "lonLat": [
+    -109.9256,
+    27.5457
+   ],
+   "red": "mar",
+   "desde": "T.M. Guaymas"
+  },
+  {
+   "nombre": "Culiacán",
+   "estado": "SIN",
+   "region": "Noroeste",
+   "medio": "ducto",
+   "capacidad": 85,
+   "lonLat": [
+    -107.4333,
+    24.7728
+   ],
+   "red": "mar",
+   "desde": "Topolobampo"
+  },
+  {
+   "nombre": "Ensenada",
+   "estado": "BC",
+   "region": "Noroeste",
+   "medio": "ducto",
+   "capacidad": 100,
+   "lonLat": [
+    -116.6825,
+    31.882
+   ],
+   "red": "mar",
+   "desde": "Rosarito"
+  },
+  {
+   "nombre": "Guamúchil",
+   "estado": "SIN",
+   "region": "Noroeste",
+   "medio": "ducto",
+   "capacidad": 74,
+   "lonLat": [
+    -108.111,
+    25.4715
+   ],
+   "red": "mar",
+   "desde": "Topolobampo"
+  },
+  {
+   "nombre": "Hermosillo",
+   "estado": "SON",
+   "region": "Noroeste",
+   "medio": "ducto",
+   "capacidad": 86,
+   "lonLat": [
+    -110.9036,
+    29.0245
+   ],
+   "red": "mar",
+   "desde": "T.M. Guaymas"
+  },
+  {
+   "nombre": "La Paz",
+   "estado": "BCS",
+   "region": "Noroeste",
+   "medio": "buquetanque",
+   "capacidad": 162,
+   "lonLat": [
+    -110.3104,
+    24.2209
+   ],
+   "red": "mar"
+  },
+  {
+   "nombre": "Magdalena",
+   "estado": "SON",
+   "region": "Noroeste",
+   "medio": "autotanque",
+   "capacidad": 27,
+   "lonLat": [
+    -110.9646,
+    30.6382
+   ],
+   "red": "mar",
+   "desde": "Hermosillo"
+  },
+  {
+   "nombre": "Mazatlán",
+   "estado": "SIN",
+   "region": "Noroeste",
+   "medio": "buquetanque",
+   "capacidad": 468,
+   "lonLat": [
+    -106.3958,
+    23.2395
+   ],
+   "red": "mar"
+  },
+  {
+   "nombre": "Mexicali",
+   "estado": "BC",
+   "region": "Noroeste",
+   "medio": "ducto",
+   "capacidad": 118,
+   "lonLat": [
+    -115.6715,
+    32.5806
+   ],
+   "red": "mar",
+   "desde": "Rosarito"
+  },
+  {
+   "nombre": "Navojoa",
+   "estado": "SON",
+   "region": "Noroeste",
+   "medio": "autotanque",
+   "capacidad": 25,
+   "lonLat": [
+    -109.4337,
+    27.0309
+   ],
+   "red": "mar",
+   "desde": "Ciudad Obregón"
+  },
+  {
+   "nombre": "Nogales",
+   "estado": "SON",
+   "region": "Noroeste",
+   "medio": "autotanque",
+   "capacidad": 35,
+   "lonLat": [
+    -110.9378,
+    31.2795
+   ],
+   "red": "mar",
+   "desde": "Hermosillo"
+  },
+  {
+   "nombre": "Rosarito",
+   "estado": "BC",
+   "region": "Noroeste",
+   "medio": "buquetanque",
+   "capacidad": 1020,
+   "lonLat": [
+    -117.07,
+    32.3749
+   ],
+   "red": "mar"
+  },
+  {
+   "nombre": "Tepic",
+   "estado": "NAY",
+   "region": "Noroeste",
+   "medio": "autotanque",
+   "capacidad": 66,
+   "lonLat": [
+    -104.8415,
+    21.4827
+   ],
+   "red": "mar",
+   "desde": "Mazatlán"
+  },
+  {
+   "nombre": "Topolobampo",
+   "estado": "SIN",
+   "region": "Noroeste",
+   "medio": "buquetanque",
+   "capacidad": 539,
+   "lonLat": [
+    -109.0467,
+    25.6154
+   ],
+   "red": "mar"
+  },
+  {
+   "nombre": "T.M. Guaymas",
+   "estado": "SON",
+   "region": "Noroeste",
+   "medio": "buquetanque",
+   "capacidad": 534,
+   "lonLat": [
+    -110.8658,
+    27.9305
+   ],
+   "red": "mar"
+  },
+  {
+   "nombre": "Chihuahua",
+   "estado": "CHIH",
+   "region": "Norte",
+   "medio": "ducto",
+   "capacidad": 336,
+   "lonLat": [
+    -105.985,
+    28.5979
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "Ciudad Juárez",
+   "estado": "CHIH",
+   "region": "Norte",
+   "medio": "ducto+autotanque",
+   "capacidad": 185,
+   "lonLat": [
+    -106.479,
+    31.6052
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "Durango",
+   "estado": "DGO",
+   "region": "Norte",
+   "medio": "carrotanque",
+   "capacidad": 52,
+   "lonLat": [
+    -104.6267,
+    24.033
+   ],
+   "red": "tren"
+  },
+  {
+   "nombre": "Gómez Palacio",
+   "estado": "DGO",
+   "region": "Norte",
+   "medio": "ducto",
+   "capacidad": 340,
+   "lonLat": [
+    -103.4682,
+    25.5629
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "Parral",
+   "estado": "CHIH",
+   "region": "Norte",
+   "medio": "autotanque",
+   "capacidad": 40,
+   "lonLat": [
+    -105.6624,
+    26.9828
+   ],
+   "red": "noreste",
+   "desde": "Chihuahua"
+  },
+  {
+   "nombre": "Cadereyta",
+   "estado": "NL",
+   "region": "Noreste",
+   "medio": "refineria+ducto",
+   "capacidad": 75,
+   "lonLat": [
+    -99.9477,
+    25.5917
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "Ciudad Mante",
+   "estado": "TAMPS",
+   "region": "Noreste",
+   "medio": "autotanque",
+   "capacidad": 15,
+   "lonLat": [
+    -98.9812,
+    22.7115
+   ],
+   "red": "tren",
+   "desde": "Ciudad Valles"
+  },
+  {
+   "nombre": "Ciudad Valles",
+   "estado": "SLP",
+   "region": "Noreste",
+   "medio": "carrotanque",
+   "capacidad": 55,
+   "lonLat": [
+    -99.0382,
+    22.0064
+   ],
+   "red": "tren"
+  },
+  {
+   "nombre": "Ciudad Victoria",
+   "estado": "TAMPS",
+   "region": "Noreste",
+   "medio": "ducto",
+   "capacidad": 147,
+   "lonLat": [
+    -99.0944,
+    23.6916
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "Matehuala",
+   "estado": "SLP",
+   "region": "Noreste",
+   "medio": "autotanque",
+   "capacidad": 25,
+   "lonLat": [
+    -100.644,
+    23.6664
+   ],
+   "red": "noreste",
+   "desde": "Ciudad Victoria"
+  },
+  {
+   "nombre": "Monclova",
+   "estado": "COAH",
+   "region": "Noreste",
+   "medio": "ducto",
+   "capacidad": 182,
+   "lonLat": [
+    -101.4258,
+    26.9581
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "Nuevo Laredo",
+   "estado": "TAMPS",
+   "region": "Noreste",
+   "medio": "autotanque",
+   "capacidad": 59,
+   "lonLat": [
+    -99.5682,
+    27.4738
+   ],
+   "red": "noreste",
+   "desde": "Sabinas"
+  },
+  {
+   "nombre": "Reynosa",
+   "estado": "TAMPS",
+   "region": "Noreste",
+   "medio": "ducto+autotanque",
+   "capacidad": 15,
+   "lonLat": [
+    -98.2786,
+    26.0754
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "Sabinas",
+   "estado": "COAH",
+   "region": "Noreste",
+   "medio": "ducto",
+   "capacidad": 73,
+   "lonLat": [
+    -101.1343,
+    27.832
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "Saltillo",
+   "estado": "COAH",
+   "region": "Noreste",
+   "medio": "ducto",
+   "capacidad": 118,
+   "lonLat": [
+    -100.9714,
+    25.4892
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "San Luis Potosí",
+   "estado": "SLP",
+   "region": "Noreste",
+   "medio": "ducto",
+   "capacidad": 69,
+   "lonLat": [
+    -100.9541,
+    22.1374
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Santa Catarina",
+   "estado": "NL",
+   "region": "Noreste",
+   "medio": "ducto",
+   "capacidad": 587,
+   "lonLat": [
+    -100.4856,
+    25.7048
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "T.M. Madero",
+   "estado": "TAMPS",
+   "region": "Noreste",
+   "medio": "refineria",
+   "capacidad": 364,
+   "lonLat": [
+    -97.8351,
+    22.238
+   ],
+   "red": "noreste"
+  },
+  {
+   "nombre": "Escamela",
+   "estado": "VER",
+   "region": "Golfo",
+   "medio": "ducto",
+   "capacidad": 70,
+   "lonLat": [
+    -97.0598,
+    18.8597
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Minatitlán",
+   "estado": "VER",
+   "region": "Golfo",
+   "medio": "refineria",
+   "capacidad": 6,
+   "lonLat": [
+    -94.5328,
+    17.9782
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Perote",
+   "estado": "VER",
+   "region": "Golfo",
+   "medio": "autotanque",
+   "capacidad": 19,
+   "lonLat": [
+    -97.2519,
+    19.5708
+   ],
+   "red": "centro",
+   "desde": "Escamela"
+  },
+  {
+   "nombre": "Poza Rica",
+   "estado": "VER",
+   "region": "Golfo",
+   "medio": "ducto",
+   "capacidad": 39,
+   "lonLat": [
+    -97.4671,
+    20.5238
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Tierra Blanca",
+   "estado": "VER",
+   "region": "Golfo",
+   "medio": "ducto",
+   "capacidad": 49,
+   "lonLat": [
+    -96.3434,
+    18.4435
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Veracruz",
+   "estado": "VER",
+   "region": "Golfo",
+   "medio": "ducto+buquetanque",
+   "capacidad": 352,
+   "lonLat": [
+    -96.1466,
+    19.2051
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Villahermosa",
+   "estado": "TAB",
+   "region": "Golfo",
+   "medio": "ducto+autotanque",
+   "capacidad": 237,
+   "lonLat": [
+    -92.9953,
+    17.9977
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Xalapa",
+   "estado": "VER",
+   "region": "Golfo",
+   "medio": "autotanque",
+   "capacidad": 27,
+   "lonLat": [
+    -96.9271,
+    19.5716
+   ],
+   "red": "centro",
+   "desde": "Escamela"
+  },
+  {
+   "nombre": "T.M. Pajaritos",
+   "estado": "VER",
+   "region": "Golfo",
+   "medio": "refineria+buquetanque",
+   "capacidad": 4370,
+   "lonLat": [
+    -94.41,
+    18.14
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "T.M. Tuxpan",
+   "estado": "VER",
+   "region": "Golfo",
+   "medio": "buquetanque",
+   "capacidad": 2201,
+   "lonLat": [
+    -97.28,
+    20.955
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Añil",
+   "estado": "CDMX",
+   "region": "Centro",
+   "medio": "ducto",
+   "capacidad": 158,
+   "lonLat": [
+    -99.104,
+    19.4046
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Azcapotzalco",
+   "estado": "CDMX",
+   "region": "Centro",
+   "medio": "ducto+autotanque",
+   "capacidad": 1108,
+   "lonLat": [
+    -99.2038,
+    19.4661
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Barranca del Muerto",
+   "estado": "CDMX",
+   "region": "Centro",
+   "medio": "ducto",
+   "capacidad": 92,
+   "lonLat": [
+    -99.2143,
+    19.3657
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Cuautla",
+   "estado": "MOR",
+   "region": "Centro",
+   "medio": "autotanque",
+   "capacidad": 45,
+   "lonLat": [
+    -98.905,
+    18.754
+   ],
+   "red": "centro",
+   "desde": "Cuernavaca"
+  },
+  {
+   "nombre": "Cuernavaca",
+   "estado": "MOR",
+   "region": "Centro",
+   "medio": "ducto",
+   "capacidad": 102,
+   "lonLat": [
+    -99.1918,
+    18.9208
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Pachuca",
+   "estado": "HGO",
+   "region": "Centro",
+   "medio": "ducto",
+   "capacidad": 120,
+   "lonLat": [
+    -98.7473,
+    20.0971
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Puebla",
+   "estado": "PUE",
+   "region": "Centro",
+   "medio": "ducto",
+   "capacidad": 302,
+   "lonLat": [
+    -98.1595,
+    19.0737
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "San Juan Ixhuatepec",
+   "estado": "MEX",
+   "region": "Centro",
+   "medio": "ducto",
+   "capacidad": 139,
+   "lonLat": [
+    -99.1142,
+    19.5286
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Tehuacán",
+   "estado": "PUE",
+   "region": "Centro",
+   "medio": "autotanque",
+   "capacidad": 32,
+   "lonLat": [
+    -97.4319,
+    18.5409
+   ],
+   "red": "centro",
+   "desde": "Puebla"
+  },
+  {
+   "nombre": "Toluca",
+   "estado": "MEX",
+   "region": "Centro",
+   "medio": "ducto",
+   "capacidad": 135,
+   "lonLat": [
+    -99.6029,
+    19.289
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Querétaro",
+   "estado": "QRO",
+   "region": "Centro",
+   "medio": "ducto",
+   "capacidad": 166,
+   "lonLat": [
+    -100.4331,
+    20.6209
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Aguascalientes",
+   "estado": "AGS",
+   "region": "Occidente",
+   "medio": "ducto",
+   "capacidad": 68,
+   "lonLat": [
+    -102.2234,
+    21.7576
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Celaya",
+   "estado": "GTO",
+   "region": "Occidente",
+   "medio": "ducto",
+   "capacidad": 130,
+   "lonLat": [
+    -100.8532,
+    20.521
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Colima",
+   "estado": "COL",
+   "region": "Occidente",
+   "medio": "autotanque",
+   "capacidad": 44,
+   "lonLat": [
+    -103.7657,
+    19.2342
+   ],
+   "red": "mar",
+   "desde": "Manzanillo"
+  },
+  {
+   "nombre": "El Castillo",
+   "estado": "JAL",
+   "region": "Occidente",
+   "medio": "ducto",
+   "capacidad": 221,
+   "lonLat": [
+    -103.2266,
+    20.5055
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Irapuato",
+   "estado": "GTO",
+   "region": "Occidente",
+   "medio": "ducto",
+   "capacidad": 314,
+   "lonLat": [
+    -101.2977,
+    20.6372
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Lázaro Cárdenas",
+   "estado": "MICH",
+   "region": "Occidente",
+   "medio": "buquetanque",
+   "capacidad": 609,
+   "lonLat": [
+    -102.1663,
+    17.9403
+   ],
+   "red": "mar"
+  },
+  {
+   "nombre": "León",
+   "estado": "GTO",
+   "region": "Occidente",
+   "medio": "ducto",
+   "capacidad": 80,
+   "lonLat": [
+    -101.7126,
+    21.0991
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Manzanillo",
+   "estado": "COL",
+   "region": "Occidente",
+   "medio": "buquetanque",
+   "capacidad": 328,
+   "lonLat": [
+    -104.2799,
+    19.0771
+   ],
+   "red": "mar"
+  },
+  {
+   "nombre": "Morelia",
+   "estado": "MICH",
+   "region": "Occidente",
+   "medio": "ducto",
+   "capacidad": 98,
+   "lonLat": [
+    -101.1475,
+    19.8442
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Uruapan",
+   "estado": "MICH",
+   "region": "Occidente",
+   "medio": "autotanque",
+   "capacidad": 102,
+   "lonLat": [
+    -102.0016,
+    19.4215
+   ],
+   "red": "centro",
+   "desde": "Zamora"
+  },
+  {
+   "nombre": "Zacatecas",
+   "estado": "ZAC",
+   "region": "Occidente",
+   "medio": "ducto",
+   "capacidad": 58,
+   "lonLat": [
+    -102.4378,
+    22.7497
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Zamora",
+   "estado": "MICH",
+   "region": "Occidente",
+   "medio": "ducto",
+   "capacidad": 64,
+   "lonLat": [
+    -102.2691,
+    20.0876
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Zapopan",
+   "estado": "JAL",
+   "region": "Occidente",
+   "medio": "ducto",
+   "capacidad": 281,
+   "lonLat": [
+    -103.4612,
+    20.7112
+   ],
+   "red": "centro"
+  },
+  {
+   "nombre": "Acapulco",
+   "estado": "GRO",
+   "region": "Sur",
+   "medio": "buquetanque",
+   "capacidad": 145,
+   "lonLat": [
+    -99.8469,
+    16.8404
+   ],
+   "red": "mar"
+  },
+  {
+   "nombre": "Iguala",
+   "estado": "GRO",
+   "region": "Sur",
+   "medio": "autotanque",
+   "capacidad": 42,
+   "lonLat": [
+    -99.5377,
+    18.3592
+   ],
+   "red": "mar",
+   "desde": "Acapulco"
+  },
+  {
+   "nombre": "Oaxaca",
+   "estado": "OAX",
+   "region": "Sur",
+   "medio": "autotanque",
+   "capacidad": 84,
+   "lonLat": [
+    -96.6129,
+    17.0332
+   ],
+   "red": "sur",
+   "desde": "Salina Cruz"
+  },
+  {
+   "nombre": "Salina Cruz",
+   "estado": "OAX",
+   "region": "Sur",
+   "medio": "refineria",
+   "capacidad": 154,
+   "lonLat": [
+    -95.1841,
+    16.2059
+   ],
+   "red": "sur"
+  },
+  {
+   "nombre": "Tapachula",
+   "estado": "CHIS",
+   "region": "Sur",
+   "medio": "autotanque",
+   "capacidad": 15,
+   "lonLat": [
+    -92.397,
+    14.7266
+   ],
+   "red": "sur",
+   "desde": "Salina Cruz"
+  },
+  {
+   "nombre": "Tapachula II",
+   "estado": "CHIS",
+   "region": "Sur",
+   "medio": "autotanque",
+   "capacidad": 51,
+   "lonLat": [
+    -92.397,
+    14.7266
+   ],
+   "red": "sur",
+   "desde": "Salina Cruz"
+  },
+  {
+   "nombre": "Tuxtla Gutiérrez",
+   "estado": "CHIS",
+   "region": "Sur",
+   "medio": "autotanque",
+   "capacidad": 75,
+   "lonLat": [
+    -93.193,
+    16.7659
+   ],
+   "red": "sur",
+   "desde": "Salina Cruz"
+  },
+  {
+   "nombre": "T.M. Salina Cruz",
+   "estado": "OAX",
+   "region": "Sur",
+   "medio": "refineria+buquetanque",
+   "capacidad": 1120,
+   "lonLat": [
+    -95.1841,
+    16.2059
+   ],
+   "red": "sur"
+  },
+  {
+   "nombre": "Campeche",
+   "estado": "CAMP",
+   "region": "Sureste",
+   "medio": "buquetanque",
+   "capacidad": 208,
+   "lonLat": [
+    -90.5876,
+    19.8143
+   ],
+   "red": "mar"
+  },
+  {
+   "nombre": "Mérida",
+   "estado": "YUC",
+   "region": "Sureste",
+   "medio": "ducto",
+   "capacidad": 115,
+   "lonLat": [
+    -89.6931,
+    20.9241
+   ],
+   "red": "mar",
+   "desde": "Progreso"
+  },
+  {
+   "nombre": "Progreso",
+   "estado": "YUC",
+   "region": "Sureste",
+   "medio": "buquetanque",
+   "capacidad": 198,
+   "lonLat": [
+    -89.6612,
+    21.2499
+   ],
+   "red": "mar"
+  }
+ ],
+ "surte": {
+  "puerto:progreso": [
+   "CAMP",
+   "QROO"
+  ],
+  "puerto:mazatlan": [
+   "NAY"
+  ]
+ },
+ "puertos": {
+  "porPuerto": {
+   "ensenada": {
+    "2018": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "2024": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "nota": "El combustible de Baja California entra por la terminal de Pemex en Rosarito: 2.49 millones de toneladas importadas en 2018. En el juego, Ensenada la representa."
+   },
+   "guaymas": {
+    "2018": [
+     1743841,
+     0,
+     606235,
+     0
+    ],
+    "2024": [
+     1081450,
+     0,
+     583890,
+     64689
+    ]
+   },
+   "topolobampo": {
+    "2018": [
+     1602486,
+     0,
+     325920,
+     53651
+    ],
+    "2024": [
+     833927,
+     0,
+     239020,
+     54084
+    ]
+   },
+   "la-paz": {
+    "2018": [
+     700012,
+     0,
+     453408,
+     0
+    ],
+    "2024": [
+     730346,
+     0,
+     574412,
+     0
+    ]
+   },
+   "mazatlan": {
+    "2018": [
+     1977130,
+     0,
+     433032,
+     0
+    ],
+    "2024": [
+     726623,
+     0,
+     856379,
+     0
+    ]
+   },
+   "manzanillo": {
+    "2018": [
+     2601164,
+     24390,
+     555203,
+     46704
+    ],
+    "2024": [
+     1196654,
+     280972,
+     512863,
+     100658
+    ]
+   },
+   "lazaro-cardenas": {
+    "2018": [
+     530442,
+     961795,
+     673827,
+     390215
+    ],
+    "2024": [
+     331164,
+     1098120,
+     682322,
+     366093
+    ]
+   },
+   "acapulco": {
+    "2018": [
+     0,
+     0,
+     1229407,
+     0
+    ],
+    "2024": [
+     11056,
+     0,
+     454624,
+     0
+    ]
+   },
+   "salina-cruz": {
+    "2018": [
+     30705,
+     4481608,
+     11645,
+     3550180
+    ],
+    "2024": [
+     0,
+     7080819,
+     0,
+     3720381
+    ]
+   },
+   "puerto-chiapas": {
+    "2018": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "2024": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "tampico": {
+    "2018": [
+     3463792,
+     1384872,
+     154147,
+     87298
+    ],
+    "2024": [
+     891128,
+     3283707,
+     7809,
+     651086
+    ]
+   },
+   "altamira": {
+    "2018": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "2024": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "tuxpan": {
+    "2018": [
+     10134291,
+     0,
+     37675,
+     0
+    ],
+    "2024": [
+     9255794,
+     0,
+     1521098,
+     0
+    ]
+   },
+   "veracruz": {
+    "2018": [
+     1812737,
+     0,
+     63653,
+     0
+    ],
+    "2024": [
+     5426535,
+     0,
+     291419,
+     0
+    ]
+   },
+   "coatzacoalcos": {
+    "2018": [
+     11269162,
+     8310717,
+     0,
+     3734040
+    ],
+    "2024": [
+     5019843,
+     13469879,
+     0,
+     3362942
+    ]
+   },
+   "dos-bocas": {
+    "2018": [
+     105102,
+     30623149,
+     347522,
+     608564
+    ],
+    "2024": [
+     446515,
+     14345560,
+     709003,
+     471406
+    ]
+   },
+   "progreso": {
+    "2018": [
+     609303,
+     0,
+     2510362,
+     0
+    ],
+    "2024": [
+     2764219,
+     0,
+     864381,
+     0
+    ]
+   }
+  },
+  "dato": "Petróleo y derivados por puerto, en toneladas: importación, exportación, cabotaje recibido y cabotaje enviado.",
+  "fuentes": [
+   "semar-puertos-2024"
+  ]
+ },
+ "puertoDeRefineria": {
+  "salina-cruz": "puerto:salina-cruz",
+  "minatitlan": "puerto:coatzacoalcos",
+  "madero": "puerto:tampico",
+  "olmeca": "puerto:dos-bocas"
+ },
+ "dias": {
+  "patio": 15,
+  "porSurtir": 15,
+  "dato": "Reglas del juego: una refinería guarda hasta 15 días de lo que produce esperando tren o barco, y un estado recibe de una vez hasta 15 días de lo que sus ductos no le traen.",
+  "fuentes": []
+ },
+ "real": {
+  "crudo": {
+   "produccion": {
+    "2018": 1833.3,
+    "2019": 1700.7,
+    "2020": 1705.4,
+    "2021": 1756.4,
+    "2022": 1784.6,
+    "2023": 1875.4,
+    "2024": 1759,
+    "2025": 1635.5,
+    "2026": 1655.4
+   },
+   "exportacion": {
+    "2018": 1184.1,
+    "2019": 1103.3,
+    "2020": 1119.9,
+    "2021": 1018.3,
+    "2022": 953.2,
+    "2023": 1032.8,
+    "2024": 806.1,
+    "2025": 580.6,
+    "2026": 452.6
+   },
+   "parcial": {
+    "2026": "enero a junio"
+   },
+   "dato": "Producción de petróleo crudo de Pemex (total por activos) y exportación de crudo, en miles de barriles diarios.",
+   "fuentes": [
+    "ig2-2026"
+   ]
+  },
+  "combustibles": {
+   "produccion": {
+    "2018": 358.6,
+    "2019": 362.8,
+    "2020": 316.7,
+    "2021": 379,
+    "2022": 450.5,
+    "2023": 423.5,
+    "2024": 503.8,
+    "2025": 627.2,
+    "2026": 696.9
+   },
+   "importacion": {
+    "2018": 877.3,
+    "2019": 748.9,
+    "2020": 510.7,
+    "2021": 461.8,
+    "2022": 630.7,
+    "2023": 615.7,
+    "2024": 562.8,
+    "2025": 435.1,
+    "2026": 399.7
+   },
+   "porProducto": {
+    "gasolinas": {
+     "produccion": {
+      "2018": 207.1,
+      "2019": 203.5,
+      "2020": 185.6,
+      "2021": 232.9,
+      "2022": 271,
+      "2023": 252.4,
+      "2024": 290.3,
+      "2025": 356.2,
+      "2026": 378.2
+     },
+     "importacion": {
+      "2018": 581.5,
+      "2019": 515.9,
+      "2020": 374.6,
+      "2021": 325.8,
+      "2022": 401.2,
+      "2023": 386.3,
+      "2024": 366.1,
+      "2025": 301.8,
+      "2026": 271.4
+     }
+    },
+    "diesel": {
+     "produccion": {
+      "2018": 116.8,
+      "2019": 130.3,
+      "2020": 113.6,
+      "2021": 117.7,
+      "2022": 146.4,
+      "2023": 134.8,
+      "2024": 180,
+      "2025": 227.8,
+      "2026": 270.2
+     },
+     "importacion": {
+      "2018": 240.6,
+      "2019": 178.4,
+      "2020": 114.3,
+      "2021": 101.7,
+      "2022": 175.1,
+      "2023": 173.6,
+      "2024": 137.5,
+      "2025": 81.2,
+      "2026": 77.1
+     }
+    },
+    "querosenos": {
+     "produccion": {
+      "2018": 34.7,
+      "2019": 29,
+      "2020": 17.5,
+      "2021": 28.4,
+      "2022": 33.1,
+      "2023": 36.3,
+      "2024": 33.5,
+      "2025": 43.2,
+      "2026": 48.5
+     },
+     "importacion": {
+      "2018": 55.2,
+      "2019": 54.6,
+      "2020": 21.8,
+      "2021": 34.3,
+      "2022": 54.4,
+      "2023": 55.8,
+      "2024": 59.2,
+      "2025": 52.1,
+      "2026": 51.2
+     }
+    }
+   },
+   "parcial": {
+    "2026": "enero a junio"
+   },
+   "dato": "Gasolinas, diésel y querosenos (la turbosina) que Pemex produjo e importó, en miles de barriles diarios. No incluye lo que importan los privados: en 2024 eran cerca del 15 % de lo que se vende (SENER).",
+   "fuentes": [
+    "ig2-2026",
+    "sener-ph2026"
+   ]
+  },
+  "tren": {
+   "porAño": {
+    "2018": {
+     "gasolina": 1.608,
+     "diesel": 3.188,
+     "combustoleo": 1.639
+    },
+    "2025": {
+     "gasolina": 4.779,
+     "diesel": 3.04,
+     "combustoleo": 3.234
+    }
+   },
+   "dato": "Millones de toneladas que movió el tren: gasolina, diésel y combustóleo.",
+   "fuentes": [
+    "attrapi-2018",
+    "attrapi-2025"
+   ]
+  },
+  "modos": {
+   "año": 2018,
+   "ducto": 1743.4,
+   "autotanque": 340.8,
+   "carrotanque": 77,
+   "buquetanque": 182.8,
+   "dato": "Lo que movió Pemex en 2018, en miles de barriles diarios, crudo y petrolíferos juntos. En buque tanque fueron 95.6 de gasolina, 62.9 de destilados y 20.8 de combustóleo; en carro tanque, 35.6 de diésel, 31.0 de combustóleo y 10.4 de gasolina. Su flota de 16 buques tanque podía mover 294.4. En 2023 movió 2,082 por ducto, 451 por tierra y 166 por mar.",
+   "fuentes": [
+    "asf-2018-0474",
+    "asf-2018-0476",
+    "pmx-ia2023"
+   ]
+  }
+ }
+}

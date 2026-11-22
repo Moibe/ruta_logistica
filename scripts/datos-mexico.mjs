@@ -966,10 +966,24 @@ function ciudades(places) {
   for (const c of candidatas) {
     if (!c.estado) throw new Error(`Ciudad sin estado: ${c.nombre}`);
     if (!c.capital && kept.some((k) => km(k, c) < MISMA_ZONA_KM)) continue;
-    kept.push({ id: slug(c.nombre), ...c });
+    const id = slug(c.nombre);
+    kept.push({ id, ...c, ...(ESTACION_APARTE[id] ? { estacion: ESTACION_APARTE[id] } : {}) });
   }
   return kept.sort((a, b) => b.poblacion - a.poblacion);
 }
+
+/**
+ * Cities whose station isn't the track nearest to them: a real station that
+ * serves the city from farther than a station's reach (`Ciudad.estacion`).
+ */
+const ESTACION_APARTE = {
+  cancun: {
+    nombre: 'Cancún Aeropuerto',
+    lon: -86.8718,
+    lat: 21.0283,
+    nota: 'La estación del Tren Maya que sirve a Cancún está junto al aeropuerto, a unos 16 km del centro (trenmaya.gob.mx).',
+  },
+};
 
 // ---- utils ----------------------------------------------------------------
 

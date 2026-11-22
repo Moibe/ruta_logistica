@@ -11,6 +11,8 @@
   } from '$lib/domain/servicio';
   import { nombreCorto } from '$lib/domain/sitios';
   import { CARGA_POR_TREN } from '$lib/domain/exportaciones';
+  import { BARRILES_POR_TANQUE } from '$lib/domain/combustibles';
+  import { refineria } from '$lib/domain/petroleo';
   import { sim, type Unidad } from '$lib/state/simulacion.svelte';
   import { tablero, type TipoUnidad } from '$lib/state/tablero.svelte';
   import { duracion, estadoUnidad, horaDeJuego, km, nudos } from './formato';
@@ -129,6 +131,9 @@
     sim.siguiendo = true;
     goto('/mundo/globo');
   }
+
+  /** Barrels, whole: "19,805". */
+  const barriles = (n: number) => Math.round(n).toLocaleString('es-MX');
 
   // Retiring a vehicle is the one destructive action here: a second click
   // confirms, inside the card (never the browser's confirm()).
@@ -263,6 +268,15 @@
         <div><dt>Ha exportado</dt><dd class="mono">{Math.round(ficha.u.exportado).toLocaleString('es-MX')} t</dd></div>
         <div><dt>Carga nacional</dt><dd class="mono">{Math.round(ficha.u.cargaNacional).toLocaleString('es-MX')} t a bordo</dd></div>
         <div><dt>Ha movido</dt><dd class="mono">{Math.round(ficha.u.movidoNacional).toLocaleString('es-MX')} t nacionales</dd></div>
+      {/if}
+      {#if ficha.u.tipo === 'tren' || ficha.u.clase === 'tanque'}
+        <div>
+          <dt>Combustible</dt>
+          <dd class="mono">
+            {barriles(ficha.u.combustible)}{ficha.u.tipo === 'barco' ? ` de ${barriles(BARRILES_POR_TANQUE)}` : ''} b a bordo{#if ficha.u.combustibleDe}{` · de ${refineria(ficha.u.combustibleDe)?.corto}`}{/if}
+          </dd>
+        </div>
+        <div><dt>Ha llevado</dt><dd class="mono">{barriles(ficha.u.entregadoCombustible)} b de combustible del país</dd></div>
       {/if}
     </dl>
 

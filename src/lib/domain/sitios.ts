@@ -1,6 +1,7 @@
 import type { LonLat } from './geo';
 import aeropuertosJson from './datos/aeropuertos.json';
 import ciudadesJson from './datos/ciudades.json';
+import petroleoJson from './datos/petroleo.json';
 import polosJson from './datos/polos.json';
 import puertasJson from './datos/puertas.json';
 import puertosJson from './datos/puertos.json';
@@ -285,7 +286,16 @@ export const CENTRO_MEXICO: LonLat = [-102.5, 23.6];
 
 // ---- one registry for every kind of site ------------------------------------
 
-export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo' | 'aeropuerto';
+export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo' | 'aeropuerto' | 'refineria';
+
+/**
+ * Pemex's refineries in Mexico are freight stations too: within reach of the
+ * track they get one, like a city, and fuel loads there. Read straight from
+ * the oil data (`petroleo.ts` builds on this module's neighbours, so it isn't
+ * imported here). Deer Park, in Texas, is off the network.
+ */
+type RefineriaSitioJson = { id: string; corto: string; estado: string; lonLat: LonLat; extranjera?: boolean };
+const REFINERIAS_SITIO = (petroleoJson as unknown as { refinerias: RefineriaSitioJson[] }).refinerias.filter((r) => !r.extranjera);
 
 /**
  * Any place on the board, whatever its kind, under one key. Ids alone clash
@@ -320,6 +330,7 @@ export const SITIOS: readonly Sitio[] = [
   ...POLOS.map((p) => ({ clave: `polo:${p.id}`, tipo: 'polo' as const, id: p.id, nombre: `Polo ${p.corto}`, estado: p.estado, lonLat: p.lonLat })),
   // Cargo airports are dry ports: within reach of the track they get a station like a city.
   ...AEROPUERTOS.map((a) => ({ clave: `aeropuerto:${a.id}`, tipo: 'aeropuerto' as const, id: a.id, nombre: a.corto, estado: a.estado, lonLat: a.lonLat })),
+  ...REFINERIAS_SITIO.map((r) => ({ clave: `refineria:${r.id}`, tipo: 'refineria' as const, id: r.id, nombre: `Ref. ${r.corto}`, estado: r.estado, lonLat: r.lonLat })),
 ];
 
 export function polo(clave: string): Polo | null {

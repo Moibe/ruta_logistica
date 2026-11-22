@@ -4,9 +4,9 @@ Referencia de lo que hay en el juego: qué contiene, de dónde sale cada dato, q
 mano y por qué, y con qué reglas se mueve. Vive también dentro del juego: el librito de la esquina
 superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`), que se arma con este archivo.
 
-> **Cifras al 20 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
+> **Cifras al 22 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto y la electricidad.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos y los combustibles.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -35,13 +35,13 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [Natural Earth](https://www.naturalearthdata.com/) 1:10m | Estados, países vecinos, vías férreas y ciudades del tablero de México | Repositorio `nvkelso/natural-earth-vector`, commit `ca96624` del 2 de junio de 2022 (versión 5.2.0-pre) | Dominio público |
 | Atlas Ambiental de América del Norte, de la CCA (Comisión para la Cooperación Ambiental de México, Estados Unidos y Canadá) | Origen de las vías férreas de Norteamérica que trae Natural Earth (así lo registra la bitácora de cambios de Natural Earth); reúne cartografía de INEGI, USGS y Natural Resources Canada | Red de alrededor de 2010 | A través de Natural Earth |
 | [world-atlas](https://github.com/topojson/world-atlas) | Contornos del mundo para las vistas globales (tierra a 110m y 50m, países a 110m), y la tierra 50m sobre la que se calculan las travesías oceánicas | 2.0.2, que redistribuye Natural Earth 4.1.0 en TopoJSON | ISC (los datos, dominio público) |
-| Curaduría propia | Los 15 puertos, las 2 salidas al mundo y sus puertos lejanos (Shanghái y Róterdam), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
-| Cálculo propio sobre Natural Earth | Las 136 rutas marítimas entre puertos y salidas, y las 2 travesías oceánicas de las salidas a sus puertos lejanos (ver [Rutas marítimas](#8-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
+| Curaduría propia | Los 17 puertos, las 2 salidas al mundo y sus puertos lejanos (Shanghái y Róterdam), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
+| Cálculo propio sobre Natural Earth | Las 171 rutas marítimas entre puertos y salidas, y las 2 travesías oceánicas de las salidas a sus puertos lejanos (ver [Rutas marítimas](#8-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
 | `logistica-oceanica` (proyecto hermano) | Velocidades de referencia de las clases de barco | — | Del proyecto |
 | [Diario Oficial de la Federación](https://dof.gob.mx) | Las declaratorias de los 32 Polos del Bienestar vigentes: polígono, superficie, municipio y fecha de cada uno (ver [Polos del Bienestar](#5-polos-del-bienestar)) | Declaratorias del 12 de mayo de 2023 al 7 de agosto de 2026, con sus notas aclaratorias y modificaciones; consultadas el 19 de noviembre de 2026 | Documento oficial público |
 | Secretaría de Economía | Lámina "Polos de Desarrollo Económico para el Bienestar" (22 de mayo de 2025): los polos anunciados por etapa | — | Documento oficial público |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) | El trazo de la autopista MEX-185D, para ubicar dos polos cuyas coordenadas no traen meridiano (ver la nota ¹ de los polos); el operador y el estado (en uso, en desuso, abandonada) de cada vía, para saber de quién es cada tramo de la red | Consultado el 19 y el 20 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
-| [ARTF, Anuario Estadístico Ferroviario 2018](https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf) | Los km de vía de cada empresa en 2018, para comprobar el reparto de dueños | 2019 | Documento oficial público |
+| [ARTF, Anuario Estadístico Ferroviario 2018](https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf) | Los km de vía de cada empresa en 2018, para comprobar el reparto de dueños; la gasolina, el diésel y el combustóleo que movió el tren en 2018 (tabla 6-4) | 2019 | Documento oficial público |
 | [ARTF, Anuario Estadístico Ferroviario 2019](https://www.gob.mx/cms/uploads/attachment/file/574090/Anuario_Estadi_stico_Ferroviario_2019__2_.pdf) | Los ingresos de cada concesionaria en 2018 (tabla 4-2), para el derecho de diciembre de 2018 | 2020 | Documento oficial público |
 | [ARTF, Sistema Nacional de Indicadores Ferroviarios 2022](https://www.gob.mx/cms/uploads/attachment/file/789599/SNIF_2022.pdf) | Densidad de tráfico y carga por tren de cada empresa (2018–2021): de ahí salen los trenes privados al día | 2022 | Documento oficial público |
 | [ARTF, Pulso de Interconexión, 1er semestre 2024](https://www.gob.mx/cms/uploads/attachment/file/947545/Pulso_Interconexion_VF7.pdf) | La tabla de derechos de paso obligatorios: quién es dueño de cada línea y kilómetro, donde OpenStreetMap no lo dice | 2024 | Documento oficial público |
@@ -53,18 +53,25 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [AFAC, Estadística operativa de aeropuertos 2006–2026](https://www.gob.mx/cms/uploads/attachment/file/1112825/producto-aeropuertos-2006-2026-sep-27102026.xlsx) | Carga nacional e internacional de cada aeropuerto, mes por mes, de 2006 a septiembre de 2026: la serie del modo Realidad | Octubre de 2026 | Dato oficial público |
 | [INEGI, Exportaciones por Entidad Federativa](https://www.inegi.org.mx/programas/exporta_ef/) | Valor de lo que exporta cada estado, por subsector, de 2007 a 2025 (datos abiertos) | 2026 | Dato oficial público |
 | [ANAM, informe mensual de diciembre de 2025](https://www.anam.gob.mx/wp-content/uploads/IM_12_2025-.pdf) y [decreto de creación (DOF, 14 de julio de 2021)](https://www.dof.gob.mx/nota_detalle.php?codigo=5623945&fecha=14/07/2021) | Recaudación, operaciones y valor de las operaciones de cada aduana en 2025; la creación de la ANAM | 2021 y 2026 | Documento oficial público |
-| [ATTRAPI, Anuario Estadístico Ferroviario 2025, tablas A9 a A13](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas que salen del país por tren cada año (2017–2025), por frontera y por puerto; el tráfico interior (carga nacional) | 2026 | Documento oficial público |
+| [ATTRAPI, Anuario Estadístico Ferroviario 2025, tablas A9 a A13](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas que salen del país por tren cada año (2017–2025), por frontera y por puerto; el tráfico interior (carga nacional); la gasolina, el diésel y el combustóleo por tren en 2025 (carga por producto, p. 72) | 2026 | Documento oficial público |
 | Pemex, Form 20-F ante la SEC de [2018](https://www.sec.gov/Archives/edgar/data/0000932782/000119312519129698/d632951d20f.htm), [2019](https://www.sec.gov/Archives/edgar/data/932782/000119312520136835/d850870d20f.htm) y [2020](https://www.sec.gov/Archives/edgar/data/932782/000119312521162651/d106092d20f.htm) | Crudo procesado por cada refinería de 2018 a 2020 y su estado en 2018; el inicio del Programa de Rehabilitación; la Olmeca autorizada; la coquizadora de Tula suspendida | 2019–2021 | Documento oficial público |
 | [ASF, auditoría 2021-0219, Programa de Rehabilitaciones del Sistema Nacional de Refinación](https://www.asf.gob.mx/Trans/Informes/IR2021c/Documentos/Auditorias/2021_0219_a.pdf) | Capacidad de diseño, utilizada en 2021 y óptima de cada refinería; lo que el programa requería, lo que se le dio y lo que cubrió | Cuenta Pública 2021 (enero de 2023) | Documento oficial público |
-| [Pemex, Informe Anual 2023](https://gaceta.diputados.gob.mx/PDF/65/2024/may/Pemex-20240514.pdf) (enviado al Congreso) | Proceso de 2022 y 2023; Tula, Salina Cruz y Minatitlán en 2023; Deer Park en 2022 y 2023; la producción que sustenta la Olmeca | Mayo de 2024 | Documento oficial público |
+| [Pemex, Informe Anual 2023](https://gaceta.diputados.gob.mx/PDF/65/2024/may/Pemex-20240514.pdf) (enviado al Congreso) | Proceso de 2022 y 2023; Tula, Salina Cruz y Minatitlán en 2023; Deer Park en 2022 y 2023; la producción que sustenta la Olmeca; lo que movió en 2023 por ducto, por tierra y por mar, y su flota | Mayo de 2024 | Documento oficial público |
 | [Presidencia, presentación de resultados de Pemex](https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf) | Combustibles producidos y déficit desde diciembre de 2018; transferencias del Gobierno Federal a Pemex 2019–abril de 2024; costo de la Olmeca y de las coquizadoras | 3 de mayo de 2024 | Documento oficial público |
 | Pemex, comunicados en la Bolsa Mexicana de Valores: [24/2019](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_928185_1.pdf), [159/2021](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1102962_1.pdf), [6/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1159261_1.pdf), [38/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1202976_1.pdf), [9/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1440766_1.pdf), [11/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1444789_1.pdf), [37/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1501814_1.pdf), [51/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1560083_1.pdf) y [87/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1602784_1.pdf) | Arranque de la Olmeca; compra de Deer Park; acuerdos de las coquizadoras; Plan de Trabajo 2025–2030; proceso de 2024; avance de las coquizadoras; Deer Park en 2026 | 2019–2026 | Comunicado oficial |
-| [Primer](https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf) y [Segundo Informe de Gobierno](https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf) | Crudo procesado por cada refinería, mes por mes, de octubre de 2024 a junio de 2026 (SENER con datos de Pemex) | Septiembre de 2025 y de 2026 | Documento oficial público |
+| [Primer](https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf) y [Segundo Informe de Gobierno](https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf) | Crudo procesado por cada refinería, mes por mes, de octubre de 2024 a junio de 2026 (SENER con datos de Pemex); en el anexo estadístico del segundo, la producción y la exportación de crudo y la gasolina, el diésel y la turbosina que Pemex produjo e importó cada año | Septiembre de 2025 y de 2026 | Documento oficial público |
 | [OpenStreetMap](https://www.openstreetmap.org/) | El predio de cada refinería | Consultado el 20 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 | CNH, capas de ductos [integrados y no integrados al SISTRANGAS y de importación (2019)](https://idegeo.centrogeo.org.mx/geoserver/ows?service=wfs&version=1.0.0&request=GetCapabilities), [de 2018](https://agsserver.sigsa.info/arcgis/rest/services/Monitoreo_de_flujo_en_tiempo_real_MIL1/MapServer/4) y de [poliductos de Chihuahua](https://services6.arcgis.com/th3TMn162i37A876/ArcGIS/rest/services/AppMote/FeatureServer/14) | El trazo aproximado de los gasoductos (del Estado, privados y de importación) y de los poliductos de Pemex del centro, el golfo y Chihuahua, con capacidad, inversión, permiso y fecha de cada gasoducto privado. La CNH ya no existe y su mapa no responde: se usan las copias en el GeoNode de CentroGeo y en otros servidores | 2018 y 2019 | Documento oficial público (CNH con información de SENER, CENAGAS, CRE y CFE) |
 | [CFE, Plan de Negocios 2021–2025](https://www.cfe.gob.mx/finanzas/Documents/Plan%20de%20Negocios%20CFE%202021.pdf) | La red de gasoductos de la CFE con capacidad y longitud; los que entraron en 2018 y 2019, los detenidos y dónde falta gas | 2021 | Documento oficial público |
 | [CFE, Programa de Desarrollo 2026–2030, tabla 2](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) y [Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) | Los gasoductos en desarrollo (Cuxtal II, Centauro del Norte, ramales de Puerta al Sureste); Puerta al Sureste en operación desde mayo de 2025; la fase I del Cuxtal II; la aportación de la CFE a la alianza con TC Energy | 2025 y 2026 | Documento oficial público |
-| [SENER, Plan de Desarrollo del Sector Hidrocarburos](https://dof.gob.mx/nota_detalle_popup.php?codigo=5798065) | La red de ductos de 2024 (21,149 km de gas, 9,582 de petrolíferos); los proyectos de la CFE, del CENAGAS y de Pemex con su avance | 4 de agosto de 2026 | Documento oficial público |
+| [SENER, Plan de Desarrollo del Sector Hidrocarburos](https://dof.gob.mx/nota_detalle_popup.php?codigo=5798065) | La red de ductos de 2024 (21,149 km de gas, 9,582 de petrolíferos); los proyectos de la CFE, del CENAGAS y de Pemex con su avance; lo que usó el país de gasolina, diésel y turbosina de 2010 a 2024 (tabla 2.24) | 4 de agosto de 2026 | Documento oficial público |
+| [SENER, mapa «Infraestructura Nacional de Petrolíferos, 2018»](http://web.archive.org/web/20220326183525/https://www.gob.mx/cms/uploads/attachment/file/416897/Mapa_log_stica_Sener_8_Reg_31-10-2018_Nueva_numeraci_n_VF.pdf) | Las 73 terminales de almacenamiento y las 5 marítimas de Pemex, con su capacidad y su medio de suministro, y los poliductos de cada región. Ya no está en gob.mx: se usa la copia del Internet Archive | 31 de octubre de 2018 | Documento oficial público |
+| [CNH, capa de terminales de almacenamiento de Pemex](https://geomaticasig1.semarnat.gob.mx/arcgis/rest/services/Hosted/Terminal_de_almacenamiento_Pemex/FeatureServer/1) | La ubicación de cada terminal (copia en el servidor de la SEMARNAT) | 2016 | Documento oficial público |
+| [CNE, datos abiertos de petrolíferos](https://www.gob.mx/cne/articulos/consulta-de-datos-abiertos) | Litros de gasolina y diésel vendidos en las gasolineras de cada estado y de turbosina entregados en sus aeródromos: el consumo de cada estado | Abril a diciembre de 2018 | Dato oficial público |
+| ASF, auditorías [474-DE](https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0474_a.pdf) y [476](https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0476_a.pdf) a Pemex Logística | Lo que movió Pemex en 2018 por ducto, autotanque, carro tanque y buque tanque; su flota al cierre de 2018 | Cuenta Pública 2018 | Documento oficial público |
+| [SEMAR, Anuario Estadístico de los Puertos de México 2024](https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024) | Petróleo y derivados por puerto en 2018 y 2024: importación, exportación y cabotaje | 2025 | Documento oficial público |
+| [EIA (gobierno de EUA), unidades de International Energy Statistics](https://www.eia.gov/cfapps/ipdbproject/docs/unitswithpetro.php) | Barriles por tonelada de gasolina, diésel y turbosina, para pasar a toneladas lo que cabe en un tren | Consultado el 22 de noviembre de 2026 | Dato oficial público (gobierno de EUA) |
+| [Pemex, boletines regionales de Tampico 2019-004 y 2024-005](https://www.pemex.com/saladeprensa/boletines_regionales/Paginas/2024-005_tampico.aspx) | Lo que carga un buque tanque de su flota: 320 mil barriles. El sitio de Pemex no deja leerlos automáticamente; la cifra es la que muestra el buscador | 2019 y 2024 | Comunicado oficial |
 | Proyectos México, fichas [0770](https://www.proyectosmexico.gob.mx/proyecto_inversion/770-cfe-gasoducto-sur-de-texas-tuxpan-marino/), [0771](https://www.proyectosmexico.gob.mx/proyecto_inversion/771-cfe-gasoducto-la-laguna-aguascalientes/) y [0767](https://www.proyectosmexico.gob.mx/proyecto_inversion/767-cfe-gasoducto-samalayuca-sasabe/) y [ciclo de inversión en hidrocarburos](https://www.proyectosmexico.gob.mx/como-invertir-en-mexico/ciclo-inversion/ciclos-hidrocarburos/) | Inicio de operación del Sur de Texas–Tuxpan, La Laguna–Aguascalientes y Samalayuca–Sásabe; kilómetros de oleoductos y poliductos de Pemex | 2021 y 2026 | Documento oficial público |
 | [La Jornada, «Opera gasoducto que provocó una controversia entre CFE y privados»](https://www.jornada.com.mx/2020/10/03/economia/018n1eco) | El Villa de Reyes–Aguascalientes–Guadalajara entró en operación el 1 de octubre de 2020, según la CFE y Fermaca | 3 de octubre de 2020 | Prensa |
 | EIA (gobierno de EUA), [régimen térmico de los ciclos combinados](https://www.eia.gov/electricity/annual/html/epa_08_02.html) y [poder calorífico del gas](https://www.eia.gov/tools/faqs/faq.php?id=45&t=8) | Cuánto gas quema un ciclo combinado por MW: 7,627 Btu por kWh (2018) y 1,037 Btu por pie cúbico | 2025 | Dato oficial público (gobierno de EUA) |
@@ -204,10 +211,11 @@ tablero puede ver, para que el borde del recorte nunca aparezca en pantalla.
 
 ## 3. Puertos
 
-Los **15 puertos se curaron a mano**: la capa de puertos de Natural Earth no trae Lázaro
+Los **17 puertos se curaron a mano**: la capa de puertos de Natural Earth no trae Lázaro
 Cárdenas (el segundo del país en contenedores) ni Altamira (el cuarto). Las coordenadas son las de
 la terminal; en los puertos de río (Altamira, Tampico, Tuxpan) y en Topolobampo, al fondo de
-una bahía, el marcador va en la bocana, que es a donde llega un barco.
+una bahía, el marcador va en la bocana, que es a donde llega un barco. La Paz y Acapulco
+entraron con los combustibles: los dos estados se surten solo por mar.
 
 ★ = principal: los cuatro puertos que mueven la mayor parte de los contenedores del país
 (Manzanillo, Lázaro Cárdenas, Veracruz, Altamira). En el mapa llevan un rombo más grande.
@@ -217,9 +225,11 @@ una bahía, el marcador va en la bocana, que es a donde llega un barco.
 | Ensenada | Baja California | Pacífico | 31.855, -116.625 | Sin vía (a 68 km) |
 | Guaymas | Sonora | Pacífico | 27.915, -110.860 | Estación |
 | Topolobampo | Sinaloa | Pacífico | 25.555, -109.105 | Estación a 8.7 km |
+| La Paz | Baja California Sur | Pacífico | 24.264, -110.327 | Sin vía (a 198 km) |
 | Mazatlán | Sinaloa | Pacífico | 23.195, -106.405 | Estación a 4.2 km |
 | Manzanillo ★ | Colima | Pacífico | 19.065, -104.305 | Estación |
 | Lázaro Cárdenas ★ | Michoacán | Pacífico | 17.945, -102.175 | Estación |
+| Acapulco | Guerrero | Pacífico | 16.848, -99.904 | Sin vía (a 129 km) |
 | Salina Cruz | Oaxaca | Pacífico | 16.165, -95.195 | Estación |
 | Puerto Chiapas | Chiapas | Pacífico | 14.705, -92.405 | Estación a 12.5 km |
 | Altamira ★ | Tamaulipas | Golfo | 22.480, -97.840 | Estación |
@@ -240,11 +250,15 @@ una bahía, el marcador va en la bocana, que es a donde llega un barco.
   recortar las vías con la costa y se recuperó (ver bitácora).
 - **Topolobampo** — Extremo del Pacífico de la línea Chihuahua al Pacífico. El marcador está en
   la boca de la bahía, unos 6 km al suroeste del muelle (ver bitácora).
+- **La Paz** — El marcador está en Pichilingue, el puerto comercial de la bahía. Baja
+  California Sur no tiene tren: todo su combustible llega por mar, a la terminal de Pemex de La Paz.
 - **Mazatlán** — Sobre la línea del Pacífico (Guadalajara–Nogales).
 - **Manzanillo ★** — El puerto de contenedores más grande de México. La fuente dejaba su vía
   a 34 km del puerto; el tramo Cuyutlán–Manzanillo se trazó a mano (ver bitácora).
 - **Lázaro Cárdenas ★** — El segundo en contenedores. Arranque del corredor hacia Nuevo
   Laredo.
+- **Acapulco** — Sin vía en los datos. En 2018 recibió 1.23 millones de toneladas de
+  petrolíferos por cabotaje (SEMAR): la terminal de Pemex de Guerrero se surte por mar.
 - **Salina Cruz** — Extremo del Pacífico del Istmo de Tehuantepec.
 - **Puerto Chiapas** — La estación más lejana de su sitio: la vía de la costa de Chiapas pasa
   a 12.5 km, tierra adentro.
@@ -258,9 +272,10 @@ una bahía, el marcador va en la bocana, que es a donde llega un barco.
 - **Dos Bocas** — Puerto petrolero de Tabasco. Sin vía en los datos.
 - **Progreso** — El puerto de Mérida, a 36 km por vía.
 
-**Ciudades portuarias.** Ocho puertos comparten nombre con una ciudad del juego (Ensenada,
-Guaymas, Mazatlán, Manzanillo, Lázaro Cárdenas, Salina Cruz, Tampico, Veracruz). En el mapa
-son un solo lugar: la etiqueta es la del puerto y su ficha muestra la población de la ciudad.
+**Ciudades portuarias.** Diez puertos comparten nombre con una ciudad del juego (Ensenada,
+Guaymas, La Paz, Mazatlán, Manzanillo, Lázaro Cárdenas, Acapulco, Salina Cruz, Tampico,
+Veracruz). En el mapa son un solo lugar: la etiqueta es la del puerto y su ficha muestra la
+población de la ciudad.
 
 ### Aeropuertos de carga
 
@@ -927,7 +942,7 @@ donde pasan sí dicen de quién son (ver [Dueños](#dueños)).
 ### Cómo se calculan
 
 Ninguna ruta de barco se dibujó a mano. `npm run datos` las calcula entre **cada par** de los
-15 puertos y las 2 salidas al mundo (136 rutas):
+17 puertos y las 2 salidas al mundo (171 rutas):
 
 1. **La tierra en una malla.** La misma tierra 1:10m del tablero (estados y países vecinos)
    se pasa a una malla de 0.05° (unos 5.5 km por celda) que va de 122° a 70° O y de 5° a 34°
@@ -944,15 +959,15 @@ Ninguna ruta de barco se dibujó a mano. `npm run datos` las calcula entre **cad
    recorrido exacto de celdas para que ninguna recta pise tierra. Mar abierto y canal se
    enderezan por separado: una recta que saliera del canal directo al mar cruzaría Colón.
 5. **Auditoría**: cada ruta se revisa cada 0.5 km contra una malla 5 veces más fina. Fuera de
-   los primeros y últimos 8 km (la entrada a cada puerto) y del Canal, **ninguna de las 136
+   los primeros y últimos 8 km (la entrada a cada puerto) y del Canal, **ninguna de las 171
    rutas pisa tierra**.
 
 ### Cifras
 
 | | |
 | --- | --- |
-| Rutas | 136 (todas las parejas de 17 puntos) |
-| Pasan por el Canal de Panamá | 72 (las que unen el Pacífico con el Golfo o con la salida a Europa) |
+| Rutas | 171 (todas las parejas de 19 puntos) |
+| Pasan por el Canal de Panamá | 88 (las que unen el Pacífico con el Golfo o con la salida a Europa) |
 | Malla | 603,200 celdas de 0.05° |
 
 Algunas distancias, comparadas con las reales en millas náuticas (mn):
@@ -1061,8 +1076,11 @@ salidas al mundo. El ciclo completo suma la navegación y todas las escalas. Una
   esos tráficos escalan en la realidad (Asia en Manzanillo y Lázaro Cárdenas; Europa en
   Veracruz y Altamira).
 - **Arrecife Alacranes**: la distribución de combustibles por la costa del Pacífico desde la
-  refinería de Salina Cruz.
-- **Isla Tiburón**: el reparto de combustibles por el Golfo.
+  refinería de Salina Cruz. Sale cargado con lo que le sobra a Salina Cruz (ver
+  [Los combustibles](#los-combustibles)).
+- **Isla Tiburón**: el reparto de combustibles por el Golfo. Empieza vacío: en 2018 ni Minatitlán
+  ni Dos Bocas tenían qué mandar. Se llena cuando opera la Olmeca o cuando a la zona del centro le
+  sobra combustible.
 - **Bahía de Banderas**: autos de costa a costa por el Canal, el rodeo largo que el corredor
   del Istmo existe para acortar.
 - **Laguna de Términos**: graneles minerales de Sonora hacia Asia.
@@ -1486,7 +1504,8 @@ los dos socios. Al pasar el cursor, cada refinería dice su proceso, su parte de
 combustibles y sus obras; un clic abre su ficha en el catálogo.
 
 **La barra de arriba** junta las cajas de la CFE y de Pemex en una celda de dos líneas. Una
-celda *Refinación* dice el crudo y la parte del consumo.
+celda *Refinación* dice el crudo y qué parte de los combustibles que usan los estados llegó del
+país (ver [Los combustibles](#los-combustibles)).
 
 **En Realidad**, la ficha y el cursor dicen lo que cada refinería procesó de verdad:
 
@@ -1621,8 +1640,9 @@ Solo la península tiene tope:
 **Los petrolíferos y el crudo.** Pemex tiene 8,926 km de poliductos, 5,777 de oleoductos y 73
 terminales de almacenamiento (Proyectos México, 2026). Los ductos de petrolíferos sumaban 9,582
 km y 4,586 Mbd autorizados en 2024 (SENER). Por ducto se mueve mucho más que por mar: en 2023
-Pemex movió 2,082 Mbd por ducto y 166 en buque tanque. Por eso, cuando los combustibles sean
-carga, la mayor parte irá por ducto y los trenes y los barcos llevarán el resto.
+Pemex movió 2,082 Mbd por ducto y 166 en buque tanque. Por eso, en [Los
+combustibles](#los-combustibles), lo que va por ducto llega solo, y los trenes y los barcos llevan
+lo que sobra.
 
 El tablero traza:
 
@@ -1637,6 +1657,211 @@ fuentes abiertas que se encontraron.
 - **Lee** las capas descargadas una vez: las de la CNH y la de OpenStreetMap.
 - **Escribe** `src/lib/domain/datos/ductos.json`, con las líneas, la obra y el gas de la península,
   y `ductos-real.json`, con las fechas reales de cada gasoducto posterior a 2018.
+
+### Los combustibles
+
+La gasolina, el diésel y la turbosina son carga. El juego mide **cómo le llegan al país**: de sus
+refinerías, por ducto o en los trenes y buques tanque del jugador, o del extranjero. Producir no
+basta: el combustible que una refinería hace de más tiene que llegar a donde falta.
+
+**Lo que usa cada estado.** El país usa 1,231 Mbd, lo de diciembre de 2018 (el mismo consumo contra
+el que se mide la refinación). Cada estado usa su parte de lo que se vendió de abril a diciembre de
+2018 según la CNE: la gasolina y el diésel de sus gasolineras y la turbosina de sus aeródromos,
+ponderados con lo que el país usó de cada uno ese año (787, 387 y 86 Mbd, SENER). Es una
+**estimación del juego** con datos oficiales. Del diésel solo cuenta el que se vende en
+gasolineras, el 60 % del total: el de la industria, la minería y el campo no está por estado.
+Enero a marzo de 2018 se deja fuera porque al registro le faltan reportes del norte.
+
+| Estado | Del país | Usa (Mbd) |
+| --- | ---: | ---: |
+| Estado de México | 10.6 % | 131 |
+| Ciudad de México | 8.2 % | 101 |
+| Jalisco | 7.8 % | 96 |
+| Nuevo León | 5.2 % | 64 |
+| Veracruz | 5.1 % | 62 |
+| Guanajuato | 4.4 % | 54 |
+| Baja California | 4.3 % | 53 |
+| Chihuahua | 4.2 % | 52 |
+| Tamaulipas | 3.5 % | 43 |
+| Sonora | 3.5 % | 43 |
+
+**Cómo se surte cada estado.** Sale del mapa de la SENER «Infraestructura Nacional de
+Petrolíferos, 2018». Trae las 73 terminales de almacenamiento y las 5 terminales marítimas de
+Pemex, cada una con su capacidad y su medio de suministro, y los poliductos de cada región con su
+origen y destino. Con eso, cada terminal se surte de una de cinco maneras:
+
+- **Por los ductos de una zona de refinerías.** Son tres zonas:
+  - *Centro, Golfo y Occidente*: Tula, Salamanca y Minatitlán, unidas por sus poliductos
+    (Tula–Salamanca, Minatitlán–México, Minatitlán–Puebla), con Tuxpan, la terminal de
+    importación, a la cabeza del Tuxpan–Azcapotzalco y del Tuxpan–Tula.
+  - *Noreste y Norte*: Cadereyta y Madero, unidas por su bidireccional. Por Santa Catarina–Gómez
+    Palacio y Gómez Palacio–Chihuahua llegan a la Laguna y a Chihuahua.
+  - *Salina Cruz*: surte por carretera a Oaxaca y Chiapas.
+- **Por mar.** Las terminales que reciben buque tanque y las que se surten por ducto desde una
+  terminal marítima: Mexicali y Ensenada desde Rosarito, Hermosillo y Ciudad Obregón desde
+  Guaymas, Culiacán y Guamúchil desde Topolobampo, Mérida desde Progreso.
+- **Por tren.** Durango y Ciudad Valles reciben carro tanque.
+- **Por carretera.** La terminal que se surte en autotanque toma el medio de la terminal más
+  cercana de su región que no se surte así; por ejemplo, Nogales y Magdalena de Hermosillo, y
+  Tuxtla Gutiérrez y Tapachula de Salina Cruz.
+- **Sin terminal.** Tlaxcala se surte de Puebla y Quintana Roo de Mérida.
+
+Dentro de un estado, cada terminal pesa por su capacidad operativa, porque el mapa no da sus
+ventas. El reparto es una **estimación del juego**:
+
+| Zona | Refinerías | Estados (la parte que alcanzan sus ductos) | Usa (Mbd) |
+| --- | --- | --- | ---: |
+| Centro, Golfo y Occidente | Tula, Salamanca, Minatitlán (y Deer Park, por Tuxpan) | Aguascalientes, Ciudad de México, Estado de México, Guanajuato, Hidalgo, Jalisco, Michoacán (30 %), Morelos, Puebla, Querétaro, San Luis Potosí (46 %), Tabasco, Tlaxcala, Veracruz, Zacatecas | 651 |
+| Noreste y Norte | Cadereyta, Madero | Chihuahua, Coahuila, Durango (87 %), Nuevo León, San Luis Potosí (17 %), Tamaulipas (98 %) | 214 |
+| Salina Cruz | Salina Cruz | Chiapas, Oaxaca | 54 |
+| Por mar | — | Baja California, Baja California Sur, Campeche, Colima, Guerrero, Michoacán (70 %), Nayarit, Quintana Roo, Sinaloa, Sonora, Yucatán | 297 |
+| Por tren | — | Durango (13 %), San Luis Potosí (37 %), Tamaulipas (3 %) | 15 |
+
+La Olmeca no tiene zona. Dos Bocas está unida a la red del Golfo por un ramal, pero en 2026 su
+combustible sale sobre todo por mar: Dos Bocas mandó 4.24 millones de toneladas por cabotaje de
+enero a octubre (SEMAR, cifras preliminares). En el juego todo lo que hace va a su patio.
+
+**Cada hora del juego:**
+
+1. **Ductos.** Lo que hacen las refinerías de una zona llega por ducto a sus estados, hasta lo que
+   usan. Si la zona no alcanza, a todos les falta en la misma proporción.
+2. **El patio.** Lo que la zona no usa espera en el patio de sus refinerías, repartido por lo que
+   produce cada una. Cabe hasta 15 días de lo que produce la refinería; pasado eso, ya no tiene
+   salida, y la barra lo avisa.
+3. **Las terminales.** Lo que a un estado le falta lo cubre el combustible que tus trenes y buques
+   tanque dejaron en sus terminales. Cuando se acaba, **se importa**.
+
+Los 15 días son reglas del juego, no cifras oficiales.
+
+**Los trenes y los buques tanque.**
+
+- **Dónde cargan.** Las refinerías con estación son paradas de tren: Cadereyta, Madero,
+  Minatitlán, Salamanca, Salina Cruz y Tula. La Olmeca queda a 88 km de la vía. Las de la costa
+  cargan también en su puerto, trenes y buques tanque:
+  - Salina Cruz en Salina Cruz;
+  - Minatitlán en Coatzacoalcos (Pajaritos);
+  - Madero en Tampico;
+  - la Olmeca en Dos Bocas.
+- **Cuánto cabe.**
+  - Un tren lleva su carga neta promedio, 2,436 toneladas: unos **19,800 barriles** con los
+    barriles por tonelada de la EIA (8.53 de gasolina, 7.46 de diésel, 7.93 de turbosina,
+    ponderados por lo que usa el país). Las exportaciones van primero, luego el combustible, y la
+    carga nacional llena lo que queda.
+  - Un buque tanque lleva **320 mil barriles**, lo que carga uno de los de Pemex.
+  - Solo los buques tanque llevan combustible; las demás clases todavía van vacías.
+- **Dónde descargan.** En la primera parada cuyo estado tenga falta, hasta 15 días de lo que no le
+  traen sus ductos, y nunca de vuelta en la refinería de donde salió. Progreso surte también a
+  Campeche y Quintana Roo, y Mazatlán a Nayarit. Un vehículo lleva el combustible de una sola
+  refinería a la vez.
+
+**Cómo empieza la partida.** Las refinerías hacen 337 Mbd, el 27 % de lo que usa el país, y 299
+llegan por ducto. Solo a la zona de Salina Cruz le sobra combustible, unos 37 Mbd. Lo llevan el
+buque tanque *Arrecife Alacranes* por el Pacífico y el tren Coatzacoalcos ⇄ Salina Cruz por el
+Istmo. El *Isla Tiburón* empieza vacío: en 2018 Minatitlán no tenía qué mandar, y el Golfo y la
+península se surtían con importaciones. El país importa unos 895 Mbd.
+
+Lo que se puede llegar a hacer (cálculos del juego):
+
+| | Hacen las refinerías | Llega por ducto | Sobra para trenes y barcos | Importación mínima |
+| --- | ---: | ---: | ---: | ---: |
+| Al empezar (2018) | 337 (27 %) | 299 | 37 (Salina Cruz) | 895 |
+| Todo rehabilitado, coquizadoras y Olmeca | 1,045 (85 %) | 660 | 385 (Salina Cruz 163, Olmeca 222) | 186 |
+| Además, Deer Park comprado y mejorado | 1,332 (108 %) | 870 | 432 | 0 |
+
+La importación mínima es la que queda si todo el sobrante llega a donde falta. Sin trenes ni buques
+tanque, el sobrante se queda en los patios y la importación no baja.
+
+**En la realidad**, Pemex movió en 2018 1,743 Mbd por ducto, 341 en autotanque, 77 en carro tanque y
+183 en buque tanque, crudo y petrolíferos juntos (ASF). En buque tanque fueron 95.6 de gasolina, 62.9
+de destilados y 20.8 de combustóleo. Tenía 16 buques tanque (2 propios), 1,485 autotanques y 511
+carros tanque, y su flota podía mover 294 Mbd. Por puerto (SEMAR, millones de toneladas de petróleo
+y derivados en 2018):
+
+| Puerto | Recibió por cabotaje | Mandó por cabotaje | Importó |
+| --- | ---: | ---: | ---: |
+| Coatzacoalcos (con Pajaritos) | — | 3.73 | 11.27 |
+| Salina Cruz | 0.01 | 3.55 | 0.03 |
+| Progreso | 2.51 | — | 0.61 |
+| Acapulco | 1.23 | — | — |
+| Lázaro Cárdenas | 0.67 | 0.39 | 0.53 |
+| Guaymas | 0.61 | — | 1.74 |
+| Manzanillo | 0.56 | 0.05 | 2.60 |
+| La Paz | 0.45 | — | 0.70 |
+| Mazatlán | 0.43 | — | 1.98 |
+| Topolobampo | 0.33 | 0.05 | 1.60 |
+| Tuxpan | 0.04 | — | 10.13 |
+
+Baja California recibe su combustible por la terminal de Rosarito, que no es puerto del tablero:
+2.49 millones de toneladas importadas en 2018. En el juego, Ensenada la representa.
+
+Por tren se movieron (ATTRAPI, millones de toneladas):
+
+| | 2018 | 2025 |
+| --- | ---: | ---: |
+| Gasolina | 1.61 | 4.78 |
+| Diésel | 3.19 | 3.04 |
+| Combustóleo | 1.64 | 3.23 |
+
+**El crudo.** La producción de crudo de Pemex sigue su serie real en los dos modos; de 2027 en
+adelante se repite la de 2026. Lo que no procesan las refinerías del país se exporta, en los barcos
+de los compradores. Al empezar se exportan 1,221 Mbd; en 2018 se exportaron de verdad 1,184.
+
+| Año | Crudo producido | Crudo exportado | Combustibles que hizo Pemex | Combustibles que importó Pemex |
+| --- | ---: | ---: | ---: | ---: |
+| 2018 | 1,833 | 1,184 | 359 | 877 |
+| 2019 | 1,701 | 1,103 | 363 | 749 |
+| 2020 | 1,705 | 1,120 | 317 | 511 |
+| 2021 | 1,756 | 1,018 | 379 | 462 |
+| 2022 | 1,785 | 953 | 451 | 631 |
+| 2023 | 1,875 | 1,033 | 424 | 616 |
+| 2024 | 1,759 | 806 | 504 | 563 |
+| 2025 | 1,636 | 581 | 627 | 435 |
+| 2026 (enero a junio) | 1,655 | 453 | 697 | 400 |
+
+Miles de barriles diarios; combustibles son gasolinas, diésel y querosenos (anexo estadístico del
+Segundo Informe de Gobierno, SENER y Pemex). No incluye lo que importan los privados: en 2024 eran
+cerca del 15 % de lo que se vende (SENER).
+
+**En el mapa**, el botón *Combustibles* pinta cada estado según la parte de lo que usó este año que
+vino del país, y dibuja las 78 terminales de Pemex en el color de cómo les llega el combustible:
+
+- ámbar, por los ductos de una zona;
+- azul, por mar;
+- lila, por tren.
+
+Al pasar el cursor:
+
+- **un estado** dice lo que usa, cómo se surte, lo que le traen hoy sus ductos y lo que le falta;
+- **una terminal** dice cómo se surte, según el mapa de la SENER;
+- **un puerto** da su petróleo y derivados de 2018 (de 2024 en Realidad, desde ese año);
+- **una refinería** dice cuánto espera en su patio.
+
+La leyenda da las cifras del país en el año. La capa no se puede ver junto con la de Energía: las
+dos pintan los estados. En Realidad no hay cifras por estado; la leyenda da las del país.
+
+**La barra de arriba.** En la celda *Refinación*, la segunda línea dice qué parte de los
+combustibles que usaron los estados este año vino del país. Al pasar el cursor da cuánto se
+importó, cuánto llegó por ducto, en tren y en barco, y el crudo exportado. En Realidad dice qué
+parte de lo que vendió Pemex hizo él mismo: lo que produjo entre lo que produjo más lo que importó.
+
+**Las fichas** de cada tren y cada buque tanque dicen cuánto combustible llevan, de qué refinería y
+cuánto han entregado.
+
+**Lo que falta o es estimación:**
+
+- **El consumo por estado:** el diésel de fuera de las gasolineras no está por estado.
+- **El reparto entre terminales:** pesa por capacidad, porque el mapa no da sus ventas.
+- **El buque de 320 mil barriles:** la cifra de los boletines de Pemex, que su sitio no deja leer.
+- **Los patios y las terminales:** los 15 días son reglas del juego.
+- **La carga nacional:** el tráfico interior por tren de la ATTRAPI ya incluye algo de combustible,
+  así que cuenta un poco doble.
+- **Lo que no está todavía:** el combustóleo, el gas LP y la turbosina como carga aparte, la
+  logística de las importaciones (en el juego llegan solas) y los poliductos del noreste y el
+  occidente en el mapa. El mapa de la SENER de 2018 sí trae sus tablas, para dibujarlos después.
+
+**Cómo se generan.** `scripts/combustibles/gen-combustibles.mjs` escribe
+`src/lib/domain/datos/combustibles.json` con todo lo de arriba y la fuente de cada cifra. Es
+autocontenido: las cifras se leyeron una vez de sus fuentes y viven en el script.
 
 ### El modo Realidad
 
@@ -1816,8 +2041,10 @@ pesos):
 | Monterrey | Interior | 11.3 | Sí |
 | Dos Bocas | Marítima | 8 | Sí |
 | Tampico | Marítima | 6.3 | Sí |
+| La Paz | Marítima | 5.4 | Sí (sin vía: ningún tren llega) |
 | Chihuahua | Interior | 1.3 | No (aduana interior de ciudad) |
 | Torreón | Interior | 0.8 | No (aduana interior de ciudad) |
+| Acapulco | Marítima | 0.8 | Sí (sin vía: ningún tren llega) |
 | Salina Cruz | Marítima | 0.5 | Sí |
 
 ### La carga nacional
@@ -1937,6 +2164,34 @@ en 2025.
 - **Botones de capas compactos.** *(22 nov 2026.)* Con el botón *Ductos* la barra de herramientas
   ya no cabía junto al panel de cifras. Abajo de 1,700 px de ancho, los botones de capas muestran
   solo su icono, y su nombre queda en el tooltip.
+- **Los combustibles: producir no basta, hay que llevarlo.** *(22 nov 2026.)* El paso 4 que aprobó
+  el usuario. Lo que hacen las refinerías llega solo por ducto a su zona. Lo que les sobra espera en
+  su patio a los trenes y buques tanque del jugador, que lo llevan a donde falta. Lo que nadie lleva
+  se importa. Así la logística se nota justo donde se notó en la realidad: en Salina Cruz y en la
+  Olmeca, que hacen más de lo que su región usa, y en el noroeste y la península, que se surten por mar.
+- **Las zonas salen del mapa oficial de 2018, no de las líneas del tablero.** *(22 nov 2026.)* Al
+  tablero le faltan los poliductos del noreste y el occidente, pero el mapa de la SENER dice cómo se
+  surtía cada terminal de Pemex y de dónde sale cada ducto. Una terminal surtida por ducto desde una
+  terminal marítima (Rosarito, Guaymas, Topolobampo, Progreso) cuenta como surtida por mar.
+- **Salina Cruz y la Olmeca, aparte del centro.** *(22 nov 2026.)* Salina Cruz está unida a
+  Minatitlán por un poliducto bidireccional, y Dos Bocas por un ramal, pero en la realidad las dos
+  sacan su combustible sobre todo por mar: Salina Cruz al Pacífico (3.55 millones de toneladas de
+  cabotaje en 2018) y Dos Bocas al Golfo. Juntarlas con el centro, que siempre importa, dejaría
+  vacíos a los buques tanque.
+- **Las importaciones y el crudo de exportación llegan y se van solos.** *(22 nov 2026.)* Pemex
+  importa con barcos fletados y vende su crudo en sus terminales a buques de los compradores. El
+  jugador hace lo que hacía la flota de Pemex: llevar el combustible del país por la costa y por el
+  Istmo.
+- **El tren también carga en el puerto de una refinería de la costa.** *(22 nov 2026.)* Salina
+  Cruz, Pajaritos (Coatzacoalcos) y Madero (Tampico) tienen la refinería junto al muelle. Así el
+  tren del Istmo de la partida ya lleva combustible de Salina Cruz al Golfo, como el corredor que el
+  gobierno usó para eso.
+- **La Paz y Acapulco, puertos del tablero.** *(22 nov 2026.)* Baja California Sur y la terminal de
+  Acapulco solo se surten por mar. Sin sus puertos, el jugador nunca podría llevarles combustible.
+- **La barra no crece.** *(22 nov 2026.)* La segunda línea de *Refinación* pasó de la parte del
+  consumo que hacen las refinerías a la parte que llegó del país; lo importado y el crudo exportado
+  van en su tooltip y en la leyenda de la capa. Con menos de 1,500 px, la celda de obras deja solo la
+  flecha y la carga aérea de Realidad se esconde.
 - **El petróleo, con caja propia de Pemex.** *(20 nov 2026.)* El usuario aprobó el orden
   (fuentes, refinerías como sitios, Pemex y sus obras, y los combustibles como carga junto con los
   barcos) y que Pemex pague con su propia caja, como la CFE. Pidió además dos cosas:
@@ -2045,6 +2300,27 @@ en 2025.
 ## 12. Bitácora de correcciones a los datos
 
 Todo lo que se cambió respecto a las fuentes, y por qué.
+
+### 22 de noviembre de 2026
+
+**Puertos**
+
+- **La Paz y Acapulco entran al tablero.** Coordenadas a mano: La Paz en Pichilingue (24.264,
+  -110.327) y Acapulco en su muelle (16.848, -99.904). Con ellos hay 171 rutas marítimas; las 136
+  de antes salen idénticas.
+- **La estación de Cancún, en el script.** Estaba puesta a mano en `ciudades.json` y
+  `npm run datos` la borraba al regenerar. Ahora el script la escribe (`ESTACION_APARTE`).
+
+**Terminales de Pemex (mapa de la SENER de 2018)**
+
+- **T.M. Guaymas** dice «Refinería/Buque tanque», pero en Guaymas no hay refinería: cuenta como
+  surtida por buque tanque.
+- **Ciudad Mante:** su capacidad nominal es de 20,458 barriles en el mapa y de 29,458 en la capa de
+  la CNH; se usa la del mapa.
+- **Sin coordenadas en la capa de la CNH:** T.M. Pajaritos y T.M. Tuxpan van en su puerto, y
+  Tapachula II junto a Tapachula.
+- **Fuera del juego:** las cuatro terminales privadas del mapa (Vopak en Veracruz, Glencore en Dos
+  Bocas, Gas Natural del Noroeste en San José Iturbide e Hidrosur en Progreso).
 
 ### 20 de noviembre de 2026
 
@@ -2222,7 +2498,8 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Región del sistema eléctrico**: cada zona que opera un centro de control del CENACE
   (Central, Oriental, Occidental, Noroeste, Norte, Noreste, Peninsular, Baja California y Baja
   California Sur). Mulegé, en el norte de Baja California Sur, es un sistema aparte.
-- **Mbd**: miles de barriles diarios, la medida del crudo que procesa una refinería.
+- **Mbd**: miles de barriles diarios, la medida del crudo que procesa una refinería y de los
+  combustibles que se usan, se mueven o se importan.
 - **MMpcd**: millones de pies cúbicos diarios, la medida del gas que transporta un gasoducto.
 - **SISTRANGAS**: el Sistema de Transporte y Almacenamiento Nacional Integrado de Gas Natural: el
   Sistema Nacional de Gasoductos del Estado más los privados integrados a él, con una sola tarifa.
@@ -2237,6 +2514,18 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   que cada una declaró a la ASF en mayo de 2022.
 - **Coquizadora**: planta que convierte el residuo pesado del crudo (el que acaba en combustóleo)
   en coque, gas y destilados como gasolina y diésel.
+- **TAD (o TAR)**: terminal de almacenamiento y despacho (o reparto) de Pemex: recibe el
+  combustible por ducto, buque tanque, carro tanque o autotanque, lo guarda y de ahí sale en pipas a
+  las gasolineras.
+- **Terminal marítima**: la de Pemex en la costa que recibe y manda buques tanque (Pajaritos,
+  Tuxpan, Madero, Salina Cruz y Guaymas).
+- **Cabotaje**: el transporte por mar entre puertos del mismo país.
+- **Buque tanque, carro tanque, autotanque**: el barco, el vagón de tren y el camión (la pipa) que
+  llevan líquidos.
+- **Zona de ductos**: en el juego, las refinerías unidas por sus poliductos y la parte de cada
+  estado a la que llegan.
+- **Patio**: en el juego, lo que una refinería hace y su zona no usa, esperando un tren o un buque
+  tanque.
 - **Sistema aislado**: red eléctrica sin enlace con la red nacional. En el juego son tres: Baja
   California, Baja California Sur y Mulegé.
 - **Termosolar**: central que concentra el sol con espejos sobre una torre y guarda el calor en

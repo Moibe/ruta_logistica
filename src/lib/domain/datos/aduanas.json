@@ -419,8 +419,8 @@
    "id": "la-paz",
    "nombre": "La Paz",
    "tipo": "maritima",
-   "sitio": null,
-   "salida": false,
+   "sitio": "puerto:la-paz",
+   "salida": true,
    "recaudacion2025": 5410.6,
    "valorOperaciones2025": 30256.4
   },
@@ -446,8 +446,8 @@
    "id": "acapulco",
    "nombre": "Acapulco",
    "tipo": "maritima",
-   "sitio": null,
-   "salida": false,
+   "sitio": "puerto:acapulco",
+   "salida": true,
    "recaudacion2025": 796.7,
    "valorOperaciones2025": 1635.8
   },
@@ -488,6 +488,8 @@
   "puerto:progreso",
   "puerto:dos-bocas",
   "puerto:tampico",
+  "puerto:la-paz",
+  "puerto:acapulco",
   "puerto:salina-cruz",
   "puerto:topolobampo"
  ]

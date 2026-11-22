@@ -1,0 +1,213 @@
+import DATOS from './datos/combustibles.json';
+import { añoDe } from './calendario';
+import { CARGA_POR_TREN } from './exportaciones';
+import { DEMANDA_COMBUSTIBLES, type Refinacion } from './petroleo';
+
+/**
+ * Fuels as cargo (`datos/combustibles.json`, every figure with its source).
+ * What the game measures is how the gasoline, diesel and jet fuel the country
+ * uses gets to it: from its own refineries — by pipeline, or on the player's
+ * trains and tankers — or from abroad.
+ *
+ * - **Use.** Each state uses its share of the 1,231 thousand barrels a day the
+ *   country used in December 2018 (the figure `petroleo.ts` measures against).
+ * - **Pipelines are automatic.** A zone is a set of refineries and the part of
+ *   each state their pipelines (and the trucks out of the terminals on them)
+ *   reach. The zone's fuel goes to that part first, up to what it uses.
+ * - **What a zone can't take** waits at its refineries, up to some days of it:
+ *   in the yard for a train (a refinery is a station) or at its port for a
+ *   tanker. Past that it has no way out.
+ * - **What a state still lacks** — the part no pipeline reaches, and the rest
+ *   when its zone falls short — a train or a tanker can bring, up to some days
+ *   of it at once. What nobody brings is imported.
+ * - **Crude** comes out of the ground at the country's real pace; what the
+ *   Mexican refineries don't run is exported, on the buyers' ships.
+ */
+
+type Fuente = { fuente: string; url: string };
+type Dato = { dato: string; fuentes: string[] };
+
+export type Zona = {
+  id: string;
+  nombre: string;
+  /** Refineries whose fuel goes down the zone's pipelines (Deer Park's enters through an import terminal). */
+  refinerias: string[];
+  /** The part of each state's use the zone's pipelines reach (0–1). */
+  estados: Record<string, number>;
+} & Dato;
+
+/** A year of the real series: Mbd, with the year's coverage when it isn't whole. */
+type Serie = Record<string, number>;
+
+/** How a Pemex terminal is supplied, as SENER's 2018 map says it. */
+export type MedioTerminal = string;
+/** Where its fuel comes from in the game: a zone's pipelines, the sea or the rail. */
+export type RedTerminal = 'centro' | 'noreste' | 'sur' | 'mar' | 'tren';
+
+export type Terminal = {
+  nombre: string;
+  estado: string;
+  /** The 2018 map's region. */
+  region: string;
+  medio: MedioTerminal;
+  /** Operating capacity, thousand barrels. */
+  capacidad: number;
+  lonLat: [number, number];
+  red: RedTerminal;
+  /** Where its supply comes from: the terminal it's trucked from, or the marine terminal its pipeline starts at. */
+  desde?: string;
+};
+
+/** Petroleum through a port in a year, tonnes: imported, exported, received and sent coastwise. */
+type MovimientoPuerto = [number, number, number, number];
+
+type CombustiblesJson = {
+  corte: string;
+  nota: string;
+  fuentes: Record<string, Fuente>;
+  /** Tonnes per barrel of the country's mix of gasoline, diesel and jet fuel. */
+  densidad: { tPorBarril: number } & Dato;
+  /** Barrels a Pemex tanker carries. */
+  tanque: { barriles: number } & Dato;
+  /** Each state's share of the country's use. */
+  consumo: { año: number; parte: Record<string, number> } & Dato;
+  zonas: Zona[];
+  /** Each state's use split by how its terminals are supplied (0–1 by zone, `mar` and `tren`). */
+  reparto: { porEstado: Record<string, Partial<Record<RedTerminal, number>>> } & Dato;
+  terminales: Terminal[];
+  /** Ports that also supply a neighbouring state without a port of its own. */
+  surte: Record<string, string[]>;
+  puertos: { porPuerto: Record<string, { '2018': MovimientoPuerto; '2024': MovimientoPuerto; nota?: string }> } & Dato;
+  /** Where each coastal refinery loads tankers. */
+  puertoDeRefineria: Record<string, string>;
+  /** Days of surplus a refinery holds, and days of a state's shortfall a delivery can cover at once. */
+  dias: { patio: number; porSurtir: number } & Dato;
+  real: {
+    /** Pemex's crude production and crude exports, Mbd. */
+    crudo: { produccion: Serie; exportacion: Serie; parcial: Record<string, string> } & Dato;
+    /** Gasoline, diesel and jet fuel (querosenos): what Pemex made and imported, Mbd. */
+    combustibles: {
+      produccion: Serie;
+      importacion: Serie;
+      porProducto: Record<'gasolinas' | 'diesel' | 'querosenos', { produccion: Serie; importacion: Serie }>;
+      parcial: Record<string, string>;
+    } & Dato;
+    /** Fuels moved by rail, millions of tonnes. */
+    tren: { porAño: Record<string, { gasolina: number; diesel: number; combustoleo: number }> } & Dato;
+    /** How Pemex moved what it moved in 2018 (crude and products), Mbd. */
+    modos: { año: number; ducto: number; autotanque: number; carrotanque: number; buquetanque: number } & Dato;
+  };
+};
+
+export const COMBUSTIBLES = DATOS as unknown as CombustiblesJson;
+export const fuenteCombustibles = (k: string) => COMBUSTIBLES.fuentes[k];
+export const ZONAS = COMBUSTIBLES.zonas;
+export const REAL_COMBUSTIBLES = COMBUSTIBLES.real;
+
+/** Tonnes per barrel of the fuel mix (EIA factors, weighted by what the country used). */
+export const T_POR_BARRIL = COMBUSTIBLES.densidad.tPorBarril;
+/** Barrels a freight train carries when all it carries is fuel: the average net load of a train. */
+export const BARRILES_POR_TREN = CARGA_POR_TREN / T_POR_BARRIL;
+/** Barrels a tanker carries. */
+export const BARRILES_POR_TANQUE = COMBUSTIBLES.tanque.barriles;
+export const DIAS_EN_PATIO = COMBUSTIBLES.dias.patio;
+export const DIAS_POR_SURTIR = COMBUSTIBLES.dias.porSurtir;
+
+/** The tanker port of each coastal refinery, and the refinery of each such port. */
+export const PUERTO_DE_REFINERIA = new Map(Object.entries(COMBUSTIBLES.puertoDeRefineria));
+export const REFINERIA_DEL_PUERTO = new Map([...PUERTO_DE_REFINERIA].map(([r, p]) => [p, r] as const));
+
+export const ESTADOS_CONSUMO = Object.keys(COMBUSTIBLES.consumo.parte);
+
+/** Thousand barrels a day a state uses. */
+export const consumoDelEstado = (estado: string) => DEMANDA_COMBUSTIBLES * (COMBUSTIBLES.consumo.parte[estado] ?? 0);
+
+/** The zone of each refinery, and the zones whose pipelines reach each state. */
+export const ZONA_DE_REFINERIA = new Map(ZONAS.flatMap((z) => z.refinerias.map((r) => [r, z] as const)));
+export const ZONAS_DEL_ESTADO = new Map(ESTADOS_CONSUMO.map((e) => [e, ZONAS.filter((z) => z.estados[e])] as const));
+export const ZONA = new Map(ZONAS.map((z) => [z.id, z] as const));
+
+/** How each state is supplied: the part by its zones' pipelines, by sea and by rail (0–1). */
+export const REPARTO = COMBUSTIBLES.reparto.porEstado;
+export const TERMINALES = COMBUSTIBLES.terminales;
+export const PUERTOS_COMBUSTIBLE = COMBUSTIBLES.puertos.porPuerto;
+
+/** The states a delivery at a site supplies: its own, plus the neighbours that come through it. */
+export function estadosQueSurte(clave: string, estado: string): string[] {
+  return [estado, ...(COMBUSTIBLES.surte[clave] ?? [])];
+}
+
+/**
+ * How fuel gets around today, thousand barrels a day: what each state uses,
+ * what its pipelines bring from the country's refineries, what it still
+ * lacks, and what each refinery has left over for trains and tankers.
+ */
+export type Abasto = {
+  consumo: Map<string, number>;
+  porDucto: Map<string, number>;
+  hueco: Map<string, number>;
+  /** By refinery: fuel its zone can't take. */
+  sobrante: Map<string, number>;
+};
+
+/** Barrels in `horas` hours of a flow of `mbd` thousand barrels a day. */
+export const barrilesEn = (mbd: number, horas: number) => (mbd * 1000 * horas) / 24;
+
+/** The flows of the game, with the refineries as they stand. */
+export function abastoJuego(r: Refinacion): Abasto {
+  const consumo = new Map(ESTADOS_CONSUMO.map((e) => [e, consumoDelEstado(e)]));
+  const porDucto = new Map(ESTADOS_CONSUMO.map((e) => [e, 0]));
+  const sobrante = new Map<string, number>();
+  for (const z of ZONAS) {
+    const prod = z.refinerias.reduce((s, id) => s + (r.porRefineria.get(id)?.combustibles ?? 0), 0);
+    const demanda = Object.entries(z.estados).reduce((s, [e, f]) => s + (consumo.get(e) ?? 0) * f, 0);
+    const llega = demanda > 0 ? Math.min(1, prod / demanda) : 0;
+    for (const [e, f] of Object.entries(z.estados)) porDucto.set(e, (porDucto.get(e) ?? 0) + (consumo.get(e) ?? 0) * f * llega);
+    const sobra = Math.max(0, prod - demanda);
+    for (const id of z.refinerias) {
+      const p = r.porRefineria.get(id)?.combustibles ?? 0;
+      // A refinery with nowhere to load (Deer Park, through an import terminal) keeps nothing in a yard.
+      const sale = id === 'deer-park' ? 0 : prod > 0 ? (sobra * p) / prod : 0;
+      sobrante.set(id, (sobrante.get(id) ?? 0) + sale);
+    }
+  }
+  // A coastal refinery outside every zone sends all it makes by sea.
+  for (const [id, e] of r.porRefineria) if (!ZONA_DE_REFINERIA.has(id) && id !== 'deer-park') sobrante.set(id, e.combustibles);
+  const hueco = new Map(ESTADOS_CONSUMO.map((e) => [e, Math.max(0, consumo.get(e)! - porDucto.get(e)!)]));
+  return { consumo, porDucto, hueco, sobrante };
+}
+
+// ---- what happened in a year -----------------------------------------------------------------------
+
+/** Barrels in a year: used, brought by pipeline, by the player's trains and tankers, imported. */
+export type Cuenta = { consumo: number; ducto: number; tren: number; barco: number; importado: number };
+export const cuentaVacia = (): Cuenta => ({ consumo: 0, ducto: 0, tren: 0, barco: 0, importado: 0 });
+
+/** Share of a year's use that came from the country's refineries (0–1). */
+export const delPais = (c: Cuenta) => (c.consumo > 0 ? (c.ducto + c.tren + c.barco) / c.consumo : 0);
+
+// ---- crude --------------------------------------------------------------------------------------------
+
+const AÑOS_CRUDO = Object.keys(REAL_COMBUSTIBLES.crudo.produccion).map(Number);
+const enSerie = (año: number, años: number[]) => String(Math.max(años[0], Math.min(año, años[años.length - 1])));
+
+/** Pemex's crude production in a game year, Mbd (its real series; later years repeat the last). */
+export const produccionCrudo = (año: number) => REAL_COMBUSTIBLES.crudo.produccion[enSerie(año, AÑOS_CRUDO)];
+
+/** Crude exported in the game: what the Mexican refineries don't run, Mbd. */
+export const exportacionCrudoJuego = (horas: number, proceso: number) => Math.max(0, produccionCrudo(añoDe(horas)) - proceso);
+
+/** A year of the real series, if published: crude produced and exported, fuels made and imported (Mbd). */
+export function realDelAño(año: number) {
+  const a = String(año);
+  const c = REAL_COMBUSTIBLES.crudo;
+  const f = REAL_COMBUSTIBLES.combustibles;
+  if (c.exportacion[a] === undefined && f.importacion[a] === undefined) return null;
+  return {
+    crudo: c.produccion[a] ?? null,
+    exportado: c.exportacion[a] ?? null,
+    hecho: f.produccion[a] ?? null,
+    importado: f.importacion[a] ?? null,
+    parcial: c.parcial[a] ?? f.parcial[a] ?? null,
+  };
+}

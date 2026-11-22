@@ -145,10 +145,10 @@ const A = [
   ['Progreso', 'maritima', 'puerto:progreso', 12242.9, 143178.9],
   ['Dos Bocas', 'maritima', 'puerto:dos-bocas', 7952.5, 153495.8],
   ['Tampico', 'maritima', 'puerto:tampico', 6300.5, 78169.7],
-  ['La Paz', 'maritima', null, 5410.6, 30256.4],
+  ['La Paz', 'maritima', 'puerto:la-paz', 5410.6, 30256.4],
   ['Cancún', 'maritima', null, 2336.3, 42915.7],
   ['Ciudad del Carmen', 'maritima', null, 1221.9, 141144.1],
-  ['Acapulco', 'maritima', null, 796.7, 1635.8],
+  ['Acapulco', 'maritima', 'puerto:acapulco', 796.7, 1635.8],
   ['Salina Cruz', 'maritima', 'puerto:salina-cruz', 527.6, 49035.3],
 ];
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-');

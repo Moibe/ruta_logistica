@@ -48,6 +48,14 @@ export type Barco = Marcha & {
   nombre: string;
   color: string;
   clase: ClaseBarco;
+  /**
+   * Fuel aboard (barrels), the refinery it came from, and the barrels it has
+   * delivered so far. Only tankers carry it (`combustibles.ts`); the other
+   * classes sail empty for now.
+   */
+  combustible: number;
+  combustibleDe: string | null;
+  entregadoCombustible: number;
 };
 
 /** Cool tints only: cyan is the sea colour, the warm ones belong to the trains. */
@@ -94,7 +102,19 @@ export function crearBarco(mar: Mar, def: NuevoBarco): Barco | null {
     desfase: def.desfase,
   });
   if (!marcha) return null;
-  return { ...marcha, tipo: 'barco', id: def.id, nombre: def.nombre, color: def.color, clase: def.clase };
+  return {
+    ...marcha,
+    tipo: 'barco',
+    id: def.id,
+    nombre: def.nombre,
+    color: def.color,
+    clase: def.clase,
+    // A tanker loads and unloads at its ports: the clock hands its arrivals to the simulation.
+    ...(def.clase === 'tanque' ? { llegadas: marcha.estado === 'parada' ? [marcha.pierna] : [] } : {}),
+    combustible: 0,
+    combustibleDe: null,
+    entregadoCombustible: 0,
+  };
 }
 
 /**

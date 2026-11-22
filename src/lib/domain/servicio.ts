@@ -37,7 +37,7 @@ export type Marcha = {
   espera: number;
   /** Total km run since the vehicle entered service. */
   odometro: number;
-  /** Legs just finished (their index), oldest first, for whoever keeps the cargo: trains only. */
+  /** Legs just finished (their index), oldest first, for whoever keeps the cargo: trains and tankers. */
   llegadas?: number[];
 };
 

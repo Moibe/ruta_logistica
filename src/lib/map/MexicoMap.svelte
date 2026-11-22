@@ -22,6 +22,21 @@
     type SituacionDucto,
   } from '$lib/domain/ductos';
   import { ADUANA_DEL_SITIO, EXPORTACIONES, SALIDAS } from '$lib/domain/exportaciones';
+  import {
+    delPais,
+    DIAS_EN_PATIO,
+    exportacionCrudoJuego,
+    realDelAño,
+    ESTADOS_CONSUMO,
+    PUERTO_DE_REFINERIA,
+    PUERTOS_COMBUSTIBLE,
+    REFINERIA_DEL_PUERTO,
+    REPARTO,
+    TERMINALES,
+    ZONA,
+    ZONAS_DEL_ESTADO,
+    type Terminal,
+  } from '$lib/domain/combustibles';
   import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, SUBREGIONES_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
   import {
     OBRAS_DE_REFINERIA,
@@ -349,6 +364,7 @@
     energia: boolean;
     refinerias: boolean;
     ductos: boolean;
+    combustibles: boolean;
   };
   let layers = $state<Layers>({
     estados: true,
@@ -360,7 +376,80 @@
     energia: false,
     refinerias: true,
     ductos: false,
+    combustibles: false,
   });
+
+  // ---- fuel ---------------------------------------------------------------------------------
+
+  /** Fuel's own amber, a step lighter than the refineries' brown-gold. */
+  const COMBUSTIBLE = '#f5b971';
+
+  /**
+   * Share of a state's fuel this game year that came from the country's
+   * refineries (0–1). Early in a year, before a day has gone by, today's
+   * pipeline flows stand in.
+   */
+  function parteDelPais(estado: string): number {
+    const c = sim.cuentaCombustibles(añoDe(sim.horas), estado);
+    if (c.consumo > 0) return delPais(c);
+    const a = sim.abasto;
+    const usa = a?.consumo.get(estado) ?? 0;
+    return a && usa > 0 ? (a.porDucto.get(estado) ?? 0) / usa : 0;
+  }
+
+  /** A Pemex terminal in the colour of how its fuel gets there: a refinery zone's pipelines, the sea, the rail. */
+  const COLOR_RED_TERMINAL: Record<Terminal['red'], string> = {
+    centro: COMBUSTIBLE,
+    noreste: COMBUSTIBLE,
+    sur: COMBUSTIBLE,
+    mar: '#67e8f9',
+    tren: '#c3a6ff',
+  };
+  const MEDIOS: Record<string, string> = { ducto: 'ducto', buquetanque: 'buque tanque', carrotanque: 'carro tanque', autotanque: 'autotanque', refineria: 'la refinería' };
+
+  /** How a terminal is supplied (SENER's map) and what that means in the game. */
+  function textoTerminal(t: Terminal): { como: string; juego: string } {
+    const medios = t.medio.split('+').map((m) => MEDIOS[m] ?? m);
+    const como = `Se surte ${medios.map((m) => (m === 'la refinería' ? 'de la refinería' : `por ${m}`)).join(' y ')}${t.desde ? ` desde ${t.desde}` : ''}`;
+    const juego =
+      t.red === 'mar'
+        ? 'Llega por mar: en el juego, en tus buques tanque o importado'
+        : t.red === 'tren'
+          ? 'Llega por tren: en el juego, en tus trenes o importado'
+          : `Por los ductos de la zona ${ZONA.get(t.red)?.nombre}`;
+    return { como, juego };
+  }
+
+  /** The fill of a state on the fuel layer: dark when it imports, amber as more of it comes from the country. */
+  const colorCombustible = (parte: number) => `rgba(245, 185, 113, ${(0.05 + 0.5 * Math.max(0, Math.min(1, parte))).toFixed(3)})`;
+
+  /** The country's fuel this year, for the fuel layer's legend: the game's so far, or the real year's. */
+  const resumenCombustibles = $derived.by(() => {
+    if (!layers.combustibles) return null;
+    sim.horas;
+    const año = añoDe(sim.horas);
+    if (sim.modo === 'realidad') {
+      const r = realDelAño(año);
+      return r && r.hecho != null && r.importado != null
+        ? `${año}${r.parcial ? ` (${r.parcial})` : ''}: Pemex hizo ${fmtMil(r.hecho)} mil b/d de gasolina, diésel y turbosina e importó ${fmtMil(r.importado)} mil; ` +
+            `exportó ${fmtMil(r.exportado ?? 0)} mil b/d de crudo.`
+        : null;
+    }
+    const c = sim.cuentaCombustibles(año);
+    const dias = sim.diasContados(año);
+    const mbd = (b: number) => fmtMil(b / dias / 1000);
+    const crudo = exportacionCrudoJuego(sim.horas, sim.refinacion?.proceso ?? 0);
+    return (
+      `${año}: del país vino el ${Math.round(delPais(c) * 100)} % (${mbd(c.ducto)} mil b/d por ducto, ${mbd(c.tren)} en tren, ${mbd(c.barco)} en barco); ` +
+      `se importan ${mbd(c.importado)} mil b/d. Crudo exportado: ${fmtMil(crudo)} mil b/d.`
+    );
+  });
+
+  /** The two states' fills paint the same polygons: one layer at a time. */
+  function alternarCapa(capa: 'energia' | 'combustibles') {
+    layers[capa] = !layers[capa];
+    if (layers[capa]) layers[capa === 'energia' ? 'combustibles' : 'energia'] = false;
+  }
   /** What the track's colour says: its class (the default), its owner, or how full it is. */
   let modoVias = $state<ModoVias>('clase');
 
@@ -374,6 +463,7 @@
     | { kind: 'via'; base: number }
     | { kind: 'planta'; indice: number }
     | { kind: 'refineria'; refineria: Refineria }
+    | { kind: 'terminal'; terminal: Terminal }
     | { kind: 'ducto'; ducto: Ducto }
     /** `region`: the pointer is over a system of its own inside the state (Mulegé), with the electricity layer on. */
     | { kind: 'estado'; estado: EstadoProps; region?: string };
@@ -451,6 +541,7 @@
   let poloPts: [number, number][] = [];
   let plantaPts: [number, number][] = [];
   let refineriaPts: [number, number][] = [];
+  let terminalPts: [number, number][] = [];
   /** Station on the track and the site it serves, both in path space. */
   let estacionPts: { clave: string; via: [number, number]; sitio: [number, number]; km: number }[] = [];
   /** Where each vehicle's head was drawn last frame, for hit-testing. */
@@ -520,6 +611,7 @@
     poloPts = POLOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     plantaPts = LONLAT_PLANTAS.map((p) => projection!(p) ?? [NaN, NaN]);
     refineriaPts = REFINERIAS.map((r) => projection!(r.lonLat) ?? [NaN, NaN]);
+    terminalPts = TERMINALES.map((t) => projection!(t.lonLat) ?? [NaN, NaN]);
     ductoPaths = DUCTOS.map((d) => {
       const g: MultiLineString = { type: 'MultiLineString', coordinates: d.trazo };
       return { d, path: new Path2D(path!(g) ?? ''), bounds: path!.bounds(g) };
@@ -962,6 +1054,15 @@
           ctx.lineWidth = 0.9 / k;
           ctx.stroke(s.frontera);
           ctx.restore();
+        }
+      }
+
+      // Fuel: every state by how much of what it uses came from the country's refineries this year.
+      if (layers.combustibles && !layers.energia && sim.modo === 'juego' && sim.abasto) {
+        for (const est of b.estados) {
+          if (!ESTADOS_CONSUMO.includes(est.props.clave)) continue;
+          ctx.fillStyle = colorCombustible(parteDelPais(est.props.clave));
+          ctx.fill(est.path);
         }
       }
 
@@ -1510,9 +1611,29 @@
       });
     }
 
+    // Pemex's fuel terminals (SENER, 2018), with the fuel layer: a dot sized by
+    // its storage, in the colour of how its fuel gets there.
+    if (layers.combustibles && !tablero.trazando) {
+      TERMINALES.forEach((t, i) => {
+        const x = sx(terminalPts[i]);
+        const y = sy(terminalPts[i]);
+        if (!onScreen(x, y)) return;
+        const hot = hovered?.kind === 'terminal' && hovered.terminal.nombre === t.nombre;
+        const r = (2.2 + Math.sqrt(t.capacidad) * 0.085) * (hot ? 1.3 : 1);
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = hot ? '#ffffff' : COLOR_RED_TERMINAL[t.red];
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
+        ctx.lineWidth = 0.9;
+        ctx.stroke();
+      });
+    }
+
     // Refineries: a drop of oil, sized by the crude it runs. The Olmeca is
     // hollow and dashed until it runs; Deer Park is dim until it's all Pemex's.
-    // Faded while laying out a route: they aren't stops.
+    // Laying out a train, the ones with a station are stops (fuel loads
+    // there); for a ship they fade back, their port is the stop.
     if (layers.refinerias) {
       REFINERIAS.forEach((r, i) => {
         const x = sx(refineriaPts[i]);
@@ -1522,7 +1643,8 @@
         const opera = refineriaOpera(r);
         const p = procesoMapa(r);
         const s = tamañoGota(opera ? (p ?? 150) : r.capacidad * 0.5) * (hot ? 1.15 : 1);
-        ctx.globalAlpha = tablero.trazando ? 0.3 : r.extranjera && !sim.deerParkPropia ? 0.55 : 1;
+        const parada = trazaTren && conEstacion(`refineria:${r.id}`);
+        ctx.globalAlpha = tablero.trazando && !parada ? 0.3 : r.extranjera && !sim.deerParkPropia ? 0.55 : 1;
         gota(ctx, x, y, s);
         if (opera) {
           ctx.fillStyle = hot ? '#fff1dc' : REFINERIA;
@@ -1542,7 +1664,7 @@
         ctx.globalAlpha = 1;
         const R = s + 1.5;
         taken.push([x - R, y - R, x + R, y + R]);
-        if (tablero.trazando) return;
+        if (tablero.trazando && !parada) return;
         labels.push({
           text: r.corto,
           spots: spotsAround(x, y, R),
@@ -2094,11 +2216,22 @@
         }
       });
     }
-    if (layers.refinerias && !tablero.trazando) {
+    // While laying out a train, a refinery with a station is a stop (fuel loads there); never for a ship.
+    if (layers.refinerias && (!tablero.trazando || tablero.pestaña === 'tren')) {
       REFINERIAS.forEach((r, i) => {
+        if (tablero.trazando && !sim.red?.estaciones.has(`refineria:${r.id}`)) return;
         const d = Math.hypot(transform.applyX(refineriaPts[i][0]) - mx, transform.applyY(refineriaPts[i][1]) - my);
         if (d < 9 && d < bestD) {
           best = { kind: 'refineria', refineria: r };
+          bestD = d;
+        }
+      });
+    }
+    if (layers.combustibles && !tablero.trazando) {
+      TERMINALES.forEach((t, i) => {
+        const d = Math.hypot(transform.applyX(terminalPts[i][0]) - mx, transform.applyY(terminalPts[i][1]) - my);
+        if (d < 7 && d < bestD) {
+          best = { kind: 'terminal', terminal: t };
           bestD = d;
         }
       });
@@ -2175,6 +2308,8 @@
                   ? `planta:${t.indice}`
                 : t.kind === 'refineria'
                   ? `refineria:${t.refineria.id}`
+                : t.kind === 'terminal'
+                  ? `terminal:${t.terminal.nombre}`
                 : t.kind === 'ducto'
                   ? `ducto:${t.ducto.id}`
                 : `estado:${t.estado.clave}${t.region ? `:${t.region}` : ''}`;
@@ -2191,7 +2326,9 @@
             ? `polo:${t.polo.id}`
             : t?.kind === 'aeropuerto'
               ? `aeropuerto:${t.aeropuerto.id}`
-              : null;
+              : t?.kind === 'refineria' && !t.refineria.extranjera
+                ? `refineria:${t.refineria.id}`
+                : null;
 
   function onPointerMove(event: PointerEvent) {
     if (!canvas || event.buttons) return; // no hover while dragging the map
@@ -2259,8 +2396,8 @@
       tablero.obraSel = fichaDeRefineria(target.refineria);
       return;
     }
-    // A rail line or a power plant only shows its card on hover.
-    if (target.kind === 'via' || target.kind === 'planta') return;
+    // A rail line, a power plant or a fuel terminal only shows its card on hover.
+    if (target.kind === 'via' || target.kind === 'planta' || target.kind === 'terminal') return;
     if (target.kind === 'estado') {
       const e = baked?.estados.find((x) => x.props.clave === target.estado.clave);
       if (e) flyToBounds(e.bounds);
@@ -2466,6 +2603,24 @@
     });
   });
 
+  // The fuel layer: each state's share from the country, checked once a game
+  // day and repainted when one of them moves a 5 % step.
+  let firmaCombustibles = '';
+  $effect(() => {
+    layers.combustibles;
+    layers.energia;
+    sim.modo;
+    sim.abasto;
+    diaDelTablero;
+    untrack(() => {
+      const pinta = layers.combustibles && !layers.energia && sim.modo === 'juego' && sim.abasto;
+      const firma = pinta ? ESTADOS_CONSUMO.map((e) => Math.round(parteDelPais(e) * 20)).join() : 'no';
+      if (firma === firmaCombustibles) return;
+      firmaCombustibles = firma;
+      ensuciaCapa();
+    });
+  });
+
   $effect(() => {
     // The refineries: their runs change daily as rehabilitations advance, and with the date in Realidad.
     layers.refinerias;
@@ -2484,11 +2639,12 @@
   });
 
   $effect(() => {
-    // What's drawn in the fondo over it: sites, stations, picked stops.
+    // What's drawn in the fondo over it: sites, stations, picked stops, the fuel terminals.
     layers.puertos;
     layers.aeropuertos;
     layers.ciudades;
     layers.polos;
+    layers.combustibles;
     tablero.paradas;
     tablero.candidato;
     ensucia();
@@ -2530,6 +2686,10 @@
   // ---- tooltip text -------------------------------------------------------------
 
   const fmt = new Intl.NumberFormat('es-MX');
+  /** Thousands of barrels, whole: "1,231". */
+  const fmtMil = (n: number) => fmt.format(Math.round(n));
+  /** Tonnes as millions: "3.55 Mt", "0.09 Mt". */
+  const mt = (t: number) => `${(t / 1e6).toLocaleString('es-MX', { maximumFractionDigits: 2, minimumFractionDigits: t < 1e7 ? 2 : 1 })} Mt`;
   function poblacion(n: number): string {
     return n >= 1e6
       ? `${(n / 1e6).toLocaleString('es-MX', { maximumFractionDigits: 1 })} M hab.`
@@ -2673,6 +2833,29 @@
       {@const rail = lineaTrazado || servicio(`puerto:${hovered.puerto.id}`)}
       {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.pestaña === 'barco'}>{rail}</span>{/if}
       {@render aduana(`puerto:${hovered.puerto.id}`)}
+      {@const refDelPuerto = REFINERIA_DEL_PUERTO.get(`puerto:${hovered.puerto.id}`)}
+      {#if refDelPuerto && sim.modo === 'juego'}
+        {@const _reloj = sim.horas}
+        <span class="tip-sub" style:color={COMBUSTIBLE}>
+          Los buques tanque cargan aquí combustible de la refinería {refineriaPorId(refDelPuerto)?.corto}: {fmtMil(sim.enPatio(refDelPuerto) / 1000)} mil barriles en espera
+        </span>
+      {/if}
+      {@const pet = layers.combustibles ? PUERTOS_COMBUSTIBLE[hovered.puerto.id] : null}
+      {#if pet}
+        {@const año = sim.modo === 'realidad' && añoDe(sim.horas) >= 2024 ? '2024' : '2018'}
+        {@const [imp, exp, recibe, envia] = pet[año]}
+        <span class="tip-sub">
+          Petróleo y derivados en {año} (SEMAR): {[
+            imp ? `importó ${mt(imp)}` : '',
+            exp ? `exportó ${mt(exp)}` : '',
+            recibe ? `recibió ${mt(recibe)} por cabotaje` : '',
+            envia ? `mandó ${mt(envia)} por cabotaje` : '',
+          ]
+            .filter(Boolean)
+            .join(', ') || 'nada'}
+        </span>
+        {#if pet.nota}<span class="tip-sub">{pet.nota}</span>{/if}
+      {/if}
     {:else if hovered.kind === 'aeropuerto'}
       {@const a = hovered.aeropuerto}
       {@const año = añoAeropuerto()}
@@ -2720,6 +2903,10 @@
       </span>
       <strong>{r.nombre}</strong>
       <span class="tip-sub">{r.lugar} · capacidad de {fmt.format(r.capacidad)} mil barriles diarios</span>
+      {#if !r.extranjera}
+        {@const rail = lineaTrazado || servicio(`refineria:${r.id}`)}
+        {#if rail}<span class="tip-rail">{rail}</span>{/if}
+      {/if}
       {#if sim.modo === 'realidad'}
         {@const pr = procesoReal(r, sim.horas)}
         {#if pr && opera}
@@ -2738,6 +2925,16 @@
           {:else}
             <span class="tip-sub">{fmt.format(Math.round(e.combustibles))} mil barriles diarios de gasolina, diésel y turbosina</span>
           {/if}
+          {@const sobra = sim.abasto?.sobrante.get(r.id) ?? 0}
+          {@const _reloj = sim.horas}
+          {@const patio = sim.enPatio(r.id)}
+          {#if !r.extranjera && (sobra > 0.05 || patio >= 1000)}
+            {@const lleno = e.combustibles > 0 && patio >= e.combustibles * 1000 * DIAS_EN_PATIO * 0.98}
+            <span class="tip-rail" class:alerta-tip={lleno}>
+              Su zona no usa {fmtMil(sobra)} mil b/d: en su patio esperan {fmtMil(patio / 1000)} mil barriles
+              {lleno ? '· lleno, ya no tiene salida' : `para tus trenes${PUERTO_DE_REFINERIA.has(r.id) ? ' y buques tanque' : ''}`}
+            </span>
+          {/if}
         {/if}
         {#each OBRAS_DE_REFINERIA.get(r.id) ?? [] as o (o.id)}
           {@const est = sim.obrasPemex.get(o.id)}
@@ -2753,7 +2950,15 @@
           {/if}
         {/each}
       {/if}
-      <span class="tip-sub">Clic: abrir su ficha</span>
+      {#if !tablero.trazando}<span class="tip-sub">Clic: abrir su ficha</span>{/if}
+    {:else if hovered.kind === 'terminal'}
+      {@const t = hovered.terminal}
+      {@const txt = textoTerminal(t)}
+      <span class="label tip-kind" style:color={COLOR_RED_TERMINAL[t.red]}>Terminal de Pemex · región {t.region}</span>
+      <strong>{t.nombre}</strong>
+      <span class="tip-sub">{estadoNombre.get(t.estado) ?? t.estado} · {fmt.format(t.capacidad)} mil barriles de capacidad operativa</span>
+      <span class="tip-rail">{txt.como}</span>
+      <span class="tip-sub">{txt.juego}</span>
     {:else if hovered.kind === 'ducto'}
       {@const d = hovered.ducto}
       {@const s = situacionAhora(d)}
@@ -2901,6 +3106,38 @@
           <span class="tip-sub">{a.nombre}, al norte, es un sistema aislado aparte.</span>
         {/each}
       {/if}
+    {:else if hovered.kind === 'estado' && layers.combustibles && sim.modo === 'juego' && sim.abasto && ESTADOS_CONSUMO.includes(hovered.estado.clave)}
+      {@const clave = hovered.estado.clave}
+      {@const a = sim.abasto}
+      {@const _reloj = sim.horas}
+      {@const año = añoDe(sim.horas)}
+      {@const c = sim.cuentaCombustibles(año, clave)}
+      {@const zonas = ZONAS_DEL_ESTADO.get(clave) ?? []}
+      {@const r = REPARTO[clave] ?? {}}
+      {@const usa = a.consumo.get(clave) ?? 0}
+      {@const hueco = a.hueco.get(clave) ?? 0}
+      <span class="label tip-kind" style:color={COMBUSTIBLE}>Combustibles · {clave}</span>
+      <strong>{hovered.estado.nombre}</strong>
+      <span class="tip-rail">
+        Usa {fmtMil(usa)} mil barriles diarios · en {año}, el {Math.round(parteDelPais(clave) * 100)} % vino del país
+      </span>
+      <span class="tip-sub">
+        Se surte {[
+          ...zonas.map((z) => `${Math.round((z.estados[clave] ?? 0) * 100)} % por los ductos de ${z.nombre}`),
+          ...(r.mar ? [`${Math.round(r.mar * 100)} % por mar`] : []),
+          ...(r.tren ? [`${Math.round(r.tren * 100)} % por tren`] : []),
+        ].join(', ')} (SENER, 2018)
+      </span>
+      {#if zonas.length}
+        <span class="tip-sub">Hoy sus ductos le traen {fmtMil(a.porDucto.get(clave) ?? 0)} mil b/d de refinerías del país</span>
+      {/if}
+      {#if hueco > 0.05}
+        <span class="tip-sub">Le faltan {fmtMil(hueco)} mil b/d: los traen tus trenes y buques tanque, o se importan</span>
+        <span class="tip-sub">
+          En sus terminales: {fmtMil(sim.enTerminales(clave) / 1000)} mil barriles que llevaste
+          {#if c.tren + c.barco > 0}· en {año}, {fmtMil(c.tren / 1000)} mil en tren y {fmtMil(c.barco / 1000)} mil en barco{/if}
+        </span>
+      {/if}
     {:else}
       <span class="label tip-kind">Estado · {hovered.estado.clave}</span>
       <strong>{hovered.estado.nombre}</strong>
@@ -2943,6 +3180,23 @@
     {#if sim.modo === 'realidad'}
       <p class="nota-leyenda">Margen estimado por el juego: los oficiales de 2019 más las centrales que entraron de verdad.</p>
     {/if}
+  </div>
+{:else if layers.combustibles && !tablero.catalogo}
+  <div class="vias panel energia">
+    <span class="label">Combustibles · {sim.modo === 'juego' ? `lo que vino del país en ${añoDe(sim.horas)}` : 'del país'}</span>
+    {#if sim.modo === 'juego'}
+      <div class="degradado-combustible" aria-hidden="true"></div>
+      <div class="escala-combustible"><span>todo importado</span><span>todo del país</span></div>
+    {/if}
+    {#if resumenCombustibles}<p class="resumen-combustibles">{resumenCombustibles}</p>{/if}
+    <ul class="leyenda dos">
+      <li><span class="punto" style:background={COMBUSTIBLE}></span>Terminal por ducto</li>
+      <li><span class="punto" style:background={COLOR_RED_TERMINAL.mar}></span>Por mar</li>
+      <li><span class="punto" style:background={COLOR_RED_TERMINAL.tren}></span>Por tren</li>
+    </ul>
+    <p class="nota-leyenda">
+      {sim.modo === 'juego' ? 'Terminales de Pemex por cómo les llega el combustible (SENER, 2018).' : 'Sin cifras por estado en Realidad. Terminales de Pemex: SENER, 2018.'}
+    </p>
   </div>
 {:else if layers.ductos && !tablero.catalogo}
   <div class="vias panel energia">
@@ -3020,7 +3274,7 @@
   <button
     class="ctl"
     aria-pressed={layers.energia} title="Energía"
-    onclick={() => (layers.energia = !layers.energia)}
+    onclick={() => alternarCapa('energia')}
   >
     <svg class="sw" width="10" height="13" viewBox="0 0 10 13" aria-hidden="true">
       <path d="M6 0 0 7.5h4L3 13l7-8H6z" fill="#facc15" />
@@ -3036,6 +3290,13 @@
       <path d="M1 3h12" stroke={GAS} stroke-width="1.8" />
       <path d="M1 7.5h12" stroke={REFINERIA} stroke-width="1.4" />
     </svg><span class="txt">Ductos</span>
+  </button>
+  <button class="ctl" aria-pressed={layers.combustibles} title="Combustibles" onclick={() => alternarCapa('combustibles')}>
+    <svg class="sw" width="12" height="13" viewBox="0 0 12 13" aria-hidden="true">
+      <rect x="1" y="1" width="6.5" height="11" rx="1" fill={COMBUSTIBLE} />
+      <rect x="2.3" y="2.4" width="3.9" height="3" rx="0.5" fill="rgba(3, 9, 18, 0.85)" />
+      <path d="M7.5 4.2h1.6l1.4 1.5v4.6a0.9 0.9 0 0 1-1.8 0V7.6H7.5" fill="none" stroke={COMBUSTIBLE} stroke-width="1.1" />
+    </svg><span class="txt">Combustibles</span>
   </button>
   <span class="sep"></span>
   <span class="label mono">{transform.k.toFixed(1)}×</span>
@@ -3355,6 +3616,35 @@
 
   .energia-nivel {
     color: #b7f5cf;
+  }
+
+  /* The fuel layer's scale: the states' own fill, from imported to the country's. */
+  .degradado-combustible {
+    height: 0.55rem;
+    margin: 0.45rem 0.15rem 0.2rem;
+    border-radius: 3px;
+    background: linear-gradient(90deg, rgba(245, 185, 113, 0.05), rgba(245, 185, 113, 0.55));
+    border: 1px solid var(--line);
+  }
+
+  .escala-combustible {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0.15rem;
+    font-size: 0.64rem;
+    color: var(--muted);
+  }
+
+  .alerta-tip {
+    color: #fca5a5;
+  }
+
+  .resumen-combustibles {
+    margin: 0.4rem 0 0.1rem;
+    padding: 0 0.15rem;
+    font-size: 0.7rem;
+    line-height: 1.35;
+    color: #f5d9b4;
   }
 
   .tip-aduana {
