@@ -35,8 +35,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [Natural Earth](https://www.naturalearthdata.com/) 1:10m | Estados, países vecinos, vías férreas y ciudades del tablero de México | Repositorio `nvkelso/natural-earth-vector`, commit `ca96624` del 2 de junio de 2022 (versión 5.2.0-pre) | Dominio público |
 | Atlas Ambiental de América del Norte, de la CCA (Comisión para la Cooperación Ambiental de México, Estados Unidos y Canadá) | Origen de las vías férreas de Norteamérica que trae Natural Earth (así lo registra la bitácora de cambios de Natural Earth); reúne cartografía de INEGI, USGS y Natural Resources Canada | Red de alrededor de 2010 | A través de Natural Earth |
 | [world-atlas](https://github.com/topojson/world-atlas) | Contornos del mundo para las vistas globales (tierra a 110m y 50m, países a 110m), y la tierra 50m sobre la que se calculan las travesías oceánicas | 2.0.2, que redistribuye Natural Earth 4.1.0 en TopoJSON | ISC (los datos, dominio público) |
-| Curaduría propia | Los 17 puertos, las 2 salidas al mundo y sus puertos lejanos (Shanghái y Róterdam), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
-| Cálculo propio sobre Natural Earth | Las 171 rutas marítimas entre puertos y salidas, y las 2 travesías oceánicas de las salidas a sus puertos lejanos (ver [Rutas marítimas](#8-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
+| Curaduría propia | Los 18 puertos, las 2 salidas al mundo y sus puertos lejanos (Shanghái y Róterdam), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
+| Cálculo propio sobre Natural Earth | Las 276 rutas marítimas entre puertos, salidas y complejos de plataformas, y las 2 travesías oceánicas de las salidas a sus puertos lejanos (ver [Rutas marítimas](#8-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
 | `logistica-oceanica` (proyecto hermano) | Velocidades de referencia de las clases de barco | — | Del proyecto |
 | [Diario Oficial de la Federación](https://dof.gob.mx) | Las declaratorias de los 32 Polos del Bienestar vigentes: polígono, superficie, municipio y fecha de cada uno (ver [Polos del Bienestar](#5-polos-del-bienestar)) | Declaratorias del 12 de mayo de 2023 al 7 de agosto de 2026, con sus notas aclaratorias y modificaciones; consultadas el 19 de noviembre de 2026 | Documento oficial público |
 | Secretaría de Economía | Lámina "Polos de Desarrollo Económico para el Bienestar" (22 de mayo de 2025): los polos anunciados por etapa | — | Documento oficial público |
@@ -59,7 +59,12 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [Pemex, Informe Anual 2023](https://gaceta.diputados.gob.mx/PDF/65/2024/may/Pemex-20240514.pdf) (enviado al Congreso) | Proceso de 2022 y 2023; Tula, Salina Cruz y Minatitlán en 2023; Deer Park en 2022 y 2023; la producción que sustenta la Olmeca; lo que movió en 2023 por ducto, por tierra y por mar, y su flota | Mayo de 2024 | Documento oficial público |
 | [Presidencia, presentación de resultados de Pemex](https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf) | Combustibles producidos y déficit desde diciembre de 2018; transferencias del Gobierno Federal a Pemex 2019–abril de 2024; costo de la Olmeca y de las coquizadoras | 3 de mayo de 2024 | Documento oficial público |
 | Pemex, comunicados en la Bolsa Mexicana de Valores: [24/2019](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_928185_1.pdf), [159/2021](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1102962_1.pdf), [6/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1159261_1.pdf), [38/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1202976_1.pdf), [9/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1440766_1.pdf), [11/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1444789_1.pdf), [37/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1501814_1.pdf), [51/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1560083_1.pdf) y [87/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1602784_1.pdf) | Arranque de la Olmeca; compra de Deer Park; acuerdos de las coquizadoras; Plan de Trabajo 2025–2030; proceso de 2024; avance de las coquizadoras; Deer Park en 2026 | 2019–2026 | Comunicado oficial |
-| [Primer](https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf) y [Segundo Informe de Gobierno](https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf) | Crudo procesado por cada refinería, mes por mes, de octubre de 2024 a junio de 2026 (SENER con datos de Pemex); en el anexo estadístico del segundo, la producción y la exportación de crudo y la gasolina, el diésel y la turbosina que Pemex produjo e importó cada año | Septiembre de 2025 y de 2026 | Documento oficial público |
+| [Primer](https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf) y [Segundo Informe de Gobierno](https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf) | Crudo procesado por cada refinería, mes por mes, de octubre de 2024 a junio de 2026 (SENER con datos de Pemex); en el anexo estadístico del segundo, la producción y la exportación de crudo y la gasolina, el diésel y la turbosina que Pemex produjo e importó cada año, y el crudo de cada bloque de producción (Cantarell, Ku-Maloob-Zaap, Abkatún-Pol-Chuc, Litoral de Tabasco y los de tierra) | Septiembre de 2025 y de 2026 | Documento oficial público |
+| [SEMAR, Cuaderno de Faros del Golfo de México y Mar Caribe](https://www.gob.mx/cms/uploads/attachment/file/908970/CDF_GOLFO_MARZO_2024.pdf) | La posición de los complejos Akal-C y Pol-A, del rebombeo del Litoral y de la terminal de Cayo Arcas | Marzo de 2024 | Documento oficial público |
+| CNH, dictámenes técnicos de los campos [Sinán](https://www.gob.mx/cms/uploads/attachment/file/856365/II.9_Dictamen_Tecnico_Mod_Plan_Desarrollo_Campo_Sinan.pdf), May, Koban y [Maloob](https://www.gob.mx/cms/uploads/attachment/file/524951/Dictamen_Tecnico_MPD_Maloob.pdf) | Los ductos del Centro de Proceso Litoral-A, para ubicarlo; el campo Maloob | 2019–2023 | Documento oficial público |
+| ASF, auditorías [2017-0485](https://www.asf.gob.mx/trans/informes/ir2017c/Documentos/Auditorias/2017_0485_d.pdf) y [2017-0486](https://www.asf.gob.mx/trans/informes/ir2017c/Documentos/Auditorias/2017_0486_a.pdf) | Qué bloque de producción de Pemex era Cantarell y cuál Ku-Maloob-Zaap | Cuenta Pública 2017 | Documento oficial público |
+| [OurAirports, radioayudas](https://davidmegginson.github.io/ourairports-data/navaids.csv) | La posición del complejo Ku, por su radiofaro: a falta de una oficial | Consultado el 22 de noviembre de 2026 | Dominio público (no oficial) |
+| [La Jornada Maya, «Son bombas de tiempo las 240 plataformas de Pemex en la Sonda de Campeche»](https://www.lajornadamaya.mx/campeche/217526/son-bombas-de-tiempo-las-240-plataformas-de-pemex-en-la-sonda-de-campeche-hernandez-perez) | Cuántas plataformas hay en la Sonda de Campeche, con datos de la SEMAR: 43 tripuladas y unas 200 satélite, con cerca de 17 mil trabajadores | 2020 | Prensa |
 | [OpenStreetMap](https://www.openstreetmap.org/) | El predio de cada refinería | Consultado el 20 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 | CNH, capas de ductos [integrados y no integrados al SISTRANGAS y de importación (2019)](https://idegeo.centrogeo.org.mx/geoserver/ows?service=wfs&version=1.0.0&request=GetCapabilities), [de 2018](https://agsserver.sigsa.info/arcgis/rest/services/Monitoreo_de_flujo_en_tiempo_real_MIL1/MapServer/4) y de [poliductos de Chihuahua](https://services6.arcgis.com/th3TMn162i37A876/ArcGIS/rest/services/AppMote/FeatureServer/14) | El trazo aproximado de los gasoductos (del Estado, privados y de importación) y de los poliductos de Pemex del centro, el golfo y Chihuahua, con capacidad, inversión, permiso y fecha de cada gasoducto privado. La CNH ya no existe y su mapa no responde: se usan las copias en el GeoNode de CentroGeo y en otros servidores | 2018 y 2019 | Documento oficial público (CNH con información de SENER, CENAGAS, CRE y CFE) |
 | [CFE, Plan de Negocios 2021–2025](https://www.cfe.gob.mx/finanzas/Documents/Plan%20de%20Negocios%20CFE%202021.pdf) | La red de gasoductos de la CFE con capacidad y longitud; los que entraron en 2018 y 2019, los detenidos y dónde falta gas | 2021 | Documento oficial público |
@@ -69,7 +74,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [CNH, capa de terminales de almacenamiento de Pemex](https://geomaticasig1.semarnat.gob.mx/arcgis/rest/services/Hosted/Terminal_de_almacenamiento_Pemex/FeatureServer/1) | La ubicación de cada terminal (copia en el servidor de la SEMARNAT) | 2016 | Documento oficial público |
 | [CNE, datos abiertos de petrolíferos](https://www.gob.mx/cne/articulos/consulta-de-datos-abiertos) | Litros de gasolina y diésel vendidos en las gasolineras de cada estado y de turbosina entregados en sus aeródromos: el consumo de cada estado | Abril a diciembre de 2018 | Dato oficial público |
 | ASF, auditorías [474-DE](https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0474_a.pdf) y [476](https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0476_a.pdf) a Pemex Logística | Lo que movió Pemex en 2018 por ducto, autotanque, carro tanque y buque tanque; su flota al cierre de 2018 | Cuenta Pública 2018 | Documento oficial público |
-| [SEMAR, Anuario Estadístico de los Puertos de México 2024](https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024) | Petróleo y derivados por puerto en 2018 y 2024: importación, exportación y cabotaje | 2025 | Documento oficial público |
+| [SEMAR, Anuario Estadístico de los Puertos de México 2024](https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024) | Petróleo y derivados por puerto en 2018 y 2024: importación, exportación y cabotaje; la carga que sale de Dos Bocas y Ciudad del Carmen a las plataformas y cuántos barcos la llevan; el crudo que exporta Cayo Arcas | 2025 | Documento oficial público |
 | [EIA (gobierno de EUA), unidades de International Energy Statistics](https://www.eia.gov/cfapps/ipdbproject/docs/unitswithpetro.php) | Barriles por tonelada de gasolina, diésel y turbosina, para pasar a toneladas lo que cabe en un tren | Consultado el 22 de noviembre de 2026 | Dato oficial público (gobierno de EUA) |
 | [Pemex, boletines regionales de Tampico 2019-004 y 2024-005](https://www.pemex.com/saladeprensa/boletines_regionales/Paginas/2024-005_tampico.aspx) | Lo que carga un buque tanque de su flota: 320 mil barriles. El sitio de Pemex no deja leerlos automáticamente; la cifra es la que muestra el buscador | 2019 y 2024 | Comunicado oficial |
 | Proyectos México, fichas [0770](https://www.proyectosmexico.gob.mx/proyecto_inversion/770-cfe-gasoducto-sur-de-texas-tuxpan-marino/), [0771](https://www.proyectosmexico.gob.mx/proyecto_inversion/771-cfe-gasoducto-la-laguna-aguascalientes/) y [0767](https://www.proyectosmexico.gob.mx/proyecto_inversion/767-cfe-gasoducto-samalayuca-sasabe/) y [ciclo de inversión en hidrocarburos](https://www.proyectosmexico.gob.mx/como-invertir-en-mexico/ciclo-inversion/ciclos-hidrocarburos/) | Inicio de operación del Sur de Texas–Tuxpan, La Laguna–Aguascalientes y Samalayuca–Sásabe; kilómetros de oleoductos y poliductos de Pemex | 2021 y 2026 | Documento oficial público |
@@ -211,11 +216,12 @@ tablero puede ver, para que el borde del recorte nunca aparezca en pantalla.
 
 ## 3. Puertos
 
-Los **17 puertos se curaron a mano**: la capa de puertos de Natural Earth no trae Lázaro
+Los **18 puertos se curaron a mano**: la capa de puertos de Natural Earth no trae Lázaro
 Cárdenas (el segundo del país en contenedores) ni Altamira (el cuarto). Las coordenadas son las de
 la terminal; en los puertos de río (Altamira, Tampico, Tuxpan) y en Topolobampo, al fondo de
 una bahía, el marcador va en la bocana, que es a donde llega un barco. La Paz y Acapulco
-entraron con los combustibles: los dos estados se surten solo por mar.
+entraron con los combustibles: los dos estados se surten solo por mar. Ciudad del Carmen entró
+con las plataformas: es base de abasto costa afuera.
 
 ★ = principal: los cuatro puertos que mueven la mayor parte de los contenedores del país
 (Manzanillo, Lázaro Cárdenas, Veracruz, Altamira). En el mapa llevan un rombo más grande.
@@ -238,6 +244,7 @@ entraron con los combustibles: los dos estados se surten solo por mar.
 | Veracruz ★ | Veracruz | Golfo | 19.205, -96.135 | Estación |
 | Coatzacoalcos | Veracruz | Golfo | 18.140, -94.410 | Estación |
 | Dos Bocas | Tabasco | Golfo | 18.430, -93.180 | Sin vía (a 89 km) |
+| Ciudad del Carmen | Campeche | Golfo | 18.665, -91.795 | Sin vía (a 93 km) |
 | Progreso | Yucatán | Golfo | 21.285, -89.665 | Estación |
 
 "Estación" sin distancia significa que la vía pasa a 3 km o menos.
@@ -269,7 +276,10 @@ entraron con los combustibles: los dos estados se surten solo por mar.
 - **Veracruz ★** — El tercero en contenedores y el puerto más antiguo del país.
 - **Coatzacoalcos** — Extremo del Golfo del Istmo de Tehuantepec y arranque de la línea hacia
   la península de Yucatán.
-- **Dos Bocas** — Puerto petrolero de Tabasco. Sin vía en los datos.
+- **Dos Bocas** — Puerto petrolero de Tabasco y la base principal del abasto a las plataformas. Sin
+  vía en los datos.
+- **Ciudad del Carmen** — En la isla del Carmen. Todo lo que mueve es cabotaje: el abasto a las
+  plataformas (207 mil toneladas salieron en 2018). Sin vía en los datos.
 - **Progreso** — El puerto de Mérida, a 36 km por vía.
 
 **Ciudades portuarias.** Diez puertos comparten nombre con una ciudad del juego (Ensenada,
@@ -942,7 +952,7 @@ donde pasan sí dicen de quién son (ver [Dueños](#dueños)).
 ### Cómo se calculan
 
 Ninguna ruta de barco se dibujó a mano. `npm run datos` las calcula entre **cada par** de los
-17 puertos y las 2 salidas al mundo (171 rutas):
+18 puertos, las 2 salidas al mundo y los 4 complejos de plataformas (276 rutas):
 
 1. **La tierra en una malla.** La misma tierra 1:10m del tablero (estados y países vecinos)
    se pasa a una malla de 0.05° (unos 5.5 km por celda) que va de 122° a 70° O y de 5° a 34°
@@ -959,15 +969,15 @@ Ninguna ruta de barco se dibujó a mano. `npm run datos` las calcula entre **cad
    recorrido exacto de celdas para que ninguna recta pise tierra. Mar abierto y canal se
    enderezan por separado: una recta que saliera del canal directo al mar cruzaría Colón.
 5. **Auditoría**: cada ruta se revisa cada 0.5 km contra una malla 5 veces más fina. Fuera de
-   los primeros y últimos 8 km (la entrada a cada puerto) y del Canal, **ninguna de las 171
+   los primeros y últimos 8 km (la entrada a cada puerto) y del Canal, **ninguna de las 276
    rutas pisa tierra**.
 
 ### Cifras
 
 | | |
 | --- | --- |
-| Rutas | 171 (todas las parejas de 19 puntos) |
-| Pasan por el Canal de Panamá | 88 (las que unen el Pacífico con el Golfo o con la salida a Europa) |
+| Rutas | 276 (todas las parejas de 24 puntos) |
+| Pasan por el Canal de Panamá | 143 (las que unen el Pacífico con el Golfo o con la salida a Europa) |
 | Malla | 603,200 celdas de 0.05° |
 
 Algunas distancias, comparadas con las reales en millas náuticas (mn):
@@ -1048,6 +1058,7 @@ el estrecho antes de salir del tablero.
 | Buque tanque | 14 nudos (26 km/h) | 24 |
 | Granelero | 13 nudos (24 km/h) | 36 |
 | Ro-ro de autos | 18 nudos (33 km/h) | 14 |
+| Barco abastecedor | 12 nudos (22 km/h) | 8 |
 
 Las velocidades parten de las clases de `logistica-oceanica` (Neopanamax 22 nudos, feeder 18,
 petrolero 15, granelero 14), bajadas un poco al promedio de "navegación lenta" que las navieras
@@ -1081,6 +1092,8 @@ salidas al mundo. El ciclo completo suma la navegación y todas las escalas. Una
 - **Isla Tiburón**: el reparto de combustibles por el Golfo. Empieza vacío: en 2018 ni Minatitlán
   ni Dos Bocas tenían qué mandar. Se llena cuando opera la Olmeca o cuando a la zona del centro le
   sobra combustible.
+- **Diez barcos abastecedores** llevan el abasto a los complejos de plataformas desde Dos Bocas y
+  Ciudad del Carmen (ver [Las plataformas del Golfo](#las-plataformas-del-golfo)).
 - **Bahía de Banderas**: autos de costa a costa por el Canal, el rodeo largo que el corredor
   del Istmo existe para acortar.
 - **Laguna de Términos**: graneles minerales de Sonora hacia Asia.
@@ -1875,6 +1888,72 @@ cuánto han entregado.
 `src/lib/domain/datos/combustibles.json` con todo lo de arriba y la fuente de cada cifra. Es
 autocontenido: las cifras se leyeron una vez de sus fuentes y viven en el script.
 
+### Las plataformas del Golfo
+
+En la Sonda de Campeche hay entre 200 y 250 plataformas de Pemex: según la SEMAR, 43 tripuladas y
+unas 200 satélite, con cerca de 17 mil trabajadores (La Jornada Maya, 2020). El juego las junta como
+Pemex reporta su producción: **un complejo por activo**, cada uno en su centro de proceso.
+
+**El crudo no viaja en barco.** De las plataformas llega a tierra por ductos submarinos, a Dos Bocas
+y a Atasta, o se carga en altamar, en **Cayo Arcas**, en los barcos de los compradores: 26.9
+millones de toneladas exportadas ahí en 2018 y 15.8 en 2024 (SEMAR). En el juego eso es automático.
+Lo que sí va y viene en barco es **el abasto**: gente, diésel, agua, tubería y equipo. Esa es la
+logística del jugador.
+
+| Complejo | Bloque de Pemex | Crudo 2018 (Mbd) | 2025 | Abasto que pide en 2018 (t/día) |
+| --- | --- | ---: | ---: | ---: |
+| Ku-Maloob-Zaap | AS01-02 | 874.7 | 530.5 | 3,610 |
+| Litoral de Tabasco | AS02-04 | 291.1 | 277.4 | 1,201 |
+| Abkatún-Pol-Chuc | AS02-03 | 183.8 | 123.4 | 759 |
+| Cantarell | AS01-01 | 161.2 | 114.0 | 665 |
+
+La producción es la real de cada año (anexo del Segundo Informe de Gobierno). Pemex ya no la reporta
+por el nombre del activo sino por bloque. La ASF dice qué bloque era Cantarell («AS01-01, antes
+Cantarell») y cuál Ku-Maloob-Zaap; un dictamen de la CNH marca el AS02-04 sobre los campos del Litoral
+de Tabasco, y el AS02-03 queda por descarte. Las series cuadran: el AS01-01 daba 1,801 Mbd en 2006.
+
+**Dónde están:**
+
+- **Cantarell:** el complejo Akal-C, de 7 plataformas, y **Abkatún-Pol-Chuc**, el complejo Pol-A, de 6,
+  en la posición que da la SEMAR en su Cuaderno de Faros del Golfo (marzo de 2024).
+- **Ku-Maloob-Zaap:** el complejo Ku, por su radiofaro, de una base de datos de navegación aérea que no es
+  oficial. No se encontró una oficial; cuadra con el campo Maloob y sus ductos en el dictamen de la CNH.
+- **Litoral de Tabasco:** su Centro de Proceso Litoral-A no tiene coordenada publicada. El juego lo pone
+  8 km al sur del rebombeo que da la SEMAR, donde cuadran las longitudes de sus ductos en los
+  dictámenes de la CNH: **estimación del juego**, a unos 5 km.
+- **Cayo Arcas:** su plataforma de habitación, según la SEMAR. El resto del crudo de Pemex sale de los campos en tierra y sigue su serie
+real.
+
+**El abasto:**
+
+- **Cuánto piden:** lo que salió en barco a las plataformas en 2018: 2.07 millones de toneladas de
+  carga general de Dos Bocas y 207 mil de Ciudad del Carmen (SEMAR), unas 6,200 al día. El juego lo
+  reparte entre los complejos por lo que produce cada uno: **estimación del juego**, porque no hay
+  cifra oficial por complejo.
+- **Las bases:** Dos Bocas y **Ciudad del Carmen**, que entra como puerto del tablero para esto.
+- **El barco abastecedor:** una clase nueva, a 12 nudos y con 8 horas en cada escala. Carga 918
+  toneladas, lo que llevó en promedio cada uno de los 2,497 barcos que salieron de Dos Bocas en 2024.
+  Carga en una base y descarga en los complejos. Los otros barcos no pueden ir a las plataformas.
+- **La reserva:** un complejo guarda hasta 15 días de abasto.
+- **Sin abasto, menos crudo.** La producción depende de cómo se surtió el complejo el último mes. Sin
+  nada de abasto cae a la mitad: los pozos siguen fluyendo, pero sin mantenimiento ni gente se van
+  cerrando plataformas. Ese piso y la memoria de un mes son **reglas del juego**.
+
+**La partida** empieza con 10 barcos abastecedores: seis de Dos Bocas a Ku-Maloob-Zaap, dos de Dos
+Bocas al Litoral de Tabasco, y uno de Ciudad del Carmen a cada uno de Abkatún-Pol-Chuc y Cantarell.
+Alcanzan con algo de margen para lo que pedían en 2018. Con los años el crudo se mueve, del
+Ku-Maloob-Zaap al Litoral de Tabasco, y el abasto con él: hay que mover barcos.
+
+**El crudo exportado** del juego es lo que produce Pemex (sus complejos según su abasto, y lo demás
+a su ritmo real) menos lo que procesan sus refinerías. Un complejo mal abastecido baja la
+exportación.
+
+**En el mapa,** la capa *Plataformas* dibuja cada complejo como una plataforma del tamaño de su
+crudo, y Cayo Arcas como un anillo. Al pasar el cursor, un complejo dice lo que produce, lo que
+necesita de abasto, para cuántos días tiene y qué tanto se surtió el último mes. Al trazar un barco
+abastecedor, los complejos son escalas. La ficha del barco dice cuánto abasto lleva y cuánto ha
+entregado.
+
 ### El modo Realidad
 
 El tablero tiene dos modos, con el interruptor *Juego / Realidad* del reloj. En **Realidad** no
@@ -2057,6 +2136,7 @@ pesos):
 | Chihuahua | Interior | 1.3 | No (aduana interior de ciudad) |
 | Torreón | Interior | 0.8 | No (aduana interior de ciudad) |
 | Acapulco | Marítima | 0.8 | Sí (sin vía: ningún tren llega) |
+| Ciudad del Carmen | Marítima | 1.2 | Sí (sin vía: ningún tren llega) |
 | Salina Cruz | Marítima | 0.5 | Sí |
 
 ### La carga nacional
@@ -2205,6 +2285,11 @@ en 2025.
   gobierno usó para eso.
 - **La Paz y Acapulco, puertos del tablero.** *(22 nov 2026.)* Baja California Sur y la terminal de
   Acapulco solo se surten por mar. Sin sus puertos, el jugador nunca podría llevarles combustible.
+- **Las plataformas, por complejo; el jugador lleva el abasto, no el crudo.** *(22 nov 2026.)* El
+  usuario quería la logística de plataforma a puerto. En la realidad el crudo va a tierra por ducto
+  submarino o se carga en altamar en Cayo Arcas; lo que va en barco es el abasto. Así que las cerca de
+  240 plataformas son 4 complejos, uno por activo, con su crudo real, y los barcos abastecedores del
+  jugador deciden cuánto producen.
 - **La barra no crece.** *(22 nov 2026.)* La segunda línea de *Refinación* pasó de la parte del
   consumo que hacen las refinerías a la parte que llegó del país; lo importado y el crudo exportado
   van en su tooltip y en la leyenda de la capa. Con menos de 1,500 px, la celda de obras deja solo la
@@ -2541,6 +2626,10 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   llevan líquidos.
 - **Zona de ductos**: en el juego, las refinerías unidas por sus poliductos y la parte de cada
   estado a la que llegan.
+- **Complejo (costa afuera)**: un conjunto de plataformas alrededor de un centro de proceso, que
+  separa el crudo y el gas y los manda a tierra por ducto submarino.
+- **Barco abastecedor**: el que lleva a las plataformas gente, diésel, agua, tubería y equipo desde
+  una base en la costa.
 - **Patio**: en el juego, lo que una refinería hace y su zona no usa, esperando un tren o un buque
   tanque.
 - **Sistema aislado**: red eléctrica sin enlace con la red nacional. En el juego son tres: Baja

@@ -14,6 +14,8 @@ export const GAS = '#6ee7b7';
 export const CRUDO = '#c2672a';
 /** Fuel's own amber, a step lighter than the refineries' brown-gold. */
 export const COMBUSTIBLE = '#f5b971';
+/** Offshore complexes: a salmon orange, between crude's brown and the fuel's amber. */
+export const PLATAFORMA = '#f0a27a';
 
 /** A plane seen from above, nose up, in a unit box: right half, mirrored for the left. */
 const MEDIO_AVION: [number, number][] = [

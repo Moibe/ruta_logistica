@@ -19,6 +19,7 @@ export type Capa =
   | 'polos'
   | 'energia'
   | 'refinerias'
+  | 'plataformas'
   | 'ductos'
   | 'combustibles';
 
@@ -44,6 +45,7 @@ class Tablero {
     polos: true,
     energia: false,
     refinerias: true,
+    plataformas: true,
     ductos: false,
     combustibles: false,
   });
@@ -164,6 +166,7 @@ class Tablero {
   #motivoBarco(clave: string): string | null {
     if (!sim.mar) return 'Las rutas marítimas aún no cargan';
     if (clave.startsWith('ciudad:')) return 'Los barcos solo hacen escala en puertos';
+    if (clave.startsWith('plataforma:') && this.claseBarco !== 'abastecedor') return 'A las plataformas solo van los barcos abastecedores';
     if (clave === this.paradas.at(-1)) return 'Es la misma escala que la anterior';
     return null;
   }

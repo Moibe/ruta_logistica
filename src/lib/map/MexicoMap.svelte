@@ -25,7 +25,6 @@
   import {
     delPais,
     DIAS_EN_PATIO,
-    exportacionCrudoJuego,
     realDelAño,
     ESTADOS_CONSUMO,
     PUERTO_DE_REFINERIA,
@@ -75,7 +74,8 @@
   import { tablero } from '$lib/state/tablero.svelte';
   import { duracion, estadoUnidad, km as fmtKm } from '$lib/ui/formato';
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
-  import { AEROPUERTO, COMBUSTIBLE, CRUDO, GAS, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
+  import { AEROPUERTO, COMBUSTIBLE, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
+  import { abastoDiario, BASES_ABASTO, CAYO_ARCAS, COMPLEJOS, produccionComplejo, type Complejo } from '$lib/domain/plataformas';
 
   /**
    * The game board: Mexico alone, in detail, with the trains and ships running
@@ -398,7 +398,7 @@
     const c = sim.cuentaCombustibles(año);
     const dias = sim.diasContados(año);
     const mbd = (b: number) => fmtMil(b / dias / 1000);
-    const crudo = exportacionCrudoJuego(sim.horas, sim.refinacion?.proceso ?? 0);
+    const crudo = sim.crudoExportado;
     return (
       `${año}: del país vino el ${Math.round(delPais(c) * 100)} % (${mbd(c.ducto)} mil b/d por ducto, ${mbd(c.tren)} en tren, ${mbd(c.barco)} en barco); ` +
       `se importan ${mbd(c.importado)} mil b/d. Crudo exportado: ${fmtMil(crudo)} mil b/d.`
@@ -419,6 +419,8 @@
     | { kind: 'planta'; indice: number }
     | { kind: 'refineria'; refineria: Refineria }
     | { kind: 'terminal'; terminal: Terminal }
+    | { kind: 'complejo'; complejo: Complejo }
+    | { kind: 'cayo-arcas' }
     | { kind: 'ducto'; ducto: Ducto }
     /** `region`: the pointer is over a system of its own inside the state (Mulegé), with the electricity layer on. */
     | { kind: 'estado'; estado: EstadoProps; region?: string };
@@ -497,6 +499,8 @@
   let plantaPts: [number, number][] = [];
   let refineriaPts: [number, number][] = [];
   let terminalPts: [number, number][] = [];
+  let complejoPts: [number, number][] = [];
+  let cayoArcasPt: [number, number] = [NaN, NaN];
   /** Station on the track and the site it serves, both in path space. */
   let estacionPts: { clave: string; via: [number, number]; sitio: [number, number]; km: number }[] = [];
   /** Where each vehicle's head was drawn last frame, for hit-testing. */
@@ -567,6 +571,8 @@
     plantaPts = LONLAT_PLANTAS.map((p) => projection!(p) ?? [NaN, NaN]);
     refineriaPts = REFINERIAS.map((r) => projection!(r.lonLat) ?? [NaN, NaN]);
     terminalPts = TERMINALES.map((t) => projection!(t.lonLat) ?? [NaN, NaN]);
+    complejoPts = COMPLEJOS.map((c) => projection!(c.lonLat) ?? [NaN, NaN]);
+    cayoArcasPt = projection!(CAYO_ARCAS.lonLat) ?? [NaN, NaN];
     ductoPaths = DUCTOS.map((d) => {
       const g: MultiLineString = { type: 'MultiLineString', coordinates: d.trazo };
       return { d, path: new Path2D(path!(g) ?? ''), bounds: path!.bounds(g) };
@@ -1566,6 +1572,68 @@
       });
     }
 
+    // Pemex's offshore complexes: a platform on its legs, sized by the crude it
+    // produces; laying out a supply vessel they're stops, for anything else they
+    // fade back. Cayo Arcas, where the buyers' ships load crude at sea: a ring.
+    if (layers.plataformas) {
+      const trazaAbasto = trazaBarco && tablero.claseBarco === 'abastecedor';
+      COMPLEJOS.forEach((c, i) => {
+        const x = sx(complejoPts[i]);
+        const y = sy(complejoPts[i]);
+        if (!onScreen(x, y)) return;
+        const hot = hovered?.kind === 'complejo' && hovered.complejo.id === c.id;
+        const mbd = sim.crudo.porComplejo.get(c.id)?.juego ?? produccionComplejo(c.id, añoDe(sim.horas));
+        const s = (3.2 + Math.sqrt(Math.max(0, mbd)) * 0.22) * (hot ? 1.15 : 1);
+        ctx.globalAlpha = tablero.trazando && !trazaAbasto ? 0.3 : 1;
+        ctx.strokeStyle = hot ? '#fff1dc' : PLATAFORMA;
+        ctx.lineWidth = 1.3;
+        ctx.beginPath();
+        ctx.moveTo(x - s * 0.65, y + s * 0.25);
+        ctx.lineTo(x - s * 0.95, y + s * 1.05);
+        ctx.moveTo(x + s * 0.65, y + s * 0.25);
+        ctx.lineTo(x + s * 0.95, y + s * 1.05);
+        ctx.stroke();
+        ctx.fillStyle = hot ? '#fff1dc' : PLATAFORMA;
+        ctx.fillRect(x - s, y - s * 0.55, 2 * s, s * 0.85);
+        ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
+        ctx.lineWidth = 0.9;
+        ctx.strokeRect(x - s, y - s * 0.55, 2 * s, s * 0.85);
+        ctx.globalAlpha = 1;
+        const R = s + 2;
+        taken.push([x - R, y - R, x + R, y + R]);
+        if (tablero.trazando && !trazaAbasto) return;
+        labels.push({
+          text: c.corto,
+          spots: spotsAround(x, y, R),
+          size: 10,
+          font: '600 10px Inter, "Segoe UI", system-ui, sans-serif',
+          color: hot ? '#ffffff' : 'rgba(250, 210, 185, 0.92)',
+          priority: (hot ? 1e9 : 0) + 3.4e7 + mbd,
+          halo: true,
+        });
+      });
+      const x = sx(cayoArcasPt);
+      const y = sy(cayoArcasPt);
+      if (onScreen(x, y) && !tablero.trazando) {
+        const hot = hovered?.kind === 'cayo-arcas';
+        ctx.beginPath();
+        ctx.arc(x, y, hot ? 5.5 : 4.5, 0, Math.PI * 2);
+        ctx.strokeStyle = hot ? '#fff1dc' : CRUDO;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        taken.push([x - 6, y - 6, x + 6, y + 6]);
+        labels.push({
+          text: 'Cayo Arcas',
+          spots: spotsAround(x, y, 6),
+          size: 10,
+          font: '500 10px Inter, "Segoe UI", system-ui, sans-serif',
+          color: hot ? '#ffffff' : 'rgba(230, 175, 140, 0.85)',
+          priority: (hot ? 1e9 : 0) + 3e7,
+          halo: true,
+        });
+      }
+    }
+
     // Pemex's fuel terminals (SENER, 2018), with the fuel layer: a dot sized by
     // its storage, in the colour of how its fuel gets there.
     if (layers.combustibles && !tablero.trazando) {
@@ -2183,6 +2251,23 @@
         }
       });
     }
+    // Laying out a supply vessel, a complex is a stop; otherwise it only shows its card.
+    if (layers.plataformas && (!tablero.trazando || (tablero.pestaña === 'barco' && tablero.claseBarco === 'abastecedor'))) {
+      COMPLEJOS.forEach((c, i) => {
+        const d = Math.hypot(transform.applyX(complejoPts[i][0]) - mx, transform.applyY(complejoPts[i][1]) - my);
+        if (d < 11 && d < bestD) {
+          best = { kind: 'complejo', complejo: c };
+          bestD = d;
+        }
+      });
+      if (!tablero.trazando) {
+        const d = Math.hypot(transform.applyX(cayoArcasPt[0]) - mx, transform.applyY(cayoArcasPt[1]) - my);
+        if (d < 8 && d < bestD) {
+          best = { kind: 'cayo-arcas' };
+          bestD = d;
+        }
+      }
+    }
     if (layers.combustibles && !tablero.trazando) {
       TERMINALES.forEach((t, i) => {
         const d = Math.hypot(transform.applyX(terminalPts[i][0]) - mx, transform.applyY(terminalPts[i][1]) - my);
@@ -2264,6 +2349,10 @@
                   ? `planta:${t.indice}`
                 : t.kind === 'refineria'
                   ? `refineria:${t.refineria.id}`
+                : t.kind === 'complejo'
+                  ? `plataforma:${t.complejo.id}`
+                : t.kind === 'cayo-arcas'
+                  ? 'cayo-arcas'
                 : t.kind === 'terminal'
                   ? `terminal:${t.terminal.nombre}`
                 : t.kind === 'ducto'
@@ -2282,6 +2371,8 @@
             ? `polo:${t.polo.id}`
             : t?.kind === 'aeropuerto'
               ? `aeropuerto:${t.aeropuerto.id}`
+              : t?.kind === 'complejo'
+                ? `plataforma:${t.complejo.id}`
               : t?.kind === 'refineria' && !t.refineria.extranjera
                 ? `refineria:${t.refineria.id}`
                 : null;
@@ -2353,7 +2444,7 @@
       return;
     }
     // A rail line, a power plant or a fuel terminal only shows its card on hover.
-    if (target.kind === 'via' || target.kind === 'planta' || target.kind === 'terminal') return;
+    if (target.kind === 'via' || target.kind === 'planta' || target.kind === 'terminal' || target.kind === 'cayo-arcas') return;
     if (target.kind === 'estado') {
       const e = baked?.estados.find((x) => x.props.clave === target.estado.clave);
       if (e) flyToBounds(e.bounds);
@@ -2368,7 +2459,9 @@
           ? target.puerta.lonLat
           : target.kind === 'polo'
             ? target.polo.lonLat
-            : target.ciudad.lonLat;
+            : target.kind === 'complejo'
+              ? target.complejo.lonLat
+              : target.ciudad.lonLat;
     const p = projection(lonLat);
     if (p) flyTo(p[0], p[1], Math.max(transform.k, target.kind === 'puerta' ? 3 : 9));
   }
@@ -2580,6 +2673,8 @@
   $effect(() => {
     // The refineries: their runs change daily as rehabilitations advance, and with the date in Realidad.
     layers.refinerias;
+    layers.plataformas;
+    sim.crudo;
     sim.refinacion;
     sim.deerParkPropia;
     sim.obrasPemex;
@@ -2798,6 +2893,9 @@
           Los buques tanque cargan aquí combustible de la refinería {refineriaPorId(refDelPuerto)?.corto}: {fmtMil(sim.enPatio(refDelPuerto) / 1000)} mil barriles en espera
         </span>
       {/if}
+      {#if BASES_ABASTO.has(`puerto:${hovered.puerto.id}`) && layers.plataformas}
+        <span class="tip-sub" style:color={PLATAFORMA}>Base de abasto costa afuera: aquí cargan los barcos abastecedores</span>
+      {/if}
       {@const pet = layers.combustibles ? PUERTOS_COMBUSTIBLE[hovered.puerto.id] : null}
       {#if pet}
         {@const año = sim.modo === 'realidad' && añoDe(sim.horas) >= 2024 ? '2024' : '2018'}
@@ -2909,6 +3007,33 @@
         {/each}
       {/if}
       {#if !tablero.trazando}<span class="tip-sub">Clic: abrir su ficha</span>{/if}
+    {:else if hovered.kind === 'complejo'}
+      {@const c = hovered.complejo}
+      {@const _reloj = sim.horas}
+      {@const año = añoDe(sim.horas)}
+      {@const e = sim.crudo.porComplejo.get(c.id)}
+      <span class="label tip-kind" style:color={PLATAFORMA}>Complejo de Pemex costa afuera · bloque {c.bloque}</span>
+      <strong>{c.nombre}</strong>
+      <span class="tip-sub">Centro de proceso {c.centro}{c.plataformasCentro ? `, de ${c.plataformasCentro} plataformas` : ''}</span>
+      {#if lineaTrazado}<span class="tip-rail mar">{lineaTrazado}</span>{/if}
+      {#if sim.modo === 'realidad' || !e}
+        <span class="tip-rail">Produjo {fmtMil(produccionComplejo(c.id, año))} mil barriles diarios de crudo en {año}</span>
+      {:else}
+        <span class="tip-rail" class:alerta-tip={e.surtido < 0.98}>
+          Produce {fmtMil(e.juego)} mil barriles diarios de crudo{e.surtido < 0.98 ? ` de ${fmtMil(e.real)}: le falta abasto` : ''}
+        </span>
+        <span class="tip-sub">
+          Necesita {fmtMil(abastoDiario(c.id, año))} toneladas de abasto al día · tiene para {sim.diasDeReserva(c.id).toLocaleString('es-MX', { maximumFractionDigits: 1 })} días ·
+          surtido el {Math.round(e.surtido * 100)} % del último mes
+        </span>
+        <span class="tip-sub">Lo llevan tus barcos abastecedores desde Dos Bocas o Ciudad del Carmen. El crudo va a tierra por ducto submarino.</span>
+      {/if}
+    {:else if hovered.kind === 'cayo-arcas'}
+      {@const ex = CAYO_ARCAS.exportacion}
+      <span class="label tip-kind" style:color={CRUDO}>Terminal de exportación de crudo, en el mar</span>
+      <strong>{CAYO_ARCAS.nombre}</strong>
+      <span class="tip-sub">Aquí cargan su crudo los barcos de los compradores, que llega por ducto submarino desde los complejos.</span>
+      <span class="tip-rail">Exportó {mt(ex['2018'])} de crudo en 2018 y {mt(ex['2024'])} en 2024 (SEMAR)</span>
     {:else if hovered.kind === 'terminal'}
       {@const t = hovered.terminal}
       {@const txt = textoTerminal(t)}

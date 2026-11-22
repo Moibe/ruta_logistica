@@ -1,0 +1,215 @@
+{
+ "corte": "2026-11-22",
+ "fuentes": {
+  "ig2-2026": {
+   "fuente": "Segundo Informe de Gobierno 2025–2026, anexo estadístico (SENER y Pemex): «Producción de petróleo crudo por activos de PEMEX», por bloque (AS01-01, AS01-02, AS02-03, AS02-04 y los de tierra), 2006–2026; 2026, de enero a junio",
+   "url": "https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf"
+  },
+  "semar-puertos-2024": {
+   "fuente": "SEMAR, Anuario Estadístico de los Puertos de México 2024: cabotaje de Dos Bocas y de Ciudad del Carmen (carga general que sale a las plataformas, 2017–2024; buques que la llevaron en 2024) y exportación de crudo de Cayo Arcas",
+   "url": "https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024"
+  },
+  "jornada-maya-2020": {
+   "fuente": "La Jornada Maya, con datos de la SEMAR: en la Sonda de Campeche hay 43 plataformas tripuladas y unas 200 satélite, con cerca de 17 mil trabajadores",
+   "url": "https://www.lajornadamaya.mx/campeche/217526/son-bombas-de-tiempo-las-240-plataformas-de-pemex-en-la-sonda-de-campeche-hernandez-perez"
+  },
+  "juego": {
+   "fuente": "Estimación del juego",
+   "url": ""
+  },
+  "semar-faros-2024": {
+   "fuente": "SEMAR, Cuaderno de Faros del Golfo de México y Mar Caribe (marzo de 2024): las señales que Pemex tiene en sus complejos de la Sonda de Campeche, con su posición (Akal-C, de 7 plataformas; Pol-A, de 6; el rebombeo del Litoral; la terminal de Cayo Arcas)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/908970/CDF_GOLFO_MARZO_2024.pdf"
+  },
+  "ourairports": {
+   "fuente": "OurAirports, base de radioayudas (no oficial; origen DAFIF): el radiofaro «Ku 22» del complejo Ku. Cuadra con el polígono del campo Maloob y las longitudes de sus ductos en el dictamen de la CNH",
+   "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv"
+  },
+  "cnh-dictamenes": {
+   "fuente": "CNH, dictámenes técnicos de los planes de desarrollo de los campos Sinán, May y Koban: del Centro de Proceso Litoral-A salen 8 km de oleoducto al rebombeo, y llegan 17 km desde May-A y 19.5 km desde Tsimín-A",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/856365/II.9_Dictamen_Tecnico_Mod_Plan_Desarrollo_Campo_Sinan.pdf"
+  },
+  "asf-2017-0485": {
+   "fuente": "ASF, auditoría 2017-0485: «Activo Integral de Producción Bloque AS01-01, antes Cantarell»; la 2017-0486 identifica el AS01-02 como Ku-Maloob-Zaap",
+   "url": "https://www.asf.gob.mx/trans/informes/ir2017c/Documentos/Auditorias/2017_0485_d.pdf"
+  }
+ },
+ "complejos": [
+  {
+   "id": "cantarell",
+   "nombre": "Cantarell",
+   "corto": "Cantarell",
+   "bloque": "AS01-01",
+   "centro": "Akal-C",
+   "estado": "CAMP",
+   "lon": -92.04,
+   "lat": 19.405,
+   "ubicacion": {
+    "dato": "El complejo Akal-C, de 7 plataformas, en 19°24'18\" N, 92°02'24\" O (SEMAR).",
+    "fuentes": [
+     "semar-faros-2024"
+    ]
+   },
+   "plataformasCentro": 7
+  },
+  {
+   "id": "ku-maloob-zaap",
+   "nombre": "Ku-Maloob-Zaap",
+   "corto": "Ku-Maloob-Zaap",
+   "bloque": "AS01-02",
+   "centro": "Ku-A",
+   "estado": "CAMP",
+   "lon": -92.1878,
+   "lat": 19.5197,
+   "ubicacion": {
+    "dato": "El complejo Ku, por su radiofaro «Ku 22». Fuente no oficial: no se encontró una oficial; cuadra con el campo Maloob de la CNH.",
+    "fuentes": [
+     "ourairports"
+    ]
+   }
+  },
+  {
+   "id": "abkatun-pol-chuc",
+   "nombre": "Abkatún-Pol-Chuc",
+   "corto": "Abkatún-Pol-Chuc",
+   "bloque": "AS02-03",
+   "centro": "Pol-A",
+   "estado": "CAMP",
+   "lon": -92.2533,
+   "lat": 19.2383,
+   "ubicacion": {
+    "dato": "El complejo Pol-A, de 6 plataformas, en 19°14'18\" N, 92°15'12\" O (SEMAR).",
+    "fuentes": [
+     "semar-faros-2024"
+    ]
+   },
+   "plataformasCentro": 6
+  },
+  {
+   "id": "litoral-de-tabasco",
+   "nombre": "Litoral de Tabasco",
+   "corto": "Litoral de Tabasco",
+   "bloque": "AS02-04",
+   "centro": "Litoral-A",
+   "estado": "TAB",
+   "lon": -92.63,
+   "lat": 18.87,
+   "ubicacion": {
+    "dato": "Estimación del juego (±5 km): no hay coordenada publicada del Centro de Proceso Litoral-A. Va a 8 km al sur del rebombeo que da la SEMAR (18°56'36\" N, 92°37'12\" O), donde cuadran las longitudes de sus ductos en los dictámenes de la CNH.",
+    "fuentes": [
+     "semar-faros-2024",
+     "cnh-dictamenes"
+    ]
+   }
+  }
+ ],
+ "produccion": {
+  "porComplejo": {
+   "cantarell": {
+    "2018": 161.2,
+    "2019": 159.3,
+    "2020": 161.2,
+    "2021": 160.9,
+    "2022": 158.3,
+    "2023": 163.8,
+    "2024": 141.5,
+    "2025": 114,
+    "2026": 112.2
+   },
+   "ku-maloob-zaap": {
+    "2018": 874.7,
+    "2019": 842.7,
+    "2020": 784.3,
+    "2021": 718.1,
+    "2022": 639.3,
+    "2023": 615.9,
+    "2024": 585.2,
+    "2025": 530.5,
+    "2026": 523.5
+   },
+   "abkatun-pol-chuc": {
+    "2018": 183.8,
+    "2019": 184,
+    "2020": 169.4,
+    "2021": 164.6,
+    "2022": 138.3,
+    "2023": 125.8,
+    "2024": 127.1,
+    "2025": 123.4,
+    "2026": 117
+   },
+   "litoral-de-tabasco": {
+    "2018": 291.1,
+    "2019": 198.8,
+    "2020": 258.2,
+    "2021": 325.4,
+    "2022": 349.4,
+    "2023": 326.6,
+    "2024": 285.7,
+    "2025": 277.4,
+    "2026": 289.8
+   }
+  },
+  "total": {
+   "2018": 1833.3,
+   "2019": 1700.7,
+   "2020": 1705.4,
+   "2021": 1756.4,
+   "2022": 1784.6,
+   "2023": 1875.4,
+   "2024": 1759,
+   "2025": 1635.5,
+   "2026": 1655.4
+  },
+  "parcial": {
+   "2026": "enero a junio"
+  },
+  "dato": "Crudo de Pemex por bloque, en miles de barriles diarios. Los bloques AS01-01, AS01-02, AS02-03 y AS02-04 son los activos Cantarell, Ku-Maloob-Zaap, Abkatún-Pol-Chuc y Litoral de Tabasco: la ASF identifica los dos primeros («AS01-01, antes Cantarell»), un dictamen de la CNH el último, y el AS02-03 queda por descarte; las series cuadran (Cantarell daba 1,801 en 2006). Lo demás es de los campos en tierra. Después de 2026 se repite el último año.",
+  "fuentes": [
+   "ig2-2026",
+   "asf-2017-0485"
+  ]
+ },
+ "cayoArcas": {
+  "nombre": "Cayo Arcas",
+  "lon": -91.9625,
+  "lat": 20.1655,
+  "exportacion": {
+   "2018": 26882907,
+   "2024": 15822212
+  },
+  "dato": "Terminal de exportación en el mar, frente a Campeche: los barcos de los compradores cargan ahí, en dos monoboyas, el crudo que llega por ducto submarino. Su plataforma de habitación está en 20°09'56\" N, 91°57'45\" O (SEMAR). Toneladas exportadas.",
+  "fuentes": [
+   "semar-faros-2024",
+   "semar-puertos-2024"
+  ]
+ },
+ "abasto": {
+  "toneladasAño": 2275813,
+  "dato": "Lo que llevan los barcos a las plataformas en un año: la carga general que salió por cabotaje de Dos Bocas (2,068,751 toneladas) y de Ciudad del Carmen (207,062) en 2018. En 2024 fueron 2,039,818 y 192,359. El juego lo reparte entre los complejos por lo que produce cada uno: estimación del juego.",
+  "fuentes": [
+   "semar-puertos-2024",
+   "juego"
+  ]
+ },
+ "barco": {
+  "toneladas": 918,
+  "dato": "Lo que lleva en promedio un barco abastecedor: en 2024 salieron de Dos Bocas por cabotaje 2.29 millones de toneladas de carga general en 2,497 buques (SEMAR).",
+  "fuentes": [
+   "semar-puertos-2024"
+  ]
+ },
+ "bases": [
+  "puerto:dos-bocas",
+  "puerto:ciudad-del-carmen"
+ ],
+ "reglas": {
+  "diasReserva": 15,
+  "diasMemoria": 30,
+  "piso": 0.5,
+  "dato": "Reglas del juego: un complejo guarda hasta 15 días de abasto; su producción depende de cómo se surtió el último mes, y sin nada de abasto cae a la mitad (los pozos siguen fluyendo, pero sin mantenimiento ni gente se cierran plataformas).",
+  "fuentes": [
+   "juego"
+  ]
+ }
+}

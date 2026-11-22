@@ -11,7 +11,7 @@ import { puerta, type Puerta } from './sitios';
  * shown on the world views.
  */
 
-export type ClaseBarco = 'contenedores' | 'tanque' | 'granel' | 'roro';
+export type ClaseBarco = 'contenedores' | 'tanque' | 'granel' | 'roro' | 'abastecedor';
 
 export type DatosClase = {
   nombre: string;
@@ -31,6 +31,8 @@ export const CLASES_BARCO: Record<ClaseBarco, DatosClase> = {
   tanque: { nombre: 'Buque tanque', nudos: 14, enPuerto: 24 },
   granel: { nombre: 'Granelero', nudos: 13, enPuerto: 36 },
   roro: { nombre: 'Ro-ro de autos', nudos: 18, enPuerto: 14 },
+  /** Offshore supply vessel: from the supply bases to the platforms (`plataformas.ts`). */
+  abastecedor: { nombre: 'Barco abastecedor', nudos: 12, enPuerto: 8 },
 };
 
 export const KM_POR_MILLA = 1.852;
@@ -56,6 +58,9 @@ export type Barco = Marcha & {
   combustible: number;
   combustibleDe: string | null;
   entregadoCombustible: number;
+  /** Supplies aboard and delivered so far (tonnes): only supply vessels carry them. */
+  abasto: number;
+  entregadoAbasto: number;
 };
 
 /** Cool tints only: cyan is the sea colour, the warm ones belong to the trains. */
@@ -78,6 +83,14 @@ export const NOMBRES_BARCO = [
   'Sonda de Campeche',
   'Cabo Catoche',
   'Golfo de Tehuantepec',
+  'Isla del Carmen',
+  'Punta Xicalango',
+  'Laguna Mecoacán',
+  'Barra de Tupilco',
+  'Río Grijalva',
+  'Isla Aguada',
+  'Champotón',
+  'Sabancuy',
 ];
 
 export type NuevoBarco = {
@@ -109,11 +122,13 @@ export function crearBarco(mar: Mar, def: NuevoBarco): Barco | null {
     nombre: def.nombre,
     color: def.color,
     clase: def.clase,
-    // A tanker loads and unloads at its ports: the clock hands its arrivals to the simulation.
-    ...(def.clase === 'tanque' ? { llegadas: marcha.estado === 'parada' ? [marcha.pierna] : [] } : {}),
+    // Tankers and supply vessels load and unload at their stops: the clock hands their arrivals to the simulation.
+    ...(def.clase === 'tanque' || def.clase === 'abastecedor' ? { llegadas: marcha.estado === 'parada' ? [marcha.pierna] : [] } : {}),
     combustible: 0,
     combustibleDe: null,
     entregadoCombustible: 0,
+    abasto: 0,
+    entregadoAbasto: 0,
   };
 }
 
@@ -177,4 +192,10 @@ export const SERVICIOS_BARCO: ServicioBarco[] = [
   { clase: 'tanque', paradas: ['puerto:coatzacoalcos', 'puerto:dos-bocas', 'puerto:progreso'], desfase: 6 },
   { clase: 'roro', paradas: ['puerto:lazaro-cardenas', 'puerto:veracruz'], desfase: 70 },
   { clase: 'granel', paradas: ['puerto:guaymas', 'puerta:asia'], desfase: 18 },
+  // Supply vessels to the offshore complexes, from Dos Bocas (the big base) and Ciudad del Carmen,
+  // enough for what each complex took in 2018 with some to spare (`plataformas.ts`), spread over their loop.
+  ...[0, 5, 10, 15, 20, 25].map((desfase) => ({ clase: 'abastecedor' as const, paradas: ['puerto:dos-bocas', 'plataforma:ku-maloob-zaap'], desfase })),
+  ...[2, 12].map((desfase) => ({ clase: 'abastecedor' as const, paradas: ['puerto:dos-bocas', 'plataforma:litoral-de-tabasco'], desfase })),
+  { clase: 'abastecedor', paradas: ['puerto:ciudad-del-carmen', 'plataforma:abkatun-pol-chuc'], desfase: 4 },
+  { clase: 'abastecedor', paradas: ['puerto:ciudad-del-carmen', 'plataforma:cantarell'], desfase: 9 },
 ];

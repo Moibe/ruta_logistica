@@ -186,16 +186,7 @@ export const cuentaVacia = (): Cuenta => ({ consumo: 0, ducto: 0, tren: 0, barco
 /** Share of a year's use that came from the country's refineries (0–1). */
 export const delPais = (c: Cuenta) => (c.consumo > 0 ? (c.ducto + c.tren + c.barco) / c.consumo : 0);
 
-// ---- crude --------------------------------------------------------------------------------------------
-
-const AÑOS_CRUDO = Object.keys(REAL_COMBUSTIBLES.crudo.produccion).map(Number);
-const enSerie = (año: number, años: number[]) => String(Math.max(años[0], Math.min(año, años[años.length - 1])));
-
-/** Pemex's crude production in a game year, Mbd (its real series; later years repeat the last). */
-export const produccionCrudo = (año: number) => REAL_COMBUSTIBLES.crudo.produccion[enSerie(año, AÑOS_CRUDO)];
-
-/** Crude exported in the game: what the Mexican refineries don't run, Mbd. */
-export const exportacionCrudoJuego = (horas: number, proceso: number) => Math.max(0, produccionCrudo(añoDe(horas)) - proceso);
+// ---- the real series (Pemex's crude in the game: `plataformas.ts`) ------------------------------------
 
 /** A year of the real series, if published: crude produced and exported, fuels made and imported (Mbd). */
 export function realDelAño(año: number) {

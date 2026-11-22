@@ -1,7 +1,7 @@
 <script lang="ts">
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero, type Capa } from '$lib/state/tablero.svelte';
-  import { AEROPUERTO, AVION_SVG, COMBUSTIBLE, GAS, GOTA_SVG, POLO, REFINERIA } from '$lib/map/simbolos';
+  import { AEROPUERTO, AVION_SVG, COMBUSTIBLE, GAS, GOTA_SVG, PLATAFORMA, POLO, REFINERIA } from '$lib/map/simbolos';
 
   /**
    * The board's layers, top left under the clock, each with its name and the
@@ -35,6 +35,7 @@
       capas: [
         { capa: 'energia', nombre: 'Energía' },
         { capa: 'refinerias', nombre: 'Refinerías' },
+        { capa: 'plataformas', nombre: 'Plataformas' },
         { capa: 'ductos', nombre: 'Ductos' },
         { capa: 'combustibles', nombre: 'Combustibles' },
       ],
@@ -89,6 +90,11 @@
             {:else if c.capa === 'refinerias'}
               <svg class="sw" width="10" height="13" viewBox="-1 -1.3 2 2.6" aria-hidden="true">
                 <path d={GOTA_SVG} fill={REFINERIA} />
+              </svg>
+            {:else if c.capa === 'plataformas'}
+              <svg class="sw" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                <path d="M3 7 1.8 11.5M9 7l1.2 4.5" stroke={PLATAFORMA} stroke-width="1.3" fill="none" />
+                <rect x="1" y="3" width="10" height="4" fill={PLATAFORMA} />
               </svg>
             {:else if c.capa === 'ductos'}
               <svg class="sw" width="14" height="10" viewBox="0 0 14 10" aria-hidden="true">

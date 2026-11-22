@@ -56,6 +56,17 @@ import {
   type Cuenta,
 } from '$lib/domain/combustibles';
 import {
+  abastoDiario,
+  BASES_ABASTO,
+  COMPLEJOS,
+  DIAS_MEMORIA,
+  DIAS_RESERVA,
+  produccionComplejo,
+  produccionFuera,
+  produccionJuego,
+  TONELADAS_ABASTECEDOR,
+} from '$lib/domain/plataformas';
+import {
   CARGA_POR_TREN,
   DIAS_EN_ESPERA,
   ESTADOS_EXPORTADORES,
@@ -222,6 +233,19 @@ class Simulacion {
    * year started being counted (the game opens on 1 December 2018).
    */
   #cuentas = new Map<string, { pais: Cuenta; estados: Map<string, Cuenta>; sinSalida: number; desde: number }>();
+  /** Supplies stored at each offshore complex, tonnes (`plataformas.ts`). Mutated by the clock. */
+  #reservas = new Map<string, number>(COMPLEJOS.map((c) => [c.id, abastoDiario(c.id, 2018) * DIAS_RESERVA * 0.5]));
+  /** How well each complex has been supplied over the last month (0–1). Mutated by the clock. */
+  #surtido = new Map<string, number>(COMPLEJOS.map((c) => [c.id, 1]));
+  /**
+   * Crude now: what each offshore complex produces (its real crude, less what
+   * it loses for want of supplies), and Pemex's whole production with the
+   * rest of its fields. Recomputed once a game day.
+   */
+  crudo = $state.raw<{ produccion: number; porComplejo: Map<string, { real: number; juego: number; surtido: number }> }>({
+    produccion: 0,
+    porComplejo: new Map(),
+  });
   modo = $state<Modo>('juego');
   /** In Realidad, each rail work as it really stood on the date shown (`horas`). Empty in the game. */
   real = $state.raw<Map<string, EstadoReal>>(new Map());
@@ -321,6 +345,8 @@ class Simulacion {
         // tanker that has just left a refinery's port sails loaded.
         for (const [id, mbd] of this.abasto?.sobrante ?? []) this.#patios.set(id, barrilesEn(mbd, 24 * 7));
         for (const b of barcos) if (b.clase === 'tanque') this.#cargarCombustible(b, b.paradas[0], BARRILES_POR_TANQUE);
+        // Half the complexes' storage full, and a supply vessel that has just left its base sails loaded.
+        for (const b of barcos) if (b.clase === 'abastecedor' && BASES_ABASTO.has(b.paradas[0])) b.abasto = TONELADAS_ABASTECEDOR;
         this.estado = 'lista';
       } catch (err) {
         console.error(err);
@@ -634,6 +660,26 @@ class Simulacion {
       deerParkPropia: this.deerParkPropia,
     });
     this.abasto = abastoJuego(this.refinacion);
+    // Offshore crude: in Realidad, the real one; in the game, each complex's as it's been supplied.
+    const año = añoDe(this.horas);
+    const porComplejo = new Map(
+      COMPLEJOS.map((c) => {
+        const surtido = this.modo === 'realidad' ? 1 : (this.#surtido.get(c.id) ?? 1);
+        return [c.id, { real: produccionComplejo(c.id, año), juego: produccionJuego(c.id, this.horas, surtido), surtido }] as const;
+      })
+    );
+    this.crudo = { produccion: produccionFuera(año) + [...porComplejo.values()].reduce((s, c) => s + c.juego, 0), porComplejo };
+  }
+
+  /** Crude exported now: what Pemex produces and the Mexican refineries don't run, Mbd. */
+  get crudoExportado(): number {
+    return Math.max(0, this.crudo.produccion - (this.refinacion?.proceso ?? 0));
+  }
+
+  /** Supplies stored at a complex, in days of what it takes. */
+  diasDeReserva(id: string): number {
+    const diario = abastoDiario(id, añoDe(this.horas));
+    return diario > 0 ? (this.#reservas.get(id) ?? 0) / diario : 0;
   }
 
   // ---- oil ----------------------------------------------------------------------------------------
@@ -808,13 +854,57 @@ class Simulacion {
     return Math.max(0, CARGA_POR_TREN - t.carga - t.cargaNacional - t.combustible * T_POR_BARRIL);
   }
 
-  /** A tanker got to a port: it leaves its fuel where the state lacks it, then loads at a refinery's port. */
+  /**
+   * A tanker got to a port: it leaves its fuel where the state lacks it, then
+   * loads at a refinery's port. A supply vessel loads at a supply base and
+   * unloads at the offshore complexes.
+   */
   #atenderEscalas(b: Barco) {
     const llegadas = b.llegadas!;
     while (llegadas.length) {
       const destino = b.destinos[llegadas.shift()!];
+      if (b.clase === 'abastecedor') {
+        this.#abastecerEscala(b, destino);
+        continue;
+      }
       this.#descargarCombustible(b, destino);
       this.#cargarCombustible(b, destino, BARRILES_POR_TANQUE);
+    }
+  }
+
+  // ---- offshore supplies ------------------------------------------------------------------------
+
+  #abastecerEscala(b: Barco, destino: string) {
+    if (BASES_ABASTO.has(destino)) {
+      b.abasto = TONELADAS_ABASTECEDOR;
+      return;
+    }
+    if (!destino.startsWith('plataforma:') || b.abasto <= 0) return;
+    const id = destino.slice('plataforma:'.length);
+    const tope = abastoDiario(id, añoDe(this.horas)) * DIAS_RESERVA;
+    const hay = this.#reservas.get(id) ?? 0;
+    const baja = Math.min(b.abasto, Math.max(0, tope - hay));
+    if (baja <= 0) return;
+    this.#reservas.set(id, hay + baja);
+    b.abasto -= baja;
+    b.entregadoAbasto += baja;
+  }
+
+  /**
+   * An hour on the platforms: each complex uses its supplies; when they run
+   * short, how well it has been supplied (remembered over a month) drops, and
+   * its crude with it.
+   */
+  #consumirAbasto(horas: number) {
+    const año = añoDe(this.horas);
+    const peso = Math.min(1, horas / (24 * DIAS_MEMORIA));
+    for (const c of COMPLEJOS) {
+      const usa = (abastoDiario(c.id, año) * horas) / 24;
+      const hay = this.#reservas.get(c.id) ?? 0;
+      const cubierto = usa > 0 ? Math.min(1, hay / usa) : 1;
+      this.#reservas.set(c.id, Math.max(0, hay - usa));
+      const s = this.#surtido.get(c.id) ?? 1;
+      this.#surtido.set(c.id, s + (cubierto - s) * peso);
     }
   }
 
@@ -1057,6 +1147,7 @@ class Simulacion {
       if (horas > 0) {
         this.#producir(horas);
         this.#abastecer(horas);
+        this.#consumirAbasto(horas);
         for (const t of this.trenes) {
           avanzar(t, horas);
           if (t.llegadas?.length) this.#atenderLlegadas(t);

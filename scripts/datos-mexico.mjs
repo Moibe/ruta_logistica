@@ -1081,9 +1081,12 @@ await writeFile(join(ROOT, 'static', 'data', 'red-ferroviaria.json'), redJson);
 const datos = join(ROOT, 'src', 'lib', 'domain', 'datos');
 const puertosMar = JSON.parse(await readFile(join(datos, 'puertos.json'), 'utf8'));
 const puertasMar = JSON.parse(await readFile(join(datos, 'puertas.json'), 'utf8'));
+// Pemex's offshore complexes: stops at sea for the supply vessels.
+const complejosMar = JSON.parse(await readFile(join(datos, 'plataformas.json'), 'utf8')).complejos;
 const puntosMar = [
   ...puertosMar.map((p) => ({ clave: `puerto:${p.id}`, lonLat: [p.lon, p.lat] })),
   ...puertasMar.map((p) => ({ clave: `puerta:${p.id}`, lonLat: [p.lon, p.lat] })),
+  ...complejosMar.map((c) => ({ clave: `plataforma:${c.id}`, lonLat: [c.lon, c.lat] })),
 ];
 const t0Mar = performance.now();
 const mar = rutasMaritimas(

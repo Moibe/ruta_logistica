@@ -5,7 +5,7 @@
   import { CAJA_CFE_MES, ENERGIA } from '$lib/domain/energia';
   import { km, mdp, personas } from './formato';
   import { añoDe } from '$lib/domain/calendario';
-  import { delPais, exportacionCrudoJuego, produccionCrudo, REAL_COMBUSTIBLES, realDelAño } from '$lib/domain/combustibles';
+  import { delPais, REAL_COMBUSTIBLES, realDelAño } from '$lib/domain/combustibles';
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
   import { OBRAS_ENERGIA } from '$lib/domain/energia';
   import { AÑOS_AEROPUERTOS, POLOS, SERIE_AEROPUERTOS } from '$lib/domain/sitios';
@@ -171,7 +171,7 @@
     const mbd = (barriles: number) => barriles / dias / 1000;
     const pct = Math.round(delPais(c) * 100);
     const sinSalida = sim.sinSalida(año);
-    const crudo = exportacionCrudoJuego(sim.horas, r.proceso);
+    const crudo = sim.crudoExportado;
     return {
       año,
       pct,
@@ -183,8 +183,8 @@
         `Se importan ${mil(mbd(c.importado))} mil.` +
         (sinSalida > 0 ? `\nLas refinerías se quedaron sin salida para ${mil(sinSalida / 1000)} mil barriles: su patio se llenó.` : ''),
       detalleCrudo:
-        `Crudo exportado: lo que Pemex produce (${mil(produccionCrudo(año))} mil barriles diarios, su producción real de ${año}; ` +
-        'después de 2026 se repite la última) y no procesan las refinerías del país. Se lo llevan los barcos de los compradores.',
+        `Crudo exportado: lo que Pemex produce (${mil(sim.crudo.produccion)} mil barriles diarios: sus campos en tierra al ritmo real y sus complejos del Golfo según cómo los abastecen tus barcos) ` +
+        'y no procesan las refinerías del país. Se lo llevan los barcos de los compradores.',
     };
   });
 

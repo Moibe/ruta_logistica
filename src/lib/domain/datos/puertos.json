@@ -15,5 +15,6 @@
  { "id": "veracruz", "nombre": "Veracruz", "estado": "VER", "lon": -96.135, "lat": 19.205, "litoral": "golfo", "principal": true },
  { "id": "coatzacoalcos", "nombre": "Coatzacoalcos", "estado": "VER", "lon": -94.41, "lat": 18.14, "litoral": "golfo", "principal": false },
  { "id": "dos-bocas", "nombre": "Dos Bocas", "estado": "TAB", "lon": -93.18, "lat": 18.43, "litoral": "golfo", "principal": false },
+ { "id": "ciudad-del-carmen", "nombre": "Ciudad del Carmen", "estado": "CAMP", "lon": -91.795, "lat": 18.665, "litoral": "golfo", "principal": false },
  { "id": "progreso", "nombre": "Progreso", "estado": "YUC", "lon": -89.665, "lat": 21.285, "litoral": "golfo", "principal": false }
 ]

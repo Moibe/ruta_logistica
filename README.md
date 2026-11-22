@@ -200,14 +200,15 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `static/data/land-*.json`, `countries-110m.json` | Mundo, de `world-atlas` (heredado de `global`)                     |
 | `static/data/mexico.topo.json`       | Estados y países vecinos en un solo TopoJSON (~350 KB)                         |
 | `static/data/red-ferroviaria.json`   | La red como grafo: 198 nodos, 231 tramos, ~19,200 km (~210 KB)                 |
-| `static/data/rutas-maritimas.json`   | 171 rutas por mar entre puertos y salidas, el trazo del Canal y las 2 travesías oceánicas (~64 KB) |
+| `static/data/rutas-maritimas.json`   | 276 rutas por mar entre puertos, salidas y complejos de plataformas, el trazo del Canal y las 2 travesías oceánicas (~101 KB) |
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
-| `src/lib/domain/datos/puertos.json`  | Los **17 puertos, curados a mano**                                             |
+| `src/lib/domain/datos/puertos.json`  | Los **18 puertos, curados a mano**                                             |
 | `src/lib/domain/datos/aeropuertos.json` | Los **10 aeropuertos de carga** de la AFAC, con sus toneladas de cada año desde 2018 (serie mensual de la AFAC) para el modo Realidad. Son sitios (`aeropuerto:<id>`): con vía a 15 km o menos tienen estación y son paradas de tren (puertos secos) |
 | `src/lib/domain/datos/ductos.json` | **Ductos**: gasoductos, poliductos y el oleoducto Nuevo Teapa–Salina Cruz con su trazo aproximado (CNH, OpenStreetMap; los poliductos que la CNH no trae, unidos por el juego con las tablas del mapa de la SENER de 2018), operador, km y capacidad; la obra Cuxtal II y el gas de la península (CFE, EIA); totales de la red (SENER, Proyectos México, Pemex). Lo genera `scripts/ductos/gen-ductos.mjs` |
 | `src/lib/domain/datos/ductos-real.json` | Fecha real de cada gasoducto que llegó, o llega, después de 2018 |
 | `src/lib/domain/datos/petroleo.json` | **Petróleo**: las seis refinerías de Pemex, la Olmeca y Deer Park con su capacidad, su proceso de 2018 y su capacidad óptima (Pemex 20-F, ASF), su proceso real por año y por mes, las obras de Pemex con costo y tiempo, la caja de Pemex, rendimientos y consumo de combustibles |
 | `src/lib/domain/datos/petroleo-real.json` | Etapa real de cada obra de Pemex (rehabilitaciones, Olmeca, coquizadoras, compra de Deer Park) |
+| `src/lib/domain/datos/plataformas.json` | **Plataformas**: los 4 complejos de Pemex en la Sonda de Campeche con su crudo por año (Segundo Informe), Cayo Arcas, el abasto que llevan los barcos (SEMAR), la carga de un barco abastecedor y las reglas del abasto. También lo lee `npm run datos` para las rutas marítimas |
 | `src/lib/domain/datos/combustibles.json` | **Combustibles**: consumo por estado (CNE, SENER), las 78 terminales de Pemex con su medio de suministro y las zonas de ductos (SENER, mapa de 2018), petróleo por puerto (SEMAR), barriles por tonelada (EIA), capacidad del buque tanque, y las series reales de crudo producido y exportado y de combustibles hechos e importados (Segundo Informe de Gobierno). Lo genera `scripts/combustibles/gen-combustibles.mjs` |
 | `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
@@ -353,6 +354,23 @@ El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedi
 El tablero tiene la capa *Combustibles*: los estados por la parte que vino del país y las 78
 terminales de Pemex. Detalle en la [enciclopedia](docs/enciclopedia.md#los-combustibles).
 
+**Las plataformas del Golfo** (`domain/plataformas.ts`, `datos/plataformas.json`, curado a mano con la fuente de cada
+cifra). Las cerca de 240 plataformas de la Sonda de Campeche son 4 complejos, uno por activo de Pemex
+(Cantarell, Ku-Maloob-Zaap, Abkatún-Pol-Chuc, Litoral de Tabasco), con su crudo real por año. Son
+sitios en el mar (`plataforma:<id>`) a los que llegan las rutas marítimas. El crudo va a tierra solo
+(ducto submarino, Cayo Arcas); lo que maneja el jugador es el abasto:
+
+- **Barcos abastecedores** (clase `abastecedor`, 918 t): cargan en Dos Bocas o Ciudad del Carmen
+  (`BASES_ABASTO`) y descargan en los complejos (`#abastecerEscala`).
+- **Cada complejo** gasta su parte de 2.28 millones de toneladas al año (`abastoDiario`) de una reserva de
+  hasta 15 días (`#reservas`); `#surtido` recuerda cómo se surtió el último mes, y su crudo es el real
+  por `factorAbasto` (de la mitad a todo).
+- `sim.crudo` (cada día de juego) suma los complejos y el resto del crudo de Pemex; `sim.crudoExportado`
+  es eso menos lo que refinan las refinerías del país.
+
+La partida trae 10 barcos abastecedores. Capa *Plataformas*. Detalle en la
+[enciclopedia](docs/enciclopedia.md#las-plataformas-del-golfo).
+
 **Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado y paga
 con su presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)
 elige de 1 a 4 cuadrillas y confirma en un cuadro propio; la obra se paga conforme avanza
@@ -377,7 +395,7 @@ km) donde una celda es tierra si su centro cae en tierra o si la toca una costa;
 Panamá** se abre a mano sobre su trazo real; ruta más corta (Dijkstra) sin cortar esquinas
 de tierra y con sobrecosto a menos de ~22 km de la costa; luego se **endereza** en tramos
 rectos con un recorrido exacto de celdas, por corridas de mar y de canal que nunca se
-mezclan. Una **auditoría** en una malla 5 veces más fina confirma que ninguna de las 171
+mezclan. Una **auditoría** en una malla 5 veces más fina confirma que ninguna de las 276
 rutas pisa tierra fuera de la entrada a cada puerto y del Canal.
 
 **Las travesías oceánicas** (`scripts/travesias.mjs`, ~4 s) usan el mismo método sobre el

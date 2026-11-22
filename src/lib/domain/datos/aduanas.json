@@ -437,8 +437,8 @@
    "id": "ciudad-del-carmen",
    "nombre": "Ciudad del Carmen",
    "tipo": "maritima",
-   "sitio": null,
-   "salida": false,
+   "sitio": "puerto:ciudad-del-carmen",
+   "salida": true,
    "recaudacion2025": 1221.9,
    "valorOperaciones2025": 141144.1
   },
@@ -489,6 +489,7 @@
   "puerto:dos-bocas",
   "puerto:tampico",
   "puerto:la-paz",
+  "puerto:ciudad-del-carmen",
   "puerto:acapulco",
   "puerto:salina-cruz",
   "puerto:topolobampo"

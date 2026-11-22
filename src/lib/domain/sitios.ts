@@ -2,6 +2,7 @@ import type { LonLat } from './geo';
 import aeropuertosJson from './datos/aeropuertos.json';
 import ciudadesJson from './datos/ciudades.json';
 import petroleoJson from './datos/petroleo.json';
+import plataformasJson from './datos/plataformas.json';
 import polosJson from './datos/polos.json';
 import puertasJson from './datos/puertas.json';
 import puertosJson from './datos/puertos.json';
@@ -286,7 +287,14 @@ export const CENTRO_MEXICO: LonLat = [-102.5, 23.6];
 
 // ---- one registry for every kind of site ------------------------------------
 
-export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo' | 'aeropuerto' | 'refineria';
+export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo' | 'aeropuerto' | 'refineria' | 'plataforma';
+
+/**
+ * Pemex's offshore complexes in the Bay of Campeche are stops at sea for the
+ * supply vessels (`plataformas.ts`); the sea lanes reach them like ports.
+ */
+type ComplejoSitioJson = { id: string; corto: string; estado: string; lon: number; lat: number };
+const COMPLEJOS_SITIO = (plataformasJson as unknown as { complejos: ComplejoSitioJson[] }).complejos;
 
 /**
  * Pemex's refineries in Mexico are freight stations too: within reach of the
@@ -331,6 +339,15 @@ export const SITIOS: readonly Sitio[] = [
   // Cargo airports are dry ports: within reach of the track they get a station like a city.
   ...AEROPUERTOS.map((a) => ({ clave: `aeropuerto:${a.id}`, tipo: 'aeropuerto' as const, id: a.id, nombre: a.corto, estado: a.estado, lonLat: a.lonLat })),
   ...REFINERIAS_SITIO.map((r) => ({ clave: `refineria:${r.id}`, tipo: 'refineria' as const, id: r.id, nombre: `Ref. ${r.corto}`, estado: r.estado, lonLat: r.lonLat })),
+  // At sea: never a station (the track is far), only a stop for supply vessels.
+  ...COMPLEJOS_SITIO.map((c) => ({
+    clave: `plataforma:${c.id}`,
+    tipo: 'plataforma' as const,
+    id: c.id,
+    nombre: c.corto,
+    estado: c.estado,
+    lonLat: [c.lon, c.lat] as LonLat,
+  })),
 ];
 
 export function polo(clave: string): Polo | null {

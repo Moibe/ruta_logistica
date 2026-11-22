@@ -12,6 +12,7 @@
   import { nombreCorto } from '$lib/domain/sitios';
   import { CARGA_POR_TREN } from '$lib/domain/exportaciones';
   import { BARRILES_POR_TANQUE } from '$lib/domain/combustibles';
+  import { TONELADAS_ABASTECEDOR } from '$lib/domain/plataformas';
   import { refineria } from '$lib/domain/petroleo';
   import { sim, type Unidad } from '$lib/state/simulacion.svelte';
   import { tablero, type TipoUnidad } from '$lib/state/tablero.svelte';
@@ -273,6 +274,10 @@
         <div><dt>Ha exportado</dt><dd class="mono">{Math.round(ficha.u.exportado).toLocaleString('es-MX')} t</dd></div>
         <div><dt>Carga nacional</dt><dd class="mono">{Math.round(ficha.u.cargaNacional).toLocaleString('es-MX')} t a bordo</dd></div>
         <div><dt>Ha movido</dt><dd class="mono">{Math.round(ficha.u.movidoNacional).toLocaleString('es-MX')} t nacionales</dd></div>
+      {/if}
+      {#if ficha.u.tipo === 'barco' && ficha.u.clase === 'abastecedor'}
+        <div><dt>Abasto</dt><dd class="mono">{barriles(ficha.u.abasto)} de {barriles(TONELADAS_ABASTECEDOR)} t a bordo</dd></div>
+        <div><dt>Ha entregado</dt><dd class="mono">{barriles(ficha.u.entregadoAbasto)} t a las plataformas</dd></div>
       {/if}
       {#if ficha.u.tipo === 'tren' || ficha.u.clase === 'tanque'}
         <div>

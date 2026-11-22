@@ -147,7 +147,7 @@ const A = [
   ['Tampico', 'maritima', 'puerto:tampico', 6300.5, 78169.7],
   ['La Paz', 'maritima', 'puerto:la-paz', 5410.6, 30256.4],
   ['Cancún', 'maritima', null, 2336.3, 42915.7],
-  ['Ciudad del Carmen', 'maritima', null, 1221.9, 141144.1],
+  ['Ciudad del Carmen', 'maritima', 'puerto:ciudad-del-carmen', 1221.9, 141144.1],
   ['Acapulco', 'maritima', 'puerto:acapulco', 796.7, 1635.8],
   ['Salina Cruz', 'maritima', 'puerto:salina-cruz', 527.6, 49035.3],
 ];
