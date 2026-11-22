@@ -440,6 +440,8 @@
   let height = 0;
   let dpr = 1;
   let projection: GeoProjection | null = null;
+  /** Bumped whenever the projection is (re)made: a camera request waiting for it can fly. */
+  let proyeccionLista = $state(0);
   let path: GeoPath | null = null;
   let geo: MexicoGeometry | null = null;
   let zoomBehaviour: ReturnType<typeof d3zoom<HTMLCanvasElement, unknown>> | null = null;
@@ -554,6 +556,7 @@
   function rebuild() {
     if (!width || !height) return;
     projection = makeProjection();
+    proyeccionLista++;
     // Room for the nav bar on top, the tool strips below, and the clock and
     // roster on the left when they're showing.
     const izq = width >= PANELES_DESDE ? PANEL_IZQ : 28;
@@ -2720,13 +2723,28 @@
     requestDraw();
   });
 
+  /**
+   * The last camera request flown. A request left from before this board was
+   * mounted isn't flown again — except coming out of a polo, which lands the
+   * board on it.
+   */
+  let atendido = untrack(() => (tablero.irA && !tablero.irA.id.startsWith('polo-fuera:') ? tablero.irA.n : 0));
+
   $effect(() => {
-    // Camera requests from the panels. Untracked: flying reads the camera
-    // transform, and tracking it would relaunch the flight on every frame of
-    // the flight itself.
+    // Camera requests from the panels, once the projection is there. Untracked:
+    // flying reads the camera transform, and tracking it would relaunch the
+    // flight on every frame of the flight itself.
     const pedido = tablero.irA;
-    if (!pedido) return;
+    if (!pedido || !proyeccionLista || pedido.n === atendido) return;
     untrack(() => {
+      atendido = pedido.n;
+      // Into a polo: all the way down onto it, on the way to its close-up. Out of one: close over it.
+      const polo = POLOS.find((x) => pedido.id === `polo:${x.id}` || pedido.id === `polo-fuera:${x.id}`);
+      if (polo) {
+        const p = projection?.(polo.lonLat);
+        if (p) flyTo(p[0], p[1], pedido.id.startsWith('polo:') ? MAX_ZOOM : 9);
+        return;
+      }
       const u = sim.unidades.find((x) => x.id === pedido.id);
       if (u) flyToUnidad(u);
     });

@@ -1,0 +1,118 @@
+{
+ "corte": "2026-11-22",
+ "nota": "Generado por scripts/polos/gen-interior.mjs.",
+ "fuentes": {
+  "dof-huamantla": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Huamantla, Tlaxcala (14 de agosto de 2025): cuadro de construcción (37 vértices, UTM), 530,000 m², vocaciones productivas, propiedad del Gobierno del estado",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5765468&fecha=14/08/2025"
+  },
+  "presidencia-inauguracion": {
+   "fuente": "Presidencia, versión estenográfica de la inauguración del PODECOBI Huamantla (12 de abril de 2026): los lotes vendidos con su superficie y empresa, las 7.8 hectáreas añadidas, las obras del gobierno del estado (energía, vialidades, iluminación), el centro de negocios, comedor y estancia infantil, y el modelo (el estado pone el terreno, un desarrollador urbaniza y la venta de los lotes paga la urbanización)",
+   "url": "https://www.gob.mx/presidencia/es/articulos/version-estenografica-inauguracion-del-polo-de-desarrollo-economico-para-el-bienestar-podecobi-huamantla?idiom=es"
+  },
+  "economia-ficha": {
+   "fuente": "Secretaría de Economía, ficha del polo Huamantla (podecobi.economia.gob.mx): energía disponible de 8 MVA, agua con disponibilidad confirmada, gas natural con ducto a 3 km, conexión ferroviaria (KCSM y Ferrosur), superficie total de 61.8 ha",
+   "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo"
+  },
+  "economia-nota": {
+   "fuente": "Secretaría de Economía, «Plan México avanza: Polo de Desarrollo Económico en Tlaxcala» (18 de diciembre de 2025): la obra concluirá el 28 de febrero de 2026, tendrá un CECI; Knipping Automotive y otras con cartas de intención",
+   "url": "https://podecobi.economia.gob.mx/en/news/plan-mexico-avanza-polo-de-desarrollo-economico-en-tlaxcala/"
+  },
+  "osm": {
+   "fuente": "OpenStreetMap (ODbL, © colaboradores de OpenStreetMap): calles, vías, líneas eléctricas, subestaciones de la CFE, poblados y la Ciudad Industrial Xicohténcatl II alrededor del polo",
+   "url": "https://www.openstreetmap.org/copyright"
+  },
+  "sict-dos-bocas": {
+   "fuente": "SICT: costo del ramal ferroviario a Dos Bocas, base del costo por km de la espuela (ver la sección de obras del Estado)",
+   "url": "https://www.gob.mx/sct/prensa/precisa-sict-que-ramal-ferroviario-roberto-ayala-dos-bocas-tiene-un-costo-estimado-de-6-mil-54-mdp"
+  },
+  "juego": {
+   "fuente": "Estimación del juego",
+   "url": ""
+  }
+ },
+ "polos": {
+  "huamantla": {
+   "nombre": "Huamantla",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de negocios, comedor y CECI",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "Las obras del polo, como las nombró el Gobierno de Tlaxcala en la inauguración: la energía, las vialidades y la iluminación, y el centro de negocios con comedor y estancia infantil (CECI); el agua y el drenaje los da la ficha de Economía y la declaratoria. Qué parte del costo lleva cada una es estimación del juego: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % servicios.",
+    "fuentes": [
+     "presidencia-inauguracion",
+     "economia-ficha",
+     "economia-nota",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 1.04,
+    "via": "Línea S",
+    "operador": "Ferrosur",
+    "mesesMinimos": 2,
+    "dato": "La espuela va de la Línea S (Ferrosur) al polo: 1.04 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y se hace a su paso, con un mínimo de 2 meses: estimación del juego. No se ha reportado que el polo real tenga espuela: la ficha de Economía solo dice «conexión ferroviaria».",
+    "fuentes": [
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "kmLinea": 0.71,
+    "dato": "Energía disponible de 8 MVA (Economía). La línea de 115 kV de la CFE más cercana queda a 0.71 km (OpenStreetMap).",
+    "fuentes": [
+     "economia-ficha",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "dato": "Siete empresas compraron lotes (Presidencia, inauguración): Gravity 20 ha, El Charrito 11, Sonavox 6.9, Rebelbox 2.5, Grupo Caná 2, Geometrika 1000 1.5 y Color Link 1; en total 44.9 ha. Dónde queda cada lote no se publica: el acomodo es del juego. Después se añadieron 7.8 ha, también vendidas, que no están en la declaratoria.",
+    "fuentes": [
+     "presidencia-inauguracion",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Industria textil",
+    "Industrias metálicas básicas",
+    "Fabricación de productos metálicos",
+    "Maquinaria y equipo",
+    "Equipo de computación",
+    "Aparatos eléctricos",
+    "Equipo de transporte",
+    "Bebidas y tabaco"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF).",
+    "fuentes": [
+     "dof-huamantla"
+    ]
+   }
+  }
+ }
+}

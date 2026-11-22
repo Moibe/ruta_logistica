@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 22 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles y el comercio por mar.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y Huamantla por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -106,7 +106,9 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [Reforma a la Ley Reglamentaria del Servicio Ferroviario](https://dof.gob.mx/nota_detalle.php?codigo=5763165&fecha=16/07/2025) | El derecho de paso: quien usa la vía de otro le paga una contraprestación | DOF, 16 de julio de 2025 | Documento oficial público |
 | INEGI (convención cartográfica) | Parámetros de la proyección del tablero: cónica conforme de Lambert, paralelos 17.5° y 29.5°, meridiano central 102° O | — | — |
 | [INEGI, Censos Económicos 2024](https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mver_ce24.pdf) | Empleos que da la obra por cada millón de pesos (construcción en Veracruz, 2023) | Resultados definitivos, 2025 | Documento oficial público |
-| Presidencia de la República y Gobierno de Tlaxcala | Tiempos y empleos del polo de Huamantla, el único terminado: su ritmo de obra y su proyección de empleos | Comunicados del 14 oct 2025 al 12 abr 2026 | Documento oficial público |
+| Presidencia de la República y Gobierno de Tlaxcala | Tiempos y empleos del polo de Huamantla, el único terminado: su ritmo de obra y su proyección de empleos; en la [versión estenográfica de su inauguración](https://www.gob.mx/presidencia/es/articulos/version-estenografica-inauguracion-del-polo-de-desarrollo-economico-para-el-bienestar-podecobi-huamantla?idiom=es), los siete lotes vendidos con su superficie, las obras que hizo el estado y cómo se paga la urbanización | Comunicados del 14 oct 2025 al 12 abr 2026 | Documento oficial público |
+| Secretaría de Economía, [ficha del polo Huamantla](https://podecobi.economia.gob.mx/polos-de-desarrollo) y [nota del 18 de diciembre de 2025](https://podecobi.economia.gob.mx/en/news/plan-mexico-avanza-polo-de-desarrollo-economico-en-tlaxcala/) | Energía disponible (8 MVA), agua, gas a 3 km, conexión ferroviaria y superficie total (61.8 ha) de Huamantla; su CECI y su fecha de término | 2025 | Documento oficial público |
+| [OpenStreetMap](https://www.openstreetmap.org/copyright), vía Overpass | Los alrededores de Huamantla para su vista por dentro: calles, carreteras, vías y su operador, líneas de 115 kV y subestaciones de la CFE, poblados y la Ciudad Industrial Xicohténcatl II | Consultado el 22 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 
 **Regla de fuentes.** Las cifras del juego salen de fuentes oficiales (DOF, Presidencia,
 dependencias, INEGI, gobiernos estatales). La prensa solo entra como complemento, y solo de
@@ -580,7 +582,8 @@ por tres fases:
 
 1. **Por construir.** Su ficha (clic en el polo) deja elegir de 1 a 4 **cuadrillas** y muestra
    el costo, la duración, la gente que trabajará en la obra y los empleos que dará lleno.
-   *Construir* pide confirmación.
+   *Construir* pide confirmación. Huamantla, que tiene vista por dentro, se construye por
+   frentes desde adentro (ver [Huamantla por dentro](#huamantla-por-dentro)).
 2. **En obra.** Se paga conforme avanza, como la obra pública. Si el presupuesto se acaba, la
    obra **se detiene** donde va. Un anillo alrededor del polo muestra el avance (rojo si está
    detenida).
@@ -621,6 +624,78 @@ gobierno publique más polos terminados, se recalibra (ver *Mantener el juego al
 [Fuentes](#1-fuentes)). Dato de contexto del informe 2025–2026 del Corredor Interoceánico: sus
 polos se concesionan a desarrolladores privados, y de nueve concesionados en 2025 quedaron cinco
 en 2026 (tres concesionarios incumplieron y uno renunció).
+
+### Huamantla por dentro
+
+Un polo puede tener **vista por dentro**: en su ficha, *Entrar al polo ›* lleva la cámara del
+tablero hasta él y abre su acercamiento (`/mexico/polo/huamantla`). Por ahora solo Huamantla
+la tiene; es la prueba antes de dársela a los demás. El reloj sigue corriendo adentro, con el
+presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
+
+**Qué se ve.** El terreno tal como lo declara el DOF, y lo que hay alrededor según
+OpenStreetMap: la carretera federal MEX 136, que corre por su costado; la **Línea S de
+Ferrosur**, a 1.04 km al suroeste; la Línea V de CPKC, al norte; las líneas de 115 kV de la CFE
+y sus subestaciones Huamantla 2000 y Cuauhtémoc; los poblados, y la Ciudad Industrial
+Xicohténcatl II, su vecina. Adentro, los lotes, la avenida principal y las obras de cada frente
+según avanzan, con las cuadrillas trabajando donde va cada frente. Al operar, los lotes se
+llenan de empresas al ritmo de la ocupación.
+
+**El terreno**, de la declaratoria (DOF, 14 de agosto de 2025): un cuadro de construcción de 37
+vértices en UTM zona 14. Convertido con el código del juego, el área da exactamente los
+530,000 m² declarados, el perímetro los 3,310.8 m y el vértice 1 cae a 0.00 m de las
+coordenadas geográficas que también da el DOF. El dibujo usa la cuadrícula UTM, cuyo norte se
+aparta 0.35° del norte verdadero ahí.
+
+**Los lotes.** En la inauguración (12 de abril de 2026), el Gobierno de Tlaxcala dijo quién
+compró y cuánto: Gravity 20 ha, El Charrito 11, Sonavox 6.9, Rebelbox 2.5, Grupo Caná 2,
+Geometrika 1000 1.5 y Color Link 1; en total 44.9 ha, «totalmente vendido». Dónde queda cada
+lote no se publica: el acomodo es del juego, con una avenida de 26 m a lo largo del polo y
+accesos de 14 m entre lotes. Al centro de negocios, comedor y estancia infantil (CECI) que tiene
+el polo (Presidencia, Economía) el juego le da 1.2 ha, a la entrada; lo que sobra es área común
+y reserva. En el juego los lotes se llaman *Lote 1* a *Lote 7*; en Realidad llevan el nombre de
+su empresa. Después se compraron otras 7.8 ha, ya vendidas, que no están en la declaratoria.
+
+**La obra por frentes.** El Gobierno de Tlaxcala se comprometió a «la energía, las vialidades,
+la iluminación, todo lo necesario para que se instalen las empresas», y el polo tiene centro
+de negocios, comedor y estancia infantil; la ficha de Economía da 8 MVA de energía, agua con
+disponibilidad confirmada, gas natural a 3 km y conexión ferroviaria. El juego lo arma en
+cinco frentes (`domain/interior.ts`):
+
+| Frente | Parte del costo y del tiempo del polo | 1 cuadrilla | 2 cuadrillas | 4 cuadrillas |
+| --- | ---: | ---: | ---: | ---: |
+| Vialidades e iluminación | 40 % | 116 millones, 9.6 meses | 134 millones, 5.7 meses | 169 millones, 3.4 meses |
+| Agua potable y drenaje | 25 % | 73 millones, 6.0 meses | 84 millones, 3.6 meses | 106 millones, 2.1 meses |
+| Energía eléctrica | 25 % | 73 millones, 6.0 meses | 84 millones, 3.6 meses | 106 millones, 2.1 meses |
+| Centro de negocios, comedor y CECI | 10 % | 29 millones, 2.4 meses | 34 millones, 1.4 meses | 42 millones, 0.9 meses |
+| Espuela de tren (1.04 km) | aparte | 47 millones, 5.7 meses | 54 millones, 3.4 meses | 68 millones, 2.0 meses |
+
+- **Las cuatro partes** (40, 25, 25 y 10 %) son **estimación del juego**: nadie publica cuánto
+  costó cada parte. Juntas suman lo que cuesta el polo entero con las fórmulas de arriba.
+- **El polo tiene 4 cuadrillas** para sus cuatro frentes urbanos, las mismas que el polo entero
+  tenía antes: el jugador decide cómo repartirlas. En frentes distintos trabajan a la vez; varias
+  en un mismo frente rinden cada vez menos (el mismo exponente de 0.75). Al terminar un frente,
+  sus cuadrillas quedan libres para otro. Bien repartidas (2 en vialidades, 1 en agua, 1 en
+  energía y, al acabar las calles, las 2 libres en servicios) Huamantla queda en unos 7 meses y
+  313 millones, cerca del récord real de 8.5 meses.
+- **La espuela** es obra de vía, con cuadrillas propias (hasta 4). Va de la Línea S de Ferrosur
+  al polo, 1.04 km en línea recta (OpenStreetMap), al costo por km del ramal a Dos Bocas (65.8
+  millones, SICT) y a su paso, 5.6 km al mes con 4 cuadrillas, con un mínimo de 2 meses:
+  estimación del juego. **El polo recibe su estación solo con la espuela**: sin ella queda
+  urbanizado pero sin tren, y sin tren no llegan empresas. No se ha reportado que el polo real
+  tenga espuela; la ficha de Economía solo dice «conexión ferroviaria».
+- **La energía**: la primera mitad del frente es la conexión a la línea de 115 kV más cercana
+  (0.71 km, OpenStreetMap) y su subestación; la segunda, la red adentro del polo.
+- Se paga conforme avanza, como cualquier obra del Estado; si se acaba el dinero, el frente se
+  detiene donde va. Con 0 cuadrillas también.
+
+El polo está **urbanizado** (operando) cuando terminan sus cuatro frentes urbanos. En el modo
+Realidad la vista muestra el polo real: urbanizado desde su inauguración (o al avance real
+mientras estaba en obra), con los lotes a nombre de sus empresas y sin espuela.
+
+Los datos del interior los arma `scripts/polos/gen-interior.mjs`: el contorno en
+`static/data/polos/huamantla.json` (lo baja la vista al entrar) y los frentes y sus fuentes en
+`src/lib/domain/datos/interiores.json`. Lo de OpenStreetMap se consulta en Overpass en partes
+chicas (la consulta completa da error 502) y se guarda en `.cache/osm/`.
 
 ---
 
@@ -2477,6 +2552,12 @@ los otros dos aún no se capturan.
   ámbar y rojo.
 - **Las estaciones llegan hasta 15 km.** Más lejos, el sitio no tiene servicio de tren y su
   ficha dice a cuántos km queda la vía.
+- **Los lugares tienen vista por dentro.** *(22 nov 2026.)* Entrar a un sitio lo muestra de cerca,
+  con lo que se puede hacer ahí. Se empezó por un polo, Huamantla, el único terminado en la
+  realidad: su obra se maneja por frentes, cada uno con sus cuadrillas, y su tren llega por una
+  espuela que hay que construir. Los demás polos se siguen construyendo de una vez desde su
+  ficha hasta que tengan su vista. El acercamiento es otra pantalla, no un zoom del tablero: la
+  escala cambia de 3,000 km a un kilómetro.
 - **En el mar, el jugador es una naviera más.** *(22 nov 2026.)* En el tren, los trenes del
   jugador llevan toda la carga del juego (los privados solo ocupan la vía). En el mar no: un
   puerto como Manzanillo recibe más de tres portacontenedores al día. Por eso cada puerto
@@ -2491,6 +2572,12 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 22 de noviembre de 2026
+
+**Huamantla por dentro (DOF)**
+
+- **Cuadro de construcción:** cuatro vértices traen un punto donde va la coma (611.268.7407,
+  611.576.0324, 611.734.0058 y 2.140,253.4809). Se leen como los números que son; con ellos el
+  área da exactamente los 530,000 m² declarados.
 
 **Comercio por mar (anuario de puertos de la SEMAR de 2024)**
 
@@ -2723,6 +2810,10 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Carga contenerizada, granel y general suelta**: los tipos de carga de la SEMAR. La
   contenerizada va en contenedores; el granel (agrícola o mineral) va suelto en la bodega; la
   general suelta va en piezas, como los autos de un ro-ro.
+- **Frente de obra**: una parte de la obra de un polo que avanza por su lado (las calles, el
+  agua, la energía, los servicios, la espuela), con sus propias cuadrillas.
+- **Espuela**: el ramal corto de vía que une un polo o una planta con la línea principal.
+- **Lote**: el pedazo del polo que compra una empresa para poner su nave.
 - **Trasbordo**: pasar la carga de un medio a otro; en el juego, del tren al barco en un
   puerto, o del barco al tren.
 - **Buque tanque, carro tanque, autotanque**: el barco, el vagón de tren y el camión (la pipa) que

@@ -54,6 +54,7 @@ saltar al siguiente libre.
 | `/mexico`       | d3-geo + Canvas2D | El tablero con trenes y barcos. `/` redirige aquí: el juego es lo principal.                 |
 | `/mundo/canvas` | d3-geo + Canvas2D | El mundo plano de `global` (tres proyecciones, mundo repetido, centrado en 130° O) con México en ámbar y los barcos. |
 | `/mundo/globo`  | Threlte + three   | El globo de `global`, abre mirando a México; el país va relleno de puntos ámbar; los barcos. Solo cliente. |
+| `/mexico/polo/[id]` | SVG          | Un polo por dentro (por ahora solo `huamantla`): su terreno del DOF, sus alrededores de OpenStreetMap y su obra por frentes. Se entra desde la ficha del polo. Solo cliente. |
 
 ### El tablero (`src/lib/map/MexicoMap.svelte`)
 
@@ -212,6 +213,8 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/plataformas.json` | **Plataformas**: los 4 complejos de Pemex en la Sonda de Campeche con su crudo por año (Segundo Informe), Cayo Arcas, el abasto que llevan los barcos (SEMAR), la carga de un barco abastecedor y las reglas del abasto. También lo lee `npm run datos` para las rutas marítimas |
 | `src/lib/domain/datos/combustibles.json` | **Combustibles**: consumo por estado (CNE, SENER), las 78 terminales de Pemex con su medio de suministro y las zonas de ductos (SENER, mapa de 2018), petróleo por puerto (SEMAR), barriles por tonelada (EIA), capacidad del buque tanque, y las series reales de crudo producido y exportado y de combustibles hechos e importados (Segundo Informe de Gobierno). Lo genera `scripts/combustibles/gen-combustibles.mjs` |
 | `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
+| `src/lib/domain/datos/interiores.json` | **Polos por dentro**: los frentes de obra de Huamantla y su parte del costo, la espuela, la energía, los lotes vendidos y las vocaciones, con sus fuentes. Lo genera `scripts/polos/gen-interior.mjs` |
+| `static/data/polos/huamantla.json` | El dibujo de Huamantla por dentro: terreno del DOF, lotes, avenida, espuela, conexión eléctrica y alrededores de OpenStreetMap, en metros (~70 KB). Lo genera el mismo script |
 | `src/lib/domain/datos/comercio-mar.json` | **Comercio por mar**: lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (SEMAR), lo que entra y sale por tren (ATTRAPI 2025), la carga de cada clase de barco y las reglas de los patios. Lo genera `scripts/comercio/gen-comercio-mar.mjs` |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
@@ -407,6 +410,30 @@ permanentes) van al panel `Erario`. Las cifras salen de fuentes oficiales y vive
 `datos/calibracion.json`; la tabla y sus fuentes, en la
 [enciclopedia](docs/enciclopedia.md#construirlos).
 
+**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla). *Entrar al polo ›* en su ficha
+pide a la cámara del tablero que baje hasta él (`tablero.entrarPolo`, pedido `polo:<id>`) y abre
+la ruta; *← México* o Esc vuelven sobre él (`tablero.salirPolo`, pedido `polo-fuera:<id>`). El
+tablero atiende un pedido de cámara una sola vez, cuando su proyección ya existe
+(`proyeccionLista`).
+
+- **Datos:** `scripts/polos/gen-interior.mjs` lee el cuadro de construcción del DOF (UTM zona 14,
+  con su conversión comprobada contra el área y un vértice en grados) y los alrededores de
+  OpenStreetMap (Overpass en consultas chicas, guardadas en `.cache/osm/<polo>/`). Acomoda los
+  lotes con las superficies que dio el gobierno, traza la espuela a la vía principal más cercana
+  y la conexión a la línea de 115 kV. Escribe `static/data/polos/<id>.json` (metros alrededor
+  del polo, lo baja la vista) y `src/lib/domain/datos/interiores.json` (los frentes y sus fuentes).
+- **Obra por frentes** (`domain/interior.ts`): `ObraPolo.frentes` lleva, por frente, cuadrillas,
+  avance, pagado y si está detenido. Los cuatro frentes urbanos reparten el costo y el tiempo del
+  polo (`costoBaseMdp`, `mesesUnaCuadrilla`) y comparten sus 4 cuadrillas (`maxCuadrillas`); la
+  espuela se presupuesta como el ramal a Dos Bocas (`presupuestarObra`) y lleva las suyas.
+  `avanzarInterior` paga cada frente (`pagarAvance`) y `resumir` deja en `plan` la suma, que es
+  lo que leen la ficha, los empleos y la barra. Urbanizado, el polo opera; su estación nace solo
+  con la espuela (`#reconstruirRed` pide `conEspuela`). `sim.cuadrillasEnFrente` es la acción.
+- **Vista** (`map/InteriorPolo.svelte`, SVG en metros; `ui/FrentesPolo.svelte`, el panel): cada
+  frente se dibuja según avanza y las cuadrillas aparecen donde trabajan. Al operar, los lotes se
+  llenan al ritmo de la ocupación. En Realidad muestra el polo real con los lotes a nombre de sus
+  empresas.
+
 **Mantener el juego al día**: `npm run al-dia` (`scripts/al-dia.mjs`) busca en el DOF, desde la
 fecha de corte de `calibracion.json` hasta hoy, los acuerdos sobre Polos del Bienestar que el
 juego aún no revisó (partiendo el rango de fechas cuando hay más de diez resultados, porque la
@@ -463,6 +490,8 @@ src/lib/
     geo.ts           LonLat, distancia, interpolación por gran círculo, rumbo, lon/lat ↔ vec3
     sitios.ts        ciudades, puertos, salidas al mundo, polos y un registro común por clave
     obras.ts         construir polos: presupuesto, cuadrillas, avance, ocupación y empleos
+    interior.ts      un polo por dentro: su obra por frentes y su espuela
+    interiorGeo.ts   el dibujo de un polo por dentro (se baja al entrar)
     trayecto.ts      un recorrido como polilínea con velocidad por segmento; avanzar sobre él
     servicio.ts      el motor común: un vehículo recorriendo sus paradas (ida y vuelta o circuito)
     red.ts           grafo ferroviario, dueños y estado de cada vía, estaciones, ruta más rápida
@@ -486,10 +515,12 @@ src/lib/
     GlobeMap.svelte · GlobeScene.svelte · globeGeometry.ts   globo
     GlobeBarcos.svelte   los barcos sobre el globo
     MexicoMap.svelte     el tablero
+    InteriorPolo.svelte  un polo por dentro (SVG)
   ui/
     ViewNav.svelte   las vistas, plegadas abajo a la izquierda: Mundo (Canvas · Globo) | México
     Reloj.svelte · Flota.svelte · Trazado.svelte · formato.ts   paneles (Reloj y Flota también en el mundo)
     Erario.svelte · FichaPolo.svelte   presupuesto y empleos; la ficha del polo y su construcción
+    FrentesPolo.svelte   adentro de un polo: sus frentes de obra y sus cuadrillas
     CatalogoObras.svelte   el catálogo de obras ferroviarias del Estado y la ficha de cada obra
 ```
 
@@ -580,6 +611,9 @@ costa del mundo solo sube de resolución). Además:
   margen.
 - **Más dinero del Estado**, con la carga: lo que cobran los trenes del Estado, lo que pagan
   sus trenes por pasar por vía privada y los impuestos de las concesionarias.
+- **Polos por dentro, lo que sigue**: los lotes con empresas por sector (las vocaciones de cada
+  declaratoria), la vista de los demás polos con su polígono del DOF, y quizás de otros sitios
+  (puertos, refinerías).
 - **Comercio por mar, lo que sigue**: el cabotaje entre puertos del país; La Paz, Acapulco y
   Ciudad del Carmen; más salidas al mundo (Estados Unidos, Sudamérica) para que las rutas
   reales tengan a dónde ir; el valor en dólares de lo que se mueve.

@@ -78,7 +78,6 @@ import {
 import {
   avanzarObra,
   empleosPermanentes,
-  obraNueva,
   personasTrabajando,
   presupuestar,
   type ObraPolo,
@@ -98,6 +97,7 @@ import {
   type TipoCarga,
 } from '$lib/domain/comercioMar';
 import { POLOS, puerta, SITIOS } from '$lib/domain/sitios';
+import { avanzarInterior, conEspuela, ESPUELA, fijarCuadrillas, obraDelPolo, resumir } from '$lib/domain/interior';
 
 const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
 
@@ -205,7 +205,7 @@ class Simulacion {
    * Every Polo del Bienestar's work and occupancy, by polo id. Mutated in place
    * by the clock like the fleet; views that show it also read `horas`.
    */
-  obras = $state.raw<Map<string, ObraPolo>>(new Map(POLOS.map((p) => [p.id, obraNueva(p.id)])));
+  obras = $state.raw<Map<string, ObraPolo>>(new Map(POLOS.map((p) => [p.id, obraDelPolo(p.id)])));
   /**
    * Every rail work of the State's catalog, by id: its phase, progress and
    * payments. Mutated in place by the clock like the polos.
@@ -497,7 +497,7 @@ class Simulacion {
     // The game's trains and ships are made-up services: none of them here.
     this.trenes = [];
     this.barcos = [];
-    this.obras = new Map(POLOS.map((p) => [p.id, obraNueva(p.id)]));
+    this.obras = new Map(POLOS.map((p) => [p.id, obraDelPolo(p.id)]));
     this.irA(horasDeHoy(), true);
   }
 
@@ -526,10 +526,17 @@ class Simulacion {
     this.obrasPemex = new Map(OBRAS_PEMEX.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
     this.deerParkPropia = this.horas >= HORAS_COMPRA_DEER_PARK;
     // The polos too: built or not. How full they are isn't published, so they stay at 0 % (no demand, no jobs counted).
+    // One built by fronts shows them at the real progress; a rail spur to it hasn't been reported.
     this.obras = new Map(
       POLOS.map((p) => {
         const f = fase(clavePolo(p.id));
-        return [p.id, { ...obraNueva(p.id), fase: f === 'en-servicio' ? 'operando' : f }];
+        const o: ObraPolo = { ...obraDelPolo(p.id), fase: f === 'en-servicio' ? 'operando' : f };
+        if (o.frentes) {
+          const avance = f === 'en-servicio' ? 1 : f === 'en-obra' ? (real.get(clavePolo(p.id))!.avance ?? 0) : 0;
+          for (const [id, e] of Object.entries(o.frentes)) e.avance = id === ESPUELA ? 0 : avance;
+          resumir(o, p);
+        }
+        return [p.id, o];
       })
     );
     this.real = real;
@@ -569,9 +576,23 @@ class Simulacion {
   construirPolo(id: string, cuadrillas: number): boolean {
     const obra = this.obras.get(id);
     const polo = POLOS.find((p) => p.id === id);
-    if (!obra || !polo || obra.fase !== 'por-construir') return false;
+    // A polo with its close-up is built front by front, from inside it.
+    if (!obra || !polo || obra.fase !== 'por-construir' || obra.frentes) return false;
     obra.plan = presupuestar(polo, cuadrillas);
     obra.fase = 'en-obra';
+    this.obras = new Map(this.obras);
+    return true;
+  }
+
+  /**
+   * Inside a polo: put `n` crews (0–4) on one of its fronts. The first crew
+   * starts the work; paid as it advances, like any other.
+   */
+  cuadrillasEnFrente(id: string, frente: string, n: number): boolean {
+    const obra = this.obras.get(id);
+    const polo = POLOS.find((p) => p.id === id);
+    if (!obra?.frentes || !polo || this.modo !== 'juego') return false;
+    fijarCuadrillas(obra, polo, frente, n, presupuestar(polo, 1).empleosLleno);
     this.obras = new Map(this.obras);
     return true;
   }
@@ -769,6 +790,8 @@ class Simulacion {
     const caja = { mdp: this.dinero };
     let terminadas = false;
     for (const o of this.obras.values()) {
+      // A polo built by fronts: each front with crews advances (urbanized, or its spur done, changes the network).
+      if (o.frentes && avanzarInterior(o, horas, caja)) terminadas = true;
       if (o.fase === 'por-construir') continue;
       // Companies come only with a train and with electricity in the region.
       if (avanzarObra(o, horas, caja, this.conectado(o.id) && this.hayEnergia(o.id))) terminadas = true;
@@ -823,7 +846,9 @@ class Simulacion {
     if (!this.#redJson) return;
     // In Realidad a polo gets no spur: whether a real one has rail isn't in the data.
     const enServicio = new Set(
-      this.modo === 'realidad' ? [] : [...this.obras.values()].filter((o) => o.fase === 'operando').map((o) => `polo:${o.id}`)
+      this.modo === 'realidad'
+        ? []
+        : [...this.obras.values()].filter((o) => o.fase === 'operando' && (!o.frentes || conEspuela(o))).map((o) => `polo:${o.id}`)
     );
     const hechas = OBRAS_VIA.filter((o) => this.obrasVia.get(o.id)?.fase === 'en-servicio');
     this.red = construirRed(this.#redJson, SITIOS, enServicio, hechas);

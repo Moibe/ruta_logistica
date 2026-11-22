@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { ESTACION_MAX_KM } from '$lib/domain/red';
+  import { conEspuela, tieneInterior } from '$lib/domain/interior';
   import { MAX_CUADRILLAS, presupuestar } from '$lib/domain/obras';
   import { PROGRAMAS_POLO, POLOS } from '$lib/domain/sitios';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
@@ -60,6 +62,19 @@
 /** How long it really takes when the money sets the pace (`presupuesto.ts`). */
   const alRitmo = (p: { costoMdp: number; meses: number }) =>
     mesesAlRitmoDelDinero(p.costoMdp, p.meses, sim.dinero, sim.ultimaMensualidad?.mes ?? 0);
+
+  /** Into the polo: the board dives onto it, then its close-up opens. */
+  let entrando = $state(false);
+  function entrar() {
+    if (!polo || entrando) return;
+    const id = polo.id;
+    entrando = true;
+    tablero.entrarPolo(id);
+    setTimeout(() => {
+      entrando = false;
+      goto(`/mexico/polo/${id}`);
+    }, 950);
+  }
 
   function construir() {
     if (!polo) return;
@@ -124,6 +139,26 @@
           {/each}
         </details>
       {/if}
+    {:else if obra.frentes && obra.fase !== 'operando'}
+      <!-- Built front by front, from inside it. -->
+      <p class="status" class:por-construir={obra.fase === 'por-construir'} class:en-obra={obra.fase === 'en-obra' && !obra.detenida} class:detenida={obra.detenida}>
+        {obra.fase === 'por-construir'
+          ? 'Por construir'
+          : obra.detenida
+            ? 'Obra detenida: se acabó el presupuesto'
+            : `En obra · ${obra.plan?.cuadrillas ?? 0} cuadrilla${obra.plan?.cuadrillas === 1 ? '' : 's'}`}
+      </p>
+      {#if obra.fase === 'en-obra'}
+        <div class="barra"><span style:width="{obra.avance * 100}%"></span></div>
+        <dl>
+          <div><dt>Avance</dt><dd class="mono">{(obra.avance * 100).toFixed(1)} %</dd></div>
+          <div><dt>Pagado</dt><dd class="mono">{mdp(obra.pagadoMdp)}</dd></div>
+          <div><dt>Trabajando en la obra</dt><dd class="mono">{personas(obra.plan?.personasEnObra ?? 0)}</dd></div>
+        </dl>
+      {/if}
+      <p class="nota">
+        Este polo se construye por frentes (calles, agua, energía, servicios y la espuela de tren), cada uno con sus cuadrillas: entra a verlo.
+      </p>
     {:else if obra.fase === 'por-construir' && plan}
       <p class="status por-construir">Por construir</p>
       <div class="cuadrillas" role="radiogroup" aria-label="Cuadrillas">
@@ -198,6 +233,16 @@
           <dd>{ficha.conectado ? `Estación a ${personas(ficha.km ?? 0)} km` : `Vía a ${personas(ficha.km ?? 0)} km`}</dd>
         </div>
       </dl>
+      {#if obra.frentes && !conEspuela(obra)}
+        <p class="aviso">Sin espuela no tiene estación: constrúyela desde adentro del polo.</p>
+      {/if}
+    {/if}
+    {#if tieneInterior(p.id)}
+      <div class="acciones">
+        <button class="ctl construir" onclick={entrar} disabled={sim.estado !== 'lista' || entrando}>
+          {entrando ? 'Entrando…' : 'Entrar al polo ›'}
+        </button>
+      </div>
     {/if}
   </section>
 

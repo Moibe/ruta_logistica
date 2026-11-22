@@ -51,12 +51,18 @@ export type Presupuesto = {
   empleosLleno: number;
 };
 
+/** What urbanizing `polo` costs with one crew, millions of pesos. */
+export const costoBaseMdp = (polo: Polo) => polo.hectareas * c('costoMdpPorHa');
+/** Months one crew takes to urbanize `polo`. */
+export const mesesUnaCuadrilla = (polo: Polo) => c('mesesObraTipica') * (polo.hectareas / c('haReferencia')) ** EXPONENTE_TAMAÑO;
+/** People a work employs at once: INEGI's people per million pesos of construction, over the months it lasts. */
+export const personasPorObra = (costoMdp: number, meses: number) => (costoMdp * c('empleosAnioPorMdp')) / (meses / 12);
+
 /** What building `polo` with `cuadrillas` crews takes and gives. */
 export function presupuestar(polo: Polo, cuadrillas: number): Presupuesto {
   const n = Math.max(1, Math.min(MAX_CUADRILLAS, Math.round(cuadrillas)));
-  const costoMdp = polo.hectareas * c('costoMdpPorHa') * (1 + SOBRECOSTO_POR_CUADRILLA * (n - 1));
-  const mesesUna = c('mesesObraTipica') * (polo.hectareas / c('haReferencia')) ** EXPONENTE_TAMAÑO;
-  const meses = mesesUna / n ** EXPONENTE_CUADRILLAS;
+  const costoMdp = costoBaseMdp(polo) * (1 + SOBRECOSTO_POR_CUADRILLA * (n - 1));
+  const meses = mesesUnaCuadrilla(polo) / n ** EXPONENTE_CUADRILLAS;
   return {
     cuadrillas: n,
     costoMdp,
@@ -85,7 +91,15 @@ export type ObraPolo = {
   horasConectado: number;
   /** 0–1: how full of companies it is. */
   ocupacion: number;
+  /**
+   * A polo with its close-up (`interior.ts`) is built by fronts, each with its
+   * own crews; then `plan` is the sum of them, kept by `avanzarInterior`.
+   */
+  frentes?: Record<string, EstadoFrente>;
 };
+
+/** One front of a polo's work: crews on it now (0 stops it), progress 0–1, money paid. */
+export type EstadoFrente = { cuadrillas: number; avance: number; pagadoMdp: number; detenida: boolean };
 
 export function obraNueva(id: string): ObraPolo {
   return { id, fase: 'por-construir', plan: null, avance: 0, pagadoMdp: 0, detenida: false, horasConectado: 0, ocupacion: 0 };
@@ -132,7 +146,8 @@ export function pagarAvance(o: EnPago, horas: number, caja: Caja): boolean {
  * is. Returns true on the hour it's finished.
  */
 export function avanzarObra(o: ObraPolo, horas: number, caja: Caja, conectado: boolean): boolean {
-  if (o.fase === 'en-obra' && o.plan) {
+  // A polo built by fronts advances in `avanzarInterior`.
+  if (o.fase === 'en-obra' && o.plan && !o.frentes) {
     if (!pagarAvance(o, horas, caja)) return false;
     o.fase = 'operando';
     return true;
@@ -148,6 +163,8 @@ export function avanzarObra(o: ObraPolo, horas: number, caja: Caja, conectado: b
 
 /** People working on the site right now. */
 export function personasTrabajando(o: ObraPolo): number {
+  // By fronts, `plan` counts only the crews at work (the spur can be built with the polo operating).
+  if (o.frentes) return o.plan?.personasEnObra ?? 0;
   return o.fase === 'en-obra' && o.plan && !o.detenida ? o.plan.personasEnObra : 0;
 }
 

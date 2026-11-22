@@ -234,6 +234,20 @@ class Tablero {
     this.irA = { id, n: ++this.#n };
   }
 
+  /**
+   * Into a polo: the camera dives onto it; the close-up opens when it gets
+   * there (`FichaPolo`).
+   */
+  entrarPolo(id: string) {
+    this.volarA(`polo:${id}`);
+  }
+
+  /** Back out of a polo: the board opens over it, its card up. */
+  salirPolo(id: string) {
+    this.poloSel = id;
+    this.volarA(`polo-fuera:${id}`);
+  }
+
   /** Totals of the preview (picked legs + the leg to the candidate). */
   get kmPrevia(): number {
     return this.previa.reduce((s, t) => s + t.km, 0);

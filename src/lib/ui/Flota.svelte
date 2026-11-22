@@ -280,7 +280,7 @@
             <dt>Importación</dt>
             <dd class="mono">{barriles(ficha.u.importacion)} t a bordo{#if ficha.u.importacionDe}{` · de ${nombreCorto(ficha.u.importacionDe)}`}{/if}</dd>
           </div>
-          <div><dt>Ha llevado</dt><dd class="mono">{barriles(ficha.u.importado)} t importadas tierra adentro</dd></div>
+          <div><dt>Ha llevado</dt><dd class="mono">{barriles(ficha.u.importado)} t importadas</dd></div>
         {/if}
       {/if}
       {#if ficha.u.tipo === 'barco' && cargaDeClase(ficha.u.clase)}
