@@ -2,6 +2,7 @@ import DATOS from './datos/energia.json';
 import { añoDecimal, horasDeFecha } from './calendario';
 import type { LonLat } from './geo';
 import { presupuestarObra, type PresupuestoObra } from './obrasVia';
+import { GAS_REGIONES, MMPCD_POR_MW, type ObraGas } from './ductos';
 
 /**
  * Electricity for the Polos del Bienestar (`datos/energia.json`, every figure
@@ -25,6 +26,11 @@ import { presupuestarObra, type PresupuestoObra } from './obrasVia';
  * the interconnected grid, 11 % on the isolated Baja California systems) at
  * both peaks. Mulegé, in the north of Baja California Sur, is a system of its
  * own, isolated from the rest of the peninsula.
+ *
+ * **Gas.** Where all the gas comes through one pipeline (the Yucatán
+ * peninsula, through the Mayakan: `ductos.ts`), the combined cycles built
+ * after 2018 only count as far as the gas left over by the 2018 ones reaches;
+ * the State's gas work (the Cuxtal II) raises it.
  */
 
 export type Escalon = 'tarde' | 'noche';
@@ -170,13 +176,47 @@ export type EstadoRegion = {
   /** MW of private plants and of the player's CFE plants in service. */
   mwPrivados: number;
   mwCfe: number;
+  /** Where the gas that reaches the region limits its plants (the peninsula); null elsewhere. */
+  gas: GasEstado | null;
 };
+
+export type GasEstado = {
+  /** MMpcd that reach the region now. */
+  capacidad: number;
+  /** MMpcd the 2018 combined cycles burn at full load. */
+  consumo2018: number;
+  /** MW of new combined cycles in service, and how many of them the gas left reaches. */
+  nuevasMW: number;
+  disponiblesMW: number;
+  /** Share of each new combined cycle that counts (0–1). */
+  factor: number;
+};
+
+/** A plant that burns gas the region must bring it: the combined cycles. */
+export const quemaGas = (p: { tecnologia: string }) => /ciclo combinado/i.test(p.tecnologia);
+
+/** MW of combined cycle the region had in 2018 (PRODESEN). */
+const CICLOS_2018 = new Map<string, number>();
+for (const p of ENERGIA.plantas2018) if (quemaGas(p)) CICLOS_2018.set(p.region, (CICLOS_2018.get(p.region) ?? 0) + p.mw);
+
+/** How the gas reaching region `id` (`capacidad`, MMpcd) stretches over its new combined cycles (`nuevasMW`). */
+export function gasDeRegion(id: string, capacidad: number, nuevasMW: number): GasEstado {
+  const consumo2018 = (CICLOS_2018.get(id) ?? 0) * MMPCD_POR_MW;
+  const disponiblesMW = Math.max(0, (capacidad - consumo2018) / MMPCD_POR_MW);
+  return { capacidad, consumo2018, nuevasMW, disponiblesMW, factor: nuevasMW > 0 ? Math.min(1, disponiblesMW / nuevasMW) : 1 };
+}
 
 /**
  * Every region at game hour `horas`, with the CFE plants already built
- * (`hechas`) and each polo's current draw in MW (`polos`: polo id → MW).
+ * (`hechas`), each polo's current draw in MW (`polos`: polo id → MW) and the
+ * gas reaching the regions it limits (`gas`: region id → MMpcd).
  */
-export function estadoEnergia(horas: number, hechas: readonly ObraEnergia[], polos: ReadonlyMap<string, number>): EstadoRegion[] {
+export function estadoEnergia(
+  horas: number,
+  hechas: readonly ObraEnergia[],
+  polos: ReadonlyMap<string, number>,
+  gas: ReadonlyMap<string, number> = new Map()
+): EstadoRegion[] {
   const privadas = privadasEnServicio(horas);
   return REGIONES.map((r) => {
     const umbral = UMBRALES[r.sistema];
@@ -185,13 +225,17 @@ export function estadoEnergia(horas: number, hechas: readonly ObraEnergia[], pol
     const demanda = demandaBase(r, horas) + demandaPolos;
     const propias = privadas.filter((p) => p.region === r.id);
     const cfe = hechas.filter((o) => o.region === r.id);
+    // The new combined cycles count only as far as the gas left over reaches.
+    const capGas = gas.get(r.id);
+    const gasEstado = capGas === undefined ? null : gasDeRegion(r.id, capGas, cfe.filter(quemaGas).reduce((s, o) => s + o.mw, 0));
+    const deGas = (o: ObraEnergia) => (gasEstado && quemaGas(o) ? gasEstado.factor : 1);
     const capacidad = {} as Record<Escalon, number>;
     const margen = {} as Record<Escalon, number>;
     for (const e of ESCALONES) {
       capacidad[e] =
         CAPACIDAD_INICIAL.get(r.id)![e] +
         propias.reduce((s, p) => s + aporte(p, e), 0) +
-        cfe.reduce((s, o) => s + aporte(o, e), 0);
+        cfe.reduce((s, o) => s + aporte(o, e) * deGas(o), 0);
       margen[e] = ((capacidad[e] - demanda) / demanda) * 100;
     }
     const margenMinimo = Math.min(margen.tarde, margen.noche);
@@ -206,9 +250,22 @@ export function estadoEnergia(horas: number, hechas: readonly ObraEnergia[], pol
       alcanza: margenMinimo >= umbral.operativo,
       mwPrivados: propias.reduce((s, p) => s + p.mw, 0),
       mwCfe: cfe.reduce((s, o) => s + o.mw, 0),
+      gas: gasEstado,
     };
   });
 }
+
+/** MMpcd reaching each gas-limited region, with the State's gas works done or not (`hecha`). */
+export function gasDisponible(hecha: (obraId: string) => boolean): Map<string, number> {
+  const m = new Map<string, number>();
+  for (const [id, g] of GAS_REGIONES) m.set(id, hecha(g.obra) ? g.capacidadConObra : g.capacidad);
+  return m;
+}
+
+/** Cost of a gas work at the government's pace, millions of pesos. */
+export const costoGasoductoMdp = (o: ObraGas) => o.costoMusd * ENERGIA.tipoCambio;
+export const presupuestarGasoducto = (o: ObraGas, cuadrillas: number): PresupuestoObra =>
+  presupuestarObra(costoGasoductoMdp(o), o.mesesGobierno, cuadrillas);
 
 /** MW a polo draws when full. */
 export const mwDelPolo = (id: string) => ENERGIA.polos[id]?.mw ?? 0;

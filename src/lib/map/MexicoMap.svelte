@@ -10,7 +10,17 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, type Dueño } from '$lib/domain/red';
   import { obraVia } from '$lib/domain/obrasVia';
-  import { clavePolo, TEXTO_ETAPA } from '$lib/domain/realidad';
+  import { clavePolo, estadoReal, fechaEnPalabras, fichaReal, TEXTO_ETAPA } from '$lib/domain/realidad';
+  import {
+    capacidadDucto,
+    DUCTOS,
+    GAS_REGIONES,
+    NOMBRE_RED,
+    OBRAS_GAS,
+    situacionDucto,
+    type Ducto,
+    type SituacionDucto,
+  } from '$lib/domain/ductos';
   import { ADUANA_DEL_SITIO, EXPORTACIONES, SALIDAS } from '$lib/domain/exportaciones';
   import { ENERGIA, OBRAS_ENERGIA, obraEnergia, REGION_DEL_ESTADO, SUBREGIONES_DEL_ESTADO, UMBRALES, type NivelEnergia } from '$lib/domain/energia';
   import {
@@ -149,6 +159,14 @@
 
   /** Refineries: crude's own brown-gold, apart from the plants' orange and the exits' amber. */
   const REFINERIA = '#e0a458';
+  /** Gas pipelines: a pale green, apart from the sea's cyan and the rail's amber. Petroleum ones in the refineries' brown-gold, crude darker. */
+  const GAS = '#6ee7b7';
+  const CRUDO = '#c2672a';
+  const colorDucto = (d: Ducto) => (d.tipo === 'gas' ? GAS : d.tipo === 'crudo' ? CRUDO : REFINERIA);
+  /** A pipeline on the board now: those after 2018 by their real dates, in the game as in Realidad. */
+  const situacionAhora = (d: Ducto): SituacionDucto => situacionDucto(d, d.real ? estadoReal(d.id, sim.horas).etapa : null);
+  /** The pipeline a State gas work widens (the Mayakan, by the Cuxtal II). */
+  const OBRA_DEL_DUCTO = new Map(OBRAS_GAS.map((o) => [o.ducto, o]));
   /** A drop of oil, point up, half-size `s`. */
   function gota(ctx: CanvasRenderingContext2D, x: number, y: number, s: number) {
     ctx.beginPath();
@@ -330,8 +348,19 @@
     polos: boolean;
     energia: boolean;
     refinerias: boolean;
+    ductos: boolean;
   };
-  let layers = $state<Layers>({ estados: true, vias: true, puertos: true, aeropuertos: true, ciudades: true, polos: true, energia: false, refinerias: true });
+  let layers = $state<Layers>({
+    estados: true,
+    vias: true,
+    puertos: true,
+    aeropuertos: true,
+    ciudades: true,
+    polos: true,
+    energia: false,
+    refinerias: true,
+    ductos: false,
+  });
   /** What the track's colour says: its class (the default), its owner, or how full it is. */
   let modoVias = $state<ModoVias>('clase');
 
@@ -345,6 +374,7 @@
     | { kind: 'via'; base: number }
     | { kind: 'planta'; indice: number }
     | { kind: 'refineria'; refineria: Refineria }
+    | { kind: 'ducto'; ducto: Ducto }
     /** `region`: the pointer is over a system of its own inside the state (Mulegé), with the electricity layer on. */
     | { kind: 'estado'; estado: EstadoProps; region?: string };
 
@@ -406,6 +436,8 @@
   let viaDelEstado: Path2D | null = null;
   /** Each rail work's line, as measured on the 2018 network (`sim.medidas`). */
   let obraPaths = new Map<string, { path: Path2D; bounds: [[number, number], [number, number]] }>();
+  /** Each pipeline, baked with the projection. */
+  let ductoPaths: { d: Ducto; path: Path2D; bounds: [[number, number], [number, number]] }[] = [];
   /** The selected vehicle's route (one direction of a line, a ship's whole loop), baked on selection. */
   let rutaSel: { id: string; path: Path2D } | null = null;
   /** The Panama Canal, baked from the sea lanes' data. */
@@ -488,6 +520,10 @@
     poloPts = POLOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     plantaPts = LONLAT_PLANTAS.map((p) => projection!(p) ?? [NaN, NaN]);
     refineriaPts = REFINERIAS.map((r) => projection!(r.lonLat) ?? [NaN, NaN]);
+    ductoPaths = DUCTOS.map((d) => {
+      const g: MultiLineString = { type: 'MultiLineString', coordinates: d.trazo };
+      return { d, path: new Path2D(path!(g) ?? ''), bounds: path!.bounds(g) };
+    });
     applyTranslateExtent();
     bake();
     bakeRed();
@@ -966,6 +1002,43 @@
         ctx.strokeStyle = 'rgba(160, 220, 255, 0.55)';
         ctx.lineWidth = 1.1 / k;
         ctx.stroke(e.path);
+      }
+    }
+
+    // Pipelines under the track: gas green, petroleum brown-gold; dashed while
+    // being built, dotted and dim out of service, faint on the US side.
+    if (layers.ductos) {
+      const hot = hovered?.kind === 'ducto' ? hovered.ducto.id : null;
+      for (const { d, path: p } of ductoPaths) {
+        const s = situacionAhora(d);
+        if (s === 'no') continue;
+        const ancho = d.red === 'sng' ? 1.5 : d.red === 'importacion' ? 0.8 : d.tipo === 'crudo' ? 1.4 : 1.1;
+        ctx.save();
+        ctx.globalAlpha = d.red === 'importacion' ? 0.4 : s === 'fuera' ? 0.5 : d.tipo === 'gas' && d.red !== 'privado' ? 0.9 : 0.8;
+        if (s === 'obra') ctx.setLineDash([4 / k, 3 / k]);
+        else if (s === 'fuera') ctx.setLineDash([1.4 / k, 2.6 / k]);
+        ctx.strokeStyle = d.id === hot ? '#ffffff' : colorDucto(d);
+        ctx.lineWidth = (d.id === hot ? ancho + 1 : ancho) / k;
+        ctx.stroke(p);
+        ctx.restore();
+      }
+      // The State's gas work over the pipeline it widens: dashed ink-white while
+      // it's being built, a broad green line once it's done.
+      for (const { d, path: p } of ductoPaths) {
+        const o = OBRA_DEL_DUCTO.get(d.id);
+        const est = o ? sim.obrasEnergia.get(o.id) : null;
+        if (!est || est.fase === 'por-construir') continue;
+        ctx.save();
+        if (est.fase === 'en-obra') {
+          ctx.setLineDash([4 / k, 3 / k]);
+          ctx.strokeStyle = est.detenida ? 'rgba(248, 113, 113, 0.8)' : 'rgba(244, 241, 222, 0.85)';
+          ctx.lineWidth = 2.2 / k;
+        } else {
+          ctx.strokeStyle = GAS;
+          ctx.lineWidth = 2.8 / k;
+        }
+        ctx.stroke(p);
+        ctx.restore();
       }
     }
 
@@ -2046,6 +2119,18 @@
     // Identity transform + a point in path space = test against the un-zoomed path.
     const px = transform.invertX(mx);
     const py = transform.invertY(my);
+    // A pipeline under the pointer, before the track: turning the layer on means looking for them.
+    if (layers.ductos && ductoPaths.length) {
+      const margen = 4 / transform.k;
+      hitCtx.lineWidth = 2 * margen;
+      for (let i = ductoPaths.length - 1; i >= 0; i--) {
+        const dp = ductoPaths[i];
+        const [[x0, y0], [x1, y1]] = dp.bounds;
+        if (px < x0 - margen || px > x1 + margen || py < y0 - margen || py > y1 + margen) continue;
+        if (situacionAhora(dp.d) === 'no') continue;
+        if (hitCtx.isPointInStroke(dp.path, px, py)) return { kind: 'ducto', ducto: dp.d };
+      }
+    }
     // A rail line under the pointer (within a few screen px of it).
     if (layers.vias && viaPaths.length) {
       const margen = 5 / transform.k;
@@ -2090,6 +2175,8 @@
                   ? `planta:${t.indice}`
                 : t.kind === 'refineria'
                   ? `refineria:${t.refineria.id}`
+                : t.kind === 'ducto'
+                  ? `ducto:${t.ducto.id}`
                 : `estado:${t.estado.clave}${t.region ? `:${t.region}` : ''}`;
 
   /** The site key of a target, if it is a site. */
@@ -2114,7 +2201,8 @@
     if (claveDe(next) !== claveDe(hovered)) {
       // A hovered estado is lit in the geography layer; sites in the fondo;
       // vehicles only in the moving layer.
-      const capaCambia = hovered?.kind === 'estado' || next?.kind === 'estado';
+      // A hovered pipeline is lit in the same layer as the geography.
+      const capaCambia = hovered?.kind === 'estado' || next?.kind === 'estado' || hovered?.kind === 'ducto' || next?.kind === 'ducto';
       const fondoCambia = hovered?.kind !== 'unidad' || next?.kind !== 'unidad';
       hovered = next;
       if (tablero.trazando) tablero.señalar(sitioDe(next));
@@ -2126,7 +2214,7 @@
 
   function onPointerLeave() {
     if (!hovered) return;
-    const eraEstado = hovered.kind === 'estado';
+    const eraEstado = hovered.kind === 'estado' || hovered.kind === 'ducto';
     hovered = null;
     if (tablero.trazando) tablero.señalar(null);
     if (eraEstado) ensuciaCapa();
@@ -2155,6 +2243,15 @@
     if (target.kind === 'polo') {
       sim.seleccionar(null);
       tablero.poloSel = target.polo.id;
+    }
+    // A pipeline a State work widens opens that work's card; the others only show their card on hover.
+    if (target.kind === 'ducto') {
+      const o = OBRA_DEL_DUCTO.get(target.ducto.id);
+      if (o) {
+        tablero.abrirCatalogo();
+        tablero.obraSel = o.id;
+      }
+      return;
     }
     // A refinery opens its card in the catalog of works.
     if (target.kind === 'refineria') {
@@ -2339,6 +2436,33 @@
         const p = projection(ref.lonLat);
         if (p) flyTo(p[0], p[1], Math.max(transform.k, 4));
       }
+      // A gas work: the pipeline it widens, with the pipelines layer on.
+      const og = OBRAS_GAS.find((o) => o.id === id);
+      const dp = og ? ductoPaths.find((x) => x.d.id === og.ducto) : null;
+      if (dp) {
+        layers.ductos = true;
+        flyToBounds(dp.bounds);
+      }
+    });
+  });
+
+  // The pipelines: on or off, works advancing, and in time each one's real
+  // date. Checked once a game day; repainted only when something changed.
+  const diaDelTablero = $derived(Math.floor(sim.horas / 24));
+  let firmaDuctos = '';
+  $effect(() => {
+    layers.ductos;
+    sim.obrasEnergia;
+    diaDelTablero;
+    untrack(() => {
+      const obras = OBRAS_GAS.map((o) => {
+        const e = sim.obrasEnergia.get(o.id);
+        return `${e?.fase}${e?.detenida ? '!' : ''}`;
+      });
+      const firma = `${layers.ductos}|${DUCTOS.filter((d) => d.real).map(situacionAhora).join()}|${obras.join()}`;
+      if (firma === firmaDuctos) return;
+      firmaDuctos = firma;
+      ensuciaCapa();
     });
   });
 
@@ -2630,6 +2754,49 @@
         {/each}
       {/if}
       <span class="tip-sub">Clic: abrir su ficha</span>
+    {:else if hovered.kind === 'ducto'}
+      {@const d = hovered.ducto}
+      {@const s = situacionAhora(d)}
+      {@const fr = d.real ? fichaReal(d.id) : null}
+      {@const og = OBRA_DEL_DUCTO.get(d.id)}
+      {@const cap = capacidadDucto(d)}
+      <span class="label tip-kind" style:color={colorDucto(d)}>
+        {d.tipo === 'gas' ? NOMBRE_RED[d.red] : d.tipo === 'crudo' ? 'Oleoducto de Pemex' : 'Poliducto de Pemex'}
+      </span>
+      <strong>{d.nombre}</strong>
+      <span class="tip-sub">{d.operador}{d.km ? ` · ${fmt.format(d.km)} km` : ''}</span>
+      {#if cap}<span class="tip-sub">{cap}</span>{/if}
+      {#if s === 'fuera'}
+        <span class="tip-rail">{d.fuera?.texto}</span>
+      {:else if s === 'obra'}
+        <span class="tip-rail">En obra{fr?.situacion ? ` · ${fr.situacion}` : ''}</span>
+      {:else if fr?.operacion}
+        <span class="tip-sub">En operación desde {fr.operacion.split('-').length === 3 ? 'el' : ''} {fechaEnPalabras(fr.operacion)}</span>
+      {:else if d.nota}
+        <span class="tip-sub">{d.nota}</span>
+      {/if}
+      {#if og}
+        {@const g = GAS_REGIONES.get(og.region)}
+        {@const est = sim.obrasEnergia.get(og.id)}
+        {#if g}
+          <span class="tip-rail">
+            Es todo el gas que llega a la península:
+            {est?.fase === 'en-servicio'
+              ? `${fmt.format(g.capacidadConObra)} millones de pies cúbicos diarios con el Cuxtal II`
+              : `${fmt.format(g.capacidad)} millones de pies cúbicos diarios; el Cuxtal II la lleva a ${fmt.format(g.capacidadConObra)}`}
+          </span>
+          <span class="tip-sub">
+            {est?.fase === 'en-obra'
+              ? `Cuxtal II en obra · ${(est.avance * 100).toFixed(0)} %`
+              : est?.fase === 'en-servicio'
+                ? 'Cuxtal II terminado'
+                : 'Clic: abrir el Cuxtal II en el catálogo'}
+          </span>
+        {/if}
+      {/if}
+      {#if d.aproximado}
+        <span class="tip-sub">Trazo aproximado: el juego lo dibuja por los puntos que dicen las fuentes.</span>
+      {/if}
     {:else if hovered.kind === 'polo'}
       {@const p = hovered.polo}
       <span class="label tip-kind" style:color={POLO}>Polo del Bienestar · {faseDelPolo(p.id)}</span>
@@ -2722,6 +2889,14 @@
         {#if reg.region.margenCalculado}
           <span class="tip-sub">Sin enlace con el resto del estado. El PRODESEN no publica su margen: lo calcula el juego.</span>
         {/if}
+        {#if reg.gas}
+          <span class="tip-sub">
+            Gas: llegan {fmt.format(reg.gas.capacidad)} millones de pies cúbicos diarios y sus ciclos combinados de 2018 queman
+            {fmt.format(Math.round(reg.gas.consumo2018))}{reg.gas.nuevasMW > 0
+              ? `; de los ${fmt.format(Math.round(reg.gas.nuevasMW))} MW nuevos cuentan ${fmt.format(Math.round(Math.min(reg.gas.nuevasMW, reg.gas.disponiblesMW)))}`
+              : ''}
+          </span>
+        {/if}
         {#each aparte as a (a.id)}
           <span class="tip-sub">{a.nombre}, al norte, es un sistema aislado aparte.</span>
         {/each}
@@ -2769,6 +2944,19 @@
       <p class="nota-leyenda">Margen estimado por el juego: los oficiales de 2019 más las centrales que entraron de verdad.</p>
     {/if}
   </div>
+{:else if layers.ductos && !tablero.catalogo}
+  <div class="vias panel energia">
+    <span class="label">Ductos</span>
+    <ul class="leyenda dos">
+      <li><span class="raya" style:background={GAS}></span>Gas</li>
+      <li><span class="raya" style:background={REFINERIA}></span>Petrolíferos</li>
+      <li><span class="raya tenue" style:background={GAS}></span>Gas de EUA</li>
+      <li><span class="raya" style:background={CRUDO}></span>Crudo</li>
+      <li><span class="raya en-obra"></span>En obra</li>
+      <li><span class="raya fuera"></span>Fuera de operación</li>
+    </ul>
+    <p class="nota-leyenda">Trazos aproximados de la CNH. Los gasoductos posteriores a 2018 llegan en su fecha real; el Cuxtal II lo construye el Estado.</p>
+  </div>
 {:else if layers.vias && !tablero.catalogo}
   <div class="vias panel">
     <div class="modos" role="group" aria-label="Color de las vías">
@@ -2801,24 +2989,24 @@
 {/if}
 
 <div class="tools panel">
-  <button class="ctl" aria-pressed={layers.estados} onclick={() => (layers.estados = !layers.estados)}>
-    <span class="sw sw-estados"></span>Estados
+  <button class="ctl" aria-pressed={layers.estados} title="Estados" onclick={() => (layers.estados = !layers.estados)}>
+    <span class="sw sw-estados"></span><span class="txt">Estados</span>
   </button>
-  <button class="ctl" aria-pressed={layers.vias} onclick={() => (layers.vias = !layers.vias)}>
-    <span class="sw sw-vias"></span>Vías férreas
+  <button class="ctl" aria-pressed={layers.vias} title="Vías férreas" onclick={() => (layers.vias = !layers.vias)}>
+    <span class="sw sw-vias"></span><span class="txt">Vías férreas</span>
   </button>
-  <button class="ctl" aria-pressed={layers.puertos} onclick={() => (layers.puertos = !layers.puertos)}>
-    <span class="sw sw-puertos"></span>Puertos
+  <button class="ctl" aria-pressed={layers.puertos} title="Puertos" onclick={() => (layers.puertos = !layers.puertos)}>
+    <span class="sw sw-puertos"></span><span class="txt">Puertos</span>
   </button>
-  <button class="ctl" aria-pressed={layers.aeropuertos} onclick={() => (layers.aeropuertos = !layers.aeropuertos)}>
+  <button class="ctl" aria-pressed={layers.aeropuertos} title="Aeropuertos" onclick={() => (layers.aeropuertos = !layers.aeropuertos)}>
     <svg class="sw" width="12" height="12" viewBox="-1.2 -1.2 2.4 2.4" aria-hidden="true">
       <path d={AVION_SVG} fill={AEROPUERTO} transform="rotate(45)" />
-    </svg>Aeropuertos
+    </svg><span class="txt">Aeropuertos</span>
   </button>
-  <button class="ctl" aria-pressed={layers.ciudades} onclick={() => (layers.ciudades = !layers.ciudades)}>
-    <span class="sw sw-ciudades"></span>Ciudades
+  <button class="ctl" aria-pressed={layers.ciudades} title="Ciudades" onclick={() => (layers.ciudades = !layers.ciudades)}>
+    <span class="sw sw-ciudades"></span><span class="txt">Ciudades</span>
   </button>
-  <button class="ctl" aria-pressed={layers.polos} onclick={() => (layers.polos = !layers.polos)}>
+  <button class="ctl" aria-pressed={layers.polos} title="Polos" onclick={() => (layers.polos = !layers.polos)}>
     <svg class="sw" width="12" height="11" viewBox="0 0 12 11" aria-hidden="true">
       <polygon
         points="11,5.5 8.5,9.8 3.5,9.8 1,5.5 3.5,1.2 8.5,1.2"
@@ -2827,21 +3015,27 @@
         stroke-width="1.3"
         stroke-dasharray="2 1.4"
       />
-    </svg>Polos
+    </svg><span class="txt">Polos</span>
   </button>
   <button
     class="ctl"
-    aria-pressed={layers.energia}
+    aria-pressed={layers.energia} title="Energía"
     onclick={() => (layers.energia = !layers.energia)}
   >
     <svg class="sw" width="10" height="13" viewBox="0 0 10 13" aria-hidden="true">
       <path d="M6 0 0 7.5h4L3 13l7-8H6z" fill="#facc15" />
-    </svg>Energía
+    </svg><span class="txt">Energía</span>
   </button>
-  <button class="ctl" aria-pressed={layers.refinerias} onclick={() => (layers.refinerias = !layers.refinerias)}>
+  <button class="ctl" aria-pressed={layers.refinerias} title="Refinerías" onclick={() => (layers.refinerias = !layers.refinerias)}>
     <svg class="sw" width="10" height="13" viewBox="-1 -1.3 2 2.6" aria-hidden="true">
       <path d={GOTA_SVG} fill={REFINERIA} />
-    </svg>Refinerías
+    </svg><span class="txt">Refinerías</span>
+  </button>
+  <button class="ctl" aria-pressed={layers.ductos} title="Ductos" onclick={() => (layers.ductos = !layers.ductos)}>
+    <svg class="sw" width="14" height="10" viewBox="0 0 14 10" aria-hidden="true">
+      <path d="M1 3h12" stroke={GAS} stroke-width="1.8" />
+      <path d="M1 7.5h12" stroke={REFINERIA} stroke-width="1.4" />
+    </svg><span class="txt">Ductos</span>
   </button>
   <span class="sep"></span>
   <span class="label mono">{transform.k.toFixed(1)}×</span>
@@ -3101,6 +3295,17 @@
     border-radius: 0;
   }
 
+  .raya.tenue {
+    opacity: 0.4;
+  }
+
+  .raya.fuera {
+    height: 0;
+    background: none;
+    border-top: 2px dotted rgba(110, 231, 183, 0.6);
+    border-radius: 0;
+  }
+
   .mancha {
     flex: none;
     width: 14px;
@@ -3172,6 +3377,13 @@
   }
 
   /* The stats share the bottom edge with the layer buttons: they give way first. */
+  /* Less room: the layer buttons keep only their swatch (the name is in their title). */
+  @media (max-width: 1700px) {
+    .tools .ctl .txt {
+      display: none;
+    }
+  }
+
   @media (max-width: 1600px) {
     .stat.opcional {
       display: none;

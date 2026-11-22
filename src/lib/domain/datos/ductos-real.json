@@ -1,0 +1,144 @@
+{
+  "corte": "2026-11-22",
+  "nota": "Lo que pasó de verdad con cada gasoducto que llegó, o llega, después de diciembre de 2018.",
+  "fuentes": {
+    "cfe-pn2021": {
+      "fuente": "CFE, Plan de Negocios 2021–2025: red de gasoductos de la CFE con capacidad y longitud; los que entraron en 2018 y 2019 y los detenidos",
+      "url": "https://www.cfe.gob.mx/finanzas/Documents/Plan%20de%20Negocios%20CFE%202021.pdf"
+    },
+    "cfe-ia2024-gas": {
+      "fuente": "CFE, Informe Anual 2024: el gasoducto Extensión al Sureste (Puerta al Sureste) terminado, la fase I del Cuxtal II y la aportación de la CFE a la alianza con TC Energy",
+      "url": "https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf"
+    },
+    "cfe-pd2026-gas": {
+      "fuente": "CFE, Programa de Desarrollo 2026–2030, tabla 2: gasoductos en desarrollo; Puerta al Sureste en operación desde mayo de 2025",
+      "url": "https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf"
+    },
+    "sener-ph2026": {
+      "fuente": "SENER, Plan de Desarrollo del Sector Hidrocarburos (4 de agosto de 2026): la red de 2024, los proyectos de la CFE (Cuxtal II al 43.8 %, Centauro del Norte al 7.12 %) y del CENAGAS",
+      "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5798065"
+    },
+    "sener-pe2025": {
+      "fuente": "SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039 (DOF, 14 de octubre de 2025): los sistemas del SISTRANGAS y lo que se le conectó desde 2019",
+      "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297"
+    },
+    "pm-0770": {
+      "fuente": "Proyectos México, ficha 0770 «CFE: Gasoducto Sur de Texas–Tuxpan (Marino)»: inicio de operación el 17 de septiembre de 2019",
+      "url": "https://www.proyectosmexico.gob.mx/proyecto_inversion/770-cfe-gasoducto-sur-de-texas-tuxpan-marino/"
+    },
+    "pm-0771": {
+      "fuente": "Proyectos México, ficha 0771 «CFE: Gasoducto La Laguna–Aguascalientes»: inicio de operación el 22 de junio de 2019",
+      "url": "https://www.proyectosmexico.gob.mx/proyecto_inversion/771-cfe-gasoducto-la-laguna-aguascalientes/"
+    },
+    "pm-0767": {
+      "fuente": "Proyectos México, ficha 0767 «CFE: Gasoducto Samalayuca–Sásabe»: inicio de operación en febrero de 2021",
+      "url": "https://www.proyectosmexico.gob.mx/proyecto_inversion/767-cfe-gasoducto-samalayuca-sasabe/"
+    },
+    "jornada-vag-2020": {
+      "fuente": "La Jornada, «Opera gasoducto que provocó una controversia entre CFE y privados» (3 de octubre de 2020): el Villa de Reyes–Aguascalientes–Guadalajara entró en operación el 1 de octubre, según la CFE y Fermaca",
+      "url": "https://www.jornada.com.mx/2020/10/03/economia/018n1eco"
+    }
+  },
+  "obras": {
+    "samalayuca-sasabe": {
+      "enObraAl": "2018-12-01",
+      "operacion": "2021-02",
+      "fuentes": [
+        "pm-0767",
+        "cfe-pn2021"
+      ]
+    },
+    "la-laguna-aguascalientes": {
+      "enObraAl": "2018-12-01",
+      "operacion": "2019-06-22",
+      "fuentes": [
+        "pm-0771",
+        "cfe-pn2021"
+      ]
+    },
+    "villa-de-reyes-guadalajara": {
+      "enObraAl": "2018-12-01",
+      "operacion": "2020-10-01",
+      "nota": "Con él se completó el sistema Wahalajara, que trae gas de Waha, en Texas, al occidente.",
+      "fuentes": [
+        "jornada-vag-2020",
+        "cfe-pn2021"
+      ]
+    },
+    "tula-villa-de-reyes": {
+      "enObraAl": "2018-12-01",
+      "situacion": "Sin terminar. El Arco Tula (17.5 km) se espera en 2027 y el tramo sur está en evaluación.",
+      "fuentes": [
+        "cfe-pn2021",
+        "cfe-pd2026-gas",
+        "sener-ph2026"
+      ]
+    },
+    "sur-de-texas-tuxpan": {
+      "enObraAl": "2018-12-01",
+      "operacion": "2019-09-17",
+      "nota": "Terminado a mediados de 2019, entró en operación tras un acuerdo de tarifas con la CFE. Es el primer gasoducto submarino de gran escala de México.",
+      "fuentes": [
+        "pm-0770",
+        "cfe-pn2021",
+        "sener-pe2025"
+      ]
+    },
+    "tuxpan-tula": {
+      "enObraAl": "2018-12-01",
+      "situacion": "Sin terminar: le falta el tramo por Puebla e Hidalgo. La CFE busca una ruta alterna (276 km, en planeación) que no afecte a las comunidades.",
+      "fuentes": [
+        "cfe-pn2021",
+        "cfe-pd2026-gas",
+        "sener-ph2026"
+      ]
+    },
+    "puerta-al-sureste": {
+      "anuncio": "2022",
+      "enObraAl": "2024-12-31",
+      "operacion": "2025-05",
+      "nota": "La CFE aportó 340 millones de dólares y 71 en especie, el 13.01 % de la alianza. Faltan sus ramales a Cosoleacaque (2027) y a Paraíso, que lo unirán con el sistema nacional y con el Mayakan.",
+      "fuentes": [
+        "cfe-ia2024-gas",
+        "cfe-pd2026-gas",
+        "sener-ph2026"
+      ]
+    },
+    "centauro-del-norte": {
+      "anuncio": "2023",
+      "avances": [
+        {
+          "fecha": "2026-08-04",
+          "pct": 7.12
+        }
+      ],
+      "prevista": "la fase I (Mexicali–San Luis Río Colorado) en 2026 y la II (Sásabe–San Luis Río Colorado) en 2028",
+      "nota": "Lleva gas de Sonora a Baja California «a precios competitivos» y asegura el de los ciclos combinados González Ortega y San Luis Río Colorado.",
+      "fuentes": [
+        "cfe-ia2024-gas",
+        "cfe-pd2026-gas",
+        "sener-ph2026"
+      ]
+    },
+    "cuxtal-ii": {
+      "anuncio": "2024",
+      "enObraAl": "2024-12",
+      "parcial": {
+        "fecha": "2024-12",
+        "texto": "su fase I, que ya da gas a los ciclos combinados de Mérida y Riviera Maya"
+      },
+      "avances": [
+        {
+          "fecha": "2026-08-04",
+          "pct": 43.8
+        }
+      ],
+      "prevista": "segundo semestre de 2027",
+      "fuentes": [
+        "cfe-ia2024-gas",
+        "cfe-pd2026-gas",
+        "sener-ph2026"
+      ]
+    }
+  }
+}

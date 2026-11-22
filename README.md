@@ -197,6 +197,8 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/ciudades.json` | 58 ciudades: capitales estatales, toda ciudad >300 mil hab. y nodos logísticos |
 | `src/lib/domain/datos/puertos.json`  | Los **15 puertos, curados a mano**                                             |
 | `src/lib/domain/datos/aeropuertos.json` | Los **10 aeropuertos de carga** de la AFAC, con sus toneladas de cada año desde 2018 (serie mensual de la AFAC) para el modo Realidad. Son sitios (`aeropuerto:<id>`): con vía a 15 km o menos tienen estación y son paradas de tren (puertos secos) |
+| `src/lib/domain/datos/ductos.json` | **Ductos**: gasoductos, poliductos y el oleoducto Nuevo Teapa–Salina Cruz con su trazo aproximado (CNH, OpenStreetMap), operador, km y capacidad; la obra Cuxtal II y el gas de la península (CFE, EIA); totales de la red (SENER, Proyectos México, Pemex). Lo genera `scripts/ductos/gen-ductos.mjs` |
+| `src/lib/domain/datos/ductos-real.json` | Fecha real de cada gasoducto que llegó, o llega, después de 2018 |
 | `src/lib/domain/datos/petroleo.json` | **Petróleo**: las seis refinerías de Pemex, la Olmeca y Deer Park con su capacidad, su proceso de 2018 y su capacidad óptima (Pemex 20-F, ASF), su proceso real por año y por mes, las obras de Pemex con costo y tiempo, la caja de Pemex, rendimientos y consumo de combustibles |
 | `src/lib/domain/datos/petroleo-real.json` | Etapa real de cada obra de Pemex (rehabilitaciones, Olmeca, coquizadoras, compra de Deer Park) |
 | `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
@@ -300,6 +302,22 @@ En Realidad, `procesoReal` da lo que cada refinería procesó ese mes o año, do
 y `totalReal` el total del año. El tablero tiene la capa *Refinerías* (gotas del tamaño de su
 proceso; un clic abre su ficha en el catálogo). Detalle en la
 [enciclopedia](docs/enciclopedia.md#el-petróleo).
+
+**Los ductos** (`domain/ductos.ts`, `datos/ductos.json` y `datos/ductos-real.json`, generados por
+`scripts/ductos/gen-ductos.mjs` a partir de las capas de la CNH y de OpenStreetMap). Son
+gasoductos (del Estado, privados y de importación), poliductos de Pemex y el oleoducto Nuevo
+Teapa–Salina Cruz:
+
+- **Los gasoductos posteriores a 2018** tienen registro real por su id y llegan en su fecha, en
+  el juego como en Realidad (`situacionDucto` con `estadoReal`).
+- **El Cuxtal II** (`OBRAS_GAS`) es la obra de gas del Estado: vive en `sim.obrasEnergia` y se
+  paga de la caja de la CFE.
+- **El gas de la península:** `estadoEnergia` recibe el gas que llega a cada región con tope
+  (`gasDisponible`). En la península, el Mayakan da 240 MMpcd y el Cuxtal II 547; los ciclos
+  combinados posteriores a 2018 solo cuentan hasta donde alcanza el gas que dejan los de 2018
+  (`gasDeRegion`, con 0.1765 MMpcd por MW de la EIA).
+
+El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedia.md#los-ductos).
 
 **Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado y paga
 con su presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)
@@ -470,7 +488,10 @@ costa del mundo solo sube de resolución). Además:
   cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
   Tuxpan…). Ya están el catálogo de obras del Estado y su presupuesto real.
 - **Petróleo, lo que sigue**:
-  - los combustibles como carga: de las refinerías en tren (carros tanque) y en buque tanque;
+  - los combustibles como carga: casi todo va por poliducto (2,082 Mbd en 2023 contra 166 en
+    buque tanque); el tren (carros tanque) y el buque tanque llevan el resto;
+  - los poliductos del noreste y del occidente y los oleoductos troncales, que faltan en el mapa
+    porque no están en las fuentes abiertas;
   - el crudo de exportación y las importaciones por barco, junto con los barcos;
   - las cifras por refinería de 2022 a septiembre de 2024, si se consigue el Anuario Estadístico
     de Pemex (su sitio no deja bajarlo automáticamente).

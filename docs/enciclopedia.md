@@ -61,6 +61,14 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | Pemex, comunicados en la Bolsa Mexicana de Valores: [24/2019](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_928185_1.pdf), [159/2021](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1102962_1.pdf), [6/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1159261_1.pdf), [38/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1202976_1.pdf), [9/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1440766_1.pdf), [11/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1444789_1.pdf), [37/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1501814_1.pdf), [51/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1560083_1.pdf) y [87/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1602784_1.pdf) | Arranque de la Olmeca; compra de Deer Park; acuerdos de las coquizadoras; Plan de Trabajo 2025–2030; proceso de 2024; avance de las coquizadoras; Deer Park en 2026 | 2019–2026 | Comunicado oficial |
 | [Primer](https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf) y [Segundo Informe de Gobierno](https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf) | Crudo procesado por cada refinería, mes por mes, de octubre de 2024 a junio de 2026 (SENER con datos de Pemex) | Septiembre de 2025 y de 2026 | Documento oficial público |
 | [OpenStreetMap](https://www.openstreetmap.org/) | El predio de cada refinería | Consultado el 20 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
+| CNH, capas de ductos [integrados y no integrados al SISTRANGAS y de importación (2019)](https://idegeo.centrogeo.org.mx/geoserver/ows?service=wfs&version=1.0.0&request=GetCapabilities), [de 2018](https://agsserver.sigsa.info/arcgis/rest/services/Monitoreo_de_flujo_en_tiempo_real_MIL1/MapServer/4) y de [poliductos de Chihuahua](https://services6.arcgis.com/th3TMn162i37A876/ArcGIS/rest/services/AppMote/FeatureServer/14) | El trazo aproximado de los gasoductos (del Estado, privados y de importación) y de los poliductos de Pemex del centro, el golfo y Chihuahua, con capacidad, inversión, permiso y fecha de cada gasoducto privado. La CNH ya no existe y su mapa no responde: se usan las copias en el GeoNode de CentroGeo y en otros servidores | 2018 y 2019 | Documento oficial público (CNH con información de SENER, CENAGAS, CRE y CFE) |
+| [CFE, Plan de Negocios 2021–2025](https://www.cfe.gob.mx/finanzas/Documents/Plan%20de%20Negocios%20CFE%202021.pdf) | La red de gasoductos de la CFE con capacidad y longitud; los que entraron en 2018 y 2019, los detenidos y dónde falta gas | 2021 | Documento oficial público |
+| [CFE, Programa de Desarrollo 2026–2030, tabla 2](https://www.cfe.gob.mx/finanzas/Documents/ProgramaDesarrollo-26.pdf) y [Informe Anual 2024](https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf) | Los gasoductos en desarrollo (Cuxtal II, Centauro del Norte, ramales de Puerta al Sureste); Puerta al Sureste en operación desde mayo de 2025; la fase I del Cuxtal II; la aportación de la CFE a la alianza con TC Energy | 2025 y 2026 | Documento oficial público |
+| [SENER, Plan de Desarrollo del Sector Hidrocarburos](https://dof.gob.mx/nota_detalle_popup.php?codigo=5798065) | La red de ductos de 2024 (21,149 km de gas, 9,582 de petrolíferos); los proyectos de la CFE, del CENAGAS y de Pemex con su avance | 4 de agosto de 2026 | Documento oficial público |
+| Proyectos México, fichas [0770](https://www.proyectosmexico.gob.mx/proyecto_inversion/770-cfe-gasoducto-sur-de-texas-tuxpan-marino/), [0771](https://www.proyectosmexico.gob.mx/proyecto_inversion/771-cfe-gasoducto-la-laguna-aguascalientes/) y [0767](https://www.proyectosmexico.gob.mx/proyecto_inversion/767-cfe-gasoducto-samalayuca-sasabe/) y [ciclo de inversión en hidrocarburos](https://www.proyectosmexico.gob.mx/como-invertir-en-mexico/ciclo-inversion/ciclos-hidrocarburos/) | Inicio de operación del Sur de Texas–Tuxpan, La Laguna–Aguascalientes y Samalayuca–Sásabe; kilómetros de oleoductos y poliductos de Pemex | 2021 y 2026 | Documento oficial público |
+| [La Jornada, «Opera gasoducto que provocó una controversia entre CFE y privados»](https://www.jornada.com.mx/2020/10/03/economia/018n1eco) | El Villa de Reyes–Aguascalientes–Guadalajara entró en operación el 1 de octubre de 2020, según la CFE y Fermaca | 3 de octubre de 2020 | Prensa |
+| EIA (gobierno de EUA), [régimen térmico de los ciclos combinados](https://www.eia.gov/electricity/annual/html/epa_08_02.html) y [poder calorífico del gas](https://www.eia.gov/tools/faqs/faq.php?id=45&t=8) | Cuánto gas quema un ciclo combinado por MW: 7,627 Btu por kWh (2018) y 1,037 Btu por pie cúbico | 2025 | Dato oficial público (gobierno de EUA) |
+| [OpenStreetMap](https://www.openstreetmap.org/) | El trazo del oleoducto Nuevo Teapa–Salina Cruz | Consultado el 22 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 | [INEGI, PIB por Entidad Federativa, base 2018](https://www.inegi.org.mx/programas/pibent/2018/) | Valor agregado de las actividades primarias y secundarias de cada estado y de la extracción de petróleo, 2018–2023 (2023 preliminar): el reparto de la carga nacional | 2024 | Dato oficial público |
 | [CENACE, circunscripción de las regiones](https://www.cenace.gob.mx/Docs/16_MARCOREGULATORIO/CENACEOrganizacion/(DOF%202018-05-15%20CENACE)%20Circunscripci%C3%B3n%20territorial%20GCR.pdf) | Qué estados y municipios forman cada región del sistema eléctrico | DOF, 15 de mayo de 2018 | Documento oficial público |
 | [CNE, lista de permisos de generación](https://www.gob.mx/cms/uploads/attachment/file/1115484/E4_Tabla_p_blica_Oct26.xlsx) | Las centrales privadas que entraron (o entrarán) desde 2019: capacidad, tecnología, fecha y municipio; inversión estimada de varias de la CFE | Al 31 de octubre de 2026 | Documento oficial público |
@@ -1513,6 +1521,123 @@ Las obras de Pemex tienen su etapa real:
 - **La de Salina Cruz:** en obra, con 80.1 % de avance en junio de 2026.
 - **Deer Park:** de Pemex desde el 20 de enero de 2022.
 
+### Los ductos
+
+El botón *Ductos* del tablero dibuja tres redes:
+
+- **los gasoductos**, en verde;
+- **los poliductos de Pemex**, que llevan gasolina, diésel y turbosina, en el café dorado de las refinerías;
+- **el oleoducto de crudo** Nuevo Teapa–Salina Cruz, en un café más oscuro.
+
+Los trazos son aproximados, como los publicó la Comisión Nacional de Hidrocarburos (CNH) con
+información de la SENER, el CENAGAS, la CRE y la CFE. Un gasoducto en obra va punteado; uno fuera
+de operación, punteado y tenue. Los de importación, del lado de Estados Unidos, van tenues.
+
+**El gas.** En 2024 la red de transporte de gas natural tenía 21,149 km (SENER):
+
+- **El SISTRANGAS**, el único sistema integrado, suma 9,732 km: 8,386 del Sistema Nacional de
+  Gasoductos, del Estado, y 1,346 de privados integrados (Los Ramones, Morelos, Tamaulipas,
+  Bajío, Zacatecas).
+- **El CENAGAS** opera 8,741 km, y el 94 % tiene más de 45 años.
+- **El resto** son gasoductos privados que contrató sobre todo la CFE para sus centrales.
+
+El tablero traza unos 16,700 km en México.
+
+**Lo que llegó después de 2018.** Casi todos los gasoductos de estos años los construyeron
+transportistas privados con contratos de la CFE. En el juego llegan en su fecha real, como las
+centrales privadas, y en Realidad se ven en su etapa.
+
+| Gasoducto | Km | Millones de pies cúbicos diarios | Llegó | Fuente |
+| --- | ---: | ---: | --- | --- |
+| Sur de Texas–Tuxpan (marino) | 800 | 2,600 | 17 de septiembre de 2019 | Proyectos México; CFE |
+| La Laguna–Aguascalientes | 452 | 1,189 | 22 de junio de 2019 | Proyectos México |
+| Villa de Reyes–Aguascalientes–Guadalajara | 374 | 886 | 1 de octubre de 2020 | La Jornada, con la CFE y Fermaca |
+| Samalayuca–Sásabe | 614 | 472 | febrero de 2021 | Proyectos México |
+| Puerta al Sureste (Tuxpan–Coatzacoalcos–Paraíso, marino) | 707 | 1,348 | mayo de 2025 | CFE |
+| Tuxpan–Tula | 276 | 886 | sin terminar | CFE |
+| Tula–Villa de Reyes | 438 | 886 | sin terminar | CFE |
+| Centauro del Norte (Sásabe–San Luis Río Colorado–Mexicali) | 442 | 400 | en obra: 7.12 % en agosto de 2026 | CFE; SENER |
+| Cuxtal II (ampliación del Mayakan) | 695 | 547 | fase I en diciembre de 2024; el resto, en el segundo semestre de 2027 | CFE; SENER |
+
+Lo demás de esos años:
+
+- **El Encino–Topolobampo y El Encino–La Laguna** entraron en 2018, antes de la partida, y ya
+  están desde el principio.
+- **Guaymas–El Oro** está fuera de operación desde 2017 por el conflicto con la comunidad yaqui
+  de Loma de Bácum; la CFE planea rodearla con un nuevo trazo para 2029.
+- **Tuxpan–Tula y Tula–Villa de Reyes** siguen sin un tramo por Puebla e Hidalgo; la CFE busca
+  una ruta alterna.
+- **Puerta al Sureste y Centauro del Norte** son alianzas en las que la CFE es socia: en la
+  primera aportó 340 millones de dólares y 71 en especie, el 13.01 % de las acciones.
+- **Los trazos de Puerta al Sureste y Centauro del Norte** los dibuja el juego por los puntos
+  que dicen las fuentes. El primero va por el mar, comprobado contra la costa del tablero.
+
+**La península y el Cuxtal II.** A la península de Yucatán el gas solo le llega por el Mayakan:
+240 millones de pies cúbicos diarios (CFE). En 2018 la región tenía 1,261 MW de ciclos combinados
+(PRODESEN). Para saber cuánto gas queman se necesita el régimen térmico, y la CFE no publica el de
+sus centrales. El juego usa los del gobierno de Estados Unidos: un ciclo combinado a plena carga
+quema 7,627 Btu por kWh y un pie cúbico de gas da 1,037 Btu (EIA). Cada MW pide así 0.1765
+millones de pies cúbicos diarios (cálculo del juego).
+
+Con eso:
+
+| | Millones de pies cúbicos diarios | Ciclos combinados nuevos que alcanzan gas |
+| --- | ---: | ---: |
+| Con el Mayakan | 240 | unos 99 MW |
+| Lo que queman los ciclos de 2018 | 223 | |
+| Con el Cuxtal II | 547 | unos 1,838 MW |
+
+La regla del juego: en la península, **los ciclos combinados nuevos solo cuentan hasta donde les
+alcanza el gas**. Los de la CFE son Mérida (499 MW) y Riviera Maya (1,020): sin el Cuxtal II
+cuentan juntos 99 MW; con él, completos.
+
+El Cuxtal II es la obra de gas del Estado en el catálogo, en la sección de energía:
+
+- **Se paga** con la caja de la CFE.
+- **Cuesta** unos 1,715 millones de dólares, estimación del juego: sus 695 km a 2.47 millones de
+  dólares por km, el promedio de los siete gasoductos que la CNH registraba en construcción en
+  2018 (8,657 millones en 3,507 km).
+- **Tarda** unos 40 meses, también estimación: la CFE lo formalizó en 2024 y lo espera para el
+  segundo semestre de 2027.
+
+En Realidad la regla también aplica:
+
+- **Hoy:** el ciclo combinado de Mérida entró en operación en mayo de 2026, pero el gas que
+  duplica el Cuxtal II llega hasta 2027. Así que cuenta 99 de sus 499 MW, y el margen estimado
+  de la península queda debajo del mínimo.
+- **Lo que dice la CFE:** que a la península le falta gas. En 2024 subió 23 % el transporte de
+  combustóleo a las centrales de Lerma, Mérida II y Valladolid, y rentó un buque tanque de
+  contingencia en Progreso (Informe Anual 2024).
+
+Solo la península tiene tope:
+
+- **Baja California** recibe gas de Estados Unidos por el gasoducto Rosarito, de 1,434 millones de
+  pies cúbicos diarios (CNH), más de lo que piden sus centrales. La CFE justifica el Centauro del
+  Norte por precio («a precios competitivos»), no por falta.
+- **El resto del país** se abastece del sistema nacional, y las fuentes oficiales no dan un tope
+  por región. La CFE sí señaló en 2021 dónde faltaba gas: primero el sureste, luego el centro y
+  el golfo, luego el centro-occidente, por los gasoductos atrasados.
+
+**Los petrolíferos y el crudo.** Pemex tiene 8,926 km de poliductos, 5,777 de oleoductos y 73
+terminales de almacenamiento (Proyectos México, 2026). Los ductos de petrolíferos sumaban 9,582
+km y 4,586 Mbd autorizados en 2024 (SENER). Por ducto se mueve mucho más que por mar: en 2023
+Pemex movió 2,082 Mbd por ducto y 166 en buque tanque. Por eso, cuando los combustibles sean
+carga, la mayor parte irá por ducto y los trenes y los barcos llevarán el resto.
+
+El tablero traza:
+
+- **los poliductos del centro, el golfo y Chihuahua**, unos 4,600 km (CNH);
+- **el oleoducto Nuevo Teapa–Salina Cruz** (OpenStreetMap).
+
+Faltan los poliductos del noreste y del occidente y los oleoductos troncales: no están en las
+fuentes abiertas que se encontraron.
+
+**Cómo se generan.** Todo lo arma `scripts/ductos/gen-ductos.mjs`:
+
+- **Lee** las capas descargadas una vez: las de la CNH y la de OpenStreetMap.
+- **Escribe** `src/lib/domain/datos/ductos.json`, con las líneas, la obra y el gas de la península,
+  y `ductos-real.json`, con las fechas reales de cada gasoducto posterior a 2018.
+
 ### El modo Realidad
 
 El tablero tiene dos modos, con el interruptor *Juego / Realidad* del reloj. En **Realidad** no
@@ -1794,6 +1919,24 @@ en 2025.
 - **Las exportaciones, con un enfoque mixto.** *(20 nov 2026.)* El usuario quiere medir
   exportaciones. La carga nacional será un número; la exportación va de un origen a una salida.
   Se mide en toneladas; el valor en dólares espera un valor por tonelada de fuente oficial.
+- **Los ductos antes que los combustibles como carga.** *(22 nov 2026.)* El usuario preguntó por
+  los gasoductos y pidió ver las líneas de los ductos en el mapa. Van antes del paso 4 porque:
+  - los gasoductos son la tercera capa de la energía;
+  - los poliductos dicen cuánto les queda a trenes y barcos;
+  - por ducto se mueve casi todo el combustible.
+- **Los gasoductos privados llegan en su fecha real; el Estado construye el Cuxtal II.** *(22
+  nov 2026.)* Los construyeron transportistas privados con contratos de la CFE, como las centrales
+  privadas que el jugador no controla. El Cuxtal II es el gasoducto que el Plan de Hidrocarburos
+  2026 liga a las centrales del Estado en la península. El juego lo cobra a la caja de la CFE como
+  inversión. En la realidad lo construye Energía Mayakan con contrato de la CFE, y la CFE no
+  publica su costo.
+- **Solo la península tiene tope de gas.** *(22 nov 2026.)* Es la única región a la que el gas
+  llega por un solo ducto con capacidad oficial (el Mayakan) y donde la CFE documenta la falta. En
+  Baja California la capacidad de importación oficial sobra. En el resto no hay un tope oficial
+  por región.
+- **Botones de capas compactos.** *(22 nov 2026.)* Con el botón *Ductos* la barra de herramientas
+  ya no cabía junto al panel de cifras. Abajo de 1,700 px de ancho, los botones de capas muestran
+  solo su icono, y su nombre queda en el tooltip.
 - **El petróleo, con caja propia de Pemex.** *(20 nov 2026.)* El usuario aprobó el orden
   (fuentes, refinerías como sitios, Pemex y sus obras, y los combustibles como carga junto con los
   barcos) y que Pemex pague con su propia caja, como la CFE. Pidió además dos cosas:
@@ -2080,6 +2223,14 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   (Central, Oriental, Occidental, Noroeste, Norte, Noreste, Peninsular, Baja California y Baja
   California Sur). Mulegé, en el norte de Baja California Sur, es un sistema aparte.
 - **Mbd**: miles de barriles diarios, la medida del crudo que procesa una refinería.
+- **MMpcd**: millones de pies cúbicos diarios, la medida del gas que transporta un gasoducto.
+- **SISTRANGAS**: el Sistema de Transporte y Almacenamiento Nacional Integrado de Gas Natural: el
+  Sistema Nacional de Gasoductos del Estado más los privados integrados a él, con una sola tarifa.
+- **CENAGAS**: el Centro Nacional de Control del Gas Natural, que opera el Sistema Nacional de
+  Gasoductos desde 2015.
+- **Gasoducto, poliducto, oleoducto**: ductos de gas natural, de petrolíferos (gasolina, diésel,
+  turbosina) y de crudo.
+- **Régimen térmico**: la energía de combustible que una central quema por cada kWh que produce.
 - **Sistema Nacional de Refinación**: las refinerías de Pemex en México: las seis de antes de
   2018 (Cadereyta, Madero, Minatitlán, Salamanca, Salina Cruz y Tula) y, desde 2024, la Olmeca.
 - **Capacidad óptima**: lo que una refinería puede procesar con sus plantas en orden, según lo

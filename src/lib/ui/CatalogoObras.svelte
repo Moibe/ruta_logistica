@@ -3,7 +3,8 @@
   import { GRUPOS_OBRA, obraVia, OBRAS_VIA, TIPOS_OBRA, type ObraVia } from '$lib/domain/obrasVia';
   import { CAPACIDAD } from '$lib/domain/red';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
-  import { aporte, CAJA_CFE_MES, mesesConCajaCfe, OBRAS_ENERGIA, obraEnergia, type ObraEnergia } from '$lib/domain/energia';
+  import { aporte, CAJA_CFE_MES, gasDeRegion, mesesConCajaCfe, OBRAS_ENERGIA, obraEnergia, quemaGas, type ObraEnergia } from '$lib/domain/energia';
+  import { FACTOR_GAS, fuenteDucto, GAS_REGIONES, MMPCD_POR_MW, OBRAS_GAS, obraGas } from '$lib/domain/ductos';
   import { fechaLarga, horasDeFecha, mesDe } from '$lib/domain/calendario';
   import {
     COMPRA_DEER_PARK,
@@ -93,10 +94,51 @@
     const estado = sim.obrasEnergia.get(o.id);
     const region = sim.energia.find((e) => e.region.id === o.region);
     if (!estado || !region) return null;
-    // What the region's margins would be with the plant in service.
-    const con = (e: 'tarde' | 'noche') => ((region.capacidad[e] + aporte(o, e) - region.demanda) / region.demanda) * 100;
-    return { o, estado, region, despues: { tarde: con('tarde'), noche: con('noche') } };
+    // Where the gas reaching the region limits it, how much of this plant would count (`gasMW`).
+    const g = region.gas && quemaGas(o) ? region.gas : null;
+    const enServicio = estado.fase === 'en-servicio';
+    const gasDespues = g ? (enServicio ? g : gasDeRegion(region.region.id, g.capacidad, g.nuevasMW + o.mw)) : null;
+    const gasMW = gasDespues ? o.mw * gasDespues.factor : o.mw;
+    // What the region's margins would be with the plant in service (what it adds, as far as its gas goes).
+    const suma = (e: 'tarde' | 'noche') => (enServicio ? 0 : aporte(o, e) * (gasDespues?.factor ?? 1));
+    const con = (e: 'tarde' | 'noche') => ((region.capacidad[e] + suma(e) - region.demanda) / region.demanda) * 100;
+    // What it adds at each peak, as far as its gas goes.
+    const agrega = { tarde: aporte(o, 'tarde') * (gasDespues?.factor ?? 1), noche: aporte(o, 'noche') * (gasDespues?.factor ?? 1) };
+    return { o, estado, region, despues: { tarde: con('tarde'), noche: con('noche') }, gas: g, gasMW, agrega };
   });
+
+  // ---- the CFE's gas works ------------------------------------------------------------------------
+
+  const gasObra = $derived(tablero.obraSel ? obraGas(tablero.obraSel) : null);
+  const planGas = $derived(gasObra ? sim.presupuestoGasoducto(gasObra.id, cuadrillas) : null);
+
+  const fichaGas = $derived.by(() => {
+    sim.horas;
+    sim.obrasEnergia;
+    const o = gasObra;
+    if (!o) return null;
+    const estado = sim.obrasEnergia.get(o.id);
+    const config = GAS_REGIONES.get(o.region);
+    const region = sim.energia.find((e) => e.region.id === o.region);
+    if (!estado || !config || !region?.gas) return null;
+    // With the work done: the same new combined cycles over the bigger flow.
+    const con = gasDeRegion(o.region, config.capacidadConObra, region.gas.nuevasMW);
+    // The catalog's combined cycles in the region, all of them built.
+    const posibles = OBRAS_ENERGIA.filter((p) => p.region === o.region && quemaGas(p));
+    return { o, estado, config, region, gas: region.gas, con, posibles };
+  });
+
+  const filasGas = $derived.by(() => {
+    sim.horas;
+    sim.obrasEnergia;
+    return OBRAS_GAS.map((o) => ({ o, estado: sim.obrasEnergia.get(o.id), plan: sim.presupuestoGasoducto(o.id, MAX_CUADRILLAS) }));
+  });
+
+  function construirGasoducto() {
+    if (!gasObra) return;
+    sim.construirGasoducto(gasObra.id, cuadrillas);
+    confirmando = false;
+  }
 
   const filasEnergia = $derived.by(() => {
     sim.horas;
@@ -434,8 +476,92 @@
           </dl>
         {/if}
       {/if}
+    {:else if fichaGas}
+      {@const { o, estado, config, gas, con, posibles } = fichaGas}
+      <header>
+        <button class="volver" onclick={() => (tablero.obraSel = null)}>← Obras del Estado</button>
+        <button class="close" onclick={() => tablero.cerrarCatalogo()} aria-label="Cerrar">×</button>
+      </header>
+      <h2>{o.nombre}</h2>
+      <p class="label gas">Gasoducto de la CFE · {personas(o.km)} km · {personas(o.capacidad)} millones de pies cúbicos diarios</p>
+      <p class="efecto">
+        A la península el gas solo le llega por el Mayakan: {personas(gas.capacidad)} millones de pies cúbicos diarios. Sus ciclos combinados de
+        2018 queman {personas(gas.consumo2018)}, así que a los nuevos les alcanzan unos {personas(gas.disponiblesMW)} MW. Con el Cuxtal II llegan
+        {personas(config.capacidadConObra)}: alcanzan para {personas(con.disponiblesMW)} MW nuevos. Los ciclos combinados de la CFE en la península
+        ({posibles.map((p) => p.nombre.replace(/^Ciclo combinado /, '')).join(' y ')}) suman {personas(posibles.reduce((s, p) => s + p.mw, 0))}.
+      </p>
+      {#if gas.nuevasMW > 0}
+        <p class="nota">Hoy hay {personas(gas.nuevasMW)} MW de ciclos combinados nuevos en la península: cuentan {Math.round(gas.factor * 100)} %.</p>
+      {/if}
+      <p class="real"><span class="label">En la realidad</span> {o.real}</p>
+
+      {#if sim.modo === 'realidad'}
+        {@render fichaRealidad(o.id)}
+      {:else if estado.fase === 'por-construir' && planGas}
+        <div class="cuadrillas" role="radiogroup" aria-label="Cuadrillas">
+          <span class="label">Cuadrillas</span>
+          {#each Array.from({ length: MAX_CUADRILLAS }, (_, i) => i + 1) as n (n)}
+            <button class="ctl" class:is-active={cuadrillas === n} role="radio" aria-checked={cuadrillas === n} onclick={() => (cuadrillas = n)}>
+              {n}
+            </button>
+          {/each}
+        </div>
+        <dl>
+          <div><dt>Costo (caja de la CFE)</dt><dd class="mono">{mdp(planGas.costoMdp)}</dd></div>
+          <div><dt>Duración</dt><dd class="mono">{meses(planGas.meses)}</dd></div>
+          <div><dt>Empleos en obra</dt><dd class="mono">{personas(planGas.personasEnObra)}</dd></div>
+        </dl>
+        <p class="nota">
+          {cuadrillas === MAX_CUADRILLAS
+            ? 'Cuatro cuadrillas: el ritmo y el costo del gobierno.'
+            : 'Menos cuadrillas que el gobierno: más barato y más lento.'}
+        </p>
+        {#if alRitmoCfe(planGas) > planGas.meses * 1.02}
+          <p class="aviso">
+            Ese ritmo cuesta {mdp(planGas.costoMdp / planGas.meses)} al mes y a la CFE le llegan {mdp(CAJA_CFE_MES)}: con lo que tiene
+            ({mdp(sim.dineroCfe)}), tardaría unos {meses(alRitmoCfe(planGas))}, si no hay otras obras de la CFE.
+          </p>
+        {/if}
+        <details class="fuentes">
+          <summary>De dónde salen las cifras</summary>
+          <p><b>Costo:</b> {o.costo.dato} <a href={o.costo.url} target="_blank" rel="noopener noreferrer">{o.costo.fuente}</a></p>
+          <p><b>Tiempo:</b> {o.tiempo.dato} <a href={o.tiempo.url} target="_blank" rel="noopener noreferrer">{o.tiempo.fuente}</a></p>
+          <p>
+            <b>Gas:</b> {config.dato}
+            {#each config.fuentes as k (k)}<a href={fuenteDucto(k).url} target="_blank" rel="noopener noreferrer">{fuenteDucto(k).fuente}</a>. {/each}
+          </p>
+          <p>
+            <b>Cuánto quema un ciclo combinado:</b> {FACTOR_GAS.dato} ({MMPCD_POR_MW} por MW)
+            {#each FACTOR_GAS.fuentes as k (k)}<a href={fuenteDucto(k).url} target="_blank" rel="noopener noreferrer">{fuenteDucto(k).fuente}</a>. {/each}
+          </p>
+        </details>
+        <div class="acciones">
+          <button class="ctl construir" onclick={() => (confirmando = true)} disabled={sim.estado !== 'lista'}>
+            Construir · {mdp(planGas.costoMdp)}
+          </button>
+        </div>
+      {:else if estado.fase === 'en-obra' && estado.plan}
+        {@const faltanMeses = ((1 - estado.avance) * estado.plan.horas) / HORAS_POR_MES}
+        <p class="status" class:detenida={estado.detenida} class:en-obra={!estado.detenida}>
+          {estado.detenida
+            ? 'Obra detenida: se acabó el dinero de la CFE'
+            : `En obra · ${estado.plan.cuadrillas} cuadrilla${estado.plan.cuadrillas > 1 ? 's' : ''}`}
+        </p>
+        <div class="barra"><span style:width="{estado.avance * 100}%"></span></div>
+        <dl>
+          <div><dt>Avance</dt><dd class="mono">{(estado.avance * 100).toFixed(1)} %</dd></div>
+          <div><dt>Termina en</dt><dd class="mono">{meses(faltanMeses)}</dd></div>
+          <div><dt>Pagado</dt><dd class="mono">{mdp(estado.pagadoMdp)} de {mdp(estado.plan.costoMdp)}</dd></div>
+          <div><dt>Trabajando en la obra</dt><dd class="mono">{personas(estado.detenida ? 0 : estado.plan.personasEnObra)}</dd></div>
+        </dl>
+      {:else if estado.fase === 'en-servicio'}
+        <p class="status en-servicio">En servicio desde el {horaDeJuego(estado.enServicioDesde ?? 0)}</p>
+        <dl>
+          <div><dt>Costó</dt><dd class="mono">{mdp(estado.pagadoMdp)}</dd></div>
+        </dl>
+      {/if}
     {:else if fichaPlanta}
-      {@const { o, estado, region, despues } = fichaPlanta}
+      {@const { o, estado, region, despues, gas, gasMW, agrega } = fichaPlanta}
       <header>
         <button class="volver" onclick={() => (tablero.obraSel = null)}>← Obras del Estado</button>
         <button class="close" onclick={() => tablero.cerrarCatalogo()} aria-label="Cerrar">×</button>
@@ -445,19 +571,31 @@
       {#if sim.modo === 'realidad'}
         <p class="efecto">
           {region.region.parteDe ? 'Sistema aislado de' : 'Región'} <b>{region.region.nombre}</b>: margen estimado de {pct(region.margen.tarde)} en
-          la tarde y {pct(region.margen.noche)} en la noche al {fechaLarga(sim.horas)}. En operación, la central suma {personas(aporte(o, 'tarde'))} MW
-          a la tarde y {personas(aporte(o, 'noche'))} a la noche.
+          la tarde y {pct(region.margen.noche)} en la noche al {fechaLarga(sim.horas)}. En operación, la central suma {personas(agrega.tarde)} MW
+          a la tarde y {personas(agrega.noche)} a la noche{gas ? ', lo que le alcanza de gas' : ''}.
         </p>
       {:else}
       <p class="efecto">
         {region.region.parteDe ? 'Sistema aislado de' : 'Región'} <b>{region.region.nombre}</b>: hoy tiene {pct(region.margen.tarde)} de margen
-        en la tarde y {pct(region.margen.noche)} en la noche. La central suma {personas(aporte(o, 'tarde'))} MW a la tarde y
-        {personas(aporte(o, 'noche'))} a la noche{o.clase === 'solar' && !o.aporte ? ' (de noche la solar no da)' : ''}: quedaría en
+        en la tarde y {pct(region.margen.noche)} en la noche. La central suma {personas(agrega.tarde)} MW a la tarde y
+        {personas(agrega.noche)} a la noche{o.clase === 'solar' && !o.aporte ? ' (de noche la solar no da)' : ''}{gas
+          ? ', lo que le alcanza de gas'
+          : ''}: quedaría en
         {pct(despues.tarde)} y {pct(despues.noche)}.
       </p>
       {/if}
       {#if o.aporteDato}
         <p class="nota">{o.aporteDato}</p>
+      {/if}
+      {#if gas}
+        <p class="aviso">
+          Quema gas, y a la península el gas solo le llega por el Mayakan: {personas(gas.capacidad)} millones de pies cúbicos diarios.
+          {estado.fase === 'en-servicio' ? 'Con el que llega cuenta' : 'Con el que llega hoy contaría'}
+          {personas(gasMW)} de sus {personas(o.mw)} MW; el resto espera el Cuxtal II.
+        </p>
+        <div class="acciones">
+          <button class="ctl" onclick={() => (tablero.obraSel = OBRAS_GAS[0].id)}>Ver el Cuxtal II →</button>
+        </div>
       {/if}
       {#if o.sitioPorDefinir}
         <p class="nota">Sitio por definir: la CFE aún lo busca; el juego la pone en {o.municipio}.</p>
@@ -639,10 +777,11 @@
         <h3 class="energia">Energía (CFE)</h3>
         <p class="texto">
           {#if sim.modo === 'realidad'}
-            Centrales de la CFE desde 2019, en su etapa real. Las que operan cuentan en el margen estimado de su región.
+            Centrales de la CFE desde 2019, en su etapa real. Las que operan cuentan en el margen estimado de su región; en la península, solo
+            hasta donde les alcanza el gas.
           {:else}
-            Centrales de la CFE desde 2019. Se pagan con la caja de la CFE, no con el presupuesto de trenes. Suben el margen de su región;
-            sin margen, los polos de la región no se llenan.
+            Centrales de la CFE desde 2019, y el gasoducto que lleva más gas a la península. Se pagan con la caja de la CFE, no con el presupuesto
+            de trenes. Suben el margen de su región; sin margen, los polos de la región no se llenan.
           {/if}
         </p>
         <ul>
@@ -661,6 +800,26 @@
                     <span class="fase en-servicio">en servicio</span>
                   {:else if plan}
                     {personas(o.mw)} MW {nombreTec(o)} · {mdp(plan.costoMdp)}
+                  {/if}
+                </span>
+              </button>
+            </li>
+          {/each}
+          {#each filasGas as { o, estado, plan } (o.id)}
+            <li>
+              <button class="obra" onclick={() => (tablero.obraSel = o.id)}>
+                <span class="nombre">{o.nombre}</span>
+                <span class="datos mono">
+                  {#if sim.modo === 'realidad'}
+                    {@render etapaReal(o.id)}
+                  {:else if estado?.fase === 'en-obra'}
+                    <span class="fase en-obra" class:detenida={estado.detenida}>
+                      {estado.detenida ? 'detenida' : 'en obra'} {(estado.avance * 100).toFixed(0)} %
+                    </span>
+                  {:else if estado?.fase === 'en-servicio'}
+                    <span class="fase en-servicio">en servicio</span>
+                  {:else if plan}
+                    gasoducto · {personas(o.km)} km · {mdp(plan.costoMdp)}
                   {/if}
                 </span>
               </button>
@@ -744,7 +903,36 @@
     </div>
   {/if}
 
-  {#if confirmando && planPemex && obraP}
+  {#if confirmando && planGas && gasObra}
+    <div class="fondo-modal" role="presentation" onclick={() => (confirmando = false)}>
+      <div
+        class="modal panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-gas"
+        tabindex="-1"
+        onclick={(e) => e.stopPropagation()}
+        onkeydown={(e) => e.stopPropagation()}
+      >
+        <p class="label">Construir · Gasoducto de la CFE</p>
+        <h2 id="titulo-gas">{gasObra.nombre}</h2>
+        <p>
+          Con {planGas.cuadrillas} cuadrilla{planGas.cuadrillas > 1 ? 's' : ''}: <b>{mdp(planGas.costoMdp)}</b> de la caja de la CFE en
+          <b>{meses(planGas.meses)}</b>, con {personas(planGas.personasEnObra)} personas trabajando. Se paga conforme avanza.
+        </p>
+        {#if alRitmoCfe(planGas) > planGas.meses * 1.02}
+          <p class="aviso">
+            Con el dinero de la CFE no alcanza a ese ritmo: la obra irá al paso de lo que le llega cada mes (unos
+            {Number.isFinite(alRitmoCfe(planGas)) ? meses(alRitmoCfe(planGas)) : 'sin fin'}).
+          </p>
+        {/if}
+        <div class="acciones">
+          <button class="ctl" onclick={() => (confirmando = false)}>Cancelar</button>
+          <button class="ctl construir" onclick={construirGasoducto}>Construir</button>
+        </div>
+      </div>
+    </div>
+  {:else if confirmando && planPemex && obraP}
     <div class="fondo-modal" role="presentation" onclick={() => (confirmando = false)}>
       <div
         class="modal panel"
@@ -908,6 +1096,10 @@
   h3.pemex,
   .label.pemex {
     color: #e0a458;
+  }
+
+  .label.gas {
+    color: #6ee7b7;
   }
 
   dl.refineria {

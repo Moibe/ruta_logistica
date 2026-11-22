@@ -20,13 +20,16 @@ import { mensualidad, type Mensualidad } from '$lib/domain/presupuesto';
 import {
   CAJA_CFE_MES,
   estadoEnergia,
+  gasDisponible,
   mwDelPolo,
   OBRAS_ENERGIA,
   obraEnergia,
+  presupuestarGasoducto,
   presupuestarPlanta,
   regionDelPolo,
   type EstadoRegion,
 } from '$lib/domain/energia';
+import { OBRAS_GAS, obraGas } from '$lib/domain/ductos';
 import { clavePolo, estadoReal, type EstadoReal } from '$lib/domain/realidad';
 import {
   cajaPemexDelMes,
@@ -120,8 +123,8 @@ class Simulacion {
    * month (`energia.ts`). Only its plants are paid from here.
    */
   dineroCfe = $state(0);
-  /** Every CFE plant of the catalog, by id: phase, progress, payments. */
-  obrasEnergia = $state.raw<Map<string, ObraViaEstado>>(new Map(OBRAS_ENERGIA.map((o) => [o.id, obraViaNueva(o.id)])));
+  /** Every CFE work of the catalog, by id — its plants and its gas pipeline (the Cuxtal II): phase, progress, payments. */
+  obrasEnergia = $state.raw<Map<string, ObraViaEstado>>(new Map([...OBRAS_ENERGIA, ...OBRAS_GAS].map((o) => [o.id, obraViaNueva(o.id)])));
   /**
    * Each electricity region now: demand, available capacity and reserve
    * margins at the afternoon and night peaks. Recomputed once a game day and
@@ -386,7 +389,11 @@ class Simulacion {
   irA(horas: number, forzar = false) {
     if (this.modo !== 'realidad') return;
     this.horas = Math.max(0, Math.min(horas, horasDeHoy()));
-    const ids = [...[...OBRAS_VIA, ...OBRAS_ENERGIA, ...OBRAS_PEMEX].map((o) => o.id), 'deer-park-compra', ...POLOS.map((p) => clavePolo(p.id))];
+    const ids = [
+      ...[...OBRAS_VIA, ...OBRAS_ENERGIA, ...OBRAS_GAS, ...OBRAS_PEMEX].map((o) => o.id),
+      'deer-park-compra',
+      ...POLOS.map((p) => clavePolo(p.id)),
+    ];
     const real = new Map(ids.map((id) => [id, estadoReal(id, this.horas)]));
     const fase = (id: string) => {
       const e = real.get(id)!.etapa;
@@ -396,7 +403,9 @@ class Simulacion {
     const antes = enServicio(this.obrasVia);
     this.obrasVia = new Map(OBRAS_VIA.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
     // The CFE's plants as they really stood: the map draws them and the regions count the ones in service.
-    this.obrasEnergia = new Map(OBRAS_ENERGIA.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
+    this.obrasEnergia = new Map(
+      [...OBRAS_ENERGIA, ...OBRAS_GAS].map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }])
+    );
     // Pemex's works too; the map and the bar read the refineries' real runs from `petroleo.ts`.
     this.obrasPemex = new Map(OBRAS_PEMEX.map((o) => [o.id, { ...obraViaNueva(o.id), fase: fase(o.id), avance: real.get(o.id)!.avance ?? 0 }]));
     this.deerParkPropia = this.horas >= HORAS_COMPRA_DEER_PARK;
@@ -543,6 +552,23 @@ class Simulacion {
     return true;
   }
 
+  /** What building the CFE's gas work `id` takes. */
+  presupuestoGasoducto(id: string, cuadrillas: number) {
+    const o = obraGas(id);
+    return o ? presupuestarGasoducto(o, cuadrillas) : null;
+  }
+
+  /** Order a CFE gas pipeline built, paid from the CFE's till as it advances. */
+  construirGasoducto(id: string, cuadrillas: number): boolean {
+    const estado = this.obrasEnergia.get(id);
+    const plan = this.presupuestoGasoducto(id, cuadrillas);
+    if (!estado || !plan || estado.fase !== 'por-construir' || this.modo !== 'juego') return false;
+    estado.plan = plan;
+    estado.fase = 'en-obra';
+    this.obrasEnergia = new Map(this.obrasEnergia);
+    return true;
+  }
+
   /** The electricity region of a polo, now. */
   energiaDelPolo(id: string): EstadoRegion | null {
     const r = regionDelPolo(id);
@@ -562,7 +588,8 @@ class Simulacion {
     const hechas = OBRAS_ENERGIA.filter((o) => this.obrasEnergia.get(o.id)?.fase === 'en-servicio');
     const polos = new Map<string, number>();
     for (const o of this.obras.values()) if (o.fase === 'operando' && o.ocupacion > 0) polos.set(o.id, mwDelPolo(o.id) * o.ocupacion);
-    this.energia = estadoEnergia(this.horas, hechas, polos);
+    const gas = gasDisponible((id) => this.obrasEnergia.get(id)?.fase === 'en-servicio');
+    this.energia = estadoEnergia(this.horas, hechas, polos, gas);
     this.refinacion = refinacionJuego({
       avance: (id) => {
         const o = this.obrasPemex.get(id);
