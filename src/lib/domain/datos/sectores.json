@@ -1,0 +1,161 @@
+{
+ "corte": "2026-11-22",
+ "nota": "Generado por scripts/polos/gen-sectores.mjs.",
+ "fuentes": {
+  "inegi-ce2019": {
+   "fuente": "INEGI, Censos Económicos 2019 (datos de 2018), datos abiertos nacionales por subsector SCIAN: personal ocupado total (H001A), gasto por consumo de energía eléctrica (K412A) y consumo de agua (K976A), en millones de pesos",
+   "url": "https://www.inegi.org.mx/contenidos/programas/ce/2019/Datosabiertos/ce2019_nac_csv.zip"
+  },
+  "artf-2018": {
+   "fuente": "ARTF, Anuario Estadístico Ferroviario 2018: toneladas netas por producto (tablas 6-1 y 6-2) y los 20 principales productos de exportación (tabla 10)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf"
+  },
+  "dof-huamantla": {
+   "fuente": "DOF, declaratoria del Polo de Desarrollo Económico para el Bienestar Huamantla (14 de agosto de 2025): sus vocaciones productivas",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5765468&fecha=14/08/2025"
+  },
+  "juego": {
+   "fuente": "Estimación del juego",
+   "url": ""
+  }
+ },
+ "manufactura": {
+  "personal": 6493020,
+  "electricidadPorTrabajador": 24753,
+  "aguaPorTrabajador": 6899,
+  "contenedoresPorTrabajador": 1.49
+ },
+ "sectores": [
+  {
+   "id": "textil",
+   "nombre": "Industria textil",
+   "corto": "Textil",
+   "scian": [
+    "313",
+    "314"
+   ],
+   "color": "#f9a8d4",
+   "personal": 215967,
+   "energia": 0.87,
+   "agua": 0.24,
+   "toneladas": 1.49,
+   "exportacion": 0.3,
+   "enContenedores": true
+  },
+  {
+   "id": "metalicas",
+   "nombre": "Industrias metálicas básicas",
+   "corto": "Metálicas básicas",
+   "scian": [
+    "331"
+   ],
+   "color": "#fca5a5",
+   "personal": 137249,
+   "energia": 4.32,
+   "agua": 1.78,
+   "toneladas": 67.83,
+   "exportacion": 0.16
+  },
+  {
+   "id": "productos-metalicos",
+   "nombre": "Fabricación de productos metálicos",
+   "corto": "Productos metálicos",
+   "scian": [
+    "332"
+   ],
+   "color": "#fdba74",
+   "personal": 454118,
+   "energia": 0.65,
+   "agua": 0.26,
+   "toneladas": 1.49,
+   "exportacion": 0.3,
+   "enContenedores": true
+  },
+  {
+   "id": "maquinaria",
+   "nombre": "Maquinaria y equipo",
+   "corto": "Maquinaria",
+   "scian": [
+    "333"
+   ],
+   "color": "#fde047",
+   "personal": 192577,
+   "energia": 1.17,
+   "agua": 0.52,
+   "toneladas": 1.49,
+   "exportacion": 0.3,
+   "enContenedores": true
+  },
+  {
+   "id": "computacion",
+   "nombre": "Equipo de computación y electrónico",
+   "corto": "Electrónica",
+   "scian": [
+    "334"
+   ],
+   "color": "#86efac",
+   "personal": 377625,
+   "energia": 0.73,
+   "agua": 0.79,
+   "toneladas": 1.49,
+   "exportacion": 0.3,
+   "enContenedores": true
+  },
+  {
+   "id": "electricos",
+   "nombre": "Aparatos eléctricos",
+   "corto": "Aparatos eléctricos",
+   "scian": [
+    "335"
+   ],
+   "color": "#7dd3fc",
+   "personal": 241221,
+   "energia": 0.99,
+   "agua": 0.53,
+   "toneladas": 1.91,
+   "exportacion": 0.45,
+   "enContenedores": true
+  },
+  {
+   "id": "transporte",
+   "nombre": "Equipo de transporte",
+   "corto": "Equipo de transporte",
+   "scian": [
+    "336"
+   ],
+   "color": "#a5b4fc",
+   "personal": 1292372,
+   "energia": 1.22,
+   "agua": 1.5,
+   "toneladas": 5.03,
+   "exportacion": 0.83
+  },
+  {
+   "id": "bebidas",
+   "nombre": "Bebidas y tabaco",
+   "corto": "Bebidas",
+   "scian": [
+    "312"
+   ],
+   "color": "#d8b4fe",
+   "personal": 188656,
+   "energia": 0.92,
+   "agua": 2.77,
+   "toneladas": 18.94,
+   "exportacion": 0.98
+  }
+ ],
+ "dato": "Lo que pide una empresa de cada sector, por trabajador, en 2018: su gasto en electricidad y en agua contra el promedio de la manufactura (INEGI, Censos Económicos 2019), y las toneladas que movió el tren de sus productos entre su personal ocupado, con la parte que salió del país (ARTF, anuario 2018). Los sectores sin productos propios en el anuario mandan su carga en contenedores: les toca lo que llevaron los contenedores por trabajador de la manufactura (estimación del juego).",
+ "fuentesDato": [
+  "inegi-ce2019",
+  "artf-2018",
+  "juego"
+ ],
+ "reglas": {
+  "dato": "Reglas del juego: una empresa ocupa un lote y da los empleos por hectárea del polo; su consumo de electricidad es la parte de su lote de la demanda del polo lleno (los 8 MW de Economía) por cuánto gasta su sector contra el promedio. Su carga espera en la estación del polo hasta un mes.",
+  "fuentes": [
+   "juego"
+  ],
+  "diasPatio": 30
+ }
+}

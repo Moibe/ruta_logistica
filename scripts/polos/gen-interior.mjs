@@ -491,6 +491,8 @@ function interior(g) {
       fuentes: ['economia-ficha', 'osm'],
     },
     lotes: {
+      /** The company lots, in the drawing's order: «Lote 1» is the first. */
+      lista: g.lotes.filter((l) => l.tipo === 'empresa').map((l, i) => ({ n: i + 1, ha: l.ha, empresa: l.empresa })),
       dato: 'Siete empresas compraron lotes (Presidencia, inauguración): Gravity 20 ha, El Charrito 11, Sonavox 6.9, Rebelbox 2.5, Grupo Caná 2, Geometrika 1000 1.5 y Color Link 1; en total 44.9 ha. Dónde queda cada lote no se publica: el acomodo es del juego. Después se añadieron 7.8 ha, también vendidas, que no están en la declaratoria.',
       fuentes: ['presidencia-inauguracion', 'juego'],
     },

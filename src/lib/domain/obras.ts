@@ -96,7 +96,16 @@ export type ObraPolo = {
    * own crews; then `plan` is the sum of them, kept by `avanzarInterior`.
    */
   frentes?: Record<string, EstadoFrente>;
+  /** Its company lots, when it has a close-up: the sector each is promoted for and how full it is. */
+  lotes?: EstadoLote[];
 };
+
+/**
+ * A company lot: the sector the State promotes it for (null: not promoted, no
+ * company comes), the order it was promoted in (lots fill in that order), and
+ * how far its company has moved in (0–1).
+ */
+export type EstadoLote = { sector: string | null; orden: number; lleno: number };
 
 /** One front of a polo's work: crews on it now (0 stops it), progress 0–1, money paid. */
 export type EstadoFrente = { cuadrillas: number; avance: number; pagadoMdp: number; detenida: boolean };
@@ -154,11 +163,19 @@ export function avanzarObra(o: ObraPolo, horas: number, caja: Caja, conectado: b
   }
   if (o.fase === 'operando' && conectado) {
     o.horasConectado += horas;
-    const u = Math.min(1, o.horasConectado / (c('aniosOcupacion') * HORAS_POR_AÑO));
-    // Slow at first, fastest midway, levelling off as the last lots fill.
-    o.ocupacion = u * u * (3 - 2 * u);
+    o.ocupacion = curvaOcupacion(o.horasConectado);
   }
   return false;
+}
+
+/**
+ * How full a polo would be after `horasConectado` hours with a train and
+ * electricity: slow at first, fastest midway, levelling off as the last lots
+ * fill, full in `aniosOcupacion` years.
+ */
+export function curvaOcupacion(horasConectado: number): number {
+  const u = Math.min(1, horasConectado / (c('aniosOcupacion') * HORAS_POR_AÑO));
+  return u * u * (3 - 2 * u);
 }
 
 /** People working on the site right now. */

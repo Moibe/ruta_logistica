@@ -41,7 +41,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [Diario Oficial de la Federación](https://dof.gob.mx) | Las declaratorias de los 32 Polos del Bienestar vigentes: polígono, superficie, municipio y fecha de cada uno (ver [Polos del Bienestar](#5-polos-del-bienestar)) | Declaratorias del 12 de mayo de 2023 al 7 de agosto de 2026, con sus notas aclaratorias y modificaciones; consultadas el 19 de noviembre de 2026 | Documento oficial público |
 | Secretaría de Economía | Lámina "Polos de Desarrollo Económico para el Bienestar" (22 de mayo de 2025): los polos anunciados por etapa | — | Documento oficial público |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) | El trazo de la autopista MEX-185D, para ubicar dos polos cuyas coordenadas no traen meridiano (ver la nota ¹ de los polos); el operador y el estado (en uso, en desuso, abandonada) de cada vía, para saber de quién es cada tramo de la red | Consultado el 19 y el 20 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
-| [ARTF, Anuario Estadístico Ferroviario 2018](https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf) | Los km de vía de cada empresa en 2018, para comprobar el reparto de dueños; la gasolina, el diésel y el combustóleo que movió el tren en 2018 (tabla 6-4) | 2019 | Documento oficial público |
+| [ARTF, Anuario Estadístico Ferroviario 2018](https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf) | Los km de vía de cada empresa en 2018, para comprobar el reparto de dueños; la gasolina, el diésel y el combustóleo que movió el tren en 2018 (tabla 6-4); las toneladas de cada producto (tablas 6-1 y 6-2) y lo exportado (tabla 10), para la carga de las empresas de un polo | 2019 | Documento oficial público |
+| [INEGI, Censos Económicos 2019, datos abiertos nacionales](https://www.inegi.org.mx/contenidos/programas/ce/2019/Datosabiertos/ce2019_nac_csv.zip) | Personal ocupado y gasto en electricidad y en agua de cada subsector de la manufactura en 2018: lo que pide una empresa de cada sector en un polo | 2020 | Dato oficial público |
 | [ARTF, Anuario Estadístico Ferroviario 2019](https://www.gob.mx/cms/uploads/attachment/file/574090/Anuario_Estadi_stico_Ferroviario_2019__2_.pdf) | Los ingresos de cada concesionaria en 2018 (tabla 4-2), para el derecho de diciembre de 2018 | 2020 | Documento oficial público |
 | [ARTF, Sistema Nacional de Indicadores Ferroviarios 2022](https://www.gob.mx/cms/uploads/attachment/file/789599/SNIF_2022.pdf) | Densidad de tráfico y carga por tren de cada empresa (2018–2021): de ahí salen los trenes privados al día | 2022 | Documento oficial público |
 | [ARTF, Pulso de Interconexión, 1er semestre 2024](https://www.gob.mx/cms/uploads/attachment/file/947545/Pulso_Interconexion_VF7.pdf) | La tabla de derechos de paso obligatorios: quién es dueño de cada línea y kilómetro, donde OpenStreetMap no lo dice | 2024 | Documento oficial público |
@@ -691,6 +692,71 @@ cinco frentes (`domain/interior.ts`):
 El polo está **urbanizado** (operando) cuando terminan sus cuatro frentes urbanos. En el modo
 Realidad la vista muestra el polo real: urbanizado desde su inauguración (o al avance real
 mientras estaba en obra), con los lotes a nombre de sus empresas y sin espuela.
+
+#### Los lotes y sus empresas
+
+Ya urbanizado, el polo necesita empresas, y el Estado las atrae: en la pestaña *Lotes y empresas*
+el jugador **promueve** cada lote para uno de los ocho sectores que la declaratoria le da al polo
+como vocaciones productivas. Solo llegan empresas a un lote promovido.
+
+- **Cuándo llegan.** Como antes: con el polo operando, con tren (la espuela) y con electricidad
+  en la región, el interés de las empresas crece en tres años. Ese interés, en hectáreas, se
+  reparte entre los lotes promovidos **en el orden en que se promovieron**; el último en llenarse
+  va a medias mientras su empresa se instala. Un lote sin promover se queda vacío, y el interés
+  que no encuentra lote espera: si el jugador promueve tarde, las empresas llegan de golpe.
+- **La energía del polo es un tope.** La ficha de Economía le da al polo 8 MVA. Lleno de
+  empresas de consumo promedio, pediría 8 MW (lo que el juego ya contaba); cada sector pide su
+  parte de eso por cuánto gasta en electricidad contra el promedio de la manufactura. **Un lote
+  cuya empresa no cabe en lo que queda se queda sin ella**: una metalúrgica en el lote de 20 ha
+  pediría 13 MW. Los lotes se acomodan en el orden en que se promovieron, y uno que no cabe no
+  aparta nada. Comprobación: los 5 mil empleos del polo, al gasto promedio de la manufactura en
+  2018 (24,753 pesos por trabajador) y a unos 1.8 pesos el kWh, dan unos 8 MW, la cifra de
+  Economía.
+- **Cada empresa da empleo**: los del polo por hectárea, repartidos por la superficie de su lote
+  (un lote de 20 ha, 2,226 empleos). Los mismos para todos los sectores: el censo no dice
+  cuántos trabajadores caben por hectárea en cada uno.
+- **Y manda carga por tren**: sus trabajadores por las toneladas que el tren movió de los
+  productos de su sector por trabajador en 2018. La parte de exportación espera en la estación
+  del polo a un tren que la lleve a una salida del país; la nacional, a uno que la deje en su
+  siguiente parada. Esperan hasta un mes; los trenes la cargan antes que la del resto del
+  estado.
+- **El agua** se muestra para comparar, sin tope: la declaratoria dice que hay y la ficha de
+  Economía, que su disponibilidad está confirmada, sin cifra.
+
+Lo que pide cada sector (`domain/sectores.ts`, datos en `src/lib/domain/datos/sectores.json`,
+que arma `scripts/polos/gen-sectores.mjs`). Luz y agua: gasto por trabajador contra el promedio
+de la manufactura (INEGI, Censos Económicos 2019, con datos de 2018). Toneladas: lo que movió el
+tren de sus productos en 2018 entre su personal ocupado, y qué parte salió del país (ARTF,
+anuario 2018, tablas 6-1, 6-2 y 10). Las dos últimas columnas son una empresa en el lote de
+20 ha:
+
+| Sector | SCIAN | Personal ocupado (2018) | Luz | Agua | t por trabajador al año | Exporta | MW | t al año por tren |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Industria textil | 313, 314 | 215,967 | 0.87× | 0.24× | 1.49* | 30 % | 2.6 MW | 3,317 t |
+| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 13.0 MW | 151,006 t |
+| Fabricación de productos metálicos | 332 | 454,118 | 0.65× | 0.26× | 1.49* | 30 % | 2.0 MW | 3,317 t |
+| Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 3.5 MW | 3,317 t |
+| Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 2.2 MW | 3,317 t |
+| Aparatos eléctricos | 335 | 241,221 | 0.99× | 0.53× | 1.91** | 45 % | 3.0 MW | 4,252 t |
+| Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 3.7 MW | 11,198 t |
+| Bebidas y tabaco | 312 | 188,656 | 0.92× | 2.77× | 18.94 | 98 % | 2.8 MW | 42,165 t |
+
+- **Productos de cada sector en el anuario**: equipo de transporte, los vehículos armados (5.43
+  millones de toneladas), el material de ensamble, los vehículos desarmados y las ruedas;
+  bebidas, la cerveza (3.53) y los vinos y licores; metálicas básicas, las láminas y planchas de
+  acero (6.47), el fierro para construcción (2.65), el aluminio, el zinc y el plomo; aparatos
+  eléctricos, los aparatos para uso doméstico (0.10).
+- \* **Sin productos propios en el anuario**, un sector manda su carga en contenedores: le tocan
+  las toneladas de contenedores (9.68 millones en 2018) por trabajador de toda la manufactura, y
+  la parte de ellas que salió del país (2.9 millones). Es **estimación del juego**. \*\* Aparatos
+  eléctricos suma sus aparatos domésticos y los contenedores.
+- Los empleos del polo, 94.3 por hectárea, son «directos e indirectos» (Presidencia); el juego
+  los toma como personal ocupado del censo, así que la carga y la electricidad pueden quedar
+  algo altas.
+
+En el mapa, cada lote promovido toma el color de su sector y se llena conforme llega su empresa;
+uno que no cabe se marca en rojo. Un clic en un lote lo abre en el panel. En Realidad los lotes
+llevan el nombre de su empresa: su giro no se publica.
 
 Los datos del interior los arma `scripts/polos/gen-interior.mjs`: el contorno en
 `static/data/polos/huamantla.json` (lo baja la vista al entrar) y los frentes y sus fuentes en
@@ -2552,6 +2618,10 @@ los otros dos aún no se capturan.
   ámbar y rojo.
 - **Las estaciones llegan hasta 15 km.** Más lejos, el sitio no tiene servicio de tren y su
   ficha dice a cuántos km queda la vía.
+- **En un polo, las empresas las atrae el Estado.** *(22 nov 2026.)* El jugador no pone
+  empresas: promueve cada lote para un sector de las vocaciones de la declaratoria, y las
+  empresas llegan solas si hay tren y energía. Cada sector pide distinto (electricidad, agua,
+  carga), así que escoger es decidir qué tren y cuánta energía necesitará el polo.
 - **Los lugares tienen vista por dentro.** *(22 nov 2026.)* Entrar a un sitio lo muestra de cerca,
   con lo que se puede hacer ahí. Se empezó por un polo, Huamantla, el único terminado en la
   realidad: su obra se maneja por frentes, cada uno con sus cuadrillas, y su tren llega por una
@@ -2814,6 +2884,11 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   agua, la energía, los servicios, la espuela), con sus propias cuadrillas.
 - **Espuela**: el ramal corto de vía que une un polo o una planta con la línea principal.
 - **Lote**: el pedazo del polo que compra una empresa para poner su nave.
+- **Promover un lote**: en el juego, ofrecerlo a empresas de un sector; solo a un lote promovido
+  llega empresa.
+- **Vocación productiva**: un sector para el que la declaratoria dice que el polo es propicio.
+- **Personal ocupado**: en los censos del INEGI, todas las personas que trabajaron para un
+  establecimiento en el año, contratadas por él o no.
 - **Trasbordo**: pasar la carga de un medio a otro; en el juego, del tren al barco en un
   puerto, o del barco al tren.
 - **Buque tanque, carro tanque, autotanque**: el barco, el vagón de tren y el camión (la pipa) que

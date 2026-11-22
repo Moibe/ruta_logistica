@@ -1,8 +1,10 @@
 <script lang="ts">
   import { alongLinea, paralela, type GeoInterior, type Lote, type Pt } from '$lib/domain/interiorGeo';
-  import { ESPUELA, interior } from '$lib/domain/interior';
+  import { ESPUELA, interior, sinEnergiaLote } from '$lib/domain/interior';
+  import { POLOS } from '$lib/domain/sitios';
   import { sim } from '$lib/state/simulacion.svelte';
   import { POLO } from './simbolos';
+  import { sector as sectorDe } from '$lib/domain/sectores';
 
   /**
    * A polo's close-up: its land as the DOF declares it, what's around it
@@ -15,7 +17,7 @@
    * SVG in metres (x east, y north; y is flipped where points are written).
    * Drag to pan, wheel to zoom. It reads `sim.horas` to follow the clock.
    */
-  let { geo }: { geo: GeoInterior } = $props();
+  let { geo, loteSel = $bindable(null) }: { geo: GeoInterior; loteSel?: number | null } = $props();
 
   const RIEL = '#ffd166';
   const LUZ = '#fde68a';
@@ -72,17 +74,29 @@
   }
 
   let arrastre = $state<{ x: number; y: number; cx: number; cy: number } | null>(null);
+  /** The pointer went down and moved: a drag, not a click on a lot. */
+  let arrastrado = false;
   function onDown(e: PointerEvent) {
     arrastre = { x: e.clientX, y: e.clientY, cx: vista.cx, cy: vista.cy };
-    (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    arrastrado = false;
   }
   function onMove(e: PointerEvent) {
     puntero = { x: e.clientX, y: e.clientY };
     if (!arrastre) return;
+    if (!arrastrado && Math.hypot(e.clientX - arrastre.x, e.clientY - arrastre.y) > 4) {
+      // Captured only once it's a drag, so a plain click still reaches the lot under it.
+      arrastrado = true;
+      (e.currentTarget as Element).setPointerCapture(e.pointerId);
+    }
+    if (!arrastrado) return;
     vista = { ...vista, cx: arrastre.cx - (e.clientX - arrastre.x) * vista.mpp, cy: arrastre.cy + (e.clientY - arrastre.y) * vista.mpp };
   }
   function onUp() {
     arrastre = null;
+  }
+  function elegirLote(n: number) {
+    if (arrastrado || n <= 0) return;
+    loteSel = loteSel === n - 1 ? null : n - 1;
   }
 
   // ---- what to draw --------------------------------------------------------------------------
@@ -144,15 +158,21 @@
   const luzConexion = $derived(Math.min(1, estado.av.energia * 2));
   const luzAdentro = $derived(Math.max(0, estado.av.energia * 2 - 1));
 
-  /** Which company lots are taken: in order, as many hectares as the occupancy says (the last one in part). */
+  /** Each company lot now: how far its company has moved in, and the sector it's promoted for. In Realidad, all sold. */
   const ocupado = $derived.by(() => {
-    const empresas = geo.lotes.filter((l) => l.tipo === 'empresa');
-    const total = empresas.reduce((s, l) => s + l.ha, 0);
-    let resta = (realidad && urbanizado ? 1 : estado.ocupacion) * total;
-    const m = new Map<Lote, number>();
-    for (const l of empresas) {
-      m.set(l, Math.max(0, Math.min(1, resta / l.ha)));
-      resta -= l.ha;
+    sim.horas;
+    const o = sim.obras.get(geo.id);
+    const polo = POLOS.find((p) => p.id === geo.id);
+    const lotes = o?.lotes ?? [];
+    const m = new Map<Lote, { lleno: number; sector: string | null; sinEnergia: boolean }>();
+    for (const [i, l] of geo.lotes.filter((x) => x.tipo === 'empresa').entries()) {
+      const e = lotes[i];
+      m.set(
+        l,
+        realidad
+          ? { lleno: urbanizado ? 1 : 0, sector: null, sinEnergia: false }
+          : { lleno: e?.lleno ?? 0, sector: e?.sector ?? null, sinEnergia: !!(o && polo && sinEnergiaLote(o, polo, i)) }
+      );
     }
     return m;
   });
@@ -286,20 +306,27 @@
     <path d={anillo(geo.poligono)} class="terreno" class:urbanizado style:--polo={POLO} />
     {#each geo.lotes as l, i (i)}
       {@const n = numeroLote.get(l) ?? 0}
-      {@const lleno = ocupado.get(l) ?? 0}
+      {@const o = ocupado.get(l)}
+      {@const lleno = o?.lleno ?? 0}
+      {@const sec = sectorDe(o?.sector)}
       <path
         d={anillo(l.puntos)}
         class="lote {l.tipo}"
         class:urbanizado
+        class:promovido={!!sec}
+        class:sin-energia={o?.sinEnergia}
+        class:sel={n > 0 && loteSel === n - 1}
         style:--lleno={lleno}
+        style:--c={sec?.color ?? '#f472b6'}
         role="presentation"
+        onclick={() => elegirLote(n)}
         onpointerenter={ver(
           nombreLote(l, n),
-          `${l.ha.toLocaleString('es-MX')} ha`,
+          `${l.ha.toLocaleString('es-MX')} ha${sec ? ` · ${sec.nombre}` : ''}`,
           l.tipo === 'empresa'
             ? realidad
               ? 'Vendido (Presidencia, inauguración del 12 de abril de 2026). Dónde queda en el polo es del juego.'
-              : `${lleno >= 1 ? 'Con empresa' : lleno > 0 ? 'Instalándose una empresa' : urbanizado ? 'Libre' : 'Por urbanizar'}. En la realidad lo compró ${l.empresa} (Presidencia); dónde queda es del juego.`
+              : `${lleno >= 1 ? 'Con empresa' : lleno > 0 ? 'Instalándose una empresa' : o?.sinEnergia ? 'Promovido, pero no cabe: al polo no le alcanza la energía' : sec ? 'Promovido' : 'Sin promover'}. Clic para verlo. En la realidad lo compró ${l.empresa} (Presidencia); dónde queda es del juego.`
             : l.tipo === 'servicios'
               ? 'Su tamaño y lugar son del juego'
               : 'Lo que queda del terreno'
@@ -310,7 +337,7 @@
         {@const c = l.puntos.reduce((s, p) => [s[0] + p[0] / l.puntos.length, s[1] + p[1] / l.puntos.length], [0, 0])}
         {#if l.ha >= 2 || vista.mpp < 0.9}
           <text x={c[0]} y={-c[1]} font-size={10 * fs} class="rotulo lote-rotulo" text-anchor="middle">
-            {realidad ? l.empresa : `Lote ${n}`} · {l.ha.toLocaleString('es-MX')} ha
+            {realidad ? l.empresa : `Lote ${n}`} · {sec ? sec.corto : `${l.ha.toLocaleString('es-MX')} ha`}
           </text>
         {/if}
       {/if}
@@ -563,6 +590,24 @@
     stroke: rgba(244, 114, 182, 0.45);
     stroke-width: 1;
     stroke-dasharray: 3 3;
+    cursor: pointer;
+  }
+
+  /* Promoted for a sector: its colour, filling in as its company moves in. */
+  .lote.empresa.promovido {
+    fill: color-mix(in srgb, var(--c) calc(10% + 50% * var(--lleno, 0)), transparent);
+    stroke: var(--c);
+  }
+
+  .lote.empresa.sin-energia {
+    stroke: #f87171;
+    stroke-dasharray: 6 4;
+  }
+
+  .lote.sel {
+    stroke: #fff;
+    stroke-width: 2.4;
+    stroke-dasharray: none;
   }
 
   .lote.urbanizado {

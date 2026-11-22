@@ -217,7 +217,9 @@
       <p class="status" class:operando={ficha.conectado && conEnergia} class:aislado={!ficha.conectado || !conEnergia}>
         {!ficha.conectado
           ? 'Construido, sin tren: no llegan empresas'
-          : conEnergia
+          : obra.lotes && !obra.lotes.some((l) => l.sector)
+            ? 'Operando: promueve sus lotes desde adentro'
+            : conEnergia
             ? 'Operando · llegan empresas'
             : 'Operando, sin energía en la región: no llegan empresas'}
       </p>

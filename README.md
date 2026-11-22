@@ -214,6 +214,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/combustibles.json` | **Combustibles**: consumo por estado (CNE, SENER), las 78 terminales de Pemex con su medio de suministro y las zonas de ductos (SENER, mapa de 2018), petróleo por puerto (SEMAR), barriles por tonelada (EIA), capacidad del buque tanque, y las series reales de crudo producido y exportado y de combustibles hechos e importados (Segundo Informe de Gobierno). Lo genera `scripts/combustibles/gen-combustibles.mjs` |
 | `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
 | `src/lib/domain/datos/interiores.json` | **Polos por dentro**: los frentes de obra de Huamantla y su parte del costo, la espuela, la energía, los lotes vendidos y las vocaciones, con sus fuentes. Lo genera `scripts/polos/gen-interior.mjs` |
+| `src/lib/domain/datos/sectores.json` | **Sectores**: lo que pide una empresa de cada vocación de un polo, por trabajador: electricidad y agua contra el promedio de la manufactura (INEGI, Censos Económicos 2019) y toneladas por tren con su parte exportada (ARTF 2018). Lo genera `scripts/polos/gen-sectores.mjs` |
 | `static/data/polos/huamantla.json` | El dibujo de Huamantla por dentro: terreno del DOF, lotes, avenida, espuela, conexión eléctrica y alrededores de OpenStreetMap, en metros (~70 KB). Lo genera el mismo script |
 | `src/lib/domain/datos/comercio-mar.json` | **Comercio por mar**: lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (SEMAR), lo que entra y sale por tren (ATTRAPI 2025), la carga de cada clase de barco y las reglas de los patios. Lo genera `scripts/comercio/gen-comercio-mar.mjs` |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
@@ -429,10 +430,19 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
   `avanzarInterior` paga cada frente (`pagarAvance`) y `resumir` deja en `plan` la suma, que es
   lo que leen la ficha, los empleos y la barra. Urbanizado, el polo opera; su estación nace solo
   con la espuela (`#reconstruirRed` pide `conEspuela`). `sim.cuadrillasEnFrente` es la acción.
-- **Vista** (`map/InteriorPolo.svelte`, SVG en metros; `ui/FrentesPolo.svelte`, el panel): cada
-  frente se dibuja según avanza y las cuadrillas aparecen donde trabajan. Al operar, los lotes se
-  llenan al ritmo de la ocupación. En Realidad muestra el polo real con los lotes a nombre de sus
-  empresas.
+- **Lotes y empresas** (`domain/sectores.ts`, `datos/sectores.json` de
+  `scripts/polos/gen-sectores.mjs`: INEGI Censos Económicos 2019 y ARTF 2018). `ObraPolo.lotes`
+  guarda, por lote, el sector para el que se promovió, su orden y cuánto se ha llenado.
+  `sim.promoverLote` es la acción. `ocuparLotes` reparte la curva de ocupación de siempre entre los
+  lotes promovidos, en orden, saltando los que no caben en los 8 MVA del polo
+  (`lotesQueCaben`, `demandaLote`). La energía de la región usa `mwEnUso`. La carga de las
+  empresas (`cargaDelPolo`) espera en `#patiosPolo`, y un tren en la estación `polo:<id>` la
+  carga antes que la del estado (`#cargarDelPolo`); `sim.cargaPolos` cuenta lo que se llevó.
+- **Vista** (`map/InteriorPolo.svelte`, SVG en metros; `ui/FrentesPolo.svelte`, el panel con las
+  pestañas *Obra* y *Lotes y empresas*, la segunda en `ui/LotesPolo.svelte`): cada frente se
+  dibuja según avanza y las cuadrillas aparecen donde trabajan. Los lotes toman el color de su
+  sector y se llenan conforme llega la empresa; un clic en uno lo abre en el panel. En Realidad
+  muestra el polo real con los lotes a nombre de sus empresas.
 
 **Mantener el juego al día**: `npm run al-dia` (`scripts/al-dia.mjs`) busca en el DOF, desde la
 fecha de corte de `calibracion.json` hasta hoy, los acuerdos sobre Polos del Bienestar que el
@@ -492,6 +502,7 @@ src/lib/
     obras.ts         construir polos: presupuesto, cuadrillas, avance, ocupación y empleos
     interior.ts      un polo por dentro: su obra por frentes y su espuela
     interiorGeo.ts   el dibujo de un polo por dentro (se baja al entrar)
+    sectores.ts      lo que pide una empresa de cada sector (luz, agua, carga por tren)
     trayecto.ts      un recorrido como polilínea con velocidad por segmento; avanzar sobre él
     servicio.ts      el motor común: un vehículo recorriendo sus paradas (ida y vuelta o circuito)
     red.ts           grafo ferroviario, dueños y estado de cada vía, estaciones, ruta más rápida
@@ -520,7 +531,7 @@ src/lib/
     ViewNav.svelte   las vistas, plegadas abajo a la izquierda: Mundo (Canvas · Globo) | México
     Reloj.svelte · Flota.svelte · Trazado.svelte · formato.ts   paneles (Reloj y Flota también en el mundo)
     Erario.svelte · FichaPolo.svelte   presupuesto y empleos; la ficha del polo y su construcción
-    FrentesPolo.svelte   adentro de un polo: sus frentes de obra y sus cuadrillas
+    FrentesPolo.svelte · LotesPolo.svelte   adentro de un polo: sus frentes de obra; sus lotes y sus empresas
     CatalogoObras.svelte   el catálogo de obras ferroviarias del Estado y la ficha de cada obra
 ```
 
@@ -611,9 +622,8 @@ costa del mundo solo sube de resolución). Además:
   margen.
 - **Más dinero del Estado**, con la carga: lo que cobran los trenes del Estado, lo que pagan
   sus trenes por pasar por vía privada y los impuestos de las concesionarias.
-- **Polos por dentro, lo que sigue**: los lotes con empresas por sector (las vocaciones de cada
-  declaratoria), la vista de los demás polos con su polígono del DOF, y quizás de otros sitios
-  (puertos, refinerías).
+- **Polos por dentro, lo que sigue**: la vista de los demás polos con su polígono del DOF;
+  ampliar la subestación de un polo; quizás la vista de otros sitios (puertos, refinerías).
 - **Comercio por mar, lo que sigue**: el cabotaje entre puertos del país; La Paz, Acapulco y
   Ciudad del Carmen; más salidas al mundo (Estados Unidos, Sudamérica) para que las rutas
   reales tengan a dónde ir; el valor en dólares de lo que se mueve.

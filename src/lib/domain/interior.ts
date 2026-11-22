@@ -1,6 +1,10 @@
 import DATOS from './datos/interiores.json';
+import { mwDelPolo } from './energia';
+import { sector as sectorDe } from './sectores';
 import {
+  cifra,
   costoBaseMdp,
+  curvaOcupacion,
   EXPONENTE_CUADRILLAS,
   HORAS_POR_MES,
   MAX_CUADRILLAS,
@@ -11,6 +15,7 @@ import {
   SOBRECOSTO_POR_CUADRILLA,
   type Caja,
   type EstadoFrente,
+  type EstadoLote,
   type ObraPolo,
 } from './obras';
 import { obraVia, presupuestarObra } from './obrasVia';
@@ -45,7 +50,7 @@ export type Interior = {
   frentesDato: Dato;
   espuela: { km: number; via: string; operador: string; mesesMinimos: number } & Dato;
   energia: { mva: number; kmLinea: number } & Dato;
-  lotes: Dato;
+  lotes: { lista: { n: number; ha: number; empresa: string }[] } & Dato;
   vocaciones: string[];
   vocacionesDato: Dato;
 };
@@ -93,11 +98,134 @@ export function planFrente(polo: Polo, frente: string, n: number): PlanFrente | 
 
 const frenteNuevo = (): EstadoFrente => ({ cuadrillas: 0, avance: 0, pagadoMdp: 0, detenida: false });
 
-/** A polo's work as the game starts it: by fronts when it has a close-up. */
+/** A polo's work as the game starts it: by fronts, and its lots not promoted yet, when it has a close-up. */
 export function obraDelPolo(id: string): ObraPolo {
   const o = obraNueva(id);
-  if (tieneInterior(id)) o.frentes = Object.fromEntries(frentesDe(id).map((f) => [f.id, frenteNuevo()]));
+  const i = interior(id);
+  if (i) {
+    o.frentes = Object.fromEntries(frentesDe(id).map((f) => [f.id, frenteNuevo()]));
+    o.lotes = i.lotes.lista.map(() => ({ sector: null, orden: 0, lleno: 0 }));
+  }
   return o;
+}
+
+// ---- the lots and their companies ---------------------------------------------------------
+
+/**
+ * What the company in lot `n` (index into the list) of a polo asks with sector
+ * `s`, the lot full: its people (the polo's jobs shared out by area), MW (its
+ * share of the polo's demand when full, times how much its sector spends on
+ * electricity against the average) and tonnes by rail a year.
+ */
+export function demandaLote(polo: Polo, n: number, s: string | null) {
+  const i = interior(polo.id);
+  const l = i?.lotes.lista[n];
+  const sec = sectorDe(s);
+  if (!i || !l) return null;
+  const areaEmpresas = i.lotes.lista.reduce((t, x) => t + x.ha, 0);
+  const personas = (l.ha * cifra('empleosPorHa') * polo.hectareas) / areaEmpresas;
+  const mw = mwDelPolo(polo.id) * (l.ha / polo.hectareas) * (sec?.energia ?? 1);
+  const toneladas = personas * (sec?.toneladas ?? 0);
+  return { ha: l.ha, personas, mw, toneladas, exportacion: sec?.exportacion ?? 0, agua: sec?.agua ?? 1 };
+}
+
+/** MW the polo has for its companies (its substation). */
+export const capacidadMw = (id: string) => interior(id)?.energia.mva ?? Infinity;
+
+/** MW its companies use now (in as far as they've moved in). */
+export function mwEnUso(o: ObraPolo, polo: Polo): number {
+  return (o.lotes ?? []).reduce((t, l, n) => t + (l.lleno > 0 ? (demandaLote(polo, n, l.sector)?.mw ?? 0) * l.lleno : 0), 0);
+}
+
+/** MW the polo would use with every promoted lot full. */
+export function mwPromovido(o: ObraPolo, polo: Polo): number {
+  return (o.lotes ?? []).reduce((t, l, n) => t + (l.sector ? (demandaLote(polo, n, l.sector)?.mw ?? 0) : 0), 0);
+}
+
+/** A lot that can't take its company: with it, the polo would need more MW than it has. */
+export function sinEnergiaLote(o: ObraPolo, polo: Polo, n: number): boolean {
+  const l = o.lotes?.[n];
+  if (!l?.sector || l.lleno >= 1) return false;
+  return !cabeLote(o, polo, n);
+}
+
+/**
+ * The promoted lots that fit under the substation: the ones whose company is
+ * already in, then the rest in the order they were promoted, each if what's
+ * taken so far leaves room for it. One that doesn't fit takes nothing.
+ */
+function lotesQueCaben(o: ObraPolo, polo: Polo): Set<number> {
+  const lotes = o.lotes ?? [];
+  const cap = capacidadMw(polo.id) + 1e-9;
+  const caben = new Set<number>();
+  let mw = 0;
+  for (const [n, l] of lotes.entries()) {
+    if (!l.sector || l.lleno <= 0) continue;
+    caben.add(n);
+    mw += demandaLote(polo, n, l.sector)?.mw ?? 0;
+  }
+  const fila = lotes.map((l, n) => ({ l, n })).filter((x) => x.l.sector && x.l.lleno <= 0).sort((a, b) => a.l.orden - b.l.orden);
+  for (const { l, n } of fila) {
+    const suyo = demandaLote(polo, n, l.sector)?.mw ?? 0;
+    if (mw + suyo > cap) continue;
+    caben.add(n);
+    mw += suyo;
+  }
+  return caben;
+}
+
+/** Whether lot `n` fits under the substation with the lots promoted before it. */
+const cabeLote = (o: ObraPolo, polo: Polo, n: number) => lotesQueCaben(o, polo).has(n);
+
+/**
+ * Promote lot `n` for a sector (null takes it off). Only a lot without its
+ * company yet; it joins the line behind the ones promoted before.
+ */
+export function promoverLote(o: ObraPolo, n: number, s: string | null, orden: number) {
+  const l = o.lotes?.[n];
+  if (!l || l.lleno > 0) return;
+  l.sector = s && sectorDe(s) ? s : null;
+  l.orden = l.sector ? orden : 0;
+}
+
+/**
+ * Companies move in: the polo's usual curve (only while a train and the
+ * region's electricity reach it) says how many hectares companies want; they
+ * take the promoted lots in the order they were promoted, skipping the ones
+ * that don't fit under the substation. The polo's occupancy is how full its
+ * company lots are.
+ */
+export function ocuparLotes(o: ObraPolo, polo: Polo) {
+  const i = interior(polo.id);
+  if (!i || !o.lotes) return;
+  const area = i.lotes.lista.reduce((t, x) => t + x.ha, 0);
+  if (o.fase === 'operando') {
+    let quieren = curvaOcupacion(o.horasConectado) * area;
+    const caben = lotesQueCaben(o, polo);
+    const fila = o.lotes.map((l, n) => ({ l, n })).filter((x) => x.l.sector).sort((a, b) => a.l.orden - b.l.orden);
+    for (const { l, n } of fila) {
+      const ha = i.lotes.lista[n].ha;
+      if (!caben.has(n)) continue;
+      const ahora = Math.max(l.lleno, Math.min(1, Math.max(0, quieren / ha)));
+      l.lleno = ahora;
+      quieren -= ha * ahora;
+    }
+  }
+  o.ocupacion = o.lotes.reduce((t, l, n) => t + l.lleno * i.lotes.lista[n].ha, 0) / area;
+}
+
+/** Tonnes a year the polo's companies send by rail now: for export and for the country. */
+export function cargaDelPolo(o: ObraPolo, polo: Polo): { exportacion: number; nacional: number } {
+  let exportacion = 0;
+  let nacional = 0;
+  for (const [n, l] of (o.lotes ?? []).entries()) {
+    if (l.lleno <= 0) continue;
+    const d = demandaLote(polo, n, l.sector);
+    if (!d) continue;
+    exportacion += d.toneladas * d.exportacion * l.lleno;
+    nacional += d.toneladas * (1 - d.exportacion) * l.lleno;
+  }
+  return { exportacion, nacional };
 }
 
 /** All four urban fronts done. */

@@ -6,14 +6,18 @@
   import { fechaLarga } from '$lib/domain/calendario';
   import { sim } from '$lib/state/simulacion.svelte';
   import { mdp, meses, personas } from './formato';
+  import LotesPolo from './LotesPolo.svelte';
+  import { untrack } from 'svelte';
 
   /**
-   * Inside a polo, on the right: its work by fronts. Each front takes 0 to 4
-   * crews (0 stops it where it is); the panel says what that costs, how long
-   * it takes and what's been paid. The spur gives the polo its station. In
-   * Realidad it shows how the real polo stood, with nothing to play.
+   * Inside a polo, on the right, in two tabs. **Obra**: its work by fronts.
+   * Each front takes crews from the polo's four (0 stops it where it is); the
+   * panel says what that costs, how long it takes and what's been paid. The
+   * spur gives the polo its station. **Lotes** (`LotesPolo`): its company
+   * lots and the sector each is promoted for. In Realidad it shows how the
+   * real polo stood, with nothing to play.
    */
-  let { id }: { id: string } = $props();
+  let { id, loteSel = $bindable(null) }: { id: string; loteSel?: number | null } = $props();
 
   const polo = $derived(POLOS.find((p) => p.id === id)!);
   const datos = $derived(interior(id)!);
@@ -57,6 +61,13 @@
     return `Operando · ${Math.round(v.o.ocupacion * 100)} % ocupado`;
   });
 
+  /** The work tab until the polo is urbanized, then its lots. */
+  let pestaña = $state<'obra' | 'lotes'>(untrack(() => (sim.obras.get(id)?.fase === 'operando' ? 'lotes' : 'obra')));
+  // A lot picked on the map shows the lots.
+  $effect(() => {
+    if (loteSel !== null) pestaña = 'lotes';
+  });
+
   const fuentes = $derived(['dof-huamantla', 'presidencia-inauguracion', 'economia-ficha', 'economia-nota', 'osm', 'sict-dos-bocas'].map((k) => fuenteInterior(k)).filter(Boolean));
 </script>
 
@@ -77,6 +88,14 @@
       {estadoTexto}{realidad ? ` · al ${fechaLarga(sim.horas)}` : ''}
     </p>
 
+    <div class="pestañas" role="tablist">
+      <button role="tab" class:activa={pestaña === 'obra'} aria-selected={pestaña === 'obra'} onclick={() => (pestaña = 'obra')}>Obra</button>
+      <button role="tab" class:activa={pestaña === 'lotes'} aria-selected={pestaña === 'lotes'} onclick={() => (pestaña = 'lotes')}>Lotes y empresas</button>
+    </div>
+
+    {#if pestaña === 'lotes'}
+      <LotesPolo {id} bind:loteSel />
+    {:else}
     {#if !realidad && !vista.urbanizado}
       <p class="cupo">
         Cuadrillas del polo <b class="mono">{vista.urbanas} de {MAX_CUADRILLAS}</b>
@@ -136,6 +155,7 @@
         El polo real: compromiso de obra el 28 de julio de 2025, al 20 % el 14 de octubre, inaugurado el 12 de abril de 2026. Los siete lotes vendidos llevan el nombre de su empresa. No se ha reportado una espuela.
       </p>
     {/if}
+    {/if}
 
     <details class="mas">
       <summary>Datos del polo</summary>
@@ -165,6 +185,32 @@
     padding: 0.85rem 0.95rem 0.95rem;
     border-top: 2px solid var(--polo);
     overflow-y: auto;
+  }
+
+  .pestañas {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0 0 0.7rem;
+    padding: 0.2rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line);
+  }
+
+  .pestañas button {
+    flex: 1;
+    padding: 0.28rem 0.4rem;
+    border: none;
+    border-radius: 8px;
+    background: none;
+    font-size: 0.72rem;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .pestañas button.activa {
+    background: rgba(244, 114, 182, 0.16);
+    color: #ffe4f1;
   }
 
   header h2 {

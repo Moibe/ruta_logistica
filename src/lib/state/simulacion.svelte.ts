@@ -97,7 +97,19 @@ import {
   type TipoCarga,
 } from '$lib/domain/comercioMar';
 import { POLOS, puerta, SITIOS } from '$lib/domain/sitios';
-import { avanzarInterior, conEspuela, ESPUELA, fijarCuadrillas, obraDelPolo, resumir } from '$lib/domain/interior';
+import {
+  avanzarInterior,
+  cargaDelPolo,
+  conEspuela,
+  ESPUELA,
+  fijarCuadrillas,
+  mwEnUso,
+  obraDelPolo,
+  ocuparLotes,
+  promoverLote,
+  resumir,
+} from '$lib/domain/interior';
+import { DIAS_PATIO_POLO } from '$lib/domain/sectores';
 
 const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
 
@@ -277,6 +289,12 @@ class Simulacion {
   #pedidos = new Map<string, Record<TipoCarga, number>>();
   /** Each port's imports waiting for a train, tonnes. */
   #patiosImportacion = new Map<string, number>();
+  /** Each polo's freight from its companies waiting at its station for a train, tonnes. Mutated by the clock. */
+  #patiosPolo = new Map<string, { exportacion: number; nacional: number }>();
+  /** What the player's trains have taken from each polo's station: tonnes for export and for the country. */
+  cargaPolos = $state.raw<Record<string, { exportacion: number; nacional: number }>>({});
+  /** Lots are filled in the order they're promoted. */
+  #ordenLotes = 0;
   /** Supplies stored at each offshore complex, tonnes (`plataformas.ts`). Mutated by the clock. */
   #reservas = new Map<string, number>(COMPLEJOS.map((c) => [c.id, abastoDiario(c.id, 2018) * DIAS_RESERVA * 0.5]));
   /** How well each complex has been supplied over the last month (0–1). Mutated by the clock. */
@@ -597,6 +615,23 @@ class Simulacion {
     return true;
   }
 
+  /**
+   * Inside a polo: promote company lot `n` (its index) for a sector, or take
+   * it off (null). Only a lot whose company hasn't come yet.
+   */
+  promoverLote(id: string, n: number, sector: string | null): boolean {
+    const obra = this.obras.get(id);
+    if (!obra?.lotes || this.modo !== 'juego') return false;
+    promoverLote(obra, n, sector, ++this.#ordenLotes);
+    this.obras = new Map(this.obras);
+    return true;
+  }
+
+  /** A polo's freight waiting at its station, tonnes. */
+  enPatioPolo(id: string): { exportacion: number; nacional: number } {
+    return this.#patiosPolo.get(id) ?? { exportacion: 0, nacional: 0 };
+  }
+
   /** Whether a train can reach the polo: it has its station on the network. */
   conectado(id: string): boolean {
     return !!this.red?.estaciones.has(`polo:${id}`);
@@ -724,7 +759,12 @@ class Simulacion {
     this.#diaEnergia = dia;
     const hechas = OBRAS_ENERGIA.filter((o) => this.obrasEnergia.get(o.id)?.fase === 'en-servicio');
     const polos = new Map<string, number>();
-    for (const o of this.obras.values()) if (o.fase === 'operando' && o.ocupacion > 0) polos.set(o.id, mwDelPolo(o.id) * o.ocupacion);
+    for (const o of this.obras.values()) {
+      if (o.fase !== 'operando' || o.ocupacion <= 0) continue;
+      // A polo with its lots: what its companies use, by their sector.
+      const polo = o.lotes ? POLOS.find((p) => p.id === o.id) : null;
+      polos.set(o.id, polo ? mwEnUso(o, polo) : mwDelPolo(o.id) * o.ocupacion);
+    }
     const gas = gasDisponible((id) => this.obrasEnergia.get(id)?.fase === 'en-servicio');
     this.energia = estadoEnergia(this.horas, hechas, polos, gas);
     this.refinacion = refinacionJuego({
@@ -795,6 +835,11 @@ class Simulacion {
       if (o.fase === 'por-construir') continue;
       // Companies come only with a train and with electricity in the region.
       if (avanzarObra(o, horas, caja, this.conectado(o.id) && this.hayEnergia(o.id))) terminadas = true;
+      // Companies take the promoted lots.
+      if (o.lotes) {
+        const polo = POLOS.find((p) => p.id === o.id);
+        if (polo) ocuparLotes(o, polo);
+      }
     }
     let viasTerminadas = false;
     for (const o of this.obrasVia.values()) {
@@ -917,6 +962,32 @@ class Simulacion {
       const ft = flujoImportacionTren(p);
       this.#patiosImportacion.set(clave, Math.min((this.#patiosImportacion.get(clave) ?? 0) + ft * horas, ft * 24 * DIAS_PATIO));
     }
+    // The polos' companies: their freight waits at the polo's station, up to a month of it.
+    for (const o of this.obras.values()) {
+      if (!o.lotes || o.ocupacion <= 0) continue;
+      const polo = POLOS.find((p) => p.id === o.id);
+      if (!polo) continue;
+      const año = cargaDelPolo(o, polo);
+      const h = 365.25 * 24;
+      const patio = this.#patiosPolo.get(o.id) ?? { exportacion: 0, nacional: 0 };
+      patio.exportacion = Math.min(patio.exportacion + (año.exportacion / h) * horas, (año.exportacion / 365.25) * DIAS_PATIO_POLO);
+      patio.nacional = Math.min(patio.nacional + (año.nacional / h) * horas, (año.nacional / 365.25) * DIAS_PATIO_POLO);
+      this.#patiosPolo.set(o.id, patio);
+    }
+  }
+
+  /** At a polo's station, a train takes the polo's own freight first (`cual`: export or domestic). */
+  #cargarDelPolo(t: Tren, destino: string, cual: 'exportacion' | 'nacional'): number {
+    if (!destino.startsWith('polo:')) return 0;
+    const id = destino.slice('polo:'.length);
+    const patio = this.#patiosPolo.get(id);
+    if (!patio || patio[cual] < 1) return 0;
+    const sube = Math.min(this.#espacioTren(t), patio[cual]);
+    if (sube <= 0) return 0;
+    patio[cual] -= sube;
+    const c = this.cargaPolos[id] ?? { exportacion: 0, nacional: 0 };
+    this.cargaPolos = { ...this.cargaPolos, [id]: { ...c, [cual]: c[cual] + sube } };
+    return sube;
   }
 
   /** Export cargo waiting in a state, tonnes. */
@@ -1253,6 +1324,7 @@ class Simulacion {
   #cargarNacional(t: Tren, destino: string) {
     const estado = SITIOS_POR_CLAVE.get(destino)?.estado;
     if (!estado) return;
+    t.cargaNacional += this.#cargarDelPolo(t, destino, 'nacional');
     const hay = this.#bodegasNacional.get(estado) ?? 0;
     const sube = Math.min(this.#espacioTren(t), hay);
     if (sube <= 0) return;
@@ -1285,6 +1357,12 @@ class Simulacion {
     }
     const estado = SITIOS_POR_CLAVE.get(destino)?.estado;
     if (!estado) return;
+    // A polo's companies' exports first.
+    const delPolo = this.#cargarDelPolo(t, destino, 'exportacion');
+    if (delPolo > 0) {
+      t.carga += delPolo;
+      t.cargaDe[estado] = (t.cargaDe[estado] ?? 0) + delPolo;
+    }
     const hay = this.#bodegas.get(estado) ?? 0;
     // Domestic cargo was delivered on arrival; fuel still aboard keeps its room.
     const sube = Math.min(this.#espacioTren(t), hay);

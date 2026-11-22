@@ -21,6 +21,8 @@
   const polo = $derived(POLOS.find((p) => p.id === id)!);
 
   let geo = $state<GeoInterior | null>(null);
+  /** The company lot picked, on the map or in the panel (its index). */
+  let loteSel = $state<number | null>(null);
   let error = $state<string | null>(null);
 
   $effect(() => {
@@ -56,7 +58,7 @@
 <svelte:window onkeydown={onKey} />
 
 {#if geo}
-  <InteriorPolo {geo} />
+  <InteriorPolo {geo} bind:loteSel />
 {:else}
   <p class="cargando">{error ?? 'Entrando al polo…'}</p>
 {/if}
@@ -78,7 +80,7 @@
     <p class="ayuda">Arrastra para moverte, la rueda acerca. Esc vuelve al tablero.</p>
   </nav>
 </div>
-<FrentesPolo {id} />
+<FrentesPolo {id} bind:loteSel />
 <CatalogoObras />
 
 <style>
