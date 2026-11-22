@@ -31,6 +31,10 @@ export type Tren = Marcha & {
   combustible: number;
   combustibleDe: string | null;
   entregadoCombustible: number;
+  /** Imports aboard (tonnes), loaded at a port for its next stop, the port they came off, and what it has delivered so far (`comercioMar.ts`). */
+  importacion: number;
+  importacionDe: string | null;
+  importado: number;
 };
 
 /**
@@ -81,6 +85,9 @@ export function crearTren(red: Red, def: NuevoTren, costo?: CostoTramo): Tren | 
     combustible: 0,
     combustibleDe: null,
     entregadoCombustible: 0,
+    importacion: 0,
+    importacionDe: null,
+    importado: 0,
   };
 }
 

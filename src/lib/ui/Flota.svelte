@@ -13,6 +13,7 @@
   import { CARGA_POR_TREN } from '$lib/domain/exportaciones';
   import { BARRILES_POR_TANQUE } from '$lib/domain/combustibles';
   import { TONELADAS_ABASTECEDOR } from '$lib/domain/plataformas';
+  import { cargaDeClase, NOMBRE_CARGA, toneladasDeClase } from '$lib/domain/comercioMar';
   import { refineria } from '$lib/domain/petroleo';
   import { sim, type Unidad } from '$lib/state/simulacion.svelte';
   import { tablero, type TipoUnidad } from '$lib/state/tablero.svelte';
@@ -274,6 +275,25 @@
         <div><dt>Ha exportado</dt><dd class="mono">{Math.round(ficha.u.exportado).toLocaleString('es-MX')} t</dd></div>
         <div><dt>Carga nacional</dt><dd class="mono">{Math.round(ficha.u.cargaNacional).toLocaleString('es-MX')} t a bordo</dd></div>
         <div><dt>Ha movido</dt><dd class="mono">{Math.round(ficha.u.movidoNacional).toLocaleString('es-MX')} t nacionales</dd></div>
+        {#if ficha.u.importacion > 0 || ficha.u.importado > 0}
+          <div>
+            <dt>Importación</dt>
+            <dd class="mono">{barriles(ficha.u.importacion)} t a bordo{#if ficha.u.importacionDe}{` · de ${nombreCorto(ficha.u.importacionDe)}`}{/if}</dd>
+          </div>
+          <div><dt>Ha llevado</dt><dd class="mono">{barriles(ficha.u.importado)} t importadas tierra adentro</dd></div>
+        {/if}
+      {/if}
+      {#if ficha.u.tipo === 'barco' && cargaDeClase(ficha.u.clase)}
+        {@const tipoCarga = cargaDeClase(ficha.u.clase)!}
+        {#if ficha.u.paradas.some((p) => p.startsWith('puerta:'))}
+          <div><dt>Carga</dt><dd>{NOMBRE_CARGA[tipoCarga]}, <span class="mono">{barriles(toneladasDeClase(ficha.u.clase))}</span> t</dd></div>
+          <div><dt>Exportación</dt><dd class="mono">{barriles(ficha.u.exportacion)} t a bordo</dd></div>
+          <div><dt>Importación</dt><dd class="mono">{barriles(ficha.u.importacion)} t a bordo</dd></div>
+          <div><dt>Ha exportado</dt><dd class="mono">{barriles(ficha.u.exportado)} t</dd></div>
+          <div><dt>Ha importado</dt><dd class="mono">{barriles(ficha.u.importado)} t</dd></div>
+        {:else}
+          <div class="aviso-carga">Sin salida al mundo en su vuelta: no lleva comercio exterior (el cabotaje entre puertos del país aún no cuenta).</div>
+        {/if}
       {/if}
       {#if ficha.u.tipo === 'barco' && ficha.u.clase === 'abastecedor'}
         <div><dt>Abasto</dt><dd class="mono">{barriles(ficha.u.abasto)} de {barriles(TONELADAS_ABASTECEDOR)} t a bordo</dd></div>
@@ -642,6 +662,13 @@
   dd {
     margin: 0;
     text-align: right;
+  }
+
+  dl > .aviso-carga {
+    display: block;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.35;
   }
 
   .acciones {

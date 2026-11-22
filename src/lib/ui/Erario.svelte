@@ -194,6 +194,21 @@
     const año = añoDe(sim.horas);
     return { año, t: sim.exportacion.porAño[String(año)] ?? 0, total: sim.exportacion.total };
   });
+  /** What the player's ships exported and imported this game year, and the imports the trains took inland. */
+  const mar = $derived.by(() => {
+    sim.horas;
+    const año = String(añoDe(sim.horas));
+    const c = sim.comercio;
+    const it = sim.importacionTren;
+    return {
+      exp: c.exportado.porAño[año] ?? 0,
+      imp: c.importado.porAño[año] ?? 0,
+      detalle:
+        `Tus portacontenedores, graneleros y ro-ro: exportado es lo que llevaron de los puertos a una salida al mundo; importado, lo que trajeron de ella a los puertos que lo piden. ` +
+        `En total, ${personas(c.exportado.total)} t exportadas y ${personas(c.importado.total)} t importadas.\n` +
+        `Tus trenes llevaron tierra adentro ${personas(it.porAño[año] ?? 0)} t importadas este año (${personas((it.tkmPorAño[año] ?? 0) / 1e6)} millones de toneladas-km).`,
+    };
+  });
   /** Tonnes, short enough for the bar as they grow: "9,790", "262 mil", "2.6 M". */
   const toneladas = (n: number) =>
     n < 1e5 ? personas(n) : n < 1e6 ? `${Math.round(n / 1e3).toLocaleString('es-MX')} mil` : `${(n / 1e6).toLocaleString('es-MX', { maximumFractionDigits: 1 })} M`;
@@ -290,12 +305,18 @@
     </div>
     <div
       class="celda doble"
-      title={`Exportado: lo que tus trenes llevaron de un origen a una salida del país (aduana fronteriza, puerto o aeropuerto); en total, ${personas(exportado.total)} t.\nNacional: lo que entregaron de una parada a la siguiente; este año ${personas(nacional.tkm / 1e6)} millones de toneladas-km, en total ${personas(nacional.total)} t.`}
+      title={`Exportado: lo que tus trenes llevaron de un origen a una salida del país (aduana fronteriza, puerto o aeropuerto); en total, ${personas(exportado.total)} t.\nNacional: lo que entregaron de una parada a la siguiente; este año ${personas(nacional.tkm / 1e6)} millones de toneladas-km, en total ${personas(nacional.total)} t.\n\nBarcos: este año exportaron ${personas(mar.exp)} t e importaron ${personas(mar.imp)} t. ${mar.detalle}`}
     >
       <span class="label export">Exportado {exportado.año}</span>
       <span class="valor"><b class="mono export">{toneladas(exportado.t)}</b> t</span>
       <span class="label">Carga nacional</span>
       <span class="valor"><b class="mono">{toneladas(nacional.t)}</b> t</span>
+    </div>
+    <div class="celda doble opcional mar-celda" title={mar.detalle}>
+      <span class="label mar">Barcos · exportado</span>
+      <span class="valor"><b class="mono">{toneladas(mar.exp)}</b> t</span>
+      <span class="label mar">Importado</span>
+      <span class="valor"><b class="mono">{toneladas(mar.imp)}</b> t</span>
     </div>
     {#if refino && combustible}
       <!-- Crude run, and the share of the fuel the states got this year that came from the country (the rest, imported: in the title). -->
@@ -427,6 +448,10 @@
     color: #fcd34d;
   }
 
+  .mar {
+    color: #7dd3fc;
+  }
+
   .agotado {
     color: #ff9b9b;
   }
@@ -475,6 +500,13 @@
 
     .obras-via .solo-angosto {
       display: inline;
+    }
+  }
+
+  /* The ships' cell needs a little more room than the other wide ones; its figures stay in the exports' title. */
+  @media (max-width: 1560px) {
+    .celda.mar-celda {
+      display: none;
     }
   }
 

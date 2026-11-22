@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 22 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos y los combustibles.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles y el comercio por mar.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -53,7 +53,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [AFAC, Estadística operativa de aeropuertos 2006–2026](https://www.gob.mx/cms/uploads/attachment/file/1112825/producto-aeropuertos-2006-2026-sep-27102026.xlsx) | Carga nacional e internacional de cada aeropuerto, mes por mes, de 2006 a septiembre de 2026: la serie del modo Realidad | Octubre de 2026 | Dato oficial público |
 | [INEGI, Exportaciones por Entidad Federativa](https://www.inegi.org.mx/programas/exporta_ef/) | Valor de lo que exporta cada estado, por subsector, de 2007 a 2025 (datos abiertos) | 2026 | Dato oficial público |
 | [ANAM, informe mensual de diciembre de 2025](https://www.anam.gob.mx/wp-content/uploads/IM_12_2025-.pdf) y [decreto de creación (DOF, 14 de julio de 2021)](https://www.dof.gob.mx/nota_detalle.php?codigo=5623945&fecha=14/07/2021) | Recaudación, operaciones y valor de las operaciones de cada aduana en 2025; la creación de la ANAM | 2021 y 2026 | Documento oficial público |
-| [ATTRAPI, Anuario Estadístico Ferroviario 2025, tablas A9 a A13](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas que salen del país por tren cada año (2017–2025), por frontera y por puerto; el tráfico interior (carga nacional); la gasolina, el diésel y el combustóleo por tren en 2025 (carga por producto, p. 72) | 2026 | Documento oficial público |
+| [ATTRAPI, Anuario Estadístico Ferroviario 2025, tablas A9 a A13](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas que salen del país por tren cada año (2017–2025), por frontera y por puerto; las que entran por tren por cada puerto (tabla A12); el tráfico interior (carga nacional); la gasolina, el diésel y el combustóleo por tren en 2025 (carga por producto, p. 72) | 2026 | Documento oficial público |
 | Pemex, Form 20-F ante la SEC de [2018](https://www.sec.gov/Archives/edgar/data/0000932782/000119312519129698/d632951d20f.htm), [2019](https://www.sec.gov/Archives/edgar/data/932782/000119312520136835/d850870d20f.htm) y [2020](https://www.sec.gov/Archives/edgar/data/932782/000119312521162651/d106092d20f.htm) | Crudo procesado por cada refinería de 2018 a 2020 y su estado en 2018; el inicio del Programa de Rehabilitación; la Olmeca autorizada; la coquizadora de Tula suspendida | 2019–2021 | Documento oficial público |
 | [ASF, auditoría 2021-0219, Programa de Rehabilitaciones del Sistema Nacional de Refinación](https://www.asf.gob.mx/Trans/Informes/IR2021c/Documentos/Auditorias/2021_0219_a.pdf) | Capacidad de diseño, utilizada en 2021 y óptima de cada refinería; lo que el programa requería, lo que se le dio y lo que cubrió | Cuenta Pública 2021 (enero de 2023) | Documento oficial público |
 | [Pemex, Informe Anual 2023](https://gaceta.diputados.gob.mx/PDF/65/2024/may/Pemex-20240514.pdf) (enviado al Congreso) | Proceso de 2022 y 2023; Tula, Salina Cruz y Minatitlán en 2023; Deer Park en 2022 y 2023; la producción que sustenta la Olmeca; lo que movió en 2023 por ducto, por tierra y por mar, y su flota | Mayo de 2024 | Documento oficial público |
@@ -74,7 +74,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [CNH, capa de terminales de almacenamiento de Pemex](https://geomaticasig1.semarnat.gob.mx/arcgis/rest/services/Hosted/Terminal_de_almacenamiento_Pemex/FeatureServer/1) | La ubicación de cada terminal (copia en el servidor de la SEMARNAT) | 2016 | Documento oficial público |
 | [CNE, datos abiertos de petrolíferos](https://www.gob.mx/cne/articulos/consulta-de-datos-abiertos) | Litros de gasolina y diésel vendidos en las gasolineras de cada estado y de turbosina entregados en sus aeródromos: el consumo de cada estado | Abril a diciembre de 2018 | Dato oficial público |
 | ASF, auditorías [474-DE](https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0474_a.pdf) y [476](https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0476_a.pdf) a Pemex Logística | Lo que movió Pemex en 2018 por ducto, autotanque, carro tanque y buque tanque; su flota al cierre de 2018 | Cuenta Pública 2018 | Documento oficial público |
-| [SEMAR, Anuario Estadístico de los Puertos de México 2024](https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024) | Petróleo y derivados por puerto en 2018 y 2024: importación, exportación y cabotaje; la carga que sale de Dos Bocas y Ciudad del Carmen a las plataformas y cuántos barcos la llevan; el crudo que exporta Cayo Arcas | 2025 | Documento oficial público |
+| [SEMAR, Anuario Estadístico de los Puertos de México 2024](https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024) | Petróleo y derivados por puerto en 2018 y 2024: importación, exportación y cabotaje; la carga que sale de Dos Bocas y Ciudad del Carmen a las plataformas y cuántos barcos la llevan; el crudo que exporta Cayo Arcas; lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (contenerizada, granel agrícola y mineral, general suelta) y en cuántos barcos | 2025 | Documento oficial público |
 | [EIA (gobierno de EUA), unidades de International Energy Statistics](https://www.eia.gov/cfapps/ipdbproject/docs/unitswithpetro.php) | Barriles por tonelada de gasolina, diésel y turbosina, para pasar a toneladas lo que cabe en un tren | Consultado el 22 de noviembre de 2026 | Dato oficial público (gobierno de EUA) |
 | [Pemex, boletines regionales de Tampico 2019-004 y 2024-005](https://www.pemex.com/saladeprensa/boletines_regionales/Paginas/2024-005_tampico.aspx) | Lo que carga un buque tanque de su flota: 320 mil barriles. El sitio de Pemex no deja leerlos automáticamente; la cifra es la que muestra el buscador | 2019 y 2024 | Comunicado oficial |
 | Proyectos México, fichas [0770](https://www.proyectosmexico.gob.mx/proyecto_inversion/770-cfe-gasoducto-sur-de-texas-tuxpan-marino/), [0771](https://www.proyectosmexico.gob.mx/proyecto_inversion/771-cfe-gasoducto-la-laguna-aguascalientes/) y [0767](https://www.proyectosmexico.gob.mx/proyecto_inversion/767-cfe-gasoducto-samalayuca-sasabe/) y [ciclo de inversión en hidrocarburos](https://www.proyectosmexico.gob.mx/como-invertir-en-mexico/ciclo-inversion/ciclos-hidrocarburos/) | Inicio de operación del Sur de Texas–Tuxpan, La Laguna–Aguascalientes y Samalayuca–Sásabe; kilómetros de oleoductos y poliductos de Pemex | 2021 y 2026 | Documento oficial público |
@@ -1076,7 +1076,7 @@ los servicios regulares de las navieras.
 | Cabo Corrientes | Portacontenedores | Róterdam → Veracruz → Altamira → Róterdam | 19,472 km | 5,256 km | 27.8 d |
 | Arrecife Alacranes | Buque tanque | Salina Cruz → Lázaro Cárdenas → Manzanillo → Mazatlán → Guaymas → Salina Cruz | 4,781 km | 4,781 km | 12.7 d |
 | Isla Tiburón | Buque tanque | Coatzacoalcos → Dos Bocas → Progreso → Coatzacoalcos | 1,311 km | 1,311 km | 5.1 d |
-| Bahía de Banderas | Ro-ro de autos | Lázaro Cárdenas → Veracruz → Lázaro Cárdenas, por Panamá | 11,396 km | 11,396 km | 16.1 d |
+| Bahía de Banderas | Ro-ro de autos | Lázaro Cárdenas → Veracruz → Shanghái → Lázaro Cárdenas, de costa a costa por Panamá | 37,888 km | 15,074 km | 51.2 d |
 | Laguna de Términos | Granelero | Guaymas → Shanghái → Guaymas | 25,838 km | 3,024 km | 48.2 d |
 
 "Por vuelta" es todo el circuito, travesías incluidas; "en el tablero", la parte entre las
@@ -1085,7 +1085,8 @@ salidas al mundo. El ciclo completo suma la navegación y todas las escalas. Una
 
 - **Mar de Cortés y Cabo Corrientes**: las líneas regulares de contenedores, que escalan donde
   esos tráficos escalan en la realidad (Asia en Manzanillo y Lázaro Cárdenas; Europa en
-  Veracruz y Altamira).
+  Veracruz y Altamira). Traen importaciones y se llevan exportaciones (ver
+  [El comercio por mar](#el-comercio-por-mar)).
 - **Arrecife Alacranes**: la distribución de combustibles por la costa del Pacífico desde la
   refinería de Salina Cruz. Sale cargado con lo que le sobra a Salina Cruz (ver
   [Los combustibles](#los-combustibles)).
@@ -1094,9 +1095,12 @@ salidas al mundo. El ciclo completo suma la navegación y todas las escalas. Una
   sobra combustible.
 - **Diez barcos abastecedores** llevan el abasto a los complejos de plataformas desde Dos Bocas y
   Ciudad del Carmen (ver [Las plataformas del Golfo](#las-plataformas-del-golfo)).
-- **Bahía de Banderas**: autos de costa a costa por el Canal, el rodeo largo que el corredor
-  del Istmo existe para acortar.
-- **Laguna de Términos**: graneles minerales de Sonora hacia Asia.
+- **Bahía de Banderas**: trae autos de Asia a los dos litorales y se lleva carga general de
+  Lázaro Cárdenas y Veracruz. De un litoral al otro va por el Canal, el rodeo largo que el
+  corredor del Istmo existe para acortar. Hasta el 22 de noviembre de 2026 iba y venía entre
+  Lázaro Cárdenas y Veracruz sin tocar una salida al mundo; ahora sigue a Shanghái, porque
+  entre puertos del país sería cabotaje, y el cabotaje aún no cuenta.
+- **Laguna de Términos**: graneles minerales y agrícolas de Sonora hacia Asia.
 
 Detalle por tramo:
 
@@ -1110,7 +1114,9 @@ Detalle por tramo:
   (1.2 d) · Guaymas–Salina Cruz 2,341 km (3.8 d).
 - **Isla Tiburón**: Coatzacoalcos–Dos Bocas 157 km (6 h) · Dos Bocas–Progreso 516 km (20 h) ·
   Progreso–Coatzacoalcos 638 km (1.0 d).
-- **Bahía de Banderas**: Lázaro Cárdenas–Veracruz 5,698 km (7.5 d), y de regreso igual.
+- **Bahía de Banderas**: Lázaro Cárdenas–Veracruz 5,698 km (7.5 d) · Veracruz–Shanghái 18,917
+  km (24.0 d, de ellos 11,407 km de travesía; sale por Panamá) · Shanghái–Lázaro Cárdenas 13,273
+  km (16.6 d).
 - **Laguna de Términos**: Guaymas–Shanghái 12,919 km (22.4 d, de ellos 11,407 km de
   travesía), y de regreso igual.
 
@@ -2182,6 +2188,81 @@ Tráfico interior por tren (anuario ferroviario, tabla A9, millones de toneladas
 36.90 en 2019, 36.16 en 2020, 37.28 en 2021, 36.03 en 2022, 37.49 en 2023, 36.75 en 2024 y 30.55
 en 2025.
 
+### El comercio por mar
+
+Los portacontenedores, graneleros y ro-ro del jugador llevan el comercio exterior de los
+puertos (`domain/comercioMar.ts`, datos en `src/lib/domain/datos/comercio-mar.json`, que arma
+`scripts/comercio/gen-comercio-mar.mjs`). El puerto es el trasbordo entre el tren y el barco.
+
+- **Tres tipos de carga, uno por clase de barco**: el portacontenedores lleva contenedores
+  (la carga contenerizada de la SEMAR), el granelero granel (agrícola y mineral) y el ro-ro
+  carga general (la suelta: los autos y lo demás). Todo en toneladas.
+- **Lo que lleva un barco por escala** es el promedio de 2024 en los puertos de altura (SEMAR):
+  **13,972 toneladas** un portacontenedores (59.4 millones de toneladas en 4,249 barcos) y
+  **29,920** un granelero (43.1 millones en 1,439). Para el ro-ro la SEMAR no da cuántos barcos
+  llevaron la carga general: **8,000 toneladas**, unos 6,000 autos, es **estimación del juego**.
+- **Exportaciones.** Cada puerto junta en su patio, por tipo, lo que exportó por mar en 2024.
+  Lo que le llega por camión entra solo, a su ritmo real; lo que le llega por tren es lo que
+  descargan ahí los trenes del jugador. Su carga de exportación se sigue contando como
+  exportada por tren (como antes) y además espera en el patio un barco, como el tipo que más
+  exporta ese puerto. Qué parte llega por tren: la de la ATTRAPI de 2025 (tabla A13) entre la
+  de la SEMAR de 2024; es **estimación del juego**, por mezclar dos años y dos fuentes.
+- **Importaciones.** Cada puerto pide, por tipo, lo que importó por mar en 2024. Un barco carga
+  importaciones en la salida al mundo (Shanghái o Róterdam), hasta llenarse, y las deja en los
+  puertos de su vuelta que las piden. Lo que sale del puerto por tren (ATTRAPI 2025, tabla
+  A12) espera en su patio a los trenes del jugador, que lo llevan tierra adentro y lo entregan
+  en su siguiente parada; se cuenta en toneladas y toneladas-km. Ese patio se llena al ritmo
+  de lo que entra por tren ese año, traiga quien traiga la carga.
+- **En cada escala**, en un puerto: primero baja la importación que ese puerto pide, luego sube
+  la exportación de su tipo hasta llenar el barco. En la salida al mundo: lo que lleva de
+  exportación se cuenta como **exportado por mar** y carga importaciones. Un barco cuya vuelta
+  no toca una salida al mundo no carga nada: entre puertos del país sería cabotaje, que todavía
+  no se cuenta.
+- **El patio de un puerto guarda hasta un mes** de su exportación, de su importación por tren y
+  de lo que pide; la partida abre con una semana. Lo que no cabe se va en los barcos de las
+  navieras: no es del jugador.
+- **El juego usa 2024 para todos los años.** El anuario de puertos por tipo de carga de 2018
+  estaba en sct.gob.mx, que ya no existe.
+
+Los barcos del jugador son pocos al lado de lo que mueve un puerto: Manzanillo importó en 2024
+unos 47 mil toneladas de contenedores al día: más de tres portacontenedores diarios. Mar de
+Cortés trae una carga cada 37 días. Lo que se gana con más barcos se ve en el puerto: al pasar
+el puntero dice cuánto espera barco, cuánto pide por importar, cuánta importación espera tren
+y cuánto movieron ahí tus barcos. La barra de arriba da lo que tus barcos exportaron e
+importaron en el año (en pantallas de menos de 1,560 px va en el título de la celda de
+exportado); la ficha de cada barco, qué lleva y cuánto ha movido; la de cada tren, la
+importación a bordo y la que ha llevado.
+
+Lo que exportó e importó cada puerto por mar en 2024 (SEMAR) y lo que entró y salió por tren en
+2025 (ATTRAPI), millones de toneladas; la última columna es el tipo en que se convierte la carga
+de exportación que llega en tren:
+
+| Puerto | Exp. contenedores | Exp. granel | Exp. general | Imp. contenedores | Imp. granel | Imp. general | Exp. por tren | Imp. por tren | El tren trae |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Ensenada | 0.52 | 0.00 | 0.00 | 1.62 | 0.02 | 0.52 | — | — | contenedores |
+| Guaymas | 0.07 | 2.39 | 0.00 | 0.05 | 0.28 | 0.02 | 0.59 | 0.15 | granel |
+| Topolobampo | 0.00 | 0.00 | 0.00 | 0.00 | 0.76 | 0.10 | 0.10 | 0.12 | granel |
+| Mazatlán | 0.22 | 0.00 | 0.04 | 0.20 | 0.00 | 0.89 | 0.39 | 0.15 | contenedores |
+| Manzanillo | 6.27 | 1.45 | 0.00 | 17.31 | 2.96 | 2.07 | 0.20 | 4.89 | contenedores |
+| Lázaro Cárdenas | 4.12 | 1.24 | 1.37 | 10.00 | 7.89 | 1.49 | 0.21 | 1.73 | contenedores |
+| Salina Cruz | 0.00 | 0.02 | 0.00 | 0.00 | 0.01 | 0.07 | — | — | granel |
+| Puerto Chiapas | 0.09 | 0.03 | 0.00 | 0.01 | 0.00 | 0.00 | — | — | contenedores |
+| Altamira | 3.27 | 0.87 | 1.00 | 3.89 | 3.72 | 4.54 | 0.12 | 1.50 | contenedores |
+| Tampico | 0.14 | 0.44 | 0.10 | 0.03 | 0.34 | 1.11 | 0.21 | 0.46 | granel |
+| Tuxpan | 0.21 | 0.00 | 0.15 | 0.07 | 1.93 | 0.15 | — | — | contenedores |
+| Veracruz | 3.12 | 0.07 | 1.35 | 7.44 | 12.26 | 1.67 | 0.34 | 8.25 | contenedores |
+| Coatzacoalcos | 0.09 | 0.15 | 0.27 | 0.01 | 2.36 | 0.35 | 0.35 | 1.07 | carga general |
+| Dos Bocas | 0.00 | 0.22 | 0.00 | 0.00 | 0.01 | 0.00 | — | — | granel |
+| Progreso | 0.33 | 0.02 | 0.03 | 0.29 | 3.63 | 0.09 | — | — | contenedores |
+
+En total, los 15 puertos exportaron por mar 29.65 millones de toneladas e importaron 90.15 (sin
+petróleo ni derivados, que van en los buques tanque; ver [Los combustibles](#los-combustibles)).
+Por tren llegaron a ellos 2.51 millones para exportar y salieron 18.32 importadas. Topolobampo y
+Mazatlán reciben por tren más de lo que exportan por mar según la SEMAR: ahí toda la exportación
+llega en tren. Puerto Chiapas no es salida de exportación de los trenes. La Paz, Acapulco y
+Ciudad del Carmen quedan por ahora sin comercio por mar: la tabla de La Paz no se pudo leer, y
+los otros dos aún no se capturan.
+
 ---
 
 ## 11. Decisiones de diseño
@@ -2396,6 +2477,12 @@ en 2025.
   ámbar y rojo.
 - **Las estaciones llegan hasta 15 km.** Más lejos, el sitio no tiene servicio de tren y su
   ficha dice a cuántos km queda la vía.
+- **En el mar, el jugador es una naviera más.** *(22 nov 2026.)* En el tren, los trenes del
+  jugador llevan toda la carga del juego (los privados solo ocupan la vía). En el mar no: un
+  puerto como Manzanillo recibe más de tres portacontenedores al día. Por eso cada puerto
+  genera su comercio real completo, los barcos del jugador se llevan lo que alcanzan, y lo que
+  no cabe en el patio en un mes se va en otros barcos. Crecer la flota se nota en lo que el
+  puerto deja de tener esperando.
 
 ---
 
@@ -2404,6 +2491,16 @@ en 2025.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 22 de noviembre de 2026
+
+**Comercio por mar (anuario de puertos de la SEMAR de 2024)**
+
+- **Tipos de carga.** Contenedores es la «general contenerizada»; granel, la suma del agrícola y
+  el mineral; carga general, la «general suelta». El petróleo y sus derivados se dejan fuera:
+  ya los llevan los buques tanque.
+- **La Paz:** su tabla de carga no se pudo leer del PDF; queda sin comercio por mar.
+- **Topolobampo** no exportó nada de altura en 2024 según la SEMAR, pero la ATTRAPI cuenta 0.10
+  millones de toneladas que salieron del país por tren por ahí en 2025. Se respeta: el patio
+  junta lo que traigan los trenes.
 
 **Puertos**
 
@@ -2622,6 +2719,12 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Terminal marítima**: la de Pemex en la costa que recibe y manda buques tanque (Pajaritos,
   Tuxpan, Madero, Salina Cruz y Guaymas).
 - **Cabotaje**: el transporte por mar entre puertos del mismo país.
+- **Altura**: el tráfico por mar con otros países: importación y exportación.
+- **Carga contenerizada, granel y general suelta**: los tipos de carga de la SEMAR. La
+  contenerizada va en contenedores; el granel (agrícola o mineral) va suelto en la bodega; la
+  general suelta va en piezas, como los autos de un ro-ro.
+- **Trasbordo**: pasar la carga de un medio a otro; en el juego, del tren al barco en un
+  puerto, o del barco al tren.
 - **Buque tanque, carro tanque, autotanque**: el barco, el vagón de tren y el camión (la pipa) que
   llevan líquidos.
 - **Zona de ductos**: en el juego, las refinerías unidas por sus poliductos y la parte de cada

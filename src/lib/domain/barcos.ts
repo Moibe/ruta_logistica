@@ -52,8 +52,7 @@ export type Barco = Marcha & {
   clase: ClaseBarco;
   /**
    * Fuel aboard (barrels), the refinery it came from, and the barrels it has
-   * delivered so far. Only tankers carry it (`combustibles.ts`); the other
-   * classes sail empty for now.
+   * delivered so far. Only tankers carry it (`combustibles.ts`).
    */
   combustible: number;
   combustibleDe: string | null;
@@ -61,6 +60,18 @@ export type Barco = Marcha & {
   /** Supplies aboard and delivered so far (tonnes): only supply vessels carry them. */
   abasto: number;
   entregadoAbasto: number;
+  /**
+   * Trade aboard (`comercioMar.ts`), tonnes: exports loaded at Mexican ports
+   * (and the port each part came from), for the next gateway, and imports
+   * loaded at a gateway, for the ports that ask for them. Container ships,
+   * bulk carriers and car carriers only, each with its kind of cargo.
+   */
+  exportacion: number;
+  exportacionDe: Record<string, number>;
+  importacion: number;
+  /** Tonnes it has exported (delivered at a gateway) and imported (delivered at a port) so far. */
+  exportado: number;
+  importado: number;
 };
 
 /** Cool tints only: cyan is the sea colour, the warm ones belong to the trains. */
@@ -122,13 +133,18 @@ export function crearBarco(mar: Mar, def: NuevoBarco): Barco | null {
     nombre: def.nombre,
     color: def.color,
     clase: def.clase,
-    // Tankers and supply vessels load and unload at their stops: the clock hands their arrivals to the simulation.
-    ...(def.clase === 'tanque' || def.clase === 'abastecedor' ? { llegadas: marcha.estado === 'parada' ? [marcha.pierna] : [] } : {}),
+    // Every ship loads and unloads at its stops: the clock hands its arrivals to the simulation.
+    llegadas: marcha.estado === 'parada' ? [marcha.pierna] : [],
     combustible: 0,
     combustibleDe: null,
     entregadoCombustible: 0,
     abasto: 0,
     entregadoAbasto: 0,
+    exportacion: 0,
+    exportacionDe: {},
+    importacion: 0,
+    exportado: 0,
+    importado: 0,
   };
 }
 
@@ -177,9 +193,11 @@ export type ServicioBarco = { clase: ClaseBarco; paradas: string[]; desfase: num
  * Services the board starts with. The liner loops call where those trades
  * really call (Asia at Manzanillo and Lázaro Cárdenas, Europe at Veracruz and
  * Altamira); the tankers run the coastal fuel distribution out of the Salina
- * Cruz and Gulf refineries; one car carrier goes coast to coast through
- * Panama — the long way round that the isthmus railway exists to shortcut.
- * All start under way, `desfase` hours out of their first stop.
+ * Cruz and Gulf refineries; the bulk carrier takes Sonora's minerals and grain
+ * to Asia; one car carrier brings Asia's cars to both coasts, going through
+ * Panama from one to the other — the long way round that the isthmus railway
+ * exists to shortcut. All start under way, `desfase` hours out of their first
+ * stop.
  */
 export const SERVICIOS_BARCO: ServicioBarco[] = [
   { clase: 'contenedores', paradas: ['puerta:asia', 'puerto:manzanillo', 'puerto:lazaro-cardenas'], desfase: 22 },
@@ -190,7 +208,7 @@ export const SERVICIOS_BARCO: ServicioBarco[] = [
     desfase: 10,
   },
   { clase: 'tanque', paradas: ['puerto:coatzacoalcos', 'puerto:dos-bocas', 'puerto:progreso'], desfase: 6 },
-  { clase: 'roro', paradas: ['puerto:lazaro-cardenas', 'puerto:veracruz'], desfase: 70 },
+  { clase: 'roro', paradas: ['puerto:lazaro-cardenas', 'puerto:veracruz', 'puerta:asia'], desfase: 70 },
   { clase: 'granel', paradas: ['puerto:guaymas', 'puerta:asia'], desfase: 18 },
   // Supply vessels to the offshore complexes, from Dos Bocas (the big base) and Ciudad del Carmen,
   // enough for what each complex took in 2018 with some to spare (`plataformas.ts`), spread over their loop.

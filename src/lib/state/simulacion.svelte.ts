@@ -83,9 +83,39 @@ import {
   presupuestar,
   type ObraPolo,
 } from '$lib/domain/obras';
-import { POLOS, SITIOS } from '$lib/domain/sitios';
+import {
+  cargaDeClase,
+  comercioDe,
+  DIAS_INICIO,
+  DIAS_PATIO,
+  flujoExportacion,
+  flujoImportacion,
+  flujoImportacionTren,
+  PUERTOS_COMERCIO,
+  TIPOS_CARGA,
+  topeExportacion,
+  toneladasDeClase,
+  type TipoCarga,
+} from '$lib/domain/comercioMar';
+import { POLOS, puerta, SITIOS } from '$lib/domain/sitios';
 
 const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
+
+/** Tonnes moved, in all, by year, by port and by kind of cargo. */
+export type Registro = { total: number; porAño: Record<string, number>; porPuerto: Record<string, number>; porTipo: Record<string, number> };
+const registroVacio = (): Registro => ({ total: 0, porAño: {}, porPuerto: {}, porTipo: {} });
+/** A new record with `ton` more, that year, of that kind, shared out among the ports in `puertos`. */
+function sumar(r: Registro, ton: number, año: string, puertos: Record<string, number>, tipo: string): Registro {
+  const porPuerto = { ...r.porPuerto };
+  for (const [p, t] of Object.entries(puertos)) porPuerto[p] = (porPuerto[p] ?? 0) + t;
+  return {
+    total: r.total + ton,
+    porAño: { ...r.porAño, [año]: (r.porAño[año] ?? 0) + ton },
+    porPuerto,
+    porTipo: { ...r.porTipo, [tipo]: (r.porTipo[tipo] ?? 0) + ton },
+  };
+}
+const porTipo = (f: (t: TipoCarga) => number) => Object.fromEntries(TIPOS_CARGA.map((t) => [t, f(t)])) as Record<TipoCarga, number>;
 import { COLORES_TREN, crearTren, ESPERA_TERMINAL_H, SERVICIOS, type Tren } from '$lib/domain/trenes';
 
 /**
@@ -233,6 +263,20 @@ class Simulacion {
    * year started being counted (the game opens on 1 December 2018).
    */
   #cuentas = new Map<string, { pais: Cuenta; estados: Map<string, Cuenta>; sinSalida: number; desde: number }>();
+  /**
+   * Sea trade (`comercioMar.ts`). What the player's ships have exported
+   * (delivered at a gateway, by the port it was loaded at) and imported
+   * (delivered at a port), replaced on every call.
+   */
+  comercio = $state.raw<{ exportado: Registro; importado: Registro }>({ exportado: registroVacio(), importado: registroVacio() });
+  /** The imports the player's trains have taken inland from the ports: tonnes and tonne-km, by year and by port. */
+  importacionTren = $state.raw<Registro & { tkm: number; tkmPorAño: Record<string, number> }>({ ...registroVacio(), tkm: 0, tkmPorAño: {} });
+  /** Each port's exports waiting for a ship, by kind, tonnes. Mutated by the clock. */
+  #patiosPuerto = new Map<string, Record<TipoCarga, number>>();
+  /** Each port's imports asked for and not yet brought, by kind, tonnes. */
+  #pedidos = new Map<string, Record<TipoCarga, number>>();
+  /** Each port's imports waiting for a train, tonnes. */
+  #patiosImportacion = new Map<string, number>();
   /** Supplies stored at each offshore complex, tonnes (`plataformas.ts`). Mutated by the clock. */
   #reservas = new Map<string, number>(COMPLEJOS.map((c) => [c.id, abastoDiario(c.id, 2018) * DIAS_RESERVA * 0.5]));
   /** How well each complex has been supplied over the last month (0–1). Mutated by the clock. */
@@ -338,6 +382,14 @@ class Simulacion {
         this.barcos = barcos;
         for (const e of ESTADOS_EXPORTADORES) this.#bodegas.set(e, flujoDelEstado(e, añoDe(this.horas)) * 24 * 7);
         for (const e of ESTADOS_PRODUCTIVOS) this.#bodegasNacional.set(e, flujoNacional(e, añoDe(this.horas)) * 24 * 7);
+        // The ports open with a week of their trade waiting.
+        const h = 24 * DIAS_INICIO;
+        for (const clave of PUERTOS_COMERCIO) {
+          const p = comercioDe(clave)!;
+          this.#patiosPuerto.set(clave, porTipo((t) => Math.min(flujoExportacion(p, t) * h, topeExportacion(p, t))));
+          this.#pedidos.set(clave, porTipo((t) => flujoImportacion(p, t) * h));
+          this.#patiosImportacion.set(clave, flujoImportacionTren(p) * h);
+        }
         this.#saturar();
         this.#cobrar();
         this.#actualizarEnergia(true);
@@ -347,6 +399,8 @@ class Simulacion {
         for (const b of barcos) if (b.clase === 'tanque') this.#cargarCombustible(b, b.paradas[0], BARRILES_POR_TANQUE);
         // Half the complexes' storage full, and a supply vessel that has just left its base sails loaded.
         for (const b of barcos) if (b.clase === 'abastecedor' && BASES_ABASTO.has(b.paradas[0])) b.abasto = TONELADAS_ABASTECEDOR;
+        // A cargo ship sails with what it loaded at its first stop.
+        for (const b of barcos) this.#comerciar(b, b.paradas[0], false);
         this.estado = 'lista';
       } catch (err) {
         console.error(err);
@@ -804,6 +858,9 @@ class Simulacion {
       nuevo.combustible = viejo.combustible;
       nuevo.combustibleDe = viejo.combustibleDe;
       nuevo.entregadoCombustible = viejo.entregadoCombustible;
+      nuevo.importacion = viejo.importacion;
+      nuevo.importacionDe = viejo.importacionDe;
+      nuevo.importado = viejo.importado;
       return nuevo;
     });
   }
@@ -821,6 +878,20 @@ class Simulacion {
       const f = flujoNacional(e, año);
       this.#bodegasNacional.set(e, Math.min((this.#bodegasNacional.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
     }
+    // The ports: exports come by road to the yard, imports are asked for, and what leaves by rail waits for a train.
+    for (const clave of PUERTOS_COMERCIO) {
+      const p = comercioDe(clave)!;
+      const patio = this.#patiosPuerto.get(clave);
+      const pedido = this.#pedidos.get(clave);
+      if (!patio || !pedido) continue;
+      for (const t of TIPOS_CARGA) {
+        patio[t] = Math.min(patio[t] + flujoExportacion(p, t) * horas, topeExportacion(p, t));
+        const f = flujoImportacion(p, t);
+        pedido[t] = Math.min(pedido[t] + f * horas, f * 24 * DIAS_PATIO);
+      }
+      const ft = flujoImportacionTren(p);
+      this.#patiosImportacion.set(clave, Math.min((this.#patiosImportacion.get(clave) ?? 0) + ft * horas, ft * 24 * DIAS_PATIO));
+    }
   }
 
   /** Export cargo waiting in a state, tonnes. */
@@ -829,12 +900,14 @@ class Simulacion {
   }
 
   /**
-   * A train got to a stop. It delivers the domestic cargo it brought from the
-   * last one (counted in tonnes and tonne-km). At an exit it unloads its export
-   * cargo (that's an export); anywhere else it loads the exports its state has
-   * waiting. Then fuel: it leaves what it carries where the state lacks it and,
-   * at a refinery, loads what is waiting in the yard. Domestic cargo fills the
-   * room left, for its next stop.
+   * A train got to a stop. It delivers the domestic cargo and the imports it
+   * brought from the last one (counted in tonnes and tonne-km). At an exit it
+   * unloads its export cargo (that's an export; at a port it waits there for a
+   * ship); anywhere else it loads the exports its state has waiting. Then
+   * fuel: it leaves what it carries where the state lacks it and, at a
+   * refinery, loads what is waiting in the yard. At a port it loads the
+   * imports waiting for a train. Domestic cargo fills the room left, for its
+   * next stop.
    */
   #atenderLlegadas(t: Tren) {
     const llegadas = t.llegadas!;
@@ -842,16 +915,43 @@ class Simulacion {
       const pierna = llegadas.shift()!;
       const destino = t.destinos[pierna];
       this.#entregarNacional(t, t.piernas[pierna].km);
+      this.#entregarImportacion(t, t.piernas[pierna].km);
       this.#exportar(t, destino);
       this.#descargarCombustible(t, destino);
       this.#cargarCombustible(t, destino, t.combustible + this.#espacioTren(t) / T_POR_BARRIL);
+      this.#cargarImportacion(t, destino);
       this.#cargarNacional(t, destino);
     }
   }
 
-  /** Tonnes a train still has room for: exports, fuel and domestic cargo share its net load. */
+  /** Tonnes a train still has room for: exports, imports, fuel and domestic cargo share its net load. */
   #espacioTren(t: Tren): number {
-    return Math.max(0, CARGA_POR_TREN - t.carga - t.cargaNacional - t.combustible * T_POR_BARRIL);
+    return Math.max(0, CARGA_POR_TREN - t.carga - t.importacion - t.cargaNacional - t.combustible * T_POR_BARRIL);
+  }
+
+  #entregarImportacion(t: Tren, km: number) {
+    if (t.importacion <= 0) return;
+    const r = this.importacionTren;
+    const año = String(añoDe(this.horas));
+    const ton = t.importacion;
+    this.importacionTren = {
+      ...sumar(r, ton, año, t.importacionDe ? { [t.importacionDe]: ton } : {}, 'tren'),
+      tkm: r.tkm + ton * km,
+      tkmPorAño: { ...r.tkmPorAño, [año]: (r.tkmPorAño[año] ?? 0) + ton * km },
+    };
+    t.importado += ton;
+    t.importacion = 0;
+    t.importacionDe = null;
+  }
+
+  /** At a port, load the imports waiting for a train, for the next stop. */
+  #cargarImportacion(t: Tren, destino: string) {
+    const hay = this.#patiosImportacion.get(destino) ?? 0;
+    const sube = Math.min(this.#espacioTren(t), hay);
+    if (sube < 1) return;
+    this.#patiosImportacion.set(destino, hay - sube);
+    t.importacion += sube;
+    t.importacionDe = destino;
   }
 
   /**
@@ -867,9 +967,63 @@ class Simulacion {
         this.#abastecerEscala(b, destino);
         continue;
       }
-      this.#descargarCombustible(b, destino);
-      this.#cargarCombustible(b, destino, BARRILES_POR_TANQUE);
+      if (b.clase === 'tanque') {
+        this.#descargarCombustible(b, destino);
+        this.#cargarCombustible(b, destino, BARRILES_POR_TANQUE);
+        continue;
+      }
+      this.#comerciar(b, destino);
     }
+  }
+
+  // ---- sea trade ---------------------------------------------------------------------------------
+
+  /**
+   * A container ship, bulk carrier or car carrier at a stop. At a gateway it
+   * delivers the exports aboard (that's an export by sea) and loads imports
+   * for the ports of its loop. At a port it unloads the imports asked for
+   * there, then loads exports of its kind — only if its loop leads to a
+   * gateway: between Mexican ports it would be cabotage, which isn't counted
+   * yet. `contar` false only loads (the opening fleet).
+   */
+  #comerciar(b: Barco, destino: string, contar = true) {
+    const tipo = cargaDeClase(b.clase);
+    if (!tipo) return;
+    const cabe = toneladasDeClase(b.clase);
+    const año = String(añoDe(this.horas));
+    if (puerta(destino)) {
+      if (b.exportacion > 0 && contar) {
+        this.comercio = { ...this.comercio, exportado: sumar(this.comercio.exportado, b.exportacion, año, b.exportacionDe, tipo) };
+        b.exportado += b.exportacion;
+      }
+      b.exportacion = 0;
+      b.exportacionDe = {};
+      if (b.paradas.some((p) => (comercioDe(p)?.imp[tipo] ?? 0) > 0)) b.importacion = Math.max(b.importacion, cabe);
+      return;
+    }
+    const pedido = this.#pedidos.get(destino);
+    const patio = this.#patiosPuerto.get(destino);
+    if (!pedido || !patio) return;
+    const baja = Math.min(b.importacion, pedido[tipo]);
+    if (baja >= 1) {
+      pedido[tipo] -= baja;
+      b.importacion -= baja;
+      b.importado += baja;
+      this.comercio = { ...this.comercio, importado: sumar(this.comercio.importado, baja, año, { [destino]: baja }, tipo) };
+    }
+    if (!b.paradas.some((p) => puerta(p))) return;
+    const sube = Math.min(patio[tipo], cabe - b.importacion - b.exportacion);
+    if (sube < 1) return;
+    patio[tipo] -= sube;
+    b.exportacion += sube;
+    b.exportacionDe[destino] = (b.exportacionDe[destino] ?? 0) + sube;
+  }
+
+  /** A port's trade now (tonnes): exports waiting for a ship and imports asked for, by kind, and imports waiting for a train. */
+  puertoAhora(clave: string): { exportacion: Record<TipoCarga, number>; pedido: Record<TipoCarga, number>; tren: number } | null {
+    const exportacion = this.#patiosPuerto.get(clave);
+    const pedido = this.#pedidos.get(clave);
+    return exportacion && pedido ? { exportacion, pedido, tren: this.#patiosImportacion.get(clave) ?? 0 } : null;
   }
 
   // ---- offshore supplies ------------------------------------------------------------------------
@@ -1096,6 +1250,10 @@ class Simulacion {
         porEstado,
       };
       t.exportado += t.carga;
+      // At a port it waits in the yard for a ship, as the kind the port exports most.
+      const p = comercioDe(destino);
+      const patio = this.#patiosPuerto.get(destino);
+      if (p && patio) patio[p.deTren] = Math.min(patio[p.deTren] + t.carga, topeExportacion(p, p.deTren));
       t.carga = 0;
       t.cargaDe = {};
       return;

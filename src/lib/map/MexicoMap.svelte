@@ -76,6 +76,7 @@
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
   import { AEROPUERTO, COMBUSTIBLE, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
   import { abastoDiario, BASES_ABASTO, CAYO_ARCAS, COMPLEJOS, produccionComplejo, type Complejo } from '$lib/domain/plataformas';
+  import { comercioDe, NOMBRE_CARGA, TIPOS_CARGA, type TipoCarga } from '$lib/domain/comercioMar';
 
   /**
    * The game board: Mexico alone, in detail, with the trains and ships running
@@ -431,6 +432,7 @@
   let hovered = $state.raw<Target | null>(null);
   let pointer = $state({ x: 0, y: 0 });
   let innerWidth = $state(0);
+  let innerHeight = $state(0);
   let status = $state<'cargando' | 'listo' | 'error'>('cargando');
 
   // Plain locals: read only when painting, rebuilt imperatively.
@@ -2743,6 +2745,14 @@
   const fmtMil = (n: number) => fmt.format(Math.round(n));
   /** Tonnes as millions: "3.55 Mt", "0.09 Mt". */
   const mt = (t: number) => `${(t / 1e6).toLocaleString('es-MX', { maximumFractionDigits: 2, minimumFractionDigits: t < 1e7 ? 2 : 1 })} Mt`;
+  /** "469 mil t de contenedores, 105 mil t de granel": the kinds with at least a thousand tonnes. */
+  const porTipos = (r: Record<TipoCarga, number>) =>
+    TIPOS_CARGA.filter((t) => r[t] >= 1000)
+      .map((t) => `${milT(r[t])} de ${NOMBRE_CARGA[t]}`)
+      .join(', ') || 'nada';
+  const sumaTipos = (r: Record<TipoCarga, number>) => TIPOS_CARGA.reduce((s, t) => s + r[t], 0);
+  /** Tonnes in thousands: "469 mil t", "8.5 mil t". */
+  const milT = (t: number) => `${(t / 1000).toLocaleString('es-MX', { maximumFractionDigits: t < 1e4 ? 1 : 0 })} mil t`;
   function poblacion(n: number): string {
     return n >= 1e6
       ? `${(n / 1e6).toLocaleString('es-MX', { maximumFractionDigits: 1 })} M hab.`
@@ -2818,7 +2828,7 @@
   });
 </script>
 
-<svelte:window bind:innerWidth />
+<svelte:window bind:innerWidth bind:innerHeight />
 
 <div class="host" bind:this={host}>
   <canvas
@@ -2853,6 +2863,7 @@
   <div
     class="tip panel"
     class:flip={pointer.x > innerWidth - 260}
+    class:arriba={pointer.y > innerHeight * 0.55}
     style:left="{pointer.x}px"
     style:top="{pointer.y}px"
   >
@@ -2886,6 +2897,41 @@
       {@const rail = lineaTrazado || servicio(`puerto:${hovered.puerto.id}`)}
       {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.pestaña === 'barco'}>{rail}</span>{/if}
       {@render aduana(`puerto:${hovered.puerto.id}`)}
+      {@const com = comercioDe(`puerto:${hovered.puerto.id}`)}
+      {#if com}
+        <span class="tip-sub tip-mar">
+          Por mar en 2024 (SEMAR): exportó {mt(sumaTipos(com.exp))} e importó {mt(sumaTipos(com.imp))}{com.trenImp > 0
+            ? `; por tren sale ${mt(com.trenImp)} de lo importado (ATTRAPI)`
+            : ''}
+        </span>
+        {#if sim.modo === 'juego'}
+          {@const _reloj = sim.horas}
+          {@const ahora = sim.puertoAhora(`puerto:${hovered.puerto.id}`)}
+          {@const mios = [
+            [sim.comercio.exportado.porPuerto[`puerto:${hovered.puerto.id}`] ?? 0, 'exportaron'],
+            [sim.comercio.importado.porPuerto[`puerto:${hovered.puerto.id}`] ?? 0, 'importaron'],
+          ] as const}
+          {#if ahora}
+            {#if sumaTipos(ahora.exportacion) >= 1000}
+              <span class="tip-sub tip-mar">Esperando barco: {porTipos(ahora.exportacion)}</span>
+            {/if}
+            {#if sumaTipos(ahora.pedido) >= 1000}
+              <span class="tip-sub tip-mar">Por importar: {porTipos(ahora.pedido)}</span>
+            {/if}
+            {#if ahora.tren >= 1000}
+              <span class="tip-sub tip-mar">Importación esperando tren: {milT(ahora.tren)}</span>
+            {/if}
+          {/if}
+          {#if mios.some(([t]) => t > 0)}
+            <span class="tip-sub tip-mar">
+              Tus barcos {mios
+                .filter(([t]) => t > 0)
+                .map(([t, verbo]) => `${verbo} ${milT(t)}`)
+                .join(' e ')} aquí
+            </span>
+          {/if}
+        {/if}
+      {/if}
       {@const refDelPuerto = REFINERIA_DEL_PUERTO.get(`puerto:${hovered.puerto.id}`)}
       {#if refDelPuerto && sim.modo === 'juego'}
         {@const _reloj = sim.horas}
@@ -3380,6 +3426,15 @@
     transform: translate(calc(-100% - 16px), 14px);
   }
 
+  /* In the lower half of the screen it opens above the cursor, so a long one isn't cut off. */
+  .tip.arriba {
+    transform: translate(16px, calc(-100% - 10px));
+  }
+
+  .tip.flip.arriba {
+    transform: translate(calc(-100% - 16px), calc(-100% - 10px));
+  }
+
   .tip strong {
     font-size: 0.92rem;
     font-weight: 600;
@@ -3637,6 +3692,11 @@
 
   .tip-aduana {
     color: #fcd34d;
+  }
+
+  /* Sea trade: the sea colour. */
+  .tip-mar {
+    color: #7dd3fc;
   }
 
   .energia-nivel.critico {

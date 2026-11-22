@@ -149,17 +149,18 @@ saltar al siguiente libre.
 - **Rutas marítimas calculadas** (`domain/mar.ts`), una por cada par de puertos y salidas:
   ver [Datos](#datos). Por mar de Salina Cruz a Coatzacoalcos hay 4,825 km (por Panamá);
   por tren, 274: el Istmo en números, tal como es.
-- **Cuatro clases** (`domain/barcos.ts`): portacontenedores y ro-ro a 18 nudos, buque tanque
-  a 14, granelero a 13; cada una con su tiempo en puerto. En el Canal, 9 km/h.
+- **Cinco clases** (`domain/barcos.ts`): portacontenedores y ro-ro a 18 nudos, buque tanque
+  a 14, granelero a 13, abastecedor a 12; cada una con su tiempo en puerto. En el Canal, 9 km/h.
 - **Servicios circulares** (A → B → C → A), como las líneas de navieras. Una **salida al
   mundo** (Asia, Europa) es, como escala, su **puerto lejano** (Shanghái-Yangshan, Róterdam):
   la pierna sigue de la salida por la **travesía oceánica** calculada, el barco la navega a su
   velocidad y hace 48 h de escala allá. Cada pierna sabe qué parte cae en el tablero
   (`Trayecto.enTablero`); el tablero dibuja solo esa parte y deja de ver al barco al pasar la
   salida (`enTravesia()`, `posicionEnTablero()`).
-- **6 barcos iniciales**: Shanghái–Manzanillo–Lázaro Cárdenas, Róterdam–Veracruz–Altamira,
-  los combustibles del Pacífico desde Salina Cruz y los del Golfo, autos de costa a costa por
-  Panamá y graneles de Guaymas a Shanghái. Nombres inventados de la geografía de México.
+- **16 barcos iniciales**: Shanghái–Manzanillo–Lázaro Cárdenas, Róterdam–Veracruz–Altamira,
+  los combustibles del Pacífico desde Salina Cruz y los del Golfo, autos de Shanghái a Lázaro
+  Cárdenas y Veracruz (de costa a costa por Panamá), graneles de Guaymas a Shanghái y 10
+  abastecedores de las plataformas. Nombres inventados de la geografía de México.
 - **Un motor de servicios común** (`domain/servicio.ts`) para trenes y barcos: cambia cómo se
   traza cada pierna y cuánto se espera, el paso de simulación es el mismo.
 - **En el tablero**: casco con proa orientado al rumbo y estela; el Canal de Panamá trazado en
@@ -211,6 +212,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/plataformas.json` | **Plataformas**: los 4 complejos de Pemex en la Sonda de Campeche con su crudo por año (Segundo Informe), Cayo Arcas, el abasto que llevan los barcos (SEMAR), la carga de un barco abastecedor y las reglas del abasto. También lo lee `npm run datos` para las rutas marítimas |
 | `src/lib/domain/datos/combustibles.json` | **Combustibles**: consumo por estado (CNE, SENER), las 78 terminales de Pemex con su medio de suministro y las zonas de ductos (SENER, mapa de 2018), petróleo por puerto (SEMAR), barriles por tonelada (EIA), capacidad del buque tanque, y las series reales de crudo producido y exportado y de combustibles hechos e importados (Segundo Informe de Gobierno). Lo genera `scripts/combustibles/gen-combustibles.mjs` |
 | `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
+| `src/lib/domain/datos/comercio-mar.json` | **Comercio por mar**: lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (SEMAR), lo que entra y sale por tren (ATTRAPI 2025), la carga de cada clase de barco y las reglas de los patios. Lo genera `scripts/comercio/gen-comercio-mar.mjs` |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
 | `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
 | `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
@@ -371,6 +373,29 @@ sitios en el mar (`plataforma:<id>`) a los que llegan las rutas marítimas. El c
 La partida trae 10 barcos abastecedores. Capa *Plataformas*. Detalle en la
 [enciclopedia](docs/enciclopedia.md#las-plataformas-del-golfo).
 
+**El comercio por mar** (`domain/comercioMar.ts`, `datos/comercio-mar.json`, que arma
+`scripts/comercio/gen-comercio-mar.mjs` con las cifras de la SEMAR de 2024 y la ATTRAPI de
+2025). El puerto es el trasbordo entre tren y barco:
+
+- **Tres tipos de carga**, uno por clase (`cargaDeClase`): contenedores (13,972 t por barco),
+  granel (29,920) y carga general en el ro-ro (8,000, estimación).
+- **Cada puerto** tiene un patio de exportación por tipo (`#patiosPuerto`): entra lo que llega
+  por camión a su ritmo real y la carga de exportación que descargan los trenes, como el tipo
+  que más exporta el puerto (`deTren`). Pide sus importaciones (`#pedidos`), y lo que sale por
+  tren espera en `#patiosImportacion`. Todo hasta un mes; la partida abre con una semana.
+- **Un barco** (`#comerciar`): en un puerto baja la importación que se pide y sube exportación
+  de su tipo; en una salida al mundo cuenta lo exportado (`sim.comercio`) y carga importación.
+  Sin salida al mundo en su vuelta no lleva nada (el cabotaje aún no cuenta).
+- **Un tren** carga en el puerto la importación que espera tren (`#cargarImportacion`) y la
+  entrega en su siguiente parada (`sim.importacionTren`, toneladas y toneladas-km). Comparte
+  sus 2,436 t con exportaciones, combustible y carga nacional.
+- `Barco` lleva `exportacion`, `exportacionDe`, `importacion`, `exportado` e `importado`;
+  `Tren`, `importacion`, `importacionDe` e `importado`. Todos los barcos tienen `llegadas`.
+
+Se ve en el puerto (al pasar el puntero), en la ficha de cada barco y tren, y en la barra
+(celda *Barcos*, desde 1,560 px). Detalle en la
+[enciclopedia](docs/enciclopedia.md#el-comercio-por-mar).
+
 **Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado y paga
 con su presupuesto (`sim.dinero`, en millones de pesos). Desde la ficha de un polo (`FichaPolo`)
 elige de 1 a 4 cuadrillas y confirma en un cuadro propio; la obra se paga conforme avanza
@@ -449,6 +474,7 @@ src/lib/
     mar.ts           rutas marítimas, Canal de Panamá, travesías; compone la pierna completa
     trenes.ts        trenes y servicios iniciales
     barcos.ts        clases de barco, travesías, barcos y servicios iniciales
+    comercioMar.ts   comercio por mar de cada puerto: tipos de carga, patios, carga de cada clase de barco
     datos/           datos (generados y curados)
   state/             estado reactivo compartido (runas)
     simulacion.svelte.ts   reloj, flota (trenes y barcos), selección
@@ -554,8 +580,8 @@ costa del mundo solo sube de resolución). Además:
   margen.
 - **Más dinero del Estado**, con la carga: lo que cobran los trenes del Estado, lo que pagan
   sus trenes por pasar por vía privada y los impuestos de las concesionarias.
-- **Carga en los demás barcos**: los portacontenedores, graneleros y ro-ro todavía van vacíos
-  (los buques tanque ya llevan combustible). El puerto como trasbordo: hoy un tren que llega a un
-  puerto exporta en ese momento; con barcos, la carga esperaría ahí a que un barco se la lleve.
+- **Comercio por mar, lo que sigue**: el cabotaje entre puertos del país; La Paz, Acapulco y
+  Ciudad del Carmen; más salidas al mundo (Estados Unidos, Sudamérica) para que las rutas
+  reales tengan a dónde ir; el valor en dólares de lo que se mueve.
 - **Sitios**: que el jugador pueda colocar los suyos (bodegas, plantas, terminales), además de
   los polos.
