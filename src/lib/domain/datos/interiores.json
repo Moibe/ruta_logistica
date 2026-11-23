@@ -274,6 +274,10 @@
    "fuente": "Gobierno de Puebla, comunicado AA 644/2026 (30 de junio de 2026): la subestación eléctrica de San José Chiapa, 591 millones de pesos del estado en 4 ha, con 60 MVA para el PODECOBI, la industria del Café y Maíz del Bienestar y la fábrica de baterías de Olinia",
    "url": "https://www.puebla.gob.mx/index.php/noticias/item/24231-subestacion-electrica-asegura-desarrollo-industrial-en-san-jose-chiapa-armenta-mier"
   },
+  "dof-seybaplaya": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Seybaplaya I, Campeche (30 de junio de 2025): cuadros de construcción de dos fracciones, 99.99 ha; a pie de la MEX-180, a 4.9 km del puerto de Seybaplaya, a 29 km del puerto de Campeche y a 37 km del Tren Maya; gas y electricidad en el predio; sus vocaciones productivas, la declaratoria de Polo Industrial del Bienestar del Gobierno de Campeche (25 de septiembre de 2024) y su propiedad (pública estatal)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5761459&fecha=30/06/2025"
+  },
   "dof-teapa": {
    "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)",
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5789895&fecha=08/06/2026"
@@ -4671,6 +4675,137 @@
     "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, la automotriz es el equipo de transporte; la electrónica, el equipo de computación y electrónico, y la química, la de fertilizantes, pinturas y jabones. La manufactura avanzada no es un sector del censo: no se ofrece para un lote.",
     "fuentes": [
      "dof-capital-tecnologia"
+    ]
+   }
+  },
+  "seybaplaya": {
+   "nombre": "Seybaplaya I",
+   "lugar": "Seybaplaya, Campeche",
+   "sectores": [
+    "alimentos",
+    "productos-metalicos",
+    "maquinaria",
+    "plastico"
+   ],
+   "fuentesLista": [
+    "dof-seybaplaya",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: el Gobierno de Campeche lo declaró Polo Industrial del Bienestar el 25 de septiembre de 2024, en terrenos del estado, y la Secretaría de Economía lo declaró polo del Plan México el 30 de junio de 2025 (DOF). No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el predio ya tiene gas y electricidad, pero no qué obras necesita. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada una de sus dos fracciones lleva su calle; se hacen una tras otra.",
+    "fuentes": [
+     "dof-seybaplaya",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 21.23,
+    "via": "Tren Maya",
+    "operador": "Tren Maya",
+    "mesesMinimos": 2,
+    "dato": "No tiene vía cerca: la declaratoria pone el Tren Maya a 37 km. La espuela del juego va del Tren Maya al polo: 21.23 km en línea recta (OpenStreetMap), la espuela más larga de los polos. En 2018 por ahí corre el viejo ferrocarril del Sureste, sobre cuyo derecho de vía se reconstruyó el Tren Maya: construido, el polo tiene su estación en esa vía. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante.",
+    "fuentes": [
+     "dof-seybaplaya",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 10.45,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 0.31,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que el predio tiene electricidad, sin decir cuánta. La línea de alta tensión más cercana a su subestación queda a 0.31 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 10,
+      "empresa": null
+     }
+    ],
+    "dato": "Dos fracciones que comparten un lado, a pie de la MEX-180. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 75 ha en 7 lotes de 8 a 15 ha, y 3 ha de servicios en la fracción 2; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-seybaplaya",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Logística",
+    "Agroindustria",
+    "Manufactura ligada a la industria energética",
+    "Otras industrias ligeras"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, agroindustria es la industria alimentaria; la manufactura ligada a la industria energética, los productos metálicos y la maquinaria (el puerto de Seybaplaya sirve a las plataformas del golfo), y las industrias ligeras, la del plástico (estimación del juego). La logística no es manufactura: no se ofrece para un lote.",
+    "fuentes": [
+     "dof-seybaplaya",
+     "juego"
     ]
    }
   }

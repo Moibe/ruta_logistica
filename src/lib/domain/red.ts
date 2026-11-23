@@ -355,7 +355,7 @@ export function construirRed(
       // Only a polo the player has built gets its station (its spur).
       if (!polosEnServicio.has(s.clave)) continue;
     }
-    if (best.km > ESTACION_MAX_KM) {
+    if (best.km > Math.max(ESTACION_MAX_KM, s.alcanceKm ?? 0)) {
       sinEstacion.set(s.clave, best.km);
       continue;
     }

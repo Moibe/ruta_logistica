@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y veintiséis polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y veintisiete polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -595,8 +595,9 @@ por tres fases:
 2. **En obra.** Se paga conforme avanza, como la obra pública. Si el presupuesto se acaba, la
    obra **se detiene** donde va. Un anillo alrededor del polo muestra el avance (rojo si está
    detenida).
-3. **Operando.** Si hay vía a 15 km o menos, al terminarse le nace su **estación** y recibe
-   trenes. Las empresas llegan **solo si hay tren**: la ocupación crece en una curva lenta al
+3. **Operando.** Si hay vía a 15 km o menos, o al alcance de la espuela de su vista por dentro
+   (más 3 km de margen), al terminarse le nace su **estación** y recibe trenes. Así Seybaplaya,
+   a 22 km de la vía, llega a ella con su espuela de 21 km. Las empresas llegan **solo si hay tren**: la ocupación crece en una curva lenta al
    principio, rápida a la mitad y lenta al final, y llena el polo en tres años. Un polo construido
    sin vía cercana queda vacío hasta que el jugador lleve el tren.
 
@@ -689,8 +690,9 @@ Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texiste
 [Matías Romero](#matías-romero-avendaño-por-dentro), [Mixtequilla](#santa-maría-mixtequilla-por-dentro),
 [Ciudad Ixtepec](#ciudad-ixtepec-por-dentro), [Asunción Ixtaltepec](#asunción-ixtaltepec-por-dentro),
 [Economía Circular Puebla](#economía-circular-puebla-por-dentro),
-[Economía Circular Tlaxcala](#economía-circular-tlaxcala-por-dentro) y
-[Capital de la Tecnología](#capital-de-la-tecnología-y-la-sostenibilidad-por-dentro).
+[Economía Circular Tlaxcala](#economía-circular-tlaxcala-por-dentro),
+[Capital de la Tecnología](#capital-de-la-tecnología-y-la-sostenibilidad-por-dentro) y
+[Seybaplaya I](#seybaplaya-i-por-dentro).
 El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
@@ -959,6 +961,7 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
 - **Economía Circular Puebla:** son tres polígonos separados.
 - **Economía Circular Tlaxcala:** son dos polígonos de 10 ha, uno junto al otro.
 - **Capital de la Tecnología:** son cinco polígonos en dos grupos a 5 km uno de otro.
+- **Seybaplaya I:** son dos fracciones que comparten un lado.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -2227,6 +2230,52 @@ norte antes que el este.
   y Maíz del Bienestar y la fábrica de Olinia.
 
 No se han reportado empresas en el polo.
+
+### Seybaplaya I por dentro
+
+El vigesimoséptimo polo con vista por dentro (`/mexico/polo/seybaplaya`), del Plan México: 99.99 ha
+en Seybaplaya, Campeche, a pie de la MEX-180, y el único polo sin vía cerca que tiene vista.
+
+**El terreno**, de su declaratoria (DOF, 30 de junio de 2025): dos fracciones en UTM zona 15 que
+comparten un lado (25.92 y 74.07 ha), con los rumbos escritos «N 7-54-1 E».
+- **Resultado:** las dos tablas dan su área y suman las 99.99 ha declaradas. Su artículo segundo
+  dice «99-98-97.42 263-16-81.106 hectáreas»: la segunda cifra es la de Tapachula I (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** a pie de la MEX-180, a 4.9 km del puerto de Seybaplaya, a 29 km del puerto de
+  Campeche, a 36 km del aeropuerto de Campeche y a 37 km de la vía del Tren Maya. Su criterio de
+  servicios dice, en cambio, que está «cerca del paso del Tren Maya».
+- **Servicios:** gas y electricidad dentro del predio, sin decir cuánta.
+- **Vocaciones:** logística, agroindustria, manufactura ligada a la industria energética y otras
+  industrias ligeras.
+- **Propiedad:** pública estatal. El Gobierno de Campeche lo declaró Polo Industrial del Bienestar
+  el 25 de septiembre de 2024.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **75 ha en 7 lotes de 8 a
+  15 ha**, con 3 ha de servicios en la fracción 2.
+- **Los empleos:** 61.2 por hectárea, 6,116. Un lote de 10 ha da 815 y pide de 0.9 MW (productos
+  metálicos o agroindustria) a 1.7 MW (plástico).
+- **La espuela:** va al **Tren Maya**, a **21.23 km** en línea recta (OpenStreetMap): la más larga
+  de los polos. En 2018 por ahí corre el viejo ferrocarril del Sureste (Mérida–Campeche–
+  Coatzacoalcos), a 22 km, sobre cuyo derecho de vía se reconstruyó el Tren Maya; construido, el
+  polo tiene su estación en esa vía. Cuesta 963 millones con una cuadrilla (10.6 meses) o 1,397 con
+  cuatro (3.8 meses). Su destino se puede cambiar más adelante (otra vía, el puerto) desde su
+  configuración.
+- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno
+  pide 9.8 MW: alcanza. La línea de 115 kV más cercana queda a 0.31 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 549 millones con una cuadrilla;
+  las vialidades, 220 millones en 11.6 meses, o 318 en 4.1 con cuatro.
+- **Las vocaciones en sectores:** agroindustria es la industria alimentaria; la manufactura ligada
+  a la industria energética, los productos metálicos y la maquinaria (el puerto de Seybaplaya sirve
+  a las plataformas del golfo), y las industrias ligeras, la del plástico (estimación del juego).
+  La logística no es manufactura.
+
+**En la realidad**: Campeche lo declaró Polo Industrial del Bienestar el 25 de septiembre de 2024 y
+la Secretaría de Economía lo declaró polo el 30 de junio de 2025 (DOF). No se ha reportado obra.
 
 ---
 
@@ -4162,6 +4211,14 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
+
+**Seybaplaya por dentro (DOF)**
+
+- **Una cifra de otra declaratoria:** su artículo segundo declara «99-98-97.42 263-16-81.106
+  hectáreas». La primera es la suya (sus dos tablas suman 99.99 ha); la segunda, 263-16-81.106,
+  es la superficie de Tapachula I.
+- **Dos distancias al Tren Maya:** su criterio de conectividad lo pone a 37 km de la vía y el de
+  servicios «cerca del paso del Tren Maya». En OpenStreetMap queda a 21.23 km en línea recta.
 
 **La energía de los polos: una octava cifra oficial (Gobierno de Puebla)**
 

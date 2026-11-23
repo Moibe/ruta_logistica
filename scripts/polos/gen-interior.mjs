@@ -2005,6 +2005,56 @@ const CAPITAL_TECNOLOGIA = {
   carreteraNombre: /Audi|Automotriz/i,
 };
 
+/**
+ * Seybaplaya I, from its declaratoria (DOF, 30 Jun 2025): two fractions in UTM zone 15 that share a
+ * side (25.92 and 74.07 ha), bearings written «N 7-54-1 E»; 99.99 ha, what both tables give. Its
+ * article two reads «99-98-97.42 263-16-81.106 hectáreas»: the second is Tapachula I's area.
+ */
+const SEYBAPLAYA = {
+  id: 'seybaplaya',
+  zona: 15,
+  piezas: [
+    {
+      nombre: 'Fracción 2',
+      servicios: true,
+      vertices: [
+        [743986.247, 2175766.68], [743634.582, 2175756.48], [743442.501, 2175750.65], [743229.871, 2175744.21],
+        [742666.22, 2175727.13], [742666.364, 2175733.04], [742671.974, 2175747.36], [742757.677, 2175826.8],
+        [742764.042, 2175883.25], [742738.487, 2176038.03], [742707.718, 2176101.46], [743207.258, 2176267.63],
+        [743220.602, 2176273.36], [744015.98, 2176504.8], [744090.938, 2176521.13],
+      ],
+      lotes: [{ ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 12, lado: 'b' }, { ha: 10, lado: 'b' }],
+    },
+    {
+      nombre: 'Fracción 1',
+      vertices: [
+        [743986.247, 2175766.681], [744090.938, 2176521.134], [744467.187, 2176323.959], [744379.869, 2175778.104],
+      ],
+      lotes: [{ ha: 10, lado: 'a' }, { ha: 8, lado: 'b' }],
+    },
+  ],
+  areaDof: 999897.42,
+  control: null,
+  marcador: { lat: 19.6648, lon: -90.678 },
+  /**
+   * No lots are published. The game gives each piece about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 75 ha in 7 lots of 8 to 15 ha (an estimate).
+   */
+  serviciosHa: 3,
+  anchoVialidad: 26,
+  anchoAcceso: 14,
+  /** At the foot of the MEX-180 (the DOF). */
+  carretera: /180/,
+  /**
+   * No track near: the declaratoria puts the Tren Maya 37 km away. The spur goes to it, the main
+   * lines of a box some 45 km around. To send it elsewhere later (a line the player builds, the
+   * port), change `viaDe` and the box, and regenerate.
+   */
+  viasLejos: '19.25,-91.05,20.10,-90.20',
+  margenVias: 45000,
+  viaDe: /Tren Maya/i,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 /**
@@ -2743,6 +2793,10 @@ const FUENTES = {
   'puebla-subestacion-chiapa': {
     fuente: 'Gobierno de Puebla, comunicado AA 644/2026 (30 de junio de 2026): la subestación eléctrica de San José Chiapa, 591 millones de pesos del estado en 4 ha, con 60 MVA para el PODECOBI, la industria del Café y Maíz del Bienestar y la fábrica de baterías de Olinia',
     url: 'https://www.puebla.gob.mx/index.php/noticias/item/24231-subestacion-electrica-asegura-desarrollo-industrial-en-san-jose-chiapa-armenta-mier',
+  },
+  'dof-seybaplaya': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Seybaplaya I, Campeche (30 de junio de 2025): cuadros de construcción de dos fracciones, 99.99 ha; a pie de la MEX-180, a 4.9 km del puerto de Seybaplaya, a 29 km del puerto de Campeche y a 37 km del Tren Maya; gas y electricidad en el predio; sus vocaciones productivas, la declaratoria de Polo Industrial del Bienestar del Gobierno de Campeche (25 de septiembre de 2024) y su propiedad (pública estatal)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5761459&fecha=30/06/2025',
   },
   'dof-teapa': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)',
@@ -3793,6 +3847,40 @@ function interiorCapitalTecnologia(g) {
   };
 }
 
+function interiorSeybaplaya(g) {
+  return {
+    nombre: 'Seybaplaya I',
+    lugar: 'Seybaplaya, Campeche',
+    sectores: ['alimentos', 'productos-metalicos', 'maquinaria', 'plastico'],
+    fuentesLista: ['dof-seybaplaya', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: el Gobierno de Campeche lo declaró Polo Industrial del Bienestar el 25 de septiembre de 2024, en terrenos del estado, y la Secretaría de Economía lo declaró polo del Plan México el 30 de junio de 2025 (DOF). No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el predio ya tiene gas y electricidad, pero no qué obras necesita. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada una de sus dos fracciones lleva su calle; se hacen una tras otra.',
+      fuentes: ['dof-seybaplaya', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `No tiene vía cerca: la declaratoria pone el Tren Maya a 37 km. La espuela del juego va del ${g.espuela.via} al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap), la espuela más larga de los polos. En 2018 por ahí corre el viejo ferrocarril del Sureste, sobre cuyo derecho de vía se reconstruyó el Tren Maya: construido, el polo tiene su estación en esa vía. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante.`,
+      fuentes: ['dof-seybaplaya', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('seybaplaya', g, `La declaratoria dice que el predio tiene electricidad, sin decir cuánta. La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Dos fracciones que comparten un lado, a pie de la MEX-180. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 8 a 15 ha, y 3 ha de servicios en la fracción 2; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-seybaplaya', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Logística', 'Agroindustria', 'Manufactura ligada a la industria energética', 'Otras industrias ligeras'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, agroindustria es la industria alimentaria; la manufactura ligada a la industria energética, los productos metálicos y la maquinaria (el puerto de Seybaplaya sirve a las plataformas del golfo), y las industrias ligeras, la del plástico (estimación del juego). La logística no es manufactura: no se ofrece para un lote.',
+      fuentes: ['dof-seybaplaya', 'juego'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -3852,6 +3940,7 @@ const POLOS_INTERIOR = [
   [CIRCULAR_PUEBLA, interiorCircularPuebla],
   [CIRCULAR_TLAXCALA, interiorCircularTlaxcala],
   [CAPITAL_TECNOLOGIA, interiorCapitalTecnologia],
+  [SEYBAPLAYA, interiorSeybaplaya],
 ];
 // `id…`: build only those polos and keep the others as they are in interiores.json.
 // `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.

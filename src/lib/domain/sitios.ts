@@ -3,6 +3,7 @@ import aeropuertosJson from './datos/aeropuertos.json';
 import ciudadesJson from './datos/ciudades.json';
 import petroleoJson from './datos/petroleo.json';
 import plataformasJson from './datos/plataformas.json';
+import interioresJson from './datos/interiores.json';
 import polosJson from './datos/polos.json';
 import puertasJson from './datos/puertas.json';
 import puertosJson from './datos/puertos.json';
@@ -320,6 +321,20 @@ export type Sitio = {
   lonLat: LonLat;
   /** Where its station is sought, when not at `lonLat` (`Ciudad.estacion`). */
   lonLatEstacion?: LonLat;
+  /** How far from the track its station may be, when farther than `ESTACION_MAX_KM`: a polo's spur. */
+  alcanceKm?: number;
+};
+
+/**
+ * A built polo reaches the track as far as the spur of its close-up goes, plus a margin (the spur
+ * is measured from the land's edge, the station from its marker): Seybaplaya's goes 37 km to the
+ * Tren Maya, San Jerónimo's 15 km to Ferromex in Ciudad Juárez.
+ */
+const MARGEN_ESPUELA_KM = 3;
+const INTERIORES = (interioresJson as unknown as { polos: Record<string, { espuela?: { km: number } }> }).polos;
+export const alcanceDelPolo = (id: string) => {
+  const km = INTERIORES[id]?.espuela?.km;
+  return km === undefined ? undefined : km + MARGEN_ESPUELA_KM;
 };
 
 export const SITIOS: readonly Sitio[] = [
@@ -335,7 +350,7 @@ export const SITIOS: readonly Sitio[] = [
   })),
   // Gateways belong to no estado.
   ...PUERTAS.map((p) => ({ clave: `puerta:${p.id}`, tipo: 'puerta' as const, id: p.id, nombre: p.nombre, estado: '', lonLat: p.lonLat })),
-  ...POLOS.map((p) => ({ clave: `polo:${p.id}`, tipo: 'polo' as const, id: p.id, nombre: `Polo ${p.corto}`, estado: p.estado, lonLat: p.lonLat })),
+  ...POLOS.map((p) => ({ clave: `polo:${p.id}`, tipo: 'polo' as const, id: p.id, nombre: `Polo ${p.corto}`, estado: p.estado, lonLat: p.lonLat, alcanceKm: alcanceDelPolo(p.id) })),
   // Cargo airports are dry ports: within reach of the track they get a station like a city.
   ...AEROPUERTOS.map((a) => ({ clave: `aeropuerto:${a.id}`, tipo: 'aeropuerto' as const, id: a.id, nombre: a.corto, estado: a.estado, lonLat: a.lonLat })),
   ...REFINERIAS_SITIO.map((r) => ({ clave: `refineria:${r.id}`, tipo: 'refineria' as const, id: r.id, nombre: `Ref. ${r.corto}`, estado: r.estado, lonLat: r.lonLat })),

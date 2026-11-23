@@ -3,7 +3,7 @@
   import { ESTACION_MAX_KM } from '$lib/domain/red';
   import { conEspuela, tieneInterior } from '$lib/domain/interior';
   import { EMPLEOS_POR_HA, empleosOficiales, MAX_CUADRILLAS, presupuestar } from '$lib/domain/obras';
-  import { PROGRAMAS_POLO, POLOS } from '$lib/domain/sitios';
+  import { alcanceDelPolo, PROGRAMAS_POLO, POLOS } from '$lib/domain/sitios';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
   import { mwDelPolo, UMBRALES } from '$lib/domain/energia';
   import { clavePolo, fechaEnPalabras, fichaReal } from '$lib/domain/realidad';
@@ -52,7 +52,8 @@
     const obra = sim.obras.get(p.id);
     if (!obra) return null;
     const km = sim.red?.aLaVia.get(`polo:${p.id}`);
-    const alcanzable = km !== undefined && km <= ESTACION_MAX_KM;
+    // A long spur reaches farther than a station: Seybaplaya's goes to the Tren Maya.
+    const alcanzable = km !== undefined && km <= Math.max(ESTACION_MAX_KM, alcanceDelPolo(p.id) ?? 0);
     const energia = sim.energiaDelPolo(p.id);
     return { p, obra, km, alcanzable, conectado: sim.conectado(p.id), energia, mw: mwDelPolo(p.id) };
   });
