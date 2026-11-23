@@ -449,6 +449,11 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
   polo. La energía de la región usa `mwEnUso`. La carga de las
   empresas (`cargaDelPolo`) espera en `#patiosPolo`, y un tren en la estación `polo:<id>` la
   carga antes que la del estado (`#cargarDelPolo`); `sim.cargaPolos` cuenta lo que se llevó.
+- **La subestación** (`SUBESTACION`, datos en `interiores.json → subestacion`: banco de 30 MVA,
+  1.64 millones por MVA y 16 meses, de la cartera de inversión de la CFE) es un frente más, que
+  se abre con la energía hecha y se repite. Lleva sus 4 cuadrillas, y `avanzarInterior` lo paga de
+  la caja de la CFE (`cajaCfe`). Cada banco terminado suma a `ObraPolo.bancos`, y
+  `capacidadMw(o, id)` es la cifra del polo más sus bancos.
 - **Vista** (`map/InteriorPolo.svelte`, SVG en metros; `ui/FrentesPolo.svelte`, el panel con las
   pestañas *Obra* y *Lotes y empresas*, la segunda en `ui/LotesPolo.svelte`): cada frente se
   dibuja según avanza y las cuadrillas aparecen donde trabajan. Los lotes toman el color de su

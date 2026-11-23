@@ -108,6 +108,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | INEGI (convención cartográfica) | Parámetros de la proyección del tablero: cónica conforme de Lambert, paralelos 17.5° y 29.5°, meridiano central 102° O | — | — |
 | [INEGI, Censos Económicos 2024](https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mver_ce24.pdf) | Empleos que da la obra por cada millón de pesos (construcción en Veracruz, 2023) | Resultados definitivos, 2025 | Documento oficial público |
 | Presidencia de la República y Gobierno de Tlaxcala | Tiempos y empleos del polo de Huamantla, el único terminado: su ritmo de obra y su proyección de empleos; en la [versión estenográfica de su inauguración](https://www.gob.mx/presidencia/es/articulos/version-estenografica-inauguracion-del-polo-de-desarrollo-economico-para-el-bienestar-podecobi-huamantla?idiom=es), los siete lotes vendidos con su superficie, las obras que hizo el estado y cómo se paga la urbanización | Comunicados del 14 oct 2025 al 12 abr 2026 | Documento oficial público |
+| [CFE, Programas y Proyectos de Inversión 2024](https://portales-transparencia.cfe.mx/corporativo/31%20Informe%20presupuestl%20balance%20general%20y%20estado%20fi/Direcci%C3%B3n%20Corporativa%20de%20Finanzas/Gerencia%20de%20Presupuestos/2024/Cartera%20de%20CFE%20pre%20cierre%20DIC%2010012025%204o%20trim.pdf) | Cada proyecto de inversión de la CFE con sus MVA, km-c, fechas y costo total: el costo por MVA de las subestaciones de distribución y lo que tardaron las subestaciones Kantenah y Leona Vicario, para ampliar la subestación de un polo | Cierre de diciembre de 2024 | Documento oficial público |
 | Secretaría de Economía, [ficha del polo Huamantla](https://podecobi.economia.gob.mx/polos-de-desarrollo) y [nota del 18 de diciembre de 2025](https://podecobi.economia.gob.mx/en/news/plan-mexico-avanza-polo-de-desarrollo-economico-en-tlaxcala/) | Energía disponible (8 MVA), agua, gas a 3 km, conexión ferroviaria y superficie total (61.8 ha) de Huamantla; su CECI y su fecha de término | 2025 | Documento oficial público |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright), vía Overpass | Los alrededores de Huamantla para su vista por dentro: calles, carreteras, vías y su operador, líneas de 115 kV y subestaciones de la CFE, poblados y la Ciudad Industrial Xicohténcatl II | Consultado el 22 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
 
@@ -755,6 +756,37 @@ anuario 2018, tablas 6-1, 6-2 y 10). Las dos últimas columnas son una empresa e
   los toma como personal ocupado del censo, así que la carga y la electricidad pueden quedar
   algo altas.
 
+#### La subestación del polo
+
+Lo que el polo da a sus empresas es su cifra oficial de electricidad (o la mediana de las siete
+oficiales, 8 MW): su subestación en la primera fase. Cuando no alcanza, **la CFE la amplía**. En
+la pestaña *Obra* está el frente *Subestación*, que se abre cuando el frente de energía está
+terminado.
+
+- **Cada ampliación es un banco de 30 MVA**, un tamaño común en las subestaciones de distribución
+  de la CFE (estimación del juego). Suma 30 MVA a lo que el polo da a sus empresas; el juego toma un
+  MVA por MW. Se pueden pedir los bancos que se quiera, uno tras otro.
+- **La paga la CFE, de su caja**, como sus centrales; la caja del Estado no se toca.
+- **Lleva cuadrillas propias**, de 1 a 4, aparte de las 4 del polo.
+- **Cuesta 1.64 millones de pesos por MVA:** unos 49 millones el banco con 4 cuadrillas. Es la
+  mediana de nueve proyectos de subestaciones de distribución terminados de la cartera de
+  inversión de la CFE de 2024, los que tienen pocas líneas (menos de 0.2 km-c por MVA). Van de 0.54
+  a 5.4 millones por MVA, en pesos del año de cada proyecto, sin actualizar.
+- **Tarda 16 meses con 4 cuadrillas:** lo que tardaron Kantenah y Leona Vicario, las dos
+  subestaciones nuevas de la Riviera Maya en la misma cartera (de abril y mayo de 2024 a agosto de
+  2025). Con menos cuadrillas, como cualquier obra del Estado:
+
+| Cuadrillas | Costo del banco | Meses | Al mes |
+| ---: | ---: | ---: | ---: |
+| 1 | 33.9 millones | 45.2 | 0.75 millones |
+| 2 | 39.0 millones | 26.9 | 1.45 millones |
+| 3 | 44.1 millones | 19.8 | 2.22 millones |
+| 4 | 49.2 millones | 16.0 | 3.07 millones |
+
+Un banco basta para una petroquímica de 25 ha en Coatzacoalcos I (21 MW). En el mapa, cada banco
+terminado es un cuadrito amarillo junto a la subestación. En Realidad no se ha reportado ninguna
+ampliación.
+
 En el mapa, cada lote promovido toma el color de su sector y se llena conforme llega su empresa;
 uno que no cabe se marca en rojo. Un clic en un lote lo abre en el panel. En Realidad los lotes
 llevan el nombre de su empresa: su giro no se publica.
@@ -798,8 +830,9 @@ juego ya tenía.
     industria promedio, el polo pediría **39 MW**.
   - Con 8 MW caben unos dos lotes de 20 ha de industria promedio. Una petroquímica o una
     metalúrgica de ese tamaño (17 MW) no caben.
-  - Es lo que dicen las cifras oficiales: los polos arrancan con 4 a 20 MW, y uno grande necesitará
-    más subestación para llenarse.
+  - Es lo que dicen las cifras oficiales: los polos arrancan con 4 a 20 MW, y uno grande necesita
+    que la CFE amplíe su subestación para llenarse (ver
+    [La subestación del polo](#la-subestación-del-polo)): con cuatro bancos, 128 MVA.
 
 Lo que pide cada uno de sus sectores en un lote de 20 ha (2,467 empleos: los del polo
 repartidos en sus 197 ha de lotes):
@@ -2708,6 +2741,9 @@ los otros dos aún no se capturan.
   ámbar y rojo.
 - **Las estaciones llegan hasta 15 km.** Más lejos, el sitio no tiene servicio de tren y su
   ficha dice a cuántos km queda la vía.
+- **La subestación de un polo la amplía la CFE.** *(23 nov 2026.)* Es obra de la CFE y se paga de
+  su caja, no de la del Estado, como sus centrales. Así la CFE reparte su dinero entre generar
+  más (la región) y llevarlo a donde se usa (el polo).
 - **La energía de un polo no se reparte por hectárea.** *(22 nov 2026.)* Las cifras oficiales
   (siete polos) van de 4 a 20 MW sin importar si el polo tiene 53 o 911 hectáreas. Un polo sin
   cifra recibe la mediana, 8 MW, y adentro las empresas piden por empleo. Así un polo grande
@@ -2997,6 +3033,8 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Lote**: el pedazo del polo que compra una empresa para poner su nave.
 - **Promover un lote**: en el juego, ofrecerlo a empresas de un sector; solo a un lote promovido
   llega empresa.
+- **Banco de transformación**: el transformador de una subestación (o su juego de tres, uno por
+  fase); su capacidad se mide en MVA. Ampliar una subestación es ponerle otro banco.
 - **Vocación productiva**: un sector para el que la declaratoria dice que el polo es propicio.
 - **Personal ocupado**: en los censos del INEGI, todas las personas que trabajaron para un
   establecimiento en el año, contratadas por él o no.

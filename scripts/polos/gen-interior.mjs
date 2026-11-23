@@ -535,6 +535,10 @@ const FUENTES = {
     url: '',
   },
   'sict-dos-bocas': { fuente: 'SICT: costo del ramal ferroviario a Dos Bocas, base del costo por km de la espuela (ver la sección de obras del Estado)', url: 'https://www.gob.mx/sct/prensa/precisa-sict-que-ramal-ferroviario-roberto-ayala-dos-bocas-tiene-un-costo-estimado-de-6-mil-54-mdp' },
+  'cfe-cartera-2024': {
+    fuente: 'CFE, Programas y Proyectos de Inversión 2024 (cierre de diciembre): cada proyecto con su descripción, sus MVA y km-c, sus fechas y su costo total, entre ellos los de subestaciones de distribución y las subestaciones Kantenah y Leona Vicario',
+    url: 'https://portales-transparencia.cfe.mx/corporativo/31%20Informe%20presupuestl%20balance%20general%20y%20estado%20fi/Direcci%C3%B3n%20Corporativa%20de%20Finanzas/Gerencia%20de%20Presupuestos/2024/Cartera%20de%20CFE%20pre%20cierre%20DIC%2010012025%204o%20trim.pdf',
+  },
   juego: { fuente: 'Estimación del juego', url: '' },
 };
 
@@ -644,6 +648,38 @@ function interiorCoatzacoalcosI(g) {
   };
 }
 
+// ---- enlarging a polo's substation ------------------------------------------------------------
+
+/**
+ * Distribution substation projects of the CFE's investment portfolio (Programas y Proyectos de
+ * Inversión 2024, cierre de diciembre), finished, with few km of line (under 0.2 km-c per MVA):
+ * [project, MVA, km-c, total cost in million pesos]. Their median cost per MVA is what a bank costs.
+ */
+const CARTERA_SUBESTACIONES = [
+  ['0518TOQ0030', 250, 45, 343.33],
+  ['0518TOQ0033', 50, 6.3, 272.15],
+  ['0518TOQ0034', 60, 0, 93.61],
+  ['0718TOQ0037', 160, 11, 414.78],
+  ['0818TOQ0073', 160, 21, 438.72],
+  ['0818TOQ0074', 342.9, 19, 564.17],
+  ['1018TOQ0048', 470, 86.14, 770.42],
+  ['1218TOQ0024', 255, 0, 137.95],
+  ['1318TOQ0021', 330, 0, 305.48],
+];
+const porMva = CARTERA_SUBESTACIONES.map(([, mva, , mdp]) => mdp / mva).sort((a, b) => a - b);
+const MDP_POR_MVA = Number(porMva[(porMva.length - 1) / 2].toFixed(2));
+/** The two new substations of the Riviera Maya (500 MVA each), from start to service, months. */
+const MESES_SUBESTACION = Math.round((16.0 + 15.7) / 2);
+const MVA_BANCO = 30;
+
+const SUBESTACION = {
+  mvaBanco: MVA_BANCO,
+  mdpPorMva: MDP_POR_MVA,
+  mesesGobierno: MESES_SUBESTACION,
+  dato: `Ampliar la subestación de un polo es obra de la CFE, pagada de su caja: un banco de transformación de ${MVA_BANCO} MVA, un tamaño común en las subestaciones de distribución de la CFE (estimación del juego). Cuesta ${MDP_POR_MVA.toLocaleString('es-MX')} millones de pesos por MVA, la mediana de los nueve proyectos de subestaciones de distribución terminados de la cartera de inversión de la CFE (pesos del año de cada proyecto, sin actualizar), y tarda ${MESES_SUBESTACION} meses con 4 cuadrillas: lo que tardaron Kantenah y Leona Vicario, las dos subestaciones nuevas de la Riviera Maya, de abril y mayo de 2024 a agosto de 2025. Cada banco suma ${MVA_BANCO} MVA a lo que el polo da a sus empresas (el juego toma un MVA por MW).`,
+  fuentes: ['cfe-cartera-2024', 'juego'],
+};
+
 const POLOS_INTERIOR = [
   [HUAMANTLA, interiorHuamantla],
   [COATZACOALCOS_I, interiorCoatzacoalcosI],
@@ -657,5 +693,5 @@ for (const [p, interior] of POLOS_INTERIOR) {
 }
 await writeFile(
   join(ROOT, 'src', 'lib', 'domain', 'datos', 'interiores.json'),
-  JSON.stringify({ corte: '2026-11-22', nota: 'Generado por scripts/polos/gen-interior.mjs.', fuentes: FUENTES, polos }, null, 1) + '\n'
+  JSON.stringify({ corte: '2026-11-23', nota: 'Generado por scripts/polos/gen-interior.mjs.', fuentes: FUENTES, subestacion: SUBESTACION, polos }, null, 1) + '\n'
 );

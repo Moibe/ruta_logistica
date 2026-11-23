@@ -1,6 +1,6 @@
 <script lang="ts">
   import { alongLinea, paralela, type GeoInterior, type Lote, type Pt } from '$lib/domain/interiorGeo';
-  import { ESPUELA, interior, sinEnergiaLote } from '$lib/domain/interior';
+  import { ESPUELA, interior, MVA_BANCO, sinEnergiaLote, SUBESTACION } from '$lib/domain/interior';
   import { POLOS } from '$lib/domain/sitios';
   import { sim } from '$lib/state/simulacion.svelte';
   import { POLO } from './simbolos';
@@ -148,7 +148,8 @@
       fase: o?.fase ?? 'por-construir',
       ocupacion: o?.ocupacion ?? 0,
       av: { vialidades: av('vialidades'), agua: av('agua'), energia: av('energia'), servicios: av('servicios'), espuela: av(ESPUELA) },
-      cu: { vialidades: cu('vialidades'), agua: cu('agua'), energia: cu('energia'), servicios: cu('servicios'), espuela: cu(ESPUELA) },
+      cu: { vialidades: cu('vialidades'), agua: cu('agua'), energia: cu('energia'), servicios: cu('servicios'), espuela: cu(ESPUELA), subestacion: cu(SUBESTACION) },
+      bancos: o?.bancos ?? 0,
     };
   });
   const urbanizado = $derived(estado.fase === 'operando');
@@ -187,6 +188,7 @@
       [c.energia, av.energia < 0.5 ? alongLinea(conexion, luzConexion) : alongLinea(ejeLuz, luzAdentro)],
       [c.servicios, geo.servicios.centro],
       [c.espuela, alongLinea(espuela, av.espuela)],
+      [c.subestacion, geo.servicios.subestacion],
     ];
     return lugar.flatMap(([n, p], f) => Array.from({ length: n }, (_, i) => ({ f, i, p })));
   });
@@ -399,6 +401,20 @@
       )}
       onpointerleave={salir}
     />
+
+    <!-- The CFE's banks added to the substation, one square each beside it. -->
+    {#each Array.from({ length: estado.bancos }, (_, i) => i) as b (b)}
+      <rect
+        x={geo.servicios.subestacion[0] + 12 + b * 12}
+        y={-geo.servicios.subestacion[1] - 5}
+        width="10"
+        height="10"
+        class="banco"
+        role="presentation"
+        onpointerenter={ver(`Banco ${b + 1} de la CFE`, `${MVA_BANCO} MVA más para las empresas del polo`)}
+        onpointerleave={salir}
+      />
+    {/each}
 
     <!-- Front: the services centre. -->
     <rect
@@ -705,6 +721,12 @@
   .subestacion.hecho {
     fill: color-mix(in srgb, var(--c) 45%, transparent);
     stroke-dasharray: none;
+  }
+
+  .banco {
+    fill: color-mix(in srgb, #fde68a 55%, transparent);
+    stroke: #fde68a;
+    stroke-width: 1.2;
   }
 
   .edificio {

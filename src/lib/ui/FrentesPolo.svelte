@@ -1,5 +1,20 @@
 <script lang="ts">
-  import { conEspuela, cuadrillasUrbanas, ESPUELA, fuenteInterior, frentesDe, interior, maxCuadrillas, planFrente, urbanizado } from '$lib/domain/interior';
+  import {
+    capacidadMw,
+    conEnergia,
+    conEspuela,
+    cuadrillasUrbanas,
+    ESPUELA,
+    fuenteInterior,
+    frentesDe,
+    interior,
+    maxCuadrillas,
+    MVA_BANCO,
+    planFrente,
+    SUBESTACION,
+    SUBESTACION_DATOS,
+    urbanizado,
+  } from '$lib/domain/interior';
   import { MAX_CUADRILLAS, HORAS_POR_MES } from '$lib/domain/obras';
   import { PROGRAMAS_POLO, POLOS } from '$lib/domain/sitios';
   import { clavePolo } from '$lib/domain/realidad';
@@ -13,7 +28,8 @@
    * Inside a polo, on the right, in two tabs. **Obra**: its work by fronts.
    * Each front takes crews from the polo's four (0 stops it where it is); the
    * panel says what that costs, how long it takes and what's been paid. The
-   * spur gives the polo its station. **Lotes** (`LotesPolo`): its company
+   * spur gives the polo its station; the substation, enlarged bank by bank,
+   * is the CFE's and paid from its till. **Lotes** (`LotesPolo`): its company
    * lots and the sector each is promoted for. In Realidad it shows how the
    * real polo stood, with nothing to play.
    */
@@ -35,13 +51,26 @@
         ...f,
         e,
         plan,
-        hecho: e.avance >= 1,
+        hecho: f.id !== SUBESTACION && e.avance >= 1,
         faltaMeses: plan && n > 0 ? ((1 - e.avance) * plan.horas) / HORAS_POR_MES : null,
         max: maxCuadrillas(o, id, f.id),
       };
     });
-    const alMes = frentes.reduce((s, f) => s + (f.e.cuadrillas > 0 && !f.hecho && f.plan ? f.plan.costoMdp / f.plan.meses : 0), 0);
-    return { o, frentes, alMes, urbanizado: urbanizado(o, id), espuela: conEspuela(o), urbanas: cuadrillasUrbanas(o, id) };
+    const alMesDe = (cfe: boolean) =>
+      frentes.reduce((s, f) => s + ((f.id === SUBESTACION) === cfe && f.e.cuadrillas > 0 && !f.hecho && f.plan ? f.plan.costoMdp / f.plan.meses : 0), 0);
+    return {
+      o,
+      frentes,
+      alMes: alMesDe(false),
+      alMesCfe: alMesDe(true),
+      pagadoCfe: o.frentes[SUBESTACION]?.pagadoMdp ?? 0,
+      bancos: o.bancos ?? 0,
+      capacidad: capacidadMw(o, id),
+      conEnergia: conEnergia(o),
+      urbanizado: urbanizado(o, id),
+      espuela: conEspuela(o),
+      urbanas: cuadrillasUrbanas(o, id),
+    };
   });
 
   const realidad = $derived(sim.modo === 'realidad');
@@ -104,7 +133,7 @@
     {/if}
     <ol class="lista">
       {#each vista.frentes as f (f.id)}
-        <li class:hecho={f.hecho} class:espuela={f.id === ESPUELA}>
+        <li class:hecho={f.hecho} class:espuela={f.id === ESPUELA} class:cfe={f.id === SUBESTACION}>
           <div class="fila">
             <span class="nombre" title={f.parte ? `${f.nombre}: ${Math.round(f.parte * 100)} % del costo del polo` : f.nombre}>{f.corto}</span>
             {#if f.hecho}
@@ -118,15 +147,22 @@
             {/if}
           </div>
           <div class="barra"><span style:width="{f.e.avance * 100}%" class:parada={f.e.detenida}></span></div>
+          {#if f.id === SUBESTACION}
+            <p class="detalle cfe">
+              Da {personas(vista.capacidad)} MVA a sus empresas{vista.bancos ? ` (${vista.bancos} banco${vista.bancos > 1 ? 's' : ''} de la CFE)` : ''}.
+            </p>
+          {/if}
           <p class="detalle">
             {#if realidad}
-              {f.id === ESPUELA ? 'No se ha reportado' : f.hecho ? 'Lo que costó cada parte no se publica' : `${Math.round(f.e.avance * 100)} % (el avance de toda la obra)`}
+              {f.id === ESPUELA ? 'No se ha reportado' : f.id === SUBESTACION ? 'No se ha reportado una ampliación' : f.hecho ? 'Lo que costó cada parte no se publica' : `${Math.round(f.e.avance * 100)} % (el avance de toda la obra)`}
+            {:else if f.id === SUBESTACION && !vista.conEnergia}
+              Se amplía cuando esté terminado el frente de energía.
             {:else if f.hecho}
               Pagado {mdp(f.e.pagadoMdp)}
             {:else if f.e.cuadrillas > 0 && f.plan}
-              {f.e.detenida ? 'Detenido: no hay dinero · ' : ''}{Math.round(f.e.avance * 100)} % · termina en {meses(f.faltaMeses ?? 0)} · {mdp(f.plan.costoMdp / f.plan.meses)}/mes
+              {f.e.detenida ? `Detenido: no hay dinero${f.id === SUBESTACION ? ' en la caja de la CFE' : ''} · ` : ''}{Math.round(f.e.avance * 100)} % · termina en {meses(f.faltaMeses ?? 0)} · {mdp(f.plan.costoMdp / f.plan.meses)}/mes{f.id === SUBESTACION ? ' de la CFE' : ''}
             {:else if f.plan}
-              {f.e.avance > 0 ? `${Math.round(f.e.avance * 100)} %, parado · ` : ''}Con 1 cuadrilla: {mdp(f.plan.costoMdp * (1 - f.e.avance))} en {meses(f.plan.meses * (1 - f.e.avance))}
+              {f.e.avance > 0 ? `${Math.round(f.e.avance * 100)} %, parado · ` : ''}Con 1 cuadrilla: {mdp(f.plan.costoMdp * (1 - f.e.avance))} en {meses(f.plan.meses * (1 - f.e.avance))}{f.id === SUBESTACION ? `, de la CFE: +${MVA_BANCO} MVA` : ''}
             {/if}
           </p>
         </li>
@@ -135,10 +171,16 @@
 
     {#if !realidad}
       <dl>
-        <div><dt>Pagado</dt><dd class="mono">{mdp(vista.o.pagadoMdp)}</dd></div>
+        <div><dt>Pagado por el Estado</dt><dd class="mono">{mdp(vista.o.pagadoMdp)}</dd></div>
+        {#if vista.pagadoCfe > 0}
+          <div><dt>Pagado por la CFE</dt><dd class="mono">{mdp(vista.pagadoCfe)}</dd></div>
+        {/if}
         <div><dt>Trabajando en la obra</dt><dd class="mono">{personas(vista.o.plan?.personasEnObra ?? 0)}</dd></div>
         {#if vista.alMes > 0}
           <div><dt>Gasto al mes</dt><dd class="mono">{mdp(vista.alMes)}</dd></div>
+        {/if}
+        {#if vista.alMesCfe > 0}
+          <div><dt>Gasto al mes de la CFE</dt><dd class="mono">{mdp(vista.alMesCfe)}</dd></div>
         {/if}
         {#if vista.o.fase === 'operando'}
           <div><dt>Empleos permanentes</dt><dd class="mono">{personas(vista.o.ocupacion * (vista.o.plan?.empleosLleno ?? 0))}</dd></div>
@@ -147,8 +189,11 @@
       {#if vista.alMes > 0 && sim.dinero < vista.alMes}
         <p class="aviso">Quedan {mdp(sim.dinero)} en la caja del Estado: a este ritmo la obra se detendrá antes de fin de mes.</p>
       {/if}
+      {#if vista.alMesCfe > 0 && sim.dineroCfe < vista.alMesCfe}
+        <p class="aviso">Quedan {mdp(sim.dineroCfe)} en la caja de la CFE: la subestación se detendrá antes de fin de mes.</p>
+      {/if}
       <p class="nota">
-        El polo tiene 4 cuadrillas para calles, agua, energía y servicios (con ese esfuerzo se hizo Huamantla en 8.5 meses); la espuela es obra de vía y lleva las suyas. En frentes distintos trabajan a la vez; varias en un mismo frente rinden cada vez menos; al terminar un frente, sus cuadrillas quedan libres. Se paga conforme avanza; con 0 el frente se detiene donde va.
+        El polo tiene 4 cuadrillas para calles, agua, energía y servicios (con ese esfuerzo se hizo Huamantla en 8.5 meses); la espuela es obra de vía y lleva las suyas, y la subestación es de la CFE: sus cuadrillas y su dinero. En frentes distintos trabajan a la vez; varias en un mismo frente rinden cada vez menos; al terminar un frente, sus cuadrillas quedan libres. Se paga conforme avanza; con 0 el frente se detiene donde va.
       </p>
     {:else}
       <p class="nota">
@@ -160,6 +205,7 @@
     <details class="mas">
       <summary>Datos del polo</summary>
       <p>{datos.energia.dato}</p>
+      <p>{SUBESTACION_DATOS.dato}</p>
       <p>{datos.espuela.dato}</p>
       <p>{datos.lotes.dato}</p>
       <p>{datos.frentesDato.dato}</p>
@@ -266,6 +312,10 @@
     padding: 0;
     display: grid;
     gap: 0.55rem;
+  }
+
+  .detalle.cfe {
+    color: #fde68a;
   }
 
   .lista li.espuela {

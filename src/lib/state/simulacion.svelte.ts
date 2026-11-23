@@ -102,6 +102,7 @@ import {
   cargaDelPolo,
   conEspuela,
   ESPUELA,
+  SUBESTACION,
   fijarCuadrillas,
   mwEnUso,
   obraDelPolo,
@@ -551,7 +552,7 @@ class Simulacion {
         const o: ObraPolo = { ...obraDelPolo(p.id), fase: f === 'en-servicio' ? 'operando' : f };
         if (o.frentes) {
           const avance = f === 'en-servicio' ? 1 : f === 'en-obra' ? (real.get(clavePolo(p.id))!.avance ?? 0) : 0;
-          for (const [id, e] of Object.entries(o.frentes)) e.avance = id === ESPUELA ? 0 : avance;
+          for (const [id, e] of Object.entries(o.frentes)) e.avance = id === ESPUELA || id === SUBESTACION ? 0 : avance;
           resumir(o, p);
         }
         return [p.id, o];
@@ -828,10 +829,12 @@ class Simulacion {
 
   #avanzarObras(horas: number) {
     const caja = { mdp: this.dinero };
+    // The CFE's till: its plants and, inside the polos, their substations.
+    const cajaCfe = { mdp: this.dineroCfe };
     let terminadas = false;
     for (const o of this.obras.values()) {
       // A polo built by fronts: each front with crews advances (urbanized, or its spur done, changes the network).
-      if (o.frentes && avanzarInterior(o, horas, caja)) terminadas = true;
+      if (o.frentes && avanzarInterior(o, horas, caja, cajaCfe)) terminadas = true;
       if (o.fase === 'por-construir') continue;
       // Companies come only with a train and with electricity in the region.
       if (avanzarObra(o, horas, caja, this.conectado(o.id) && this.hayEnergia(o.id))) terminadas = true;
@@ -853,7 +856,6 @@ class Simulacion {
     if (caja.mdp !== this.dinero) this.dinero = caja.mdp;
 
     // CFE plants, from the CFE's own till.
-    const cajaCfe = { mdp: this.dineroCfe };
     let plantasTerminadas = false;
     for (const o of this.obrasEnergia.values()) {
       if (o.fase !== 'en-obra') continue;

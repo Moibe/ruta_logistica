@@ -1,5 +1,5 @@
 {
- "corte": "2026-11-22",
+ "corte": "2026-11-23",
  "nota": "Generado por scripts/polos/gen-interior.mjs.",
  "fuentes": {
   "dof-huamantla": {
@@ -34,10 +34,24 @@
    "fuente": "SICT: costo del ramal ferroviario a Dos Bocas, base del costo por km de la espuela (ver la sección de obras del Estado)",
    "url": "https://www.gob.mx/sct/prensa/precisa-sict-que-ramal-ferroviario-roberto-ayala-dos-bocas-tiene-un-costo-estimado-de-6-mil-54-mdp"
   },
+  "cfe-cartera-2024": {
+   "fuente": "CFE, Programas y Proyectos de Inversión 2024 (cierre de diciembre): cada proyecto con su descripción, sus MVA y km-c, sus fechas y su costo total, entre ellos los de subestaciones de distribución y las subestaciones Kantenah y Leona Vicario",
+   "url": "https://portales-transparencia.cfe.mx/corporativo/31%20Informe%20presupuestl%20balance%20general%20y%20estado%20fi/Direcci%C3%B3n%20Corporativa%20de%20Finanzas/Gerencia%20de%20Presupuestos/2024/Cartera%20de%20CFE%20pre%20cierre%20DIC%2010012025%204o%20trim.pdf"
+  },
   "juego": {
    "fuente": "Estimación del juego",
    "url": ""
   }
+ },
+ "subestacion": {
+  "mvaBanco": 30,
+  "mdpPorMva": 1.64,
+  "mesesGobierno": 16,
+  "dato": "Ampliar la subestación de un polo es obra de la CFE, pagada de su caja: un banco de transformación de 30 MVA, un tamaño común en las subestaciones de distribución de la CFE (estimación del juego). Cuesta 1.64 millones de pesos por MVA, la mediana de los nueve proyectos de subestaciones de distribución terminados de la cartera de inversión de la CFE (pesos del año de cada proyecto, sin actualizar), y tarda 16 meses con 4 cuadrillas: lo que tardaron Kantenah y Leona Vicario, las dos subestaciones nuevas de la Riviera Maya, de abril y mayo de 2024 a agosto de 2025. Cada banco suma 30 MVA a lo que el polo da a sus empresas (el juego toma un MVA por MW).",
+  "fuentes": [
+   "cfe-cartera-2024",
+   "juego"
+  ]
  },
  "polos": {
   "huamantla": {

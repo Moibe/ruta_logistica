@@ -96,6 +96,8 @@ export type ObraPolo = {
    * own crews; then `plan` is the sum of them, kept by `avanzarInterior`.
    */
   frentes?: Record<string, EstadoFrente>;
+  /** Banks the CFE has added to its substation (each one more MVA for its companies). */
+  bancos?: number;
   /** Its company lots, when it has a close-up: the sector each is promoted for and how full it is. */
   lotes?: EstadoLote[];
 };

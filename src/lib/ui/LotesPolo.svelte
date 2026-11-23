@@ -53,7 +53,8 @@
     return {
       o,
       lotes,
-      cap: capacidadMw(id),
+      cap: capacidadMw(o, id),
+      bancos: o.bancos ?? 0,
       enUso: mwEnUso(o, polo),
       promovido: mwPromovido(o, polo),
       patio: sim.enPatioPolo(id),
@@ -90,7 +91,7 @@
         <span class="uso" style:width="{Math.min(100, (vista.enUso / vista.cap) * 100)}%"></span>
       </div>
       <p class="detalle">
-        Con todo lo promovido lleno pediría {mw(vista.promovido)} MW. La subestación del polo da {mw(vista.cap)} MVA ({datos.energia.fuenteCorta}): un lote que no cabe se queda sin empresa.
+        Con todo lo promovido lleno pediría {mw(vista.promovido)} MW. La subestación del polo da {mw(vista.cap)} MVA ({datos.energia.fuenteCorta}{vista.bancos ? `, más ${vista.bancos} banco${vista.bancos > 1 ? 's' : ''} de la CFE` : ''}): un lote que no cabe se queda sin empresa hasta que la CFE la amplíe (pestaña Obra).
       </p>
     </div>
     {#if vista.sinPromover}

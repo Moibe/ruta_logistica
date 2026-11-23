@@ -24,7 +24,7 @@ import { POLOS, type Polo } from './sitios';
 /**
  * The inside of a Polo del Bienestar: its close-up view and its work by
  * fronts (`datos/interiores.json`, from `scripts/polos/gen-interior.mjs`, every
- * figure with its source). For now only Huamantla has one.
+ * figure with its source). Huamantla and Coatzacoalcos I have one.
  *
  * - **The urban fronts** (roads and lighting, water and drainage, power, the
  *   services centre) share the polo's cost and time by their part of it (an
@@ -37,6 +37,9 @@ import { POLOS, type Polo } from './sitios';
  *   cost per km of the Dos Bocas branch line. The polo gets its station only
  *   with it built.
  * - The polo is urbanized (operating) when the four urban fronts are done.
+ * - **Its substation** gives its companies its official MW (or the median of
+ *   the official ones). Once its power front is built, the CFE can enlarge it
+ *   bank by bank, paid from the CFE's till, with crews of its own.
  */
 
 type Fuente = { fuente: string; url: string };
@@ -63,7 +66,8 @@ export type Interior = {
   vocacionesDato: Dato;
 };
 
-type InterioresJson = { corte: string; fuentes: Record<string, Fuente>; polos: Record<string, Interior> };
+type Subestacion = { mvaBanco: number; mdpPorMva: number; mesesGobierno: number } & Dato;
+type InterioresJson = { corte: string; fuentes: Record<string, Fuente>; subestacion: Subestacion; polos: Record<string, Interior> };
 
 const D = DATOS as unknown as InterioresJson;
 export const fuenteInterior = (k: string) => D.fuentes[k];
@@ -73,13 +77,21 @@ export const interior = (id: string): Interior | null => D.polos[id] ?? null;
 
 /** The spur's front id. */
 export const ESPUELA = 'espuela';
+/** The substation's enlargement: one bank at a time, by the CFE. */
+export const SUBESTACION = 'subestacion';
+export const SUBESTACION_DATOS = D.subestacion;
+export const MVA_BANCO = D.subestacion.mvaBanco;
 
-/** A front as the view lists it: the four urban ones, then the spur. */
+/** A front as the view lists it: the four urban ones, the spur, then the substation's enlargement. */
 export type Frente = { id: string; nombre: string; corto: string; parte: number | null };
 export function frentesDe(id: string): Frente[] {
   const i = interior(id);
   if (!i) return [];
-  return [...i.frentes, { id: ESPUELA, nombre: `Espuela de tren (${i.espuela.km.toLocaleString('es-MX')} km)`, corto: 'Espuela', parte: null }];
+  return [
+    ...i.frentes,
+    { id: ESPUELA, nombre: `Espuela de tren (${i.espuela.km.toLocaleString('es-MX')} km)`, corto: 'Espuela', parte: null },
+    { id: SUBESTACION, nombre: `Ampliar la subestación: un banco de ${MVA_BANCO} MVA (CFE)`, corto: 'Subestación', parte: null },
+  ];
 }
 
 export type PlanFrente = { cuadrillas: number; costoMdp: number; meses: number; horas: number; personasEnObra: number };
@@ -89,6 +101,12 @@ export function planFrente(polo: Polo, frente: string, n: number): PlanFrente | 
   const i = interior(polo.id);
   if (!i) return null;
   const k = Math.max(1, Math.min(MAX_CUADRILLAS, Math.round(n)));
+  if (frente === SUBESTACION) {
+    // A bank: the CFE's median cost per MVA, at the pace of its latest new substations.
+    const s = D.subestacion;
+    const p = presupuestarObra(s.mvaBanco * s.mdpPorMva, s.mesesGobierno, k);
+    return { cuadrillas: k, costoMdp: p.costoMdp, meses: p.meses, horas: p.horas, personasEnObra: p.personasEnObra };
+  }
   if (frente === ESPUELA) {
     // The Dos Bocas branch line: its cost per km and its pace (km a month with four crews).
     const ramal = obraVia('dos-bocas');
@@ -113,6 +131,7 @@ export function obraDelPolo(id: string): ObraPolo {
   if (i) {
     o.frentes = Object.fromEntries(frentesDe(id).map((f) => [f.id, frenteNuevo()]));
     o.lotes = i.lotes.lista.map(() => ({ sector: null, orden: 0, lleno: 0 }));
+    o.bancos = 0;
   }
   return o;
 }
@@ -138,8 +157,14 @@ export function demandaLote(polo: Polo, n: number, s: string | null) {
   return { ha: l.ha, personas, mw, toneladas, exportacion: sec?.exportacion ?? 0, agua: sec?.agua ?? 1 };
 }
 
-/** MW the polo has for its companies (its substation): its official figure, or the median of the official ones. */
-export const capacidadMw = (id: string) => (interior(id) ? mwDelPolo(id) : Infinity);
+/**
+ * MW the polo has for its companies (its substation): its official figure, or
+ * the median of the official ones, and the banks the CFE has added.
+ */
+export const capacidadMw = (o: ObraPolo, id: string) => (interior(id) ? mwDelPolo(id) + (o.bancos ?? 0) * MVA_BANCO : Infinity);
+
+/** Its power front built: the substation can be enlarged. */
+export const conEnergia = (o: ObraPolo) => (o.frentes?.energia?.avance ?? 0) >= 1;
 
 /** MW its companies use now (in as far as they've moved in). */
 export function mwEnUso(o: ObraPolo, polo: Polo): number {
@@ -165,7 +190,7 @@ export function sinEnergiaLote(o: ObraPolo, polo: Polo, n: number): boolean {
  */
 function lotesQueCaben(o: ObraPolo, polo: Polo): Set<number> {
   const lotes = o.lotes ?? [];
-  const cap = capacidadMw(polo.id) + 1e-9;
+  const cap = capacidadMw(o, polo.id) + 1e-9;
   const caben = new Set<number>();
   let mw = 0;
   for (const [n, l] of lotes.entries()) {
@@ -251,7 +276,8 @@ export function resumir(o: ObraPolo, polo: Polo) {
   const i = interior(polo.id);
   if (!i || !o.frentes) return;
   o.avance = i.frentes.reduce((s, f) => s + f.parte * (o.frentes![f.id]?.avance ?? 0), 0);
-  o.pagadoMdp = Object.values(o.frentes).reduce((s, f) => s + f.pagadoMdp, 0);
+  // What the State paid: the substation is the CFE's.
+  o.pagadoMdp = Object.entries(o.frentes).reduce((s, [id, f]) => s + (id === SUBESTACION ? 0 : f.pagadoMdp), 0);
   let cuadrillas = 0;
   let costo = 0;
   let personas = 0;
@@ -289,9 +315,14 @@ export function cuadrillasUrbanas(o: ObraPolo, id: string): number {
   }, 0);
 }
 
-/** The most crews front `frente` can take now: 4 for the spur; for an urban front, what the polo's 4 leave free. */
+/**
+ * The most crews front `frente` can take now: 4 for the spur; 4 for the
+ * substation once the power front is built; for an urban front, what the
+ * polo's 4 leave free.
+ */
 export function maxCuadrillas(o: ObraPolo, id: string, frente: string): number {
   if (frente === ESPUELA) return MAX_CUADRILLAS;
+  if (frente === SUBESTACION) return conEnergia(o) ? MAX_CUADRILLAS : 0;
   const propias = o.frentes?.[frente]?.cuadrillas ?? 0;
   return Math.max(0, MAX_CUADRILLAS - (cuadrillasUrbanas(o, id) - propias));
 }
@@ -311,11 +342,12 @@ export function fijarCuadrillas(o: ObraPolo, polo: Polo, frente: string, n: numb
 }
 
 /**
- * Move each front with crews `horas` forward, paid as it advances. Returns
- * true on the hour the polo is urbanized or its spur is finished: either
- * changes the rail network.
+ * Move each front with crews `horas` forward, paid as it advances: from the
+ * State's till, the substation from the CFE's. A finished bank adds its MVA
+ * and the front waits for the next one. Returns true on the hour the polo is
+ * urbanized or its spur is finished: either changes the rail network.
  */
-export function avanzarInterior(o: ObraPolo, horas: number, caja: Caja): boolean {
+export function avanzarInterior(o: ObraPolo, horas: number, caja: Caja, cajaCfe: Caja): boolean {
   if (!o.frentes) return false;
   const polo = POLOS.find((p) => p.id === o.id);
   if (!polo) return false;
@@ -326,13 +358,17 @@ export function avanzarInterior(o: ObraPolo, horas: number, caja: Caja): boolean
     const p = planFrente(polo, id, e.cuadrillas);
     if (!p) continue;
     const pago = { plan: { costoMdp: p.costoMdp, horas: p.horas }, avance: e.avance, pagadoMdp: e.pagadoMdp, detenida: e.detenida };
-    const listo = pagarAvance(pago, horas, caja);
+    const listo = pagarAvance(pago, horas, id === SUBESTACION ? cajaCfe : caja);
     e.avance = pago.avance;
     e.pagadoMdp = pago.pagadoMdp;
     e.detenida = pago.detenida;
     if (listo) {
       e.cuadrillas = 0;
       if (id === ESPUELA) cambio = true;
+      if (id === SUBESTACION) {
+        o.bancos = (o.bancos ?? 0) + 1;
+        e.avance = 0;
+      }
     }
   }
   resumir(o, polo);
