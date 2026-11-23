@@ -5,7 +5,8 @@
 //   node scripts/polos/gen-interior.mjs
 //
 // Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San
-// Jerónimo, Parque Industrial Bajío, Hermosillo and Topolobampo. Writes:
+// Jerónimo, Parque Industrial Bajío, Hermosillo, Topolobampo, Puerta Logística del Bajío and
+// Durango. Writes:
 //   static/data/polos/<id>.json            the geometry, in metres around the polo (fetched by the view)
 //   src/lib/domain/datos/interiores.json   the works by front and the real facts (read by the game)
 //
@@ -937,6 +938,194 @@ const TOPOLOBAMPO = {
   carretera: /124/,
 };
 
+/**
+ * Puerta Logística del Bajío, from its declaratoria (DOF, 21 Jul 2025): three polygons in UTM zone
+ * 14 (the DOF doesn't say the zone; Celaya is in it), with their curves' centres and radii: I
+ * (3.29 ha), II (48.83 ha) and III (0.29 ha), 52.41 ha. Every side agrees with its bearing and
+ * length. A road 25 m wide curves between I and II (their curves share centres, 25 m apart), and
+ * II goes round a rectangle of 1.2 ha it leaves out (its table walks into it and back along the
+ * same side). III is too small for a lot: the game draws it as the polo's reserve.
+ */
+const PUERTA_LOGISTICA_BAJIO = {
+  id: 'puerta-logistica-bajio',
+  zona: 14,
+  piezas: [
+    {
+      nombre: 'Polígono II',
+      servicios: true,
+      vertices: [
+        [316547.078, 2264676.008], [316495.866, 2264495.107], [316494.404, 2264491.384], [316480.35, 2264447.185],
+        [316479.051, 2264442.99], [316463.076, 2264381.818], [316455.275, 2264383.473], [316439.714, 2264331.146],
+        [316446.745, 2264329.559], [316436.342, 2264291.39], [316407.869, 2264190.609], [316397.397, 2264190.651],
+        [316395.172, 2264132.574], [316393.146, 2264075.343], [316391.138, 2264014.432], [316368.109, 2264014.973],
+        [316393.61, 2263879.816], [316391.877, 2263739.858], [316392.274, 2263671.967], [316385.94, 2263602.217],
+        [316379.165, 2263600.075], [316372.469, 2263597.7], [316365.858, 2263595.094], [316359.342, 2263592.261],
+        [316352.928, 2263589.204], [316346.624, 2263585.926], [316340.437, 2263582.433], [316334.374, 2263578.727],
+        [316328.444, 2263574.813], [316322.652, 2263570.697], [316317.007, 2263566.382], [316311.514, 2263561.875],
+        [316306.181, 2263557.18], [316301.013, 2263552.303], [316296.018, 2263547.25], [316291.2, 2263542.028],
+        [316286.566, 2263536.641], [316282.122, 2263531.098], [316277.872, 2263525.403], [316273.821, 2263519.565],
+        [316269.976, 2263513.591], [316266.339, 2263507.486], [316262.916, 2263501.26], [316226.535, 2263432.277],
+        [316223.555, 2263426.857], [316220.389, 2263421.543], [316217.04, 2263416.342], [316213.513, 2263411.26],
+        [316209.812, 2263406.304], [316205.941, 2263401.479], [316201.905, 2263396.791], [316197.71, 2263392.246],
+        [316193.359, 2263387.849], [316188.858, 2263383.606], [316184.212, 2263379.522], [316179.428, 2263375.601],
+        [316174.511, 2263371.848], [316169.467, 2263368.268], [316164.301, 2263364.865], [316159.021, 2263361.643],
+        [316153.632, 2263358.607], [316148.141, 2263355.759], [316142.554, 2263353.103], [316136.879, 2263350.642],
+        [316131.121, 2263348.38], [316125.289, 2263346.319], [316119.389, 2263344.462], [316113.428, 2263342.81],
+        [316107.413, 2263341.365], [316101.352, 2263340.131], [316095.252, 2263339.107], [316089.12, 2263338.295],
+        [316082.963, 2263337.697], [316095.59, 2263476.123], [316105.492, 2263476.034], [316113.952, 2263483.923],
+        [316113.952, 2263488.097], [316105.31, 2263497.224], [316116.169, 2263615.266], [316127.345, 2263739.56],
+        [316161.284, 2264113.112], [316172.671, 2264237.652], [316183.882, 2264362.326], [316195.008, 2264486.589],
+        [316206.34, 2264611.473], [316217.622, 2264736.051], [316228.959, 2264860.478], [316232.574, 2264901.045],
+        [316240.06, 2264985.068], [316247.324, 2265064.503], [316251.443, 2265109.545], [316258.217, 2265185.818],
+        [316262.865, 2265200.734], [316492.027, 2265213.038], [316584.606, 2265196.506], [316580.992, 2265177.879],
+        [316547.22, 2265003.807], [316597.823, 2264992.818], [316595.809, 2264985.195], [316570.756, 2264992.148],
+        [316494.846, 2265005.888], [316453.406, 2264856.21], [316530.215, 2264837.132], [316570.756, 2264992.148],
+        [316595.809, 2264985.195], [316555.392, 2264832.213], [316553.995, 2264826.922], [316579.174, 2264821.941],
+        [316572.961, 2264773.823],
+      ],
+      lotes: [
+        { ha: 6, lado: 'a' }, { ha: 5, lado: 'a' }, { ha: 4, lado: 'a' }, { ha: 3, lado: 'a' }, { ha: 3, lado: 'a' },
+        { ha: 6, lado: 'b' }, { ha: 5, lado: 'b' }, { ha: 4, lado: 'b' }, { ha: 2, lado: 'b' },
+      ],
+    },
+    {
+      nombre: 'Polígono I',
+      vertices: [
+        [316381.647, 2263574.441], [316354.113, 2263289.162], [316080.635, 2263312.17], [316080.663, 2263312.48],
+        [316087.604, 2263313.005], [316094.523, 2263313.768], [316101.412, 2263314.767], [316108.263, 2263316.001],
+        [316115.067, 2263317.469], [316121.817, 2263319.169], [316128.505, 2263321.099], [316135.123, 2263323.257],
+        [316141.664, 2263325.64], [316148.119, 2263328.246], [316154.48, 2263331.071], [316160.742, 2263334.112],
+        [316166.896, 2263337.365], [316172.935, 2263340.828], [316178.851, 2263344.495], [316184.639, 2263348.362],
+        [316190.291, 2263352.425], [316195.801, 2263356.68], [316201.161, 2263361.12], [316206.367, 2263365.741],
+        [316211.411, 2263370.538], [316216.289, 2263375.505], [316220.993, 2263380.635], [316225.519, 2263385.924],
+        [316229.861, 2263391.364], [316234.015, 2263396.95], [316237.975, 2263402.675], [316241.737, 2263408.532],
+        [316245.296, 2263414.514], [316248.648, 2263420.615], [316285.029, 2263489.598], [316288.046, 2263495.084],
+        [316291.251, 2263500.462], [316294.641, 2263505.725], [316298.212, 2263510.868], [316301.959, 2263515.883],
+        [316305.878, 2263520.765], [316309.965, 2263525.508], [316314.214, 2263530.106], [316318.62, 2263534.554],
+        [316323.178, 2263538.846], [316327.882, 2263542.977], [316332.727, 2263546.942], [316337.707, 2263550.736],
+        [316342.815, 2263554.355], [316348.047, 2263557.795], [316353.394, 2263561.05], [316358.852, 2263564.118],
+        [316364.413, 2263566.994], [316370.07, 2263569.676], [316375.817, 2263572.159],
+      ],
+      lotes: [{ ha: 2, lado: 'a' }],
+    },
+  ],
+  franjas: [
+    {
+      nombre: 'Polígono III',
+      tipo: 'reserva',
+      nota: 'Parte del polo (DOF): 0.29 ha, muy chica para un lote; el juego la deja de reserva',
+      delPolo: true,
+      vertices: [
+        [316356.877, 2265237.176], [316412.276, 2265227.282], [316268.736, 2265219.576], [316274.294, 2265237.413],
+        [316275.555, 2265243.009], [316257.333, 2265249.269], [316258.753, 2265264.785], [316280.5, 2265259.426],
+      ],
+    },
+  ],
+  areaDof: 524080.7,
+  control: null,
+  marcador: { lat: 20.46901, lon: -100.76097 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 40 ha in 10 lots of 2 to 6 ha, the size of logistics warehouses
+   * (an estimate).
+   */
+  serviciosHa: 1.5,
+  anchoVialidad: 26,
+  anchoAcceso: 14,
+  /** The only numbered road near: the state toll bypass of Celaya, GTO D (OpenStreetMap). */
+  carretera: /GTO D/,
+};
+
+/**
+ * Centro Logístico e Industrial de Durango, from its declaratoria (DOF, 26 Aug 2025): polygon 1
+ * (272.16 ha) and four reserves north of it (1, 2, 4 and 5; there's no 3), 315.42 ha, in UTM zone
+ * 13 (the DOF doesn't say the zone; Durango is in it), with European number format. Every side
+ * agrees with its bearing and length. The game puts the lots in polygon 1 and leaves the reserves
+ * as such.
+ */
+const DURANGO = {
+  id: 'durango',
+  zona: 13,
+  piezas: [
+    {
+      nombre: 'Polígono 1',
+      servicios: true,
+      vertices: [
+        [549361.769, 2674973.111], [549668.316, 2674739.17], [549671.561, 2674736.75], [550000.1, 2674469.15],
+        [550003.513, 2674466.65], [550275.972, 2674242.31], [550141.097, 2674067.6], [550138.482, 2674064.6],
+        [549987.796, 2673875.819], [549988.241, 2673872.93], [549860.997, 2673655.148], [549704.961, 2673447.099],
+        [549702.886, 2673443.78], [549553.987, 2673256.601], [549550.803, 2673252.85], [549389.174, 2673056.05],
+        [549385.884, 2673052.7], [549233.09, 2672856.829], [549231.246, 2672852.85], [549090.087, 2672650.49],
+        [549087.706, 2672647.34], [548935.794, 2672460.311], [548933.482, 2672456.891], [548788.834, 2672268.94],
+        [548786.28, 2672265.65], [548635.636, 2672075.8], [548312.378, 2672323.091], [548308.366, 2672326.159],
+        [548000.911, 2672561.36], [548148.255, 2672751.05], [548151.763, 2672755.229], [548300.027, 2672949.049],
+        [548303.106, 2672953.87], [548453.305, 2673145.46], [548456.196, 2673149.111], [548604.324, 2673339.809],
+        [548607.781, 2673344.05], [548296.402, 2673590.82], [548452.529, 2673791.503], [548754.065, 2673542.53],
+        [548757.761, 2673539.369], [548924.798, 2673758.98], [548927.937, 2673762.42], [549067.945, 2673945.559],
+        [549070.773, 2673949.641], [549067.017, 2673952.46], [548749.892, 2674199.081], [548899.43, 2674390.08],
+        [548903.364, 2674395.182], [548746.338, 2674521.271], [548900.227, 2674723.142], [549053.458, 2674598.41],
+        [549057.045, 2674595.321], [549060.405, 2674599.739], [549215.255, 2674792.62], [549217.695, 2674795.73],
+      ],
+      lotes: [
+        { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 10, lado: 'a' },
+        { ha: 30, lado: 'b' }, { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' },
+      ],
+    },
+  ],
+  franjas: [
+    {
+      nombre: 'Reserva 1',
+      tipo: 'reserva',
+      nota: 'Reserva del polo según su declaratoria (DOF); el juego no le pone lotes',
+      delPolo: true,
+      vertices: [
+        [550296.909, 2675523.891], [550314.724, 2675507.85], [550574.976, 2675300.534], [550883.389, 2675028.342],
+        [550751.52, 2674875.87], [550433.87, 2675126.82], [550347.432, 2675020.177], [550279.51, 2675075.23],
+        [550069.93, 2675237.53],
+      ],
+    },
+    {
+      nombre: 'Reserva 2',
+      tipo: 'reserva',
+      nota: 'Reserva del polo según su declaratoria (DOF); el juego no le pone lotes',
+      delPolo: true,
+      vertices: [
+        [549953.19, 2675826.54], [549999.459, 2675791.891], [550001.477, 2675789.906], [550244.096, 2675571.445],
+        [550148.6, 2675450.56], [549856.48, 2675682.85],
+      ],
+    },
+    {
+      nombre: 'Reserva 4',
+      tipo: 'reserva',
+      nota: 'Reserva del polo según su declaratoria (DOF); el juego no le pone lotes',
+      delPolo: true,
+      vertices: [
+        [549046.766, 2675898.85], [549377.513, 2675643.51], [549227.008, 2675460.28], [548894.968, 2675716.18],
+      ],
+    },
+    {
+      nombre: 'Reserva 5',
+      tipo: 'reserva',
+      nota: 'Reserva del polo según su declaratoria (DOF); el juego no le pone lotes',
+      delPolo: true,
+      vertices: [
+        [548840.07, 2676248.456], [549132.732, 2676019.251], [549039.807, 2675902.906], [548743.805, 2676137.205],
+      ],
+    },
+  ],
+  areaDof: 3154162.71,
+  control: null,
+  marcador: { lat: 24.17403, lon: -104.51633 },
+  /**
+   * No lots are published. The game puts in polygon 1 about the share Coatzacoalcos I's
+   * declaratoria zones industrial (76.46 % of it): 212 ha in 11 lots of 10 to 30 ha (an estimate).
+   */
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  carretera: /40/,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 const CONSULTAS = (p) => ({
@@ -1511,6 +1700,34 @@ const FUENTES = {
     fuente: 'Gobierno de Sinaloa, 20 de noviembre de 2025: la planta de amoniaco de Proman-GPO en Topolobampo (800 mil toneladas al año) supera el 50 % de su obra, con 1,700 empleos directos, y producirá a finales de 2027',
     url: 'https://sinaloa.gob.mx/topolobampo-se-consolida-como-polo-de-desarrollo-y-bienestar-con-la-planta-proman-gpo/',
   },
+  'dof-plb': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Puerta Logística del Bajío, Guanajuato (21 de julio de 2025): cuadros de construcción de tres polígonos con sus curvas, 52.41 ha en Celaya; a 5 km de la carretera 51 y a 2 km de la 45D, con acceso directo a las vías de CPKC y Ferromex, a 15 km del aeropuerto de Celaya; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (el Gobierno de Guanajuato)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5763405&fecha=21/07/2025',
+  },
+  'economia-plb': {
+    fuente: 'Secretaría de Economía, portal de los Polos de Desarrollo, ficha de Puerta Logística del Bajío: convergencia de Ferromex y CPKC, proyecto de sección aduanera, disponibilidad eléctrica para operaciones de logística',
+    url: 'https://podecobi.economia.gob.mx/polos-de-desarrollo',
+  },
+  'celaya-plb': {
+    fuente: 'Municipio de Celaya, agosto de 2024: firma del puerto seco intermodal «Puerta Logística del Bajío» con el grupo español AZVI, CPKC y Ferromex; 51 ha cerca de la armadora Honda, al sur del municipio, con 2 mil millones de pesos en su primera etapa',
+    url: 'https://www.celaya.gob.mx/likcitsci/comunicados/2024/celaya-sera-el-centro-logistico-y-comercial-mas-importante-del-pais-jmm/',
+  },
+  'guanajuato-carta': {
+    fuente: 'Gobierno de Guanajuato, 26 de junio de 2025: la gobernadora firma en Palacio Nacional la carta de intención del polo; la primera etapa ocupa 51 ha y puede crecer a 200, y por Celaya pasa el 23 % de la carga ferroviaria del país',
+    url: 'https://boletines.guanajuato.gob.mx/2025/06/26/firman-carta-de-intencion-para-impulsar-el-proyecto-de-la-puerta-logistica-del-bajio/',
+  },
+  'economista-plb': {
+    fuente: 'El Economista, entrevista con el director de Guanajuato Puerto Interior, reproducida en el blog de GPI (11 de marzo de 2026): la Puerta Logística del Bajío empezaría su obra en 2026 y operaría en 2027, con 2,500 millones de pesos de Cointer México (Grupo AZVI), 12 km de vías, seis naves de 10,800 m² y una refrigerada, 144 mil toneladas de almacenamiento y una sección aduanal',
+    url: 'https://puertointerior.guanajuato.gob.mx/blog/2026/03/11/puerta-logistica-del-bajio-sera-ancla-de-desarrollo-en-la-region/',
+  },
+  'dof-durango': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Centro Logístico e Industrial de Durango (26 de agosto de 2025): cuadros de construcción del polígono 1 y de las reservas 1, 2, 4 y 5, 315.42 ha; a pie de la carretera 40D y de la vía férrea, a 780 m de la zona urbana Cinco de Mayo y a 4 km del aeropuerto; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (el estado de Durango)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5766563&fecha=26/08/2025',
+  },
+  'congreso-durango-fermaca': {
+    fuente: 'Congreso del Estado de Durango, 21 de abril de 2026: autoriza donar 50 ha del Centro Logístico Industrial de Durango a Fermaca Digital para un centro de datos, con unos 2,700 millones de dólares y por lo menos mil empleos directos',
+    url: 'https://congresodurango.gob.mx/2026/04/21/autoriza-congreso-terreno-para-fermaca-digital-city/',
+  },
   juego: { fuente: 'Estimación del juego', url: '' },
 };
 
@@ -1983,6 +2200,84 @@ function interiorTopolobampo(g) {
   };
 }
 
+function interiorPuertaLogisticaBajio(g) {
+  return {
+    nombre: 'Puerta Logística del Bajío',
+    lugar: 'Celaya, Guanajuato',
+    sectores: ['transporte', 'alimentos', 'productos-metalicos', 'maquinaria', 'electricos', 'computacion'],
+    fuentesLista: ['dof-plb', 'celaya-plb', 'guanajuato-carta', 'economista-plb', 'economia-plb', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota:
+      'El polo real: el Gobierno de Guanajuato firmó el proyecto en agosto de 2024 como un puerto seco intermodal, con el grupo español AZVI y las dos ferroviarias de Celaya, CPKC y Ferromex, y 2 mil millones en su primera etapa (municipio de Celaya). El 26 de junio de 2025 la gobernadora firmó en la conferencia matutina la carta de intención que lo hizo polo, y la declaratoria salió el 21 de julio (DOF). Su primera etapa ocupa 51 ha y puede crecer a 200. En marzo de 2026 el director de Guanajuato Puerto Interior dijo a El Economista que la obra empezaría ese año y operaría en 2027, con 2,500 millones de Cointer México (Grupo AZVI), 12 km de vías y siete naves, y que el puerto seco no pide mucha energía ni agua. No se ha reportado que su obra empezara: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el polígono ya «dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad»; para lotes de empresas hace falta llevarlas adentro. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus dos polígonos grandes lleva su calle; se hacen uno tras otro.',
+      fuentes: ['dof-plb', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria le da «acceso directo a vías férreas (CPKC y Ferromex)»: Celaya es donde se cruzan, y por ahí pasa el 23 % de la carga ferroviaria del país (Gobierno de Guanajuato). Pegados a su lado oeste corren ramales sin nombre (OpenStreetMap); la espuela del juego va a la línea principal más cercana, la ${g.espuela.via} (${g.espuela.operador}): ${km(g.espuela.km)} km en línea recta. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-plb', 'guanajuato-carta', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra(
+      'puerta-logistica-bajio',
+      g,
+      `El portal de Economía solo dice «disponibilidad eléctrica para operaciones de logística». La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`
+    ),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Tres polígonos: el II (48.83 ha), que rodea un rectángulo de 1.2 ha que no incluye; el I (3.29 ha), al sur, del otro lado de una calle curva de 25 m, y el III (0.29 ha), en la punta norte, que el juego deja de reserva. No hay lotes publicados. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 2 a 6 ha, del tamaño de las bodegas de un puerto seco, y 1.5 ha de servicios; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-plb', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Industria', 'Manufacturera avanzada', 'Logística y transporte', 'Agroindustria de valor agregado', 'Tecnologías de la información y servicios empresariales', 'Automotriz', 'Aeroespacial'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, automotriz y aeroespacial son el equipo de transporte; agroindustria, la industria alimentaria; industria, a secas, los productos metálicos, la maquinaria, los aparatos eléctricos y la electrónica, como la manufactura de Zapotlán (estimación del juego). Manufactura avanzada no es un sector del censo, y logística y tecnologías de la información no son manufactura: el juego no las ofrece para un lote.',
+      fuentes: ['dof-plb'],
+    },
+  };
+}
+
+function interiorDurango(g) {
+  return {
+    nombre: 'Centro Logístico e Industrial de Durango',
+    lugar: 'Durango, Durango',
+    sectores: ['transporte', 'electricos', 'computacion', 'textil', 'papel'],
+    fuentesLista: ['dof-durango', 'congreso-durango-fermaca', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota:
+      'El polo real: declarado el 26 de agosto de 2025 (DOF) en terrenos públicos del estado de Durango. El 21 de abril de 2026 el Congreso de Durango autorizó donar 50 ha del Centro Logístico Industrial de Durango a Fermaca Digital, para un centro de datos de unos 2,700 millones de dólares y por lo menos mil empleos directos; la nota no dice si esas hectáreas quedan dentro del polígono del polo. Sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el polígono ya «dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad»; para lotes de empresas hace falta llevarlas adentro. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['dof-durango', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria lo pone «a pie de paso de la carretera 40D, así como de la vía férrea existente». La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-durango', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra(
+      'durango',
+      g,
+      `La declaratoria dice que dispone de energía eléctrica, sin cifra. La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`
+    ),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `El polígono 1 (272.16 ha) y cuatro reservas al norte (21.50, 6.28, 9.93 y 5.54 ha; la declaratoria no tiene reserva 3). No hay lotes publicados. El juego pone en el polígono 1 la parte que Coatzacoalcos I tiene de uso industrial (76.46 % de él): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 10 a 30 ha, y 4 ha de servicios a la entrada; las reservas quedan de reserva (estimación del juego).`,
+      fuentes: ['dof-durango', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Movilidad eléctrica', 'Industria cinematográfica', 'Autopartes', 'Electrónica especializada', 'Manufactura avanzada', 'Industria textil', 'Industria de papel', 'Automotriz'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), que repite manufactura avanzada. En el juego, movilidad eléctrica es el equipo de transporte y los aparatos eléctricos, donde están las baterías; autopartes y automotriz, el equipo de transporte; electrónica especializada, la electrónica (estimación del juego); la textil y la del papel, sus sectores. Manufactura avanzada no es un sector del censo y la industria cinematográfica no es manufactura: el juego no las ofrece para un lote.',
+      fuentes: ['dof-durango'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -2026,6 +2321,8 @@ const POLOS_INTERIOR = [
   [PARQUE_INDUSTRIAL_BAJIO, interiorParqueIndustrialBajio],
   [HERMOSILLO, interiorHermosillo],
   [TOPOLOBAMPO, interiorTopolobampo],
+  [PUERTA_LOGISTICA_BAJIO, interiorPuertaLogisticaBajio],
+  [DURANGO, interiorDurango],
 ];
 // `id…`: build only those polos and keep the others as they are in interiores.json.
 // `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.

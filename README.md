@@ -413,7 +413,7 @@ los primeros 15 polos entre sus hectáreas (60.5). Las cifras salen de fuentes o
 `datos/calibracion.json`; la tabla y sus fuentes, en la
 [enciclopedia](docs/enciclopedia.md#construirlos).
 
-**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San Jerónimo, Parque Industrial Bajío, Hermosillo y Topolobampo). *Entrar al polo ›* en su ficha
+**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San Jerónimo, Parque Industrial Bajío, Hermosillo, Topolobampo, Puerta Logística del Bajío y Durango). *Entrar al polo ›* en su ficha
 pide a la cámara del tablero que baje hasta él (`tablero.entrarPolo`, pedido `polo:<id>`) y abre
 la ruta; *← México* o Esc vuelven sobre él (`tablero.salirPolo`, pedido `polo-fuera:<id>`). El
 tablero atiende un pedido de cámara una sola vez, cuando su proyección ya existe
@@ -421,8 +421,8 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
 
 - **Datos:** `scripts/polos/gen-interior.mjs` tiene una configuración por polo (`HUAMANTLA`,
   `COATZACOALCOS_I`, `TEXISTEPEC`, `ALTAMIRA`, `NEZAHUALCOYOTL`, `RESERVA_ZAPOTLAN`,
-  `SAN_JERONIMO`, `PARQUE_INDUSTRIAL_BAJIO`, `HERMOSILLO`, `TOPOLOBAMPO`, con los vértices del
-  DOF ya corregidos) y un texto
+  `SAN_JERONIMO`, `PARQUE_INDUSTRIAL_BAJIO`, `HERMOSILLO`, `TOPOLOBAMPO`,
+  `PUERTA_LOGISTICA_BAJIO`, `DURANGO`, con los vértices del DOF ya corregidos) y un texto
   por polo (`interiorHuamantla`, …). `node scripts/polos/gen-interior.mjs id…` rehace solo esos
   polos y conserva los demás en `interiores.json`; con `--prueba [id…]` los arma e imprime cómo
   salen, sin escribir nada.
@@ -432,7 +432,9 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
   - **Las franjas** (`franjas`: derechos de vía, servidumbres, parcelas) se dibujan; la que tiene
     `cruza` (una pieza o una lista) es obstáculo para los lotes de esas piezas. Una franja se da
     con su anillo, o con el eje de un camino y su ancho (`eje`, `ancho`: esquinas a inglete, su
-    área es ancho por largo); la que tiene `delPolo` cuenta en la superficie del polo.
+    área es ancho por largo); la que tiene `delPolo` cuenta en la superficie del polo. Una pieza
+    del polo sin lotes (muy chica, o una «reserva» de la declaratoria) va como franja de tipo
+    `reserva` con `delPolo`.
   - Comprueba la conversión UTM contra el área declarada (la suma de las piezas y de las franjas
     `delPolo`, cada franja y las tablas de `comprobar`) y contra un vértice en grados o el
     marcador del polo (cerca del centro o dentro del terreno). Si la declaratoria declara una

@@ -740,6 +740,11 @@
     stroke: rgba(251, 146, 60, 0.65);
   }
 
+  .franja.reserva {
+    fill: rgba(110, 231, 183, 0.06);
+    stroke: rgba(244, 114, 182, 0.6);
+  }
+
   .franja.parcela {
     fill: rgba(167, 139, 250, 0.1);
     stroke: rgba(167, 139, 250, 0.55);

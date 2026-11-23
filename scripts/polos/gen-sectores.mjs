@@ -65,6 +65,7 @@ const CENSO = {
   3256: [55434, 1118.523, 475.844],
   3259: [28969, 972.857, 193.374],
   326: [381838, 12281.191, 893.821],
+  322: [147245, 5051.895, 906.219],
   3344: [196205, 3259.038, 1300.765],
   3353: [74641, 1606.412, 181.077],
   3391: [172298, 1946.929, 438.187],
@@ -118,6 +119,10 @@ const TREN = {
   fertilizantes: { t: 552357, exp: 0 },
   fertilizanteAmoniaco: { t: 22861, exp: 0 },
   jabonPolvo: { t: 5136, exp: 0 },
+  // Paper (its scrap is a raw material, as the iron scrap is).
+  celulosa: { t: 551289, exp: 0 },
+  carton: { t: 266998, exp: 0 },
+  papel: { t: 165337, exp: 0 },
 };
 
 /**
@@ -168,6 +173,8 @@ const SECTORES = [
   // Topolobampo's: plastic and rubber products. The yearbook has no product of theirs (its plastic
   // granules are resins, petrochemicals): they go in containers.
   { id: 'plastico', nombre: 'Industria del plástico y del hule', corto: 'Plástico y hule', scian: ['326'], productos: [], color: '#cbd5e1' },
+  // Durango's: paper, pulp and cardboard.
+  { id: 'papel', nombre: 'Industria del papel', corto: 'Papel', scian: ['322'], productos: ['celulosa', 'carton', 'papel'], color: '#d9b38c' },
 ];
 
 const [pMan, eMan, aMan] = CENSO['31-33'];

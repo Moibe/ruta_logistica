@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y diez polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y doce polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -673,8 +673,9 @@ tablero hasta él y abre su acercamiento (`/mexico/polo/huamantla`). Por ahora l
 Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texistepec-por-dentro),
 [Altamira](#altamira-por-dentro), [Nezahualcóyotl](#nezahualcóyotl-por-dentro),
 [Reserva Zapotlán](#reserva-zapotlán-por-dentro), [San Jerónimo](#san-jerónimo-por-dentro),
-[Parque Industrial Bajío](#parque-industrial-bajío-por-dentro), [Hermosillo](#hermosillo-por-dentro) y
-[Topolobampo](#topolobampo-por-dentro). El reloj sigue corriendo adentro, con el
+[Parque Industrial Bajío](#parque-industrial-bajío-por-dentro), [Hermosillo](#hermosillo-por-dentro),
+[Topolobampo](#topolobampo-por-dentro), [Puerta Logística del Bajío](#puerta-logística-del-bajío-por-dentro)
+y [Durango](#durango-por-dentro). El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
 **Qué se ve.** El terreno tal como lo declara el DOF, y lo que hay alrededor según
@@ -930,6 +931,9 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
 - **Hermosillo:** son tres secciones; una de ellas, el PIAT, llena una muesca de otra.
 - **Topolobampo:** son dos polígonos; un tercero, una donación, salió del polo cuando se modificó
   su declaratoria.
+- **Puerta Logística del Bajío:** son tres polígonos separados por una calle curva; el más chico
+  (0.29 ha) queda de reserva, sin lotes.
+- **Durango:** son un polígono y cuatro «reservas» al norte, que el juego deja sin lotes.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -1504,6 +1508,138 @@ Lo que pide cada uno de sus sectores en un lote de 20 ha (1,583 empleos):
 
 No se ha reportado obra ni empresas en el polo. Los 30 mil empleos que se anuncian con él son de
 todo el norte de Sinaloa (ver [Cuántos empleos da un polo](#cuántos-empleos-da-un-polo)).
+
+### Puerta Logística del Bajío por dentro
+
+El undécimo polo con vista por dentro (`/mexico/polo/puerta-logistica-bajio`), del Plan México:
+52.41 ha en Celaya, Guanajuato, para un puerto seco donde se cruzan Ferromex y CPKC.
+
+**El terreno**, de su declaratoria (DOF, 21 de julio de 2025): tres polígonos en UTM zona 14 (el
+DOF no dice la zona; Celaya está en ella), con sus curvas.
+
+| Polígono | Superficie | Dónde |
+| --- | ---: | --- |
+| II | 48.83 ha | Una franja de 1.7 km de norte a sur, que rodea un rectángulo de 1.2 ha que no incluye |
+| I | 3.29 ha | Al sur, del otro lado de una calle curva de 25 m |
+| III | 0.29 ha | Un triángulo en la punta norte |
+
+- **Resultado:** cada lado cuadra con su rumbo y su distancia; suman 52.41 ha, lo declarado.
+- **La calle curva:** las curvas del I y del II giran alrededor de los mismos centros, a 25 m una
+  de otra.
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** a 5 km de la carretera 51 y a 2 km de la 45D, con «acceso directo a vías
+  férreas (CPKC y Ferromex)» y a 15 km del aeropuerto de Celaya; el tren Querétaro–Irapuato
+  tendrá estación en Celaya.
+- **Servicios:** «dispone de vialidades, energía eléctrica, agua potable, drenaje y
+  conectividad».
+- **Vocaciones:** industria, manufacturera avanzada, logística y transporte, agroindustria de
+  valor agregado, tecnologías de la información y servicios empresariales, automotriz y
+  aeroespacial.
+- **Propiedad:** el Gobierno de Guanajuato.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **40 ha en 10 lotes de 2
+  a 6 ha**, del tamaño de las bodegas de un puerto seco: 9 en el polígono II y 1 en el I.
+  - Los servicios tienen 1.5 ha a la entrada, en la punta norte.
+  - El polígono III queda de reserva.
+- **Los empleos:** 60.5 por hectárea, 3,168. Un lote de 5 ha da 396 y pide de 0.4 MW (productos
+  metálicos o agroindustria) a 0.8 MW (equipo de transporte).
+- **La espuela:** pegados a su lado oeste corren ramales de vía sin nombre (OpenStreetMap). La
+  espuela va a la línea principal más cercana, la **Línea AM de Ferromex**: **1.09 km**, 50
+  millones con una cuadrilla (5.6 meses) o 72 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  5.1 MW: le sobra. La línea de 115 kV más cercana queda a 0.08 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 288 millones con una cuadrilla;
+  las vialidades, 115 millones en 9.6 meses, o 167 en 3.4 con cuatro.
+- **Las vocaciones en sectores:**
+  - Automotriz y aeroespacial son el equipo de transporte.
+  - Agroindustria es la industria alimentaria.
+  - Industria, a secas, son los productos metálicos, la maquinaria, los aparatos eléctricos y la
+    electrónica, como la manufactura de Zapotlán (estimación del juego).
+  - Manufactura avanzada no es un sector del censo, y logística y tecnologías de la información
+    no son manufactura: no se ofrecen para un lote.
+
+**En la realidad**:
+- **Agosto de 2024:** el Gobierno de Guanajuato firma en Celaya el puerto seco con el grupo español
+  AZVI, CPKC y Ferromex, con 2 mil millones en su primera etapa (municipio de Celaya).
+- **26 de junio de 2025:** la gobernadora firma en Palacio Nacional la carta de intención que lo
+  hace polo; la primera etapa ocupa 51 ha y puede crecer a 200, y por Celaya pasa el 23 % de la
+  carga ferroviaria del país (Gobierno de Guanajuato).
+- **21 de julio:** sale la declaratoria (DOF).
+- **Marzo de 2026:** el director de Guanajuato Puerto Interior dice a El Economista que la obra
+  empezaría ese año y operaría en 2027, con 2,500 millones de Cointer México (Grupo AZVI), 12 km de
+  vías y siete naves.
+
+No se ha reportado que su obra empezara. Junto al polo, OpenStreetMap marca en obra la Línea NBA
+de CPKC y un patio de vías, fuera del terreno.
+
+### Durango por dentro
+
+El duodécimo polo con vista por dentro (`/mexico/polo/durango`), del Plan México: el Centro
+Logístico e Industrial de Durango, 315.42 ha en la orilla de la ciudad, junto a la autopista 40D
+y a la vía de la Línea Coahuila Durango.
+
+**El terreno**, de su declaratoria (DOF, 26 de agosto de 2025): cinco cuadros en UTM zona 13 (el
+DOF no dice la zona; Durango está en ella), con números en formato europeo (2.674.973,1107).
+
+| Cuadro | Superficie |
+| --- | ---: |
+| Polígono 1 | 272.16 ha |
+| Reserva 1 | 21.50 ha |
+| Reserva 2 | 6.28 ha |
+| Reserva 4 | 9.93 ha |
+| Reserva 5 | 5.54 ha |
+
+- **Resultado:** cada lado cuadra con su rumbo y su distancia; suman 315.42 ha, lo declarado. No
+  hay reserva 3.
+- **El marcador:** el que el juego ya tenía cae dentro del polígono 1.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** «a pie de paso de la carretera 40D, así como de la vía férrea existente», a
+  780 m de la zona urbana Cinco de Mayo y a 4 km del aeropuerto.
+- **Servicios:** «dispone de vialidades, energía eléctrica, agua potable, drenaje y
+  conectividad».
+- **Vocaciones:** movilidad eléctrica, industria cinematográfica, autopartes, electrónica
+  especializada, manufactura avanzada, industria textil, industria del papel y automotriz.
+- **Propiedad:** el estado de Durango.
+
+**Lo que es del juego**:
+- **Los lotes:** en el polígono 1, la parte de uso industrial de Coatzacoalcos I (76.46 % de él):
+  **212 ha en 11 lotes de 10 a 30 ha**, con 4 ha de servicios a la entrada. Las cuatro reservas
+  quedan como reserva, sin lotes.
+- **Los empleos:** 60.5 por hectárea, 19,069. Un lote de 20 ha da 1,799 y pide de 2.1 MW
+  (electrónica) a 4 MW (papel).
+- **La espuela:** la **Línea DA de la Línea Coahuila Durango** corre pegada al polígono 1:
+  **0.04 km**, 3 millones con cuatro cuadrillas y el mínimo de 2 meses.
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  30.5 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.31 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,732 millones con una
+  cuadrilla; las vialidades, 693 millones en 16.4 meses, o 1,004 en 5.8 con cuatro.
+- **Las vocaciones en sectores:**
+  - Movilidad eléctrica es el equipo de transporte y los aparatos eléctricos, donde están las
+    baterías; autopartes y automotriz, el equipo de transporte; electrónica especializada, la
+    electrónica (estimación del juego).
+  - La textil y la del papel, sus sectores.
+  - **Papel** es un sector nuevo (SCIAN 322, INEGI): gasta 1.39 veces la luz y 0.89 veces el agua
+    del promedio de la manufactura, y el tren mueve su celulosa (551 mil toneladas en 2018), su
+    cartón (267 mil) y su papel (165 mil), sin exportar (ARTF). Un lote de 20 ha de papel mueve 12
+    mil toneladas al año por tren. Su desperdicio de papel no cuenta: es materia prima, como el
+    desperdicio de fierro.
+  - Manufactura avanzada no es un sector del censo y la industria cinematográfica no es
+    manufactura: no se ofrecen para un lote.
+
+**En la realidad**:
+- **26 de agosto de 2025:** sale la declaratoria (DOF), en terrenos públicos del estado.
+- **21 de abril de 2026:** el Congreso de Durango autoriza donar 50 ha del Centro Logístico
+  Industrial a Fermaca Digital para un centro de datos de unos 2,700 millones de dólares y por lo
+  menos mil empleos directos. La nota no dice si esas hectáreas quedan dentro del polígono del
+  polo.
+
+No se ha reportado obra del polo; sus lotes y su acomodo son del juego.
 
 ---
 
@@ -3436,6 +3572,20 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
+
+**Puerta Logística del Bajío por dentro (DOF)**
+
+- **Dos renglones con otra etiqueta:** el lado que va del vértice 360 al 332 (una curva) pone sus
+  coordenadas bajo el nombre 362, y el polígono III cierra con un lado «3282 → 3275» sin que el
+  3282 aparezca. Ninguno cambia el área: los tres polígonos dan lo de sus cuadros.
+- **Un hueco:** la tabla del polígono II entra a un rectángulo de 1.2 ha y sale por el mismo lado
+  (del 2107 al 2106 y de regreso), así que el rectángulo queda fuera del polo.
+
+**Durango por dentro (DOF)**
+
+- **Las vocaciones:** la declaratoria numera nueve y repite «manufactura avanzada» (la 5 y la 9).
+- **Las reservas:** son la 1, la 2, la 4 y la 5; no hay reserva 3. Con ellas y el polígono 1
+  suman exactamente las 315.42 ha declaradas.
 
 **Hermosillo por dentro (DOF)**
 

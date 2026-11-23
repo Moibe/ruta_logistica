@@ -158,6 +158,34 @@
    "fuente": "Gobierno de Sinaloa, 20 de noviembre de 2025: la planta de amoniaco de Proman-GPO en Topolobampo (800 mil toneladas al año) supera el 50 % de su obra, con 1,700 empleos directos, y producirá a finales de 2027",
    "url": "https://sinaloa.gob.mx/topolobampo-se-consolida-como-polo-de-desarrollo-y-bienestar-con-la-planta-proman-gpo/"
   },
+  "dof-plb": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Puerta Logística del Bajío, Guanajuato (21 de julio de 2025): cuadros de construcción de tres polígonos con sus curvas, 52.41 ha en Celaya; a 5 km de la carretera 51 y a 2 km de la 45D, con acceso directo a las vías de CPKC y Ferromex, a 15 km del aeropuerto de Celaya; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (el Gobierno de Guanajuato)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5763405&fecha=21/07/2025"
+  },
+  "economia-plb": {
+   "fuente": "Secretaría de Economía, portal de los Polos de Desarrollo, ficha de Puerta Logística del Bajío: convergencia de Ferromex y CPKC, proyecto de sección aduanera, disponibilidad eléctrica para operaciones de logística",
+   "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo"
+  },
+  "celaya-plb": {
+   "fuente": "Municipio de Celaya, agosto de 2024: firma del puerto seco intermodal «Puerta Logística del Bajío» con el grupo español AZVI, CPKC y Ferromex; 51 ha cerca de la armadora Honda, al sur del municipio, con 2 mil millones de pesos en su primera etapa",
+   "url": "https://www.celaya.gob.mx/likcitsci/comunicados/2024/celaya-sera-el-centro-logistico-y-comercial-mas-importante-del-pais-jmm/"
+  },
+  "guanajuato-carta": {
+   "fuente": "Gobierno de Guanajuato, 26 de junio de 2025: la gobernadora firma en Palacio Nacional la carta de intención del polo; la primera etapa ocupa 51 ha y puede crecer a 200, y por Celaya pasa el 23 % de la carga ferroviaria del país",
+   "url": "https://boletines.guanajuato.gob.mx/2025/06/26/firman-carta-de-intencion-para-impulsar-el-proyecto-de-la-puerta-logistica-del-bajio/"
+  },
+  "economista-plb": {
+   "fuente": "El Economista, entrevista con el director de Guanajuato Puerto Interior, reproducida en el blog de GPI (11 de marzo de 2026): la Puerta Logística del Bajío empezaría su obra en 2026 y operaría en 2027, con 2,500 millones de pesos de Cointer México (Grupo AZVI), 12 km de vías, seis naves de 10,800 m² y una refrigerada, 144 mil toneladas de almacenamiento y una sección aduanal",
+   "url": "https://puertointerior.guanajuato.gob.mx/blog/2026/03/11/puerta-logistica-del-bajio-sera-ancla-de-desarrollo-en-la-region/"
+  },
+  "dof-durango": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Centro Logístico e Industrial de Durango (26 de agosto de 2025): cuadros de construcción del polígono 1 y de las reservas 1, 2, 4 y 5, 315.42 ha; a pie de la carretera 40D y de la vía férrea, a 780 m de la zona urbana Cinco de Mayo y a 4 km del aeropuerto; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (el estado de Durango)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5766563&fecha=26/08/2025"
+  },
+  "congreso-durango-fermaca": {
+   "fuente": "Congreso del Estado de Durango, 21 de abril de 2026: autoriza donar 50 ha del Centro Logístico Industrial de Durango a Fermaca Digital para un centro de datos, con unos 2,700 millones de dólares y por lo menos mil empleos directos",
+   "url": "https://congresodurango.gob.mx/2026/04/21/autoriza-congreso-terreno-para-fermaca-digital-city/"
+  },
   "juego": {
    "fuente": "Estimación del juego",
    "url": ""
@@ -1995,6 +2023,317 @@
     "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, la industria química y petroquímica son dos sectores (los fertilizantes están en la química); el plástico y el hule, y las metálicas básicas, el suyo cada una. Manufactura avanzada no es un sector del censo y logística no es manufactura: el juego no las ofrece para un lote.",
     "fuentes": [
      "dof-topolobampo"
+    ]
+   }
+  },
+  "puerta-logistica-bajio": {
+   "nombre": "Puerta Logística del Bajío",
+   "lugar": "Celaya, Guanajuato",
+   "sectores": [
+    "transporte",
+    "alimentos",
+    "productos-metalicos",
+    "maquinaria",
+    "electricos",
+    "computacion"
+   ],
+   "fuentesLista": [
+    "dof-plb",
+    "celaya-plb",
+    "guanajuato-carta",
+    "economista-plb",
+    "economia-plb",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: el Gobierno de Guanajuato firmó el proyecto en agosto de 2024 como un puerto seco intermodal, con el grupo español AZVI y las dos ferroviarias de Celaya, CPKC y Ferromex, y 2 mil millones en su primera etapa (municipio de Celaya). El 26 de junio de 2025 la gobernadora firmó en la conferencia matutina la carta de intención que lo hizo polo, y la declaratoria salió el 21 de julio (DOF). Su primera etapa ocupa 51 ha y puede crecer a 200. En marzo de 2026 el director de Guanajuato Puerto Interior dijo a El Economista que la obra empezaría ese año y operaría en 2027, con 2,500 millones de Cointer México (Grupo AZVI), 12 km de vías y siete naves, y que el puerto seco no pide mucha energía ni agua. No se ha reportado que su obra empezara: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el polígono ya «dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad»; para lotes de empresas hace falta llevarlas adentro. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus dos polígonos grandes lleva su calle; se hacen uno tras otro.",
+    "fuentes": [
+     "dof-plb",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 1.09,
+    "via": "Línea AM",
+    "operador": "Ferromex",
+    "mesesMinimos": 2,
+    "dato": "La declaratoria le da «acceso directo a vías férreas (CPKC y Ferromex)»: Celaya es donde se cruzan, y por ahí pasa el 23 % de la carga ferroviaria del país (Gobierno de Guanajuato). Pegados a su lado oeste corren ramales sin nombre (OpenStreetMap); la espuela del juego va a la línea principal más cercana, la Línea AM (Ferromex): 1.09 km en línea recta. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-plb",
+     "guanajuato-carta",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 0.08,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). El portal de Economía solo dice «disponibilidad eléctrica para operaciones de logística». La línea de alta tensión más cercana a su subestación queda a 0.08 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 2,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 3,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 3,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 2,
+      "empresa": null
+     }
+    ],
+    "dato": "Tres polígonos: el II (48.83 ha), que rodea un rectángulo de 1.2 ha que no incluye; el I (3.29 ha), al sur, del otro lado de una calle curva de 25 m, y el III (0.29 ha), en la punta norte, que el juego deja de reserva. No hay lotes publicados. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): 40 ha en 10 lotes de 2 a 6 ha, del tamaño de las bodegas de un puerto seco, y 1.5 ha de servicios; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-plb",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Industria",
+    "Manufacturera avanzada",
+    "Logística y transporte",
+    "Agroindustria de valor agregado",
+    "Tecnologías de la información y servicios empresariales",
+    "Automotriz",
+    "Aeroespacial"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, automotriz y aeroespacial son el equipo de transporte; agroindustria, la industria alimentaria; industria, a secas, los productos metálicos, la maquinaria, los aparatos eléctricos y la electrónica, como la manufactura de Zapotlán (estimación del juego). Manufactura avanzada no es un sector del censo, y logística y tecnologías de la información no son manufactura: el juego no las ofrece para un lote.",
+    "fuentes": [
+     "dof-plb"
+    ]
+   }
+  },
+  "durango": {
+   "nombre": "Centro Logístico e Industrial de Durango",
+   "lugar": "Durango, Durango",
+   "sectores": [
+    "transporte",
+    "electricos",
+    "computacion",
+    "textil",
+    "papel"
+   ],
+   "fuentesLista": [
+    "dof-durango",
+    "congreso-durango-fermaca",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 26 de agosto de 2025 (DOF) en terrenos públicos del estado de Durango. El 21 de abril de 2026 el Congreso de Durango autorizó donar 50 ha del Centro Logístico Industrial de Durango a Fermaca Digital, para un centro de datos de unos 2,700 millones de dólares y por lo menos mil empleos directos; la nota no dice si esas hectáreas quedan dentro del polígono del polo. Sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el polígono ya «dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad»; para lotes de empresas hace falta llevarlas adentro. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "dof-durango",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.04,
+    "via": "Línea DA",
+    "operador": "Ferrocarril Coahuila Durango",
+    "mesesMinimos": 2,
+    "dato": "La declaratoria lo pone «a pie de paso de la carretera 40D, así como de la vía férrea existente». La espuela del juego va de la Línea DA (Ferrocarril Coahuila Durango), la más cercana, al polo: 0.04 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-durango",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 0.31,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que dispone de energía eléctrica, sin cifra. La línea de alta tensión más cercana a su subestación queda a 0.31 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 30,
+      "empresa": null
+     }
+    ],
+    "dato": "El polígono 1 (272.16 ha) y cuatro reservas al norte (21.50, 6.28, 9.93 y 5.54 ha; la declaratoria no tiene reserva 3). No hay lotes publicados. El juego pone en el polígono 1 la parte que Coatzacoalcos I tiene de uso industrial (76.46 % de él): 212 ha en 11 lotes de 10 a 30 ha, y 4 ha de servicios a la entrada; las reservas quedan de reserva (estimación del juego).",
+    "fuentes": [
+     "dof-durango",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Movilidad eléctrica",
+    "Industria cinematográfica",
+    "Autopartes",
+    "Electrónica especializada",
+    "Manufactura avanzada",
+    "Industria textil",
+    "Industria de papel",
+    "Automotriz"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), que repite manufactura avanzada. En el juego, movilidad eléctrica es el equipo de transporte y los aparatos eléctricos, donde están las baterías; autopartes y automotriz, el equipo de transporte; electrónica especializada, la electrónica (estimación del juego); la textil y la del papel, sus sectores. Manufactura avanzada no es un sector del censo y la industria cinematográfica no es manufactura: el juego no las ofrece para un lote.",
+    "fuentes": [
+     "dof-durango"
     ]
    }
   }

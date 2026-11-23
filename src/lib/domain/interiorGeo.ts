@@ -17,9 +17,10 @@ export type GeoInterior = {
   piezas: { nombre: string | null; ha: number; puntos: Pt[] }[];
   /**
    * Rights of way the declaratoria leaves out of the land (a highway, a track), that cross it (a
-   * pipeline's easement) or that are part of it (an access road), and parcels it doesn't explain.
+   * pipeline's easement) or that are part of it (an access road, a reserve without lots), and
+   * parcels it doesn't explain.
    */
-  franjas: { nombre: string; tipo: 'carretera' | 'via' | 'ducto' | 'parcela'; ha: number; nota: string; puntos: Pt[] }[];
+  franjas: { nombre: string; tipo: 'carretera' | 'via' | 'ducto' | 'parcela' | 'reserva'; ha: number; nota: string; puntos: Pt[] }[];
   areaM2: number;
   perimetroM: number;
   lotes: Lote[];
