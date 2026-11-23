@@ -74,7 +74,11 @@ saltar al siguiente libre.
   barcos, solo en el juego), territorio, y energía y petróleo. El estado de las capas vive en
   `tablero.capas`, que comparten el mapa, el panel y la lista de vehículos (`tablero.alternar`:
   energía y combustibles se excluyen; apagar trenes o barcos cierra su ficha y su trazado). La
-  lista de trenes y barcos va debajo de las capas, solo con alguna de las dos encendida. Las
+  lista de trenes y barcos va debajo de las capas, solo con alguna de las dos encendida. Los dos
+  paneles se pliegan con su flecha (la misma de *Vistas*): Capas queda en su título con cuántas
+  capas están encendidas, y la lista en sus pestañas y *＋ Nuevo*. Cada navegador recuerda cómo
+  los dejó (`state/plegable.svelte.ts`, en `localStorage`, leído al montar porque el tablero se
+  arma en el servidor). Las
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, y abajo a la derecha
   solo el zoom y *Reencuadrar*. Colores e íconos compartidos: `map/simbolos.ts`.
 - Etiquetas con colisión: cada una prueba cuatro posiciones alrededor de su punto y gana la

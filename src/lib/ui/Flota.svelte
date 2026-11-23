@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { Plegable } from '$lib/state/plegable.svelte';
   import { CLASES_BARCO, enElCanal, enTravesia, KM_POR_MILLA } from '$lib/domain/barcos';
   import {
     avanceDePierna,
@@ -33,6 +35,9 @@
   let { vista = 'tablero' }: { vista?: 'tablero' | 'mundo' } = $props();
 
   const mundo = $derived(vista === 'mundo');
+  /** Folded, the roster keeps its header (tabs and «＋ Nuevo») and hides the list. */
+  const panel = new Plegable('flota');
+  onMount(() => panel.recordar());
   const tipo = $derived<TipoUnidad>(mundo ? 'barco' : tablero.pestaña);
   const lista = $derived<Unidad[]>(tipo === 'tren' ? sim.trenes : sim.barcos);
 
@@ -169,7 +174,7 @@
   });
 </script>
 
-<aside class="flota panel" class:en-columna={!mundo}>
+<aside class="flota panel" class:en-columna={!mundo} class:plegado={panel.plegado}>
   <header>
     {#if mundo}
       <span class="titulo">Barcos <span class="mono">{sim.barcos.length}</span></span>
@@ -215,15 +220,26 @@
       ＋ Nuevo
     </button>
     {/if}
+    <button
+      class="plegar"
+      aria-expanded={!panel.plegado}
+      aria-label={panel.plegado ? 'Mostrar la lista' : 'Plegar la lista'}
+      title={panel.plegado ? 'Mostrar la lista' : 'Plegar la lista'}
+      onclick={() => panel.alternar()}
+    >
+      <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" /></svg>
+    </button>
   </header>
-  {#if sim.estado === 'cargando'}
+  {#if panel.plegado}
+    <!-- Folded: only the header. -->
+  {:else if sim.estado === 'cargando'}
     <p class="vacio">Cargando las rutas…</p>
   {:else if sim.estado === 'error'}
     <p class="vacio err">No se pudieron cargar las rutas</p>
   {:else if !filas.length}
     <p class="vacio">Sin {tipo === 'tren' ? 'trenes' : 'barcos'}. Crea uno con «＋ Nuevo» en el tablero.</p>
   {/if}
-  <ul>
+  <ul hidden={panel.plegado}>
     {#each filas as f (f.id)}
       <li>
         <button
@@ -352,7 +368,7 @@
   .flota header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
     padding: 0.5rem 0.55rem 0.5rem 0.55rem;
     border-bottom: 1px solid var(--line);
   }
@@ -380,11 +396,12 @@
   .pestañas button {
     border: none;
     background: none;
-    padding: 0.28rem 0.55rem;
+    padding: 0.28rem 0.5rem;
     border-radius: 7px;
     font-size: 0.72rem;
     color: var(--muted);
     cursor: pointer;
+    white-space: nowrap;
   }
 
   .pestañas button .mono {
@@ -404,7 +421,8 @@
 
   .nuevo {
     margin-left: auto;
-    padding: 0.28rem 0.6rem;
+    white-space: nowrap;
+    padding: 0.28rem 0.55rem;
     font-size: 0.7rem;
     border-color: rgba(255, 209, 102, 0.45);
     color: #fff1cc;
@@ -431,6 +449,48 @@
   .nuevo:disabled {
     opacity: 0.45;
     cursor: default;
+  }
+
+  /* Folds the list away, with the same arrow as «Vistas». */
+  .plegar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-right: -0.15rem;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .plegar:hover {
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .plegar svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.15s;
+  }
+
+  .plegado .plegar svg {
+    transform: rotate(180deg);
+  }
+
+  .flota.plegado header {
+    border-bottom: 0;
+  }
+
+  ul[hidden] {
+    display: none;
   }
 
   .vacio {

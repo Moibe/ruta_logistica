@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { Plegable } from '$lib/state/plegable.svelte';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero, type Capa } from '$lib/state/tablero.svelte';
   import { AEROPUERTO, AVION_SVG, COMBUSTIBLE, GAS, GOTA_SVG, PLATAFORMA, POLO, REFINERIA } from '$lib/map/simbolos';
@@ -41,11 +43,29 @@
       ],
     },
   ];
+
+  /** The panel folds to its title, which then says how many layers are on. */
+  const panel = new Plegable('capas');
+  onMount(() => panel.recordar());
+  const visibles = $derived(GRUPOS.filter((g) => !g.soloJuego || sim.modo === 'juego').flatMap((g) => g.capas));
+  const encendidas = $derived(visibles.filter((c) => tablero.capas[c.capa]).length);
 </script>
 
-<nav class="capas panel" aria-label="Capas del mapa">
+<nav class="capas panel" class:plegado={panel.plegado} aria-label="Capas del mapa">
+  <button
+    class="plegar"
+    aria-expanded={!panel.plegado}
+    title={panel.plegado ? 'Mostrar las capas' : 'Plegar las capas'}
+    onclick={() => panel.alternar()}
+  >
+    <span class="label">Capas</span>
+    {#if panel.plegado}
+      <span class="cuenta mono">{encendidas} de {visibles.length}</span>
+    {/if}
+    <svg class="flecha" viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" /></svg>
+  </button>
   {#each GRUPOS as g (g.titulo)}
-    {#if !g.soloJuego || sim.modo === 'juego'}
+    {#if !panel.plegado && (!g.soloJuego || sim.modo === 'juego')}
       <span class="label titulo">{g.titulo}</span>
       <div class="grupo">
         {#each g.capas as c (c.capa)}
@@ -128,6 +148,51 @@
   .titulo {
     font-size: 0.58rem;
     padding: 0.2rem 0.15rem 0;
+  }
+
+  .capas.plegado {
+    padding-bottom: 0.5rem;
+  }
+
+  /* The title row folds and unfolds the panel, with the same arrow as «Vistas». */
+  .plegar {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.1rem 0.15rem;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .plegar .label {
+    flex: 1;
+    text-align: left;
+    font-size: 0.62rem;
+  }
+
+  .plegar:hover {
+    color: var(--ink);
+  }
+
+  .cuenta {
+    font-size: 0.62rem;
+  }
+
+  .flecha {
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.15s;
+  }
+
+  .plegado .flecha {
+    transform: rotate(180deg);
   }
 
   .grupo {
