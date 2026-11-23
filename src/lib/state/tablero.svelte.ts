@@ -49,6 +49,8 @@ class Tablero {
     ductos: false,
     combustibles: false,
   });
+  /** What the track's colour says: its class (the default), its owner, or how full it is. */
+  modoVias = $state<'clase' | 'dueño' | 'uso'>('clase');
   /** The kind of vehicle being laid out: the one whose roster's "＋ Nuevo" was clicked. */
   tipoNuevo = $state<TipoUnidad>('tren');
 

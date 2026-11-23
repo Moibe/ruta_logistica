@@ -31,3 +31,20 @@ export const AVION_SVG = 'M' + PUNTOS_AVION.map(([x, y]) => `${x} ${y}`).join(' 
 
 /** A drop of oil, point up, in a unit box. */
 export const GOTA_SVG = 'M0 -1.15 C0.35 -0.55 0.85 -0.05 0.85 0.35 A0.85 0.85 0 0 1 -0.85 0.35 C-0.85 -0.05 -0.35 -0.55 0 -1.15 Z';
+
+/**
+ * Track coloured by who runs it. The State's own railways are ink-white — they are the player's;
+ * the concessionaires each get a hue of their own, none of them the sea's cyan or the polos' rose.
+ */
+export const COLOR_DUEÑO: Record<string, string> = {
+  FXE: '#f59e0b',
+  KCSM: '#a78bfa',
+  FSRR: '#4ade80',
+  LCD: '#f87171',
+  FTVM: '#94a3b8',
+  FIT: '#f4f1de',
+  ADMICARGA: '#f4f1de',
+  EST: '#ffffff',
+};
+/** Track coloured by use: room to spare, busy (trains slow down), over capacity. */
+export const COLOR_USO = { holgada: '#4ade80', cargada: '#fbbf24', saturada: '#f87171' } as const;

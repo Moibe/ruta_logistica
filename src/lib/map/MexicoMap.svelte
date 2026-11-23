@@ -74,7 +74,7 @@
   import { tablero } from '$lib/state/tablero.svelte';
   import { duracion, estadoUnidad, km as fmtKm } from '$lib/ui/formato';
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
-  import { AEROPUERTO, COMBUSTIBLE, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
+  import { COLOR_DUEÑO, COLOR_USO, AEROPUERTO, COMBUSTIBLE, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
   import { abastoDiario, BASES_ABASTO, CAYO_ARCAS, COMPLEJOS, produccionComplejo, type Complejo } from '$lib/domain/plataformas';
   import { comercioDe, NOMBRE_CARGA, TIPOS_CARGA, type TipoCarga } from '$lib/domain/comercioMar';
 
@@ -103,24 +103,7 @@
 
   const POLO_CLARO = '#ffe4f1';
 
-  /**
-   * Track coloured by who runs it. The State's own railways are ink-white —
-   * they are the player's; the concessionaires each get a hue of their own,
-   * none of them the sea's cyan or the polos' rose.
-   */
-  const COLOR_DUEÑO: Record<Dueño, string> = {
-    FXE: '#f59e0b',
-    KCSM: '#a78bfa',
-    FSRR: '#4ade80',
-    LCD: '#f87171',
-    FTVM: '#94a3b8',
-    FIT: '#f4f1de',
-    ADMICARGA: '#f4f1de',
-    EST: '#ffffff',
-  };
   const COLOR_SIN_DUEÑO = '#64748b';
-  /** Track coloured by use: room to spare, busy (trains slow down), over capacity. */
-  const COLOR_USO: Record<NivelUso, string> = { holgada: '#4ade80', cargada: '#fbbf24', saturada: '#f87171' };
   /** Track out of service since before 2018: there, but dead. */
   const VIA_MUERTA = 'rgba(138, 164, 194, 0.3)';
 
@@ -249,12 +232,6 @@
   const LONLAT_PLANTAS: LonLat[] = [...ENERGIA.plantas2018, ...ENERGIA.privadas, ...OBRAS_ENERGIA].map((p) => p.lonLat);
   const radioPlanta = (mw: number) => 1.6 + Math.sqrt(mw) / 7;
 
-  type ModoVias = 'clase' | 'dueño' | 'uso';
-  const MODOS_VIAS: { id: ModoVias; label: string }[] = [
-    { id: 'clase', label: 'Clase' },
-    { id: 'dueño', label: 'Dueño' },
-    { id: 'uso', label: 'Uso' },
-  ];
 
   /**
    * INEGI's Lambert conformal conic for the whole country (standard parallels
@@ -406,8 +383,8 @@
     );
   });
 
-  /** What the track's colour says: its class (the default), its owner, or how full it is. */
-  let modoVias = $state<ModoVias>('clase');
+  /** What the track's colour says (the rail legend, in the left column, picks it). */
+  const modoVias = $derived(tablero.modoVias);
 
   type Target =
     | { kind: 'unidad'; unidad: Unidad }
@@ -3361,35 +3338,6 @@
       gasoductos posteriores a 2018 llegan en su fecha real; el Cuxtal II lo construye el Estado.
     </p>
   </div>
-{:else if layers.vias && !tablero.catalogo}
-  <div class="vias panel">
-    <div class="modos" role="group" aria-label="Color de las vías">
-      {#each MODOS_VIAS as m (m.id)}
-        <button class="modo" aria-pressed={modoVias === m.id} onclick={() => (modoVias = m.id)}>{m.label}</button>
-      {/each}
-    </div>
-    <ul class="leyenda">
-      {#if modoVias === 'dueño'}
-        {#each Object.entries(DUEÑOS) as [id, d] (id)}
-          {#if id !== 'ADMICARGA' && id !== 'EST'}
-            <li>
-              <span class="raya" style:background={COLOR_DUEÑO[id as Dueño]}></span>{id === 'FIT' ? 'Del Estado (Istmo)' : d.nombre}
-            </li>
-          {/if}
-        {/each}
-      {:else if modoVias === 'uso'}
-        <li><span class="raya" style:background={COLOR_USO.holgada}></span>Holgada · hasta 60 %</li>
-        <li><span class="raya" style:background={COLOR_USO.cargada}></span>Cargada · los trenes frenan</li>
-        <li><span class="raya" style:background={COLOR_USO.saturada}></span>Saturada · más de lo que cabe</li>
-      {/if}
-      <li><span class="raya estado"></span>Obra del Estado{sim.modo === 'realidad' ? ' en operación' : ''}</li>
-      {#if sim.modo === 'realidad'}
-        <li><span class="raya en-obra"></span>En obra</li>
-        <li><span class="raya anunciada"></span>Anunciada</li>
-      {/if}
-      <li><span class="raya muerta"></span>Fuera de operación</li>
-    </ul>
-  </div>
 {/if}
 
 <div class="tools panel">
@@ -3533,34 +3481,9 @@
     font-size: 0.7rem;
   }
 
-  .modos {
-    display: flex;
-    gap: 0.25rem;
-    padding: 0.2rem;
-    border-radius: 9px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--line);
-  }
 
-  .modo {
-    flex: 1;
-    padding: 0.25rem 0;
-    border: 0;
-    border-radius: 7px;
-    background: none;
-    font-size: 0.68rem;
-    color: var(--muted);
-    cursor: pointer;
-  }
 
-  .modo:hover {
-    color: var(--ink);
-  }
 
-  .modo[aria-pressed='true'] {
-    background: rgba(255, 209, 102, 0.14);
-    color: #fff1cc;
-  }
 
   .vias.energia {
     width: 17rem;
@@ -3593,11 +3516,6 @@
     border-radius: 2px;
   }
 
-  .raya.estado {
-    height: 4px;
-    background: #f4f1de;
-    box-shadow: 0 0 0 1px rgba(244, 241, 222, 0.35);
-  }
 
   .raya.en-obra {
     height: 0;
@@ -3605,17 +3523,7 @@
     border-top: 2px dashed rgba(244, 241, 222, 0.85);
   }
 
-  .raya.anunciada {
-    height: 0;
-    background: none;
-    border-top: 2px dotted rgba(244, 241, 222, 0.5);
-  }
 
-  .raya.muerta {
-    height: 0;
-    border-top: 2px dashed rgba(138, 164, 194, 0.55);
-    border-radius: 0;
-  }
 
   .raya.tenue {
     opacity: 0.4;

@@ -4,6 +4,7 @@
   import CatalogoObras from '$lib/ui/CatalogoObras.svelte';
   import Erario from '$lib/ui/Erario.svelte';
   import FichaPolo from '$lib/ui/FichaPolo.svelte';
+  import LeyendaVias from '$lib/ui/LeyendaVias.svelte';
   import Flota from '$lib/ui/Flota.svelte';
   import Reloj from '$lib/ui/Reloj.svelte';
   import Trazado from '$lib/ui/Trazado.svelte';
@@ -23,6 +24,10 @@
   <Capas />
   {#if sim.modo === 'juego' && tablero.capas.trenes}
     <Flota tipo="tren" />
+  {/if}
+  <!-- The track's legend goes with the trains: right under their roster. -->
+  {#if tablero.capas.vias && !tablero.catalogo}
+    <LeyendaVias />
   {/if}
   {#if sim.modo === 'juego' && tablero.capas.barcos}
     <Flota tipo="barco" />
@@ -54,7 +59,7 @@
   }
 
   /* All folded (the layers and the rosters on), the bars would sit on Tijuana's label: together, they drop below it. */
-  .columna:has(:global(nav.capas.plegado)):has(:global(aside.flota)):not(:has(:global(aside.flota:not(.plegado)))) > :global(nav.capas) {
+  .columna:has(:global(nav.capas.plegado)):has(:global(aside.flota)):not(:has(:global(aside.flota:not(.plegado)))):not(:has(:global(section.vias:not(.plegado)))) > :global(nav.capas) {
     margin-top: 7.5rem;
   }
 </style>

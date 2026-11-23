@@ -324,6 +324,11 @@
     min-height: 0;
   }
 
+  /* Open, a roster keeps room for a couple of rows however crowded the column is. */
+  .flota.en-columna:not(.plegado) {
+    min-height: 8.5rem;
+  }
+
   .flota header {
     display: flex;
     align-items: center;
