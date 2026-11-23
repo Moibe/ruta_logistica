@@ -278,6 +278,26 @@
    "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Seybaplaya I, Campeche (30 de junio de 2025): cuadros de construcción de dos fracciones, 99.99 ha; a pie de la MEX-180, a 4.9 km del puerto de Seybaplaya, a 29 km del puerto de Campeche y a 37 km del Tren Maya; gas y electricidad en el predio; sus vocaciones productivas, la declaratoria de Polo Industrial del Bienestar del Gobierno de Campeche (25 de septiembre de 2024) y su propiedad (pública estatal)",
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5761459&fecha=30/06/2025"
   },
+  "dof-chetumal": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Chetumal, Quintana Roo (1 de julio de 2025): cuadros de construcción de tres secciones, 87.80 ha en Othón P. Blanco; sobre la carretera federal 186 Escárcega–Chetumal, a 3.5 km del aeropuerto y de la estación Chetumal Aeropuerto del Tren Maya, a 2 km del puerto y a 7.4 km de la frontera con Belice; vialidades, energía, agua y conectividad; sus vocaciones productivas y su propiedad (pública estatal)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5761568&fecha=01/07/2025"
+  },
+  "dof-tuxpan": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Tuxpan, Veracruz (26 de agosto de 2025): cuadro de construcción de 98 vértices, 235.10 ha; conectividad marítima y la autopista México–Tuxpan, a 4 km del aeropuerto; el dictamen de la Secretaría de Energía (demanda de 4 MW en su etapa madura, de 2 a 3.5 MW de 2027 a 2030; la línea de 115 kV Tuxpan–Tihuatlán II o Tuxpan II–Esfuerzo a 0.8 km); sus vocaciones productivas y su propiedad (el Gobierno de Veracruz)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5766562&fecha=26/08/2025"
+  },
+  "dof-cancun": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Distrito Financiero y Tecnológico de Cancún, Quintana Roo (7 de agosto de 2026): cuadros de construcción de Kulkaná 1 y 2 y sus continuaciones en la cónica conforme de Lambert del INEGI, 60.76 ha en Benito Juárez; cerca de las carreteras 180 y 307 y del Distribuidor Colosio, a 4.1 km de la estación Cancún del Tren Maya y a 5 km del aeropuerto; vialidades, energía, agua, drenaje y conectividad; sus vocaciones (todas de servicios) y su propiedad (dominio público del estado)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5795731&fecha=07/08/2026"
+  },
+  "dof-circular-quintana-roo": {
+   "fuente": "DOF, Acuerdo de la Semarnat por el que se emite la declaratoria del Polo de Desarrollo de Economía Circular para el Bienestar Quintana Roo (27 de julio de 2026): 39.90 ha dentro de un predio de 100 ha de la Agencia de Proyectos Estratégicos del estado, en Puerto Morelos; su cuadro de construcción y su croquis vienen como imagen (37.90 ha de uso industrial y 2 de uso comercial); junto a la federal 307 Cancún–Chetumal",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5794759&fecha=27/07/2026"
+  },
+  "dof-coatzacoalcos-ii": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Coatzacoalcos II (12 de mayo de 2023): cuadro de construcción con nueve curvas, 131.82 ha en dos polígonos (129.20 y 2.63 ha); a 800 m del entronque de la línea Z, con frente a la vialidad del Túnel Sumergido de Coatzacoalcos, a 4 km de la MEX-180 y a 600 m de la carretera estatal a Allende, cerca del recinto portuario de Pajaritos; sus vocaciones productivas y su propiedad (donaciones de Pemex al Corredor Interoceánico)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5688609&fecha=12/05/2023"
+  },
   "dof-teapa": {
    "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)",
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5789895&fecha=08/06/2026"
@@ -4806,6 +4826,705 @@
     "fuentes": [
      "dof-seybaplaya",
      "juego"
+    ]
+   }
+  },
+  "chetumal": {
+   "nombre": "Chetumal",
+   "lugar": "Othón P. Blanco, Quintana Roo",
+   "sectores": [
+    "generacion-electrica",
+    "textil",
+    "metalicas",
+    "maquinaria",
+    "alimentos"
+   ],
+   "fuentesLista": [
+    "dof-chetumal",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 1 de julio de 2025 (DOF) en terrenos del estado; la Secretaría de Economía y el Gobierno de Quintana Roo lo lanzaron el 6 de agosto de 2025 y el estado formalizó el fideicomiso que lo administra el 7 de agosto de 2026. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el polo ya dispone de vialidades, energía, agua y conectividad, pero no qué obras le faltan. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada una de sus tres secciones lleva su calle; se hacen una tras otra.",
+    "fuentes": [
+     "dof-chetumal",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.56,
+    "via": "Tren Maya",
+    "operador": "Tren Maya",
+    "mesesMinimos": 2,
+    "dato": "En 2018 no hay vía en Quintana Roo: la declaratoria pone la estación Chetumal Aeropuerto del Tren Maya a 3.5 km. La espuela del juego va del Tren Maya al polo: 0.56 km en línea recta (OpenStreetMap). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta Chetumal. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante.",
+    "fuentes": [
+     "dof-chetumal",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 10.45,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 2.96,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que el polígono dispone de energía eléctrica, sin decir cuánta. La línea de alta tensión más cercana a su subestación queda a 2.96 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 3,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 3,
+      "empresa": null
+     }
+    ],
+    "dato": "Tres secciones sobre la carretera 186. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 67 ha en 9 lotes de 3 a 15 ha, y 3 ha de servicios en la sección I; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-chetumal",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Energía eléctrica",
+    "Industria textil",
+    "Metalurgia",
+    "Maquinaria y equipo",
+    "Agroindustria",
+    "Tecnologías de la información y comunicación",
+    "Actividades industriales y comercio internacional",
+    "Almacenamiento y distribución de mercancías"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, la energía eléctrica es el equipo de generación y distribución de electricidad; la metalurgia, las metálicas básicas, y la agroindustria, la industria alimentaria. Las tecnologías de la información, el comercio y el almacenamiento no son manufactura: no se ofrecen para un lote.",
+    "fuentes": [
+     "dof-chetumal"
+    ]
+   }
+  },
+  "tuxpan": {
+   "nombre": "Tuxpan",
+   "lugar": "Tuxpan, Veracruz",
+   "sectores": [
+    "alimentos",
+    "textil",
+    "metalicas",
+    "productos-metalicos",
+    "plastico",
+    "generacion-electrica"
+   ],
+   "fuentesLista": [
+    "dof-tuxpan",
+    "osm",
+    "sict-dos-bocas"
+   ],
+   "realNota": "El polo real: la Federación y Veracruz firmaron su convenio el 26 de junio de 2025 y la declaratoria salió el 26 de agosto de 2025 (DOF), en un predio del estado junto al puerto. En noviembre de 2026 el Gobierno de Veracruz anunció el concurso para elegir a su desarrollador. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 141.11,
+    "via": "Línea V",
+    "operador": "Canadian Pacific Kansas City",
+    "mesesMinimos": 2,
+    "dato": "No tiene vía: la declaratoria habla del puerto y de la autopista, y dice que el puerto «requiere modernización logística e intermodal». La espuela del juego va de la Línea V (Canadian Pacific Kansas City), la línea principal más cercana, al polo: 141.11 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante, por ejemplo a una vía que construya el jugador.",
+    "fuentes": [
+     "dof-tuxpan",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 4,
+    "fuenteCorta": "Sener",
+    "kmLinea": 3.49,
+    "dato": "La Secretaría de Energía, en la declaratoria: «en su etapa madura este PODECOBI alcance una demanda de electricidad de 4 MW», de 2 a 3.5 MW de 2027 a 2030, conectado a la línea de 115 kV Tuxpan–Tihuatlán II o Tuxpan II–Esfuerzo, a 0.8 km. En OpenStreetMap, la línea de alta tensión más cercana a la subestación del juego queda a 3.49 km.",
+    "fuentes": [
+     "dof-tuxpan",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 30,
+      "empresa": null
+     }
+    ],
+    "dato": "Un polígono de 98 vértices. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 180 ha en 10 lotes de 10 a 30 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-tuxpan",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Logística",
+    "Agroindustria",
+    "Industria ligera",
+    "Energético",
+    "Industria pesada",
+    "Industria textil especializada",
+    "Actividades industriales y comercio internacional",
+    "Almacenamiento y distribución de mercancías"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, agroindustria es la industria alimentaria; la industria pesada, las metálicas básicas y los productos metálicos; la ligera, la del plástico; el energético, el equipo de generación y distribución de electricidad, y la textil, su sector (estimación del juego). La logística, el comercio y el almacenamiento no son manufactura: no se ofrecen para un lote.",
+    "fuentes": [
+     "dof-tuxpan",
+     "juego"
+    ]
+   }
+  },
+  "cancun": {
+   "nombre": "Distrito Financiero y Tecnológico de Cancún",
+   "lugar": "Benito Juárez, Quintana Roo",
+   "sectores": [
+    "alimentos",
+    "dispositivos-medicos",
+    "computacion"
+   ],
+   "fuentesLista": [
+    "dof-cancun",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 7 de agosto de 2026 (DOF) en terrenos del estado, el primero de servicios: turismo médico, contenidos digitales, finanzas. El 4 de agosto de 2026 la gobernadora firmó en Orlando un memorándum para un centro de servicios médicos de 270 millones de dólares en el distrito. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el polo ya dispone de vialidades, energía, agua, drenaje y conectividad, pero no qué obras le faltan. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada una de sus piezas lleva su calle; se hacen una tras otra.",
+    "fuentes": [
+     "dof-cancun",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.03,
+    "via": "Tren Maya",
+    "operador": "Tren Maya",
+    "mesesMinimos": 2,
+    "dato": "En 2018 no hay vía en Quintana Roo: la declaratoria pone la estación Cancún del Tren Maya a 4.1 km. La espuela del juego va del Tren Maya al polo: 0.03 km en línea recta (OpenStreetMap). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta Cancún. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante.",
+    "fuentes": [
+     "dof-cancun",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 10.45,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 2.5,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que dispone de energía «con opciones identificadas para ampliar la disponibilidad de energía en el mediano plazo», sin decir cuánta. La línea de alta tensión más cercana a su subestación queda a 2.5 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 1.5,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 2,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 2,
+      "empresa": null
+     }
+    ],
+    "dato": "Kulkaná 1 y 2 con sus continuaciones, en la Lambert del INEGI pasada a UTM. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 45.5 ha en 9 lotes de 1.5 a 8 ha, y 2 ha de servicios en Kulkaná 2; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-cancun",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Turismo médico",
+    "Producción audiovisual",
+    "Animación digital y contenidos",
+    "Servicios gastronómicos",
+    "Servicios educativos y formación profesional",
+    "Comercio al por mayor de alimentos y abarrotes",
+    "Centros de servicios empresariales y financieros",
+    "Centros de distribución para el Caribe"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones de la declaratoria (DOF), «enunciativas más no limitativas»: todas son de servicios, y el juego solo tiene sectores de manufactura. Para que sus lotes tengan qué ofrecer, el juego toma los más cercanos: la industria alimentaria por la gastronomía y el abasto, los dispositivos médicos por el turismo médico y el equipo de cómputo y electrónico por los contenidos digitales (estimación del juego).",
+    "fuentes": [
+     "dof-cancun",
+     "juego"
+    ]
+   }
+  },
+  "circular-quintana-roo": {
+   "nombre": "Economía Circular Quintana Roo",
+   "lugar": "Puerto Morelos, Quintana Roo",
+   "sectores": [
+    "plastico",
+    "papel",
+    "metalicas"
+   ],
+   "fuentesLista": [
+    "dof-circular-quintana-roo",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: la Semarnat lo declaró el 27 de julio de 2026 (DOF) en 39.90 ha de un predio de 100 ha de la Agencia de Proyectos Estratégicos del estado, en Puerto Morelos. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.49,
+    "via": "Tren Maya",
+    "operador": "Tren Maya",
+    "mesesMinimos": 2,
+    "dato": "En 2018 no hay vía en Quintana Roo; la declaratoria habla de un corredor con infraestructura ferroviaria sin decir a qué distancia. La espuela del juego va del Tren Maya al polo: 0.49 km en línea recta (OpenStreetMap). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta ahí. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante.",
+    "fuentes": [
+     "dof-circular-quintana-roo",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 10.45,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 1.85,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 1.85 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 8,
+      "empresa": null
+     }
+    ],
+    "dato": "Un rectángulo junto a la federal 307; su croquis marca 2 ha de uso comercial al sur y 37.90 de uso industrial. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 28 ha en 4 lotes de 6 y 8 ha, y 1.5 ha de servicios; la franja comercial queda sin lotes (estimación del juego).",
+    "fuentes": [
+     "dof-circular-quintana-roo",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Economía circular"
+   ],
+   "vocacionesDato": {
+    "dato": "La declaratoria no enumera vocaciones: el polo es para empresas de economía circular, que aprovechan residuos. El juego les ofrece las industrias que usan material reciclado como materia prima: el plástico y el hule, el papel y cartón, y las metálicas básicas, con chatarra de fierro (estimación del juego).",
+    "fuentes": [
+     "dof-circular-quintana-roo",
+     "juego"
+    ]
+   }
+  },
+  "coatzacoalcos-ii": {
+   "nombre": "Coatzacoalcos II",
+   "lugar": "Coatzacoalcos, Veracruz",
+   "sectores": [
+    "computacion",
+    "semiconductores",
+    "transporte",
+    "dispositivos-medicos",
+    "farmaceutica",
+    "alimentos",
+    "generacion-electrica",
+    "maquinaria",
+    "metalicas",
+    "petroquimica"
+   ],
+   "fuentesLista": [
+    "dof-coatzacoalcos-ii",
+    "presidencia-istmo-2025",
+    "piciit-2026",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 12 de mayo de 2023 (DOF) en terrenos que Pemex donó al Corredor Interoceánico. La Presidenta lo dio por concesionado a Desarrolladora Multimodal del Istmo el 19 de febrero de 2025, con Coatzacoalcos I y Salina Cruz; en 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 3.11,
+    "via": "Línea FA",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "El polo queda «a 800 m del entronque ferroviario correspondiente a la línea Z» (DOF). Esas vías cercanas son espuelas industriales del complejo de Pajaritos; la espuela del juego va a la línea principal más cercana, la Línea FA (Ferroistmo): 3.11 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-coatzacoalcos-ii",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 10.45,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 2.1,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 2.1 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 20,
+      "empresa": null
+     }
+    ],
+    "dato": "Un polígono con nueve curvas junto a la vialidad del túnel sumergido. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 100 ha en 8 lotes de 8 a 20 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-coatzacoalcos-ii",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Eléctrica y electrónica",
+    "Semiconductores",
+    "Automotriz (electromovilidad), autopartes y equipo de transporte",
+    "Dispositivos médicos",
+    "Farmacéutica",
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica (energías limpias)",
+    "Maquinaria y equipo",
+    "Tecnologías de la Información y la Comunicación",
+    "Metales",
+    "Petroquímica"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
+    "fuentes": [
+     "dof-coatzacoalcos-ii"
     ]
    }
   }

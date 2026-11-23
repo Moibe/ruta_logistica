@@ -2055,6 +2055,351 @@ const SEYBAPLAYA = {
   viaDe: /Tren Maya/i,
 };
 
+/**
+ * Chetumal, from its declaratoria (DOF, 1 Jul 2025): three sections in UTM zone 16 with northings
+ * before eastings (67.46, 13.08 and 7.26 ha), 87.80 ha. Sections I and III give their areas; II gives
+ * 13.0763 ha against 13.0802 (0.03 % less), every side agreeing.
+ */
+const CHETUMAL = {
+  id: 'chetumal',
+  zona: 16,
+  piezas: [
+    {
+      nombre: 'Sección I',
+      servicios: true,
+      vertices: [
+        [357558.779, 2046120.881], [357585.268, 2045725.971], [357815.494, 2045731.585], [357641.385, 2044663.118],
+        [357904.092, 2044769.597], [357904.268, 2044672.048], [358556.984, 2044640.691], [358578.894, 2044860.135],
+        [358649.987, 2045171.471], [357875.372, 2045273.06], [357977.648, 2045483.684], [358069.212, 2045699.876],
+        [358110.607, 2045737.559], [357925.355, 2045733.809], [357882.246, 2045732.936], [357880.961, 2045736.587],
+        [357880.279, 2045740.396], [357880.218, 2045744.266], [357880.162, 2045747.275], [357879.605, 2045750.233],
+        [357878.563, 2045753.057], [357877.065, 2045755.667], [357875.154, 2045757.992], [357716.737, 2045920.715],
+        [357712.971, 2045925.036], [357709.704, 2045929.746], [357706.974, 2045934.786], [357704.816, 2045940.096],
+        [357703.256, 2045945.612], [357702.312, 2045951.265], [357701.996, 2045956.988], [357701.996, 2045975.135],
+        [357701.996, 2046111.733],
+      ],
+      lotes: [{ ha: 15, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 10, lado: 'b' }, { ha: 8, lado: 'b' }],
+    },
+    {
+      nombre: 'Sección II',
+      vertices: [
+        [357450.839, 2045726.653], [357550.768, 2045720.496], [357435.023, 2044858.967], [357290.131, 2044823.535],
+        [357305.132, 2045216.236],
+      ],
+      lotes: [{ ha: 5, lado: 'a' }, { ha: 5, lado: 'b' }],
+    },
+    {
+      nombre: 'Sección III',
+      vertices: [
+        [356953.051, 2046339.61], [356953.051, 2046154.577], [357555.758, 2046126.789], [357726.132, 2046117.828],
+        [357726.132, 2046317.733], [357726.398, 2046348.124], [357647.295, 2046348.847], [357647.295, 2046174.857],
+        [357132.55, 2046174.881], [357132.57, 2046336.658],
+      ],
+      lotes: [{ ha: 3, lado: 'a' }, { ha: 3, lado: 'b' }],
+    },
+  ],
+  areaDof: 878010.416,
+  control: null,
+  marcador: { lat: 18.4919, lon: -88.3445 },
+  /**
+   * No lots are published. The game gives each piece about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 67 ha in 9 lots of 3 to 15 ha (an estimate).
+   */
+  serviciosHa: 3,
+  anchoVialidad: 26,
+  anchoAcceso: 14,
+  /** OpenStreetMap has no power line in the view, only the Tren Maya's substations: a wider search. */
+  margenLuz: 15000,
+  /** On the federal 186, Escárcega–Chetumal (the DOF). */
+  carretera: /186/,
+  /**
+   * No track in 2018: the Tren Maya, whose Chetumal Aeropuerto station the declaratoria puts 3.5 km
+   * away, came later. The spur goes to it; change `viaDe` and the box to send it elsewhere.
+   */
+  viasLejos: '18.30,-88.60,18.70,-88.10',
+  margenVias: 20000,
+  viaDe: /Tren Maya/i,
+};
+
+/**
+ * Tuxpan, from its declaratoria (DOF, 26 Aug 2025): one polygon of 98 vertices in UTM zone 14 with
+ * northings before eastings, 235.10 ha; every side agrees with its bearing and length but for rounding.
+ */
+const TUXPAN = {
+  id: 'tuxpan',
+  zona: 14,
+  vertices: [
+    [666085.08, 2311707.73], [666080.04, 2311777.19], [666068.65, 2311825.01], [666057.13, 2311870.58],
+    [666041.11, 2311892.83], [666020.06, 2311917.12], [665982.75, 2311957.95], [665926.36, 2311994.12],
+    [665885.4, 2312019.73], [665827.07, 2312073.83], [665786.02, 2312109.35], [665759.62, 2312131],
+    [665744.56, 2312160.83], [665727.58, 2312206.51], [665708.81, 2312264], [665703.18, 2312330.29],
+    [665700.76, 2312393.77], [665697.08, 2312419.64], [665657.85, 2312481.87], [665612.62, 2312553.69],
+    [665613.57, 2312702.82], [665615.6, 2312858.47], [665616.92, 2312872.28], [665653.06, 2312966.4],
+    [665666.3, 2312995.05], [665675.38, 2313006.08], [665755.66, 2313089.3], [665771.2, 2313105.19],
+    [665848.57, 2313185.28], [665883.27, 2313312.12], [665891.22, 2313458.71], [665895.68, 2313544.23],
+    [665897.98, 2313593.58], [665849.12, 2313763.34], [665781.25, 2314000.99], [665728.72, 2314178.23],
+    [665705.75, 2314193.06], [665693.38, 2314201.95], [665685.66, 2314211.14], [665680.49, 2314218.63],
+    [665677.54, 2314223.97], [665673.92, 2314235.32], [665672.31, 2314250.39], [665673.42, 2314265.11],
+    [665677.31, 2314279.38], [665685.5, 2314304.68], [665688.18, 2314319.29], [665687.68, 2314327.86],
+    [665662.4, 2314424.63], [665651.42, 2314464.99], [665624.79, 2314538.97], [665582.7, 2314641.38],
+    [665550.57, 2314635.53], [665510.03, 2314623.16], [665477.34, 2314608.71], [665449.28, 2314592.26],
+    [665438.89, 2314586.13], [665339.63, 2314520.3], [665342.22, 2314515.25], [665316.01, 2314499.9],
+    [665247.11, 2314444.19], [665322.61, 2314157.76], [665333.35, 2313985.02], [665341.28, 2313849.55],
+    [665353.64, 2313642.6], [665358.78, 2313550.81], [665376.64, 2313249.92], [665370.85, 2313237.5],
+    [665363.99, 2313226.42], [665353.37, 2313213.04], [665340.78, 2313199.23], [665323.41, 2313182.72],
+    [665306.27, 2313169.77], [665284.47, 2313158.54], [665266.18, 2313150.37], [665183.9, 2313113.62],
+    [665067.12, 2313061.32], [664900.9, 2312987.1], [664764.45, 2312926.47], [664626.04, 2312865.53],
+    [664621.42, 2312860.88], [664604.91, 2312853.74], [664598.16, 2312787.11], [664607.05, 2312737.68],
+    [664585.91, 2312550.51], [664575.07, 2312459.01], [664561.56, 2312379.72], [664549.46, 2312308.32],
+    [664530.85, 2312201.49], [664532.23, 2312198.19], [664519.29, 2312083.6], [664511.48, 2312011.1],
+    [664496.22, 2311923.58], [664478.92, 2311802.68], [664471.57, 2311715.15], [664463.71, 2311645.02],
+    [664639.98, 2311650.33],
+  ],
+  areaDof: 2351023.52,
+  control: null,
+  marcador: { lat: 20.9076, lon: -97.4107 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria zones
+   * industrial (76.46 %): 180 ha in 10 lots of 10 to 30 ha (an estimate).
+   */
+  lotes: [
+    { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 10, lado: 'a' },
+    { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' }, { ha: 10, lado: 'b' },
+  ],
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  /** The México–Tuxpan highway (the DOF). */
+  carretera: /132|180/,
+  /**
+   * No track: the declaratoria says the port «requires intermodal modernisation», and the nearest
+   * line of 2018 is some 90 km away. The spur goes to the nearest main line of a box about 150 km
+   * around; to send it elsewhere later (a line the player builds), give `viaDe` and narrow the box.
+   */
+  viasLejos: '19.30,-99.00,21.90,-96.50',
+  margenVias: 160000,
+};
+
+/**
+ * Distrito Financiero y Tecnológico de Cancún, from its declaratoria (DOF, 7 Aug 2026): tables in the
+ * INEGI's Lambert conformal conic (GRS80, parallels 17.5 and 29.5, origin 12 N 102 W, false easting
+ * 2,500,000), converted here to UTM zone 16. Kulkaná 1 (two rings, 25.91 ha), its continuation
+ * (3.40), Kulkaná 2 (two rings, 28.98) and its continuation (2.47): 60.76 ha. Kulkaná 2's vertex 1 is
+ * written 4,058,378.7395 east; vertex 10, which closes the ring, is 4,058,278.7395 (a 3 for a 2).
+ * The areas are the Lambert plane's, whose scale here is 0.9955: on the ground (in UTM) the same
+ * rings measure 0.9 % more.
+ */
+const CANCUN = {
+  id: 'cancun',
+  zona: 16,
+  piezas: [
+    {
+      nombre: 'Kulkaná 2',
+      servicios: true,
+      vertices: [
+        [508804.149, 2323935.717], [508178.118, 2323897.34], [508178.805, 2324408.666], [508705.582, 2324433.807],
+        [508715.962, 2324361.982], [508725.219, 2324304.544], [508746.127, 2324189.75], [508770.114, 2324075.744],
+        [508783.249, 2324019.068],
+      ],
+      lotes: [{ ha: 8, lado: 'a' }, { ha: 6, lado: 'a' }, { ha: 8, lado: 'b' }],
+    },
+    {
+      nombre: 'Kulkaná 1',
+      vertices: [
+        [508705.116, 2324437.299], [508178.809, 2324411.891], [508179.412, 2324860.534], [508219.211, 2324868.392],
+        [508302.069, 2324880.873], [508336.097, 2324898.84], [508400.322, 2324907.642], [508591.371, 2324915.105],
+        [508666.952, 2324923.284], [508670.135, 2324824.448], [508676.893, 2324708.29], [508686.801, 2324592.357],
+        [508692.934, 2324534.503],
+      ],
+      lotes: [{ ha: 8, lado: 'a' }, { ha: 4, lado: 'a' }, { ha: 6, lado: 'b' }],
+    },
+    {
+      nombre: 'Kulkaná 1, oriente',
+      vertices: [
+        [508804.084, 2324442.078], [508775.281, 2324440.687], [508762.466, 2324542.586], [508751.18, 2324656.483],
+        [508742.988, 2324770.645], [508737.898, 2324884.987], [508736.791, 2324930.843], [508787.103, 2324936.288],
+      ],
+      lotes: [{ ha: 1.5, lado: 'a' }],
+    },
+    {
+      nombre: 'Continuación de Kulkaná 1',
+      vertices: [
+        [508775.284, 2324440.687], [508705.116, 2324437.299], [508692.931, 2324534.503], [508686.801, 2324592.357],
+        [508676.893, 2324708.29], [508670.135, 2324824.448], [508666.952, 2324923.284], [508736.79, 2324930.843],
+        [508740.055, 2324827.798], [508746.697, 2324713.536], [508756.437, 2324599.496], [508762.466, 2324542.586],
+      ],
+      lotes: [{ ha: 2, lado: 'a' }],
+    },
+    {
+      nombre: 'Continuación de Kulkaná 2',
+      vertices: [
+        [508806.776, 2323935.878], [508804.149, 2323935.717], [508783.249, 2324019.068], [508770.01, 2324076.208],
+        [508746.156, 2324189.606], [508725.219, 2324304.544], [508715.962, 2324361.982], [508705.582, 2324433.807],
+        [508775.755, 2324437.157], [508785.18, 2324372.419], [508803.342, 2324264.231],
+      ],
+      lotes: [{ ha: 2, lado: 'a' }],
+    },
+  ],
+  franjas: [
+    {
+      nombre: 'Kulkaná 2, punta norte',
+      tipo: 'reserva',
+      nota: 'Parte del polo (DOF), muy chica para un lote',
+      delPolo: true,
+      vertices: [
+        [508801.521, 2324438.388], [508803.342, 2324264.231], [508785.18, 2324372.419], [508775.755, 2324437.157],
+      ],
+    },
+  ],
+  areaDof: 607600,
+  areaNoCuadra: 0.01,
+  control: null,
+  marcador: { lat: 21.0181, lon: -86.9182 },
+  /**
+   * No lots are published. The game gives each piece about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 45.5 ha in 9 lots of 1.5 to 8 ha (an estimate).
+   */
+  serviciosHa: 2,
+  anchoVialidad: 24,
+  anchoAcceso: 14,
+  /** Near the federal 180 and 307, by the Distribuidor Colosio (the DOF). */
+  carretera: /307|180/,
+  /**
+   * No track in 2018: the Tren Maya's Cancún station, 4.1 km away (the DOF), came later. The spur
+   * goes to it; change `viaDe` and the box to send it elsewhere.
+   */
+  viasLejos: '20.85,-87.15,21.25,-86.75',
+  margenVias: 20000,
+  viaDe: /Tren Maya/i,
+};
+
+/**
+ * Economía Circular Quintana Roo, from its declaratoria (Semarnat, DOF, 27 Jul 2026): its table is an
+ * image, transcribed here. A rectangle of four vertices in UTM zone 16 (39.90 ha, 399,007.436 m²,
+ * exactly what the transcription gives); vertices 5 and 6 cut a 2 ha strip on its south side that the
+ * croquis marks as commercial use, the rest industrial (37.90 ha).
+ */
+const CIRCULAR_QUINTANA_ROO = {
+  id: 'circular-quintana-roo',
+  zona: 16,
+  piezas: [
+    {
+      nombre: 'Uso industrial',
+      servicios: true,
+      vertices: [
+        [504612.2014, 2307331.966], [504687.4488, 2308227.686], [505109.7068, 2308193.274], [505035.1736, 2307306.057],
+      ],
+      lotes: [{ ha: 8, lado: 'a' }, { ha: 6, lado: 'a' }, { ha: 8, lado: 'b' }, { ha: 6, lado: 'b' }],
+    },
+  ],
+  franjas: [
+    {
+      nombre: 'Uso comercial',
+      tipo: 'reserva',
+      ha: 2.0000271,
+      nota: 'Parte del polo que su croquis marca de uso comercial (DOF); el juego no le pone lotes',
+      delPolo: true,
+      vertices: [
+        [505031.2217, 2307259.014], [504608.2495, 2307284.923], [504612.2014, 2307331.966], [505035.1736, 2307306.057],
+      ],
+    },
+  ],
+  areaDof: 399007.436,
+  control: null,
+  marcador: { lat: 20.8698, lon: -86.9533 },
+  /**
+   * No lots are published. The game gives the industrial part about the share Coatzacoalcos I's
+   * declaratoria zones industrial (76.46 %): 28 ha in 4 lots of 6 and 8 ha (an estimate).
+   */
+  serviciosHa: 1.5,
+  anchoVialidad: 20,
+  anchoAcceso: 12,
+  /** The federal 307, Cancún–Chetumal (the DOF). */
+  carretera: /307/,
+  /**
+   * No track in 2018; the Tren Maya came later. The spur goes to it; change `viaDe` and the box to
+   * send it elsewhere.
+   */
+  viasLejos: '20.70,-87.15,21.05,-86.80',
+  margenVias: 20000,
+  viaDe: /Tren Maya/i,
+};
+
+/**
+ * Coatzacoalcos II, from its declaratoria (DOF, 12 May 2023): one table in UTM zone 15 with nine
+ * curves (each centre in the row after the side it bends), 131.82 ha. Its article speaks of two
+ * polygons (129.20 and 2.63 ha); the table is the outline of both. Vertex 77 is written 358,801.577
+ * east, 5 km off: its side from 43 puts it at 353,801.577 (an 8 for a 3). Sides 91→92 and 92→93 give
+ * bearings north and south where their coordinates and lengths run west. With them the ring gives
+ * 1,318,245 m² against 1,318,237.54.
+ */
+const COATZACOALCOS_II = {
+  id: 'coatzacoalcos-ii',
+  zona: 15,
+  vertices: [
+    [351786.138, 2007091.458], [351832.055, 2007101.969], [351855.867, 2007097.29], [351850.577, 2007005.707],
+    [351852.642, 2007002.923], [351854.801, 2007000.212], [351857.051, 2006997.576], [351859.389, 2006995.018],
+    [351861.814, 2006992.542], [351864.322, 2006990.15], [351866.91, 2006987.844], [351869.575, 2006985.629],
+    [351872.315, 2006983.506], [351875.125, 2006981.478], [351878.003, 2006979.547], [351880.945, 2006977.715],
+    [351883.949, 2006975.985], [351887.009, 2006974.359], [351890.123, 2006972.837], [351893.288, 2006971.424],
+    [351896.498, 2006970.119], [351899.752, 2006968.924], [351903.044, 2006967.842], [351906.372, 2006966.872],
+    [351909.73, 2006966.017], [351913.116, 2006965.276], [351916.525, 2006964.652], [351919.954, 2006964.145],
+    [351923.397, 2006963.755], [351926.853, 2006963.483], [351930.315, 2006963.329], [351932.703, 2006963.631],
+    [351935.079, 2006964.016], [351937.441, 2006964.481], [351939.786, 2006965.028], [351942.11, 2006965.654],
+    [351944.411, 2006966.36], [351946.687, 2006967.145], [351948.934, 2006968.007], [351951.151, 2006968.946],
+    [351953.334, 2006969.961], [351955.481, 2006971.05], [351957.589, 2006972.212], [351959.656, 2006973.445],
+    [351961.679, 2006974.749], [351963.657, 2006976.122], [351965.586, 2006977.562], [351967.465, 2006979.067],
+    [351969.29, 2006980.636], [351971.061, 2006982.266], [351972.775, 2006983.957], [351974.43, 2006985.705],
+    [351976.024, 2006987.509], [351977.554, 2006989.367], [351979.021, 2006991.276], [351980.42, 2006993.234],
+    [351981.752, 2006995.24], [351983.014, 2006997.29], [351984.205, 2006999.382], [351985.323, 2007001.513],
+    [351986.367, 2007003.682], [351987.337, 2007005.886], [351988.23, 2007008.121], [351989.046, 2007010.386],
+    [351989.783, 2007012.677], [351990.442, 2007014.993], [351991.02, 2007017.329], [351991.518, 2007019.684],
+    [351991.935, 2007022.055], [351992.27, 2007024.439], [351993.698, 2007023.337], [351995.162, 2007022.283],
+    [351996.661, 2007021.28], [351998.194, 2007020.328], [351999.757, 2007019.429], [352001.35, 2007018.583],
+    [352002.971, 2007017.792], [352004.618, 2007017.055], [352006.289, 2007016.376], [352007.982, 2007015.753],
+    [352009.695, 2007015.187], [352011.426, 2007014.681], [352013.173, 2007014.233], [352014.935, 2007013.844],
+    [352016.709, 2007013.515], [352018.492, 2007013.247], [352020.284, 2007013.039], [352022.082, 2007012.892],
+    [352023.884, 2007012.806], [352025.687, 2007012.781], [352027.491, 2007012.818], [352029.292, 2007012.915],
+    [352031.089, 2007013.073], [352093.227, 2007015.905], [352116.121, 2007015.534], [352149.734, 2006961.922],
+    [352222.038, 2006911.174], [352288.519, 2006909.58], [352328.699, 2006916.618], [352409.539, 2006950.69],
+    [352458.449, 2007022.651], [352530.519, 2007020.059], [352597.55, 2007017.648], [352610.615, 2007017.178],
+    [352690.015, 2007014.339], [352750.293, 2007010.307], [352795.043, 2007007.833], [352869.979, 2007003.687],
+    [352909.67, 2007001.853], [352949.229, 2006999.304], [353029.534, 2006994.863], [353069.325, 2006992.869],
+    [353109.128, 2006990.461], [353280.249, 2006980.996], [353315.184, 2006975.946], [353328.89, 2006973.733],
+    [353342.515, 2006971.068], [353356.045, 2006967.954], [353369.465, 2006964.394], [353382.759, 2006960.393],
+    [353395.914, 2006955.954], [353408.915, 2006951.083], [353421.748, 2006945.785], [353434.398, 2006940.065],
+    [353446.853, 2006933.93], [353458.595, 2006929.029], [353470.183, 2006923.774], [353481.607, 2006918.17],
+    [353497.29, 2006909.285], [353505.012, 2006905.837], [353512.847, 2006902.651], [353520.785, 2006899.731],
+    [353528.816, 2006897.081], [353536.933, 2006894.704], [353545.125, 2006892.602], [353553.383, 2006890.777],
+    [353561.698, 2006889.233], [353570.061, 2006887.97], [353579.109, 2006886.931], [353588.174, 2006886.06],
+    [353605.257, 2006886.178], [353622.326, 2006886.888], [353639.36, 2006888.188], [353656.339, 2006890.078],
+    [353673.242, 2006892.554], [353690.049, 2006895.615], [353706.74, 2006899.256], [353720.885, 2006904.821],
+    [353734.853, 2006910.817], [353748.631, 2006917.239], [353762.204, 2006924.081], [353775.562, 2006931.336],
+    [353788.69, 2006938.998], [353801.577, 2006947.059], [353793.077, 2006863.28], [353787.122, 2006804.578],
+    [353785.099, 2006790.509], [353780.763, 2006760.746], [353774.659, 2006714.856], [353770.789, 2006654.054],
+    [353768.39, 2006624.16], [353761.779, 2006453.488], [353761.4, 2006437.86], [353761.415, 2006392.616],
+    [353761.387, 2006333.317], [353761.387, 2006311.629], [353761.387, 2006247.813], [353349.875, 2006247.813],
+    [353328.187, 2006247.813], [352130.245, 2006247.813], [352130.245, 2006617.378], [351777.323, 2006617.378],
+  ],
+  areaDof: 1318237.54,
+  control: null,
+  marcador: { lat: 18.1437, lon: -94.3915 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria zones
+   * industrial (76.46 %): 100 ha in 8 lots of 8 to 20 ha (an estimate).
+   */
+  lotes: [
+    { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 8, lado: 'a' },
+    { ha: 15, lado: 'b' }, { ha: 12, lado: 'b' }, { ha: 10, lado: 'b' }, { ha: 8, lado: 'b' },
+  ],
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  /** It fronts the road of the Coatzacoalcos submerged tunnel; the MEX-180 is 4 km away (the DOF). */
+  carretera: /180/,
+  carreteraNombre: /T[úu]nel/i,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 /**
@@ -2797,6 +3142,26 @@ const FUENTES = {
   'dof-seybaplaya': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Seybaplaya I, Campeche (30 de junio de 2025): cuadros de construcción de dos fracciones, 99.99 ha; a pie de la MEX-180, a 4.9 km del puerto de Seybaplaya, a 29 km del puerto de Campeche y a 37 km del Tren Maya; gas y electricidad en el predio; sus vocaciones productivas, la declaratoria de Polo Industrial del Bienestar del Gobierno de Campeche (25 de septiembre de 2024) y su propiedad (pública estatal)',
     url: 'https://dof.gob.mx/nota_detalle.php?codigo=5761459&fecha=30/06/2025',
+  },
+  'dof-chetumal': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Chetumal, Quintana Roo (1 de julio de 2025): cuadros de construcción de tres secciones, 87.80 ha en Othón P. Blanco; sobre la carretera federal 186 Escárcega–Chetumal, a 3.5 km del aeropuerto y de la estación Chetumal Aeropuerto del Tren Maya, a 2 km del puerto y a 7.4 km de la frontera con Belice; vialidades, energía, agua y conectividad; sus vocaciones productivas y su propiedad (pública estatal)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5761568&fecha=01/07/2025',
+  },
+  'dof-tuxpan': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Tuxpan, Veracruz (26 de agosto de 2025): cuadro de construcción de 98 vértices, 235.10 ha; conectividad marítima y la autopista México–Tuxpan, a 4 km del aeropuerto; el dictamen de la Secretaría de Energía (demanda de 4 MW en su etapa madura, de 2 a 3.5 MW de 2027 a 2030; la línea de 115 kV Tuxpan–Tihuatlán II o Tuxpan II–Esfuerzo a 0.8 km); sus vocaciones productivas y su propiedad (el Gobierno de Veracruz)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5766562&fecha=26/08/2025',
+  },
+  'dof-cancun': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Distrito Financiero y Tecnológico de Cancún, Quintana Roo (7 de agosto de 2026): cuadros de construcción de Kulkaná 1 y 2 y sus continuaciones en la cónica conforme de Lambert del INEGI, 60.76 ha en Benito Juárez; cerca de las carreteras 180 y 307 y del Distribuidor Colosio, a 4.1 km de la estación Cancún del Tren Maya y a 5 km del aeropuerto; vialidades, energía, agua, drenaje y conectividad; sus vocaciones (todas de servicios) y su propiedad (dominio público del estado)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5795731&fecha=07/08/2026',
+  },
+  'dof-circular-quintana-roo': {
+    fuente: 'DOF, Acuerdo de la Semarnat por el que se emite la declaratoria del Polo de Desarrollo de Economía Circular para el Bienestar Quintana Roo (27 de julio de 2026): 39.90 ha dentro de un predio de 100 ha de la Agencia de Proyectos Estratégicos del estado, en Puerto Morelos; su cuadro de construcción y su croquis vienen como imagen (37.90 ha de uso industrial y 2 de uso comercial); junto a la federal 307 Cancún–Chetumal',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5794759&fecha=27/07/2026',
+  },
+  'dof-coatzacoalcos-ii': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Coatzacoalcos II (12 de mayo de 2023): cuadro de construcción con nueve curvas, 131.82 ha en dos polígonos (129.20 y 2.63 ha); a 800 m del entronque de la línea Z, con frente a la vialidad del Túnel Sumergido de Coatzacoalcos, a 4 km de la MEX-180 y a 600 m de la carretera estatal a Allende, cerca del recinto portuario de Pajaritos; sus vocaciones productivas y su propiedad (donaciones de Pemex al Corredor Interoceánico)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5688609&fecha=12/05/2023',
   },
   'dof-teapa': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)',
@@ -3881,6 +4246,182 @@ function interiorSeybaplaya(g) {
   };
 }
 
+function interiorChetumal(g) {
+  return {
+    nombre: 'Chetumal',
+    lugar: 'Othón P. Blanco, Quintana Roo',
+    sectores: ['generacion-electrica', 'textil', 'metalicas', 'maquinaria', 'alimentos'],
+    fuentesLista: ['dof-chetumal', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: declarado el 1 de julio de 2025 (DOF) en terrenos del estado; la Secretaría de Economía y el Gobierno de Quintana Roo lo lanzaron el 6 de agosto de 2025 y el estado formalizó el fideicomiso que lo administra el 7 de agosto de 2026. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el polo ya dispone de vialidades, energía, agua y conectividad, pero no qué obras le faltan. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada una de sus tres secciones lleva su calle; se hacen una tras otra.',
+      fuentes: ['dof-chetumal', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `En 2018 no hay vía en Quintana Roo: la declaratoria pone la estación Chetumal Aeropuerto del Tren Maya a 3.5 km. La espuela del juego va del ${g.espuela.via} al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta Chetumal. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante.`,
+      fuentes: ['dof-chetumal', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('chetumal', g, `La declaratoria dice que el polígono dispone de energía eléctrica, sin decir cuánta. La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Tres secciones sobre la carretera 186. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 3 a 15 ha, y 3 ha de servicios en la sección I; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-chetumal', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Energía eléctrica', 'Industria textil', 'Metalurgia', 'Maquinaria y equipo', 'Agroindustria', 'Tecnologías de la información y comunicación', 'Actividades industriales y comercio internacional', 'Almacenamiento y distribución de mercancías'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, la energía eléctrica es el equipo de generación y distribución de electricidad; la metalurgia, las metálicas básicas, y la agroindustria, la industria alimentaria. Las tecnologías de la información, el comercio y el almacenamiento no son manufactura: no se ofrecen para un lote.',
+      fuentes: ['dof-chetumal'],
+    },
+  };
+}
+
+function interiorTuxpan(g) {
+  return {
+    nombre: 'Tuxpan',
+    lugar: 'Tuxpan, Veracruz',
+    sectores: ['alimentos', 'textil', 'metalicas', 'productos-metalicos', 'plastico', 'generacion-electrica'],
+    fuentesLista: ['dof-tuxpan', 'osm', 'sict-dos-bocas'],
+    realNota: 'El polo real: la Federación y Veracruz firmaron su convenio el 26 de junio de 2025 y la declaratoria salió el 26 de agosto de 2025 (DOF), en un predio del estado junto al puerto. En noviembre de 2026 el Gobierno de Veracruz anunció el concurso para elegir a su desarrollador. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `No tiene vía: la declaratoria habla del puerto y de la autopista, y dice que el puerto «requiere modernización logística e intermodal». La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la línea principal más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante, por ejemplo a una vía que construya el jugador.`,
+      fuentes: ['dof-tuxpan', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: {
+      mva: ENERGIA.polos['tuxpan'].mw,
+      fuenteCorta: 'Sener',
+      kmLinea: g.conexionElectrica.km,
+      dato: `La Secretaría de Energía, en la declaratoria: «en su etapa madura este PODECOBI alcance una demanda de electricidad de 4 MW», de 2 a 3.5 MW de 2027 a 2030, conectado a la línea de 115 kV Tuxpan–Tihuatlán II o Tuxpan II–Esfuerzo, a 0.8 km. En OpenStreetMap, la línea de alta tensión más cercana a la subestación del juego queda a ${km(g.conexionElectrica.km)} km.`,
+      fuentes: ['dof-tuxpan', 'osm'],
+    },
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono de 98 vértices. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 10 a 30 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-tuxpan', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Logística', 'Agroindustria', 'Industria ligera', 'Energético', 'Industria pesada', 'Industria textil especializada', 'Actividades industriales y comercio internacional', 'Almacenamiento y distribución de mercancías'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, agroindustria es la industria alimentaria; la industria pesada, las metálicas básicas y los productos metálicos; la ligera, la del plástico; el energético, el equipo de generación y distribución de electricidad, y la textil, su sector (estimación del juego). La logística, el comercio y el almacenamiento no son manufactura: no se ofrecen para un lote.',
+      fuentes: ['dof-tuxpan', 'juego'],
+    },
+  };
+}
+
+function interiorCancun(g) {
+  return {
+    nombre: 'Distrito Financiero y Tecnológico de Cancún',
+    lugar: 'Benito Juárez, Quintana Roo',
+    sectores: ['alimentos', 'dispositivos-medicos', 'computacion'],
+    fuentesLista: ['dof-cancun', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: declarado el 7 de agosto de 2026 (DOF) en terrenos del estado, el primero de servicios: turismo médico, contenidos digitales, finanzas. El 4 de agosto de 2026 la gobernadora firmó en Orlando un memorándum para un centro de servicios médicos de 270 millones de dólares en el distrito. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el polo ya dispone de vialidades, energía, agua, drenaje y conectividad, pero no qué obras le faltan. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada una de sus piezas lleva su calle; se hacen una tras otra.',
+      fuentes: ['dof-cancun', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `En 2018 no hay vía en Quintana Roo: la declaratoria pone la estación Cancún del Tren Maya a 4.1 km. La espuela del juego va del ${g.espuela.via} al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta Cancún. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante.`,
+      fuentes: ['dof-cancun', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('cancun', g, `La declaratoria dice que dispone de energía «con opciones identificadas para ampliar la disponibilidad de energía en el mediano plazo», sin decir cuánta. La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Kulkaná 1 y 2 con sus continuaciones, en la Lambert del INEGI pasada a UTM. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 1.5 a 8 ha, y 2 ha de servicios en Kulkaná 2; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-cancun', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Turismo médico', 'Producción audiovisual', 'Animación digital y contenidos', 'Servicios gastronómicos', 'Servicios educativos y formación profesional', 'Comercio al por mayor de alimentos y abarrotes', 'Centros de servicios empresariales y financieros', 'Centros de distribución para el Caribe'],
+    vocacionesDato: {
+      dato: 'Vocaciones de la declaratoria (DOF), «enunciativas más no limitativas»: todas son de servicios, y el juego solo tiene sectores de manufactura. Para que sus lotes tengan qué ofrecer, el juego toma los más cercanos: la industria alimentaria por la gastronomía y el abasto, los dispositivos médicos por el turismo médico y el equipo de cómputo y electrónico por los contenidos digitales (estimación del juego).',
+      fuentes: ['dof-cancun', 'juego'],
+    },
+  };
+}
+
+function interiorCircularQuintanaRoo(g) {
+  return {
+    nombre: 'Economía Circular Quintana Roo',
+    lugar: 'Puerto Morelos, Quintana Roo',
+    sectores: ['plastico', 'papel', 'metalicas'],
+    fuentesLista: ['dof-circular-quintana-roo', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: la Semarnat lo declaró el 27 de julio de 2026 (DOF) en 39.90 ha de un predio de 100 ha de la Agencia de Proyectos Estratégicos del estado, en Puerto Morelos. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `En 2018 no hay vía en Quintana Roo; la declaratoria habla de un corredor con infraestructura ferroviaria sin decir a qué distancia. La espuela del juego va del ${g.espuela.via} al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta ahí. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante.`,
+      fuentes: ['dof-circular-quintana-roo', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('circular-quintana-roo', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un rectángulo junto a la federal 307; su croquis marca 2 ha de uso comercial al sur y 37.90 de uso industrial. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 6 y 8 ha, y 1.5 ha de servicios; la franja comercial queda sin lotes (estimación del juego).`,
+      fuentes: ['dof-circular-quintana-roo', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Economía circular'],
+    vocacionesDato: {
+      dato: 'La declaratoria no enumera vocaciones: el polo es para empresas de economía circular, que aprovechan residuos. El juego les ofrece las industrias que usan material reciclado como materia prima: el plástico y el hule, el papel y cartón, y las metálicas básicas, con chatarra de fierro (estimación del juego).',
+      fuentes: ['dof-circular-quintana-roo', 'juego'],
+    },
+  };
+}
+
+function interiorCoatzacoalcosII(g) {
+  return {
+    nombre: 'Coatzacoalcos II',
+    lugar: 'Coatzacoalcos, Veracruz',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-coatzacoalcos-ii', 'presidencia-istmo-2025', 'piciit-2026', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: declarado el 12 de mayo de 2023 (DOF) en terrenos que Pemex donó al Corredor Interoceánico. La Presidenta lo dio por concesionado a Desarrolladora Multimodal del Istmo el 19 de febrero de 2025, con Coatzacoalcos I y Salina Cruz; en 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo queda «a 800 m del entronque ferroviario correspondiente a la línea Z» (DOF). Esas vías cercanas son espuelas industriales del complejo de Pajaritos; la espuela del juego va a la línea principal más cercana, la ${g.espuela.via} (${g.espuela.operador}): ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-coatzacoalcos-ii', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('coatzacoalcos-ii', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono con nueve curvas junto a la vialidad del túnel sumergido. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 8 a 20 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-coatzacoalcos-ii', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-coatzacoalcos-ii'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -3941,6 +4482,11 @@ const POLOS_INTERIOR = [
   [CIRCULAR_TLAXCALA, interiorCircularTlaxcala],
   [CAPITAL_TECNOLOGIA, interiorCapitalTecnologia],
   [SEYBAPLAYA, interiorSeybaplaya],
+  [CHETUMAL, interiorChetumal],
+  [TUXPAN, interiorTuxpan],
+  [CANCUN, interiorCancun],
+  [CIRCULAR_QUINTANA_ROO, interiorCircularQuintanaRoo],
+  [COATZACOALCOS_II, interiorCoatzacoalcosII],
 ];
 // `id…`: build only those polos and keep the others as they are in interiores.json.
 // `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.

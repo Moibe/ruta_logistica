@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y veintisiete polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y los 32 polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -691,8 +691,11 @@ Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texiste
 [Ciudad Ixtepec](#ciudad-ixtepec-por-dentro), [Asunción Ixtaltepec](#asunción-ixtaltepec-por-dentro),
 [Economía Circular Puebla](#economía-circular-puebla-por-dentro),
 [Economía Circular Tlaxcala](#economía-circular-tlaxcala-por-dentro),
-[Capital de la Tecnología](#capital-de-la-tecnología-y-la-sostenibilidad-por-dentro) y
-[Seybaplaya I](#seybaplaya-i-por-dentro).
+[Capital de la Tecnología](#capital-de-la-tecnología-y-la-sostenibilidad-por-dentro),
+[Seybaplaya I](#seybaplaya-i-por-dentro), [Chetumal](#chetumal-por-dentro), [Tuxpan](#tuxpan-por-dentro),
+[Cancún](#distrito-financiero-y-tecnológico-de-cancún-por-dentro),
+[Economía Circular Quintana Roo](#economía-circular-quintana-roo-por-dentro) y
+[Coatzacoalcos II](#coatzacoalcos-ii-por-dentro): los 32.
 El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
@@ -962,6 +965,9 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
 - **Economía Circular Tlaxcala:** son dos polígonos de 10 ha, uno junto al otro.
 - **Capital de la Tecnología:** son cinco polígonos en dos grupos a 5 km uno de otro.
 - **Seybaplaya I:** son dos fracciones que comparten un lado.
+- **Chetumal:** son tres secciones sobre la carretera 186.
+- **Cancún:** son Kulkaná 1 y 2 con sus continuaciones; una punta de Kulkaná 2 de 0.23 ha queda de
+  reserva.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -2276,6 +2282,223 @@ comparten un lado (25.92 y 74.07 ha), con los rumbos escritos «N 7-54-1 E».
 
 **En la realidad**: Campeche lo declaró Polo Industrial del Bienestar el 25 de septiembre de 2024 y
 la Secretaría de Economía lo declaró polo el 30 de junio de 2025 (DOF). No se ha reportado obra.
+
+### Chetumal por dentro
+
+El vigesimoctavo polo con vista por dentro (`/mexico/polo/chetumal`), del Plan México: 87.80 ha en
+Othón P. Blanco, Quintana Roo, sobre la carretera federal 186.
+
+**El terreno**, de su declaratoria (DOF, 1 de julio de 2025): tres secciones en UTM zona 16, con el
+norte antes que el este (67.46, 13.08 y 7.26 ha).
+- **Resultado:** las secciones I y III dan su área; la II da 13.0763 ha contra 13.0802 (0.03 %
+  menos), aunque cada lado cuadra. En total, 877,972 m² contra 878,010.
+- **El marcador:** cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** sobre la federal 186 Escárcega–Chetumal; el aeropuerto y la estación Chetumal
+  Aeropuerto del Tren Maya a 3.5 km, el puerto a 2 km y la frontera con Belice a 7.4 km.
+- **Servicios:** vialidades, energía, agua y conectividad.
+- **Vocaciones:** energía eléctrica, textil, metalurgia, maquinaria y equipo, agroindustria,
+  tecnologías de la información, comercio internacional y almacenamiento.
+- **Propiedad:** pública estatal.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **67 ha en 9 lotes de 3 a
+  15 ha**, con 3 ha de servicios en la sección I.
+- **Los empleos:** 61.2 por hectárea, 5,370. Un lote de 10 ha da 802 y pide de 0.9 MW (agroindustria)
+  a 5.5 MW (metálicas básicas).
+- **La espuela:** va al **Tren Maya**, a **0.56 km**. Cuesta 25 millones con una cuadrilla (5.6 meses)
+  o 37 con cuatro (2 meses). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta ahí: en 2018 no
+  hay vía en Quintana Roo. En el catálogo de obras, el Tren Maya llega a Chetumal
+  por los tramos 6 y 7.
+- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+  8.6 MW: alcanza. En su vista no hay líneas de alta tensión, solo subestaciones del Tren Maya: la
+  línea de 115 kV más cercana queda a 2.96 km de su subestación (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 482 millones con una cuadrilla; las
+  vialidades, 193 millones en 11.2 meses, o 280 en 4.0 con cuatro.
+- **Las vocaciones en sectores:** la energía eléctrica es el equipo de generación y distribución; la
+  metalurgia, las metálicas básicas, y la agroindustria, la industria alimentaria. Las tecnologías
+  de la información, el comercio y el almacenamiento no son manufactura.
+
+**En la realidad**:
+- **6 de agosto de 2025:** la Secretaría de Economía y el Gobierno de Quintana Roo lanzan el polo.
+- **7 de agosto de 2026:** el estado formaliza el fideicomiso que lo administra.
+
+No se ha reportado obra.
+
+### Tuxpan por dentro
+
+El vigesimonoveno polo con vista por dentro (`/mexico/polo/tuxpan`), del Plan México: 235.10 ha en
+Tuxpan, Veracruz, junto al puerto.
+
+**El terreno**, de su declaratoria (DOF, 26 de agosto de 2025): un polígono de 98 vértices en UTM
+zona 14, con el norte antes que el este.
+- **Resultado:** cada lado cuadra salvo redondeos; da 2,351,020 m² contra los 2,351,024 declarados.
+- **El marcador:** cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** el puerto (que «requiere modernización logística e intermodal») y la autopista
+  México–Tuxpan; el aeropuerto a 4 km. No habla de vías.
+- **Energía:** el dictamen de la Secretaría de Energía: una demanda de 4 MW en su etapa madura, de
+  2 a 3.5 MW de 2027 a 2030, conectada a la línea de 115 kV Tuxpan–Tihuatlán II o Tuxpan
+  II–Esfuerzo, a 0.8 km; el ducto Fernando–Cactus a 3.5 km.
+- **Vocaciones:** logística, agroindustria, industria ligera, energético, industria pesada, textil
+  especializada, comercio internacional y almacenamiento.
+- **Propiedad:** el Gobierno de Veracruz.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **180 ha en 10 lotes de 10
+  a 30 ha**, con 4 ha de servicios a la entrada.
+- **Los empleos:** 61.2 por hectárea, 14,380. Un lote de 10 ha da 799 y pide de 0.8 MW (productos
+  metálicos) a 5.5 MW (metálicas básicas).
+- **La espuela:** no tiene vía cerca. Va a la **Línea V de CPKC**, la línea principal más cercana:
+  **141.11 km**, la espuela más larga de los polos. En la red del juego de 2018 la vía en operación
+  más cercana está a 142.5 km (una más cercana, cerca de Tampico, no opera). Cuesta 6,404 millones
+  con una cuadrilla (70.6 meses) o 9,285 con cuatro (25 meses). Se puede cambiar de destino más
+  adelante, por ejemplo a una vía que construya el jugador.
+- **La energía:** los **4 MW** del dictamen de la Sener. Lleno pide 23 MW: un banco de la CFE. En
+  OpenStreetMap la línea de 115 kV más cercana queda a 3.49 km de su subestación.
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,291 millones con una cuadrilla;
+  las vialidades, 516 millones en 15 meses, o 749 en 5.3 con cuatro.
+- **Las vocaciones en sectores:** agroindustria es la industria alimentaria; la industria pesada,
+  las metálicas básicas y los productos metálicos; la ligera, la del plástico; el energético, el
+  equipo de generación y distribución, y la textil, su sector (estimación del juego).
+
+**En la realidad**:
+- **26 de junio de 2025:** la Federación y Veracruz firman su convenio.
+- **17 de noviembre de 2026:** Veracruz anuncia la publicación en el DOF del concurso para elegir a
+  su desarrollador.
+
+No se ha reportado obra.
+
+### Distrito Financiero y Tecnológico de Cancún por dentro
+
+El trigésimo polo con vista por dentro (`/mexico/polo/cancun`), del Plan México: 60.76 ha en Benito
+Juárez, Quintana Roo, unos 5 km al oeste del aeropuerto, y el primer polo de servicios.
+
+**El terreno**, de su declaratoria (DOF, 7 de agosto de 2026): sus cuadros vienen en la cónica
+conforme de Lambert del INEGI (GRS80, paralelos 17.5° y 29.5°, origen 12° N 102° O, falso este
+2,500,000), y el juego los pasa a UTM zona 16.
+- **Las piezas:** Kulkaná 1 (dos anillos, 25.91 ha), su continuación (3.40), Kulkaná 2 (dos anillos,
+  28.98) y su continuación (2.47).
+- **Resultado:** con el vértice 1 de Kulkaná 2 corregido (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)), cada tabla da su área en el plano de
+  Lambert y suman 60.77 ha. En el terreno miden 0.9 % más (61.28 ha), porque la escala de esa
+  proyección a 21° N es 0.9955.
+- **El marcador:** cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** cerca de las carreteras 180 y 307 y del Distribuidor Colosio, a 4.1 km de la
+  estación Cancún del Tren Maya y a 5 km del aeropuerto; a 8 km del transporte público.
+- **Servicios:** vialidades, energía, agua y drenaje, «con opciones identificadas para ampliar la
+  disponibilidad de energía en el mediano plazo».
+- **Vocaciones:** todas de servicios: turismo médico, producción audiovisual, animación digital,
+  gastronomía, educación, comercio al por mayor de alimentos, servicios financieros y centros de
+  distribución para el Caribe.
+- **Propiedad:** del dominio público del estado.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **45.5 ha en 9 lotes de 1.5
+  a 8 ha**, con 2 ha de servicios en Kulkaná 2.
+- **Los sectores:** el juego solo tiene manufactura; para que sus lotes tengan qué ofrecer, toma los
+  más cercanos a sus vocaciones: la industria alimentaria (gastronomía y abasto), los dispositivos
+  médicos (turismo médico) y el equipo de cómputo y electrónico (contenidos digitales); estimación
+  del juego.
+- **Los empleos:** 61.2 por hectárea, 3,716. Un lote de 8 ha da 653 y pide de 0.5 MW (dispositivos
+  médicos) a 0.8 MW (cómputo y electrónica).
+- **La espuela:** el **Tren Maya** pasa pegado: **0.03 km**, 2 millones con cuatro cuadrillas y el
+  mínimo de 2 meses. Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta ahí: en 2018 no
+  hay vía en Quintana Roo.
+- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+  5.9 MW: alcanza. La línea de 230 kV más cercana queda a 2.5 km de su subestación (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 334 millones con una cuadrilla; las
+  vialidades, 133 millones en 10 meses, o 194 en 3.5 con cuatro.
+
+**En la realidad**:
+- **4 de agosto de 2026:** la gobernadora firma en Orlando un memorándum para un centro de
+  servicios médicos de 270 millones de dólares en el distrito; es un hospital, no una fábrica.
+
+No se ha reportado obra.
+
+### Economía Circular Quintana Roo por dentro
+
+El trigésimo primer polo con vista por dentro (`/mexico/polo/circular-quintana-roo`), de economía
+circular: 39.90 ha en Puerto Morelos, junto a la federal 307.
+
+**El terreno**, de su declaratoria (DOF, 27 de julio de 2026): su cuadro viene como imagen y se
+transcribió.
+- **La forma:** un rectángulo de cuatro vértices en UTM zona 16. Los vértices 5 y 6 cortan al sur una
+  franja que su croquis marca de uso comercial (2 ha); el resto es de uso industrial (37.90 ha).
+- **Resultado:** la transcripción da exactamente los 399,007 m² de la imagen.
+- **El marcador:** cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** en el corredor Cancún–Puerto Morelos–Playa del Carmen, junto a la federal 307
+  Cancún–Chetumal.
+- **Vocaciones:** no las enumera.
+- **Propiedad:** son 39.90 ha de un predio de 100 ha de la Agencia de Proyectos Estratégicos del
+  estado.
+
+**Lo que es del juego**:
+- **Los lotes:** **28 ha en 4 lotes de 6 y 8 ha** en la parte industrial, con 1.5 ha de servicios; la
+  franja comercial queda sin lotes.
+- **Los sectores:** los mismos que en los otros polos de economía circular (estimación del juego).
+- **Los empleos:** 61.2 por hectárea, 2,440. Un lote de 8 ha da 697 y pide de 1.5 MW (plástico) a
+  4.8 MW (metálicas básicas).
+- **La espuela:** va al **Tren Maya**, a **0.49 km**. Cuesta 22 millones con una cuadrilla (5.6 meses)
+  o 32 con cuatro (2 meses). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta ahí: en 2018 no
+  hay vía en Quintana Roo.
+- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+  3.9 MW: alcanza. La línea de 230 kV más cercana queda a 1.85 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 219 millones con una cuadrilla; las
+  vialidades, 88 millones en 8.8 meses, o 127 en 3.1 con cuatro.
+
+**En la realidad**: declarado el 27 de julio de 2026 (DOF). No se ha reportado obra.
+
+### Coatzacoalcos II por dentro
+
+El trigésimo segundo polo con vista por dentro (`/mexico/polo/coatzacoalcos-ii`), del Corredor
+Interoceánico: 131.82 ha en Coatzacoalcos, Veracruz, junto al túnel sumergido y al complejo de
+Pajaritos.
+
+**El terreno**, de su declaratoria (DOF, 12 de mayo de 2023): un cuadro en UTM zona 15 con nueve
+curvas; el centro de cada una viene en el renglón que sigue al lado que dobla.
+- **Dos polígonos, un cuadro:** el artículo habla de dos polígonos (129.20 y 2.63 ha); el cuadro es
+  el contorno de los dos juntos.
+- **Resultado:** con el vértice 77 corregido (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)) da 1,318,245 m² contra los 1,318,238
+  declarados. Sin esa corrección no cuadraba, y por eso fue el último en tener vista.
+- **El marcador:** cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** a 800 m del entronque ferroviario de la línea Z, con frente a la vialidad del
+  Túnel Sumergido de Coatzacoalcos, a 4 km de la MEX-180 y a 600 m de la carretera a Allende, cerca
+  del recinto portuario de Pajaritos.
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** donaciones de Pemex al Corredor Interoceánico (protocolizadas en 2021 y 2023).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **100 ha en 8 lotes de 8 a
+  20 ha**, con 4 ha de servicios a la entrada.
+- **Los empleos:** 61.2 por hectárea, 8,063. Un lote de 10 ha da 806 y pide de 0.6 MW (dispositivos
+  médicos) a 5.6 MW (metálicas básicas).
+- **La espuela:** las vías a menos de 1 km son espuelas industriales de Pajaritos; la espuela del
+  juego va a la línea principal más cercana, la **Línea FA de Ferroistmo**, a **3.11 km**. Cuesta 141
+  millones con una cuadrilla (5.6 meses) o 205 con cuatro (2 meses). En la red del juego hay vía a
+  0.4 km: construido, tiene su estación.
+- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+  12.9 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 2.1 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 724 millones con una cuadrilla; las
+  vialidades, 290 millones en 12.6 meses, o 420 en 4.5 con cuatro.
+
+**En la realidad**:
+- **19 de febrero de 2025:** la Presidenta lo da por concesionado a Desarrolladora Multimodal del
+  Istmo, con Coatzacoalcos I y Salina Cruz.
+
+En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha
+reportado obra.
 
 ---
 
@@ -4211,6 +4434,25 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
+
+**Coatzacoalcos II por dentro (DOF)**
+
+- **Un dígito:** el vértice 77 dice 358,801.577 al este, 5 km fuera; su lado desde el 43 lo pone en
+  353,801.577 (un 8 por un 3). Con él, el cuadro da lo declarado: por eso antes no cuadraba.
+- **Dos rumbos:** los lados 91→92 y 92→93 dicen sur y norte donde sus coordenadas y distancias van al
+  oeste. No mueven nada.
+
+**Cancún por dentro (DOF)**
+
+- **Un dígito:** el vértice 1 de Kulkaná 2 dice 4,058,378.7395 al este; el 10, que cierra el anillo,
+  4,058,278.7395 (un 3 por un 2).
+- **El plano:** sus superficies son las del plano de Lambert, cuya escala ahí es 0.9955: en el
+  terreno los mismos anillos miden 0.9 % más (61.28 ha contra 60.76).
+
+**Chetumal por dentro (DOF)**
+
+- **La sección II** da 13.0763 ha contra las 13.0802 de su cuadro, aunque cada lado cuadra; y en la
+  sección I el lado 23→24 dice 227.70 m donde sus vértices dan 227.10 (sin mover nada).
 
 **Seybaplaya por dentro (DOF)**
 
