@@ -73,11 +73,13 @@ saltar al siguiente libre.
   (`ui/Capas.svelte`), arriba a la izquierda bajo el reloj, en tres grupos: movimiento (trenes y
   barcos, solo en el juego), territorio, y energía y petróleo. El estado de las capas vive en
   `tablero.capas`, que comparten el mapa, el panel y la lista de vehículos (`tablero.alternar`:
-  energía y combustibles se excluyen; apagar trenes o barcos cierra su ficha y su trazado). La
-  lista de trenes y barcos va debajo de las capas, solo con alguna de las dos encendida. Los dos
-  paneles se pliegan con su flecha (la misma de *Vistas*): Capas queda en su título con cuántas
-  capas están encendidas, y la lista en sus pestañas y *＋ Nuevo* (con las dos plegadas, las dos barras
-  bajan juntas 120 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
+  energía y combustibles se excluyen; apagar trenes o barcos esconde su lista y cierra su ficha y
+  su trazado). Debajo de las capas van dos listas, la de trenes y la de barcos (`Flota` con
+  `tipo`), cada una con su capa encendida, su *＋ Nuevo* (`tablero.nuevo(tipo)`; el de la otra
+  cambia el trazo en curso) y la ficha de su vehículo elegido; con las dos abiertas se reparten el
+  alto. Los paneles se pliegan con su flecha (la misma de *Vistas*): Capas queda en su título con
+  cuántas capas están encendidas, y cada lista en su nombre y *＋ Nuevo* (con todo plegado, las
+  barras bajan juntas 120 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
   los dejó (`state/plegable.svelte.ts`, en `localStorage`, leído al montar porque el tablero se
   arma en el servidor). Las
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, y abajo a la derecha
@@ -144,7 +146,7 @@ saltar al siguiente libre.
   Cárdenas–SLP–Monterrey–Nuevo Laredo, Veracruz–Puebla–CDMX, CDMX–Querétaro–Torreón–
   Chihuahua–Cd. Juárez, Guadalajara–Mazatlán–Hermosillo–Nogales, Altamira–Monterrey, el Istmo
   (Coatzacoalcos–Salina Cruz) y Coatzacoalcos–Mérida–Progreso.
-- **Interfaz**: lista de trenes a la izquierda (clic para volar al tren), ficha a la derecha
+- **Interfaz**: lista de trenes a la izquierda, aparte de la de barcos (clic para volar al tren), ficha a la derecha
   (próxima parada, hora de llegada, velocidad, recorrido; *Seguir* con la cámara; *Retirar*
   con confirmación en la misma ficha) y **＋ Nuevo tren**: clic en estaciones del mapa, en
   orden; la ruta se dibuja mientras eliges y *Despachar* (o Enter) lo pone a correr.
@@ -170,8 +172,8 @@ saltar al siguiente libre.
 - **Un motor de servicios común** (`domain/servicio.ts`) para trenes y barcos: cambia cómo se
   traza cada pierna y cuánto se espera, el paso de simulación es el mismo.
 - **En el tablero**: casco con proa orientado al rumbo y estela; el Canal de Panamá trazado en
-  cian; las dos salidas como un anillo con flecha. La lista tiene pestañas Trenes / Barcos, y
-  *＋ Nuevo* en la pestaña Barcos pide la clase y las escalas (puertos o salidas). Con un barco
+  cian; las dos salidas como un anillo con flecha. Los barcos tienen su propia lista, y su
+  *＋ Nuevo* pide la clase y las escalas (puertos o salidas). Con un barco
   elegido que pasa la salida, la cámara que lo seguía se queda esperándolo ahí y su ficha
   ofrece **Ver en el globo**.
 
@@ -589,7 +591,7 @@ src/lib/
     datos/           datos (generados y curados)
   state/             estado reactivo compartido (runas)
     simulacion.svelte.ts   reloj, flota (trenes y barcos), selección
-    tablero.svelte.ts      pestaña, modo "nuevo tren / nuevo barco" y pedidos de cámara
+    tablero.svelte.ts      capas, modo "nuevo tren / nuevo barco" (`tipoNuevo`) y pedidos de cámara
   map/
     world.ts         carga del mundo (110m / 50m)
     mexico.ts        carga de México: estados, país, costa vs. frontera, vías, vecinos

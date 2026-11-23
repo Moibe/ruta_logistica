@@ -49,33 +49,34 @@ class Tablero {
     ductos: false,
     combustibles: false,
   });
-  /** Which kind of vehicle the roster is showing, and what "＋ Nuevo" makes. */
-  pestaña = $state<TipoUnidad>('tren');
+  /** The kind of vehicle being laid out: the one whose roster's "＋ Nuevo" was clicked. */
+  tipoNuevo = $state<TipoUnidad>('tren');
 
   /**
    * Turn a layer on or off. Electricity and fuel paint the same states: one
-   * at a time. Turning trains or ships off closes their card and any route
-   * being laid out for them; turning them on shows them in the roster.
+   * at a time. Turning trains or ships off hides their roster and closes their
+   * card and any route being laid out for them.
    */
   alternar(capa: Capa) {
     const on = !this.capas[capa];
     this.capas[capa] = on;
     if (on && capa === 'energia') this.capas.combustibles = false;
     if (on && capa === 'combustibles') this.capas.energia = false;
-    if (capa !== 'trenes' && capa !== 'barcos') return;
+    if (on || (capa !== 'trenes' && capa !== 'barcos')) return;
     const tipo: TipoUnidad = capa === 'trenes' ? 'tren' : 'barco';
-    if (on) {
-      if (!this.trazando) this.pestaña = tipo;
-      return;
-    }
     if (sim.seleccionado?.tipo === tipo) sim.seleccionar(null);
-    if (this.trazando && this.pestaña === tipo) this.cancelar();
-    if (this.pestaña === tipo) this.pestaña = tipo === 'tren' ? 'barco' : 'tren';
+    if (this.trazando && this.tipoNuevo === tipo) this.cancelar();
+  }
+
+  /** Lay out a new vehicle of kind `tipo` (from its roster's "＋ Nuevo"). */
+  nuevo(tipo: TipoUnidad) {
+    this.tipoNuevo = tipo;
+    this.empezar();
   }
 
   /** The layer a kind of vehicle lives in. */
   capaDe = (tipo: TipoUnidad): Capa => (tipo === 'tren' ? 'trenes' : 'barcos');
-  /** Picking stops on the map for a new vehicle of kind `pestaña`. */
+  /** Picking stops on the map for a new vehicle of kind `tipoNuevo`. */
   trazando = $state(false);
   /** The kind of ship being laid out. */
   claseBarco = $state<ClaseBarco>('contenedores');
@@ -139,9 +140,9 @@ class Tablero {
       const obra = sim.obras.get(clave.slice(5));
       if (obra?.fase === 'por-construir') return 'Polo por construir: todavía no recibe trenes';
       if (obra?.fase === 'en-obra') return 'Polo en obra: recibirá trenes al terminarse';
-      if (this.pestaña === 'barco') return 'Los barcos solo hacen escala en puertos';
+      if (this.tipoNuevo === 'barco') return 'Los barcos solo hacen escala en puertos';
     }
-    return this.pestaña === 'tren' ? this.#motivoTren(clave) : this.#motivoBarco(clave);
+    return this.tipoNuevo === 'tren' ? this.#motivoTren(clave) : this.#motivoBarco(clave);
   }
 
   #motivoTren(clave: string): string | null {
@@ -179,7 +180,7 @@ class Tablero {
     this.candidato = next;
     const tramo = next ? this.#leg(this.paradas.at(-1), next) : null;
     // A ship's loop closes back on its first port: show that leg too.
-    const cierre = next && this.pestaña === 'barco' && this.paradas.length ? this.#leg(next, this.paradas[0]) : null;
+    const cierre = next && this.tipoNuevo === 'barco' && this.paradas.length ? this.#leg(next, this.paradas[0]) : null;
     this.previa = [...this.elegida, ...(tramo ? [tramo] : []), ...(cierre ? [cierre] : [])];
   }
 
@@ -223,7 +224,7 @@ class Tablero {
   despachar(): string | null {
     if (this.paradas.length < 2) return null;
     const unidad =
-      this.pestaña === 'tren' ? sim.agregarTren(this.paradas) : sim.agregarBarco(this.claseBarco, this.paradas);
+      this.tipoNuevo === 'tren' ? sim.agregarTren(this.paradas) : sim.agregarBarco(this.claseBarco, this.paradas);
     this.cancelar();
     if (!unidad) return null;
     sim.seleccionar(unidad.id);
@@ -267,14 +268,14 @@ class Tablero {
   }
 
   #cierre(): Trayecto[] {
-    if (this.pestaña !== 'barco' || this.paradas.length < 2) return [];
+    if (this.tipoNuevo !== 'barco' || this.paradas.length < 2) return [];
     const c = this.#leg(this.paradas.at(-1), this.paradas[0]);
     return c ? [c] : [];
   }
 
   #leg(desde: string | undefined, hasta: string): Trayecto | null {
     if (!desde) return null;
-    if (this.pestaña === 'barco') {
+    if (this.tipoNuevo === 'barco') {
       return sim.mar ? rutaMar(sim.mar, desde, hasta, kmhDe(this.claseBarco)) : null;
     }
     const red = sim.red;

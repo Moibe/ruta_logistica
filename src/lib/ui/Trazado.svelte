@@ -11,7 +11,7 @@
    * dispatches, Backspace drops the last stop, Esc cancels.
    */
 
-  const esBarco = $derived(tablero.pestaña === 'barco');
+  const esBarco = $derived(tablero.tipoNuevo === 'barco');
   const clases = Object.entries(CLASES_BARCO) as [ClaseBarco, (typeof CLASES_BARCO)[ClaseBarco]][];
 
   function despachar() {

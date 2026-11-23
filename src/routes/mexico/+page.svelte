@@ -18,11 +18,14 @@
 <MexicoMap />
 <Reloj />
 <Erario />
-<!-- The left column, under the clock: the layers, and the fleet when trains or ships are on. -->
+<!-- The left column, under the clock: the layers, and a roster for trains and one for ships when their layers are on. -->
 <div class="columna">
   <Capas />
-  {#if sim.modo === 'juego' && (tablero.capas.trenes || tablero.capas.barcos)}
-    <Flota />
+  {#if sim.modo === 'juego' && tablero.capas.trenes}
+    <Flota tipo="tren" />
+  {/if}
+  {#if sim.modo === 'juego' && tablero.capas.barcos}
+    <Flota tipo="barco" />
   {/if}
 </div>
 {#if sim.modo === 'juego'}
@@ -50,8 +53,8 @@
     pointer-events: auto;
   }
 
-  /* Both folded, the two bars would sit on Tijuana's label: together, they drop below it. */
-  .columna:has(:global(nav.capas.plegado)):has(:global(aside.flota.plegado)) > :global(nav.capas) {
+  /* All folded (the layers and the rosters on), the bars would sit on Tijuana's label: together, they drop below it. */
+  .columna:has(:global(nav.capas.plegado)):has(:global(aside.flota)):not(:has(:global(aside.flota:not(.plegado)))) > :global(nav.capas) {
     margin-top: 7.5rem;
   }
 </style>

@@ -1312,8 +1312,8 @@
     const onScreen = (x: number, y: number) => x > -20 && x < width + 20 && y > -20 && y < height + 20;
     const conEstacion = (clave: string) => !!sim.red?.estaciones.has(clave);
     // Picking stops: what can't be a stop for this kind of vehicle fades back.
-    const trazaTren = trazando && tablero.pestaña === 'tren';
-    const trazaBarco = trazando && tablero.pestaña === 'barco';
+    const trazaTren = trazando && tablero.tipoNuevo === 'tren';
+    const trazaBarco = trazando && tablero.tipoNuevo === 'barco';
     const atenuado = (clave: string) =>
       trazaTren ? !conEstacion(clave) : trazaBarco ? clave.startsWith('ciudad:') || clave.startsWith('aeropuerto:') : false;
 
@@ -2149,7 +2149,7 @@
   /** While picking stops: the route so far, as marching dashes. */
   function pintarPrevia(ctx: CanvasRenderingContext2D, now: number) {
     if (!tablero.trazando || !tablero.previa.length) return;
-    const mar = tablero.pestaña === 'barco';
+    const mar = tablero.tipoNuevo === 'barco';
     ctx.save();
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
@@ -2201,7 +2201,7 @@
       });
     }
     // While laying out a train, an airport with a station is a stop; never for a ship.
-    if (layers.aeropuertos && (!tablero.trazando || tablero.pestaña === 'tren')) {
+    if (layers.aeropuertos && (!tablero.trazando || tablero.tipoNuevo === 'tren')) {
       AEROPUERTOS.forEach((a, i) => {
         if (!aeropuertoVisible(a)) return;
         if (tablero.trazando && !sim.red?.estaciones.has(`aeropuerto:${a.id}`)) return;
@@ -2223,7 +2223,7 @@
     }
     // Laying out a ship, cities aren't stops; skipping them also keeps a port
     // city's dot (a pixel off its port at country scale) from stealing the click.
-    if (layers.ciudades && !(tablero.trazando && tablero.pestaña === 'barco')) {
+    if (layers.ciudades && !(tablero.trazando && tablero.tipoNuevo === 'barco')) {
       CIUDADES.forEach((c, i) => {
         const d = Math.hypot(transform.applyX(ciudadPts[i][0]) - mx, transform.applyY(ciudadPts[i][1]) - my);
         if (d < 8 && d < bestD) {
@@ -2236,7 +2236,7 @@
     // from the port or station next to it.
     if (layers.polos) {
       POLOS.forEach((p, i) => {
-        if (tablero.trazando && !(tablero.pestaña === 'tren' && sim.red?.estaciones.has(`polo:${p.id}`))) return;
+        if (tablero.trazando && !(tablero.tipoNuevo === 'tren' && sim.red?.estaciones.has(`polo:${p.id}`))) return;
         if (!poloVisible(p.id)) return;
         const d = Math.hypot(transform.applyX(poloPts[i][0]) - mx, transform.applyY(poloPts[i][1]) - my);
         if (d < 9 && d < bestD) {
@@ -2246,7 +2246,7 @@
       });
     }
     // While laying out a train, a refinery with a station is a stop (fuel loads there); never for a ship.
-    if (layers.refinerias && (!tablero.trazando || tablero.pestaña === 'tren')) {
+    if (layers.refinerias && (!tablero.trazando || tablero.tipoNuevo === 'tren')) {
       REFINERIAS.forEach((r, i) => {
         if (tablero.trazando && !sim.red?.estaciones.has(`refineria:${r.id}`)) return;
         const d = Math.hypot(transform.applyX(refineriaPts[i][0]) - mx, transform.applyY(refineriaPts[i][1]) - my);
@@ -2257,7 +2257,7 @@
       });
     }
     // Laying out a supply vessel, a complex is a stop; otherwise it only shows its card.
-    if (layers.plataformas && (!tablero.trazando || (tablero.pestaña === 'barco' && tablero.claseBarco === 'abastecedor'))) {
+    if (layers.plataformas && (!tablero.trazando || (tablero.tipoNuevo === 'barco' && tablero.claseBarco === 'abastecedor'))) {
       COMPLEJOS.forEach((c, i) => {
         const d = Math.hypot(transform.applyX(complejoPts[i][0]) - mx, transform.applyY(complejoPts[i][1]) - my);
         if (d < 11 && d < bestD) {
@@ -2831,7 +2831,7 @@
     const problema = tablero.motivo(clave);
     if (problema) return problema;
     const n = tablero.paradas.length;
-    const barco = tablero.pestaña === 'barco';
+    const barco = tablero.tipoNuevo === 'barco';
     if (!n) return barco ? 'Clic: primera escala del barco' : 'Clic: origen del tren';
     const que = barco ? 'escala' : 'parada';
     return `Clic: ${que} ${n + 1} · ${fmtKm(tablero.kmPrevia)} · ${duracion(tablero.horasPrevia)}${barco ? ' por vuelta' : ''}`;
@@ -2913,7 +2913,7 @@
         {/if}
       </span>
       {@const rail = lineaTrazado || servicio(`puerto:${hovered.puerto.id}`)}
-      {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.pestaña === 'barco'}>{rail}</span>{/if}
+      {#if rail}<span class="tip-rail" class:mar={tablero.trazando && tablero.tipoNuevo === 'barco'}>{rail}</span>{/if}
       {@render aduana(`puerto:${hovered.puerto.id}`)}
       {@const com = comercioDe(`puerto:${hovered.puerto.id}`)}
       {#if com}

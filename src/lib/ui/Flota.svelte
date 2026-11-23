@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import { goto } from '$app/navigation';
   import { Plegable } from '$lib/state/plegable.svelte';
   import { CLASES_BARCO, enElCanal, enTravesia, KM_POR_MILLA } from '$lib/domain/barcos';
@@ -22,23 +22,23 @@
   import { duracion, estadoUnidad, horaDeJuego, km, nudos } from './formato';
 
   /**
-   * The fleet: a roster on the left, trains or ships by tab (each one, where
-   * it is, how far along its leg) and, for the selected one, a card on the
-   * right. Both read `sim.horas` so they refresh as vehicles move — they're
-   * mutated in place and aren't reactive on their own.
+   * A roster of one kind of vehicle, trains or ships (each one, where it is,
+   * how far along its leg), with its own «＋ Nuevo», and, for the selected
+   * vehicle of that kind, a card on the right. Both read `sim.horas` so they
+   * refresh as vehicles move — they're mutated in place and aren't reactive on
+   * their own. The board shows one roster per kind, each folding on its own.
    *
-   * On the world views (`vista="mundo"`) it lists the ships only — trains
-   * are a board thing — and nothing is off the map there: a ship on an ocean
+   * On the world views (`vista="mundo"`) it lists the ships — trains are a
+   * board thing — and nothing is off the map there: a ship on an ocean
    * crossing is followed like any other. On the board, a ship beyond a gateway
    * offers to be watched on the globe instead.
    */
-  let { vista = 'tablero' }: { vista?: 'tablero' | 'mundo' } = $props();
+  let { vista = 'tablero', tipo = 'barco' }: { vista?: 'tablero' | 'mundo'; tipo?: TipoUnidad } = $props();
 
   const mundo = $derived(vista === 'mundo');
-  /** Folded, the roster keeps its header (tabs and «＋ Nuevo») and hides the list. */
-  const panel = new Plegable('flota');
+  /** Folded, the roster keeps its header (its name and «＋ Nuevo») and hides the list. */
+  const panel = new Plegable(untrack(() => (tipo === 'tren' ? 'flota-trenes' : 'flota-barcos')));
   onMount(() => panel.recordar());
-  const tipo = $derived<TipoUnidad>(mundo ? 'barco' : tablero.pestaña);
   const lista = $derived<Unidad[]>(tipo === 'tren' ? sim.trenes : sim.barcos);
 
   const filas = $derived.by(() => {
@@ -56,8 +56,9 @@
 
   const ficha = $derived.by(() => {
     sim.horas;
+    // The card of the selected vehicle comes with its kind's roster.
     const u = sim.seleccionado;
-    if (!u || (mundo && u.tipo !== 'barco')) return null;
+    if (!u || u.tipo !== tipo) return null;
     const aqui = paradaActual(u);
     const proxima = proximaParada(u);
     const enH = horasAProxima(u);
@@ -109,12 +110,6 @@
     };
   });
 
-  function pestaña(tipo: TipoUnidad) {
-    if (tablero.pestaña === tipo) return;
-    if (tablero.trazando) tablero.cancelar();
-    tablero.pestaña = tipo;
-  }
-
   function abrir(id: string) {
     if (tablero.trazando) tablero.cancelar();
     sim.seleccionar(id);
@@ -128,8 +123,7 @@
 
   /** From a world view: lay out a new ship on the board, where stops are picked. */
   function nuevoEnElTablero() {
-    tablero.pestaña = 'barco';
-    tablero.empezar();
+    tablero.nuevo('barco');
     goto('/mexico');
   }
 
@@ -167,59 +161,21 @@
     confirmando = false;
   });
 
-  $effect(() => {
-    // Selecting a vehicle on the map shows its tab.
-    const u = sim.seleccionado;
-    if (!mundo && u && u.tipo !== tablero.pestaña && !tablero.trazando) tablero.pestaña = u.tipo;
-  });
 </script>
 
 <aside class="flota panel" class:en-columna={!mundo} class:plegado={panel.plegado}>
   <header>
-    {#if mundo}
-      <span class="titulo">Barcos <span class="mono">{sim.barcos.length}</span></span>
-      <button
-        class="ctl nuevo mar"
-        title="Los barcos se trazan en el tablero"
-        onclick={nuevoEnElTablero}
-        disabled={sim.estado !== 'lista'}
-      >
-        ＋ Nuevo
-      </button>
-    {:else}
-    <!-- A tab for each of the two layers that's on. -->
-    <div class="pestañas" role="tablist">
-      {#if tablero.capas.trenes}
-        <button
-          role="tab"
-          class:activa={tablero.pestaña === 'tren'}
-          aria-selected={tablero.pestaña === 'tren'}
-          onclick={() => pestaña('tren')}
-        >
-          Trenes <span class="mono">{sim.trenes.length}</span>
-        </button>
-      {/if}
-      {#if tablero.capas.barcos}
-        <button
-          role="tab"
-          class:activa={tablero.pestaña === 'barco'}
-          aria-selected={tablero.pestaña === 'barco'}
-          onclick={() => pestaña('barco')}
-        >
-          Barcos <span class="mono">{sim.barcos.length}</span>
-        </button>
-      {/if}
-    </div>
+    <span class="titulo">{tipo === 'tren' ? 'Trenes' : 'Barcos'} <span class="mono">{lista.length}</span></span>
+    <!-- On the board, laying out one kind while the other is being laid out switches to it. -->
     <button
       class="ctl nuevo"
-      class:mar={tablero.pestaña === 'barco'}
-      title={tablero.pestaña === 'tren' ? 'Nuevo tren' : 'Nuevo barco'}
-      onclick={() => tablero.empezar()}
-      disabled={sim.estado !== 'lista' || tablero.trazando}
+      class:mar={tipo === 'barco'}
+      title={mundo ? 'Los barcos se trazan en el tablero' : tipo === 'tren' ? 'Nuevo tren' : 'Nuevo barco'}
+      onclick={() => (mundo ? nuevoEnElTablero() : tablero.nuevo(tipo))}
+      disabled={sim.estado !== 'lista' || (!mundo && tablero.trazando && tablero.tipoNuevo === tipo)}
     >
       ＋ Nuevo
     </button>
-    {/if}
     <button
       class="plegar"
       aria-expanded={!panel.plegado}
@@ -356,7 +312,10 @@
     overflow: hidden;
   }
 
-  /* On the board it sits in the left column, under the layers, and takes what height is left. */
+  /*
+   * On the board it sits in the left column, under the layers; with both rosters there, they
+   * share what height is left, each in proportion to its list, and each list scrolls.
+   */
   .flota.en-columna {
     position: static;
     width: auto;
@@ -382,41 +341,6 @@
     font-size: 0.64rem;
     color: var(--muted);
     margin-left: 0.15rem;
-  }
-
-  .pestañas {
-    display: flex;
-    gap: 0.2rem;
-    padding: 0.15rem;
-    border-radius: 9px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--line);
-  }
-
-  .pestañas button {
-    border: none;
-    background: none;
-    padding: 0.28rem 0.5rem;
-    border-radius: 7px;
-    font-size: 0.72rem;
-    color: var(--muted);
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .pestañas button .mono {
-    font-size: 0.64rem;
-    color: var(--dim);
-    margin-left: 0.15rem;
-  }
-
-  .pestañas button.activa {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--ink);
-  }
-
-  .pestañas button.activa .mono {
-    color: var(--muted);
   }
 
   .nuevo {
