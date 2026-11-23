@@ -1,4 +1,5 @@
 import calibracionJson from './datos/calibracion.json';
+import polosJson from './datos/polos.json';
 import type { Polo } from './sitios';
 
 /**
@@ -17,8 +18,11 @@ import type { Polo } from './sitios';
  *   and in phases at once — so time grows with the size to the power 0.3.
  * - **Construction jobs** follow the money: INEGI's ratio of people employed
  *   to construction output, spread over the months the work lasts.
- * - **Permanent jobs** follow occupancy: Huamantla's projection per hectare,
- *   times how full the polo is. Occupancy only grows while a train can get there.
+ * - **Permanent jobs** follow occupancy: the polo's jobs when full, times how
+ *   full it is. A polo with its own official figure has it (Huamantla,
+ *   Nezahualcóyotl); the others have the government's own density, the 300
+ *   thousand jobs of the first 15 polos over their land. Occupancy only grows
+ *   while a train can get there.
  */
 
 type Cifra = { valor: number; unidad: string; dato: string; fuente: string; url: string; consultado: string };
@@ -27,6 +31,28 @@ export type Calibracion = { corte: string; nota: string; cifras: Record<string, 
 export const CALIBRACION = calibracionJson as Calibracion;
 export const cifra = (k: string) => CALIBRACION.cifras[k].valor;
 const c = cifra;
+
+/** Polos with their own official figure of jobs, and the calibration figure that holds it. */
+const EMPLEOS_OFICIALES: Record<string, string> = { huamantla: 'empleosHuamantla', nezahualcoyotl: 'empleosNezahualcoyotl' };
+/**
+ * The first 15 polos of the Plan México (Presidencia, 26 Jun 2025) that the
+ * game has: 14. The 15th, economía circular in Hidalgo, has no published area.
+ */
+const PRIMEROS_15 = [
+  'seybaplaya', 'san-jeronimo', 'durango', 'nezahualcoyotl', 'puerta-logistica-bajio', 'reserva-zapotlan', 'parque-industrial-bajio',
+  'capital-tecnologia', 'chetumal', 'topolobampo', 'altamira', 'huamantla', 'tuxpan', 'hermosillo',
+];
+const haPrimeros = (polosJson as { id: string; ha: number }[]).filter((p) => PRIMEROS_15.includes(p.id)).reduce((s, p) => s + p.ha, 0);
+/** Jobs per hectare the government expects of its polos: their 300 thousand jobs over the land of the first 15 (60.5). */
+export const EMPLEOS_POR_HA = cifra('empleosPolosPlanMexico') / haPrimeros;
+
+/** Permanent jobs of `polo` when full: its own official figure, or its land at the government's density. */
+export function empleosLleno(polo: Polo): number {
+  const k = EMPLEOS_OFICIALES[polo.id];
+  return k ? cifra(k) : polo.hectareas * EMPLEOS_POR_HA;
+}
+/** Where a polo's jobs come from, for its card: its own figure, or the density. */
+export const empleosOficiales = (id: string) => id in EMPLEOS_OFICIALES;
 
 export const MAX_CUADRILLAS = 4;
 /** Each crew beyond the first adds this share of the base cost. */
@@ -69,7 +95,7 @@ export function presupuestar(polo: Polo, cuadrillas: number): Presupuesto {
     meses,
     horas: meses * HORAS_POR_MES,
     personasEnObra: (costoMdp * c('empleosAnioPorMdp')) / (meses / 12),
-    empleosLleno: polo.hectareas * c('empleosPorHa'),
+    empleosLleno: empleosLleno(polo),
   };
 }
 
@@ -189,6 +215,6 @@ export function personasTrabajando(o: ObraPolo): number {
 
 /** Permanent jobs right now. */
 export function empleosPermanentes(o: ObraPolo, polo: Polo): number {
-  return o.fase === 'operando' ? o.ocupacion * polo.hectareas * c('empleosPorHa') : 0;
+  return o.fase === 'operando' ? o.ocupacion * empleosLleno(polo) : 0;
 }
 

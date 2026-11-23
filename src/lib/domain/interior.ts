@@ -2,9 +2,9 @@ import DATOS from './datos/interiores.json';
 import { mwDelPolo } from './energia';
 import { KW_POR_EMPLEO, sector as sectorDe } from './sectores';
 import {
-  cifra,
   costoBaseMdp,
   curvaOcupacion,
+  empleosLleno,
   EXPONENTE_CUADRILLAS,
   HORAS_POR_MES,
   MAX_CUADRILLAS,
@@ -151,7 +151,7 @@ export function demandaLote(polo: Polo, n: number, s: string | null) {
   const sec = sectorDe(s);
   if (!i || !l) return null;
   const areaEmpresas = i.lotes.lista.reduce((t, x) => t + x.ha, 0);
-  const personas = (l.ha * cifra('empleosPorHa') * polo.hectareas) / areaEmpresas;
+  const personas = (empleosLleno(polo) * l.ha) / areaEmpresas;
   const mw = ((personas * KW_POR_EMPLEO) / 1000) * (sec?.energia ?? 1);
   const toneladas = personas * (sec?.toneladas ?? 0);
   return { ha: l.ha, personas, mw, toneladas, exportacion: sec?.exportacion ?? 0, agua: sec?.agua ?? 1 };

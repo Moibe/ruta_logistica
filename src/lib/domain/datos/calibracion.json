@@ -34,13 +34,29 @@
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5765468&fecha=14/08/2025",
    "consultado": "2026-11-19"
   },
-  "empleosPorHa": {
-   "valor": 94.3,
-   "unidad": "empleos permanentes (directos e indirectos) por hectárea con el polo lleno",
+  "empleosHuamantla": {
+   "valor": 5000,
+   "unidad": "empleos permanentes (directos e indirectos) con el polo lleno",
    "dato": "Huamantla, 53 ha: «generará más de 5 mil empleos directos e indirectos»",
    "fuente": "Presidencia, comunicado de la inauguración del PODECOBI Huamantla, 12 abr 2026",
    "url": "https://www.gob.mx/presidencia/prensa/plan-mexico-presidenta-inaugura-primer-polo-de-desarrollo-economico-para-el-bienestar-en-huamantla-tlaxcala-con-inversion-de-540-mdd",
    "consultado": "2026-11-19"
+  },
+  "empleosNezahualcoyotl": {
+   "valor": 4500,
+   "unidad": "empleos directos en la primera etapa del polo",
+   "dato": "Nezahualcóyotl, 68.4 ha: «En su primera etapa, se contempla una inversión aproximada de 800 millones de pesos y la generación de 4 mil 500 empleos directos» (la gobernadora del Estado de México, en el boletín del municipio)",
+   "fuente": "Gobierno de Nezahualcóyotl, comunicado de prensa 100, 26 jun 2025",
+   "url": "https://www.neza.gob.mx/prensa_2025/single.php?id=100",
+   "consultado": "2026-11-23"
+  },
+  "empleosPolosPlanMexico": {
+   "valor": 300000,
+   "unidad": "empleos de los primeros 15 polos del Plan México en esta administración",
+   "dato": "Los primeros 15 Polos de Desarrollo Económico para el Bienestar, en 14 estados: «Se generarán 300 mil empleos y una inversión de 1.5 del PIB en esta administración» (también en el Primer Informe de Gobierno)",
+   "fuente": "Presidencia, comunicado del 26 jun 2025 («Plan México: Presidenta Claudia Sheinbaum pone en marcha los primeros 15 Polos de Desarrollo Económico para el Bienestar en 14 estados»)",
+   "url": "https://www.gob.mx/presidencia/prensa/plan-mexico-presidenta-claudia-sheinbaum-pone-en-marcha-los-primeros-15-polos-de-desarrollo-economico-para-el-bienestar-en-14-estados?idiom=es-MX",
+   "consultado": "2026-11-23"
   },
   "empleosAnioPorMdp": {
    "valor": 1.187,

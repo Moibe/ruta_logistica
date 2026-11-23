@@ -245,7 +245,7 @@
   "juego"
  ],
  "reglas": {
-  "dato": "Reglas del juego: una empresa ocupa un lote y da los empleos por hectárea del polo. Cada empleo pide 1.6 kW de electricidad al promedio de la manufactura (los 8 MW de Huamantla para sus 5 mil empleos; con el gasto del censo, 24,753 pesos por trabajador al año, eso es un kWh de unos 1.77 pesos), por cuánto gasta su sector contra el promedio. Su carga espera en la estación del polo hasta un mes.",
+  "dato": "Reglas del juego: una empresa ocupa un lote y da los empleos del polo lleno repartidos por la superficie de los lotes. Cada empleo pide 1.6 kW de electricidad al promedio de la manufactura (los 8 MW de Huamantla para sus 5 mil empleos; con el gasto del censo, 24,753 pesos por trabajador al año, eso es un kWh de unos 1.77 pesos), por cuánto gasta su sector contra el promedio. Su carga espera en la estación del polo hasta un mes.",
   "fuentes": [
    "economia-huamantla",
    "inegi-ce2019",

@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation';
   import { ESTACION_MAX_KM } from '$lib/domain/red';
   import { conEspuela, tieneInterior } from '$lib/domain/interior';
-  import { MAX_CUADRILLAS, presupuestar } from '$lib/domain/obras';
+  import { EMPLEOS_POR_HA, empleosOficiales, MAX_CUADRILLAS, presupuestar } from '$lib/domain/obras';
   import { PROGRAMAS_POLO, POLOS } from '$lib/domain/sitios';
   import { mesesAlRitmoDelDinero } from '$lib/domain/presupuesto';
   import { mwDelPolo, UMBRALES } from '$lib/domain/energia';
@@ -179,7 +179,16 @@
         <div><dt>Costo</dt><dd class="mono">{mdp(plan.costoMdp)}</dd></div>
         <div><dt>Duración</dt><dd class="mono">{meses(plan.meses)}</dd></div>
         <div><dt>Empleos en obra</dt><dd class="mono">{personas(plan.personasEnObra)}</dd></div>
-        <div><dt>Empleos con el polo lleno</dt><dd class="mono">{personas(plan.empleosLleno)}</dd></div>
+        <div>
+          <dt
+            title={empleosOficiales(p.id)
+              ? 'Cifra oficial del polo'
+              : `${EMPLEOS_POR_HA.toLocaleString('es-MX', { maximumFractionDigits: 1 })} por hectárea: los 300 mil empleos de los primeros 15 polos del Plan México entre su superficie (estimación del juego)`}
+          >
+            Empleos con el polo lleno
+          </dt>
+          <dd class="mono">{personas(plan.empleosLleno)}</dd>
+        </div>
       </dl>
       {#if !ficha.alcanzable}
         <p class="aviso">

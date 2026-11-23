@@ -189,7 +189,7 @@ const datos = {
     'Lo que pide una empresa de cada sector, por trabajador, en 2018: su gasto en electricidad y en agua contra el promedio de la manufactura (INEGI, Censos Económicos 2019), y las toneladas que movió el tren de sus productos entre su personal ocupado, con la parte que salió del país (ARTF, anuario 2018). Los sectores sin productos propios en el anuario mandan su carga en contenedores: les toca lo que llevaron los contenedores por trabajador de la manufactura (estimación del juego).',
   fuentesDato: ['inegi-ce2019', 'artf-2018', 'juego'],
   reglas: {
-    dato: `Reglas del juego: una empresa ocupa un lote y da los empleos por hectárea del polo. Cada empleo pide ${KW_POR_EMPLEO.toLocaleString('es-MX')} kW de electricidad al promedio de la manufactura (los 8 MW de Huamantla para sus 5 mil empleos; con el gasto del censo, 24,753 pesos por trabajador al año, eso es un kWh de unos 1.77 pesos), por cuánto gasta su sector contra el promedio. Su carga espera en la estación del polo hasta un mes.`,
+    dato: `Reglas del juego: una empresa ocupa un lote y da los empleos del polo lleno repartidos por la superficie de los lotes. Cada empleo pide ${KW_POR_EMPLEO.toLocaleString('es-MX')} kW de electricidad al promedio de la manufactura (los 8 MW de Huamantla para sus 5 mil empleos; con el gasto del censo, 24,753 pesos por trabajador al año, eso es un kWh de unos 1.77 pesos), por cuánto gasta su sector contra el promedio. Su carga espera en la estación del polo hasta un mes.`,
     fuentes: ['economia-huamantla', 'inegi-ce2019', 'juego'],
     diasPatio: 30,
     kwPorEmpleo: KW_POR_EMPLEO,

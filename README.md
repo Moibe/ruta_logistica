@@ -407,7 +407,9 @@ elige de 1 a 4 cuadrillas y confirma en un cuadro propio; la obra se paga confor
 hay vía a ≤ 15 km, la red se reconstruye con el polo en servicio (`construirRed(json, sitios,
 polosEnServicio)`) y nace su estación (`sim.versionRed` avisa al tablero que re-hornee la
 vía). Ya operando y con tren, se llena de empresas en tres años; los empleos (en obra y
-permanentes) van al panel `Erario`. Las cifras salen de fuentes oficiales y viven en
+permanentes) van al panel `Erario`. Los empleos del polo lleno (`empleosLleno`) son su cifra
+oficial (Huamantla, Nezahualcóyotl) o su superficie por `EMPLEOS_POR_HA`, los 300 mil empleos de
+los primeros 15 polos entre sus hectáreas (60.5). Las cifras salen de fuentes oficiales y viven en
 `datos/calibracion.json`; la tabla y sus fuentes, en la
 [enciclopedia](docs/enciclopedia.md#construirlos).
 
