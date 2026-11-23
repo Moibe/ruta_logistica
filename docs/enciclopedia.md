@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y diecisiete polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y veintitrés polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -491,11 +491,16 @@ nota en el DOF, se cerró cada polígono y se calcularon su área y su centroide
 Notas de la tabla:
 
 - ¹ **Santa María Mixtequilla y Ciudad Ixtepec** traen sus coordenadas en el sistema **TME
-  (Transversal Modificado Ejidal)** del Registro Agrario, cuyo meridiano central es el de cada
-  ejido y no se publica. La latitud sí es exacta. La longitud se fijó poniendo el vértice sur
-  de cada polígono sobre la autopista MEX-185D (trazo de OpenStreetMap), que es donde lo muestran
-  los croquis de las declaratorias. Comprobación: en Ixtepec, alinear en cambio el polígono con
-  el entronque MEX-185D / OAX 49 del croquis da un punto a 160 m de este.
+  (Transversal Modificado Ejidal)** del Registro Agrario. Una nota al pie de cada cuadro da su
+  meridiano central, 95°15' O, con factor de escala 1.0. La latitud es exacta. La longitud del
+  marcador se fijó poniendo el vértice sur de cada polígono sobre la autopista MEX-185D (trazo de
+  OpenStreetMap), que es donde lo muestran los croquis de las declaratorias.
+  - **Mixtequilla:** con el meridiano de su nota, su borde corre 3.7 km sobre la MEX-190D y casi
+    1 km sobre la MEX-185D, como dice su declaratoria; su vista por dentro lo usa, y su centro
+    queda a 506 m del marcador.
+  - **Ixtepec:** el mismo meridiano lo manda 17.7 km al oeste de su croquis. Su vista por dentro
+    usa el meridiano 95.0828° O, que pone 2.2 km de su borde sobre la MEX-185D; su centro queda a
+    446 m del marcador.
 - ² **Economía Circular Quintana Roo** publica su cuadro como imagen: se transcribieron sus
   vértices (UTM zona 16) y el área calculada, 39.90 ha, es exactamente la de la imagen.
 - ³ **San Jerónimo** está al pie de la frontera, que ahí corre por el paralelo 31°47′ N. La
@@ -676,7 +681,10 @@ Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texiste
 [Parque Industrial Bajío](#parque-industrial-bajío-por-dentro), [Hermosillo](#hermosillo-por-dentro),
 [Topolobampo](#topolobampo-por-dentro), [Puerta Logística del Bajío](#puerta-logística-del-bajío-por-dentro),
 [Durango](#durango-por-dentro), [Salina Cruz](#salina-cruz-por-dentro), [Arriaga](#arriaga-por-dentro),
-[Tapachula I](#tapachula-i-por-dentro), [Tapachula II](#tapachula-ii-por-dentro) y [Teapa](#teapa-por-dentro).
+[Tapachula I](#tapachula-i-por-dentro), [Tapachula II](#tapachula-ii-por-dentro), [Teapa](#teapa-por-dentro),
+[San Blas Atempa](#san-blas-atempa-por-dentro), [San Juan Evangelista](#san-juan-evangelista-por-dentro),
+[Matías Romero](#matías-romero-avendaño-por-dentro), [Mixtequilla](#santa-maría-mixtequilla-por-dentro),
+[Ciudad Ixtepec](#ciudad-ixtepec-por-dentro) y [Asunción Ixtaltepec](#asunción-ixtaltepec-por-dentro).
 El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
@@ -940,6 +948,8 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
 - **Tapachula I:** como en Texistepec, el DOF le quita a una poligonal general los derechos de vía
   del ramal KA y de una línea eléctrica de la CFE, que la cruzan de lado a lado: quedan tres
   predios.
+- **Asunción Ixtaltepec:** son cuatro polígonos (A, B, C y uno adyacente al B); el derecho de vía
+  de Pemex cruza el B y le deja una esquina de 2.18 ha, que el juego deja sin lotes.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -1851,6 +1861,250 @@ zona 15, cada uno también en latitud y longitud.
 
 **En la realidad**: Tabasco aportó el terreno en abril de 2025 y la declaratoria salió el 8 de
 junio de 2026 (DOF). No se ha reportado licitación ni obra.
+
+### San Blas Atempa por dentro
+
+El decimoctavo polo con vista por dentro (`/mexico/polo/san-blas-atempa`), del Corredor
+Interoceánico: 331.54 ha en San Blas Atempa, Oaxaca, a pie de la MEX-185.
+
+**El terreno**, de su declaratoria (DOF, 12 de mayo de 2023): un polígono de 11 vértices en UTM
+zona 15.
+- **Resultado:** cada lado cuadra con su rumbo y su distancia; da 3,315,377 m² contra los 3,315,375
+  declarados.
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** a 4.7 km de la línea Z, a pie de la MEX-185 Juchitán–Tehuantepec, a 18.4 km del
+  aeropuerto de Ixtepec y a 25 km del puerto de Salina Cruz.
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** el Corredor Interoceánico la compró (protocolizada el 22 de abril de 2022).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **255 ha en 13 lotes de 10
+  a 30 ha**, con 4 ha de servicios a la entrada, del lado de la MEX-185.
+- **Los empleos:** 60.5 por hectárea, 20,043. Un lote de 10 ha da 786 y pide de 0.6 MW
+  (dispositivos médicos) a 5.4 MW (metálicas básicas).
+- **La espuela:** la **Línea Z de Ferroistmo** queda a **2.67 km** en línea recta (el DOF dice 4.7).
+  Cuesta 121 millones con una cuadrilla (5.6 meses) o 176 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  32.1 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.02 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,820 millones con una
+  cuadrilla; las vialidades, 728 millones en 16.6 meses, o 1,056 en 5.9 con cuatro.
+
+**En la realidad**:
+- **16 de julio de 2025:** fallo de su licitación (DOF).
+
+En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se
+ha reportado obra.
+
+### San Juan Evangelista por dentro
+
+El decimonoveno polo con vista por dentro (`/mexico/polo/san-juan-evangelista`), del Corredor
+Interoceánico: 360.25 ha en Veracruz, junto a la línea Z, cerca del nodo
+ferroviario de Medias Aguas.
+
+**El terreno**, de su declaratoria (DOF, 12 de mayo de 2023): un polígono de diez vértices en UTM
+zona 15 que cierra con una curva; el centro de la curva viene en el renglón que sigue al cierre.
+- **Resultado:** cada lado cuadra con su rumbo y su distancia; con la curva da 3,602,513 m² contra
+  los 3,602,505 declarados.
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** aledaño a la línea Z, a 3.5 km del nodo ferroviario de Medias Aguas, donde la
+  vía transístmica cruza la que va al centro del país, y a 7.5 km de la MEX-185.
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** el Corredor Interoceánico la compró (instrumentos del 6 de diciembre de 2021 y del
+  29 de marzo de 2023).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **270 ha en 13 lotes de 10
+  a 30 ha**, con 4 ha de servicios a la entrada. No hay carretera con número en su vista: la
+  MEX-185 queda a 7.5 km.
+- **Los empleos:** 60.5 por hectárea, 21,779. Un lote de 10 ha da 807 y pide de 0.6 MW
+  (dispositivos médicos) a 5.6 MW (metálicas básicas).
+- **La espuela:** la **Línea Z de Ferroistmo** corre pegada a su lado este: **0.03 km**, 2 millones
+  con cuatro cuadrillas y el mínimo de 2 meses.
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  34.8 MW: un banco de la CFE. La línea de 400 kV más cercana queda a 2.63 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,978 millones con una
+  cuadrilla; las vialidades, 791 millones en 17.1 meses, o 1,147 en 6.0 con cuatro.
+
+**En la realidad**:
+- **30 de mayo de 2024:** fallo de su licitación (DOF).
+- **19 de febrero de 2025:** la Presidenta lo da por concesionado a Proistmo y Profharmax, con
+  Texistepec, Matías Romero y Mixtequilla.
+
+En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se
+ha reportado obra.
+
+### Matías Romero Avendaño por dentro
+
+El vigésimo polo con vista por dentro (`/mexico/polo/matias-romero`), del Corredor Interoceánico:
+179.27 ha en Matías Romero Avendaño, Oaxaca, entre la línea Z y la MEX-185.
+
+**El terreno**, de su declaratoria (DOF, 11 de octubre de 2023): un polígono en UTM zona 15 con cinco
+curvas; el centro de cada una viene en el renglón que sigue al lado que dobla.
+- **Resultado:** da 1,792,643 m² contra los 1,792,746 declarados (0.006 % menos). La tabla cierra con
+  un vértice 1A cuyo norte está 57 km al sur (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+- **El marcador:** el que el juego ya tenía cae dentro del terreno, a 1.4 km de su centro: el polo
+  es una franja de 2.8 km de largo.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** aledaño a la línea Z y a unos 110 m de la MEX-185. El Corredor agrega que en el
+  municipio se construye una nueva estación ferroviaria y su complejo logístico.
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** el INDAABIN la aportó al Corredor Interoceánico (DOF, 23 de enero de 2023).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **137 ha en 10 lotes de 8
+  a 20 ha**, con 3 ha de servicios a la entrada, del lado de la vía y la carretera.
+- **Los empleos:** 60.5 por hectárea, 10,838. Un lote de 10 ha da 791 y pide de 0.6 MW
+  (dispositivos médicos) a 5.5 MW (metálicas básicas).
+- **La espuela:** la **Línea Z de Ferroistmo** pasa por su entrada: **0.03 km**, 2 millones con
+  cuatro cuadrillas y el mínimo de 2 meses.
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  17.3 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.41 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 984 millones con una
+  cuadrilla; las vialidades, 394 millones en 13.8 meses, o 571 en 4.9 con cuatro.
+
+**En la realidad**:
+- **30 de octubre de 2023:** el Corredor publica la convocatoria a su licitación internacional.
+- **19 de febrero de 2025:** la Presidenta lo da por concesionado a Proistmo y Profharmax, con
+  Texistepec, San Juan Evangelista y Mixtequilla.
+
+En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se
+ha reportado obra.
+
+### Santa María Mixtequilla por dentro
+
+El vigesimoprimer polo con vista por dentro (`/mexico/polo/mixtequilla`), del Corredor
+Interoceánico: 502.43 ha en Santa María Mixtequilla, Oaxaca, en el cruce de la MEX-185D con la
+MEX-190D.
+
+**El terreno**, de su declaratoria (DOF, 11 de octubre de 2023): 113 vértices en coordenadas TME
+(Transversal Modificado Ejidal), con meridiano central 95°15' O y factor de escala 1.0, según la nota
+de su cuadro.
+- **La conversión:** con ese meridiano, su borde corre 3.7 km sobre la MEX-190D y casi 1 km sobre
+  la MEX-185D de OpenStreetMap, como dice la declaratoria (2.8 y 1.5 km de frente). El juego lo
+  pasa a UTM zona 15; ahí mide 502.74 ha, 0.06 % más, por la escala de UTM a 2.25° de su meridiano.
+- **Resultado:** con el vértice 33 corregido (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)), su cuadro da 5,024,261 m² contra los
+  5,024,260 declarados.
+- **El marcador:** cae dentro del terreno, a 506 m de su centro.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** a 4.6 km de la línea Z, con unos 1.5 km de frente a la MEX-185D (Salina
+  Cruz–La Ventosa) y 2.8 km a la MEX-190D (Mitla–Tehuantepec), a 33 km del aeropuerto de Ixtepec.
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** se expropió a la comunidad de Santa María Mixtequilla a favor del Corredor
+  Interoceánico (DOF, 2 de febrero de 2023).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **380 ha en 14 lotes de 10
+  a 40 ha**, con 5 ha de servicios a la entrada.
+- **Los empleos:** 60.5 por hectárea, 30,374. Un lote de 10 ha da 799 y pide de 0.6 MW
+  (dispositivos médicos) a 5.5 MW (metálicas básicas).
+- **La espuela:** la **Línea Z de Ferroistmo** queda a **4.5 km** en línea recta. Cuesta 204
+  millones con una cuadrilla (5.6 meses) o 296 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  48.6 MW: 2 bancos de la CFE. OpenStreetMap no tiene líneas ni subestaciones a menos de 5 km: la
+  línea de 115 kV más cercana queda a 8.48 km de su subestación, y la vista se abre hasta ella.
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 2,758 millones con una
+  cuadrilla; las vialidades, 1,103 millones en 18.8 meses, o 1,600 en 6.7 con cuatro.
+
+**En la realidad**:
+- **30 de octubre de 2023:** el Corredor publica la convocatoria a su licitación internacional.
+- **19 de febrero de 2025:** la Presidenta lo da por concesionado a Proistmo y Profharmax, con
+  Texistepec, San Juan Evangelista y Matías Romero.
+
+En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se
+ha reportado obra.
+
+### Ciudad Ixtepec por dentro
+
+El vigesimosegundo polo con vista por dentro (`/mexico/polo/ciudad-ixtepec`), del Corredor
+Interoceánico: 412.54 ha en Ciudad Ixtepec, Oaxaca, junto a la MEX-185D.
+
+**El terreno**, de su declaratoria (DOF, 11 de octubre de 2023): 150 vértices en coordenadas TME.
+- **La conversión:** su nota da el mismo meridiano que la de Mixtequilla, 95°15' O, pero con él
+  queda 17.7 km al oeste de su croquis. El juego usa el meridiano 95.0828° O, que
+  pone 2.2 km de su borde sobre la MEX-185D de OpenStreetMap (la declaratoria dice 1.5 km de
+  frente), y lo pasa a UTM zona 15.
+- **Resultado:** con dos vértices corregidos (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)), su cuadro da 4,125,444 m², lo declarado.
+- **El marcador:** cae dentro del terreno, a 446 m de su centro.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** a 3.5 km de la línea Z, con unos 1.5 km de frente a la MEX-185D y cerca de la
+  carretera estatal Ixtepec–Guevea de Humboldt (la OAX 49).
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** se expropió a la comunidad de Ciudad Ixtepec a favor del Corredor Interoceánico
+  (DOF, 2 de febrero de 2023).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **315 ha en 13 lotes de 10
+  a 40 ha**, con 4 ha de servicios a la entrada, del lado de la MEX-185D.
+- **Los empleos:** 60.5 por hectárea, 24,941. Un lote de 10 ha da 792 y pide de 0.6 MW
+  (dispositivos médicos) a 5.5 MW (metálicas básicas).
+- **La espuela:** la **Línea Z de Ferroistmo** queda a **3.22 km** en línea recta (el DOF dice 3.5).
+  Cuesta 146 millones con una cuadrilla (5.6 meses) o 212 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  39.9 MW: 2 bancos de la CFE. OpenStreetMap no tiene líneas ni subestaciones a menos de 5 km: la
+  línea de 115 kV más cercana queda a 7.41 km de su subestación.
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 2,265 millones con una
+  cuadrilla; las vialidades, 906 millones en 17.8 meses, o 1,314 en 6.3 con cuatro.
+
+**En la realidad**:
+- **30 de octubre de 2023:** el Corredor publica la convocatoria a su licitación internacional.
+- **30 de noviembre de 2023:** se cancela su licitación (DOF).
+
+No se ha reportado otra licitación ni obra.
+
+### Asunción Ixtaltepec por dentro
+
+El vigesimotercer polo con vista por dentro (`/mexico/polo/ixtaltepec`), del Corredor
+Interoceánico: 246.08 ha en Asunción Ixtaltepec, Oaxaca, con unos 2 km de frente a la MEX-185.
+
+**El terreno**, de su declaratoria (DOF, 16 de octubre de 2023): cuatro polígonos en UTM zona 15 (ver
+[Un polo en varias piezas](#un-polo-en-varias-piezas)).
+- **A:** 10.68 ha.
+- **B:** 145.42 ha menos el derecho de vía de Pemex (0.48 ha), que lo cruza y le deja una esquina de
+  2.18 ha; en el juego, el resto (142.77 ha) lleva lotes y la esquina queda de reserva.
+- **C:** 78.19 ha.
+- **Adyacente:** 12.27 ha, pegado al B.
+- **Resultado:** con dos vértices del B corregidos (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)), cada tabla da su área y el polo suma
+  2,460,807 m² contra los 2,460,802 declarados.
+- **El marcador:** cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** a 1 km de la línea Z, con unos 2 km de frente a la MEX-185, a 47 km del
+  aeropuerto de Ixtepec.
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** el 95.01 % es del Corredor Interoceánico; del resto dice que «es viable para su
+  consideración en la presente Declaratoria».
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **187 ha en 16 lotes de 4
+  a 20 ha**, con 4 ha de servicios a la entrada del polígono B. Cada polígono lleva su calle.
+- **Los empleos:** 60.5 por hectárea, 14,877. Un lote de 10 ha da 796 y pide de 0.6 MW
+  (dispositivos médicos) a 5.5 MW (metálicas básicas).
+- **La espuela:** la **Línea Z de Ferroistmo** queda al oeste: **0.99 km**. Cuesta 45 millones con
+  una cuadrilla (5.6 meses) o 65 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  23.8 MW: un banco de la CFE. La línea de 400 kV más cercana queda a 0.04 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,351 millones con una
+  cuadrilla; las vialidades, 540 millones en 15.2 meses, o 784 en 5.4 con cuatro.
+
+**En la realidad**:
+- **10 de septiembre de 2024:** fallo de su licitación (DOF).
+
+En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se
+ha reportado obra.
 
 ---
 
@@ -3784,6 +4038,34 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
 
+**Ciudad Ixtepec por dentro (DOF)**
+
+- **El meridiano:** la nota de su cuadro da 95°15' O, que lo pone 17.7 km al oeste de su croquis; el
+  juego usa 95.0828° O, el que pone su borde sobre la MEX-185D.
+- **Dos dígitos:** el vértice 64 dice 1,830,773.588 al norte y sus lados lo ponen en 777.588 (un 3
+  por un 7); el 82 dice 1,811,586.468, 20 km al sur, y va en 1,831,586.468. Con los dos, el cuadro
+  da lo declarado.
+- **Dos rumbos:** los lados 39→40 y 45→46 dicen W donde sus vértices dan E. No mueven nada.
+
+**Santa María Mixtequilla por dentro (DOF)**
+
+- **Un dígito:** el vértice 33 dice 499,399.965 al este; sus lados desde el 32 y hacia el 34 lo
+  ponen en 499,999.965 (un 3 por un 9). Con él, el cuadro da lo declarado.
+
+**Asunción Ixtaltepec por dentro (DOF)**
+
+- **Dos dígitos en el polígono B:** el vértice 1B dice 1,848,167.788 al norte, y sus lados y la
+  tabla del polígono adyacente lo ponen en 1,849,167.788; el 30B dice 1,848,315.216 y sus dos lados
+  lo ponen en 312.216. Con ellos, el B da sus 145.42 ha y el derecho de vía de Pemex sus 0.48.
+- **Un rumbo:** el lado 18B→19B dice S 78°37' W; sus vértices dan S 76°32' W (la distancia cuadra).
+- **La superficie:** el Corredor da 234.10 ha en la ficha del polo; la declaratoria, 246.08.
+
+**Matías Romero por dentro (DOF)**
+
+- **El cierre:** la tabla vuelve al 1A con un norte de 1,847,912.785, 57 km al sur (es el del 1A
+  de Ixtaltepec); el juego cierra en el 1A del primer renglón. Su área queda 0.006 % abajo de la
+  declarada.
+
 **Teapa por dentro (DOF)**
 
 - **La vía, a dos distancias:** la declaratoria lo pone «aledaño a la línea FA» en su criterio de
@@ -4068,8 +4350,8 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Erratas del DOF descartadas**: el vértice 81 de Ciudad Ixtepec (un dígito de más en el
   norte lo mandaba 20 km fuera) y el vértice de cierre de Matías Romero (1A repetido con
   y = 1,847,912.785 en lugar de 1,905,075.739: 57 km al sur).
-- **Ciudad Ixtepec y Santa María Mixtequilla**, en coordenadas TME sin meridiano publicado: la
-  longitud se fijó contra la autopista MEX-185D de OpenStreetMap.
+- **Ciudad Ixtepec y Santa María Mixtequilla**, en coordenadas TME: la longitud del marcador se fijó
+  contra la autopista MEX-185D de OpenStreetMap (ver la nota ¹ de la tabla de polos).
 - **Economía Circular Quintana Roo**: cuadro transcrito de la imagen del DOF.
 - **San Jerónimo**: el marcador se bajó 750 m para quedar del lado mexicano de la frontera del
   tablero (la de Natural Earth corre ahí ~1 km al sur de la real).
@@ -4213,7 +4495,7 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Cuadro de construcción**: la tabla de una declaratoria con los vértices del polígono del
   terreno: rumbos, distancias y coordenadas.
 - **TME (Transversal Modificado Ejidal)**: sistema de coordenadas del Registro Agrario
-  Nacional, con el meridiano central de cada ejido.
+  Nacional, con el meridiano central de cada ejido y factor de escala 1.
 - **Servicio**: la lista de paradas que recorre un vehículo. Un tren las recorre de ida y de
   vuelta; un barco, en circuito.
 - **Escala**: una parada de barco en un puerto.

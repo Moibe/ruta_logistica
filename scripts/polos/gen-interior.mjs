@@ -1428,6 +1428,394 @@ const TEAPA = {
   carretera: /195/,
 };
 
+// ---- the Istmo: San Blas Atempa, San Juan Evangelista, Matías Romero, Mixtequilla, Ixtepec, Ixtaltepec
+
+/**
+ * San Blas Atempa, from its declaratoria (DOF, 12 May 2023): one polygon of 11 vertices in UTM
+ * zone 15, 3,315,374.887 m². Every side agrees with its bearing and length.
+ */
+const SAN_BLAS_ATEMPA = {
+  id: 'san-blas-atempa',
+  zona: 15,
+  vertices: [
+    [267566.819, 1810427.117], [267565.332, 1810284.408], [267552.938, 1809095.474], [267534.418, 1807316.221],
+    [266939.532, 1807518.324], [266746.434, 1807833.416], [266563.394, 1808132.125], [265948.357, 1809135.821],
+    [265735.038, 1809483.941], [265725.641, 1809499.276], [267070.118, 1810176.81],
+  ],
+  areaDof: 3315374.887,
+  control: null,
+  marcador: { lat: 16.3504, lon: -95.1819 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 % of 331.54 ha): 255 ha in 13 lots of 10 to 30 ha (an estimate).
+   */
+  lotes: [
+    { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' },
+    { ha: 10, lado: 'a' }, { ha: 30, lado: 'b' }, { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' }, { ha: 20, lado: 'b' },
+    { ha: 15, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' },
+  ],
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  /** At the foot of the MEX-185, Juchitán–Tehuantepec (the DOF). */
+  carretera: /185/,
+};
+
+/**
+ * San Juan Evangelista, from its declaratoria (DOF, 12 May 2023): a polygon of ten vertices in UTM
+ * zone 15 that closes with a curve (its centre, 13B, comes after it), 3,602,505.364 m². Every
+ * side agrees with its bearing and length.
+ */
+const SAN_JUAN_EVANGELISTA = {
+  id: 'san-juan-evangelista',
+  zona: 15,
+  vertices: [
+    [286742.109, 1961045.874], [286501.698, 1959184.837], [285023.997, 1958942.123], [284994.229, 1959121.125],
+    [285294.395, 1961260.573], [286059.593, 1961309.045], [285993.452, 1961908.651], [286671.775, 1961574.05],
+    [286764.964, 1961169.298], [286758.87, 1961144.919], [286753.532, 1961120.364], [286748.957, 1961095.656],
+    [286745.148, 1961070.818],
+  ],
+  areaDof: 3602505.3636,
+  control: null,
+  marcador: { lat: 17.7193, lon: -95.0188 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 % of 360.25 ha): 270 ha in 13 lots of 10 to 30 ha (an estimate).
+   */
+  lotes: [
+    { ha: 30, lado: 'a' }, { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' },
+    { ha: 15, lado: 'a' }, { ha: 30, lado: 'b' }, { ha: 25, lado: 'b' }, { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' },
+    { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' }, { ha: 10, lado: 'b' },
+  ],
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  /** By the line Z, 3.5 km from the Medias Aguas junction; the MEX-185 is 7.5 km away (the DOF). */
+  carretera: /185/,
+};
+
+/**
+ * Matías Romero Avendaño, from its declaratoria (DOF, 11 Oct 2023): a polygon in UTM zone 15 with
+ * five curves, each centre in the row after the side it bends, 1,792,745.995 m². The table closes
+ * on 1A written with a north 57 km off (1,847,912.785, Ixtaltepec's 1A); its first row is used.
+ */
+const MATIAS_ROMERO = {
+  id: 'matias-romero',
+  zona: 15,
+  vertices: [
+    [281999.704, 1905075.739], [281873.678, 1904902.421], [281865.01, 1904890.956], [281856.745, 1904879.198],
+    [281848.893, 1904867.159], [281841.463, 1904854.856], [281834.464, 1904842.302], [281830.734, 1904834.561],
+    [281827.264, 1904826.7], [281824.059, 1904818.727], [281821.122, 1904810.652], [281818.457, 1904802.483],
+    [281816.066, 1904794.23], [281813.951, 1904785.902], [281812.116, 1904777.507], [281810.563, 1904769.056],
+    [281809.292, 1904760.558], [281808.306, 1904752.022], [281807.606, 1904743.458], [281807.192, 1904734.875],
+    [281807.065, 1904726.283], [281807.225, 1904717.692], [281807.671, 1904709.111], [281813.563, 1904621.278],
+    [281813.818, 1904610.385], [281813.7, 1904599.49], [281813.209, 1904588.605], [281812.346, 1904577.743],
+    [281811.113, 1904566.918], [281809.51, 1904556.14], [281807.54, 1904545.424], [281805.204, 1904534.782],
+    [281802.506, 1904524.225], [281799.448, 1904513.767], [281796.035, 1904503.42], [281792.27, 1904493.195],
+    [281785.426, 1904477.233], [281778.051, 1904461.51], [281770.155, 1904446.041], [281761.747, 1904430.845],
+    [281752.835, 1904415.939], [281748.515, 1904408.649], [281744.359, 1904401.265], [281866.576, 1904356.18],
+    [281778.836, 1904122.083], [281861.399, 1904091.626], [282111.913, 1904760.021], [282806.312, 1904672.471],
+    [282755.715, 1904275.182], [284732.697, 1904027.262], [284804.862, 1904723.58],
+  ],
+  areaDof: 1792745.9949,
+  control: null,
+  marcador: { lat: 17.2157, lon: -95.0366 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 % of 179.27 ha): 137 ha in 10 lots of 8 to 20 ha (an estimate).
+   */
+  lotes: [
+    { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 10, lado: 'a' },
+    { ha: 8, lado: 'a' }, { ha: 20, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 12, lado: 'b' }, { ha: 10, lado: 'b' },
+  ],
+  serviciosHa: 3,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  /** About 110 m from the MEX-185 (the DOF). */
+  carretera: /185/,
+};
+
+/**
+ * Santa María Mixtequilla, from its declaratoria (DOF, 11 Oct 2023): 113 vertices in the ejido
+ * transverse Mercator (TME), central meridian 95°15' W and scale factor 1.0 as its note says,
+ * 5,024,259.847 m²; converted here to UTM zone 15. With that meridian its boundary runs 3.7 km
+ * along the MEX-190D and 0.9 km along the MEX-185D of OpenStreetMap. Vertex 33 is written
+ * 499,399.965 east; its sides from 32 and to 34 put it at 499,999.965 (a 3 for a 9).
+ */
+const MIXTEQUILLA = {
+  id: 'mixtequilla',
+  zona: 15,
+  vertices: [
+    [258847.726, 1818538.563], [257794.586, 1817068.475], [257796.09, 1816931.74], [257641.639, 1816952.079],
+    [257638.687, 1816881.453], [257691.427, 1816853.647], [257747.517, 1816725.3], [257770.846, 1816715.975],
+    [257872.734, 1816748.008], [257952.911, 1816707.27], [257987.626, 1816689.337], [258005.682, 1816691.633],
+    [258058.254, 1816703.101], [258123.955, 1816762.626], [258161.448, 1816796.335], [258203.156, 1816816.385],
+    [258257.055, 1816830.188], [258432.096, 1816817.568], [258546.902, 1816777.526], [258573.045, 1816768.408],
+    [258685.268, 1816678.16], [258749.283, 1816646.123], [258801.388, 1816633.19], [258850.022, 1816633.235],
+    [258867.095, 1816633.251], [258991.745, 1816634.888], [259089.317, 1816651.31], [259190.813, 1816606.025],
+    [259223.507, 1816597.177], [259451.661, 1816595.335], [259490.066, 1816568.226], [259588.869, 1816452.661],
+    [259659.117, 1816342.256], [259696.893, 1816262.526], [259703.558, 1816224.812], [259719.964, 1816185.391],
+    [259813.295, 1816147.916], [259895.816, 1816045.341], [259978.564, 1815969.933], [260048.715, 1815927.349],
+    [260170.586, 1815866.113], [260224.578, 1815843.9], [260231.469, 1815839.705], [260231.469, 1815814.852],
+    [260412.896, 1815759.299], [260459.163, 1815787.546], [260675.536, 1815745.663], [260735.211, 1815564.499],
+    [260762.416, 1815481.905], [260771.467, 1815477.277], [260815.822, 1815615.252], [260834.152, 1815657.83],
+    [260864.499, 1815728.324], [260910.069, 1815785.98], [260937.509, 1815821.163], [260971.176, 1815866.457],
+    [261068.514, 1815960.798], [261120.766, 1816010.611], [261158.442, 1816048.912], [261169.41, 1816059.02],
+    [261180.106, 1816070.476], [261200.345, 1816090.941], [261235.985, 1816126.98], [261249.344, 1816142.293],
+    [261256.801, 1816150.841], [261278.418, 1816179.619], [261283.539, 1816186.437], [261292.755, 1816200.72],
+    [261316.351, 1816241.254], [261332.273, 1816271.718], [261344.602, 1816305.056], [261346.84, 1816311.107],
+    [261352.221, 1816327.552], [261358.326, 1816347.817], [261364.543, 1816373.09], [261370.414, 1816402.52],
+    [261374.85, 1816490.225], [261374.913, 1816491.47], [261376.234, 1816517.599], [261371.802, 1816560.948],
+    [261365.995, 1816595.317], [261359.411, 1816623.436], [261357.498, 1816629.179], [261335.944, 1816693.898],
+    [261304.732, 1816755.341], [261273.397, 1816802.865], [261263.453, 1816792.512], [261236.93, 1816799.399],
+    [261158.654, 1816819.724], [261154.248, 1816820.868], [261182.715, 1816882.004], [261025.724, 1817024.111],
+    [260954.275, 1817081.359], [260828.919, 1817169.535], [260612.942, 1817332.44], [260520.911, 1817397.866],
+    [260402.634, 1817478.651], [260187.657, 1817630.561], [260164.667, 1817646.964], [260003.739, 1817759.53],
+    [259862.076, 1817856.755], [259742.148, 1817934.044], [259657.265, 1818001.952], [259616.473, 1818030.872],
+    [259508.419, 1818107.483], [259410.336, 1818176.583], [259292.136, 1818258.662], [259219.237, 1818308.933],
+    [259133.227, 1818366.175], [259042.8, 1818423.493], [258968.109, 1818469.678], [258926.037, 1818491.951],
+  ],
+  areaDof: 5024259.847,
+  control: null,
+  marcador: { lat: 16.4228, lon: -95.2507 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 % of 502.43 ha): 380 ha in 14 lots of 10 to 40 ha (an estimate).
+   */
+  lotes: [
+    { ha: 40, lado: 'a' }, { ha: 40, lado: 'a' }, { ha: 35, lado: 'a' }, { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' },
+    { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 40, lado: 'b' }, { ha: 35, lado: 'b' }, { ha: 30, lado: 'b' },
+    { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' },
+  ],
+  serviciosHa: 5,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  margen: 2000,
+  /** OpenStreetMap has no power line or substation within 5 km. */
+  margenLuz: 15000,
+  /** Fronts the MEX-185D for about 1.5 km and the MEX-190D for about 2.8 km (the DOF). */
+  carretera: /185|190/,
+};
+
+/**
+ * Ciudad Ixtepec, from its declaratoria (DOF, 11 Oct 2023): 150 vertices in the ejido transverse
+ * Mercator (TME), 4,125,444.754 m². Its note gives the central meridian as 95°15' W, which puts it
+ * 17.7 km west of where its croquis shows it, by the MEX-185D: it's converted with the meridian
+ * -95.0828°, which lays 2.2 km of its boundary on that highway in OpenStreetMap
+ * (scale factor 1.0), then to UTM zone 15.
+ * Two typos: vertex 64's north is written 1,830,773.588 (its sides put it at 777.588) and 82's
+ * 1,811,586.468 (at 1,831,586.468, 20 km off). Sides 39→40 and 45→46 have E for W.
+ */
+const CIUDAD_IXTEPEC = {
+  id: 'ciudad-ixtepec',
+  zona: 15,
+  vertices: [
+    [269649.202, 1832551.651], [269644.946, 1832534.098], [269648.412, 1832471.034], [269649.121, 1832462.963],
+    [269648.809, 1832456.403], [269648.075, 1832449.538], [269636.248, 1832423.702], [269634.792, 1832413.08],
+    [269639.993, 1832382.529], [269645.243, 1832313.615], [269645.938, 1832302.788], [269647.442, 1832296.533],
+    [269651.479, 1832283.267], [269655.095, 1832268.156], [269655.529, 1832260.525], [269655.567, 1832256.762],
+    [269652.223, 1832232.562], [269649.535, 1832221.891], [269640.81, 1832208.154], [269635.688, 1832197.331],
+    [269633.27, 1832186.079], [269630.766, 1832161.267], [269631.272, 1832152.257], [269632.413, 1832142.402],
+    [269630.833, 1832132.293], [269626.867, 1832124.555], [269621.685, 1832120.682], [269617.063, 1832118.138],
+    [269595.598, 1830888.702], [269594.688, 1830879.764], [269627.919, 1830505.532], [269654.667, 1830204.313],
+    [269658.506, 1830161.083], [269662.013, 1830121.582], [269671.302, 1830016.979], [269674.891, 1829976.563],
+    [269681.297, 1829904.428], [269696.225, 1829873.573], [269726.617, 1829810.75], [269800.151, 1829830.475],
+    [269828.121, 1829706.038], [269833.65, 1829708.923], [269917.389, 1829750.253], [269936.67, 1829650.577],
+    [269936.938, 1829649.19], [270194.31, 1829770.426], [270365.312, 1829988.93], [270425.783, 1830064.709],
+    [270650.667, 1830346.521], [270761.475, 1830485.319], [270814.091, 1830550.969], [270945.158, 1830716.609],
+    [270749.732, 1830727.765], [270773.446, 1830882.661], [271034.727, 1830841.859], [271044.585, 1830840.302],
+    [271257.128, 1831106.633], [271249.508, 1831112.712], [271180.421, 1831136.286], [271181.854, 1831146.682],
+    [271199.31, 1831320.402], [271205.564, 1831319.757], [271245.622, 1831316.686], [271368.509, 1831262.555],
+    [271377.829, 1831258.449], [271427.828, 1831321.272], [271490.139, 1831398.98], [271479.832, 1831402.183],
+    [271432.044, 1831417.88], [271378.546, 1831435.89], [271367.824, 1831550.814], [271366.862, 1831561.114],
+    [271549.463, 1831559.972], [271680.477, 1831844.388], [271684.738, 1831853.638], [271748.946, 1831833.359],
+    [271755.117, 1832019.331], [271825.996, 1832024.468], [271800.943, 1832036.662], [271794.199, 1832067.264],
+    [271803.935, 1832076.663], [271804.433, 1832088.838], [271805.915, 1832104.211], [271806.241, 1832114.885],
+    [271806.174, 1832121.758], [271804.811, 1832130.683], [271817.728, 1832137.474], [271779.852, 1832166.561],
+    [271798.023, 1832186.967], [271734.735, 1832202.129], [271762.202, 1832292.833], [271631.054, 1832311.419],
+    [271584.05, 1832328.896], [271537.32, 1832362.722], [271508.23, 1832370.359], [271444.624, 1832383.206],
+    [271434.344, 1832422.111], [271425.752, 1832421.69], [271412.766, 1832391.598], [271408.996, 1832369.326],
+    [271420.362, 1832309.963], [271448.691, 1832258.478], [271483.93, 1832227.399], [271507.333, 1832217.304],
+    [271539.182, 1832213.077], [271516.722, 1832110.819], [271404.956, 1832131.146], [271412.808, 1832178.279],
+    [271313.262, 1832184.835], [271310.59, 1832193.81], [271277.482, 1832241.847], [271257.817, 1832248.807],
+    [271230.689, 1832290.564], [271234.609, 1832327.224], [271238.513, 1832363.726], [271272.124, 1832474.435],
+    [271268.32, 1832475.798], [271265.165, 1832477.918], [271095.635, 1832326.466], [271081.405, 1832319.105],
+    [271042.951, 1832184.308], [271042.249, 1832145.823], [270992.732, 1832152.101], [270978.569, 1832040.925],
+    [270904.89, 1832053.583], [270843.871, 1832124.832], [270873.067, 1832430.678], [270704.34, 1832471.757],
+    [270751.05, 1832704.856], [270744.017, 1832711.165], [270653.84, 1832735.575], [270635.055, 1832737.811],
+    [270585.723, 1832738.515], [270351.47, 1832765.366], [270346.771, 1832765.302], [270338.35, 1832774.33],
+    [270337.24, 1832777.27], [270301.249, 1832786.88], [270207.023, 1832782.953], [270174.484, 1832661.364],
+    [270084.191, 1832730.228], [270044.614, 1832763.581], [270011.816, 1832762.925], [269998.529, 1832716.709],
+    [269993.15, 1832685.295], [269985.945, 1832671.265], [269912.321, 1832543.221], [270009.307, 1832482.424],
+    [269890.462, 1832398.857],
+  ],
+  areaDof: 4125444.754,
+  control: null,
+  marcador: { lat: 16.5535, lon: -95.1501 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 % of 412.54 ha): 315 ha in 13 lots of 10 to 40 ha (an estimate).
+   */
+  lotes: [
+    { ha: 40, lado: 'a' }, { ha: 35, lado: 'a' }, { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' },
+    { ha: 15, lado: 'a' }, { ha: 35, lado: 'b' }, { ha: 30, lado: 'b' }, { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' },
+    { ha: 15, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' },
+  ],
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  margen: 2000,
+  /** OpenStreetMap has no power line or substation within 5 km. */
+  margenLuz: 15000,
+  /** Fronts the MEX-185D for about 1.5 km (the DOF). */
+  carretera: /185/,
+};
+
+/**
+ * Asunción Ixtaltepec, from its declaratoria (DOF, 16 Oct 2023), UTM zone 15: polygons A (10.68 ha),
+ * B (145.42 ha less Pemex's right of way, 0.48 ha, which crosses it and leaves a 2.18 ha corner
+ * without lots), C (78.19 ha) and an adjacent one (12.27 ha) that shares B's side 70B→1B; 246.08 ha.
+ * Two typos in B: 1B's north is written 1,848,167.788 (its sides and the adjacent polygon's table
+ * put it at 1,849,167.788) and 30B's 1,848,315.216 (at 312.216, from both its sides).
+ */
+const IXTALTEPEC = {
+  id: 'ixtaltepec',
+  zona: 15,
+  piezas: [
+    {
+      nombre: 'Polígono B',
+      servicios: true,
+      vertices: [
+        [289192.098, 1849167.788], [289115.357, 1849160.332], [289003.481, 1849136.37], [288931.656, 1849130.201],
+        [288795.883, 1849099.275], [288707.796, 1849066.171], [288665.877, 1849049.409], [288656.113, 1849044.703],
+        [288647.994, 1849038.307], [288585.649, 1848943.247], [288558.372, 1848925.467], [288513.813, 1848919.91],
+        [288331.233, 1848867.726], [288279.547, 1848849.518], [288258.991, 1848499.549], [288169.695, 1848479.466],
+        [288141.247, 1848472.652], [288224.983, 1848302.327], [288253.382, 1848291.643], [288284.954, 1848283.869],
+        [288354.392, 1848273.036], [288363.785, 1848355.291], [288345.196, 1848404.16], [288336.938, 1848427.442],
+        [288336.015, 1848455.172], [288336.85, 1848475.912], [288338.64, 1848507.077], [288439.299, 1848529.132],
+        [288553.989, 1848238.067], [288783.76, 1848210.361], [288784.826, 1848152.677], [288828.411, 1848143.513],
+        [288888.783, 1848135.195], [289105.498, 1848110.227], [289223.584, 1848115.302], [289224.788, 1848107.934],
+        [289266.153, 1848105.105], [289314.899, 1848096.996], [289326.341, 1848089.476], [289348.709, 1848043.411],
+        [289573.832, 1848031.583], [289573.455, 1848036.261], [289623.635, 1848035.002], [289710.639, 1848042.45],
+        [289784.387, 1848055.508], [289791.732, 1848059.627], [289822.068, 1848119.104], [289842.236, 1848145.839],
+        [289904.938, 1848193.301], [289925.191, 1848204.914], [289984.506, 1848228.38], [290013.945, 1848235.489],
+        [290129.113, 1848231.931], [290235.13, 1848231.377], [290309.309, 1848244.51], [290032.903, 1848560.594],
+        [289748.245, 1848885.384], [289549.093, 1848708.135], [289373.756, 1848908.162], [289418.53, 1848947.716],
+      ],
+      lotes: [
+        { ha: 20, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 20, lado: 'b' },
+        { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' },
+      ],
+    },
+    {
+      nombre: 'Polígono C',
+      vertices: [
+        [290628.994, 1847439.393], [290587.969, 1847436.071], [290522.497, 1847427.975], [290371.176, 1847358.727],
+        [290373.474, 1847220.909], [290375.055, 1847206.215], [290380.333, 1847174.655], [290319.598, 1847196.815],
+        [290282.184, 1847209.748], [290159.068, 1847249.987], [290158.507, 1847286.607], [290157.794, 1847298.574],
+        [290134.681, 1847365.984], [290100.088, 1847365.366], [290036.793, 1847377.481], [289993.489, 1847395.401],
+        [289970.78, 1847422.304], [289973.898, 1847532.76], [289814.548, 1847588.009], [289653.877, 1847577.622],
+        [289654.249, 1847588.718], [289667.238, 1847684.415], [289671.196, 1847800.609], [289653.264, 1847900.104],
+        [289665.698, 1847941.612], [289707.85, 1848036.192], [289787.446, 1848052.006], [289866.95, 1848022.219],
+        [289907.085, 1847991.328], [289957.873, 1847958.807], [290001.511, 1847932.165], [290012.005, 1847923.91],
+        [290038.524, 1847909.273], [290037.996, 1847913.148], [290027.281, 1847919.653], [289956.786, 1847968.431],
+        [289918.491, 1847993.448], [289871.514, 1848026.842], [289829.205, 1848043.365], [289799.133, 1848053.126],
+        [289828.693, 1848119.85], [289849.608, 1848144.712], [289905.498, 1848187.802], [289982.754, 1848224.632],
+        [290012.722, 1848230.366], [290125.89, 1848223.309], [290230.594, 1848224.255], [290231.404, 1848218.631],
+        [290299.401, 1848232.845], [290318.772, 1848233.688], [290585.424, 1847928.756], [290889.114, 1847583.863],
+        [290987.701, 1847472.573], [290995.589, 1847442.432], [290964.464, 1847446.882], [290913.129, 1847411.389],
+        [290866.381, 1847419.841], [290832.985, 1847415.04], [290825.99, 1847426.778], [290782.971, 1847435.558],
+        [290750.586, 1847438.589], [290705.057, 1847438.638], [290650.956, 1847439.715],
+      ],
+      lotes: [
+        { ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' },
+      ],
+    },
+    {
+      nombre: 'Polígono adyacente',
+      vertices: [
+        [289748.245, 1848885.384], [289549.093, 1848708.135], [289373.756, 1848908.162], [289418.53, 1848947.716],
+        [289192.098, 1849167.788], [289260.61, 1849174.594], [289307.014, 1849181.534], [289343.513, 1849194.16],
+        [289424.715, 1849206.71], [289459.894, 1849214.385], [289559.627, 1849100.592],
+      ],
+      lotes: [{ ha: 5, lado: 'a' }, { ha: 4, lado: 'b' }],
+    },
+    {
+      nombre: 'Polígono A',
+      vertices: [
+        [288990.841, 1847912.785], [289004.645, 1847892.599], [289021.548, 1847886.644], [289046.044, 1847877.66],
+        [289070.326, 1847866.793], [289132.266, 1847830.255], [289214.748, 1847806.191], [289271.627, 1847783.325],
+        [289327.798, 1847755.909], [289343.476, 1848036.857], [289314.919, 1848092.47], [289267.721, 1848100.99],
+        [289251.738, 1848102.807], [289226.004, 1848103.481], [289104.223, 1848103.217], [289012.381, 1848113.027],
+        [288887.115, 1848125.224], [288885.215, 1848113.863],
+      ],
+      lotes: [{ ha: 4, lado: 'a' }, { ha: 4, lado: 'b' }],
+    },
+  ],
+  franjas: [
+    {
+      nombre: 'Derecho de vía de Pemex',
+      tipo: 'ducto',
+      ha: 0.47987,
+      nota: 'Se excluye del polígono B (DOF)',
+      vertices: [
+        [288141.247, 1848472.652], [288121.665, 1848467.963], [288179.137, 1848318.826], [288198.698, 1848312.216],
+        [288224.983, 1848302.327],
+      ],
+    },
+    {
+      nombre: 'Esquina del polígono B',
+      tipo: 'reserva',
+      nota: 'Parte del polo que el derecho de vía de Pemex separa del resto; el juego no le pone lotes',
+      delPolo: true,
+      vertices: [
+        [288121.665, 1848467.963], [288115.045, 1848466.377], [288068.197, 1848456.957], [288030.347, 1848451.816],
+        [287896.61, 1848437.828], [287859.037, 1848445.167], [287859.762, 1848418.084], [287911.395, 1848405.471],
+        [287950.869, 1848394.191], [287994.245, 1848380.484], [288121.737, 1848338.222], [288179.137, 1848318.826],
+      ],
+    },
+  ],
+  comprobar: [
+    {
+      nombre: 'Polígono B completo',
+      ha: 145.4239888,
+      vertices: [
+        [289192.098, 1849167.788], [289115.357, 1849160.332], [289003.481, 1849136.37], [288931.656, 1849130.201],
+        [288795.883, 1849099.275], [288707.796, 1849066.171], [288665.877, 1849049.409], [288656.113, 1849044.703],
+        [288647.994, 1849038.307], [288585.649, 1848943.247], [288558.372, 1848925.467], [288513.813, 1848919.91],
+        [288331.233, 1848867.726], [288279.547, 1848849.518], [288258.991, 1848499.549], [288169.695, 1848479.466],
+        [288141.247, 1848472.652], [288121.665, 1848467.963], [288115.045, 1848466.377], [288068.197, 1848456.957],
+        [288030.347, 1848451.816], [287896.61, 1848437.828], [287859.037, 1848445.167], [287859.762, 1848418.084],
+        [287911.395, 1848405.471], [287950.869, 1848394.191], [287994.245, 1848380.484], [288121.737, 1848338.222],
+        [288179.137, 1848318.826], [288198.698, 1848312.216], [288224.983, 1848302.327], [288253.382, 1848291.643],
+        [288284.954, 1848283.869], [288354.392, 1848273.036], [288363.785, 1848355.291], [288345.196, 1848404.16],
+        [288336.938, 1848427.442], [288336.015, 1848455.172], [288336.85, 1848475.912], [288338.64, 1848507.077],
+        [288439.299, 1848529.132], [288553.989, 1848238.067], [288783.76, 1848210.361], [288784.826, 1848152.677],
+        [288828.411, 1848143.513], [288888.783, 1848135.195], [289105.498, 1848110.227], [289223.584, 1848115.302],
+        [289224.788, 1848107.934], [289266.153, 1848105.105], [289314.899, 1848096.996], [289326.341, 1848089.476],
+        [289348.709, 1848043.411], [289573.832, 1848031.583], [289573.455, 1848036.261], [289623.635, 1848035.002],
+        [289710.639, 1848042.45], [289784.387, 1848055.508], [289791.732, 1848059.627], [289822.068, 1848119.104],
+        [289842.236, 1848145.839], [289904.938, 1848193.301], [289925.191, 1848204.914], [289984.506, 1848228.38],
+        [290013.945, 1848235.489], [290129.113, 1848231.931], [290235.13, 1848231.377], [290309.309, 1848244.51],
+        [290032.903, 1848560.594], [289748.245, 1848885.384], [289549.093, 1848708.135], [289373.756, 1848908.162],
+        [289418.53, 1848947.716],
+      ],
+    },
+  ],
+  areaDof: 2460802.123,
+  control: null,
+  marcador: { lat: 16.7102, lon: -94.9775 },
+  /**
+   * No lots are published. The game gives each piece about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 187 ha in 16 lots of 4 to 20 ha (an estimate).
+   */
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  /** About 2 km of front on the MEX-185 (the DOF). */
+  carretera: /185/,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 /**
@@ -1439,9 +1827,9 @@ const CONSULTAS = (p) => ({
   caminos: [['way', p.cerca, [['highway']]]],
   vias: [['way', p.lejos, [['railway']]]],
   electricidad: [
-    ['way', p.cerca, [['power', '~', 'line|minor_line']]],
-    ['node', p.lejos, [['power', '=', 'substation']]],
-    ['way', p.lejos, [['power', '=', 'substation']]],
+    ['way', p.luz ?? p.cerca, [['power', '~', 'line|minor_line']]],
+    ['node', p.luz ?? p.lejos, [['power', '=', 'substation']]],
+    ['way', p.luz ?? p.lejos, [['power', '=', 'substation']]],
     ['way', p.lejos, [['man_made', '=', 'pipeline']]],
   ],
   suelo: [['way', p.cerca, [['landuse']]]],
@@ -1585,6 +1973,8 @@ async function construir(p, { soloCajas = false } = {}) {
   };
   p.cerca ??= cajaGeo(margen + 300);
   p.lejos ??= cajaGeo(margen + 3000);
+  // Where OpenStreetMap has no power line or substation near (Mixtequilla, Ixtepec), a wider box.
+  p.luz ??= p.margenLuz ? cajaGeo(p.margenLuz) : null;
 
   const local = (lon, lat) => { const [x, y] = aUtm(lon, lat, p.zona); return [x - cx, y - cy]; };
   const { x0, x1, y0, y1 } = p.caja;
@@ -2100,6 +2490,50 @@ const FUENTES = {
   'ciit-tapachula-ii': {
     fuente: 'Corredor Interoceánico, ficha del PODEBI Tapachula II: convocatoria a su licitación pública internacional LPIBI-013AYH-PODEBI-3-2025 (DOF, 11 de junio de 2025) y segunda nota aclaratoria (17 de septiembre), que reabre el registro de interesados del 19 al 30 de septiembre',
     url: 'https://www.gob.mx/ciit/es/articulos/podebi-tapachula-ii',
+  },
+  'dof-san-blas-atempa': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar San Blas Atempa (12 de mayo de 2023): cuadro de construcción de 11 vértices, 331.54 ha; a 4.7 km de la línea Z, a pie de la MEX-185 Juchitán–Tehuantepec, a 18.4 km del aeropuerto de Ixtepec y a 25 km del puerto de Salina Cruz; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (el Corredor Interoceánico la compró)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5688611&fecha=12/05/2023',
+  },
+  'dof-san-juan-evangelista': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar San Juan Evangelista (12 de mayo de 2023): cuadro de construcción con una curva, 360.25 ha; aledaño a la línea Z, a 3.5 km del nodo ferroviario de Medias Aguas y a 7.5 km de la MEX-185; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (el Corredor Interoceánico la compró)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5688612&fecha=12/05/2023',
+  },
+  'dof-matias-romero': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Matías Romero Avendaño (11 de octubre de 2023): cuadro de construcción con cinco curvas, 179.27 ha; aledaño a la línea Z y a unos 110 m de la MEX-185; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (el INDAABIN la aportó al Corredor Interoceánico, DOF, 23 de enero de 2023)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5704695&fecha=11/10/2023',
+  },
+  'dof-mixtequilla': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Santa María Mixtequilla (11 de octubre de 2023): cuadro de construcción de 113 vértices en coordenadas TME (meridiano central 95°15\' O, factor de escala 1.0), 502.43 ha; a 4.6 km de la línea Z, con frente de unos 1.5 km a la MEX-185D y de 2.8 km a la MEX-190D; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (expropiada a la comunidad a favor del Corredor Interoceánico, DOF, 2 de febrero de 2023)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5704696&fecha=11/10/2023',
+  },
+  'dof-ciudad-ixtepec': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Ciudad Ixtepec (11 de octubre de 2023): cuadro de construcción de 150 vértices en coordenadas TME (su nota dice meridiano central 95°15\' O y factor de escala 1.0), 412.54 ha; a 3.5 km de la línea Z, con frente de unos 1.5 km a la MEX-185D y cerca de la carretera estatal Ixtepec–Guevea de Humboldt; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (expropiada a la comunidad a favor del Corredor Interoceánico, DOF, 2 de febrero de 2023)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5704697&fecha=11/10/2023',
+  },
+  'dof-ixtaltepec': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Asunción Ixtaltepec (16 de octubre de 2023): cuadros de construcción de los polígonos A, B (con el derecho de vía de Pemex que se le excluye), C y adyacente, 246.08 ha; a 1 km de la línea Z, con unos 2 km de frente a la MEX-185, a 47 km del aeropuerto de Ixtepec; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (95.01 % del Corredor Interoceánico)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5705269&fecha=16/10/2023',
+  },
+  'ciit-san-juan-evangelista': {
+    fuente: 'Corredor Interoceánico, ficha del PODEBI San Juan Evangelista (22 de junio de 2023): su declaratoria y la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-4-2023',
+    url: 'https://www.gob.mx/ciit/es/articulos/podebi-san-juan-evangelista',
+  },
+  'ciit-matias-romero': {
+    fuente: 'Corredor Interoceánico, ficha del PODEBI Matías Romero Avendaño (30 de octubre de 2023): con frente a la línea Z, en un municipio donde se construye una nueva estación ferroviaria y su complejo logístico; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-8-2023',
+    url: 'https://www.gob.mx/ciit/es/articulos/podebi-matias-romero-avendano',
+  },
+  'ciit-mixtequilla': {
+    fuente: 'Corredor Interoceánico, ficha del PODEBI Santa María Mixtequilla (30 de octubre de 2023): frente a la MEX-185D (Salina Cruz–La Ventosa) y a la MEX-190D (Mitla–Tehuantepec), a 45 km del puerto de Salina Cruz; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-9-2023',
+    url: 'https://www.gob.mx/ciit/es/articulos/podebi-santa-maria-mixtequilla',
+  },
+  'ciit-ciudad-ixtepec': {
+    fuente: 'Corredor Interoceánico, ficha del PODEBI Ciudad Ixtepec (30 de octubre de 2023): frente a la MEX-185D, en el municipio donde se juntan las líneas Z y K; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-7-2023 y el aviso de su cancelación (DOF, 30 de noviembre de 2023)',
+    url: 'https://www.gob.mx/ciit/es/articulos/podebi-ciudad-ixtepec',
+  },
+  'ciit-ixtaltepec': {
+    fuente: 'Corredor Interoceánico, ficha del PODEBI Asunción Ixtaltepec (30 de octubre de 2023): frente a la MEX-185, a 1 km de la línea Z; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-6-2023',
+    url: 'https://www.gob.mx/ciit/es/articulos/podebi-asuncion-ixtaltepec',
   },
   'dof-teapa': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)',
@@ -2835,6 +3269,210 @@ function interiorTeapa(g) {
   };
 }
 
+function interiorSanBlasAtempa(g) {
+  return {
+    nombre: 'San Blas Atempa',
+    lugar: 'San Blas Atempa, Oaxaca',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-san-blas-atempa', 'piciit-2026', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: declarado el 12 de mayo de 2023 (DOF) en un terreno que el Corredor Interoceánico compró. Su licitación tuvo fallo el 16 de julio de 2025 (DOF). En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo queda «a 4.7 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-san-blas-atempa', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('san-blas-atempa', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono de 11 vértices, a pie de la MEX-185. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 10 a 30 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-san-blas-atempa', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-san-blas-atempa'],
+    },
+  };
+}
+
+function interiorSanJuanEvangelista(g) {
+  return {
+    nombre: 'San Juan Evangelista',
+    lugar: 'San Juan Evangelista, Veracruz',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-san-juan-evangelista', 'ciit-san-juan-evangelista', 'presidencia-istmo-2025', 'piciit-2026', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: declarado el 12 de mayo de 2023 (DOF) en un terreno que el Corredor Interoceánico compró. Su licitación tuvo fallo el 30 de mayo de 2024 (DOF). La Presidenta lo dio por concesionado a Proistmo y Profharmax el 19 de febrero de 2025; en 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo queda «aledaño a la línea Z», a 3.5 km del nodo ferroviario de Medias Aguas (DOF). La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-san-juan-evangelista', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('san-juan-evangelista', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono de diez vértices que cierra con una curva. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 10 a 30 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-san-juan-evangelista', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-san-juan-evangelista'],
+    },
+  };
+}
+
+function interiorMatiasRomero(g) {
+  return {
+    nombre: 'Matías Romero Avendaño',
+    lugar: 'Matías Romero Avendaño, Oaxaca',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-matias-romero', 'ciit-matias-romero', 'presidencia-istmo-2025', 'piciit-2026', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: declarado el 11 de octubre de 2023 (DOF) en un terreno federal que el INDAABIN aportó al Corredor Interoceánico, que convocó a su licitación ese mes. La Presidenta lo dio por concesionado a Proistmo y Profharmax el 19 de febrero de 2025; en 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo queda «aledaño a la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-matias-romero', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('matias-romero', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono con cinco curvas, a unos 110 m de la MEX-185. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 8 a 20 ha, y 3 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-matias-romero', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-matias-romero'],
+    },
+  };
+}
+
+function interiorMixtequilla(g) {
+  return {
+    nombre: 'Santa María Mixtequilla',
+    lugar: 'Santa María Mixtequilla, Oaxaca',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-mixtequilla', 'ciit-mixtequilla', 'presidencia-istmo-2025', 'piciit-2026', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: el terreno se expropió a la comunidad de Santa María Mixtequilla a favor del Corredor Interoceánico (DOF, 2 de febrero de 2023) y la declaratoria salió el 11 de octubre de 2023 (DOF); el Corredor convocó a su licitación ese mes. La Presidenta lo dio por concesionado a Proistmo y Profharmax el 19 de febrero de 2025; en 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo queda «a 4.6 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-mixtequilla', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('mixtequilla', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono de 113 vértices entre la MEX-185D y la MEX-190D. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 10 a 40 ha, y 5 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-mixtequilla', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-mixtequilla'],
+    },
+  };
+}
+
+function interiorCiudadIxtepec(g) {
+  return {
+    nombre: 'Ciudad Ixtepec',
+    lugar: 'Ciudad Ixtepec, Oaxaca',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-ciudad-ixtepec', 'ciit-ciudad-ixtepec', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: el terreno se expropió a la comunidad de Ciudad Ixtepec a favor del Corredor Interoceánico (DOF, 2 de febrero de 2023) y la declaratoria salió el 11 de octubre de 2023 (DOF). El Corredor convocó a su licitación ese mes y la canceló el 30 de noviembre de 2023 (DOF). No se ha reportado otra licitación ni obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo queda «a 3.5 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-ciudad-ixtepec', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('ciudad-ixtepec', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono de 150 vértices junto a la MEX-185D. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 10 a 40 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-ciudad-ixtepec', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-ciudad-ixtepec'],
+    },
+  };
+}
+
+function interiorIxtaltepec(g) {
+  return {
+    nombre: 'Asunción Ixtaltepec',
+    lugar: 'Asunción Ixtaltepec, Oaxaca',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-ixtaltepec', 'ciit-ixtaltepec', 'piciit-2026', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: declarado el 16 de octubre de 2023 (DOF); el 95.01 % del terreno es del Corredor Interoceánico. Su licitación tuvo fallo el 10 de septiembre de 2024 (DOF). En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus polígonos lleva su calle; se hacen uno tras otro.',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo queda «a 1 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-ixtaltepec', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('ixtaltepec', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Cuatro polígonos junto a la MEX-185; el derecho de vía de Pemex cruza el polígono B y le deja una esquina de 2.18 ha que el juego no lotifica. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 4 a 20 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-ixtaltepec', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-ixtaltepec'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -2885,6 +3523,12 @@ const POLOS_INTERIOR = [
   [TAPACHULA_I, interiorTapachulaI],
   [TAPACHULA_II, interiorTapachulaII],
   [TEAPA, interiorTeapa],
+  [SAN_BLAS_ATEMPA, interiorSanBlasAtempa],
+  [SAN_JUAN_EVANGELISTA, interiorSanJuanEvangelista],
+  [MATIAS_ROMERO, interiorMatiasRomero],
+  [MIXTEQUILLA, interiorMixtequilla],
+  [CIUDAD_IXTEPEC, interiorCiudadIxtepec],
+  [IXTALTEPEC, interiorIxtaltepec],
 ];
 // `id…`: build only those polos and keep the others as they are in interiores.json.
 // `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.

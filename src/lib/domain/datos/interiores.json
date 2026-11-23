@@ -210,6 +210,50 @@
    "fuente": "Corredor Interoceánico, ficha del PODEBI Tapachula II: convocatoria a su licitación pública internacional LPIBI-013AYH-PODEBI-3-2025 (DOF, 11 de junio de 2025) y segunda nota aclaratoria (17 de septiembre), que reabre el registro de interesados del 19 al 30 de septiembre",
    "url": "https://www.gob.mx/ciit/es/articulos/podebi-tapachula-ii"
   },
+  "dof-san-blas-atempa": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar San Blas Atempa (12 de mayo de 2023): cuadro de construcción de 11 vértices, 331.54 ha; a 4.7 km de la línea Z, a pie de la MEX-185 Juchitán–Tehuantepec, a 18.4 km del aeropuerto de Ixtepec y a 25 km del puerto de Salina Cruz; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (el Corredor Interoceánico la compró)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5688611&fecha=12/05/2023"
+  },
+  "dof-san-juan-evangelista": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar San Juan Evangelista (12 de mayo de 2023): cuadro de construcción con una curva, 360.25 ha; aledaño a la línea Z, a 3.5 km del nodo ferroviario de Medias Aguas y a 7.5 km de la MEX-185; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (el Corredor Interoceánico la compró)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5688612&fecha=12/05/2023"
+  },
+  "dof-matias-romero": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Matías Romero Avendaño (11 de octubre de 2023): cuadro de construcción con cinco curvas, 179.27 ha; aledaño a la línea Z y a unos 110 m de la MEX-185; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (el INDAABIN la aportó al Corredor Interoceánico, DOF, 23 de enero de 2023)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5704695&fecha=11/10/2023"
+  },
+  "dof-mixtequilla": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Santa María Mixtequilla (11 de octubre de 2023): cuadro de construcción de 113 vértices en coordenadas TME (meridiano central 95°15' O, factor de escala 1.0), 502.43 ha; a 4.6 km de la línea Z, con frente de unos 1.5 km a la MEX-185D y de 2.8 km a la MEX-190D; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (expropiada a la comunidad a favor del Corredor Interoceánico, DOF, 2 de febrero de 2023)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5704696&fecha=11/10/2023"
+  },
+  "dof-ciudad-ixtepec": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Ciudad Ixtepec (11 de octubre de 2023): cuadro de construcción de 150 vértices en coordenadas TME (su nota dice meridiano central 95°15' O y factor de escala 1.0), 412.54 ha; a 3.5 km de la línea Z, con frente de unos 1.5 km a la MEX-185D y cerca de la carretera estatal Ixtepec–Guevea de Humboldt; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (expropiada a la comunidad a favor del Corredor Interoceánico, DOF, 2 de febrero de 2023)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5704697&fecha=11/10/2023"
+  },
+  "dof-ixtaltepec": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Asunción Ixtaltepec (16 de octubre de 2023): cuadros de construcción de los polígonos A, B (con el derecho de vía de Pemex que se le excluye), C y adyacente, 246.08 ha; a 1 km de la línea Z, con unos 2 km de frente a la MEX-185, a 47 km del aeropuerto de Ixtepec; sus once vocaciones productivas, las de Coatzacoalcos I, y su propiedad (95.01 % del Corredor Interoceánico)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5705269&fecha=16/10/2023"
+  },
+  "ciit-san-juan-evangelista": {
+   "fuente": "Corredor Interoceánico, ficha del PODEBI San Juan Evangelista (22 de junio de 2023): su declaratoria y la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-4-2023",
+   "url": "https://www.gob.mx/ciit/es/articulos/podebi-san-juan-evangelista"
+  },
+  "ciit-matias-romero": {
+   "fuente": "Corredor Interoceánico, ficha del PODEBI Matías Romero Avendaño (30 de octubre de 2023): con frente a la línea Z, en un municipio donde se construye una nueva estación ferroviaria y su complejo logístico; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-8-2023",
+   "url": "https://www.gob.mx/ciit/es/articulos/podebi-matias-romero-avendano"
+  },
+  "ciit-mixtequilla": {
+   "fuente": "Corredor Interoceánico, ficha del PODEBI Santa María Mixtequilla (30 de octubre de 2023): frente a la MEX-185D (Salina Cruz–La Ventosa) y a la MEX-190D (Mitla–Tehuantepec), a 45 km del puerto de Salina Cruz; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-9-2023",
+   "url": "https://www.gob.mx/ciit/es/articulos/podebi-santa-maria-mixtequilla"
+  },
+  "ciit-ciudad-ixtepec": {
+   "fuente": "Corredor Interoceánico, ficha del PODEBI Ciudad Ixtepec (30 de octubre de 2023): frente a la MEX-185D, en el municipio donde se juntan las líneas Z y K; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-7-2023 y el aviso de su cancelación (DOF, 30 de noviembre de 2023)",
+   "url": "https://www.gob.mx/ciit/es/articulos/podebi-ciudad-ixtepec"
+  },
+  "ciit-ixtaltepec": {
+   "fuente": "Corredor Interoceánico, ficha del PODEBI Asunción Ixtaltepec (30 de octubre de 2023): frente a la MEX-185, a 1 km de la línea Z; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-6-2023",
+   "url": "https://www.gob.mx/ciit/es/articulos/podebi-asuncion-ixtaltepec"
+  },
   "dof-teapa": {
    "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)",
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5789895&fecha=08/06/2026"
@@ -3120,6 +3164,1056 @@
     "dato": "Vocaciones productivas de la declaratoria (DOF), «enunciativas y no limitativas». En el juego, agroindustria es la industria alimentaria y petroquímica, su sector. Comercio y logística no son manufactura: el juego no los ofrece para un lote.",
     "fuentes": [
      "dof-teapa"
+    ]
+   }
+  },
+  "san-blas-atempa": {
+   "nombre": "San Blas Atempa",
+   "lugar": "San Blas Atempa, Oaxaca",
+   "sectores": [
+    "computacion",
+    "semiconductores",
+    "transporte",
+    "dispositivos-medicos",
+    "farmaceutica",
+    "alimentos",
+    "generacion-electrica",
+    "maquinaria",
+    "metalicas",
+    "petroquimica"
+   ],
+   "fuentesLista": [
+    "dof-san-blas-atempa",
+    "piciit-2026",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 12 de mayo de 2023 (DOF) en un terreno que el Corredor Interoceánico compró. Su licitación tuvo fallo el 16 de julio de 2025 (DOF). En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 2.67,
+    "via": "Línea Z",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "El polo queda «a 4.7 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la Línea Z (Ferroistmo), la más cercana, al polo: 2.67 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-san-blas-atempa",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 0.02,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.02 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 30,
+      "empresa": null
+     }
+    ],
+    "dato": "Un polígono de 11 vértices, a pie de la MEX-185. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 255 ha en 13 lotes de 10 a 30 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-san-blas-atempa",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Eléctrica y electrónica",
+    "Semiconductores",
+    "Automotriz (electromovilidad), autopartes y equipo de transporte",
+    "Dispositivos médicos",
+    "Farmacéutica",
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica (energías limpias)",
+    "Maquinaria y equipo",
+    "Tecnologías de la Información y la Comunicación",
+    "Metales",
+    "Petroquímica"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
+    "fuentes": [
+     "dof-san-blas-atempa"
+    ]
+   }
+  },
+  "san-juan-evangelista": {
+   "nombre": "San Juan Evangelista",
+   "lugar": "San Juan Evangelista, Veracruz",
+   "sectores": [
+    "computacion",
+    "semiconductores",
+    "transporte",
+    "dispositivos-medicos",
+    "farmaceutica",
+    "alimentos",
+    "generacion-electrica",
+    "maquinaria",
+    "metalicas",
+    "petroquimica"
+   ],
+   "fuentesLista": [
+    "dof-san-juan-evangelista",
+    "ciit-san-juan-evangelista",
+    "presidencia-istmo-2025",
+    "piciit-2026",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 12 de mayo de 2023 (DOF) en un terreno que el Corredor Interoceánico compró. Su licitación tuvo fallo el 30 de mayo de 2024 (DOF). La Presidenta lo dio por concesionado a Proistmo y Profharmax el 19 de febrero de 2025; en 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.03,
+    "via": "Línea Z",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "El polo queda «aledaño a la línea Z», a 3.5 km del nodo ferroviario de Medias Aguas (DOF). La espuela del juego va de la Línea Z (Ferroistmo), la más cercana, al polo: 0.03 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-san-juan-evangelista",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 2.63,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 2.63 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 30,
+      "empresa": null
+     }
+    ],
+    "dato": "Un polígono de diez vértices que cierra con una curva. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 270 ha en 13 lotes de 10 a 30 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-san-juan-evangelista",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Eléctrica y electrónica",
+    "Semiconductores",
+    "Automotriz (electromovilidad), autopartes y equipo de transporte",
+    "Dispositivos médicos",
+    "Farmacéutica",
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica (energías limpias)",
+    "Maquinaria y equipo",
+    "Tecnologías de la Información y la Comunicación",
+    "Metales",
+    "Petroquímica"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
+    "fuentes": [
+     "dof-san-juan-evangelista"
+    ]
+   }
+  },
+  "matias-romero": {
+   "nombre": "Matías Romero Avendaño",
+   "lugar": "Matías Romero Avendaño, Oaxaca",
+   "sectores": [
+    "computacion",
+    "semiconductores",
+    "transporte",
+    "dispositivos-medicos",
+    "farmaceutica",
+    "alimentos",
+    "generacion-electrica",
+    "maquinaria",
+    "metalicas",
+    "petroquimica"
+   ],
+   "fuentesLista": [
+    "dof-matias-romero",
+    "ciit-matias-romero",
+    "presidencia-istmo-2025",
+    "piciit-2026",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 11 de octubre de 2023 (DOF) en un terreno federal que el INDAABIN aportó al Corredor Interoceánico, que convocó a su licitación ese mes. La Presidenta lo dio por concesionado a Proistmo y Profharmax el 19 de febrero de 2025; en 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.03,
+    "via": "Línea Z",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "El polo queda «aledaño a la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la Línea Z (Ferroistmo), la más cercana, al polo: 0.03 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-matias-romero",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 0.41,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.41 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 20,
+      "empresa": null
+     }
+    ],
+    "dato": "Un polígono con cinco curvas, a unos 110 m de la MEX-185. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 137 ha en 10 lotes de 8 a 20 ha, y 3 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-matias-romero",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Eléctrica y electrónica",
+    "Semiconductores",
+    "Automotriz (electromovilidad), autopartes y equipo de transporte",
+    "Dispositivos médicos",
+    "Farmacéutica",
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica (energías limpias)",
+    "Maquinaria y equipo",
+    "Tecnologías de la Información y la Comunicación",
+    "Metales",
+    "Petroquímica"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
+    "fuentes": [
+     "dof-matias-romero"
+    ]
+   }
+  },
+  "mixtequilla": {
+   "nombre": "Santa María Mixtequilla",
+   "lugar": "Santa María Mixtequilla, Oaxaca",
+   "sectores": [
+    "computacion",
+    "semiconductores",
+    "transporte",
+    "dispositivos-medicos",
+    "farmaceutica",
+    "alimentos",
+    "generacion-electrica",
+    "maquinaria",
+    "metalicas",
+    "petroquimica"
+   ],
+   "fuentesLista": [
+    "dof-mixtequilla",
+    "ciit-mixtequilla",
+    "presidencia-istmo-2025",
+    "piciit-2026",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: el terreno se expropió a la comunidad de Santa María Mixtequilla a favor del Corredor Interoceánico (DOF, 2 de febrero de 2023) y la declaratoria salió el 11 de octubre de 2023 (DOF); el Corredor convocó a su licitación ese mes. La Presidenta lo dio por concesionado a Proistmo y Profharmax el 19 de febrero de 2025; en 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 4.5,
+    "via": "Línea Z",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "El polo queda «a 4.6 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la Línea Z (Ferroistmo), la más cercana, al polo: 4.5 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-mixtequilla",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 8.48,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 8.48 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 35,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 35,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 14,
+      "ha": 40,
+      "empresa": null
+     }
+    ],
+    "dato": "Un polígono de 113 vértices entre la MEX-185D y la MEX-190D. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 380 ha en 14 lotes de 10 a 40 ha, y 5 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-mixtequilla",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Eléctrica y electrónica",
+    "Semiconductores",
+    "Automotriz (electromovilidad), autopartes y equipo de transporte",
+    "Dispositivos médicos",
+    "Farmacéutica",
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica (energías limpias)",
+    "Maquinaria y equipo",
+    "Tecnologías de la Información y la Comunicación",
+    "Metales",
+    "Petroquímica"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
+    "fuentes": [
+     "dof-mixtequilla"
+    ]
+   }
+  },
+  "ciudad-ixtepec": {
+   "nombre": "Ciudad Ixtepec",
+   "lugar": "Ciudad Ixtepec, Oaxaca",
+   "sectores": [
+    "computacion",
+    "semiconductores",
+    "transporte",
+    "dispositivos-medicos",
+    "farmaceutica",
+    "alimentos",
+    "generacion-electrica",
+    "maquinaria",
+    "metalicas",
+    "petroquimica"
+   ],
+   "fuentesLista": [
+    "dof-ciudad-ixtepec",
+    "ciit-ciudad-ixtepec",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: el terreno se expropió a la comunidad de Ciudad Ixtepec a favor del Corredor Interoceánico (DOF, 2 de febrero de 2023) y la declaratoria salió el 11 de octubre de 2023 (DOF). El Corredor convocó a su licitación ese mes y la canceló el 30 de noviembre de 2023 (DOF). No se ha reportado otra licitación ni obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 3.22,
+    "via": "Línea Z",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "El polo queda «a 3.5 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la Línea Z (Ferroistmo), la más cercana, al polo: 3.22 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-ciudad-ixtepec",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 7.41,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 7.41 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 35,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 35,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 40,
+      "empresa": null
+     }
+    ],
+    "dato": "Un polígono de 150 vértices junto a la MEX-185D. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 315 ha en 13 lotes de 10 a 40 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-ciudad-ixtepec",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Eléctrica y electrónica",
+    "Semiconductores",
+    "Automotriz (electromovilidad), autopartes y equipo de transporte",
+    "Dispositivos médicos",
+    "Farmacéutica",
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica (energías limpias)",
+    "Maquinaria y equipo",
+    "Tecnologías de la Información y la Comunicación",
+    "Metales",
+    "Petroquímica"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
+    "fuentes": [
+     "dof-ciudad-ixtepec"
+    ]
+   }
+  },
+  "ixtaltepec": {
+   "nombre": "Asunción Ixtaltepec",
+   "lugar": "Asunción Ixtaltepec, Oaxaca",
+   "sectores": [
+    "computacion",
+    "semiconductores",
+    "transporte",
+    "dispositivos-medicos",
+    "farmaceutica",
+    "alimentos",
+    "generacion-electrica",
+    "maquinaria",
+    "metalicas",
+    "petroquimica"
+   ],
+   "fuentesLista": [
+    "dof-ixtaltepec",
+    "ciit-ixtaltepec",
+    "piciit-2026",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 16 de octubre de 2023 (DOF); el 95.01 % del terreno es del Corredor Interoceánico. Su licitación tuvo fallo el 10 de septiembre de 2024 (DOF). En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus polígonos lleva su calle; se hacen uno tras otro.",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.99,
+    "via": "Línea Z",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "El polo queda «a 1 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la Línea Z (Ferroistmo), la más cercana, al polo: 0.99 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-ixtaltepec",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 0.04,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.04 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 14,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 15,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 16,
+      "ha": 4,
+      "empresa": null
+     }
+    ],
+    "dato": "Cuatro polígonos junto a la MEX-185; el derecho de vía de Pemex cruza el polígono B y le deja una esquina de 2.18 ha que el juego no lotifica. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 187 ha en 16 lotes de 4 a 20 ha, y 4 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-ixtaltepec",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Eléctrica y electrónica",
+    "Semiconductores",
+    "Automotriz (electromovilidad), autopartes y equipo de transporte",
+    "Dispositivos médicos",
+    "Farmacéutica",
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica (energías limpias)",
+    "Maquinaria y equipo",
+    "Tecnologías de la Información y la Comunicación",
+    "Metales",
+    "Petroquímica"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
+    "fuentes": [
+     "dof-ixtaltepec"
     ]
    }
   }
