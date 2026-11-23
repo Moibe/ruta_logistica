@@ -534,7 +534,7 @@ Notas de la tabla:
 | Seybaplaya I | Seybaplaya, Campeche | 100 ha | [30 jun 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761459&fecha=30/06/2025) | 22 km |
 | San Jerónimo ³ | Juárez, Chihuahua | 60.3 ha | [30 jun 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761460&fecha=30/06/2025) | 10 km |
 | Reserva Zapotlán | Zapotlán de Juárez, Hidalgo | 911 ha | [30 jun 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761461&fecha=30/06/2025) | 1 km |
-| Capital de la Tecnología y la Sostenibilidad | San José Chiapa y Nopalucan, Puebla | 275 ha | [1 jul 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761567&fecha=01/07/2025) | 2 km |
+| Capital de la Tecnología y la Sostenibilidad | San José Chiapa y Nopalucan, Puebla | 218 ha | [1 jul 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761567&fecha=01/07/2025) | 2 km |
 | Chetumal | Othón P. Blanco, Quintana Roo | 87.8 ha | [1 jul 2025](https://dof.gob.mx/nota_detalle.php?codigo=5761568&fecha=01/07/2025) | 191 km |
 | Parque Industrial Bajío | Zinapécuaro, Michoacán | 342 ha | [7 jul 2025](https://dof.gob.mx/nota_detalle.php?codigo=5762147&fecha=07/07/2025) | 2 km |
 | Puerta Logística del Bajío | Celaya, Guanajuato | 52.4 ha | [21 jul 2025](https://dof.gob.mx/nota_detalle.php?codigo=5763405&fecha=21/07/2025) | 4 km |
@@ -555,7 +555,7 @@ Notas de la tabla:
 | Economía Circular Tlaxcala | Atlangatepec, Tlaxcala | 20 ha | [8 jun 2026](https://dof.gob.mx/nota_detalle.php?codigo=5789881&fecha=08/06/2026) | 1 km |
 | Economía Circular Quintana Roo ² | Puerto Morelos, Quintana Roo | 39.9 ha | [27 jul 2026](https://dof.gob.mx/nota_detalle.php?codigo=5794759&fecha=27/07/2026) | 128 km |
 
-Total: 32 polos, 8,647 ha.
+Total: 32 polos, 8,590 ha.
 
 Los enlaces llevan a cada declaratoria en el DOF. Topolobampo usa el polígono del acuerdo que la
 modificó el 29 de abril de 2026; Reserva Zapotlán y Capital de la Tecnología tienen notas
@@ -608,7 +608,7 @@ por tres fases:
 | Duración, 1 cuadrilla | 24 meses × (hectáreas ÷ 53)^0.3 | Un parque industrial «en promedio toma 2 años, cuando menos» (inauguración de Huamantla, 12 abr 2026). El exponente 0.3 hace que los polos grandes tarden más pero no en proporción, porque se construyen por frentes y fases a la vez |
 | Duración, n cuadrillas | la de una ÷ n^0.75 | El exponente sale de pedir que 4 cuadrillas igualen el récord de Huamantla: 53 ha en 8.5 meses (compromiso del 28 jul 2025, 20 % el 14 oct 2025, inaugurado el 12 abr 2026) |
 | Gente trabajando en la obra | 1.187 empleos-año por millón de pesos, repartidos en lo que dura | Construcción en Veracruz, 2023: 26,482 personas ocupadas con 22,308 millones de pesos de producción (INEGI, Censos Económicos 2024) |
-| Empleos permanentes | Los del polo lleno × ocupación. Con cifra oficial propia, esa; sin ella, **60.5 por hectárea** | Huamantla: «más de 5 mil empleos directos e indirectos» en 53 ha (Presidencia, 12 abr 2026). Nezahualcóyotl: «4 mil 500 empleos directos» en su primera etapa, 68.4 ha (su gobierno municipal, 26 jun 2025). Los demás: los «300 mil empleos» de los primeros 15 polos del Plan México (Presidencia, 26 jun 2025) entre las 4,962 ha de los 14 que tiene el juego (ver [Cuántos empleos da un polo](#cuántos-empleos-da-un-polo)) |
+| Empleos permanentes | Los del polo lleno × ocupación. Con cifra oficial propia, esa; sin ella, **61.2 por hectárea** | Huamantla: «más de 5 mil empleos directos e indirectos» en 53 ha (Presidencia, 12 abr 2026). Nezahualcóyotl: «4 mil 500 empleos directos» en su primera etapa, 68.4 ha (su gobierno municipal, 26 jun 2025). Los demás: los «300 mil empleos» de los primeros 15 polos del Plan México (Presidencia, 26 jun 2025) entre las 4,905 ha de los 14 que tiene el juego (ver [Cuántos empleos da un polo](#cuántos-empleos-da-un-polo)) |
 | Ocupación | de 0 a 100 % en 3 años, solo con tren | Supuesto del juego: no hay cifra oficial de cuánto tarda un polo en llenarse |
 | Dinero para construir | El presupuesto del Estado: llega cada mes (ver [El presupuesto del Estado](#el-presupuesto-del-estado)) | Presupuesto federal real para ferrocarriles y derecho de las concesionarias |
 
@@ -656,20 +656,23 @@ en los gobiernos estatales y municipales.
 
 **La cifra de conjunto:** los primeros 15 polos del Plan México generarán **300 mil empleos en
 esta administración** (Presidencia, 26 de junio de 2025; Primer Informe de Gobierno). El juego
-tiene 14 de ellos, con 4,962 ha; el 15.º, de economía circular en Hidalgo, no tiene superficie
-publicada. Eso da **60.5 empleos por hectárea**, cerca de los 66 de Nezahualcóyotl.
+tiene 14 de ellos, con 4,905 ha; el 15.º, de economía circular en Hidalgo, no tiene superficie
+publicada. Eso da **61.2 empleos por hectárea**, cerca de los 66 de Nezahualcóyotl. (Eran 60.5
+mientras el juego tuvo las 275.2 ha con que se declaró Capital de la Tecnología; su nota
+aclaratoria las bajó a 217.68.)
 
 **Cómo los usa el juego:**
 - **Un polo con cifra oficial de su terreno la usa:** Huamantla 5,000, Nezahualcóyotl 4,500 y
   Parque Industrial Bajío 27,000.
-- **Los demás usan los 60.5 por hectárea del gobierno**, una estimación del juego con la cifra
+- **Los demás usan los 61.2 por hectárea del gobierno**, una estimación del juego con la cifra
   oficial de conjunto.
 - **Por qué por hectárea:** a diferencia de la electricidad, los empleos sí crecen con el terreno,
   porque las empresas ocupan lotes. Las cifras de primera fase se parecen (unos 5 mil), pero un
   polo lleno no es su primera fase.
 - **Antes** todos usaban los 94.3 por hectárea de Huamantla, un polo chico y vendido completo. Así
-  Altamira daba 154 mil empleos y los 32 polos, 815 mil. Ahora Altamira da 99 mil y los 32, 531
-  mil (525 mil antes de usar la cifra de Bajío, que con la densidad daba 20,681).
+  Altamira daba 154 mil empleos y los 32 polos, 815 mil. Ahora Altamira da 100 mil y los 32, 534
+  mil (531 mil con los 60.5 por hectárea, y 525 mil antes de usar la cifra de Bajío, que con la
+  densidad daba 20,681).
 
 ### Huamantla por dentro
 
@@ -885,19 +888,19 @@ juego ya tenía.
 - **La energía:** no hay cifra oficial. Le toca la de un polo sin cifra, la mediana de los siete
   que la tienen: **8 MW**, lo que da su subestación en su primera fase.
   - Sus empresas piden lo mismo por empleo que en Huamantla, 1.6 kW al promedio. Lleno de
-    industria promedio (sus 15,580 empleos, 60.5 por hectárea), el polo pediría **25 MW**.
+    industria promedio (sus 15,763 empleos, 61.2 por hectárea), el polo pediría **25 MW**.
   - Con 8 MW caben unos tres lotes de 20 ha de industria promedio. Una petroquímica o una
     metalúrgica de ese tamaño (11 MW) no caben.
   - Es lo que dicen las cifras oficiales: los polos arrancan con 4 a 20 MW, y uno grande necesita
     que la CFE amplíe su subestación para llenarse (ver
     [La subestación del polo](#la-subestación-del-polo)): con cuatro bancos, 128 MVA.
 
-Lo que pide cada uno de sus sectores en un lote de 20 ha (1,582 empleos: los 15,580 del polo
+Lo que pide cada uno de sus sectores en un lote de 20 ha (1,600 empleos: los 15,763 del polo
 repartidos en sus 197 ha de lotes):
 
 | Sector | SCIAN | Personal ocupado (2018) | Luz | Agua | t por trabajador al año | Exporta | MW | t al año por tren |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 1.8 MW | 2,357 t |
+| Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 1.9 MW | 2,357 t |
 | Semiconductores (componentes electrónicos) | 3344 | 196,205 | 0.67× | 0.96× | 1.49* | 30 % | 1.7 MW | 2,357 t |
 | Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 3.1 MW | 7,956 t |
 | Dispositivos médicos | 3391 | 172,298 | 0.46× | 0.37× | 1.49* | 30 % | 1.2 MW | 2,357 t |
@@ -905,8 +908,8 @@ repartidos en sus 197 ha de lotes):
 | Agroindustria (industria alimentaria) | 311 | 1,092,943 | 0.66× | 0.57× | 2.70 | 3 % | 1.7 MW | 4,271 t |
 | Equipo de generación y distribución de electricidad | 3353 | 74,641 | 0.87× | 0.35× | 1.49* | 30 % | 2.2 MW | 2,357 t |
 | Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 3.0 MW | 2,357 t |
-| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 10.9 MW | 107,288 t |
-| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 10.8 MW | 237,749 t |
+| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 11.1 MW | 107,288 t |
+| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 11.0 MW | 237,749 t |
 
 - **Agroindustria** es la industria alimentaria (SCIAN 311). En el anuario ferroviario de 2018
   sus productos son el jarabe de maíz (1.29 millones de toneladas), los aceites y grasas
@@ -1018,9 +1021,9 @@ UTM zona 15, con el rumbo y la distancia de cada lado y el centro y el radio de 
   - Es el polo más barato de conectar al tren.
 - **La energía:** no hay cifra oficial; le tocan los **8 MW** de un polo sin cifra.
   - La línea de 115 kV más cercana pasa al norte, a 3.86 km de su subestación (OpenStreetMap).
-  - Lleno de industria promedio (27,954 empleos, 60.5 por hectárea) pediría 44.7 MW.
-  - Un lote de 20 ha da 1,584 empleos y pide lo mismo que en Coatzacoalcos I (ver la tabla de
-    arriba): de 1.2 MW si es de dispositivos médicos a 10.9 MW si es una metalúrgica.
+  - Lleno de industria promedio (28,282 empleos, 61.2 por hectárea) pediría 45.3 MW.
+  - Un lote de 20 ha da 1,602 empleos y pide lo mismo que en Coatzacoalcos I (ver la tabla de
+    arriba): de 1.2 MW si es de dispositivos médicos a 11.1 MW si es una metalúrgica.
 - **Los frentes y su costo:** son los de Huamantla.
   - Su obra completa cuesta 2,539 millones con una cuadrilla.
   - Las vialidades solas: 1,015 millones en 18.4 meses con una cuadrilla, o 1,472 millones en
@@ -1082,24 +1085,24 @@ cuyas áreas calculadas dan las declaradas.
 - **La energía:** no hay cifra oficial; le tocan los **8 MW** de un polo sin cifra.
   - Su subestación queda a 1.43 km de la línea de 115 kV de las subestaciones del puerto (Puerto
     5 Norte, la más cercana).
-  - Lleno de industria promedio (99,013 empleos) pediría 158 MW: necesitará muchos bancos de
+  - Lleno de industria promedio (100,174 empleos) pediría 160 MW: necesitará muchos bancos de
     la CFE.
 - **Los frentes y su costo:** son los de Huamantla. Su obra completa cuesta 8,991 millones con
   una cuadrilla; las vialidades solas tardan 26.9 meses con una cuadrilla y 9.5 con cuatro.
 
-Lo que pide cada uno de sus sectores en un lote de 40 ha (3,252 empleos: los 99,013 del polo
+Lo que pide cada uno de sus sectores en un lote de 40 ha (3,290 empleos: los 100,174 del polo
 repartidos en sus 1,218 ha de lotes):
 
 | Sector | SCIAN | Personal ocupado (2018) | Luz | Agua | t por trabajador al año | Exporta | MW | t al año por tren |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 6.3 MW | 16,356 t |
-| Química (fertilizantes, pinturas, jabones y otros) | 3253, 3255, 3256, 3259 | 122,757 | 1.21× | 1.72× | 4.73 | 0 % | 6.3 MW | 15,380 t |
+| Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 6.4 MW | 16,356 t |
+| Química (fertilizantes, pinturas, jabones y otros) | 3253, 3255, 3256, 3259 | 122,757 | 1.21× | 1.72× | 4.73 | 0 % | 6.4 MW | 15,380 t |
 | Farmacéutica | 3254 | 88,699 | 0.84× | 0.89× | 1.49* | 30 % | 4.4 MW | 4,845 t |
-| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 22.3 MW | 488,757 t |
+| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 22.5 MW | 488,757 t |
 | Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 3.8 MW | 4,845 t |
 | Aparatos eléctricos | 335 | 241,221 | 0.99× | 0.53× | 1.91* | 45 % | 5.2 MW | 6,211 t |
 | Fabricación de productos metálicos | 332 | 454,118 | 0.65× | 0.26× | 1.49* | 30 % | 3.4 MW | 4,845 t |
-| Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 6.1 MW | 4,845 t |
+| Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 6.2 MW | 4,845 t |
 
 - **Química** es un sector nuevo, con el resto de la industria química del censo: fertilizantes
   (3253), pinturas y adhesivos (3255), jabones y cosméticos (3256) y otros productos químicos
@@ -1220,7 +1223,7 @@ zona 14.
   - En OpenStreetMap no hay ninguna línea ni subestación a menos de 4.5 km. La conexión va a la
     subestación que nombra la declaratoria, **Tizayuca** (230 kV, 180 MVA en OpenStreetMap), a
     **24.45 km** de la subestación del juego, casi los 24 del DOF.
-  - Lleno de industria promedio (55,064 empleos) pediría 88 MW. Un lote de 20 ha da 1,620 empleos
+  - Lleno de industria promedio (55,710 empleos) pediría 89 MW. Un lote de 20 ha da 1,639 empleos
     y pide de 1.2 MW (dispositivos médicos) a 3.2 MW (equipo de transporte).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta **5,000 millones** con una
   cuadrilla, la cifra de su propia declaratoria. Las vialidades solas: 2,000 millones en 22.5
@@ -1276,7 +1279,7 @@ ocho vértices y dos curvas en UTM zona 13 (el DOF no dice la zona; Juárez est�
   en 8 lotes de 2 a 10 ha**.
   - Los servicios tienen 1.5 ha a la entrada.
   - Como el cuadro tiene menos terreno del que declara, la reserva es chica: 2.7 ha.
-- **Los empleos:** 60.5 por hectárea, 3,647. Un lote de 10 ha da 793 y pide de 0.6 MW
+- **Los empleos:** 61.2 por hectárea, 3,689. Un lote de 10 ha da 802 y pide de 0.6 MW
   (dispositivos médicos) a 1.6 MW (equipo de transporte).
 - **La espuela**, la más larga de los polos con vista:
   - La vía más cercana es la UP Lordsburg Subdivision de Union Pacific, a 4.24 km, del otro lado
@@ -1286,7 +1289,7 @@ ocho vértices y dos curvas en UTM zona 13 (el DOF no dice la zona; Juárez est�
     **15.33 km**, casi los 15 de la declaratoria.
   - Cuesta 696 millones con una cuadrilla (7.7 meses) o 1,009 con cuatro (2.7 meses): dos o tres
     veces el polo entero. Alejando la vista se ve llegar a Juárez.
-- **La energía:** los **20 MW** de Economía. Lleno pide 5.8 MW: le sobra. La línea de 115 kV más
+- **La energía:** los **20 MW** de Economía. Lleno pide 5.9 MW: le sobra. La línea de 115 kV más
   cercana queda a 0.35 km de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 331 millones con una cuadrilla;
   las vialidades, 132 millones en 10 meses, o 192 en 3.5 con cuatro.
@@ -1431,8 +1434,8 @@ DOF no dice la zona; Sonora está en ella), con coma decimal.
   - Por sección: 9 lotes en el Lado A (225 ha), 8 en el B (170 ha) y 2 de 8 ha en el PIAT.
   - Los servicios tienen 5 ha a la entrada del Lado A, al sur.
   - Lo demás es área común y reserva, sobre todo las puntas norte de los dos lados.
-- **Los empleos:** 60.5 por hectárea, 33,036. Un lote de 20 ha da 1,608 y pide de 1.2 MW
-  (dispositivos médicos) a 3.1 MW (equipo de transporte).
+- **Los empleos:** 61.2 por hectárea, 33,424. Un lote de 20 ha da 1,626 y pide de 1.2 MW
+  (dispositivos médicos) a 3.2 MW (equipo de transporte).
 - **La espuela:** la **Línea T de Ferromex** corre al este del polo: **1.94 km**, casi los 2 de
   la declaratoria. Cuesta 88 millones con una cuadrilla (5.6 meses) o 128 con cuatro (2 meses).
   La vía queda fuera de la caja de la vista; el generador la busca hasta 6 km más allá, como
@@ -1489,24 +1492,24 @@ polígonos en UTM zona 12, el 2 (216.16 ha) y el 1 (61.42 ha).
   10 a 30 ha**: 8 en el polígono 2 (160 ha) y 4 en el 1 (52 ha).
   - Los servicios tienen 4 ha a la entrada del polígono 2, por la SIN 124.
   - Lo demás es área común y reserva.
-- **Los empleos:** 60.5 por hectárea, 16,781.
+- **Los empleos:** 61.2 por hectárea, 16,978.
 - **La espuela:** la **Línea Q de Ferromex** corre pegada al polígono 2: **0.02 km**, 1 millón
   con cuatro cuadrillas y el mínimo de 2 meses.
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno de
-  industria promedio pide 26.8 MW: un banco de la CFE. Pero sus vocaciones gastan mucho: un lote
-  de petroquímica o de metálicas básicas de 20 ha pide casi 11 MW. La línea de 230 kV más
+  industria promedio pide 27.2 MW: un banco de la CFE. Pero sus vocaciones gastan mucho: un lote
+  de petroquímica o de metálicas básicas de 20 ha pide 11 MW. La línea de 230 kV más
   cercana queda a 0.52 km de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,524 millones con una
   cuadrilla; las vialidades, 610 millones en 15.8 meses, o 884 en 5.6 con cuatro.
 
-Lo que pide cada uno de sus sectores en un lote de 20 ha (1,583 empleos):
+Lo que pide cada uno de sus sectores en un lote de 20 ha (1,602 empleos):
 
 | Sector | SCIAN | Personal ocupado (2018) | Luz | Agua | t por trabajador al año | Exporta | MW | t al año por tren |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Química (fertilizantes, pinturas, jabones y otros) | 3253, 3255, 3256, 3259 | 122,757 | 1.21× | 1.72× | 4.73 | 0 % | 3.1 MW | 7,488 t |
-| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 10.8 MW | 237,959 t |
+| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 11.0 MW | 237,959 t |
 | Industria del plástico y del hule | 326 | 381,838 | 1.30× | 0.34× | 1.49* | 30 % | 3.3 MW | 2,359 t |
-| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 10.9 MW | 107,383 t |
+| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 11.1 MW | 107,383 t |
 
 - **Plástico y hule** es un sector nuevo (SCIAN 326, INEGI). Gasta 1.30 veces la luz y 0.34
   veces el agua del promedio de la manufactura. El anuario ferroviario no trae productos suyos
@@ -1564,7 +1567,7 @@ DOF no dice la zona; Celaya está en ella), con sus curvas.
   a 6 ha**, del tamaño de las bodegas de un puerto seco: 9 en el polígono II y 1 en el I.
   - Los servicios tienen 1.5 ha a la entrada, en la punta norte.
   - El polígono III queda de reserva.
-- **Los empleos:** 60.5 por hectárea, 3,168. Un lote de 5 ha da 396 y pide de 0.4 MW (productos
+- **Los empleos:** 61.2 por hectárea, 3,206. Un lote de 5 ha da 401 y pide de 0.4 MW (productos
   metálicos o agroindustria) a 0.8 MW (equipo de transporte).
 - **La espuela:** pegados a su lado oeste corren ramales de vía sin nombre (OpenStreetMap). La
   espuela va a la línea principal más cercana, la **Línea AM de Ferromex**: **1.09 km**, 50
@@ -1630,12 +1633,12 @@ DOF no dice la zona; Durango está en ella), con números en formato europeo (2.
 - **Los lotes:** en el polígono 1, la parte de uso industrial de Coatzacoalcos I (76.46 % de él):
   **212 ha en 11 lotes de 10 a 30 ha**, con 4 ha de servicios a la entrada. Las cuatro reservas
   quedan como reserva, sin lotes.
-- **Los empleos:** 60.5 por hectárea, 19,069. Un lote de 20 ha da 1,799 y pide de 2.1 MW
+- **Los empleos:** 61.2 por hectárea, 19,292. Un lote de 20 ha da 1,820 y pide de 2.1 MW
   (electrónica) a 4 MW (papel).
 - **La espuela:** la **Línea DA de la Línea Coahuila Durango** corre pegada al polígono 1:
   **0.04 km**, 3 millones con cuatro cuadrillas y el mínimo de 2 meses.
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  30.5 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.31 km de su subestación
+  30.9 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.31 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,732 millones con una
   cuadrilla; las vialidades, 693 millones en 16.4 meses, o 1,004 en 5.8 con cuatro.
@@ -1684,12 +1687,12 @@ curvas, con su centro y su radio.
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **63 ha en 8 lotes de 4 a
   12 ha**, con 2 ha de servicios a la entrada. La entrada mira a la avenida Oleoducto: no hay
   carretera con número a menos de 2 km.
-- **Los empleos:** 60.5 por hectárea, 4,963. Un lote de 10 ha da 788 y pide de 0.6 MW
-  (dispositivos médicos) a 5.4 MW (metálicas básicas o petroquímica).
+- **Los empleos:** 61.2 por hectárea, 5,021. Un lote de 10 ha da 797 y pide de 0.6 MW
+  (dispositivos médicos) a 5.5 MW (metálicas básicas o petroquímica).
 - **La espuela:** la **Línea Z de Ferroistmo** queda al oeste: **2.26 km** (el DOF dice 3; el
   desarrollador, 2). Cuesta 103 millones con una cuadrilla (5.6 meses) o 149 con cuatro (2 meses).
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  7.9 MW: cabe justo. La línea de 115 kV más cercana queda a 1.07 km de su subestación
+  8.0 MW: cabe justo. La línea de 115 kV más cercana queda a 1.07 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 451 millones con una cuadrilla;
   las vialidades, 180 millones en 10.9 meses, o 261 en 3.9 con cuatro.
@@ -1727,12 +1730,12 @@ polígono de nueve vértices en UTM zona 15, con rumbos escritos «NW 84°…».
 **Lo que es del juego**:
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **37 ha en 6 lotes de 3 a
   10 ha**, con 1.5 ha de servicios a la entrada, del lado de la MEX-200.
-- **Los empleos:** 60.5 por hectárea, 2,952. Un lote de 10 ha da 798 y pide de 0.8 MW
-  (agroindustria) a 5.5 MW (metálicas básicas).
+- **Los empleos:** 61.2 por hectárea, 2,987. Un lote de 10 ha da 807 y pide de 0.8 MW
+  (agroindustria) a 5.6 MW (metálicas básicas).
 - **La espuela:** la **Línea K de Ferroistmo** corre pegada a su lado suroeste: **0.02 km**, 1
   millón con cuatro cuadrillas y el mínimo de 2 meses.
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  4.7 MW; un lote de metálicas básicas ya pide 5.5. La línea de 115 kV más cercana queda a 0.68 km
+  4.8 MW; un lote de metálicas básicas ya pide 5.6. La línea de 115 kV más cercana queda a 0.68 km
   de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 268 millones con una cuadrilla;
   las vialidades, 107 millones en 9.4 meses, o 156 en 3.3 con cuatro.
@@ -1766,12 +1769,12 @@ a lado. Quedan tres predios: el sur (168.50 ha), el norte (55.88) y el central (
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **200 ha en 17 lotes de 5 a
   25 ha**, con 4 ha de servicios a la entrada del predio sur. Cada predio lleva su calle; se hacen
   uno tras otro, el sur primero.
-- **Los empleos:** 60.5 por hectárea, 15,910. Un lote de 10 ha da 795 y pide de 0.6 MW
-  (dispositivos médicos) a 5.5 MW (metálicas básicas).
+- **Los empleos:** 61.2 por hectárea, 16,097. Un lote de 10 ha da 805 y pide de 0.6 MW
+  (dispositivos médicos) a 5.6 MW (metálicas básicas).
 - **La espuela:** el ramal KA de Ferroistmo lo cruza: **0.01 km**, menos de un millón con cuatro
   cuadrillas y el mínimo de 2 meses.
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  25.5 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.12 km de su subestación
+  25.8 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.12 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,445 millones con una cuadrilla;
   las vialidades, 578 millones en 15.5 meses, o 838 en 5.5 con cuatro.
@@ -1808,12 +1811,12 @@ dos curvas cuyo centro va en el mismo renglón que el vértice donde terminan.
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **111 ha en 9 lotes de 6 a
   20 ha**, con 3 ha de servicios a la entrada. La entrada mira al camino que corre a su pie, que
   OpenStreetMap llama Ramal a Escolleras y marca como MEX-225; ninguno se llama Playa Linda.
-- **Los empleos:** 60.5 por hectárea, 9,051. Un lote de 10 ha da 815 y pide de 0.6 MW
-  (dispositivos médicos) a 5.6 MW (metálicas básicas).
+- **Los empleos:** 61.2 por hectárea, 9,157. Un lote de 10 ha da 825 y pide de 0.6 MW
+  (dispositivos médicos) a 5.7 MW (metálicas básicas).
 - **La espuela:** la **Línea KA de Ferroistmo** queda a **0.47 km** (el DOF dice 0.75). Cuesta 21
   millones con una cuadrilla (5.6 meses) o 31 con cuatro (2 meses).
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  14.5 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.39 km de su subestación
+  14.7 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.39 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 822 millones con una cuadrilla;
   las vialidades, 329 millones en 13.1 meses, o 477 en 4.6 con cuatro.
@@ -1851,12 +1854,12 @@ zona 15, cada uno también en latitud y longitud.
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **73 ha en 8 lotes de 5 a
   15 ha**, con 2 ha de servicios a la entrada. A su alrededor solo hay caminos sin nombre ni número
   en OpenStreetMap: la vista no rotula carretera.
-- **Los empleos:** 60.5 por hectárea, 5,812. Un lote de 10 ha da 796 y pide 0.8 MW (agroindustria)
+- **Los empleos:** 61.2 por hectárea, 5,880. Un lote de 10 ha da 805 y pide 0.8 MW (agroindustria)
   o 5.5 MW (petroquímica).
 - **La espuela:** la **Línea FA de Ferroistmo** queda al sur: **1.43 km** en línea recta. Cuesta
   65 millones con una cuadrilla (5.6 meses) o 94 con cuatro (2 meses).
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  9.3 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 1.32 km de su subestación
+  9.4 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 1.32 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 528 millones con una cuadrilla;
   las vialidades, 211 millones en 11.5 meses, o 306 en 4.1 con cuatro.
@@ -1886,12 +1889,12 @@ zona 15.
 **Lo que es del juego**:
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **255 ha en 13 lotes de 10
   a 30 ha**, con 4 ha de servicios a la entrada, del lado de la MEX-185.
-- **Los empleos:** 60.5 por hectárea, 20,043. Un lote de 10 ha da 786 y pide de 0.6 MW
-  (dispositivos médicos) a 5.4 MW (metálicas básicas).
+- **Los empleos:** 61.2 por hectárea, 20,278. Un lote de 10 ha da 795 y pide de 0.6 MW
+  (dispositivos médicos) a 5.5 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** queda a **2.67 km** en línea recta (el DOF dice 4.7).
   Cuesta 121 millones con una cuadrilla (5.6 meses) o 176 con cuatro (2 meses).
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  32.1 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.02 km de su subestación
+  32.4 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.02 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,820 millones con una
   cuadrilla; las vialidades, 728 millones en 16.6 meses, o 1,056 en 5.9 con cuatro.
@@ -1925,12 +1928,12 @@ zona 15 que cierra con una curva; el centro de la curva viene en el renglón que
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **270 ha en 13 lotes de 10
   a 30 ha**, con 4 ha de servicios a la entrada. No hay carretera con número en su vista: la
   MEX-185 queda a 7.5 km.
-- **Los empleos:** 60.5 por hectárea, 21,779. Un lote de 10 ha da 807 y pide de 0.6 MW
+- **Los empleos:** 61.2 por hectárea, 22,035. Un lote de 10 ha da 816 y pide de 0.6 MW
   (dispositivos médicos) a 5.6 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** corre pegada a su lado este: **0.03 km**, 2 millones
   con cuatro cuadrillas y el mínimo de 2 meses.
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  34.8 MW: un banco de la CFE. La línea de 400 kV más cercana queda a 2.63 km de su subestación
+  35.3 MW: un banco de la CFE. La línea de 400 kV más cercana queda a 2.63 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,978 millones con una
   cuadrilla; las vialidades, 791 millones en 17.1 meses, o 1,147 en 6.0 con cuatro.
@@ -1964,12 +1967,12 @@ curvas; el centro de cada una viene en el renglón que sigue al lado que dobla.
 **Lo que es del juego**:
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **137 ha en 10 lotes de 8
   a 20 ha**, con 3 ha de servicios a la entrada, del lado de la vía y la carretera.
-- **Los empleos:** 60.5 por hectárea, 10,838. Un lote de 10 ha da 791 y pide de 0.6 MW
+- **Los empleos:** 61.2 por hectárea, 10,965. Un lote de 10 ha da 800 y pide de 0.6 MW
   (dispositivos médicos) a 5.5 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** pasa por su entrada: **0.03 km**, 2 millones con
   cuatro cuadrillas y el mínimo de 2 meses.
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  17.3 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.41 km de su subestación
+  17.5 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.41 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 984 millones con una
   cuadrilla; las vialidades, 394 millones en 13.8 meses, o 571 en 4.9 con cuatro.
@@ -2009,12 +2012,12 @@ de su cuadro.
 **Lo que es del juego**:
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **380 ha en 14 lotes de 10
   a 40 ha**, con 5 ha de servicios a la entrada.
-- **Los empleos:** 60.5 por hectárea, 30,374. Un lote de 10 ha da 799 y pide de 0.6 MW
-  (dispositivos médicos) a 5.5 MW (metálicas básicas).
+- **Los empleos:** 61.2 por hectárea, 30,731. Un lote de 10 ha da 809 y pide de 0.6 MW
+  (dispositivos médicos) a 5.6 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** queda a **4.5 km** en línea recta. Cuesta 204
   millones con una cuadrilla (5.6 meses) o 296 con cuatro (2 meses).
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  48.6 MW: 2 bancos de la CFE. OpenStreetMap no tiene líneas ni subestaciones a menos de 5 km: la
+  49.2 MW: 2 bancos de la CFE. OpenStreetMap no tiene líneas ni subestaciones a menos de 5 km: la
   línea de 115 kV más cercana queda a 8.48 km de su subestación, y la vista se abre hasta ella.
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 2,758 millones con una
   cuadrilla; las vialidades, 1,103 millones en 18.8 meses, o 1,600 en 6.7 con cuatro.
@@ -2051,12 +2054,12 @@ Interoceánico: 412.54 ha en Ciudad Ixtepec, Oaxaca, junto a la MEX-185D.
 **Lo que es del juego**:
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **315 ha en 13 lotes de 10
   a 40 ha**, con 4 ha de servicios a la entrada, del lado de la MEX-185D.
-- **Los empleos:** 60.5 por hectárea, 24,941. Un lote de 10 ha da 792 y pide de 0.6 MW
+- **Los empleos:** 61.2 por hectárea, 25,233. Un lote de 10 ha da 801 y pide de 0.6 MW
   (dispositivos médicos) a 5.5 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** queda a **3.22 km** en línea recta (el DOF dice 3.5).
   Cuesta 146 millones con una cuadrilla (5.6 meses) o 212 con cuatro (2 meses).
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  39.9 MW: 2 bancos de la CFE. OpenStreetMap no tiene líneas ni subestaciones a menos de 5 km: la
+  40.4 MW: 2 bancos de la CFE. OpenStreetMap no tiene líneas ni subestaciones a menos de 5 km: la
   línea de 115 kV más cercana queda a 7.41 km de su subestación.
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 2,265 millones con una
   cuadrilla; las vialidades, 906 millones en 17.8 meses, o 1,314 en 6.3 con cuatro.
@@ -2094,12 +2097,12 @@ Interoceánico: 246.08 ha en Asunción Ixtaltepec, Oaxaca, con unos 2 km de fren
 **Lo que es del juego**:
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **187 ha en 16 lotes de 4
   a 20 ha**, con 4 ha de servicios a la entrada del polígono B. Cada polígono lleva su calle.
-- **Los empleos:** 60.5 por hectárea, 14,877. Un lote de 10 ha da 796 y pide de 0.6 MW
-  (dispositivos médicos) a 5.5 MW (metálicas básicas).
+- **Los empleos:** 61.2 por hectárea, 15,051. Un lote de 10 ha da 805 y pide de 0.6 MW
+  (dispositivos médicos) a 5.6 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** queda al oeste: **0.99 km**. Cuesta 45 millones con
   una cuadrilla (5.6 meses) o 65 con cuatro (2 meses).
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  23.8 MW: un banco de la CFE. La línea de 400 kV más cercana queda a 0.04 km de su subestación
+  24.1 MW: un banco de la CFE. La línea de 400 kV más cercana queda a 0.04 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,351 millones con una
   cuadrilla; las vialidades, 540 millones en 15.2 meses, o 784 en 5.4 con cuatro.
@@ -2134,12 +2137,12 @@ llamados BET (28.42 y 5.23 ha) y uno CERHAN (6.78 ha).
   polígono 1. Cada polígono lleva su calle.
 - **Los sectores:** las industrias que usan material reciclado como materia prima: plástico y hule,
   papel y cartón, y metálicas básicas, con chatarra de fierro (estimación del juego).
-- **Los empleos:** 60.5 por hectárea, 2,444. Un lote de 8 ha da 631 y pide de 1.3 MW (plástico) a
+- **Los empleos:** 61.2 por hectárea, 2,473. Un lote de 8 ha da 638 y pide de 1.3 MW (plástico) a
   4.4 MW (metálicas básicas).
 - **La espuela:** la **Línea VB de Ferrosur** queda a **0.46 km**. Cuesta 21 millones con una
   cuadrilla (5.6 meses) o 30 con cuatro (2 meses).
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  3.9 MW: alcanza. La línea de 230 kV más cercana queda a 1.1 km de su subestación (OpenStreetMap).
+  4.0 MW: alcanza. La línea de 230 kV más cercana queda a 1.1 km de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 222 millones con una cuadrilla;
   las vialidades, 89 millones en 8.9 meses, o 129 en 3.1 con cuatro.
 
@@ -2164,12 +2167,12 @@ circular, de la Semarnat: 20 ha en la ex hacienda de San Pedro Ecatepec, Atlanga
 **Lo que es del juego**:
 - **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **15 ha en 4 lotes de 3 y 4 ha**, con 1 ha de servicios.
 - **Los sectores:** los mismos que en Puebla (estimación del juego).
-- **Los empleos:** 60.5 por hectárea, 1,209. Un lote de 4 ha da 322 y pide de 0.7 MW (plástico) a
+- **Los empleos:** 61.2 por hectárea, 1,223. Un lote de 4 ha da 326 y pide de 0.7 MW (plástico) a
   2.2 MW (metálicas básicas).
 - **La espuela:** la **Línea V de CPKC** queda a **0.46 km**. Cuesta 21 millones con una cuadrilla
   (5.6 meses) o 30 con cuatro (2 meses).
 - **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
-  1.9 MW: alcanza. La línea de 230 kV más cercana queda a 0.92 km de su subestación
+  2.0 MW: alcanza. La línea de 230 kV más cercana queda a 0.92 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 110 millones con una cuadrilla;
   las vialidades, 44 millones en 7.2 meses, o 64 en 2.5 con cuatro.
@@ -4108,6 +4111,17 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
 
+**Capital de la Tecnología: su superficie ([nota aclaratoria](https://dof.gob.mx/nota_detalle.php?codigo=5764007&fecha=29/07/2025), DOF)**
+
+- **El error:** el juego tenía las 275.2 ha del artículo segundo de su declaratoria. Su nota
+  aclaratoria del 29 de julio de 2025 las corrige a 217.68 ha, lo que dan sus cinco cuadros de
+  construcción (217.71 ha); antes solo se había leído el cambio de nombre.
+- **El arrastre:** los empleos de un polo sin cifra propia salen de los 300 mil de los primeros 15
+  polos del Plan México entre su superficie, y Capital de la Tecnología es uno de ellos. Con 57.5 ha
+  menos, la densidad sube de 60.5 a 61.2 empleos por hectárea, y con ella los empleos de cada polo
+  lleno (1.2 % más), la gente de cada lote y lo que pide de electricidad. Las cifras de los polos por
+  dentro ya son las nuevas; ningún polo cambia de número de bancos de la CFE.
+
 **Ciudad Ixtepec por dentro (DOF)**
 
 - **El meridiano:** la nota de su cuadro da 95°15' O, que lo pone 17.7 km al oeste de su croquis; el
@@ -4429,7 +4443,8 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Reserva Zapotlán**: su nota aclaratoria (29 jul 2025) corrige la superficie a 9,108,169.94
   m² (910.82 ha) y el municipio a Zapotlán de Juárez; el polígono calculado da exactamente eso.
 - **Capital de la Tecnología y la Sostenibilidad** (Puebla): su nota aclaratoria (29 jul 2025)
-  le quita el "Futura" del nombre.
+  le quita el "Futura" del nombre y corrige su superficie de 275.2 a 217.68 ha, lo que dan sus
+  cinco cuadros (217.71 ha).
 - **Parque Hidalgo** (economía circular, Tlaxcoapan y Atitalaquia, 275 ha), declarado el 1 de
   agosto de 2025, **no está**: su declaratoria se abrogó el 23 de julio de 2026.
 

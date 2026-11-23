@@ -409,7 +409,7 @@ polosEnServicio)`) y nace su estación (`sim.versionRed` avisa al tablero que re
 vía). Ya operando y con tren, se llena de empresas en tres años; los empleos (en obra y
 permanentes) van al panel `Erario`. Los empleos del polo lleno (`empleosLleno`) son su cifra
 oficial (Huamantla, Nezahualcóyotl, Parque Industrial Bajío) o su superficie por `EMPLEOS_POR_HA`, los 300 mil empleos de
-los primeros 15 polos entre sus hectáreas (60.5). Las cifras salen de fuentes oficiales y viven en
+los primeros 15 polos entre sus hectáreas (61.2). Las cifras salen de fuentes oficiales y viven en
 `datos/calibracion.json`; la tabla y sus fuentes, en la
 [enciclopedia](docs/enciclopedia.md#construirlos).
 

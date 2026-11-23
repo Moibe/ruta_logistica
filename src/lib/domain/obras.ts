@@ -47,7 +47,7 @@ const PRIMEROS_15 = [
   'capital-tecnologia', 'chetumal', 'topolobampo', 'altamira', 'huamantla', 'tuxpan', 'hermosillo',
 ];
 const haPrimeros = (polosJson as { id: string; ha: number }[]).filter((p) => PRIMEROS_15.includes(p.id)).reduce((s, p) => s + p.ha, 0);
-/** Jobs per hectare the government expects of its polos: their 300 thousand jobs over the land of the first 15 (60.5). */
+/** Jobs per hectare the government expects of its polos: their 300 thousand jobs over the land of the first 15 (61.2). */
 export const EMPLEOS_POR_HA = cifra('empleosPolosPlanMexico') / haPrimeros;
 
 /** Permanent jobs of `polo` when full: its own official figure, or its land at the government's density. */
