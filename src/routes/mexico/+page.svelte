@@ -50,8 +50,8 @@
     pointer-events: auto;
   }
 
-  /* Both folded, the roster would sit on Tijuana's label: it drops below it. */
-  .columna:has(:global(nav.capas.plegado)) > :global(aside.flota.plegado) {
-    margin-top: 3.75rem;
+  /* Both folded, the two bars would sit on Tijuana's label: together, they drop below it. */
+  .columna:has(:global(nav.capas.plegado)):has(:global(aside.flota.plegado)) > :global(nav.capas) {
+    margin-top: 5.5rem;
   }
 </style>

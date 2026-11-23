@@ -76,8 +76,8 @@ saltar al siguiente libre.
   energía y combustibles se excluyen; apagar trenes o barcos cierra su ficha y su trazado). La
   lista de trenes y barcos va debajo de las capas, solo con alguna de las dos encendida. Los dos
   paneles se pliegan con su flecha (la misma de *Vistas*): Capas queda en su título con cuántas
-  capas están encendidas, y la lista en sus pestañas y *＋ Nuevo* (con las dos plegadas, la lista baja
-  60 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
+  capas están encendidas, y la lista en sus pestañas y *＋ Nuevo* (con las dos plegadas, las dos barras
+  bajan juntas 88 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
   los dejó (`state/plegable.svelte.ts`, en `localStorage`, leído al montar porque el tablero se
   arma en el servidor). Las
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, y abajo a la derecha
