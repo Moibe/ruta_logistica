@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { alongLinea, paralela, type GeoInterior, type Lote, type Pt } from '$lib/domain/interiorGeo';
+  import { alongLinea, paralela, recorrido, type GeoInterior, type Lote, type Pt } from '$lib/domain/interiorGeo';
   import { ESPUELA, interior, MVA_BANCO, sinEnergiaLote, SUBESTACION } from '$lib/domain/interior';
   import { POLOS } from '$lib/domain/sitios';
   import { sim } from '$lib/state/simulacion.svelte';
@@ -7,9 +7,11 @@
   import { sector as sectorDe } from '$lib/domain/sectores';
 
   /**
-   * A polo's close-up: its land as the DOF declares it, what's around it
-   * (OpenStreetMap) and its work by fronts, drawn as it advances — the main
-   * road growing down the axis, the water and power lines along it, the
+   * A polo's close-up: its land as the DOF declares it (in pieces, when the
+   * declaratoria gives several or rights of way cross it), what's around it
+   * (OpenStreetMap) and its work by fronts, drawn as it advances — each
+   * piece's main road growing down its axis, one piece after another, the
+   * water and power lines along them, the
    * substation, the services centre, the rail spur from the main line — with
    * the crews where each front is being worked. When it operates, its lots
    * fill with companies.
@@ -38,7 +40,7 @@
   const LIBRE = { izq: 290, der: 340, arriba: 96, abajo: 70 };
 
   function encuadrar() {
-    const pts: Pt[] = [...geo.poligono, ...geo.espuela.puntos];
+    const pts: Pt[] = [...geo.piezas.flatMap((q) => q.puntos), ...geo.espuela.puntos];
     const xs = pts.map((p) => p[0]);
     const ys = pts.map((p) => p[1]);
     const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
@@ -128,10 +130,12 @@
     return c.length ? { texto: c[0].ref!, p } : null;
   });
 
-  /** The road's axis, from the entrance. */
-  const eje = $derived(geo.eje as [Pt, Pt]);
-  const ejeAgua = $derived(paralela(eje, 9));
-  const ejeLuz = $derived(paralela(eje, -9));
+  /** Each piece's road axis, from its entrance; the services' piece first. */
+  const ejes = $derived(geo.ejes as [Pt, Pt][]);
+  const ejesAgua = $derived(ejes.map((e) => paralela(e, 9)));
+  const ejesLuz = $derived(ejes.map((e) => paralela(e, -9)));
+  /** The services' piece's road. */
+  const eje = $derived(ejes[0]);
   const anguloEje = $derived((Math.atan2(-(eje[1][1] - eje[0][1]), eje[1][0] - eje[0][0]) * 180) / Math.PI);
   /** The spur, from the main track to the polo. */
   const espuela = $derived([geo.espuela.puntos[1], geo.espuela.puntos[0]] as [Pt, Pt]);
@@ -158,6 +162,10 @@
   /** Power: the first half of the front is the connection to the line, the second the network inside. */
   const luzConexion = $derived(Math.min(1, estado.av.energia * 2));
   const luzAdentro = $derived(Math.max(0, estado.av.energia * 2 - 1));
+  /** Roads, water and the power network inside, built piece after piece. */
+  const obraVial = $derived(recorrido(ejes, estado.av.vialidades));
+  const obraAgua = $derived(recorrido(ejesAgua, estado.av.agua));
+  const obraLuz = $derived(recorrido(ejesLuz, luzAdentro));
 
   /** Each company lot now: how far its company has moved in, and the sector it's promoted for. In Realidad, all sold. */
   const ocupado = $derived.by(() => {
@@ -183,9 +191,9 @@
     const c = estado.cu;
     const av = estado.av;
     const lugar: [number, Pt][] = [
-      [c.vialidades, alongLinea(eje, av.vialidades)],
-      [c.agua, alongLinea(ejeAgua, av.agua)],
-      [c.energia, av.energia < 0.5 ? alongLinea(conexion, luzConexion) : alongLinea(ejeLuz, luzAdentro)],
+      [c.vialidades, obraVial.punta],
+      [c.agua, obraAgua.punta],
+      [c.energia, av.energia < 0.5 ? alongLinea(conexion, luzConexion) : obraLuz.punta],
       [c.servicios, geo.servicios.centro],
       [c.espuela, alongLinea(espuela, av.espuela)],
       [c.subestacion, geo.servicios.subestacion],
@@ -193,12 +201,13 @@
     return lugar.flatMap(([n, p], f) => Array.from({ length: n }, (_, i) => ({ f, i, p })));
   });
 
-  /** Lamp posts every 45 m on both sides of the road, once it's lit. */
-  const faroles = $derived.by(() => {
-    const largo = Math.hypot(eje[1][0] - eje[0][0], eje[1][1] - eje[0][1]);
-    const n = Math.floor(largo / 45);
-    return [paralela(eje, 14), paralela(eje, -14)].flatMap((l) => Array.from({ length: n + 1 }, (_, i) => alongLinea(l, i / n)));
-  });
+  /** Lamp posts every 45 m on both sides of each road, once they're lit. */
+  const faroles = $derived(
+    ejes.flatMap((e) => {
+      const n = Math.max(1, Math.floor(Math.hypot(e[1][0] - e[0][0], e[1][1] - e[0][1]) / 45));
+      return [paralela(e, 14), paralela(e, -14)].flatMap((l) => Array.from({ length: n + 1 }, (_, i) => alongLinea(l, i / n)));
+    })
+  );
 
   // ---- hover --------------------------------------------------------------------------------
 
@@ -307,7 +316,17 @@
     {/each}
 
     <!-- The polo. -->
-    <path d={anillo(geo.poligono)} class="terreno" class:urbanizado style:--polo={POLO} />
+    {#each geo.piezas as q, i (i)}
+      <path
+        d={anillo(q.puntos)}
+        class="terreno"
+        class:urbanizado
+        style:--polo={POLO}
+        role="presentation"
+        onpointerenter={q.nombre ? ver(q.nombre, `${q.ha.toLocaleString('es-MX')} ha`, 'Predio del polo según su declaratoria (DOF)') : undefined}
+        onpointerleave={q.nombre ? salir : undefined}
+      />
+    {/each}
     {#each geo.lotes as l, i (i)}
       {@const n = numeroLote.get(l) ?? 0}
       {@const o = ocupado.get(l)}
@@ -341,7 +360,8 @@
       />
       {#if l.tipo === 'empresa' && l.puntos.length}
         {@const c = l.puntos.reduce((s, p) => [s[0] + p[0] / l.puntos.length, s[1] + p[1] / l.puntos.length], [0, 0])}
-        {#if l.ha >= 2 || vista.mpp < 0.9}
+        <!-- Only where it fits: a lot about 50 px across or more on screen. -->
+        {#if Math.sqrt(l.ha * 1e4) / vista.mpp > 50}
           <text x={c[0]} y={-c[1]} font-size={10 * fs} class="rotulo lote-rotulo" text-anchor="middle">
             {realidad && l.empresa ? l.empresa : `Lote ${n}`} · {sec ? sec.corto : `${l.ha.toLocaleString('es-MX')} ha`}
           </text>
@@ -349,11 +369,24 @@
       {/if}
     {/each}
 
-    <!-- Front: roads and lighting. The axis is the main road, planned until built. -->
-    <path d={anillo(geo.vialidad)} class="vialidad-plan" />
-    {#if estado.av.vialidades > 0}
-      <path d={linea([eje[0], alongLinea(eje, estado.av.vialidades)])} class="vialidad" />
-    {/if}
+    <!-- Rights of way: left out of the land (a highway, a track) or crossing it (a pipeline). -->
+    {#each geo.franjas as f, i (i)}
+      <path
+        d={anillo(f.puntos)}
+        class="franja {f.tipo}"
+        role="presentation"
+        onpointerenter={ver(f.nombre, `${f.ha.toLocaleString('es-MX')} ha`, `${f.nota}.`)}
+        onpointerleave={salir}
+      />
+    {/each}
+
+    <!-- Front: roads and lighting. Each piece's axis is its main road, planned until built. -->
+    {#each geo.vialidades as v, i (i)}
+      <path d={anillo(v)} class="vialidad-plan" />
+    {/each}
+    {#each obraVial.hechos as h, i (i)}
+      <path d={linea(h)} class="vialidad" />
+    {/each}
     {#if estado.av.vialidades >= 1}
       {#each faroles as f, i (i)}
         <circle cx={f[0]} cy={-f[1]} r={1.6 * fs} class="farol" />
@@ -361,9 +394,9 @@
     {/if}
 
     <!-- Front: water and drainage. -->
-    {#if estado.av.agua > 0}
-      <path d={linea([ejeAgua[0], alongLinea(ejeAgua, estado.av.agua)])} class="tubo" stroke={AGUA} />
-    {/if}
+    {#each obraAgua.hechos as h, i (i)}
+      <path d={linea(h)} class="tubo" stroke={AGUA} />
+    {/each}
     <circle
       cx={geo.servicios.tanque[0]}
       cy={-geo.servicios.tanque[1]}
@@ -381,9 +414,9 @@
     {#if luzConexion > 0}
       <path d={linea([conexion[0], alongLinea(conexion, luzConexion)])} class="cable" stroke={LUZ} />
     {/if}
-    {#if luzAdentro > 0}
-      <path d={linea([ejeLuz[0], alongLinea(ejeLuz, luzAdentro)])} class="cable" stroke={LUZ} />
-    {/if}
+    {#each obraLuz.hechos as h, i (i)}
+      <path d={linea(h)} class="cable" stroke={LUZ} />
+    {/each}
     <rect
       x={geo.servicios.subestacion[0] - 8}
       y={-geo.servicios.subestacion[1] - 8}
@@ -647,6 +680,28 @@
   .lote:hover {
     stroke: #ffe4f1;
     stroke-width: 1.6;
+  }
+
+  .franja {
+    fill: rgba(214, 228, 243, 0.07);
+    stroke: rgba(214, 228, 243, 0.45);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .franja.via {
+    fill: rgba(255, 209, 102, 0.08);
+    stroke: rgba(255, 209, 102, 0.5);
+  }
+
+  .franja.ducto {
+    fill: rgba(251, 146, 60, 0.16);
+    stroke: rgba(251, 146, 60, 0.65);
+  }
+
+  .franja:hover {
+    stroke-width: 1.6;
+    filter: brightness(1.5);
   }
 
   .vialidad-plan {

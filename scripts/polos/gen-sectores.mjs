@@ -59,7 +59,11 @@ const CENSO = {
   311: [1092943, 17833.01, 4260.86],
   3251: [38098, 3203.831, 930.858],
   3252: [18532, 2789.304, 211.388],
+  3253: [13902, 996.036, 514.283],
   3254: [88699, 1833.739, 542.717],
+  3255: [24452, 593.639, 276.5],
+  3256: [55434, 1118.523, 475.844],
+  3259: [28969, 972.857, 193.374],
   3344: [196205, 3259.038, 1300.765],
   3353: [74641, 1606.412, 181.077],
   3391: [172298, 1946.929, 438.187],
@@ -109,14 +113,19 @@ const TREN = {
   productosSodio: { t: 152194, exp: 0 },
   oxidoEtileno: { t: 100103, exp: 0 },
   plasticosGranulos: { t: 13163, exp: 0 },
+  // Fertilizers and soaps.
+  fertilizantes: { t: 552357, exp: 0 },
+  fertilizanteAmoniaco: { t: 22861, exp: 0 },
+  jabonPolvo: { t: 5136, exp: 0 },
 };
 
 /**
- * The polo's vocations (Huamantla's declaratoria) as SCIAN subsectors, and the rail products that
+ * The polos' vocations (their declaratorias) as SCIAN subsectors, and the rail products that
  * are theirs. A sector with no products of its own in the yearbook ships in containers: it gets
  * the containers' tonnes per manufacturing worker (an estimate).
  */
 const SECTORES = [
+  // Huamantla's.
   { id: 'textil', nombre: 'Industria textil', corto: 'Textil', scian: ['313', '314'], productos: [], color: '#f9a8d4' },
   { id: 'metalicas', nombre: 'Industrias metálicas básicas', corto: 'Metálicas básicas', scian: ['331'], productos: ['laminas', 'fierroConstruccion', 'billetsAluminio', 'lingoteZinc', 'hojaAluminio', 'barrasPlomo'], color: '#fca5a5' },
   { id: 'productos-metalicos', nombre: 'Fabricación de productos metálicos', corto: 'Productos metálicos', scian: ['332'], productos: [], color: '#fdba74' },
@@ -146,6 +155,15 @@ const SECTORES = [
   { id: 'dispositivos-medicos', nombre: 'Dispositivos médicos', corto: 'Dispositivos médicos', scian: ['3391'], productos: [], color: '#99f6e4' },
   { id: 'semiconductores', nombre: 'Semiconductores (componentes electrónicos)', corto: 'Semiconductores', scian: ['3344'], productos: [], color: '#4ade80' },
   { id: 'generacion-electrica', nombre: 'Equipo de generación y distribución de electricidad', corto: 'Equipo eléctrico', scian: ['3353'], productos: [], color: '#38bdf8' },
+  // Altamira's: the chemical industry that isn't basic chemicals, resins or pharmaceuticals.
+  {
+    id: 'quimica',
+    nombre: 'Química (fertilizantes, pinturas, jabones y otros)',
+    corto: 'Química',
+    scian: ['3253', '3255', '3256', '3259'],
+    productos: ['fertilizantes', 'fertilizanteAmoniaco', 'jabonPolvo'],
+    color: '#e879f9',
+  },
 ];
 
 const [pMan, eMan, aMan] = CENSO['31-33'];
@@ -180,7 +198,7 @@ const sectores = SECTORES.map((s) => {
 });
 
 const datos = {
-  corte: '2026-11-22',
+  corte: '2026-11-23',
   nota: 'Generado por scripts/polos/gen-sectores.mjs.',
   fuentes: FUENTES,
   manufactura: { personal: pMan, electricidadPorTrabajador: Math.round(elecMan * 1e6), aguaPorTrabajador: Math.round(aguaMan * 1e6), contenedoresPorTrabajador: r(contPorTrab, 2) },

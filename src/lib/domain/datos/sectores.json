@@ -1,5 +1,5 @@
 {
- "corte": "2026-11-22",
+ "corte": "2026-11-23",
  "nota": "Generado por scripts/polos/gen-sectores.mjs.",
  "fuentes": {
   "inegi-ce2019": {
@@ -236,6 +236,23 @@
    "toneladas": 1.49,
    "exportacion": 0.3,
    "enContenedores": true
+  },
+  {
+   "id": "quimica",
+   "nombre": "Química (fertilizantes, pinturas, jabones y otros)",
+   "corto": "Química",
+   "scian": [
+    "3253",
+    "3255",
+    "3256",
+    "3259"
+   ],
+   "color": "#e879f9",
+   "personal": 122757,
+   "energia": 1.21,
+   "agua": 1.72,
+   "toneladas": 4.73,
+   "exportacion": 0
   }
  ],
  "dato": "Lo que pide una empresa de cada sector, por trabajador, en 2018: su gasto en electricidad y en agua contra el promedio de la manufactura (INEGI, Censos Económicos 2019), y las toneladas que movió el tren de sus productos entre su personal ocupado, con la parte que salió del país (ARTF, anuario 2018). Los sectores sin productos propios en el anuario mandan su carga en contenedores: les toca lo que llevaron los contenedores por trabajador de la manufactura (estimación del juego).",

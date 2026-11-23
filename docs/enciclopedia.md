@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 22 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y los polos de Huamantla y Coatzacoalcos I por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y los polos de Huamantla, Coatzacoalcos I, Texistepec y Altamira por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -668,7 +668,8 @@ publicada. Eso da **60.5 empleos por hectárea**, cerca de los 66 de Nezahualcó
 
 Un polo puede tener **vista por dentro**: en su ficha, *Entrar al polo ›* lleva la cámara del
 tablero hasta él y abre su acercamiento (`/mexico/polo/huamantla`). Por ahora la tienen
-Huamantla y [Coatzacoalcos I](#coatzacoalcos-i-por-dentro). El reloj sigue corriendo adentro, con el
+Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texistepec-por-dentro) y
+[Altamira](#altamira-por-dentro). El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
 **Qué se ve.** El terreno tal como lo declara el DOF, y lo que hay alrededor según
@@ -906,8 +907,184 @@ repartidos en sus 197 ha de lotes):
 - **Tecnologías de la información** no es manufactura, así que el juego no la ofrece para un lote.
 - \* En contenedores (estimación del juego, como en Huamantla).
 
-En Realidad el polo está declarado y sin obra reportada; sus lotes dicen «Sin empresa
-reportada».
+**En la realidad**, la Presidenta dijo el 19 de febrero de 2025 que Coatzacoalcos I, Coatzacoalcos
+II y Salina Cruz ya estaban licitados y concesionados a Desarrolladora Multimodal del Istmo, para
+distribuir vehículos y autopartes, con 90 % de avance en sus estudios (versión estenográfica de
+Presidencia). En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir
+cuáles. No se ha reportado obra: en Realidad sus lotes dicen «Sin empresa reportada».
+
+### Un polo en varias piezas
+
+Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
+- **Texistepec:** el DOF le quita a un polígono general los derechos de vía de una autopista y de
+  una vía que lo cruzan, y quedan tres predios separados.
+- **Altamira:** son tres polígonos a varios kilómetros uno de otro.
+
+El juego arma cada pieza como un polo chico:
+- **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
+  carretera, con sus lotes a los dos lados.
+- **Servicios:** la pieza que los tiene (la subestación, el tanque de agua y el centro de
+  servicios) va primero.
+- **Obra:** los frentes de vialidades, agua y energía avanzan por las calles una tras otra, en ese
+  orden; las cuadrillas trabajan donde va cada frente.
+- **Franjas:** se dibujan los derechos de vía excluidos. Si una franja cruza una pieza (el
+  gasoducto de Altamira), ningún lote se pone encima: el lote que no cabe antes de ella va
+  después.
+- **Comprobación:** el generador compara cada tabla con su área declarada (el polígono general,
+  cada franja y la suma de las piezas).
+
+### Texistepec por dentro
+
+El tercer polo con vista por dentro (`/mexico/polo/texistepec`), del Corredor Interoceánico:
+462.39 ha entre Texistepec y Jáltipan, Veracruz, donde la autopista La Tinaja–Cosoleacaque
+(MEX-145D) cruza la línea Z del Ferrocarril del Istmo.
+
+**El terreno**, de su declaratoria (DOF, 12 de mayo de 2023): cuatro cuadros de construcción en
+UTM zona 15, con el rumbo y la distancia de cada lado y el centro y el radio de cada curva.
+- **El polígono general:** 484.99 ha calculadas, contra 484.94 declaradas.
+- **Las franjas que se le quitan:** el derecho de vía de la autopista 145D (8.54 ha) y el de la
+  línea Z (14.05 ha calculadas, contra 14.00 declaradas).
+- **Las tres piezas que quedan:**
+
+  | Predio | Superficie |
+  | --- | ---: |
+  | Al sur de la autopista | 192.77 ha |
+  | Al norte de la autopista | 167.58 ha |
+  | Al oeste de la vía | 102.04 ha |
+
+- **Resultado:** las tres suman 462.3944 ha contra las 462.3909 declaradas.
+- **Correcciones:** se corrigió una errata del vértice 10A y se usó el radio que dan los vértices
+  y el centro de la curva grande de la vía (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+- **La vía Z:** cruza el polo con una curva de 88° y 330 a 400 m de radio.
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Tren y carretera:** es «aledaño a la línea Z, en su tramo Medias Aguas–Coatzacoalcos» y tiene
+  frente sobre la MEX-145D.
+- **Puerto y aeropuerto:** está a 37 km del puerto de Coatzacoalcos y a 39.6 km del aeropuerto de
+  Minatitlán.
+- **Uso de suelo:** es reserva territorial industrial.
+- **Propietario:** el Corredor Interoceánico, que lo compró en diciembre de 2020.
+- **Vocaciones:** las mismas once que Coatzacoalcos I.
+
+**Lo que es del juego**:
+- **Los lotes:** no hay lotes ni empresas publicados. El juego les da la parte del terreno que
+  Coatzacoalcos I tiene de uso industrial (76.46 %): **353 ha en 18 lotes de 8 a 30 ha**.
+  - Por predio: 8 lotes al sur de la autopista, 6 al norte y 4 al oeste de la vía.
+  - Los servicios tienen 4 ha a la entrada del predio sur, junto a la autopista.
+  - Lo demás, 72 ha, es área común y reserva.
+- **Las calles:** tres, una por predio, de 3.2, 2.3 y 1.6 km.
+- **La espuela:** como la línea Z pasa entre sus predios, son **0.03 km**: el tramo de la vía al
+  predio más cercano, con su cambio de vía.
+  - Al precio por km del ramal a Dos Bocas cuesta 2 millones con 4 cuadrillas y tarda el
+    mínimo, 2 meses.
+  - Es el polo más barato de conectar al tren.
+- **La energía:** no hay cifra oficial; le tocan los **8 MW** de un polo sin cifra.
+  - La línea de 115 kV más cercana pasa al norte, a 3.86 km de su subestación (OpenStreetMap).
+  - Lleno de industria promedio (27,954 empleos, 60.5 por hectárea) pediría 44.7 MW.
+  - Un lote de 20 ha da 1,584 empleos y pide lo mismo que en Coatzacoalcos I (ver la tabla de
+    arriba): de 1.2 MW si es de dispositivos médicos a 10.9 MW si es una metalúrgica.
+- **Los frentes y su costo:** son los de Huamantla.
+  - Su obra completa cuesta 2,539 millones con una cuadrilla.
+  - Las vialidades solas: 1,015 millones en 18.4 meses con una cuadrilla, o 1,472 millones en
+    6.5 con cuatro.
+
+**En la realidad**:
+- **Licitación:** la ganó el consorcio de Profharmax y Transportadora Comexsa (fallo del 17 de
+  noviembre de 2023, DOF).
+- **Concesión:** la Presidenta lo dio por concesionado el 19 de febrero de 2025.
+- **2026:** el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles.
+- **Obra:** no se ha reportado obra ni empresas.
+
+### Altamira por dentro
+
+El cuarto polo con vista por dentro (`/mexico/polo/altamira`), del Plan México y el más grande:
+1,637.78 ha junto al puerto industrial de Altamira, Tamaulipas.
+
+**El terreno**, de su declaratoria (DOF, 21 de octubre de 2025): tres polígonos en UTM zona 14,
+cuyas áreas calculadas dan las declaradas.
+
+| Polígono | Superficie |
+| --- | ---: |
+| GOB 3, al norte | 955.16 ha |
+| PRODET | 37.74 ha |
+| GOB 2, al sur | 644.88 ha |
+
+- **Su tamaño:** de punta a punta mide **18 km de norte a sur**, y GOB 3 y GOB 2 tienen de 0.7 a
+  1.7 km de ancho.
+- **El gasoducto:** la declaratoria trae además la servidumbre de paso de la interconexión al
+  gasoducto Texas–Tuxpan (2.34 ha), que cruza GOB 3 de lado a lado. El texto dice que se resta,
+  pero su resumen no la resta (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)). El
+  juego la dibuja y no pone lotes en ella.
+- **El marcador:** el que el juego ya tenía cae dentro de GOB 3.
+
+**Lo que dice la declaratoria**:
+- **Carretera y aeropuerto:** está a 7 km de la carretera federal 80 y a 17 km del aeropuerto de
+  Tampico.
+- **Tren y puerto:** tiene el puerto de Altamira, de 13.5 m de calado, y dos ferrocarriles que lo
+  sirven, Ferromex y CPKC.
+- **Uso de suelo y servicios:** el uso de suelo es industrial y el polígono ya «dispone de
+  vialidades, energía eléctrica, agua potable, drenaje y conectividad», con «opciones
+  identificadas para ampliar la disponibilidad de energía en el mediano plazo».
+- **Propietario:** el Gobierno de Tamaulipas.
+- **Vocaciones:** automotriz, química, farmacéutica, petroquímica, eléctrica-electrónica,
+  metalmecánica, manufactura avanzada y logística.
+
+**Lo que es del juego**:
+- **Las entradas:** en OpenStreetMap no hay carretera federal junto al polo. Cada polígono se
+  abre hacia las troncales del puerto: el Boulevard de los Ríos (TAM 113) y el Libramiento Luis
+  Donaldo Colosio (TAM 143), al sur.
+- **Los lotes:** el juego les da la misma parte que Coatzacoalcos I (76.46 %): **1,218 ha en 28
+  lotes de 14 a 80 ha**, del tamaño de las plantas químicas del puerto.
+  - Por polígono: 14 lotes en GOB 3, 2 en PRODET y 12 en GOB 2.
+  - Los servicios tienen 6 ha a la entrada de GOB 3.
+  - Lo demás, 337 ha, es área común y reserva.
+- **Las calles:** tres, de 6.8, 0.9 y 8.5 km.
+- **La espuela:** va de la **Línea MB de Ferromex**, la vía principal más cercana, a GOB 2:
+  **0.32 km**. Cuesta 21 millones con 4 cuadrillas y tarda el mínimo, 2 meses.
+- **La energía:** no hay cifra oficial; le tocan los **8 MW** de un polo sin cifra.
+  - Su subestación queda a 1.43 km de la línea de 115 kV de las subestaciones del puerto (Puerto
+    5 Norte, la más cercana).
+  - Lleno de industria promedio (99,013 empleos) pediría 158 MW: necesitará muchos bancos de
+    la CFE.
+- **Los frentes y su costo:** son los de Huamantla. Su obra completa cuesta 8,991 millones con
+  una cuadrilla; las vialidades solas tardan 26.9 meses con una cuadrilla y 9.5 con cuatro.
+
+Lo que pide cada uno de sus sectores en un lote de 40 ha (3,252 empleos: los 99,013 del polo
+repartidos en sus 1,218 ha de lotes):
+
+| Sector | SCIAN | Personal ocupado (2018) | Luz | Agua | t por trabajador al año | Exporta | MW | t al año por tren |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Equipo de transporte | 336 | 1,292,372 | 1.22× | 1.50× | 5.03 | 83 % | 6.3 MW | 16,356 t |
+| Química (fertilizantes, pinturas, jabones y otros) | 3253, 3255, 3256, 3259 | 122,757 | 1.21× | 1.72× | 4.73 | 0 % | 6.3 MW | 15,380 t |
+| Farmacéutica | 3254 | 88,699 | 0.84× | 0.89× | 1.49* | 30 % | 4.4 MW | 4,845 t |
+| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 22.3 MW | 488,757 t |
+| Equipo de computación y electrónico | 334 | 377,625 | 0.73× | 0.79× | 1.49* | 30 % | 3.8 MW | 4,845 t |
+| Aparatos eléctricos | 335 | 241,221 | 0.99× | 0.53× | 1.91* | 45 % | 5.2 MW | 6,211 t |
+| Fabricación de productos metálicos | 332 | 454,118 | 0.65× | 0.26× | 1.49* | 30 % | 3.4 MW | 4,845 t |
+| Maquinaria y equipo | 333 | 192,577 | 1.17× | 0.52× | 1.49* | 30 % | 6.1 MW | 4,845 t |
+
+- **Química** es un sector nuevo, con el resto de la industria química del censo: fertilizantes
+  (3253), pinturas y adhesivos (3255), jabones y cosméticos (3256) y otros productos químicos
+  (3259).
+  - **Lo que gasta:** 1.21 veces la luz y 1.72 veces el agua del promedio de la manufactura.
+  - **Por tren** (ARTF, 2018) mueve sus fertilizantes (552 mil toneladas), el amoniaco
+    fertilizante (23 mil) y el jabón en polvo (5 mil).
+  - **Exporta:** ninguno de los tres está entre los 20 productos que más se exportan por tren.
+- **Las vocaciones del DOF en sectores:** la petroquímica sigue siendo la química básica y las
+  resinas; metalmecánica son los productos metálicos y la maquinaria, y la eléctrica-electrónica,
+  el equipo electrónico y los aparatos eléctricos.
+- **Lo que el juego no ofrece:** manufactura avanzada no es un sector del censo y logística no
+  es manufactura, así que no se ofrecen para un lote.
+- **La petroquímica:** un lote de 40 ha manda casi medio millón de toneladas al año, unos 200
+  trenes, y pide 22 MW, casi tres veces lo que el polo da al arrancar.
+- \* En contenedores (estimación del juego, como en Huamantla).
+
+**En la realidad**, el 18 de febrero de 2026 Tamaulipas y la federación firmaron el convenio del
+polo. En marzo seguía en su fase de formalización, la primera de tres (formalización,
+desarrollo, inversión productiva), rumbo a su fideicomiso (Gobierno municipal de Altamira). No
+se ha reportado obra ni empresas.
 
 ---
 
@@ -2795,6 +2972,11 @@ los otros dos aún no se capturan.
   empresas: promueve cada lote para un sector de las vocaciones de la declaratoria, y las
   empresas llegan solas si hay tren y energía. Cada sector pide distinto (electricidad, agua,
   carga), así que escoger es decidir qué tren y cuánta energía necesitará el polo.
+- **Un polo en varias piezas se arma pieza por pieza.** *(23 nov 2026.)* Cuando la declaratoria
+  parte el terreno (franjas que lo cruzan, polígonos separados), cada pieza lleva su calle y sus
+  lotes como un polo chico, y la obra avanza por las calles una tras otra. Se dibujan las
+  franjas excluidas, y donde una cruza una pieza no va ningún lote. Así el terreno se respeta
+  como lo declara el DOF, en vez de dibujar un rectángulo que pase sobre una autopista.
 - **Los lugares tienen vista por dentro.** *(22 nov 2026.)* Entrar a un sitio lo muestra de cerca,
   con lo que se puede hacer ahí. Se empezó por un polo, Huamantla, el único terminado en la
   realidad: su obra se maneja por frentes, cada uno con sus cuadrillas, y su tren llega por una
@@ -2813,6 +2995,34 @@ los otros dos aún no se capturan.
 ## 12. Bitácora de correcciones a los datos
 
 Todo lo que se cambió respecto a las fuentes, y por qué.
+
+### 23 de noviembre de 2026
+
+**Texistepec por dentro (DOF)**
+
+- **Vértice 10A del derecho de vía de la línea Z:** dice 1´982,986.5187 de norte, pero el lado
+  que llega a él desde el vértice 10 («S 16°32'50.56" W, 3.1184 m») termina en 1,981,986.52. Es
+  un dígito equivocado; con el número original la franja hacía un pico de un kilómetro y medía
+  12.03 ha en vez de 14.00.
+- **La curva grande de la vía:** los dos bordes de la franja giran alrededor del mismo centro
+  (CT2), a 329.82 m el de adentro y a 399.82 m el de afuera. El renglón de la curva de afuera
+  dice 477.819 m de radio y 13°20' de ángulo, lo que no cuadra con sus propios vértices ni con su
+  centro; se usa el radio que dan ellos.
+- **Resultado:** las tres piezas suman 462.3944 ha contra las 462.3909 declaradas.
+
+**Altamira por dentro (DOF)**
+
+- **La servidumbre del gasoducto:** la declaratoria dice que la superficie resulta «de la suma de
+  las áreas de los tres polígonos y restando el derecho de vía de la interconexión al gasoducto
+  Texas-Tuxpan», pero su resumen no resta nada: 955.16 + 644.88 + 37.74 = 1,637.78 ha, lo
+  declarado. La servidumbre (2.34 ha) queda dentro de GOB 3. El juego toma las 1,637.78 ha, la
+  dibuja y no pone lotes en ella.
+
+**Coatzacoalcos I en la realidad**
+
+- **Antes** decía que no había licitación reportada.
+- **Ahora** dice que la Presidenta lo dio por concesionado a Desarrolladora Multimodal del Istmo
+  el 19 de febrero de 2025.
 
 ### 22 de noviembre de 2026
 
@@ -3080,6 +3290,10 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Frente de obra**: una parte de la obra de un polo que avanza por su lado (las calles, el
   agua, la energía, los servicios, la espuela), con sus propias cuadrillas.
 - **Espuela**: el ramal corto de vía que une un polo o una planta con la línea principal.
+- **Derecho de vía**: la franja de terreno de una carretera, una vía o un ducto, a los lados de
+  la obra. Una declaratoria puede excluirlo del polo (Texistepec).
+- **Servidumbre de paso**: el derecho de pasar por un terreno ajeno, por ejemplo con un ducto,
+  sin ser su dueño (el gasoducto que cruza Altamira).
 - **Lote**: el pedazo del polo que compra una empresa para poner su nave.
 - **Promover un lote**: en el juego, ofrecerlo a empresas de un sector; solo a un lote promovido
   llega empresa.

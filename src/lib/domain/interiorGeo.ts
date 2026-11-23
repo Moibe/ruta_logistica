@@ -13,12 +13,16 @@ export type GeoInterior = {
   id: string;
   centro: { lon: number; lat: number };
   caja: { x0: number; x1: number; y0: number; y1: number };
-  poligono: Pt[];
+  /** The land: one ring per piece of the declaratoria (named when there are several). */
+  piezas: { nombre: string | null; ha: number; puntos: Pt[] }[];
+  /** Rights of way the declaratoria leaves out of the land (a highway, a track) or that cross it (a pipeline's easement). */
+  franjas: { nombre: string; tipo: 'carretera' | 'via' | 'ducto'; ha: number; nota: string; puntos: Pt[] }[];
   areaM2: number;
   perimetroM: number;
   lotes: Lote[];
-  vialidad: Pt[];
-  eje: [Pt, Pt];
+  /** Each piece's main road, the services' piece first: the order they're built in. */
+  vialidades: Pt[][];
+  ejes: [Pt, Pt][];
   servicios: { centro: Pt; subestacion: Pt; tanque: Pt };
   /** From the polo's boundary (first point) to the main track (second). */
   espuela: { puntos: [Pt, Pt]; km: number; via: string; operador: string };
@@ -54,6 +58,26 @@ export function alongLinea(puntos: Pt[], t: number): Pt {
     resta -= largos[i];
   }
   return puntos[puntos.length - 1];
+}
+
+/**
+ * Work that runs along several lines one after another (the roads of a polo's
+ * pieces), a share `t` (0–1) done: the stretch built on each line and where
+ * the work is now.
+ */
+export function recorrido(lineas: [Pt, Pt][], t: number): { hechos: [Pt, Pt][]; punta: Pt } {
+  const largos = lineas.map(([a, b]) => Math.hypot(b[0] - a[0], b[1] - a[1]));
+  let resta = Math.max(0, Math.min(1, t)) * largos.reduce((s, l) => s + l, 0);
+  const hechos: [Pt, Pt][] = [];
+  let punta = lineas[0][0];
+  for (const [i, l] of lineas.entries()) {
+    if (resta <= 0) break;
+    const u = largos[i] > 0 ? Math.min(1, resta / largos[i]) : 1;
+    punta = alongLinea(l, u);
+    hechos.push([l[0], punta]);
+    resta -= largos[i];
+  }
+  return { hechos, punta };
 }
 
 /** A line `d` metres to the left of the segment a→b. */

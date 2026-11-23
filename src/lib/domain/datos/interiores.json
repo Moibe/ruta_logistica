@@ -38,6 +38,34 @@
    "fuente": "CFE, Programas y Proyectos de Inversión 2024 (cierre de diciembre): cada proyecto con su descripción, sus MVA y km-c, sus fechas y su costo total, entre ellos los de subestaciones de distribución y las subestaciones Kantenah y Leona Vicario",
    "url": "https://portales-transparencia.cfe.mx/corporativo/31%20Informe%20presupuestl%20balance%20general%20y%20estado%20fi/Direcci%C3%B3n%20Corporativa%20de%20Finanzas/Gerencia%20de%20Presupuestos/2024/Cartera%20de%20CFE%20pre%20cierre%20DIC%2010012025%204o%20trim.pdf"
   },
+  "presidencia-istmo-2025": {
+   "fuente": "Presidencia, versión estenográfica de la conferencia del 19 de febrero de 2025: los polos de Coatzacoalcos I, Coatzacoalcos II y Salina Cruz, «licitados y concesionados a la empresa Desarrolladora Multimodal del Istmo», con 90 % de avance en sus estudios; los de Texistepec, San Juan Evangelista, Matías Romero y Santa María Mixtequilla, «concesionados a empresas nacionales que se llaman Proistmo y Profharmax»",
+   "url": "https://www.gob.mx/presidencia/es/articulos/version-estenografica-conferencia-de-prensa-de-la-presidenta-claudia-sheinbaum-pardo-del-19-de-febrero-de-2025?idiom=es"
+  },
+  "piciit-2026": {
+   "fuente": "CIIT, Informe anual de avance y resultados del PICIIT 2025–2026: cinco polos del Istmo concesionados, tras tres concesionarios que incumplieron y uno que renunció (no dice cuáles)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/1100578/Informe_anual_de_avance_y_resultados_PICIIT_2025_2026.pdf"
+  },
+  "dof-texistepec": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Texistepec (12 de mayo de 2023): cuadros de construcción de la poligonal general (484.94 ha) y de los derechos de vía de la carretera federal 145D (8.54 ha) y de la línea Z (14.00 ha), que se excluyen; 462.39 ha en Texistepec y Jáltipan; aledaño a la línea Z, con frente a la MEX-145D, a 37 km del puerto de Coatzacoalcos; sus vocaciones productivas y su propiedad (el Corredor Interoceánico la compró)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5688613&fecha=12/05/2023"
+  },
+  "dof-fallo-texistepec": {
+   "fuente": "DOF, 28 de noviembre de 2023: aviso del fallo de la licitación del polo Texistepec (17 de noviembre), ganada por el consorcio de Profharmax y Transportadora Comexsa",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5709825&fecha=28/11/2023"
+  },
+  "ciit-texistepec-predio": {
+   "fuente": "CIIT, comunicado 013 del 28 de diciembre de 2020: se concreta la compra del predio del polo Texistepec",
+   "url": "https://www.gob.mx/ciit/prensa/se-concreta-la-adquisicion-del-predio-destinado-al-polo-de-desarrollo-para-el-bienestar-en-texistepec-veracruz?idiom=es"
+  },
+  "dof-altamira": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Altamira, Tamaulipas (21 de octubre de 2025): cuadros de construcción de los polígonos GOB 3, GOB 2 y PRODET y de la servidumbre de paso de la interconexión al gasoducto Texas–Tuxpan (UTM 14), 1,637.78 ha; a 7 km de la carretera federal 80, junto al puerto de Altamira (13.5 m de calado), con Ferromex y CPKC; uso de suelo industrial, sus servicios, sus vocaciones productivas y su propiedad (el Gobierno de Tamaulipas)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5770448&fecha=21/10/2025"
+  },
+  "altamira-convenio": {
+   "fuente": "Gobierno municipal de Altamira, 6 de marzo de 2026: el polo está en su fase de formalización (las siguientes son la de desarrollo y la de inversión productiva) tras el convenio del 18 de febrero de 2026 entre el Gobierno de Tamaulipas y el federal, que dará paso a su fideicomiso; el predio, de 1,638 ha, es del Gobierno del estado, en el puerto de Altamira",
+   "url": "https://altamira.gob.mx/2427/2026/03/06/consolidan-estrategia-del-plan-mexico-para-atraer-inversion-a-altamira/"
+  },
   "juego": {
    "fuente": "Estimación del juego",
    "url": ""
@@ -211,11 +239,13 @@
    ],
    "fuentesLista": [
     "dof-coatzacoalcos-i",
+    "presidencia-istmo-2025",
+    "piciit-2026",
     "osm",
     "sict-dos-bocas",
     "energia-polos"
    ],
-   "realNota": "El polo real: declarado el 12 de mayo de 2023 (DOF). En lo que el juego consultó no hay obra, licitación ni empresas reportadas; el Corredor Interoceánico reporta en 2026 cinco polos del Istmo concesionados sin decir cuáles. Sus lotes y su acomodo son del juego.",
+   "realNota": "El polo real: declarado el 12 de mayo de 2023 (DOF). La Presidenta dijo el 19 de febrero de 2025 que, junto con Coatzacoalcos II y Salina Cruz, ya estaba licitado y concesionado a Desarrolladora Multimodal del Istmo para distribuir vehículos y autopartes, con 90 % de avance en sus estudios; en 2026 el Corredor Interoceánico reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra ni empresas: sus lotes y su acomodo son del juego.",
    "frentes": [
     {
      "id": "vialidades",
@@ -357,6 +387,451 @@
     "dato": "Vocaciones productivas de la declaratoria (DOF). Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
     "fuentes": [
      "dof-coatzacoalcos-i"
+    ]
+   }
+  },
+  "texistepec": {
+   "nombre": "Texistepec",
+   "lugar": "Texistepec y Jáltipan, Veracruz",
+   "sectores": [
+    "computacion",
+    "semiconductores",
+    "transporte",
+    "dispositivos-medicos",
+    "farmaceutica",
+    "alimentos",
+    "generacion-electrica",
+    "maquinaria",
+    "metalicas",
+    "petroquimica"
+   ],
+   "fuentesLista": [
+    "dof-texistepec",
+    "ciit-texistepec-predio",
+    "dof-fallo-texistepec",
+    "presidencia-istmo-2025",
+    "piciit-2026",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: el Corredor Interoceánico compró el predio en diciembre de 2020 y lo declaró el 12 de mayo de 2023 (DOF); su licitación la ganó el consorcio de Profharmax y Transportadora Comexsa (fallo del 17 de noviembre de 2023) y la Presidenta lo dio por concesionado el 19 de febrero de 2025. En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha reportado obra ni empresas: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus tres predios lleva su calle; se hacen uno tras otro.",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.03,
+    "via": "Línea Z",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "La línea Z cruza el polo: la declaratoria excluye su derecho de vía, que pasa entre sus predios. La espuela del juego es el tramo de la Línea Z (Ferroistmo) al predio más cercano, 0.03 km (OpenStreetMap), con su cambio de vía: cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-texistepec",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 3.86,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de 115 kV más cercana, la que pasa al norte, queda a 3.86 km de su subestación (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 14,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 16,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 22,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 28,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 14,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 15,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 16,
+      "ha": 18,
+      "empresa": null
+     },
+     {
+      "n": 17,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 18,
+      "ha": 25,
+      "empresa": null
+     }
+    ],
+    "dato": "La declaratoria parte el terreno en tres predios: la autopista 145D y la línea Z lo cruzan y sus derechos de vía se excluyen. No hay lotes ni empresas publicados. El juego les da a los lotes la parte del terreno que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 353 ha en 18 lotes de 8 a 30 ha, y 4 ha de servicios a la entrada del predio al sur de la autopista; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-texistepec",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Eléctrica y electrónica",
+    "Semiconductores",
+    "Automotriz (electromovilidad), autopartes y equipo de transporte",
+    "Dispositivos médicos",
+    "Farmacéutica",
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica (energías limpias)",
+    "Maquinaria y equipo",
+    "Tecnologías de la Información y la Comunicación",
+    "Metales",
+    "Petroquímica"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
+    "fuentes": [
+     "dof-texistepec"
+    ]
+   }
+  },
+  "altamira": {
+   "nombre": "Altamira",
+   "lugar": "Altamira, Tamaulipas",
+   "sectores": [
+    "transporte",
+    "quimica",
+    "farmaceutica",
+    "petroquimica",
+    "computacion",
+    "electricos",
+    "productos-metalicos",
+    "maquinaria"
+   ],
+   "fuentesLista": [
+    "dof-altamira",
+    "altamira-convenio",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 21 de octubre de 2025 (DOF) en terrenos del Gobierno de Tamaulipas, junto al puerto de Altamira. El 18 de febrero de 2026 el estado y la federación firmaron su convenio; en marzo seguía en su fase de formalización, la primera de tres, rumbo a su fideicomiso (Gobierno municipal de Altamira). No se ha reportado obra ni empresas: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el polígono ya «dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad», las del puerto industrial; para lotes de empresas hace falta llevarlas adentro. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus tres polígonos lleva su calle; se hacen uno tras otro.",
+    "fuentes": [
+     "dof-altamira",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.32,
+    "via": "Línea MB",
+    "operador": "Ferromex",
+    "mesesMinimos": 2,
+    "dato": "Dos líneas dan servicio al puerto de Altamira, Ferromex y CPKC (DOF). La espuela del juego va de la Línea MB (Ferromex), la más cercana, a GOB 2: 0.32 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-altamira",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 1.43,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que tiene energía eléctrica, con «opciones identificadas para ampliar la disponibilidad de energía en el mediano plazo». La línea de 115 kV más cercana, la de las subestaciones del puerto, queda a 1.43 km de su subestación (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 80,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 60,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 50,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 50,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 50,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 50,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 60,
+      "empresa": null
+     },
+     {
+      "n": 14,
+      "ha": 80,
+      "empresa": null
+     },
+     {
+      "n": 15,
+      "ha": 14,
+      "empresa": null
+     },
+     {
+      "n": 16,
+      "ha": 14,
+      "empresa": null
+     },
+     {
+      "n": 17,
+      "ha": 60,
+      "empresa": null
+     },
+     {
+      "n": 18,
+      "ha": 50,
+      "empresa": null
+     },
+     {
+      "n": 19,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 20,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 21,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 22,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 23,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 24,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 25,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 26,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 27,
+      "ha": 50,
+      "empresa": null
+     },
+     {
+      "n": 28,
+      "ha": 60,
+      "empresa": null
+     }
+    ],
+    "dato": "Tres polígonos a lo largo de 18 km de norte a sur: GOB 3 (955 ha), PRODET (38 ha) y GOB 2 (645 ha). La declaratoria da uso de suelo industrial a todo y no publica lotes. El juego les da a los lotes la misma parte que Coatzacoalcos I (76.46 % de uso industrial): 1,218 ha en 28 lotes de 14 a 80 ha, del tamaño de las plantas químicas del puerto, y 6 ha de servicios a la entrada de GOB 3; lo demás es área común y reserva (estimación del juego). La servidumbre del gasoducto que cruza GOB 3 queda sin lotes.",
+    "fuentes": [
+     "dof-altamira",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Automotriz",
+    "Química",
+    "Farmacéutica",
+    "Petroquímica",
+    "Industria eléctrica-electrónica",
+    "Metalmecánica",
+    "Manufactura avanzada",
+    "Logística"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, química y petroquímica son dos sectores (la petroquímica es la química básica y las resinas; la química, los fertilizantes, pinturas, jabones y lo demás); metalmecánica son los productos metálicos y la maquinaria, y la eléctrica-electrónica, el equipo electrónico y los aparatos eléctricos. Manufactura avanzada no es un sector del censo y logística no es manufactura: el juego no las ofrece para un lote.",
+    "fuentes": [
+     "dof-altamira"
     ]
    }
   }
