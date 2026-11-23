@@ -6,7 +6,7 @@
 //
 // Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San
 // Jerónimo, Parque Industrial Bajío, Hermosillo, Topolobampo, Puerta Logística del Bajío,
-// Durango, Salina Cruz and Arriaga. Writes:
+// Durango, Salina Cruz, Arriaga, Tapachula I, Tapachula II and Teapa. Writes:
 //   static/data/polos/<id>.json            the geometry, in metres around the polo (fetched by the view)
 //   src/lib/domain/datos/interiores.json   the works by front and the real facts (read by the game)
 //
@@ -1217,6 +1217,217 @@ const ARRIAGA = {
   carretera: /200/,
 };
 
+/**
+ * Tapachula I, from its declaratoria (DOF, 8 Apr 2025): a general polygon «A» in UTM zone 15
+ * (268.73 ha) minus the rights of way of a CFE power line (1.94 ha) and of the rail branch KA
+ * (3.62 ha), which cross it from side to side and leave three pieces, 263.17 ha. Every corner of
+ * the strips lies on a side of the polygon. The tables show three typos:
+ * - the power line's vertex J is written 565,969.702 east; its sides from I and to E put it at
+ *   565,989.702 (a 6 for an 8): with it, the strip gives its 1.9434 ha;
+ * - vertices 55, 56 and 57 lie about 6.7 m off where their sides from 21 and to 58 put them, and
+ *   that's the 0.29 ha the polygon has too many: they're taken from the bearings;
+ * - the side 61→1 says N 33°34' E; its vertices give N 38°34' (the length agrees).
+ * With them, the general polygon gives 268.78 ha and the pieces 263.22 against 263.17.
+ */
+const TAPACHULA_I = {
+  id: 'tapachula-i',
+  zona: 15,
+  piezas: [
+    {
+      nombre: 'Predio sur',
+      servicios: true,
+      vertices: [
+        [566373.205, 1630052.35], [566531.642, 1629855.149], [567041.765, 1629368.544], [567242.342, 1629179.925],
+        [567190.047, 1629106.832], [567218.219, 1629103.683], [567010.725, 1628816.013], [567022.967, 1628803.327],
+        [567002.651, 1628776.155], [567057.573, 1628726.317], [566986.075, 1628628.876], [566837.523, 1628419.562],
+        [566745.228, 1628509.654], [566536.493, 1628205.94], [566624.241, 1628116.137], [566620.224, 1628110.359],
+        [565819.375, 1628903.021], [565951.982, 1629075.629], [566074.126, 1629246.373], [565635.941, 1629621.695],
+        [565540.425, 1629700.276], [565996.298, 1630079.734],
+      ],
+      lotes: [
+        { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 8, lado: 'a' },
+        { ha: 20, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' }, { ha: 5, lado: 'b' },
+      ],
+    },
+    {
+      nombre: 'Predio norte',
+      vertices: [
+        [565219.557, 1629964.254], [565114.716, 1630050.507], [565097.335, 1630027.514], [564830.972, 1630596.08],
+        [565259.485, 1631133.277], [565439.856, 1630944.273], [565493.574, 1631042.409], [565610.132, 1630685.632],
+        [565724.087, 1630597.926],
+      ],
+      lotes: [{ ha: 12, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 12, lado: 'b' }, { ha: 8, lado: 'b' }],
+    },
+    {
+      nombre: 'Predio central',
+      vertices: [
+        [565759.451, 1630570.707], [566110.467, 1630300.547], [566292.281, 1630153.074], [566356.095, 1630073.646],
+        [565989.702, 1630100.266], [565524.703, 1629713.211], [565254.018, 1629935.903],
+      ],
+      lotes: [{ ha: 10, lado: 'a' }, { ha: 6, lado: 'a' }, { ha: 8, lado: 'b' }, { ha: 6, lado: 'b' }],
+    },
+  ],
+  franjas: [
+    {
+      nombre: 'Derecho de vía del ramal KA',
+      tipo: 'via',
+      ha: 3.617361,
+      nota: 'Se excluye del polo (DOF)',
+      vertices: [
+        [565724.087, 1630597.926], [565759.451, 1630570.707], [565254.018, 1629935.903], [565219.557, 1629964.254],
+      ],
+    },
+    {
+      nombre: 'Derecho de vía de la línea eléctrica de la CFE',
+      tipo: 'linea',
+      ha: 1.9434078,
+      nota: 'Se excluye del polo (DOF)',
+      vertices: [
+        [566356.095, 1630073.646], [566373.205, 1630052.35], [565996.298, 1630079.734], [565540.425, 1629700.276],
+        [565524.703, 1629713.211], [565989.702, 1630100.266],
+      ],
+    },
+  ],
+  comprobar: [
+    {
+      nombre: 'Poligonal general',
+      ha: 268.7288794,
+      vertices: [
+        [565259.485, 1631133.277], [565439.856, 1630944.273], [565493.574, 1631042.409], [565610.132, 1630685.632],
+        [566110.467, 1630300.547], [566292.281, 1630153.074], [566531.642, 1629855.149], [567041.765, 1629368.544],
+        [567242.342, 1629179.925], [567190.047, 1629106.832], [567218.219, 1629103.683], [567010.725, 1628816.013],
+        [567022.967, 1628803.327], [567002.651, 1628776.155], [567057.573, 1628726.317], [566986.075, 1628628.876],
+        [566837.523, 1628419.562], [566745.228, 1628509.654], [566536.493, 1628205.94], [566624.241, 1628116.137],
+        [566620.224, 1628110.359], [565819.375, 1628903.021], [565951.982, 1629075.629], [566074.126, 1629246.373],
+        [565635.941, 1629621.695], [565114.716, 1630050.507], [565097.335, 1630027.514], [564830.972, 1630596.08],
+      ],
+    },
+  ],
+  areaDof: 2631681.106,
+  control: null,
+  marcador: { lat: 14.73987, lon: -92.38628 },
+  /**
+   * No lots are published. The game gives each piece about the share Coatzacoalcos I's
+   * declaratoria zones industrial (76.46 %): 200 ha in 17 lots of 5 to 25 ha (an estimate).
+   */
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  carretera: /225/,
+};
+
+/**
+ * Tapachula II, from its declaratoria (DOF, 8 Apr 2025): polygon «C» in UTM zone 15 with two curves
+ * whose centres share the row of the vertex they end at, 149.7186 ha. Every side agrees with its
+ * bearing and length; with the curves, the area is the table's.
+ */
+const TAPACHULA_II = {
+  id: 'tapachula-ii',
+  zona: 15,
+  vertices: [
+    [565607.3, 1628446.857], [565640.063, 1628415.004], [565824.309, 1628233.719], [566077.412, 1627979.99],
+    [566330.515, 1627726.262], [566260.383, 1627633.172], [565825.234, 1627017.148], [565927, 1626906.44],
+    [565874.393, 1626837.838], [565565.342, 1626450.419], [565492.722, 1626519.183], [565307.615, 1626283.099],
+    [565190.09, 1626394.278], [565081.413, 1626501.333], [565074.436, 1626510.338], [565067.762, 1626519.57],
+    [565061.398, 1626529.019], [565055.353, 1626538.674], [565049.631, 1626548.525], [565044.241, 1626558.561],
+    [565039.186, 1626568.77], [565034.474, 1626579.142], [565030.11, 1626589.664], [565026.097, 1626600.326],
+    [565022.442, 1626611.115], [565019.147, 1626622.02], [565016.216, 1626633.029], [565013.653, 1626644.128],
+    [565011.46, 1626655.307], [565009.64, 1626666.553], [565008.195, 1626677.852], [565007.127, 1626689.194],
+    [565007.203, 1626721.993], [565008.454, 1626754.769], [565010.839, 1626787.482], [565014.319, 1626820.097],
+    [565116.23, 1627815.614], [565223.774, 1627696.627], [565315.325, 1627585.66], [565428.527, 1627912.24],
+    [565460.764, 1628030.388],
+  ],
+  areaDof: 1497185.682,
+  control: null,
+  marcador: { lat: 14.71913, lon: -92.39066 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 111 ha in 9 lots of 6 to 20 ha (an estimate).
+   */
+  lotes: [
+    { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 8, lado: 'a' },
+    { ha: 18, lado: 'b' }, { ha: 12, lado: 'b' }, { ha: 10, lado: 'b' }, { ha: 6, lado: 'b' },
+  ],
+  serviciosHa: 3,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  /**
+   * At the foot of the state road to Playa Linda, 2.74 km from the MEX-225 (the DOF). No road in
+   * OpenStreetMap is called Playa Linda: the one along it is the «Ramal a Escolleras», which it
+   * tags MEX 225.
+   */
+  carretera: /225/,
+};
+
+/**
+ * Teapa, from its declaratoria (DOF, 8 Jun 2026): one polygon of 171 vertices in UTM zone 15, each
+ * also in latitude and longitude, 961,360.974 m². The area computed is the table's.
+ */
+const TEAPA = {
+  id: 'teapa',
+  zona: 15,
+  vertices: [
+    [511311.61, 1945028.67], [511268.27, 1944991.5], [511017.99, 1944734.21], [510511.34, 1944263.49],
+    [510422.32, 1944176.17], [510362.54, 1944102.02], [510361.21, 1944083.74], [510370.96, 1944055.47],
+    [510420.8, 1943925.16], [510425.03, 1943813.45], [510534.07, 1943662.12], [510556.52, 1943659.63],
+    [510558.93, 1943660.56], [510647.82, 1943653.14], [510646.04, 1943662.66], [510653.63, 1943684.97],
+    [510675.38, 1943743.11], [510683.43, 1943754.88], [510688.32, 1943757.49], [510693.51, 1943759.98],
+    [510727.53, 1943765.68], [510766.84, 1943757.47], [510778.19, 1943758.27], [510795.87, 1943755.47],
+    [510814.36, 1943752.57], [510834.82, 1943745.69], [510848.85, 1943739.47], [510853.41, 1943738.12],
+    [510862.09, 1943735.6], [510871.09, 1943731.84], [510874.61, 1943730.39], [510877.44, 1943729.48],
+    [510884.08, 1943728.73], [510895.55, 1943727.65], [510909.95, 1943725.15], [510915.81, 1943725.05],
+    [510938.77, 1943712.47], [510972.75, 1943690.71], [510985.33, 1943669.39], [510989.35, 1943661.75],
+    [511008.19, 1943608.95], [511009.7, 1943604.84], [511009.75, 1943601.53], [511009.54, 1943597.65],
+    [511008.58, 1943596.29], [511008.63, 1943593.62], [511009.89, 1943587.57], [511014.63, 1943582.18],
+    [511015.32, 1943581.57], [511019.66, 1943574.64], [511019.72, 1943574.38], [511022.11, 1943566],
+    [511027.17, 1943557.43], [511031.41, 1943550.89], [511037.15, 1943547.99], [511045.15, 1943547.3],
+    [511049.71, 1943547.64], [511058.74, 1943555.6], [511063.8, 1943560.99], [511074.59, 1943582.35],
+    [511085.77, 1943620.01], [511088.78, 1943635.52], [511089.67, 1943647.52], [511087.75, 1943656.59],
+    [511088.24, 1943666.41], [511090.47, 1943688.28], [511091.34, 1943704.61], [511084.44, 1943741.33],
+    [511082.18, 1943762.3], [511088.89, 1943780.23], [511092.68, 1943784.69], [511098.56, 1943787.21],
+    [511104.62, 1943790.69], [511111.86, 1943796.81], [511119.24, 1943799.53], [511123.71, 1943802.92],
+    [511143.07, 1943816.09], [511149.41, 1943815.64], [511156.84, 1943819.36], [511162.57, 1943822.01],
+    [511172.78, 1943823.37], [511185.53, 1943826.83], [511221.54, 1943827.31], [511227.45, 1943827.17],
+    [511234.77, 1943824.97], [511242.96, 1943821.41], [511255.68, 1943816.42], [511258.37, 1943816.07],
+    [511261.13, 1943815.45], [511262.31, 1943813.02], [511265.84, 1943811.84], [511269.97, 1943807.03],
+    [511274.33, 1943799], [511273.9, 1943795.9], [511277, 1943789.99], [511283.49, 1943777.52],
+    [511284.64, 1943771.7], [511286, 1943764.86], [511287.06, 1943759.54], [511287.08, 1943758.6],
+    [511290.66, 1943741.94], [511292.16, 1943738.51], [511294.72, 1943727.76], [511291.25, 1943720.05],
+    [511285.65, 1943711.81], [511270.86, 1943675.29], [511266.24, 1943671.33], [511265.01, 1943667.4],
+    [511263.15, 1943663.56], [511266.13, 1943656.61], [511266.81, 1943653.69], [511266.53, 1943650.16],
+    [511265.36, 1943645.22], [511265.06, 1943644.49], [511274.95, 1943639.25], [511296.9, 1943655.24],
+    [511319.73, 1943675.9], [511326.12, 1943680.76], [511341.11, 1943691.98], [511386.71, 1943702.2],
+    [511392.42, 1943700.27], [511405.12, 1943691.99], [511418.92, 1943685.21], [511421.99, 1943684.44],
+    [511425.85, 1943672.68], [511429.09, 1943661.79], [511431.08, 1943657.59], [511432.73, 1943647.05],
+    [511432.46, 1943641.6], [511430.15, 1943633.07], [511429.74, 1943625.41], [511425.44, 1943616.01],
+    [511423.28, 1943611.82], [511404.42, 1943585.43], [511395.58, 1943570.95], [511389.46, 1943559.79],
+    [511384.6, 1943544.91], [511384.79, 1943535.55], [511384.69, 1943528.56], [511387.29, 1943524.48],
+    [511395.9, 1943519.1], [511403.73, 1943518.92], [511421.08, 1943522.66], [511433.9, 1943526.33],
+    [511438.29, 1943530.41], [511442.92, 1943544.04], [511444.74, 1943549.57], [511450.37, 1943573.78],
+    [511453.38, 1943594.29], [511452.27, 1943601.65], [511451.62, 1943608.22], [511456.7, 1943636.01],
+    [511463.81, 1943672.55], [511463.51, 1943680.78], [511465.99, 1943694.75], [511468.73, 1943706.7],
+    [511471.55, 1943720.19], [511473.77, 1943732.79], [511478.4, 1943762.6], [511476.7, 1943776.12],
+    [511475.25, 1943791.73], [511472.55, 1943814.92], [511475.23, 1943831.98], [511477.09, 1943845.06],
+    [511474.54, 1943852.76], [511471.41, 1943859.67], [511471.26, 1943877.67], [511476.58, 1943893.7],
+    [511479.35, 1943895.88], [511191.5, 1944167.2], [511680.96, 1944680.15],
+  ],
+  areaDof: 961360.974,
+  /** Vertex 6, where the table starts, as the DOF gives it in geographic coordinates. */
+  control: { lat: 17.591806037, lon: -92.893390902 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 73 ha in 8 lots of 5 to 15 ha (an estimate).
+   */
+  lotes: [
+    { ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 5, lado: 'a' },
+    { ha: 12, lado: 'b' }, { ha: 10, lado: 'b' }, { ha: 6, lado: 'b' }, { ha: 5, lado: 'b' },
+  ],
+  serviciosHa: 2,
+  anchoVialidad: 26,
+  anchoAcceso: 14,
+  carretera: /195/,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 /**
@@ -1352,7 +1563,7 @@ async function construir(p, { soloCajas = false } = {}) {
   if (desvio > (p.areaNoCuadra ?? 0.005)) throw new Error('El área no cuadra con la del DOF');
   if (desvio > 0.005) console.log(`  ⚠ el área queda ${(desvio * 100).toFixed(1)} % lejos de la del DOF (areaNoCuadra)`);
   // The other tables of the declaratoria (a general polygon, rights of way): each against its own area.
-  for (const c of [...(p.comprobar ?? []).map((c) => ({ ...c, local: anilloDe(p, c.anillo) })), ...franjas.filter((f) => f.ha)]) {
+  for (const c of [...(p.comprobar ?? []).map((c) => ({ ...c, local: c.vertices ?? anilloDe(p, c.anillo) })), ...franjas.filter((f) => f.ha)]) {
     const ha = area(c.local) / 1e4;
     console.log(`  ${c.nombre}: ${ha.toFixed(4)} ha (DOF ${c.ha})`);
     if (Math.abs(ha - c.ha) / c.ha > 0.005) throw new Error(`${c.nombre}: el área no cuadra con la del DOF`);
@@ -1873,6 +2084,26 @@ const FUENTES = {
   'dof-arriaga': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Arriaga (8 de junio de 2026): cuadro de construcción de la Finca Rústica El Cocal, 48.83 ha; colindante con la Línea K y a 3 km de la estación Arriaga, a pie del libramiento Arriaga–Tapanatepec y a 5 km de la MEX-200; sus vocaciones productivas y su propiedad (el ayuntamiento la aportó al Corredor Interoceánico)',
     url: 'https://dof.gob.mx/nota_detalle.php?codigo=5789894&fecha=08/06/2026',
+  },
+  'dof-tapachula-i': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Tapachula I (8 de abril de 2025): cuadros de construcción de la poligonal general «A» (268.73 ha) y de los derechos de vía de una línea eléctrica de la CFE (1.94 ha) y del ramal ferroviario KA (3.62 ha), que se excluyen: 263.17 ha; aledaño a la línea KA, con frente a la autopista MEX-225 Tapachula–Puerto de San Benito, a 5.22 km de Puerto Chiapas; sus vocaciones productivas y su propiedad (el INDAABIN la aportó al Corredor Interoceánico)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5754325&fecha=08/04/2025',
+  },
+  'dof-tapachula-ii': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Tapachula II (8 de abril de 2025): cuadro de construcción del polígono «C» con dos curvas, 149.72 ha; a 0.75 km de la línea KA, a pie de la carretera estatal a Playa Linda, a 2.74 km de la MEX-225 y a 0.59 km de Puerto Chiapas; sus vocaciones productivas y su propiedad (el INDAABIN la aportó al Corredor Interoceánico)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5754326&fecha=08/04/2025',
+  },
+  'ciit-tapachula-i': {
+    fuente: 'Corredor Interoceánico, ficha del PODEBI Tapachula I: convocatoria a su licitación pública internacional LPIBI-013AYH-PODEBI-2-2025 (DOF, 11 de junio de 2025) y segunda nota aclaratoria (17 de septiembre), que reabre el registro de interesados del 19 al 30 de septiembre',
+    url: 'https://www.gob.mx/ciit/es/articulos/podebi-tapachula-i',
+  },
+  'ciit-tapachula-ii': {
+    fuente: 'Corredor Interoceánico, ficha del PODEBI Tapachula II: convocatoria a su licitación pública internacional LPIBI-013AYH-PODEBI-3-2025 (DOF, 11 de junio de 2025) y segunda nota aclaratoria (17 de septiembre), que reabre el registro de interesados del 19 al 30 de septiembre',
+    url: 'https://www.gob.mx/ciit/es/articulos/podebi-tapachula-ii',
+  },
+  'dof-teapa': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5789895&fecha=08/06/2026',
   },
   'dof-durango': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Centro Logístico e Industrial de Durango (26 de agosto de 2025): cuadros de construcción del polígono 1 y de las reservas 1, 2, 4 y 5, 315.42 ha; a pie de la carretera 40D y de la vía férrea, a 780 m de la zona urbana Cinco de Mayo y a 4 km del aeropuerto; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (el estado de Durango)',
@@ -2502,6 +2733,108 @@ function interiorArriaga(g) {
   };
 }
 
+function interiorTapachulaI(g) {
+  return {
+    nombre: 'Tapachula I',
+    lugar: 'Tapachula, Chiapas',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-tapachula-i', 'ciit-tapachula-i', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: el INDAABIN aportó el terreno al Corredor Interoceánico (DOF, 16 de octubre de 2024) y la declaratoria salió el 8 de abril de 2025 (DOF). El Corredor convocó a su licitación internacional el 11 de junio de 2025, para concesionarlo 30 años, y en septiembre reabrió el registro de interesados; no se ha publicado un fallo. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus tres predios lleva su calle; se hacen uno tras otro.',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo queda «aledaño a la línea KA», el ramal de Puerto Chiapas, cuyo derecho de vía lo cruza y se excluye (DOF). La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km, con su cambio de vía. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-tapachula-i', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('tapachula-i', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `La declaratoria le quita a su poligonal general los derechos de vía del ramal KA y de una línea eléctrica de la CFE, que la cruzan de lado a lado: quedan tres predios. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 5 a 25 ha, y 4 ha de servicios a la entrada del predio sur; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-tapachula-i', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-tapachula-i'],
+    },
+  };
+}
+
+function interiorTapachulaII(g) {
+  return {
+    nombre: 'Tapachula II',
+    lugar: 'Tapachula, Chiapas',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-tapachula-ii', 'ciit-tapachula-ii', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: el INDAABIN aportó el terreno al Corredor Interoceánico (DOF, 16 de octubre de 2024) y la declaratoria salió el 8 de abril de 2025 (DOF). El Corredor convocó a su licitación internacional el 11 de junio de 2025, para concesionarlo 30 años, y en septiembre reabrió el registro de interesados; no se ha publicado un fallo. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo queda a 0.75 km de la línea KA, el ramal de Puerto Chiapas (DOF). La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-tapachula-ii', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('tapachula-ii', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono con dos curvas, a 0.59 km de Puerto Chiapas. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 6 a 20 ha, y 3 ha de servicios a la entrada, por el camino que corre a su pie (la declaratoria lo llama carretera estatal a Playa Linda; OpenStreetMap, Ramal a Escolleras, con el número de la MEX-225); lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-tapachula-ii', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-tapachula-ii'],
+    },
+  };
+}
+
+function interiorTeapa(g) {
+  return {
+    nombre: 'Teapa',
+    lugar: 'Teapa, Tabasco',
+    sectores: ['alimentos', 'petroquimica'],
+    fuentesLista: ['dof-teapa', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: el Gobierno de Tabasco aportó el terreno al Corredor Interoceánico (Periódico Oficial de Tabasco, 30 de abril de 2025) y la declaratoria salió el 8 de junio de 2026 (DOF). No se ha reportado licitación ni obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria lo pone «aledaño a la línea FA» y, un párrafo después, a 4 km de ella. La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-teapa', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('teapa', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono de 171 vértices. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 5 a 15 ha, y 2 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-teapa', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Agroindustria', 'Petroquímica', 'Comercio y logística'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), «enunciativas y no limitativas». En el juego, agroindustria es la industria alimentaria y petroquímica, su sector. Comercio y logística no son manufactura: el juego no los ofrece para un lote.',
+      fuentes: ['dof-teapa'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -2549,6 +2882,9 @@ const POLOS_INTERIOR = [
   [DURANGO, interiorDurango],
   [SALINA_CRUZ, interiorSalinaCruz],
   [ARRIAGA, interiorArriaga],
+  [TAPACHULA_I, interiorTapachulaI],
+  [TAPACHULA_II, interiorTapachulaII],
+  [TEAPA, interiorTeapa],
 ];
 // `id…`: build only those polos and keep the others as they are in interiores.json.
 // `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.

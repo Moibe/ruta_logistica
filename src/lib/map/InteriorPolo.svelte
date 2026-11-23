@@ -147,9 +147,11 @@
   });
   const etiquetaCarretera = $derived.by(() => {
     const c = geo.carretera ? geo.caminos.filter((x) => (x.ref ?? x.nombre) === geo.carretera) : [];
-    // Clear of the polo, which it runs along: about 900 m from its centre.
+    // Clear of the polo, which it runs along: about 900 m from its centre, and of the substations'
+    // labels (Tapachula II's road passes by one).
     const pts = c.flatMap((x) => x.puntos);
-    const p = pts.reduce((m, q) => (Math.abs(Math.hypot(...q) - 900) < Math.abs(Math.hypot(...m) - 900) ? q : m), pts[0]);
+    const lejos = (q: Pt) => (Math.abs(Math.hypot(...q) - 900) + (geo.subestaciones.some((s) => Math.hypot(q[0] - s.x, q[1] - s.y) < 300) ? 1e6 : 0));
+    const p = pts.reduce((m, q) => (lejos(q) < lejos(m) ? q : m), pts[0]);
     return c.length ? { texto: c[0].ref ?? c[0].nombre!, p } : null;
   });
 
@@ -738,6 +740,11 @@
   .franja.ducto {
     fill: rgba(251, 146, 60, 0.16);
     stroke: rgba(251, 146, 60, 0.65);
+  }
+
+  .franja.linea {
+    fill: rgba(253, 230, 138, 0.07);
+    stroke: rgba(253, 230, 138, 0.5);
   }
 
   .franja.reserva {

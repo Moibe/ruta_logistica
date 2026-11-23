@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y catorce polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y diecisiete polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -111,7 +111,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | Presidencia de la República y Gobierno de Tlaxcala | Tiempos y empleos del polo de Huamantla, el único terminado: su ritmo de obra y su proyección de empleos; en la [versión estenográfica de su inauguración](https://www.gob.mx/presidencia/es/articulos/version-estenografica-inauguracion-del-polo-de-desarrollo-economico-para-el-bienestar-podecobi-huamantla?idiom=es), los siete lotes vendidos con su superficie, las obras que hizo el estado y cómo se paga la urbanización | Comunicados del 14 oct 2025 al 12 abr 2026 | Documento oficial público |
 | [CFE, Programas y Proyectos de Inversión 2024](https://portales-transparencia.cfe.mx/corporativo/31%20Informe%20presupuestl%20balance%20general%20y%20estado%20fi/Direcci%C3%B3n%20Corporativa%20de%20Finanzas/Gerencia%20de%20Presupuestos/2024/Cartera%20de%20CFE%20pre%20cierre%20DIC%2010012025%204o%20trim.pdf) | Cada proyecto de inversión de la CFE con sus MVA, km-c, fechas y costo total: el costo por MVA de las subestaciones de distribución y lo que tardaron las subestaciones Kantenah y Leona Vicario, para ampliar la subestación de un polo | Cierre de diciembre de 2024 | Documento oficial público |
 | Secretaría de Economía, [ficha del polo Huamantla](https://podecobi.economia.gob.mx/polos-de-desarrollo) y [nota del 18 de diciembre de 2025](https://podecobi.economia.gob.mx/en/news/plan-mexico-avanza-polo-de-desarrollo-economico-en-tlaxcala/) | Energía disponible (8 MVA), agua, gas a 3 km, conexión ferroviaria y superficie total (61.8 ha) de Huamantla; su CECI y su fecha de término | 2025 | Documento oficial público |
-| [OpenStreetMap](https://www.openstreetmap.org/copyright), vía Overpass | Los alrededores de Huamantla para su vista por dentro: calles, carreteras, vías y su operador, líneas de 115 kV y subestaciones de la CFE, poblados y la Ciudad Industrial Xicohténcatl II | Consultado el 22 de noviembre de 2026 | ODbL, © colaboradores de OpenStreetMap |
+| [OpenStreetMap](https://www.openstreetmap.org/copyright), vía Overpass y el extracto de México de [Geofabrik](https://download.geofabrik.de/north-america/mexico.html) | Los alrededores de cada polo con vista por dentro: calles, carreteras, vías y su operador, líneas de alta tensión y subestaciones de la CFE, ríos, poblados y zonas industriales | Consultado el 22 y el 23 de noviembre de 2026 (el extracto, cortado el 22 de noviembre) | ODbL, © colaboradores de OpenStreetMap |
 
 **Regla de fuentes.** Las cifras del juego salen de fuentes oficiales (DOF, Presidencia,
 dependencias, INEGI, gobiernos estatales). La prensa solo entra como complemento, y solo de
@@ -675,7 +675,8 @@ Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texiste
 [Reserva Zapotlán](#reserva-zapotlán-por-dentro), [San Jerónimo](#san-jerónimo-por-dentro),
 [Parque Industrial Bajío](#parque-industrial-bajío-por-dentro), [Hermosillo](#hermosillo-por-dentro),
 [Topolobampo](#topolobampo-por-dentro), [Puerta Logística del Bajío](#puerta-logística-del-bajío-por-dentro),
-[Durango](#durango-por-dentro), [Salina Cruz](#salina-cruz-por-dentro) y [Arriaga](#arriaga-por-dentro).
+[Durango](#durango-por-dentro), [Salina Cruz](#salina-cruz-por-dentro), [Arriaga](#arriaga-por-dentro),
+[Tapachula I](#tapachula-i-por-dentro), [Tapachula II](#tapachula-ii-por-dentro) y [Teapa](#teapa-por-dentro).
 El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
@@ -839,8 +840,9 @@ llevan el nombre de su empresa: su giro no se publica.
 
 Los datos del interior los arma `scripts/polos/gen-interior.mjs`: el contorno de cada polo en
 `static/data/polos/<polo>.json` (lo baja la vista al entrar) y los frentes y sus fuentes en
-`src/lib/domain/datos/interiores.json`. Lo de OpenStreetMap se consulta en Overpass en partes
-chicas (la consulta completa da error 502) y se guarda en `.cache/osm/`.
+`src/lib/domain/datos/interiores.json`. Lo de OpenStreetMap sale del extracto de México de
+Geofabrik, leído en dos pasadas (`scripts/polos/osm-local.py`), o, si no está bajado, de
+Overpass en partes chicas (la consulta completa da error 502); se guarda en `.cache/osm/`.
 
 ### Coatzacoalcos I por dentro
 
@@ -935,6 +937,9 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
 - **Puerta Logística del Bajío:** son tres polígonos separados por una calle curva; el más chico
   (0.29 ha) queda de reserva, sin lotes.
 - **Durango:** son un polígono y cuatro «reservas» al norte, que el juego deja sin lotes.
+- **Tapachula I:** como en Texistepec, el DOF le quita a una poligonal general los derechos de vía
+  del ramal KA y de una línea eléctrica de la CFE, que la cruzan de lado a lado: quedan tres
+  predios.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -1722,6 +1727,130 @@ polígono de nueve vértices en UTM zona 15, con rumbos escritos «NW 84°…».
 
 **En la realidad**: el ayuntamiento aportó el terreno en julio de 2025 y la declaratoria salió el 8
 de junio de 2026 (DOF). No se ha reportado licitación ni obra.
+
+### Tapachula I por dentro
+
+El decimoquinto polo con vista por dentro (`/mexico/polo/tapachula-i`), del Corredor
+Interoceánico: 263.17 ha en Tapachula, Chiapas, junto a la autopista a Puerto Chiapas.
+
+**El terreno**, de su declaratoria (DOF, 8 de abril de 2025): una poligonal general «A» en UTM zona
+15 menos los derechos de vía del ramal KA y de una línea eléctrica de la CFE, que la cruzan de lado
+a lado. Quedan tres predios: el sur (168.50 ha), el norte (55.88) y el central (38.84).
+- **Resultado:** con tres erratas corregidas, la poligonal da 268.78 ha contra 268.73 y los predios
+  263.22 contra 263.17 (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)). Las dos franjas
+  dan exactamente lo de sus cuadros.
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** aledaño a la línea KA y a 9.57 km de la línea K, con frente a la MEX-225
+  (la autopista Tapachula–Puerto de San Benito), a 5.22 km de Puerto Chiapas y a 5.98 km del
+  aeropuerto de Tapachula.
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** el INDAABIN la aportó al Corredor Interoceánico (DOF, 16 de octubre de 2024).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **200 ha en 17 lotes de 5 a
+  25 ha**, con 4 ha de servicios a la entrada del predio sur. Cada predio lleva su calle; se hacen
+  uno tras otro, el sur primero.
+- **Los empleos:** 60.5 por hectárea, 15,910. Un lote de 10 ha da 795 y pide de 0.6 MW
+  (dispositivos médicos) a 5.5 MW (metálicas básicas).
+- **La espuela:** el ramal KA de Ferroistmo lo cruza: **0.01 km**, menos de un millón con cuatro
+  cuadrillas y el mínimo de 2 meses.
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  25.5 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.12 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,445 millones con una cuadrilla;
+  las vialidades, 578 millones en 15.5 meses, o 838 en 5.5 con cuatro.
+
+**En la realidad**:
+- **16 de octubre de 2024:** el INDAABIN aporta el terreno al Corredor Interoceánico (DOF).
+- **11 de junio de 2025:** el Corredor convoca a su licitación internacional (LPIBI-013AYH-PODEBI-2-2025),
+  para concesionarlo 30 años, prorrogables 20.
+- **17 de septiembre de 2025:** una segunda nota aclaratoria reabre el registro de interesados, del
+  19 al 30 de septiembre.
+
+No se ha publicado un fallo ni se ha reportado obra: en el modo Realidad sigue anunciado, con su
+convocatoria entre sus hitos.
+
+### Tapachula II por dentro
+
+El decimosexto polo con vista por dentro (`/mexico/polo/tapachula-ii`), del Corredor
+Interoceánico: 149.72 ha en Tapachula, Chiapas, a 0.59 km de Puerto Chiapas.
+
+**El terreno**, de su declaratoria (DOF, 8 de abril de 2025): el polígono «C» en UTM zona 15, con
+dos curvas cuyo centro va en el mismo renglón que el vértice donde terminan.
+- **Resultado:** cada lado cuadra con su rumbo y su distancia; con las curvas da 149.72 ha, lo
+  declarado.
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** a 0.75 km de la línea KA y a 14.16 km de la línea K, a pie de la carretera
+  estatal a Playa Linda, a 2.74 km de la MEX-225, a 0.59 km de Puerto Chiapas y a 11.40 km del
+  aeropuerto de Tapachula.
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** el INDAABIN la aportó al Corredor Interoceánico (DOF, 16 de octubre de 2024).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **111 ha en 9 lotes de 6 a
+  20 ha**, con 3 ha de servicios a la entrada. La entrada mira al camino que corre a su pie, que
+  OpenStreetMap llama Ramal a Escolleras y marca como MEX-225; ninguno se llama Playa Linda.
+- **Los empleos:** 60.5 por hectárea, 9,051. Un lote de 10 ha da 815 y pide de 0.6 MW
+  (dispositivos médicos) a 5.6 MW (metálicas básicas).
+- **La espuela:** la **Línea KA de Ferroistmo** queda a **0.47 km** (el DOF dice 0.75). Cuesta 21
+  millones con una cuadrilla (5.6 meses) o 31 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  14.5 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.39 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 822 millones con una cuadrilla;
+  las vialidades, 329 millones en 13.1 meses, o 477 en 4.6 con cuatro.
+
+**En la realidad**:
+- **16 de octubre de 2024:** el INDAABIN aporta el terreno al Corredor Interoceánico (DOF).
+- **11 de junio de 2025:** el Corredor convoca a su licitación internacional (LPIBI-013AYH-PODEBI-3-2025),
+  para concesionarlo 30 años, prorrogables 20.
+- **17 de septiembre de 2025:** una segunda nota aclaratoria reabre el registro de interesados, del
+  19 al 30 de septiembre.
+
+No se ha publicado un fallo ni se ha reportado obra: en el modo Realidad sigue anunciado, con su
+convocatoria entre sus hitos.
+
+### Teapa por dentro
+
+El decimoséptimo polo con vista por dentro (`/mexico/polo/teapa`), del Corredor Interoceánico y el
+único en Tabasco: 96.14 ha en Teapa.
+
+**El terreno**, de su declaratoria (DOF, 8 de junio de 2026): un polígono de 171 vértices en UTM
+zona 15, cada uno también en latitud y longitud.
+- **Resultado:** da 961,359 m² contra los 961,361 declarados.
+- **La conversión:** el primer vértice de la tabla cae a 0.01 m de sus coordenadas geográficas.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** «aledaño a la línea FA» y, un párrafo después, a 4 km de ella (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)); a 6 km de la MEX-195
+  Villahermosa–Escopetazo, a 8 km de la ciudad de Teapa y a 75 km del aeropuerto de Villahermosa.
+- **Vocaciones:** agroindustria, petroquímica, y comercio y logística, «enunciativas y no
+  limitativas».
+- **Propiedad:** el Gobierno de Tabasco la aportó al Corredor Interoceánico (Periódico Oficial de
+  Tabasco, 30 de abril de 2025); se protocolizó el 16 de febrero de 2026.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **73 ha en 8 lotes de 5 a
+  15 ha**, con 2 ha de servicios a la entrada. A su alrededor solo hay caminos sin nombre ni número
+  en OpenStreetMap: la vista no rotula carretera.
+- **Los empleos:** 60.5 por hectárea, 5,812. Un lote de 10 ha da 796 y pide 0.8 MW (agroindustria)
+  o 5.5 MW (petroquímica).
+- **La espuela:** la **Línea FA de Ferroistmo** queda al sur: **1.43 km** en línea recta. Cuesta
+  65 millones con una cuadrilla (5.6 meses) o 94 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  9.3 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 1.32 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 528 millones con una cuadrilla;
+  las vialidades, 211 millones en 11.5 meses, o 306 en 4.1 con cuatro.
+- **Las vocaciones en sectores:** agroindustria es la industria alimentaria y petroquímica, su
+  sector. Comercio y logística no son manufactura: no se ofrecen para un lote.
+
+**En la realidad**: Tabasco aportó el terreno en abril de 2025 y la declaratoria salió el 8 de
+junio de 2026 (DOF). No se ha reportado licitación ni obra.
 
 ---
 
@@ -3654,6 +3783,25 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
+
+**Teapa por dentro (DOF)**
+
+- **La vía, a dos distancias:** la declaratoria lo pone «aledaño a la línea FA» en su criterio de
+  macro localización y, en el siguiente, a 4 km de la vía de la línea FA. En OpenStreetMap la vía
+  queda a 1.43 km en línea recta; el juego usa esa.
+
+**Tapachula I por dentro (DOF)**
+
+- **Un dígito cambiado:** el vértice J de la franja de la línea eléctrica de la CFE dice
+  565,969.702 al este; sus lados desde el I y hacia el E lo ponen en 565,989.702 (un 6 por un 8).
+  Con él, la franja da exactamente sus 1.9434 ha.
+- **Tres vértices fuera de su lugar:** el 55, el 56 y el 57 quedan a unos 6.7 m de donde los ponen
+  sus rumbos y distancias desde el 21, y de ahí salen 0.29 ha de más. El juego los toma de los
+  rumbos.
+- **Un rumbo:** el lado del 61 al 1 dice N 33°34' E; sus vértices dan N 38°34' (la distancia
+  cuadra). No mueve nada.
+- **El resultado:** la poligonal general da 268.78 ha contra las 268.73 declaradas, y los tres
+  predios 263.22 contra 263.17 (0.02 % más). Las dos franjas dan lo de sus cuadros.
 
 **Arriaga por dentro (DOF)**
 

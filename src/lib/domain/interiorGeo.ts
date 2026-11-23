@@ -20,7 +20,7 @@ export type GeoInterior = {
    * pipeline's easement) or that are part of it (an access road, a reserve without lots), and
    * parcels it doesn't explain.
    */
-  franjas: { nombre: string; tipo: 'carretera' | 'via' | 'ducto' | 'parcela' | 'reserva'; ha: number; nota: string; puntos: Pt[] }[];
+  franjas: { nombre: string; tipo: 'carretera' | 'via' | 'ducto' | 'linea' | 'parcela' | 'reserva'; ha: number; nota: string; puntos: Pt[] }[];
   areaM2: number;
   perimetroM: number;
   lotes: Lote[];
