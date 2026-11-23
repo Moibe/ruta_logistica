@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y veinticinco polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y veintiséis polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -688,8 +688,9 @@ Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texiste
 [San Blas Atempa](#san-blas-atempa-por-dentro), [San Juan Evangelista](#san-juan-evangelista-por-dentro),
 [Matías Romero](#matías-romero-avendaño-por-dentro), [Mixtequilla](#santa-maría-mixtequilla-por-dentro),
 [Ciudad Ixtepec](#ciudad-ixtepec-por-dentro), [Asunción Ixtaltepec](#asunción-ixtaltepec-por-dentro),
-[Economía Circular Puebla](#economía-circular-puebla-por-dentro) y
-[Economía Circular Tlaxcala](#economía-circular-tlaxcala-por-dentro).
+[Economía Circular Puebla](#economía-circular-puebla-por-dentro),
+[Economía Circular Tlaxcala](#economía-circular-tlaxcala-por-dentro) y
+[Capital de la Tecnología](#capital-de-la-tecnología-y-la-sostenibilidad-por-dentro).
 El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
@@ -957,6 +958,7 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
   de Pemex cruza el B y le deja una esquina de 2.18 ha, que el juego deja sin lotes.
 - **Economía Circular Puebla:** son tres polígonos separados.
 - **Economía Circular Tlaxcala:** son dos polígonos de 10 ha, uno junto al otro.
+- **Capital de la Tecnología:** son cinco polígonos en dos grupos a 5 km uno de otro.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -2178,6 +2180,54 @@ circular, de la Semarnat: 20 ha en la ex hacienda de San Pedro Ecatepec, Atlanga
   las vialidades, 44 millones en 7.2 meses, o 64 en 2.5 con cuatro.
 
 **En la realidad**: declarado el 8 de junio de 2026 (DOF). No se ha reportado obra.
+
+### Capital de la Tecnología y la Sostenibilidad por dentro
+
+El vigesimosexto polo con vista por dentro (`/mexico/polo/capital-tecnologia`), del Plan México:
+217.68 ha en San José Chiapa y Nopalucan, Puebla, junto a la planta de Audi.
+
+**El terreno**, de su declaratoria (DOF, 1 de julio de 2025): cinco cuadros en UTM zona 14, con el
+norte antes que el este.
+- **Las piezas:** al norte, el Rancho de Lima (63.63 ha), el Rancho Minillas (65.62) y la Parcela 423
+  (18.24); 5 km al suroeste, las superficies A (58.06) y B (12.16) del polígono sur.
+- **Resultado:** cada tabla da su área y suman 217.71 ha. La declaratoria decía 275.2; su nota
+  aclaratoria (DOF, 29 de julio de 2025) las corrige a 217.68 (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+- **El marcador:** cae dentro del terreno, en el grupo norte, a 5 km del centro de la vista.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** cerca de la autopista Amozoc–Perote y del Arco Norte, a menos de 70 km de la
+  ciudad de Puebla. Ya dispone de vialidades, energía, agua, drenaje y conectividad. No habla de
+  vías.
+- **Vocaciones:** manufactura avanzada, automotriz, textil especializada, electrónica, química, y
+  plástico y hule.
+- **Propiedad:** sus predios están en un fideicomiso bajo control del Gobierno de Puebla.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **165 ha en 17 lotes de 4 a
+  15 ha**, con 4 ha de servicios en el Rancho de Lima. Cada polígono lleva su calle.
+- **Los empleos:** 61.2 por hectárea, 13,314. Un lote de 10 ha da 807 y pide de 0.9 MW
+  (electrónica) a 1.7 MW (plástico y hule).
+- **La espuela:** la **Línea VB de Ferrosur** toca el polígono sur: **0 km**, sin costo.
+- **La energía:** no tiene cifra oficial del polo: la mediana, **8 MW** (estimación del juego). Lleno
+  pide 21.3 MW: un banco de la CFE. La línea de 230 kV más cercana queda a 2.34 km de su
+  subestación (OpenStreetMap).
+- **La subestación de Puebla:** el estado construye en San José Chiapa una de 60 MVA para el polo y
+  la fábrica de baterías de Olinia. El juego aún no la cuenta como cifra del polo: hacerlo cambiaría
+  la mediana de las cifras oficiales, y con ella la energía de los polos que no tienen cifra.
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,195 millones con una cuadrilla;
+  las vialidades, 478 millones en 14.7 meses, o 693 en 5.2 con cuatro.
+- **Las vocaciones en sectores:** la automotriz es el equipo de transporte; la electrónica, el equipo
+  de computación y electrónico, y la química, la de fertilizantes, pinturas y jabones. La manufactura
+  avanzada no es un sector del censo.
+
+**En la realidad**:
+- **21 de noviembre de 2025:** el Gobierno de Puebla construye la subestación de San José Chiapa,
+  de 60 MVA, con 591 millones de pesos del estado.
+- **30 de junio de 2026:** el gobernador recorre la subestación, para el polo, la industria del Café
+  y Maíz del Bienestar y la fábrica de Olinia.
+
+No se han reportado empresas en el polo.
 
 ---
 

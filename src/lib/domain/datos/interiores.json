@@ -262,6 +262,18 @@
    "fuente": "DOF, Acuerdo de la Semarnat por el que se emite la declaratoria del Polo de Desarrollo de Economía Circular para el Bienestar Tlaxcala (8 de junio de 2026): cuadros de construcción de dos polígonos de 10 ha, 20.00 ha en la ex hacienda de San Pedro Ecatepec, Atlangatepec; su propiedad (el Fideicomiso de la Ciudad Industrial de Xicoténcatl, del Gobierno de Tlaxcala)",
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5789881&fecha=08/06/2026"
   },
+  "dof-capital-tecnologia": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Capital de la Tecnología y la Sostenibilidad, Puebla (1 de julio de 2025): cuadros de construcción de los polígonos Rancho de Lima, Rancho Minillas, Parcela 423 Z-2 P-5 y las superficies A y B del polígono sur, en San José Chiapa y Nopalucan; cerca de la autopista Amozoc–Perote y del Arco Norte; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (fideicomiso del Gobierno de Puebla)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5761567&fecha=01/07/2025"
+  },
+  "dof-capital-tecnologia-nota": {
+   "fuente": "DOF, nota aclaratoria a su declaratoria (29 de julio de 2025): le quita el «Futura» del nombre y corrige su superficie de 275.2 a 217.68 ha",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5764007&fecha=29/07/2025"
+  },
+  "puebla-subestacion-chiapa": {
+   "fuente": "Gobierno de Puebla, comunicado AA 644/2026 (30 de junio de 2026): la subestación eléctrica de San José Chiapa, 591 millones de pesos del estado en 4 ha, con 60 MVA para el PODECOBI, la industria del Café y Maíz del Bienestar y la fábrica de baterías de Olinia",
+   "url": "https://www.puebla.gob.mx/index.php/noticias/item/24231-subestacion-electrica-asegura-desarrollo-industrial-en-san-jose-chiapa-armenta-mier"
+  },
   "dof-teapa": {
    "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)",
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5789895&fecha=08/06/2026"
@@ -4464,6 +4476,201 @@
     "fuentes": [
      "dof-circular-tlaxcala",
      "juego"
+    ]
+   }
+  },
+  "capital-tecnologia": {
+   "nombre": "Capital de la Tecnología y la Sostenibilidad",
+   "lugar": "San José Chiapa y Nopalucan, Puebla",
+   "sectores": [
+    "transporte",
+    "textil",
+    "computacion",
+    "quimica",
+    "plastico"
+   ],
+   "fuentesLista": [
+    "dof-capital-tecnologia",
+    "dof-capital-tecnologia-nota",
+    "puebla-subestacion-chiapa",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 1 de julio de 2025 (DOF) en terrenos de un fideicomiso del Gobierno de Puebla, junto a la planta de Audi; su nota aclaratoria corrigió su superficie a 217.68 ha. El estado construye desde noviembre de 2025 una subestación de 60 MVA en San José Chiapa para el polo y la fábrica de baterías de Olinia (591 millones de pesos). No se han reportado empresas en sus lotes: su acomodo es del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el polo ya dispone de vialidades, energía, agua, drenaje y conectividad, pero no qué obras le faltan. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus polígonos lleva su calle; se hacen uno tras otro.",
+    "fuentes": [
+     "dof-capital-tecnologia",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0,
+    "via": "Línea VB",
+    "operador": "Ferrosur",
+    "mesesMinimos": 2,
+    "dato": "La declaratoria no habla de vías. La espuela del juego va de la Línea VB (Ferrosur), la más cercana, al polo: 0 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-capital-tecnologia",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 2.34,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). El Gobierno de Puebla construye en San José Chiapa una subestación de 60 MVA para el polo y la fábrica de Olinia (comunicado del 30 de junio de 2026); el juego aún no la cuenta como cifra del polo. La línea de alta tensión más cercana a su subestación queda a 2.34 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 14,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 15,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 16,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 17,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 18,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 19,
+      "ha": 5,
+      "empresa": null
+     }
+    ],
+    "dato": "Cinco polígonos en dos grupos: los ranchos de Lima y Minillas con la parcela 423, al norte, y las dos superficies del polígono sur, 5 km al suroeste. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 165 ha en 19 lotes de 4 a 15 ha, y 4 ha de servicios en el Rancho de Lima; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-capital-tecnologia",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Manufacturera avanzada",
+    "Industria automotriz",
+    "Industria textil especializada",
+    "Electrónica",
+    "Industria química",
+    "Industria del plástico y del hule"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, la automotriz es el equipo de transporte; la electrónica, el equipo de computación y electrónico, y la química, la de fertilizantes, pinturas y jabones. La manufactura avanzada no es un sector del censo: no se ofrece para un lote.",
+    "fuentes": [
+     "dof-capital-tecnologia"
     ]
    }
   }

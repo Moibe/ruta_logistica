@@ -1908,6 +1908,103 @@ const CIRCULAR_TLAXCALA = {
   anchoAcceso: 12,
 };
 
+/**
+ * Capital de la Tecnología y la Sostenibilidad, from its declaratoria (DOF, 1 Jul 2025): five tables in
+ * UTM zone 14 (Rancho de Lima, Rancho Minillas, Parcela 423 Z-2 P-5 and the south polygon's surfaces A
+ * and B), with northings before eastings; each gives its area and they add up to 217.71 ha. The
+ * declaratoria said 275.2 ha; its nota aclaratoria (DOF, 29 Jul 2025) corrects it to 217.68.
+ */
+const CAPITAL_TECNOLOGIA = {
+  id: 'capital-tecnologia',
+  zona: 14,
+  piezas: [
+    {
+      nombre: 'Rancho de Lima',
+      servicios: true,
+      vertices: [
+        [632526.631, 2127312.796], [632853.295, 2126353.436], [632277.667, 2126386.785], [631673.514, 2126782.781],
+        [631653.191, 2126855.887],
+      ],
+      lotes: [{ ha: 15, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 10, lado: 'b' }, { ha: 5, lado: 'b' }],
+    },
+    {
+      nombre: 'Rancho Minillas',
+      vertices: [
+        [632712.129, 2127153.116], [633638.742, 2126377.538], [633100.53, 2125627.344], [632853.295, 2126353.436],
+        [632581.694, 2127151.083],
+      ],
+      lotes: [{ ha: 15, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 12, lado: 'b' }, { ha: 5, lado: 'b' }],
+    },
+    {
+      nombre: 'Parcela 423',
+      vertices: [
+        [632005.321, 2125622.479], [632135.974, 2125532.144], [632125.569, 2125515.064], [632009.238, 2125574.221],
+        [632162.109, 2125024.035], [632330.112, 2125397.505], [632334.605, 2125407.584], [632397.438, 2125496.203],
+        [632471.579, 2125680.195], [632470.121, 2125751.858], [632352.067, 2125820.445],
+      ],
+      lotes: [{ ha: 8, lado: 'a' }, { ha: 6, lado: 'b' }],
+    },
+    {
+      nombre: 'Polígono sur A',
+      vertices: [
+        [627436.848, 2124644.372], [627500.033, 2124627.006], [627527.851, 2124621.399], [627555.128, 2124612.134],
+        [627617.92, 2124593.92], [627680.182, 2124576.772], [627741.846, 2124559.114], [627809.521, 2124540.178],
+        [627938.537, 2124501.587], [627949.475, 2124498.315], [627758.335, 2124364.663], [627758.325, 2124364.656],
+        [627770.152, 2124354.902], [627779.63, 2124347.087], [627833.635, 2124302.553], [627906.995, 2124245.146],
+        [627923.489, 2124231.162], [628165.97, 2124402.832], [628371.042, 2124546.145], [628429.978, 2124497.528],
+        [628442.888, 2124487.203], [628543.77, 2124410.776], [628579.585, 2124374.651], [628449.748, 2124225.87],
+        [628446.227, 2124220.761], [628484.195, 2124189.653], [628566.165, 2124122.387], [628341.267, 2123871.141],
+        [628339.289, 2123868.932], [628290.795, 2123867.52], [628267.39, 2123866.543], [628238.801, 2123866.145],
+        [628210.213, 2123866.543], [628181.646, 2123867.735], [628153.124, 2123869.721], [628129.406, 2123872.036],
+        [628129.361, 2123871.986], [628103.131, 2123874.875], [628076.977, 2123878.377], [628050.911, 2123882.49],
+        [628024.949, 2123887.212], [628000.87, 2123892.155], [627993.432, 2123893.852], [627976.904, 2123897.622],
+        [627964.436, 2123900.753], [627956.741, 2123902.686], [627953.063, 2123903.609], [627928.905, 2123910.239],
+        [627923.145, 2123911.884], [627818.449, 2123941.777], [627803.919, 2123945.925], [627677.85, 2123981.915],
+        [627703.279, 2123998.485], [627718.752, 2124008.567], [627718.741, 2124008.576], [627699.761, 2124023.283],
+        [627643.851, 2124066.607], [627567.42, 2124128.429], [627567.41, 2124128.422], [627561.564, 2124124.516],
+        [627321.066, 2123963.84], [627317.289, 2123966.776], [627314.875, 2123965.14], [627311.245, 2123962.681],
+        [627246.498, 2124012.597], [627240.72, 2124017.052], [627245.548, 2124020.472], [627247.003, 2124021.504],
+        [627247.003, 2124021.515], [627247.502, 2124021.873], [627260.921, 2124031.382], [627615.659, 2124276.665],
+        [627619.109, 2124279.867], [627613.219, 2124281.44], [627608.422, 2124282.72], [627578.596, 2124290.682],
+        [627517.204, 2124309.314], [627453.55, 2124329.62], [627390.043, 2124350.944], [627362.818, 2124357.538],
+        [627335.686, 2124366.452], [627275.67, 2124383.067],
+      ],
+      lotes: [{ ha: 12, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 8, lado: 'b' }, { ha: 6, lado: 'b' }],
+    },
+    {
+      nombre: 'Polígono sur B',
+      vertices: [
+        [627633.426, 2123952.969], [627761.174, 2123916.53], [627892.435, 2123879.223], [627892.288, 2123879.099],
+        [627898.993, 2123877.18], [627919.083, 2123871.45], [627929.884, 2123868.477], [627940.428, 2123865.574],
+        [627961.881, 2123860.104], [627983.437, 2123855.041], [627991.161, 2123853.388], [628007.269, 2123849.941],
+        [628031.206, 2123845.339], [628034.626, 2123844.756], [628055.234, 2123841.238], [628079.342, 2123837.638],
+        [628079.18, 2123837.572], [628080.351, 2123837.479], [628093.237, 2123835.529], [628122.22, 2123831.948],
+        [628151.289, 2123829.16], [628180.423, 2123827.167], [628209.601, 2123825.971], [628228.606, 2123825.711],
+        [628231.033, 2123826.666], [628255.03, 2123826.666], [628285.479, 2123827.46], [628315.896, 2123829.048],
+        [628332.875, 2123830.378], [628333.424, 2123830.323], [628339.567, 2123825.418], [628392.23, 2123783.371],
+        [628441.315, 2123840.505], [628510.621, 2123847.131], [628546.347, 2123850.546], [628603.322, 2123858.789],
+        [628601.266, 2123856.569], [628487.895, 2123734.133], [628472.132, 2123734.907], [628235.987, 2123722.757],
+        [628027.283, 2123746.515], [627893.997, 2123761.676], [627785.677, 2123768.761], [627784.639, 2123789.211],
+        [627636.101, 2123735.008], [627555.768, 2123790.33], [627475.159, 2123848.573], [627605.926, 2123935.048],
+      ],
+      lotes: [{ ha: 5, lado: 'a' }, { ha: 4, lado: 'b' }],
+    },
+  ],
+  areaDof: 2176800,
+  control: null,
+  marcador: { lat: 19.227, lon: -97.7338 },
+  /**
+   * No lots are published. The game gives each piece about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 165 ha in 17 lots of 4 to 15 ha (an estimate).
+   */
+  serviciosHa: 4,
+  anchoVialidad: 26,
+  anchoAcceso: 14,
+  /** Near the Amozoc–Perote highway (the DOF), by the Circuito Audi. */
+  carretera: /140|129/,
+  carreteraNombre: /Audi|Automotriz/i,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 /**
@@ -2634,6 +2731,18 @@ const FUENTES = {
   'dof-circular-tlaxcala': {
     fuente: 'DOF, Acuerdo de la Semarnat por el que se emite la declaratoria del Polo de Desarrollo de Economía Circular para el Bienestar Tlaxcala (8 de junio de 2026): cuadros de construcción de dos polígonos de 10 ha, 20.00 ha en la ex hacienda de San Pedro Ecatepec, Atlangatepec; su propiedad (el Fideicomiso de la Ciudad Industrial de Xicoténcatl, del Gobierno de Tlaxcala)',
     url: 'https://dof.gob.mx/nota_detalle.php?codigo=5789881&fecha=08/06/2026',
+  },
+  'dof-capital-tecnologia': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Capital de la Tecnología y la Sostenibilidad, Puebla (1 de julio de 2025): cuadros de construcción de los polígonos Rancho de Lima, Rancho Minillas, Parcela 423 Z-2 P-5 y las superficies A y B del polígono sur, en San José Chiapa y Nopalucan; cerca de la autopista Amozoc–Perote y del Arco Norte; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (fideicomiso del Gobierno de Puebla)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5761567&fecha=01/07/2025',
+  },
+  'dof-capital-tecnologia-nota': {
+    fuente: 'DOF, nota aclaratoria a su declaratoria (29 de julio de 2025): le quita el «Futura» del nombre y corrige su superficie de 275.2 a 217.68 ha',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5764007&fecha=29/07/2025',
+  },
+  'puebla-subestacion-chiapa': {
+    fuente: 'Gobierno de Puebla, comunicado AA 644/2026 (30 de junio de 2026): la subestación eléctrica de San José Chiapa, 591 millones de pesos del estado en 4 ha, con 60 MVA para el PODECOBI, la industria del Café y Maíz del Bienestar y la fábrica de baterías de Olinia',
+    url: 'https://www.puebla.gob.mx/index.php/noticias/item/24231-subestacion-electrica-asegura-desarrollo-industrial-en-san-jose-chiapa-armenta-mier',
   },
   'dof-teapa': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)',
@@ -3641,6 +3750,40 @@ function interiorCircularTlaxcala(g) {
   };
 }
 
+function interiorCapitalTecnologia(g) {
+  return {
+    nombre: 'Capital de la Tecnología y la Sostenibilidad',
+    lugar: 'San José Chiapa y Nopalucan, Puebla',
+    sectores: ['transporte', 'textil', 'computacion', 'quimica', 'plastico'],
+    fuentesLista: ['dof-capital-tecnologia', 'dof-capital-tecnologia-nota', 'puebla-subestacion-chiapa', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: declarado el 1 de julio de 2025 (DOF) en terrenos de un fideicomiso del Gobierno de Puebla, junto a la planta de Audi; su nota aclaratoria corrigió su superficie a 217.68 ha. El estado construye desde noviembre de 2025 una subestación de 60 MVA en San José Chiapa para el polo y la fábrica de baterías de Olinia (591 millones de pesos). No se han reportado empresas en sus lotes: su acomodo es del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el polo ya dispone de vialidades, energía, agua, drenaje y conectividad, pero no qué obras le faltan. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus polígonos lleva su calle; se hacen uno tras otro.',
+      fuentes: ['dof-capital-tecnologia', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria no habla de vías. La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-capital-tecnologia', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('capital-tecnologia', g, `El Gobierno de Puebla construye en San José Chiapa una subestación de 60 MVA para el polo y la fábrica de Olinia (comunicado del 30 de junio de 2026); el juego aún no la cuenta como cifra del polo. La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Cinco polígonos en dos grupos: los ranchos de Lima y Minillas con la parcela 423, al norte, y las dos superficies del polígono sur, 5 km al suroeste. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 4 a 15 ha, y 4 ha de servicios en el Rancho de Lima; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-capital-tecnologia', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Manufacturera avanzada', 'Industria automotriz', 'Industria textil especializada', 'Electrónica', 'Industria química', 'Industria del plástico y del hule'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, la automotriz es el equipo de transporte; la electrónica, el equipo de computación y electrónico, y la química, la de fertilizantes, pinturas y jabones. La manufactura avanzada no es un sector del censo: no se ofrece para un lote.',
+      fuentes: ['dof-capital-tecnologia'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -3699,6 +3842,7 @@ const POLOS_INTERIOR = [
   [IXTALTEPEC, interiorIxtaltepec],
   [CIRCULAR_PUEBLA, interiorCircularPuebla],
   [CIRCULAR_TLAXCALA, interiorCircularTlaxcala],
+  [CAPITAL_TECNOLOGIA, interiorCapitalTecnologia],
 ];
 // `id…`: build only those polos and keep the others as they are in interiores.json.
 // `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.
