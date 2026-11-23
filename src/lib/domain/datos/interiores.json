@@ -512,10 +512,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 1.59,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana queda a 1.59 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana queda a 1.59 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -682,10 +682,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 3.86,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de 115 kV más cercana, la que pasa al norte, queda a 3.86 km de su subestación (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de 115 kV más cercana, la que pasa al norte, queda a 3.86 km de su subestación (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -879,10 +879,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 1.43,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que tiene energía eléctrica, con «opciones identificadas para ampliar la disponibilidad de energía en el mediano plazo». La línea de 115 kV más cercana, la de las subestaciones del puerto, queda a 1.43 km de su subestación (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que tiene energía eléctrica, con «opciones identificadas para ampliar la disponibilidad de energía en el mediano plazo». La línea de 115 kV más cercana, la de las subestaciones del puerto, queda a 1.43 km de su subestación (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -2032,10 +2032,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.52,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que tiene energía eléctrica, con «opciones identificadas para ampliar la disponibilidad de energía en el mediano plazo». La línea de alta tensión más cercana a su subestación queda a 0.52 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que tiene energía eléctrica, con «opciones identificadas para ampliar la disponibilidad de energía en el mediano plazo». La línea de alta tensión más cercana a su subestación queda a 0.52 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -2196,10 +2196,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.08,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). El portal de Economía solo dice «disponibilidad eléctrica para operaciones de logística». La línea de alta tensión más cercana a su subestación queda a 0.08 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). El portal de Economía solo dice «disponibilidad eléctrica para operaciones de logística». La línea de alta tensión más cercana a su subestación queda a 0.08 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -2346,10 +2346,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.31,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que dispone de energía eléctrica, sin cifra. La línea de alta tensión más cercana a su subestación queda a 0.31 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La declaratoria dice que dispone de energía eléctrica, sin cifra. La línea de alta tensión más cercana a su subestación queda a 0.31 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -2509,10 +2509,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 1.07,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 1.07 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 1.07 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -2649,10 +2649,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.68,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.68 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.68 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -2779,10 +2779,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.12,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.12 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.12 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -2972,10 +2972,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.39,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.39 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.39 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -3116,10 +3116,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 1.32,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 1.32 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 1.32 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -3256,10 +3256,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.02,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.02 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.02 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -3431,10 +3431,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 2.63,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 2.63 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 2.63 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -3606,10 +3606,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.41,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.41 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.41 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -3766,10 +3766,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 8.48,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 8.48 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 8.48 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -3944,10 +3944,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 7.41,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 7.41 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 7.41 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -4118,10 +4118,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.04,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.04 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.04 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -4298,10 +4298,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 1.1,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 1.1 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 1.1 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -4429,10 +4429,10 @@
     ]
    },
    "energia": {
-    "mva": 8,
+    "mva": 10.45,
     "fuenteCorta": "estimación del juego",
     "kmLinea": 0.92,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.92 km (OpenStreetMap).",
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los ocho polos que sí la tienen, 10.45 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.92 km (OpenStreetMap).",
     "fuentes": [
      "energia-polos",
      "osm"
@@ -4545,12 +4545,12 @@
     ]
    },
    "energia": {
-    "mva": 8,
-    "fuenteCorta": "estimación del juego",
+    "mva": 60,
+    "fuenteCorta": "Gobierno de Puebla",
     "kmLinea": 2.34,
-    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). El Gobierno de Puebla construye en San José Chiapa una subestación de 60 MVA para el polo y la fábrica de Olinia (comunicado del 30 de junio de 2026); el juego aún no la cuenta como cifra del polo. La línea de alta tensión más cercana a su subestación queda a 2.34 km (OpenStreetMap).",
+    "dato": "La subestación que el Gobierno de Puebla construyó en San José Chiapa, de 60 MVA, «suficiente para cubrir la demanda industrial de esa zona durante los próximos 30 años» (comunicado del 30 de junio de 2026). La comparte con la industria del Café y Maíz del Bienestar y la fábrica de baterías de Olinia; el juego se la da toda al polo. La línea de alta tensión más cercana a la subestación del juego queda a 2.34 km (OpenStreetMap).",
     "fuentes": [
-     "energia-polos",
+     "puebla-subestacion-chiapa",
      "osm"
     ]
    },

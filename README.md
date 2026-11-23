@@ -495,7 +495,7 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
   guarda, por lote, el sector para el que se promovió, su orden y cuánto se ha llenado.
   `sim.promoverLote` es la acción. `ocuparLotes` reparte la curva de ocupación de siempre entre los
   lotes promovidos, en orden, saltando los que no caben en la electricidad del polo
-  (`capacidadMw`: su cifra oficial o, sin ella, la mediana de las siete oficiales, 8 MW;
+  (`capacidadMw`: su cifra oficial o, sin ella, la mediana de las ocho oficiales, 10.45 MW;
   `lotesQueCaben`). Cada empresa pide por empleo (`demandaLote`: 1.6 kW por empleo,
   `KW_POR_EMPLEO`, por el factor de su sector), así que un trabajador pide lo mismo en cualquier
   polo. La energía de la región usa `mwEnUso`. La carga de las

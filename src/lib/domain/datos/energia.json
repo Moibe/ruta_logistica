@@ -47,7 +47,7 @@
   "polos": {
    "fuente": "Declaratorias de los polos (DOF) y portal de los Polos de Desarrollo de la Secretaría de Economía",
    "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo",
-   "dato": "Siete polos tienen cifra oficial: lo que pedirán o tendrán disponible en su primera fase, de 4 a 20 MW. No crece con la superficie, así que los demás usan la mediana de los siete: 8 MW (estimación del juego)."
+   "dato": "Ocho polos tienen cifra oficial: lo que pedirán o tendrán disponible en su primera fase, de 4 a 60 MW. No crece con la superficie, así que los demás usan la mediana de los ocho: 10.45 MW (estimación del juego)."
   },
   "mulege": {
    "fuente": "SENER, PRODESEN 2019–2033 (tablas 5.1 y 6.5) y Plan de Desarrollo del Sector Eléctrico 2025–2039 (tabla A1.6); su límite, INEGI, Marco Geoestadístico de diciembre de 2025",
@@ -94,7 +94,7 @@
  },
  "cajaCfeMdpAño": 26400,
  "tipoCambio": 18.33,
- "mwSinCifra": 8,
+ "mwSinCifra": 10.45,
  "regiones": [
   {
    "id": "central",
@@ -450,77 +450,77 @@
  "polos": {
   "coatzacoalcos-i": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "coatzacoalcos-ii": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "salina-cruz": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "san-blas-atempa": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "san-juan-evangelista": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "texistepec": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "matias-romero": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "mixtequilla": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "ciudad-ixtepec": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "ixtaltepec": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "tapachula-i": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "tapachula-ii": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "arriaga": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "teapa": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "seybaplaya": {
    "region": "peninsular",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "san-jeronimo": {
@@ -537,12 +537,13 @@
   },
   "capital-tecnologia": {
    "region": "oriental",
-   "mw": 8,
-   "oficial": false
+   "mw": 60,
+   "oficial": true,
+   "dato": "Gobierno de Puebla (comunicado del 30 de junio de 2026): la subestación de San José Chiapa, con «una capacidad de 60 Megavolts Amperes, suficiente para cubrir la demanda industrial de esa zona durante los próximos 30 años», para el polo, la industria del Café y Maíz del Bienestar y la fábrica de baterías de Olinia."
   },
   "chetumal": {
    "region": "peninsular",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "parque-industrial-bajio": {
@@ -553,7 +554,7 @@
   },
   "puerta-logistica-bajio": {
    "region": "occidental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "nezahualcoyotl": {
@@ -576,7 +577,7 @@
   },
   "durango": {
    "region": "norte",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "hermosillo": {
@@ -587,32 +588,32 @@
   },
   "altamira": {
    "region": "noreste",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "topolobampo": {
    "region": "noroeste",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "cancun": {
    "region": "peninsular",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "circular-puebla": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "circular-tlaxcala": {
    "region": "oriental",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   },
   "circular-quintana-roo": {
    "region": "peninsular",
-   "mw": 8,
+   "mw": 10.45,
    "oficial": false
   }
  },

@@ -2877,13 +2877,16 @@ const haLotes = (g) => g.lotes.filter((l) => l.tipo === 'empresa').reduce((s, l)
 const nLotes = (g) => g.lotes.filter((l) => l.tipo === 'empresa').length;
 const listaLotes = (g) => g.lotes.filter((l) => l.tipo === 'empresa').map((l, i) => ({ n: i + 1, ha: l.ha, empresa: l.empresa ?? null }));
 /** A polo with no official figure of its energy: the game's median, and how far its line is. */
+/** How many polos have an official figure of their electricity, in words. */
+const CON_CIFRA = { 7: 'siete', 8: 'ocho', 9: 'nueve', 10: 'diez' }[Object.values(ENERGIA.polos).filter((p) => p.oficial).length];
+
 function energiaSinCifra(id, g, linea) {
   const mw = ENERGIA.polos[id].mw;
   return {
     mva: mw,
     fuenteCorta: 'estimación del juego',
     kmLinea: g.conexionElectrica.km,
-    dato: `No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, ${km(mw)} MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). ${linea}`,
+    dato: `No hay cifra oficial de su energía: el juego le da la mediana de los ${CON_CIFRA} polos que sí la tienen, ${km(mw)} MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). ${linea}`,
     fuentes: ['energia-polos', 'osm'],
   };
 }
@@ -3770,7 +3773,13 @@ function interiorCapitalTecnologia(g) {
       dato: `La declaratoria no habla de vías. La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
       fuentes: ['dof-capital-tecnologia', 'osm', 'sict-dos-bocas', 'juego'],
     },
-    energia: energiaSinCifra('capital-tecnologia', g, `El Gobierno de Puebla construye en San José Chiapa una subestación de 60 MVA para el polo y la fábrica de Olinia (comunicado del 30 de junio de 2026); el juego aún no la cuenta como cifra del polo. La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    energia: {
+      mva: ENERGIA.polos['capital-tecnologia'].mw,
+      fuenteCorta: 'Gobierno de Puebla',
+      kmLinea: g.conexionElectrica.km,
+      dato: `La subestación que el Gobierno de Puebla construyó en San José Chiapa, de 60 MVA, «suficiente para cubrir la demanda industrial de esa zona durante los próximos 30 años» (comunicado del 30 de junio de 2026). La comparte con la industria del Café y Maíz del Bienestar y la fábrica de baterías de Olinia; el juego se la da toda al polo. La línea de alta tensión más cercana a la subestación del juego queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`,
+      fuentes: ['puebla-subestacion-chiapa', 'osm'],
+    },
     lotes: {
       lista: listaLotes(g),
       dato: `Cinco polígonos en dos grupos: los ranchos de Lima y Minillas con la parcela 423, al norte, y las dos superficies del polígono sur, 5 km al suroeste. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 4 a 15 ha, y 4 ha de servicios en el Rancho de Lima; lo demás es área común y reserva (estimación del juego).`,

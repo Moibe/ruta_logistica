@@ -461,7 +461,7 @@
       role="presentation"
       onpointerenter={ver(
         'Subestación del polo',
-        `${(datos?.energia.mva ?? 0).toLocaleString('es-MX')} MVA disponibles (${datos?.energia.fuenteCorta ?? ''})`,
+        `${(datos?.energia.mva ?? 0).toLocaleString('es-MX', { maximumFractionDigits: 1 })} MVA disponibles (${datos?.energia.fuenteCorta ?? ''})`,
         `Energía: ${estado.av.energia >= 1 ? 'terminada' : `${Math.round(estado.av.energia * 100)} %`}`,
         `Se conecta a la línea de ${Number(geo.conexionElectrica.kv) / 1000 || 115} kV a ${geo.conexionElectrica.km.toLocaleString('es-MX')} km`
       )}

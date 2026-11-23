@@ -149,7 +149,7 @@
           <div class="barra"><span style:width="{f.e.avance * 100}%" class:parada={f.e.detenida}></span></div>
           {#if f.id === SUBESTACION}
             <p class="detalle cfe">
-              Da {personas(vista.capacidad)} MVA a sus empresas{vista.bancos ? ` (${vista.bancos} banco${vista.bancos > 1 ? 's' : ''} de la CFE)` : ''}.
+              Da {vista.capacidad.toLocaleString('es-MX', { maximumFractionDigits: 1 })} MVA a sus empresas{vista.bancos ? ` (${vista.bancos} banco${vista.bancos > 1 ? 's' : ''} de la CFE)` : ''}.
             </p>
           {/if}
           <p class="detalle">
