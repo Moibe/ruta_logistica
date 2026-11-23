@@ -254,6 +254,14 @@
    "fuente": "Corredor Interoceánico, ficha del PODEBI Asunción Ixtaltepec (30 de octubre de 2023): frente a la MEX-185, a 1 km de la línea Z; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-6-2023",
    "url": "https://www.gob.mx/ciit/es/articulos/podebi-asuncion-ixtaltepec"
   },
+  "dof-circular-puebla": {
+   "fuente": "DOF, Acuerdo de la Semarnat por el que se emite la declaratoria del Polo de Desarrollo de Economía Circular para el Bienestar Puebla (2 de marzo de 2026): cuadros de construcción de tres polígonos (BET 1, BET 2 y CERHAN), 40.43 ha en San José Chiapa; sus vialidades (Boulevard Industria Automotriz, carretera Teziutlán–Acajete, autopista Cuapiaxtla–Cuacnopalan y Circuito Audi), sus servicios y su propiedad (el Gobierno de Puebla)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5781224&fecha=02/03/2026"
+  },
+  "dof-circular-tlaxcala": {
+   "fuente": "DOF, Acuerdo de la Semarnat por el que se emite la declaratoria del Polo de Desarrollo de Economía Circular para el Bienestar Tlaxcala (8 de junio de 2026): cuadros de construcción de dos polígonos de 10 ha, 20.00 ha en la ex hacienda de San Pedro Ecatepec, Atlangatepec; su propiedad (el Fideicomiso de la Ciudad Industrial de Xicoténcatl, del Gobierno de Tlaxcala)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5789881&fecha=08/06/2026"
+  },
   "dof-teapa": {
    "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)",
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5789895&fecha=08/06/2026"
@@ -4214,6 +4222,248 @@
     "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
     "fuentes": [
      "dof-ixtaltepec"
+    ]
+   }
+  },
+  "circular-puebla": {
+   "nombre": "Economía Circular Puebla",
+   "lugar": "San José Chiapa, Puebla",
+   "sectores": [
+    "plastico",
+    "papel",
+    "metalicas"
+   ],
+   "fuentesLista": [
+    "dof-circular-puebla",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: el Gobierno de Puebla lo propuso en terrenos suyos y la Semarnat lo declaró el 2 de marzo de 2026 (DOF), junto al polo Capital de la Tecnología y al Circuito Audi. No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus polígonos lleva su calle; se hacen uno tras otro.",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.46,
+    "via": "Línea VB",
+    "operador": "Ferrosur",
+    "mesesMinimos": 2,
+    "dato": "La declaratoria no habla de vías. La espuela del juego va de la Línea VB (Ferrosur), la más cercana, al polo: 0.46 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-circular-puebla",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 1.1,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 1.1 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 3,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 2,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 3,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 2,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 2,
+      "empresa": null
+     }
+    ],
+    "dato": "Tres polígonos junto al Circuito Audi. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 31 ha en 8 lotes de 2 a 8 ha, y 1.5 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-circular-puebla",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Economía circular"
+   ],
+   "vocacionesDato": {
+    "dato": "La declaratoria no enumera vocaciones: el polo es para empresas de economía circular, que aprovechan residuos. El juego les ofrece las industrias que usan material reciclado como materia prima: el plástico y el hule, el papel y cartón, y las metálicas básicas, con chatarra de fierro (estimación del juego).",
+    "fuentes": [
+     "dof-circular-puebla",
+     "juego"
+    ]
+   }
+  },
+  "circular-tlaxcala": {
+   "nombre": "Economía Circular Tlaxcala",
+   "lugar": "Atlangatepec, Tlaxcala",
+   "sectores": [
+    "plastico",
+    "papel",
+    "metalicas"
+   ],
+   "fuentesLista": [
+    "dof-circular-tlaxcala",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: el Gobierno de Tlaxcala lo propuso en la ex hacienda de San Pedro Ecatepec, de un fideicomiso suyo, y la Semarnat lo declaró el 8 de junio de 2026 (DOF). No se ha reportado obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus polígonos lleva su calle; se hacen uno tras otro.",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.46,
+    "via": "Línea V",
+    "operador": "Canadian Pacific Kansas City",
+    "mesesMinimos": 2,
+    "dato": "La declaratoria no habla de vías. La espuela del juego va de la Línea V (Canadian Pacific Kansas City), la más cercana, al polo: 0.46 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-circular-tlaxcala",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 0.92,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.92 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 3,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 4,
+      "empresa": null
+     }
+    ],
+    "dato": "Dos polígonos de 10 ha. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 15 ha en 4 lotes de 3 a 4 ha, y 1 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-circular-tlaxcala",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Economía circular"
+   ],
+   "vocacionesDato": {
+    "dato": "La declaratoria no enumera vocaciones: el polo es para empresas de economía circular, que aprovechan residuos. El juego les ofrece las industrias que usan material reciclado como materia prima: el plástico y el hule, el papel y cartón, y las metálicas básicas, con chatarra de fierro (estimación del juego).",
+    "fuentes": [
+     "dof-circular-tlaxcala",
+     "juego"
     ]
    }
   }

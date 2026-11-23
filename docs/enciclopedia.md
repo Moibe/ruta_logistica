@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y veintitrés polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y veinticinco polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -684,7 +684,9 @@ Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texiste
 [Tapachula I](#tapachula-i-por-dentro), [Tapachula II](#tapachula-ii-por-dentro), [Teapa](#teapa-por-dentro),
 [San Blas Atempa](#san-blas-atempa-por-dentro), [San Juan Evangelista](#san-juan-evangelista-por-dentro),
 [Matías Romero](#matías-romero-avendaño-por-dentro), [Mixtequilla](#santa-maría-mixtequilla-por-dentro),
-[Ciudad Ixtepec](#ciudad-ixtepec-por-dentro) y [Asunción Ixtaltepec](#asunción-ixtaltepec-por-dentro).
+[Ciudad Ixtepec](#ciudad-ixtepec-por-dentro), [Asunción Ixtaltepec](#asunción-ixtaltepec-por-dentro),
+[Economía Circular Puebla](#economía-circular-puebla-por-dentro) y
+[Economía Circular Tlaxcala](#economía-circular-tlaxcala-por-dentro).
 El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
@@ -950,6 +952,8 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
   predios.
 - **Asunción Ixtaltepec:** son cuatro polígonos (A, B, C y uno adyacente al B); el derecho de vía
   de Pemex cruza el B y le deja una esquina de 2.18 ha, que el juego deja sin lotes.
+- **Economía Circular Puebla:** son tres polígonos separados.
+- **Economía Circular Tlaxcala:** son dos polígonos de 10 ha, uno junto al otro.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -2105,6 +2109,72 @@ Interoceánico: 246.08 ha en Asunción Ixtaltepec, Oaxaca, con unos 2 km de fren
 
 En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se
 ha reportado obra.
+
+### Economía Circular Puebla por dentro
+
+El vigesimocuarto polo con vista por dentro (`/mexico/polo/circular-puebla`) y el primero de
+economía circular, de la Semarnat: 40.43 ha en San José Chiapa, Puebla, junto a la planta de Audi
+y a 80 m del polo Capital de la Tecnología.
+
+**El terreno**, de su declaratoria (DOF, 2 de marzo de 2026): tres polígonos en UTM zona 14, dos
+llamados BET (28.42 y 5.23 ha) y uno CERHAN (6.78 ha).
+- **Resultado:** cada tabla da su área; suman exactamente las 40.4280 ha declaradas.
+- **El marcador:** queda a 232 m del centro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** sus vialidades son el Boulevard Industria Automotriz, la carretera
+  Teziutlán–Acajete, la autopista Cuapiaxtla–Cuacnopalan y el Circuito Audi, y cuenta con agua,
+  drenaje, electricidad y telecomunicaciones. No habla de vías.
+- **Vocaciones:** no las enumera: el polo es para empresas de economía circular, que aprovechan
+  residuos.
+- **Propiedad:** el Gobierno de Puebla, que lo propuso.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **31 ha en 8 lotes de 2 a 8 ha**, con 1.5 ha de servicios en el
+  polígono 1. Cada polígono lleva su calle.
+- **Los sectores:** las industrias que usan material reciclado como materia prima: plástico y hule,
+  papel y cartón, y metálicas básicas, con chatarra de fierro (estimación del juego).
+- **Los empleos:** 60.5 por hectárea, 2,444. Un lote de 8 ha da 631 y pide de 1.3 MW (plástico) a
+  4.4 MW (metálicas básicas).
+- **La espuela:** la **Línea VB de Ferrosur** queda a **0.46 km**. Cuesta 21 millones con una
+  cuadrilla (5.6 meses) o 30 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  3.9 MW: alcanza. La línea de 230 kV más cercana queda a 1.1 km de su subestación (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 222 millones con una cuadrilla;
+  las vialidades, 89 millones en 8.9 meses, o 129 en 3.1 con cuatro.
+
+**En la realidad**: declarado el 2 de marzo de 2026 (DOF). No se ha reportado obra.
+
+### Economía Circular Tlaxcala por dentro
+
+El vigesimoquinto polo con vista por dentro (`/mexico/polo/circular-tlaxcala`), de economía
+circular, de la Semarnat: 20 ha en la ex hacienda de San Pedro Ecatepec, Atlangatepec, Tlaxcala.
+
+**El terreno**, de su declaratoria (DOF, 8 de junio de 2026): dos polígonos de 10 ha en UTM zona 14.
+- **Resultado:** cada tabla da su área; suman las 20.00014 ha declaradas.
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** «cerca de localidades y con accesibilidad funcional dentro de la región»; no
+  nombra carreteras ni vías. En OpenStreetMap solo hay caminos sin número a su alrededor.
+- **Vocaciones:** no las enumera, como la de Puebla.
+- **Propiedad:** el Fideicomiso de la Ciudad Industrial de Xicoténcatl, del Gobierno de Tlaxcala,
+  por una donación.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **15 ha en 4 lotes de 3 y 4 ha**, con 1 ha de servicios.
+- **Los sectores:** los mismos que en Puebla (estimación del juego).
+- **Los empleos:** 60.5 por hectárea, 1,209. Un lote de 4 ha da 322 y pide de 0.7 MW (plástico) a
+  2.2 MW (metálicas básicas).
+- **La espuela:** la **Línea V de CPKC** queda a **0.46 km**. Cuesta 21 millones con una cuadrilla
+  (5.6 meses) o 30 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  1.9 MW: alcanza. La línea de 230 kV más cercana queda a 0.92 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 110 millones con una cuadrilla;
+  las vialidades, 44 millones en 7.2 meses, o 64 en 2.5 con cuatro.
+
+**En la realidad**: declarado el 8 de junio de 2026 (DOF). No se ha reportado obra.
 
 ---
 

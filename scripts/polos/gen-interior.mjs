@@ -1816,6 +1816,98 @@ const IXTALTEPEC = {
   carretera: /185/,
 };
 
+/**
+ * Economía Circular Puebla, from its declaratoria (Semarnat, DOF, 2 Mar 2026): three polygons in UTM
+ * zone 14 (BET 1, BET 2 and CERHAN), 40.4280 ha in San José Chiapa, 80 m west of Capital de la
+ * Tecnología's Rancho de Lima. Each table gives its area.
+ */
+const CIRCULAR_PUEBLA = {
+  id: 'circular-puebla',
+  zona: 14,
+  piezas: [
+    {
+      nombre: 'Polígono 1 (BET)',
+      servicios: true,
+      vertices: [
+        [630525.389, 2126554.151], [630482.719, 2126707.641], [630604.507, 2126783.338], [630588.328, 2126817.857],
+        [630436.061, 2126988.053], [630413.539, 2127015.474], [630570.203, 2127102.472], [630706.447, 2126897.412],
+        [630723.523, 2126687.6], [630732.758, 2126672.726], [631373.826, 2127070.739], [631364.591, 2127085.613],
+        [631226.471, 2127228.988], [631369.898, 2127310.656], [631396.238, 2127242.616], [631458.526, 2127202.645],
+        [631472.559, 2127199.751], [631483.616, 2127159.952], [631505.262, 2127173.392], [631573.029, 2126845.388],
+      ],
+      lotes: [{ ha: 8, lado: 'a' }, { ha: 6, lado: 'a' }, { ha: 5, lado: 'b' }, { ha: 3, lado: 'b' }],
+    },
+    {
+      nombre: 'Polígono 3 (CERHAN)',
+      vertices: [
+        [630141.162, 2126637.388], [630279.507, 2126675.626], [630337.014, 2126737.244], [630312.607, 2126874.061],
+        [630330.823, 2126884.836], [630482.719, 2126707.641], [630517.086, 2126584.019], [630182.199, 2126490.922],
+      ],
+      lotes: [{ ha: 3, lado: 'a' }, { ha: 2, lado: 'b' }],
+    },
+    {
+      nombre: 'Polígono 2 (BET)',
+      vertices: [
+        [630953.699, 2127589.306], [630973.276, 2127567.372], [631019.838, 2127555.598], [631148.311, 2127350.032],
+        [631217.516, 2127242.488], [630827.778, 2127407.355],
+      ],
+      lotes: [{ ha: 2, lado: 'a' }, { ha: 2, lado: 'b' }],
+    },
+  ],
+  areaDof: 404280,
+  control: null,
+  marcador: { lat: 19.2312, lon: -97.7533 },
+  /**
+   * No lots are published. The game gives each piece about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 31 ha in 8 lots of 2 to 8 ha (an estimate).
+   */
+  serviciosHa: 1.5,
+  anchoVialidad: 20,
+  anchoAcceso: 12,
+  /** Between the Cuapiaxtla–Cuacnopalan highway, the Circuito Audi and the Boulevard Industria Automotriz (the DOF). */
+  carretera: /129/,
+  carreteraNombre: /Audi|Automotriz/i,
+};
+
+/**
+ * Economía Circular Tlaxcala, from its declaratoria (Semarnat, DOF, 8 Jun 2026): two polygons of 10 ha
+ * in UTM zone 14, in the former hacienda of San Pedro Ecatepec, Atlangatepec; 20.00014 ha. Each table
+ * gives its area.
+ */
+const CIRCULAR_TLAXCALA = {
+  id: 'circular-tlaxcala',
+  zona: 14,
+  piezas: [
+    {
+      nombre: 'Polígono 1',
+      servicios: true,
+      vertices: [
+        [587639.579, 2157595.53], [587681.348, 2157243.694], [587944.169, 2157103.478], [587965.919, 2157141.726],
+        [588050.164, 2157303.539],
+      ],
+      lotes: [{ ha: 4, lado: 'a' }, { ha: 3, lado: 'b' }],
+    },
+    {
+      nombre: 'Polígono 2',
+      vertices: [
+        [587681.348, 2157243.694], [587549.611, 2157030.044], [587509.969, 2156965.755], [587779.706, 2156814.219],
+        [587782.405, 2156819.159], [587890.657, 2157009.371], [587944.169, 2157103.478],
+      ],
+      lotes: [{ ha: 4, lado: 'a' }, { ha: 4, lado: 'b' }],
+    },
+  ],
+  areaDof: 200001.4,
+  control: null,
+  marcador: { lat: 19.5087, lon: -98.163 },
+  /**
+   * No lots are published. The game gives each piece about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 15 ha in 4 lots of 3 to 4 ha (an estimate).
+   */
+  serviciosHa: 1,
+  anchoVialidad: 18,
+  anchoAcceso: 12,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 /**
@@ -2534,6 +2626,14 @@ const FUENTES = {
   'ciit-ixtaltepec': {
     fuente: 'Corredor Interoceánico, ficha del PODEBI Asunción Ixtaltepec (30 de octubre de 2023): frente a la MEX-185, a 1 km de la línea Z; la convocatoria a su licitación internacional LPIBI-013AYH-PODEBI-6-2023',
     url: 'https://www.gob.mx/ciit/es/articulos/podebi-asuncion-ixtaltepec',
+  },
+  'dof-circular-puebla': {
+    fuente: 'DOF, Acuerdo de la Semarnat por el que se emite la declaratoria del Polo de Desarrollo de Economía Circular para el Bienestar Puebla (2 de marzo de 2026): cuadros de construcción de tres polígonos (BET 1, BET 2 y CERHAN), 40.43 ha en San José Chiapa; sus vialidades (Boulevard Industria Automotriz, carretera Teziutlán–Acajete, autopista Cuapiaxtla–Cuacnopalan y Circuito Audi), sus servicios y su propiedad (el Gobierno de Puebla)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5781224&fecha=02/03/2026',
+  },
+  'dof-circular-tlaxcala': {
+    fuente: 'DOF, Acuerdo de la Semarnat por el que se emite la declaratoria del Polo de Desarrollo de Economía Circular para el Bienestar Tlaxcala (8 de junio de 2026): cuadros de construcción de dos polígonos de 10 ha, 20.00 ha en la ex hacienda de San Pedro Ecatepec, Atlangatepec; su propiedad (el Fideicomiso de la Ciudad Industrial de Xicoténcatl, del Gobierno de Tlaxcala)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5789881&fecha=08/06/2026',
   },
   'dof-teapa': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Teapa (8 de junio de 2026): cuadro de construcción de 171 vértices en UTM y en coordenadas geográficas, 96.14 ha; aledaño a la línea FA (y, más adelante, a 4 km de ella), a 6 km de la MEX-195 y a 8 km de Teapa; sus vocaciones productivas y su propiedad (el Gobierno de Tabasco la aportó al Corredor Interoceánico)',
@@ -3473,6 +3573,74 @@ function interiorIxtaltepec(g) {
   };
 }
 
+function interiorCircularPuebla(g) {
+  return {
+    nombre: 'Economía Circular Puebla',
+    lugar: 'San José Chiapa, Puebla',
+    sectores: ['plastico', 'papel', 'metalicas'],
+    fuentesLista: ['dof-circular-puebla', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: el Gobierno de Puebla lo propuso en terrenos suyos y la Semarnat lo declaró el 2 de marzo de 2026 (DOF), junto al polo Capital de la Tecnología y al Circuito Audi. No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus polígonos lleva su calle; se hacen uno tras otro.',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria no habla de vías. La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-circular-puebla', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('circular-puebla', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Tres polígonos junto al Circuito Audi. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 2 a 8 ha, y 1.5 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-circular-puebla', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Economía circular'],
+    vocacionesDato: {
+      dato: 'La declaratoria no enumera vocaciones: el polo es para empresas de economía circular, que aprovechan residuos. El juego les ofrece las industrias que usan material reciclado como materia prima: el plástico y el hule, el papel y cartón, y las metálicas básicas, con chatarra de fierro (estimación del juego).',
+      fuentes: ['dof-circular-puebla', 'juego'],
+    },
+  };
+}
+
+function interiorCircularTlaxcala(g) {
+  return {
+    nombre: 'Economía Circular Tlaxcala',
+    lugar: 'Atlangatepec, Tlaxcala',
+    sectores: ['plastico', 'papel', 'metalicas'],
+    fuentesLista: ['dof-circular-tlaxcala', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: el Gobierno de Tlaxcala lo propuso en la ex hacienda de San Pedro Ecatepec, de un fideicomiso suyo, y la Semarnat lo declaró el 8 de junio de 2026 (DOF). No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus polígonos lleva su calle; se hacen uno tras otro.',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria no habla de vías. La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-circular-tlaxcala', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('circular-tlaxcala', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Dos polígonos de 10 ha. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 3 a 4 ha, y 1 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-circular-tlaxcala', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Economía circular'],
+    vocacionesDato: {
+      dato: 'La declaratoria no enumera vocaciones: el polo es para empresas de economía circular, que aprovechan residuos. El juego les ofrece las industrias que usan material reciclado como materia prima: el plástico y el hule, el papel y cartón, y las metálicas básicas, con chatarra de fierro (estimación del juego).',
+      fuentes: ['dof-circular-tlaxcala', 'juego'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -3529,6 +3697,8 @@ const POLOS_INTERIOR = [
   [MIXTEQUILLA, interiorMixtequilla],
   [CIUDAD_IXTEPEC, interiorCiudadIxtepec],
   [IXTALTEPEC, interiorIxtaltepec],
+  [CIRCULAR_PUEBLA, interiorCircularPuebla],
+  [CIRCULAR_TLAXCALA, interiorCircularTlaxcala],
 ];
 // `id…`: build only those polos and keep the others as they are in interiores.json.
 // `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.
