@@ -306,7 +306,7 @@
         class:ladero={v.servicio === 'siding'}
         role="presentation"
         onpointerenter={ver(
-          v.estado === 'rail' ? (v.nombre ?? 'Vía férrea') : 'Vía abandonada',
+          v.estado === 'rail' ? (v.nombre ?? 'Vía férrea') : `${v.estado === 'construction' ? 'Vía en obra' : 'Vía abandonada'}${v.nombre ? ` · ${v.nombre}` : ''}`,
           v.operador ? `Opera ${v.operador}` : '',
           v.servicio === 'siding' ? 'Ladero' : '',
           'OpenStreetMap'

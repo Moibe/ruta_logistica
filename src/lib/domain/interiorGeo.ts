@@ -25,7 +25,7 @@ export type GeoInterior = {
   ejes: [Pt, Pt][];
   servicios: { centro: Pt; subestacion: Pt; tanque: Pt };
   /** From the polo's boundary (first point) to the main track (second). */
-  espuela: { puntos: [Pt, Pt]; km: number; via: string; operador: string };
+  espuela: { puntos: [Pt, Pt]; km: number; via: string; operador: string; /** When the track isn't in service in OpenStreetMap: 'construction', 'abandoned'. */ estado?: string };
   /** From the substation (first point) to the high-voltage line (second). */
   conexionElectrica: { puntos: [Pt, Pt]; km: number; kv: string };
   /** The highway the polo faces (its OpenStreetMap ref), for its label. */

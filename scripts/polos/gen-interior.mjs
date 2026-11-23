@@ -4,7 +4,7 @@
 //
 //   node scripts/polos/gen-interior.mjs
 //
-// Huamantla, Coatzacoalcos I, Texistepec and Altamira. Writes:
+// Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl and Reserva Zapotlán. Writes:
 //   static/data/polos/<id>.json            the geometry, in metres around the polo (fetched by the view)
 //   src/lib/domain/datos/interiores.json   the works by front and the real facts (read by the game)
 //
@@ -463,6 +463,130 @@ const ALTAMIRA = {
   carretera: /113|143/,
 };
 
+/**
+ * Nezahualcóyotl, from its declaratoria (DOF, 7 Aug 2025): four cadastral lots of the state (3-B,
+ * 3-C, 7-D and 7-E) by the Bordo de Xochiaca, in UTM zone 14 (the DOF doesn't say the zone; the
+ * State of Mexico is in it). The 3-B table closes with a row «R100» at 4,999,867.778 east, one 9
+ * too many, that repeats R27: it's left out, and the four add up to the 683,683.11 m² declared.
+ */
+const NEZAHUALCOYOTL = {
+  id: 'nezahualcoyotl',
+  zona: 14,
+  piezas: [
+    {
+      nombre: 'Lote 3-C',
+      servicios: true,
+      vertices: [
+        [500085.207, 2147738.197], [500115.703, 2147789.922], [500123.966, 2147805.933], [500128.73, 2147816.97],
+        [500135.85, 2147833.51], [500137.014, 2147836.301], [500142.829, 2147846.817], [500145.782, 2147852.012],
+        [500160.333, 2147878.283], [500162.876, 2147883.681], [500174.707, 2147911.312], [500185.361, 2147936.216],
+        [500190.707, 2147951.821], [500197.215, 2147970.73], [500214.85, 2148006.511], [500224.897, 2148023.847],
+        [500234.679, 2148041.163], [500244.66, 2148058.552], [500260.261, 2148085.833], [500264.791, 2148093.103],
+        [500276.367, 2148109.386], [500303.61, 2148138.596], [500335.503, 2148162.689], [500352.912, 2148172.558],
+        [500371.06, 2148180.856], [500389.925, 2148187.585], [500409.276, 2148192.621], [500503.384, 2148202.349],
+        [500565.581, 2148188.774], [500650.121, 2147976.179], [500032.504, 2147245.868], [499904.278, 2147316.005],
+      ],
+      lotes: [{ ha: 6, lado: 'a' }, { ha: 5, lado: 'a' }, { ha: 5, lado: 'b' }, { ha: 4.5, lado: 'b' }, { ha: 2, lado: 'b' }],
+    },
+    {
+      nombre: 'Lote 3-B',
+      vertices: [
+        [500158.053, 2148377.014], [500159.319, 2148371.171], [500161.553, 2148359.321], [500163.527, 2148347.483],
+        [500166.168, 2148329.662], [500168.006, 2148311.77], [500169.723, 2148287.799], [500170.68, 2148269.823],
+        [500170.773, 2148263.791], [500170.88, 2148252.284], [500170.44, 2148230.387], [500170.121, 2148224.616],
+        [500169.223, 2148206.618], [500168.712, 2148200.662], [500167.689, 2148188.666], [500165.608, 2148170.804],
+        [500162.936, 2148152.981], [500158.674, 2148129.356], [500154.892, 2148111.636], [500149.79, 2148091.232],
+        [500144.09, 2148071.129], [500138.723, 2148053.916], [500130.598, 2148031.334], [500126.226, 2148020.188],
+        [500112.568, 2147986.863], [500085.369, 2147923.019], [500078.883, 2147904.708], [499867.778, 2147339.916],
+        [499638.419, 2147465.368], [500011.131, 2148248.345], [500147.671, 2148360.155],
+      ],
+      lotes: [{ ha: 5, lado: 'a' }, { ha: 3.5, lado: 'a' }, { ha: 4.5, lado: 'b' }, { ha: 3, lado: 'b' }],
+    },
+    {
+      nombre: 'Lote 7-D',
+      vertices: [
+        [499856.969, 2147317.333], [499840.187, 2147278.296], [499832.297, 2147259.921], [499824.433, 2147241.59],
+        [499816.556, 2147223.175], [499808.685, 2147204.823], [499800.851, 2147186.426], [499785.03, 2147149.643],
+        [499777.133, 2147131.287], [499769.306, 2147112.882], [499764.556, 2147101.687], [499758.985, 2147091.943],
+        [499752.297, 2147084.516], [499744.247, 2147076.854], [499735.178, 2147074.383], [499725.449, 2147072.128],
+        [499715.478, 2147071.812], [499705.667, 2147073.554], [499689.417, 2147076.934], [499669.944, 2147080.964],
+        [499649.619, 2147086.692], [499630.402, 2147092.078], [499611.134, 2147097.456], [499591.882, 2147102.873],
+        [499573.445, 2147108.016], [499552.043, 2147111.457], [499533.102, 2147114.508], [499513.327, 2147117.708],
+        [499508.056, 2147118.553], [499297.691, 2147177], [499299.962, 2147182.463], [499449.843, 2147542.982],
+      ],
+      lotes: [{ ha: 4, lado: 'a' }, { ha: 2, lado: 'a' }, { ha: 3.5, lado: 'b' }, { ha: 2.5, lado: 'b' }],
+    },
+    {
+      nombre: 'Lote 7-E',
+      vertices: [
+        [500016.482, 2147226.067], [499894.835, 2147292.048], [499854.784, 2147196.123], [499847.072, 2147177.788],
+        [499839.408, 2147159.255], [499831.663, 2147140.826], [499823.954, 2147122.334], [499816.221, 2147103.814],
+        [499808.548, 2147085.44], [499806.051, 2147079.328], [499804.193, 2147073.808], [499803.561, 2147063.858],
+        [499805.802, 2147054.206], [499810.817, 2147045.558], [499818.23, 2147038.899], [499827.283, 2147030.653],
+        [499846.052, 2147027.82], [499850.786, 2147026.35], [499861.126, 2147038.813],
+      ],
+      lotes: [{ ha: 1.5, lado: 'b' }],
+    },
+  ],
+  areaDof: 683683.11,
+  control: null,
+  marcador: { lat: 19.4243, lon: -98.9973 },
+  /** Business centre and services: the game's estimate. */
+  serviciosHa: 1.5,
+  /** A city's: narrower roads than an open-country polo's. */
+  anchoVialidad: 22,
+  anchoAcceso: 12,
+  margen: 1200,
+  /** The Circuito Exterior Mexiquense: the only road with a number by it. */
+  carretera: /5D/,
+  sinServicio: true,
+};
+
+/**
+ * Reserva Zapotlán, from its declaratoria (DOF, 30 Jun 2025): one polygon of 40 vertices in UTM
+ * zone 14 (the DOF doesn't say the zone; Hidalgo is in it), 9,108,169.941 m² as its table says.
+ * The article that declares it says 9,222,019.79 m²; the table and its vertices give 910.82 ha.
+ */
+const RESERVA_ZAPOTLAN = {
+  id: 'reserva-zapotlan',
+  zona: 14,
+  vertices: [
+    [516456.4369, 2203410.9664], [516338.2167, 2203647.388], [516639.6118, 2203964.703], [516749.4705, 2203720.991],
+    [518708.0479, 2206030.863], [518730.8576, 2206011.475], [519036.7478, 2206372.404], [518860.5899, 2206518.684],
+    [520332.7786, 2208256.14], [518622.3825, 2208588.954], [518505.2726, 2208613.2491], [518108.9698, 2208690.573],
+    [518113.8095, 2208454.643], [518316.0658, 2208414.434], [518222.0962, 2207909.34], [518140.6298, 2207927.858],
+    [518072.8381, 2207837.358], [518247.1969, 2207719.675], [518171.1821, 2207625.702], [517999.188, 2207740.539],
+    [517853.656, 2207558.85], [518026.9725, 2207447.255], [516250.409, 2205263.832], [516187.979, 2205298.876],
+    [516046.7536, 2205112.734], [515974.4439, 2205155.935], [515786.8699, 2205040.983], [515679.7007, 2204849.847],
+    [515664.8538, 2204830.649], [515327.3307, 2204234.423], [515561.8059, 2204079.466], [515391.5419, 2203800.238],
+    [515167.252, 2203951.483], [515085.6354, 2203808.616], [515307.5037, 2203662.595], [515223.3664, 2203521.941],
+    [515355.5587, 2203449.279], [515341.6116, 2203439.7174], [516133.9196, 2202994.0203], [516304.5457, 2203195.6604],
+  ],
+  areaDof: 9108169.941,
+  control: null,
+  marcador: { lat: 19.95, lon: -98.8316 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 680 ha in 20 lots of 15 to 60 ha (an estimate).
+   */
+  lotes: [
+    { ha: 60, lado: 'a' }, { ha: 50, lado: 'a' }, { ha: 45, lado: 'a' }, { ha: 40, lado: 'a' }, { ha: 35, lado: 'a' },
+    { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' },
+    { ha: 60, lado: 'b' }, { ha: 50, lado: 'b' }, { ha: 45, lado: 'b' }, { ha: 40, lado: 'b' }, { ha: 35, lado: 'b' },
+    { ha: 30, lado: 'b' }, { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' }, { ha: 20, lado: 'b' }, { ha: 15, lado: 'b' },
+  ],
+  serviciosHa: 6,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  carretera: /85/,
+  /**
+   * No power line or substation in OpenStreetMap within kilometres: the declaratoria says the
+   * nearest distribution substation is 20 km away and the high-voltage connection would be
+   * Tizayuca's, about 24 km. Where it is: OpenStreetMap (230/23 kV, 180 MVA).
+   */
+  conexion: { nombre: 'Tizayuca', lon: -98.9902, lat: 19.8248, kv: '230000' },
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 const CONSULTAS = (p) => ({
@@ -590,7 +714,7 @@ async function construir(p) {
   const vias = [];
   for (const e of datos.vias) {
     const t = e.tags ?? {};
-    if (!e.geometry || !['rail', 'abandoned', 'disused'].includes(t.railway)) continue;
+    if (!e.geometry || !['rail', 'abandoned', 'disused', 'construction'].includes(t.railway)) continue;
     for (const puntos of trazos(e.geometry, 2))
       vias.push({ estado: t.railway, ...(t.name ? { nombre: t.name } : {}), ...(t.operator ? { operador: t.operator } : {}), ...(t.service ? { servicio: t.service } : {}), puntos });
   }
@@ -648,20 +772,29 @@ async function construir(p) {
   }
   const { subestacion } = servicios;
 
-  // The rail spur: from the nearest main track to the nearest piece.
-  const principales = vias.filter((x) => x.estado === 'rail' && !['siding', 'yard', 'spur'].includes(x.servicio ?? '') && x.nombre);
+  // The rail spur: from the nearest main track to the nearest piece. With none in service near
+  // (Reserva Zapotlán), the nearest named line, abandoned or being rebuilt.
+  const conNombre = vias.filter((x) => x.nombre && !['siding', 'yard', 'spur'].includes(x.servicio ?? ''));
+  const enServicio = conNombre.filter((x) => x.estado === 'rail');
   let espuela = null;
   for (const pieza of piezas)
-    for (const via of principales) {
+    for (const via of enServicio.length ? enServicio : conNombre) {
       const m = masCercanos(pieza.local, via.puntos, true);
       if (!espuela || m.d < espuela.d) espuela = { ...m, via };
     }
-  // The power connection: from the substation to the nearest high-voltage line.
+  // The power connection: from the substation to the nearest high-voltage line, or to the
+  // substation the declaratoria names when there's no line near (Reserva Zapotlán's Tizayuca).
   let conexion = null;
-  for (const l of lineas) {
-    const m = masCercanos([subestacion, subestacion], l.puntos);
-    if (!conexion || m.d < conexion.d) conexion = { ...m, linea: l };
-  }
+  if (p.conexion) {
+    const pb = local(p.conexion.lon, p.conexion.lat);
+    conexion = { pa: subestacion, pb, d: Math.hypot(pb[0] - subestacion[0], pb[1] - subestacion[1]), linea: { kv: p.conexion.kv } };
+    if (!subestaciones.some((x) => x.nombre === p.conexion.nombre))
+      subestaciones.push({ nombre: p.conexion.nombre, operador: 'CFE', kv: p.conexion.kv, x: r0(pb[0]), y: r0(pb[1]) });
+  } else
+    for (const l of lineas) {
+      const m = masCercanos([subestacion, subestacion], l.puntos);
+      if (!conexion || m.d < conexion.d) conexion = { ...m, linea: l };
+    }
   // The view reaches the line the polo connects to.
   const [lx, ly] = conexion.pb;
   p.caja = { x0: Math.min(x0, cien(lx - 400)), x1: Math.max(x1, cien(lx + 400)), y0: Math.min(y0, cien(ly - 400)), y1: Math.max(y1, cien(ly + 400)) };
@@ -682,7 +815,13 @@ async function construir(p) {
     vialidades,
     ejes,
     servicios,
-    espuela: { puntos: [espuela.pa, espuela.pb].map(([x, y]) => [r1(x), r1(y)]), km: Number((espuela.d / 1000).toFixed(2)), via: espuela.via.nombre ?? '', operador: espuela.via.operador ?? '' },
+    espuela: {
+      puntos: [espuela.pa, espuela.pb].map(([x, y]) => [r1(x), r1(y)]),
+      km: Number((espuela.d / 1000).toFixed(2)),
+      via: espuela.via.nombre ?? '',
+      operador: espuela.via.operador ?? '',
+      ...(espuela.via.estado !== 'rail' ? { estado: espuela.via.estado } : {}),
+    },
     conexionElectrica: { puntos: [conexion.pa, conexion.pb].map(([x, y]) => [r1(x), r1(y)]), km: Number((conexion.d / 1000).toFixed(2)), kv: conexion.linea.kv },
     /** The highway the polo faces, for its label. */
     carretera: carretera[0]?.ref ?? null,
@@ -864,6 +1003,22 @@ const FUENTES = {
   'altamira-convenio': {
     fuente: 'Gobierno municipal de Altamira, 6 de marzo de 2026: el polo está en su fase de formalización (las siguientes son la de desarrollo y la de inversión productiva) tras el convenio del 18 de febrero de 2026 entre el Gobierno de Tamaulipas y el federal, que dará paso a su fideicomiso; el predio, de 1,638 ha, es del Gobierno del estado, en el puerto de Altamira',
     url: 'https://altamira.gob.mx/2427/2026/03/06/consolidan-estrategia-del-plan-mexico-para-atraer-inversion-a-altamira/',
+  },
+  'dof-nezahualcoyotl': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Nezahualcóyotl, Estado de México (7 de agosto de 2025): cuadros de construcción de los lotes 3-B, 3-C, 7-D y 7-E, 683,683.11 m²; junto a la Ciudad de México y al aeropuerto; dentro del predio, gas, electricidad y red férrea; la demanda de electricidad de la Secretaría de Energía; sus vocaciones productivas y su propiedad (el Gobierno del Estado de México)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5764903&fecha=07/08/2025',
+  },
+  'neza-polo': {
+    fuente: 'Gobierno de Nezahualcóyotl, comunicado de prensa 100, 26 de junio de 2025: en su primera etapa, unos 800 millones de pesos de inversión y 4,500 empleos directos',
+    url: 'https://www.neza.gob.mx/prensa_2025/single.php?id=100',
+  },
+  'dof-zapotlan': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Reserva Zapotlán, Hidalgo (30 de junio de 2025): cuadro de construcción (40 vértices, 9,108,169.941 m²); acceso a las autopistas 85D y 40, a 27 km del AIFA; «requiere obras de infraestructura… de alrededor de 5 mil millones de pesos»; la demanda de electricidad y la conexión de la Secretaría de Energía; sus vocaciones productivas y su propiedad (el Gobierno de Hidalgo)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5761461&fecha=30/06/2025',
+  },
+  'presidencia-zapotlan': {
+    fuente: 'Presidencia, comunicado del 19 de agosto de 2026: DEWA invertirá 10,106 millones de pesos en el PODECOBI de Zapotlán; en su primera fase, 1,277 millones para urbanización y 2,000 millones para las dos primeras naves, con obras desde septiembre y 5,100 empleos directos e indirectos',
+    url: 'https://www.gob.mx/presidencia/prensa/presidenta-destaca-inversion-de-10-mil-106-mdp-para-el-podecobi-de-zapotlan-hidalgo-que-ya-reune-147-mil-mdp-en-proyectos',
   },
   juego: { fuente: 'Estimación del juego', url: '' },
 };
@@ -1083,6 +1238,88 @@ function interiorAltamira(g) {
   };
 }
 
+function interiorNezahualcoyotl(g) {
+  return {
+    nombre: 'Nezahualcóyotl',
+    lugar: 'Nezahualcóyotl, Estado de México',
+    sectores: ['computacion', 'textil', 'alimentos', 'farmaceutica', 'dispositivos-medicos'],
+    fuentesLista: ['dof-nezahualcoyotl', 'neza-polo', 'osm', 'sict-dos-bocas'],
+    realNota:
+      'El polo real: declarado el 7 de agosto de 2025 (DOF) en cuatro lotes del Gobierno del Estado de México junto al Bordo de Xochiaca. El municipio anunció, para su primera etapa, unos 800 millones de pesos de inversión y 4,500 empleos directos. No se ha reportado obra ni empresas: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el predio ya «cuenta con infraestructura urbana básica» y adentro tiene gas, electricidad y red férrea; para lotes de empresas hace falta llevarlas a cada uno. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus cuatro lotes catastrales lleva su calle; se hacen uno tras otro.',
+      fuentes: ['dof-nezahualcoyotl', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria dice que el predio tiene red férrea: la ${g.espuela.via} de ${g.espuela.operador} pasa junto a él (OpenStreetMap). La espuela del juego es el tramo de esa vía al predio, ${km(g.espuela.km)} km, con su cambio de vía: cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-nezahualcoyotl', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: {
+      mva: ENERGIA.polos.nezahualcoyotl.mw,
+      fuenteCorta: 'Sener, en la declaratoria',
+      kmLinea: g.conexionElectrica.km,
+      dato: `La Secretaría de Energía, en la declaratoria: su demanda crecerá «de 5 a 7.7 MW de 2027 a 2030»; la subestación de distribución más cercana está a 1.8 km y en alta tensión se conectaría a la subestación Nezahualcóyotl, de 85 kV, con una línea de unos 0.2 km. La línea de 85 kV más cercana a la subestación del juego queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`,
+      fuentes: ['dof-nezahualcoyotl', 'osm'],
+    },
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Cuatro lotes catastrales del estado: 3-C (29.2 ha), 3-B (21.0), 7-D (15.6) y 7-E (2.6). No hay lotes de empresas publicados. El juego les da la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 1.5 a 6 ha, chicos como los de una ciudad, y 1.5 ha de servicios a la entrada del lote 3-C; lo demás es área común y reserva (estimación del juego). Sus empleos son los que anunció el municipio para su primera etapa, 4,500.`,
+      fuentes: ['dof-nezahualcoyotl', 'dof-coatzacoalcos-i', 'neza-polo', 'juego'],
+    },
+    vocaciones: ['Logística', 'Economía digital', 'Servicios tecnológicos', 'Electrónica', 'Industria ligera', 'Farmacéutico y dispositivos médicos'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, electrónica es el equipo de computación y electrónico; industria ligera, la textil y la alimentaria (estimación del juego); farmacéutico y dispositivos médicos, sus dos sectores. Logística, economía digital y servicios tecnológicos no son manufactura: el juego no los ofrece para un lote.',
+      fuentes: ['dof-nezahualcoyotl'],
+    },
+  };
+}
+
+function interiorReservaZapotlan(g) {
+  return {
+    nombre: 'Reserva Zapotlán',
+    lugar: 'Zapotlán de Juárez, Hidalgo',
+    sectores: ['farmaceutica', 'dispositivos-medicos', 'transporte', 'productos-metalicos', 'maquinaria', 'electricos', 'computacion'],
+    fuentesLista: ['dof-zapotlan', 'presidencia-zapotlan', 'osm', 'sict-dos-bocas'],
+    realNota:
+      'El polo real: declarado el 30 de junio de 2025 (DOF) en terrenos del Gobierno de Hidalgo, junto al parque industrial QUMA. El 19 de agosto de 2026 la Presidencia anunció que la desarrolladora DEWA invertirá 10,106 millones para urbanizarlo en cinco fases; la primera, 1,277 millones de urbanización y 2,000 millones para sus dos primeras naves, con obra desde septiembre y 5,100 empleos directos e indirectos. No se ha reportado que la obra empezara: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que «requiere obras de infraestructura, previamente identificadas por el estado de Hidalgo, de alrededor de 5 mil millones de pesos»: de ahí sale el costo por hectárea de todos los polos del juego. DEWA, su desarrollador, pone 1,277 millones en la urbanización de la primera fase de cinco (Presidencia). Los frentes son los de Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['dof-zapotlan', 'presidencia-zapotlan', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria no habla de tren. Junto al polo pasa la vía México–Pachuca: en la red del juego de 2018 es de Ferrosur y está en servicio; hoy se rehace para el tren de pasajeros México–Pachuca (Presidencia), y OpenStreetMap la marca en obra. La espuela del juego va a ella: ${km(g.espuela.km)} km, con su cambio de vía. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['osm', 'presidencia-zapotlan', 'sict-dos-bocas', 'juego'],
+    },
+    energia: {
+      mva: ENERGIA.polos['reserva-zapotlan'].mw,
+      fuenteCorta: 'Sener, en la declaratoria',
+      kmLinea: g.conexionElectrica.km,
+      dato: `La declaratoria: «en su etapa madura este PODECOBI alcance una demanda de electricidad de 20 MW», de 8 a 12 MW entre 2028 y 2030; la subestación de distribución más cercana está a 20 km y en alta tensión se conectaría a la subestación Tizayuca, a unos 24 km. La línea de alta tensión más cercana a la subestación del juego queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`,
+      fuentes: ['dof-zapotlan', 'osm'],
+    },
+    lotes: {
+      lista: listaLotes(g),
+      dato: `La declaratoria da al polígono un uso logístico, industrial y de servicios y no publica lotes; DEWA anunció dos naves en su primera fase. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 15 a 60 ha, y 6 ha de servicios a la entrada, del lado de la autopista; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-zapotlan', 'dof-coatzacoalcos-i', 'presidencia-zapotlan', 'juego'],
+    },
+    vocaciones: ['Logístico', 'Manufactura', 'Farmacéutico y dispositivos médicos', 'Automotriz', 'Aeroespacial'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, automotriz y aeroespacial son el equipo de transporte; manufactura, a secas, son los productos metálicos, la maquinaria, los aparatos eléctricos y la electrónica (estimación del juego); farmacéutico y dispositivos médicos, sus dos sectores. Logístico no es manufactura: el juego no lo ofrece para un lote.',
+      fuentes: ['dof-zapotlan'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -1120,6 +1357,8 @@ const POLOS_INTERIOR = [
   [COATZACOALCOS_I, interiorCoatzacoalcosI],
   [TEXISTEPEC, interiorTexistepec],
   [ALTAMIRA, interiorAltamira],
+  [NEZAHUALCOYOTL, interiorNezahualcoyotl],
+  [RESERVA_ZAPOTLAN, interiorReservaZapotlan],
 ];
 await mkdir(join(ROOT, 'static', 'data', 'polos'), { recursive: true });
 const polos = {};

@@ -66,6 +66,22 @@
    "fuente": "Gobierno municipal de Altamira, 6 de marzo de 2026: el polo está en su fase de formalización (las siguientes son la de desarrollo y la de inversión productiva) tras el convenio del 18 de febrero de 2026 entre el Gobierno de Tamaulipas y el federal, que dará paso a su fideicomiso; el predio, de 1,638 ha, es del Gobierno del estado, en el puerto de Altamira",
    "url": "https://altamira.gob.mx/2427/2026/03/06/consolidan-estrategia-del-plan-mexico-para-atraer-inversion-a-altamira/"
   },
+  "dof-nezahualcoyotl": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Nezahualcóyotl, Estado de México (7 de agosto de 2025): cuadros de construcción de los lotes 3-B, 3-C, 7-D y 7-E, 683,683.11 m²; junto a la Ciudad de México y al aeropuerto; dentro del predio, gas, electricidad y red férrea; la demanda de electricidad de la Secretaría de Energía; sus vocaciones productivas y su propiedad (el Gobierno del Estado de México)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5764903&fecha=07/08/2025"
+  },
+  "neza-polo": {
+   "fuente": "Gobierno de Nezahualcóyotl, comunicado de prensa 100, 26 de junio de 2025: en su primera etapa, unos 800 millones de pesos de inversión y 4,500 empleos directos",
+   "url": "https://www.neza.gob.mx/prensa_2025/single.php?id=100"
+  },
+  "dof-zapotlan": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Reserva Zapotlán, Hidalgo (30 de junio de 2025): cuadro de construcción (40 vértices, 9,108,169.941 m²); acceso a las autopistas 85D y 40, a 27 km del AIFA; «requiere obras de infraestructura… de alrededor de 5 mil millones de pesos»; la demanda de electricidad y la conexión de la Secretaría de Energía; sus vocaciones productivas y su propiedad (el Gobierno de Hidalgo)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5761461&fecha=30/06/2025"
+  },
+  "presidencia-zapotlan": {
+   "fuente": "Presidencia, comunicado del 19 de agosto de 2026: DEWA invertirá 10,106 millones de pesos en el PODECOBI de Zapotlán; en su primera fase, 1,277 millones para urbanización y 2,000 millones para las dos primeras naves, con obras desde septiembre y 5,100 empleos directos e indirectos",
+   "url": "https://www.gob.mx/presidencia/prensa/presidenta-destaca-inversion-de-10-mil-106-mdp-para-el-podecobi-de-zapotlan-hidalgo-que-ya-reune-147-mil-mdp-en-proyectos"
+  },
   "juego": {
    "fuente": "Estimación del juego",
    "url": ""
@@ -832,6 +848,376 @@
     "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, química y petroquímica son dos sectores (la petroquímica es la química básica y las resinas; la química, los fertilizantes, pinturas, jabones y lo demás); metalmecánica son los productos metálicos y la maquinaria, y la eléctrica-electrónica, el equipo electrónico y los aparatos eléctricos. Manufactura avanzada no es un sector del censo y logística no es manufactura: el juego no las ofrece para un lote.",
     "fuentes": [
      "dof-altamira"
+    ]
+   }
+  },
+  "nezahualcoyotl": {
+   "nombre": "Nezahualcóyotl",
+   "lugar": "Nezahualcóyotl, Estado de México",
+   "sectores": [
+    "computacion",
+    "textil",
+    "alimentos",
+    "farmaceutica",
+    "dispositivos-medicos"
+   ],
+   "fuentesLista": [
+    "dof-nezahualcoyotl",
+    "neza-polo",
+    "osm",
+    "sict-dos-bocas"
+   ],
+   "realNota": "El polo real: declarado el 7 de agosto de 2025 (DOF) en cuatro lotes del Gobierno del Estado de México junto al Bordo de Xochiaca. El municipio anunció, para su primera etapa, unos 800 millones de pesos de inversión y 4,500 empleos directos. No se ha reportado obra ni empresas: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el predio ya «cuenta con infraestructura urbana básica» y adentro tiene gas, electricidad y red férrea; para lotes de empresas hace falta llevarlas a cada uno. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus cuatro lotes catastrales lleva su calle; se hacen uno tras otro.",
+    "fuentes": [
+     "dof-nezahualcoyotl",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.01,
+    "via": "Línea VK",
+    "operador": "Ferrovalle",
+    "mesesMinimos": 2,
+    "dato": "La declaratoria dice que el predio tiene red férrea: la Línea VK de Ferrovalle pasa junto a él (OpenStreetMap). La espuela del juego es el tramo de esa vía al predio, 0.01 km, con su cambio de vía: cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-nezahualcoyotl",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 7.7,
+    "fuenteCorta": "Sener, en la declaratoria",
+    "kmLinea": 1.27,
+    "dato": "La Secretaría de Energía, en la declaratoria: su demanda crecerá «de 5 a 7.7 MW de 2027 a 2030»; la subestación de distribución más cercana está a 1.8 km y en alta tensión se conectaría a la subestación Nezahualcóyotl, de 85 kV, con una línea de unos 0.2 km. La línea de 85 kV más cercana a la subestación del juego queda a 1.27 km (OpenStreetMap).",
+    "fuentes": [
+     "dof-nezahualcoyotl",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 4.5,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 2,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 4.5,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 3,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 3.5,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 3.5,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 2.5,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 2,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 14,
+      "ha": 1.5,
+      "empresa": null
+     }
+    ],
+    "dato": "Cuatro lotes catastrales del estado: 3-C (29.2 ha), 3-B (21.0), 7-D (15.6) y 7-E (2.6). No hay lotes de empresas publicados. El juego les da la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): 52 ha en 14 lotes de 1.5 a 6 ha, chicos como los de una ciudad, y 1.5 ha de servicios a la entrada del lote 3-C; lo demás es área común y reserva (estimación del juego). Sus empleos son los que anunció el municipio para su primera etapa, 4,500.",
+    "fuentes": [
+     "dof-nezahualcoyotl",
+     "dof-coatzacoalcos-i",
+     "neza-polo",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Logística",
+    "Economía digital",
+    "Servicios tecnológicos",
+    "Electrónica",
+    "Industria ligera",
+    "Farmacéutico y dispositivos médicos"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, electrónica es el equipo de computación y electrónico; industria ligera, la textil y la alimentaria (estimación del juego); farmacéutico y dispositivos médicos, sus dos sectores. Logística, economía digital y servicios tecnológicos no son manufactura: el juego no los ofrece para un lote.",
+    "fuentes": [
+     "dof-nezahualcoyotl"
+    ]
+   }
+  },
+  "reserva-zapotlan": {
+   "nombre": "Reserva Zapotlán",
+   "lugar": "Zapotlán de Juárez, Hidalgo",
+   "sectores": [
+    "farmaceutica",
+    "dispositivos-medicos",
+    "transporte",
+    "productos-metalicos",
+    "maquinaria",
+    "electricos",
+    "computacion"
+   ],
+   "fuentesLista": [
+    "dof-zapotlan",
+    "presidencia-zapotlan",
+    "osm",
+    "sict-dos-bocas"
+   ],
+   "realNota": "El polo real: declarado el 30 de junio de 2025 (DOF) en terrenos del Gobierno de Hidalgo, junto al parque industrial QUMA. El 19 de agosto de 2026 la Presidencia anunció que la desarrolladora DEWA invertirá 10,106 millones para urbanizarlo en cinco fases; la primera, 1,277 millones de urbanización y 2,000 millones para sus dos primeras naves, con obra desde septiembre y 5,100 empleos directos e indirectos. No se ha reportado que la obra empezara: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que «requiere obras de infraestructura, previamente identificadas por el estado de Hidalgo, de alrededor de 5 mil millones de pesos»: de ahí sale el costo por hectárea de todos los polos del juego. DEWA, su desarrollador, pone 1,277 millones en la urbanización de la primera fase de cinco (Presidencia). Los frentes son los de Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "dof-zapotlan",
+     "presidencia-zapotlan",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.01,
+    "via": "Ferrocarril México - Pachuca",
+    "operador": "",
+    "mesesMinimos": 2,
+    "dato": "La declaratoria no habla de tren. Junto al polo pasa la vía México–Pachuca: en la red del juego de 2018 es de Ferrosur y está en servicio; hoy se rehace para el tren de pasajeros México–Pachuca (Presidencia), y OpenStreetMap la marca en obra. La espuela del juego va a ella: 0.01 km, con su cambio de vía. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "osm",
+     "presidencia-zapotlan",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 20,
+    "fuenteCorta": "Sener, en la declaratoria",
+    "kmLinea": 24.45,
+    "dato": "La declaratoria: «en su etapa madura este PODECOBI alcance una demanda de electricidad de 20 MW», de 8 a 12 MW entre 2028 y 2030; la subestación de distribución más cercana está a 20 km y en alta tensión se conectaría a la subestación Tizayuca, a unos 24 km. La línea de alta tensión más cercana a la subestación del juego queda a 24.45 km (OpenStreetMap).",
+    "fuentes": [
+     "dof-zapotlan",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 60,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 50,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 45,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 35,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 14,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 15,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 16,
+      "ha": 35,
+      "empresa": null
+     },
+     {
+      "n": 17,
+      "ha": 40,
+      "empresa": null
+     },
+     {
+      "n": 18,
+      "ha": 45,
+      "empresa": null
+     },
+     {
+      "n": 19,
+      "ha": 50,
+      "empresa": null
+     },
+     {
+      "n": 20,
+      "ha": 60,
+      "empresa": null
+     }
+    ],
+    "dato": "La declaratoria da al polígono un uso logístico, industrial y de servicios y no publica lotes; DEWA anunció dos naves en su primera fase. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): 680 ha en 20 lotes de 15 a 60 ha, y 6 ha de servicios a la entrada, del lado de la autopista; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-zapotlan",
+     "dof-coatzacoalcos-i",
+     "presidencia-zapotlan",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Logístico",
+    "Manufactura",
+    "Farmacéutico y dispositivos médicos",
+    "Automotriz",
+    "Aeroespacial"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, automotriz y aeroespacial son el equipo de transporte; manufactura, a secas, son los productos metálicos, la maquinaria, los aparatos eléctricos y la electrónica (estimación del juego); farmacéutico y dispositivos médicos, sus dos sectores. Logístico no es manufactura: el juego no lo ofrece para un lote.",
+    "fuentes": [
+     "dof-zapotlan"
     ]
    }
   }

@@ -4,9 +4,9 @@ Referencia de lo que hay en el juego: qué contiene, de dónde sale cada dato, q
 mano y por qué, y con qué reglas se mueve. Vive también dentro del juego: el librito de la esquina
 superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`), que se arma con este archivo.
 
-> **Cifras al 22 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
+> **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y los polos de Huamantla, Coatzacoalcos I, Texistepec y Altamira por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y seis polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -668,8 +668,9 @@ publicada. Eso da **60.5 empleos por hectárea**, cerca de los 66 de Nezahualcó
 
 Un polo puede tener **vista por dentro**: en su ficha, *Entrar al polo ›* lleva la cámara del
 tablero hasta él y abre su acercamiento (`/mexico/polo/huamantla`). Por ahora la tienen
-Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texistepec-por-dentro) y
-[Altamira](#altamira-por-dentro). El reloj sigue corriendo adentro, con el
+Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texistepec-por-dentro),
+[Altamira](#altamira-por-dentro), [Nezahualcóyotl](#nezahualcóyotl-por-dentro) y
+[Reserva Zapotlán](#reserva-zapotlán-por-dentro). El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
 **Qué se ve.** El terreno tal como lo declara el DOF, y lo que hay alrededor según
@@ -919,6 +920,7 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
 - **Texistepec:** el DOF le quita a un polígono general los derechos de vía de una autopista y de
   una vía que lo cruzan, y quedan tres predios separados.
 - **Altamira:** son tres polígonos a varios kilómetros uno de otro.
+- **Nezahualcóyotl:** son cuatro lotes catastrales del estado, separados por calles y por una vía.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -1085,6 +1087,125 @@ repartidos en sus 1,218 ha de lotes):
 polo. En marzo seguía en su fase de formalización, la primera de tres (formalización,
 desarrollo, inversión productiva), rumbo a su fideicomiso (Gobierno municipal de Altamira). No
 se ha reportado obra ni empresas.
+
+### Nezahualcóyotl por dentro
+
+El quinto polo con vista por dentro (`/mexico/polo/nezahualcoyotl`), del Plan México y el único
+dentro de una ciudad: 68.37 ha junto al Bordo de Xochiaca, al lado de la Ciudad de México y del
+aeropuerto.
+
+**El terreno**, de su declaratoria (DOF, 7 de agosto de 2025): cuatro lotes catastrales del
+Gobierno del Estado de México, en UTM zona 14 (el DOF no dice la zona; el estado está en ella).
+
+| Lote | Superficie |
+| --- | ---: |
+| 3-C | 29.21 ha |
+| 3-B | 21.05 ha |
+| 7-D | 15.55 ha |
+| 7-E | 2.56 ha |
+
+- **Resultado:** suman 683,749 m² calculados contra los 683,683.11 declarados.
+- **Una errata:** la tabla del 3-B cierra con un renglón que se deja fuera (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Servicios:** adentro del predio ya hay gas, electricidad y red férrea, e «infraestructura
+  urbana básica».
+- **Vialidades:** tiene acceso a vialidades primarias.
+- **Energía:** la Secretaría de Energía calcula que su demanda crecerá de 5 a 7.7 MW de 2027 a
+  2030. La subestación de distribución más cercana está a 1.8 km; en alta tensión se conectaría a
+  la subestación Nezahualcóyotl (85 kV) con una línea de unos 0.2 km.
+- **Vocaciones:** logística, economía digital, servicios tecnológicos, electrónica, industria
+  ligera, y farmacéutico y dispositivos médicos.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **52 ha en 14 lotes de
+  1.5 a 6 ha**, chicos como los de una ciudad.
+  - Los servicios tienen 1.5 ha a la entrada del lote 3-C.
+  - Lo demás, 6.7 ha, es área común y reserva.
+  - Sus calles son más angostas que las de un polo en el campo (22 m) y son cuatro, una por lote
+    catastral.
+- **Los empleos:** los que anunció el municipio para su primera etapa, 4,500 (ver
+  [Cuántos empleos da un polo](#cuántos-empleos-da-un-polo)). Un lote de 5 ha da 433, y pide de
+  0.3 MW (dispositivos médicos) a 0.6 MW (textil o farmacéutica).
+- **La espuela:** la **Línea VK de Ferrovalle** pasa entre sus lotes, así que son **0.01 km**: 1
+  millón con 4 cuadrillas y el mínimo de 2 meses.
+- **La energía:** los **7.7 MW** de la Secretaría de Energía. Lleno, a 1.6 kW por empleo, pide
+  7.2 MW: cabe entero en su energía de arranque, sin bancos de la CFE. La línea de 85 kV más
+  cercana a su subestación queda a 1.27 km (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 375 millones con una cuadrilla;
+  las vialidades, 150 millones en 10.4 meses.
+- **Las vocaciones en sectores:**
+  - Electrónica es el equipo de computación y electrónico.
+  - Industria ligera es la textil y la alimentaria (estimación del juego).
+  - Farmacéutico y dispositivos médicos son sus dos sectores.
+  - Logística, economía digital y servicios tecnológicos no son manufactura: no se ofrecen para un
+    lote.
+
+**En la realidad** no se ha reportado obra ni empresas. El municipio anunció, para su primera
+etapa, unos 800 millones de pesos de inversión y 4,500 empleos directos.
+
+### Reserva Zapotlán por dentro
+
+El sexto polo con vista por dentro (`/mexico/polo/reserva-zapotlan`), del Plan México: 910.82 ha
+en Zapotlán de Juárez, Hidalgo, al sur de Pachuca y junto al parque industrial QUMA.
+
+**El terreno**, de su declaratoria (DOF, 30 de junio de 2025): un polígono de 40 vértices en UTM
+zona 14.
+- **Resultado:** el área calculada da los 9,108,169.94 m² de su tabla.
+- **Una errata:** el artículo que lo declara dice otra superficie, 9,222,019.79 m² (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Carreteras y aeropuertos:** tiene acceso a las autopistas 85D y 40 (el Arco Norte) y está a
+  27 km del AIFA.
+- **Ductos:** tiene ductos de Pemex a 150 m y un gasoducto del CENAGAS a 4 km.
+- **La obra que necesita:** «requiere obras de infraestructura, previamente identificadas por el
+  estado de Hidalgo, de alrededor de 5 mil millones de pesos». De ahí sale el costo por hectárea
+  de todos los polos del juego.
+- **Energía:** en su etapa madura pedirá 20 MW (de 8 a 12 MW entre 2028 y 2030).
+  - La subestación de distribución más cercana está a 20 km.
+  - En alta tensión se conectaría a la de Tizayuca, a unos 24 km.
+- **Vocaciones:** logística, manufactura, farmacéutico y dispositivos médicos, automotriz y
+  aeroespacial.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **680 ha en 20 lotes de
+  15 a 60 ha**.
+  - Los servicios tienen 6 ha a la entrada, del lado de la carretera México–Pachuca.
+  - Lo demás, 182 ha, es área común y reserva, sobre todo el extremo suroeste, el más ancho.
+  - Su calle mide 6.5 km.
+- **La espuela:** en OpenStreetMap no hay vía en servicio cerca, solo líneas abandonadas y el
+  ferrocarril México–Pachuca, que pasa junto al polo y se rehace para el tren de pasajeros.
+  - En la red del juego de 2018 esa vía es de Ferrosur y está en servicio.
+  - La espuela va a ella: **0.01 km**, 1 millón con 4 cuadrillas y el mínimo de 2 meses.
+- **La energía:** los **20 MW** de la declaratoria, la cifra oficial más alta junto con San
+  Jerónimo.
+  - En OpenStreetMap no hay ninguna línea ni subestación a menos de 4.5 km. La conexión va a la
+    subestación que nombra la declaratoria, **Tizayuca** (230 kV, 180 MVA en OpenStreetMap), a
+    **24.45 km** de la subestación del juego, casi los 24 del DOF.
+  - Lleno de industria promedio (55,064 empleos) pediría 88 MW. Un lote de 20 ha da 1,620 empleos
+    y pide de 1.2 MW (dispositivos médicos) a 3.2 MW (equipo de transporte).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta **5,000 millones** con una
+  cuadrilla, la cifra de su propia declaratoria. Las vialidades solas: 2,000 millones en 22.5
+  meses, o 2,900 en 8 con cuatro cuadrillas.
+- **Las vocaciones en sectores:**
+  - Automotriz y aeroespacial son el equipo de transporte.
+  - Manufactura, a secas, son los productos metálicos, la maquinaria, los aparatos eléctricos y
+    la electrónica (estimación del juego).
+  - Farmacéutico y dispositivos médicos son sus dos sectores.
+  - Logístico no es manufactura: no se ofrece para un lote.
+
+**En la realidad**, el 19 de agosto de 2026 la Presidencia anunció que la desarrolladora DEWA
+invertirá **10,106 millones** para urbanizarlo en cinco fases. La primera:
+- **Urbanización:** 1,277 millones.
+- **Naves:** 2,000 millones para sus dos primeras naves.
+- **Arranque y empleos:** obra desde septiembre y 5,100 empleos directos e indirectos.
+
+No se ha reportado que la obra empezara. El juego no usa esos 5,100 como sus empleos: son los de
+una fase de cinco (ver [Cuántos empleos da un polo](#cuántos-empleos-da-un-polo)).
 
 ---
 
@@ -2492,8 +2613,14 @@ Y un Polo del Bienestar:
 | Declarado (desde su declaratoria en el DOF) | Hexágono punteado |
 | En operación | Hexágono lleno |
 
-De los polos solo entra lo que una fuente oficial dice de cada uno: su declaratoria, el fallo de
-su licitación (cinco del Istmo, de noviembre de 2023 a julio de 2025) y su inauguración. Al 20 de
+De los polos solo entra lo que una fuente oficial dice de cada uno:
+- **su declaratoria;**
+- **el fallo de su licitación:** cinco del Istmo, de noviembre de 2023 a julio de 2025;
+- **su concesión**, cuando la anuncia la Presidenta: Coatzacoalcos I y Texistepec, el 19 de
+  febrero de 2025;
+- **el convenio o el desarrollador que se anuncia:** el de Altamira, el 18 de febrero de 2026, y
+  DEWA en Reserva Zapotlán, el 19 de agosto de 2026;
+- **su inauguración.** Al 20 de
 noviembre de 2026 opera uno, **Huamantla**, desde el 12 de abril de 2026. El Corredor reporta
 que en 2026 solo cinco polos del Istmo siguen concesionados (tres concesionarios incumplieron y
 uno renunció), pero no dice cuáles; la ficha de esos cinco lo advierte. Cuántas empresas tiene
@@ -2972,6 +3099,12 @@ los otros dos aún no se capturan.
   empresas: promueve cada lote para un sector de las vocaciones de la declaratoria, y las
   empresas llegan solas si hay tren y energía. Cada sector pide distinto (electricidad, agua,
   carga), así que escoger es decidir qué tren y cuánta energía necesitará el polo.
+- **Un polo se conecta a la luz donde dice su declaratoria.** *(23 nov 2026.)* La conexión del
+  dibujo va a la línea de alta tensión más cercana de OpenStreetMap. Cuando no hay ninguna cerca
+  (Reserva Zapotlán), va a la subestación que nombra la declaratoria, aunque quede a 24 km.
+- **La espuela va a la vía que hay.** *(23 nov 2026.)* A la vía principal en servicio más
+  cercana; si no hay ninguna, a la línea con nombre más cercana aunque esté en obra o
+  abandonada (la México–Pachuca de Zapotlán, que la red del juego de 2018 tiene en servicio).
 - **Un polo en varias piezas se arma pieza por pieza.** *(23 nov 2026.)* Cuando la declaratoria
   parte el terreno (franjas que lo cruzan, polígonos separados), cada pieza lleva su calle y sus
   lotes como un polo chico, y la obra avanza por las calles una tras otra. Se dibujan las
@@ -2997,6 +3130,18 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
+
+**Nezahualcóyotl por dentro (DOF)**
+
+- **Lote 3-B:** su tabla cierra con un renglón «R100» de 4,999,867.778 de este (un 9 de más) que
+  repite las coordenadas de R27. Se deja fuera; sin él, el área del lote da exactamente los
+  210,484.94 m² declarados.
+
+**Reserva Zapotlán por dentro (DOF)**
+
+- **La superficie:** el artículo segundo declara 9,222,019.79 m², pero su cuadro de construcción
+  dice 9,108,169.941 m², y eso dan sus vértices. El juego usa el cuadro (910.82 ha), como ya lo
+  hacía.
 
 **Texistepec por dentro (DOF)**
 
