@@ -77,7 +77,7 @@ saltar al siguiente libre.
   lista de trenes y barcos va debajo de las capas, solo con alguna de las dos encendida. Los dos
   paneles se pliegan con su flecha (la misma de *Vistas*): Capas queda en su título con cuántas
   capas están encendidas, y la lista en sus pestañas y *＋ Nuevo* (con las dos plegadas, las dos barras
-  bajan juntas 88 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
+  bajan juntas 120 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
   los dejó (`state/plegable.svelte.ts`, en `localStorage`, leído al montar porque el tablero se
   arma en el servidor). Las
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, y abajo a la derecha

@@ -52,6 +52,6 @@
 
   /* Both folded, the two bars would sit on Tijuana's label: together, they drop below it. */
   .columna:has(:global(nav.capas.plegado)):has(:global(aside.flota.plegado)) > :global(nav.capas) {
-    margin-top: 5.5rem;
+    margin-top: 7.5rem;
   }
 </style>
