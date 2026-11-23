@@ -413,7 +413,7 @@ los primeros 15 polos entre sus hectáreas (60.5). Las cifras salen de fuentes o
 `datos/calibracion.json`; la tabla y sus fuentes, en la
 [enciclopedia](docs/enciclopedia.md#construirlos).
 
-**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San Jerónimo y Parque Industrial Bajío). *Entrar al polo ›* en su ficha
+**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San Jerónimo, Parque Industrial Bajío, Hermosillo y Topolobampo). *Entrar al polo ›* en su ficha
 pide a la cámara del tablero que baje hasta él (`tablero.entrarPolo`, pedido `polo:<id>`) y abre
 la ruta; *← México* o Esc vuelven sobre él (`tablero.salirPolo`, pedido `polo-fuera:<id>`). El
 tablero atiende un pedido de cámara una sola vez, cuando su proyección ya existe
@@ -421,7 +421,8 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
 
 - **Datos:** `scripts/polos/gen-interior.mjs` tiene una configuración por polo (`HUAMANTLA`,
   `COATZACOALCOS_I`, `TEXISTEPEC`, `ALTAMIRA`, `NEZAHUALCOYOTL`, `RESERVA_ZAPOTLAN`,
-  `SAN_JERONIMO`, `PARQUE_INDUSTRIAL_BAJIO`, con los vértices del DOF ya corregidos) y un texto
+  `SAN_JERONIMO`, `PARQUE_INDUSTRIAL_BAJIO`, `HERMOSILLO`, `TOPOLOBAMPO`, con los vértices del
+  DOF ya corregidos) y un texto
   por polo (`interiorHuamantla`, …). `node scripts/polos/gen-interior.mjs id…` rehace solo esos
   polos y conserva los demás en `interiores.json`; con `--prueba [id…]` los arma e imprime cómo
   salen, sin escribir nada.
@@ -448,6 +449,8 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
   - Traza la espuela a la vía principal en servicio con nombre más cercana (si no hay, a la línea
     con nombre más cercana, en obra o abandonada) y la conexión a la línea de alta tensión más
     cercana, o al punto que da `conexion` (la subestación que nombra la declaratoria).
+    - Si en la caja de la vista no hay ninguna línea con nombre, busca las principales hasta 6 km
+      más allá, como con la luz (la Línea T de Hermosillo).
     - `viaDe` limita la espuela a las líneas de un operador. San Jerónimo la usa porque la vía
       más cercana está del otro lado de la frontera, y la salida la nombra en
       `espuela.masCercana`.

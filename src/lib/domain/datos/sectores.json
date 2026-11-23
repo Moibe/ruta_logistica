@@ -253,6 +253,21 @@
    "agua": 1.72,
    "toneladas": 4.73,
    "exportacion": 0
+  },
+  {
+   "id": "plastico",
+   "nombre": "Industria del plástico y del hule",
+   "corto": "Plástico y hule",
+   "scian": [
+    "326"
+   ],
+   "color": "#cbd5e1",
+   "personal": 381838,
+   "energia": 1.3,
+   "agua": 0.34,
+   "toneladas": 1.49,
+   "exportacion": 0.3,
+   "enContenedores": true
   }
  ],
  "dato": "Lo que pide una empresa de cada sector, por trabajador, en 2018: su gasto en electricidad y en agua contra el promedio de la manufactura (INEGI, Censos Económicos 2019), y las toneladas que movió el tren de sus productos entre su personal ocupado, con la parte que salió del país (ARTF, anuario 2018). Los sectores sin productos propios en el anuario mandan su carga en contenedores: les toca lo que llevaron los contenedores por trabajador de la manufactura (estimación del juego).",

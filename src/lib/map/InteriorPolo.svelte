@@ -113,6 +113,28 @@
   const pathMenores = $derived(caminosMenores.map((c) => linea(c.puntos)).join(''));
 
   /** One label per named line, at its point nearest the polo. */
+  /**
+   * Where a lot's label goes: the mean of its corners, or, when that falls outside the lot (one
+   * that wraps around a notch, as in Hermosillo), the middle of its longest stretch along that
+   * horizontal.
+   */
+  function rotuloLote(pts: Pt[]): Pt {
+    const c: Pt = [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];
+    const cortes: number[] = [];
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      const [xi, yi] = pts[i];
+      const [xj, yj] = pts[j];
+      if (yi > c[1] !== yj > c[1]) cortes.push(xi + ((c[1] - yi) * (xj - xi)) / (yj - yi));
+    }
+    cortes.sort((a, b) => a - b);
+    let mejor: [number, number] | null = null;
+    for (let k = 0; k + 1 < cortes.length; k += 2) {
+      if (cortes[k] <= c[0] && c[0] <= cortes[k + 1]) return c;
+      if (!mejor || cortes[k + 1] - cortes[k] > mejor[1] - mejor[0]) mejor = [cortes[k], cortes[k + 1]];
+    }
+    return mejor ? [(mejor[0] + mejor[1]) / 2, c[1]] : c;
+  }
+
   function etiquetaDe(pts: Pt[]): Pt {
     let mejor = pts[0];
     for (const p of pts) if (Math.hypot(...p) < Math.hypot(...mejor)) mejor = p;
@@ -368,7 +390,7 @@
         onpointerleave={salir}
       />
       {#if l.tipo === 'empresa' && l.puntos.length}
-        {@const c = l.puntos.reduce((s, p) => [s[0] + p[0] / l.puntos.length, s[1] + p[1] / l.puntos.length], [0, 0])}
+        {@const c = rotuloLote(l.puntos)}
         <!-- Only where it fits: a lot about 50 px across or more on screen. -->
         {#if Math.sqrt(l.ha * 1e4) / vista.mpp > 50}
           <text x={c[0]} y={-c[1]} font-size={10 * fs} class="rotulo lote-rotulo" text-anchor="middle">

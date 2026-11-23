@@ -5,7 +5,7 @@
 //   node scripts/polos/gen-interior.mjs
 //
 // Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San
-// Jerónimo and Parque Industrial Bajío. Writes:
+// Jerónimo, Parque Industrial Bajío, Hermosillo and Topolobampo. Writes:
 //   static/data/polos/<id>.json            the geometry, in metres around the polo (fetched by the view)
 //   src/lib/domain/datos/interiores.json   the works by front and the real facts (read by the game)
 //
@@ -791,6 +791,152 @@ const PARQUE_INDUSTRIAL_BAJIO = {
   carretera: /15D/,
 };
 
+/**
+ * Bienestar e Innovación de Hermosillo, from its declaratoria (DOF, 26 Aug 2025): three sections in
+ * UTM zone 12 (the DOF doesn't say the zone; Sonora is in it), Lado A (25 vertices, 298.97 ha),
+ * Lado B (100 vertices, 226.86 ha) and PIAT (4 vertices, 20.63 ha), 546.46 ha. Every side's length
+ * agrees with its vertices, and the PIAT fills a notch of Lado A. Lado B's column of bearings holds
+ * angles that aren't its sides' bearings, and one of its rows is labelled «216 - 217» where it goes
+ * from 215 to 216: neither moves a vertex.
+ */
+const HERMOSILLO = {
+  id: 'hermosillo',
+  zona: 12,
+  piezas: [
+    {
+      nombre: 'Lado A',
+      servicios: true,
+      vertices: [
+        [508051.7, 3229556.52], [507999.3, 3229953.08], [507469.81, 3229883.12], [507461.83, 3229918.38],
+        [507441.63, 3230007.74], [508169.33, 3230102.51], [508048.13, 3231033.25], [508876.6, 3231141.13],
+        [508867.06, 3230635.08], [508865.39, 3230546.54], [508864.4, 3230495.44], [508863.71, 3230457.68],
+        [508839.22, 3229159.72], [508838.55, 3229124.31], [508808.11, 3227510.15], [508725.7, 3227580.62],
+        [508115.19, 3228106.05], [507930.85, 3228410.65], [507895.13, 3228576.15], [507876.51, 3228663.9],
+        [507766.15, 3228824.29], [507675.14, 3228958.83], [507666.36, 3229013.75], [507566.35, 3229456.09],
+        [507558.38, 3229491.35],
+      ],
+      lotes: [
+        { ha: 40, lado: 'a' }, { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' },
+        { ha: 35, lado: 'b' }, { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' }, { ha: 15, lado: 'b' },
+      ],
+    },
+    {
+      nombre: 'Lado B',
+      vertices: [
+        [506358.38, 3229077.45], [506432.67, 3229187.85], [506317.87, 3229252.99], [506254.26, 3229121.16],
+        [506153.51, 3229169.2], [506046.5, 3229466.36], [506177.29, 3229517.87], [506098.03, 3229656.56],
+        [506049.07, 3229700.71], [505951.01, 3229789.17], [505998.57, 3229876.34], [506236.36, 3229824.83],
+        [506418.67, 3229967.47], [506369.32, 3230319.41], [506359.22, 3230391.43], [506432.01, 3230462.03],
+        [506435.56, 3230533.24], [506322.52, 3230577.26], [506323.5, 3230592.92], [506453.14, 3230642.15],
+        [506403.22, 3230854.19], [507061.98, 3231009.29], [507149.24, 3230625.98], [507160.88, 3230583.48],
+        [507136.61, 3230581.33], [507129.52, 3230580.83], [507106.42, 3230579.92], [507076.19, 3230580.39],
+        [507059.55, 3230581.11], [507044.3, 3230581.67], [507009.27, 3230582.65], [507021.85, 3230464.71],
+        [507023.28, 3230451.29], [507030.22, 3230386.19], [507075.48, 3230390.37], [507090.21, 3230391.38],
+        [507147.61, 3230396.15], [507157.29, 3230397.22], [507202.73, 3230403.29], [507211.83, 3230364.02],
+        [507152.64, 3230356.26], [507096.65, 3230351.5], [507110.02, 3230268.5], [507116.06, 3230225.17],
+        [507119.03, 3230196.82], [507120.92, 3230172.84], [507122.58, 3230141.55], [507124.29, 3230121.38],
+        [507128.07, 3230100.98], [507132.75, 3230084.32], [507142.43, 3230054.34], [507146.71, 3230040.9],
+        [507158.63, 3230002.68], [507165.26, 3229981.06], [507169.53, 3229966.91], [507181.04, 3229929.37],
+        [507192.99, 3229891.97], [507197.69, 3229877.69], [507202.65, 3229862.62], [507205.51, 3229854.36],
+        [507218.89, 3229814.79], [507238.42, 3229750.5], [507241, 3229742.47], [507245.49, 3229728.39],
+        [507249.74, 3229714.87], [507283.77, 3229599.33], [507293.12, 3229598.11], [507348.78, 3229596.2],
+        [507375.63, 3229599.24], [507414.52, 3229607.62], [507455.07, 3229433.99], [507475.32, 3229355.67],
+        [507491.39, 3229271.68], [507495.12, 3229256.66], [507498.35, 3229243.64], [507540.95, 3229075.89],
+        [507546.24, 3229054.58], [507558.07, 3229000.35], [507562.15, 3228978], [507568.4, 3228929.44],
+        [507589.17, 3228932.75], [507609.84, 3228803], [507625.62, 3228661.57], [507590.08, 3228568.21],
+        [507578.83, 3228551.84], [507553.85, 3228520.21], [507505.16, 3228460.75], [507478.35, 3228430.56],
+        [507317.64, 3228348.26], [507066.58, 3228323.15], [507058.59, 3228322.16], [507049.07, 3228417.36],
+        [506986.51, 3228411.11], [506980.92, 3228434.83], [506956.4, 3228538.74], [506936.07, 3228624.9],
+        [506920.76, 3228623.35], [506894.54, 3228733.74], [506845.73, 3228940.81], [506570.06, 3229017.22],
+      ],
+      lotes: [
+        { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' },
+        { ha: 30, lado: 'b' }, { ha: 25, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' },
+      ],
+    },
+    {
+      nombre: 'PIAT',
+      vertices: [
+        [507469.807, 3229883.119], [507999.305, 3229953.075], [508051.697, 3229556.521], [507558.382, 3229491.345],
+      ],
+      lotes: [{ ha: 8, lado: 'a' }, { ha: 8, lado: 'b' }],
+    },
+  ],
+  areaDof: 5464584.948,
+  control: null,
+  marcador: { lat: 29.19346, lon: -110.91385 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 411 ha in 19 lots of 8 to 40 ha (an estimate).
+   */
+  serviciosHa: 5,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  carretera: /15/,
+};
+
+/**
+ * Topolobampo, from the agreement that modified its declaratoria (DOF, 29 Apr 2026): two polygons
+ * in UTM zone 12, 61.42 and 216.16 ha, the 277.5776 ha declared. The declaratoria of 20 Mar 2026
+ * also listed a «polygon of donation to Rosendo G. Castro» (3.77 ha, by polygon 1), so its tables
+ * added up to 281.35 ha; the agreement left it out. The game draws it, outside the land.
+ */
+const TOPOLOBAMPO = {
+  id: 'topolobampo',
+  zona: 12,
+  piezas: [
+    {
+      nombre: 'Polígono 2',
+      servicios: true,
+      vertices: [
+        [695702.16, 2836541.09], [695690.4042, 2836547.6559], [695700.844, 2836594.0909], [695667.8156, 2836628.5628],
+        [695724.8958, 2836873.0865], [696024.3108, 2836845.9159], [696022.6329, 2837042.9286], [695766.7817, 2837052.5152],
+        [695809.9496, 2837237.4403], [695891.96, 2837385.72], [695906.576, 2837448.5451], [695947.8466, 2837449.4102],
+        [696228.0079, 2838653.6505], [696397.7055, 2838690.5856], [697042.7794, 2838347.7066], [697030.873, 2837912.6971],
+        [696998.6375, 2837897.9214], [697003.9617, 2837844.9221], [696968.6558, 2837777.0582], [697013.3688, 2837728.9603],
+        [697029.4122, 2837741.7547], [697024.6098, 2837373.1597], [697062.5428, 2837317.9725], [697116.9647, 2837286.9031],
+        [696848.1758, 2836752.3463], [696802.6233, 2836773.0543], [696720.5403, 2836609.8108], [696161.3604, 2836311.6191],
+      ],
+      lotes: [
+        { ha: 30, lado: 'a' }, { ha: 25, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' },
+        { ha: 25, lado: 'b' }, { ha: 20, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' },
+      ],
+    },
+    {
+      nombre: 'Polígono 1',
+      vertices: [
+        [695236.054, 2838142.948], [695197.017, 2837974.883], [695176.661, 2837888.948], [695155.503, 2837799.3941],
+        [695112.385, 2837616.1751], [695063.2475, 2837406.3076], [695242.6305, 2837365.3472], [695197.2179, 2837166.4661],
+        [695679.886, 2837056.2533], [695847.9411, 2837774.8154], [695897.8667, 2837987.7571],
+      ],
+      lotes: [{ ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' }],
+    },
+  ],
+  franjas: [
+    {
+      nombre: 'Donación a Rosendo G. Castro',
+      tipo: 'parcela',
+      nota: 'Venía en la declaratoria del 20 de marzo de 2026; el acuerdo del 29 de abril la dejó fuera del polo (DOF)',
+      vertices: [
+        [695197.22, 2837166.47], [695016.46, 2837207.74], [695021.13, 2837227.62], [695060.85, 2837396.07],
+        [695063.25, 2837406.31], [695242.63, 2837365.35],
+      ],
+    },
+  ],
+  areaDof: 2775775.717,
+  control: null,
+  marcador: { lat: 25.64171, lon: -109.04325 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 212 ha in 12 lots of 10 to 30 ha (an estimate).
+   */
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  /** No federal highway near: the state's SIN 124, Topolobampo–Choix (OpenStreetMap). */
+  carretera: /124/,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 const CONSULTAS = (p) => ({
@@ -1018,9 +1164,16 @@ async function construir(p) {
   // The rail spur: from the nearest main track to the nearest piece. With none in service near
   // (Reserva Zapotlán), the nearest named line, abandoned or being rebuilt. Only the lines of
   // `p.viaDe` when it's given: the nearest to San Jerónimo are across the border.
-  const conNombre = vias.filter(
-    (x) => x.nombre && !['siding', 'yard', 'spur'].includes(x.servicio ?? '') && (!p.viaDe || p.viaDe.test(`${x.operador ?? ''} ${x.nombre}`))
-  );
+  const sirve = (x) => x.nombre && !['siding', 'yard', 'spur'].includes(x.servicio ?? '') && (!p.viaDe || p.viaDe.test(`${x.operador ?? ''} ${x.nombre}`));
+  let conNombre = vias.filter(sirve);
+  // No named line in the view: the main lines up to 6 km past it, as with power (Hermosillo's).
+  if (!conNombre.length)
+    for (const e of datos.vias) {
+      const t = e.tags ?? {};
+      if (!e.geometry || t.railway !== 'rail' || t.service || !t.name) continue;
+      for (const puntos of trazos(e.geometry, 2, 6000)) vias.push({ estado: 'rail', nombre: t.name, ...(t.operator ? { operador: t.operator } : {}), puntos });
+    }
+  conNombre = vias.filter(sirve);
   const enServicio = conNombre.filter((x) => x.estado === 'rail');
   let espuela = null;
   for (const pieza of piezas)
@@ -1329,6 +1482,34 @@ const FUENTES = {
   'presidencia-plan-michoacan': {
     fuente: 'Presidencia, 4 de noviembre de 2026, avance del Plan Michoacán por la Paz y la Justicia: «Inicia en noviembre de 2026 la obra de infraestructura y conexión con la Carretera Federal 120 para el Parque Industrial Bajío», con 9,310 millones de pesos estimados',
     url: 'https://www.gob.mx/presidencia/prensa/plan-michoacan-por-la-paz-y-la-justicia-registra-un-avance-de-67-a-un-ano-de-su-implementacion?idiom=es',
+  },
+  'dof-hermosillo': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar e Innovación de Hermosillo, Sonora (26 de agosto de 2025): cuadros de construcción del Lado A (298.97 ha), el Lado B (226.86 ha) y el PIAT (20.63 ha), 546.46 ha; a 650 m de la carretera Hermosillo–Guaymas, con acceso ferroviario a 2 km y el aeropuerto a 17 km; la demanda de electricidad y la conexión de la Secretaría de Energía, y el gas de Energas de México; uso de suelo industrial y su manifestación de impacto ambiental; sus vocaciones productivas y su propiedad (el Gobierno de Sonora)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5766564&fecha=26/08/2025',
+  },
+  'sonora-incorpora': {
+    fuente: 'Gobierno de Sonora, 27 de junio de 2025: el gobernador anuncia en la conferencia matutina la incorporación de Hermosillo a los Polos de Desarrollo, con más de 100 hectáreas disponibles y conectividad por carretera, ferrocarril y aeropuerto',
+    url: 'https://www.sonora.gob.mx/gobierno/acciones/gobernador/gobernador-durazo-y-presidenta-sheinbaum-fortalecen-el-plan-sonora-con-polo-de-desarrollo-en-hermosillo',
+  },
+  'sonora-presentacion': {
+    fuente: 'Gobierno de Sonora, 5 de abril de 2026: presentación del Polo de Desarrollo para el Bienestar en Hermosillo, con la alianza Sonora–Arizona–Taiwán para atraer inversión y formar talento',
+    url: 'https://www.sonora.gob.mx/gobierno/acciones/gobernador/inversion-tecnologica-con-polos-de-desarrollo-durazo-y-sheinbaum-posicionan-a-sonora-en-el-mapa-global',
+  },
+  'dof-topolobampo': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Topolobampo, Sinaloa (20 de marzo de 2026): 277.58 ha en Ahome, cuadros de construcción de los polígonos 1 y 2 y de un polígono de donación a Rosendo G. Castro; puerto de 8 a 12 m de calado, carretera y conexión ferroviaria, gas y electricidad en el predio, con opciones para ampliar la energía; sus vocaciones productivas y su propiedad (el estado de Sinaloa)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5782770&fecha=20/03/2026',
+  },
+  'dof-topolobampo-modifica': {
+    fuente: 'DOF, 29 de abril de 2026: Acuerdo por el que se modifica la declaratoria del polo Topolobampo, para «precisar las coordenadas de los polígonos»: quedan los polígonos 1 y 2, sin la donación',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5786253&fecha=29/04/2026',
+  },
+  'sinaloa-polos': {
+    fuente: 'Gobierno de Sinaloa, 3 de septiembre de 2025: el polo de Topolobampo tiene 275 hectáreas desarrollables y a su alrededor cuatro proyectos grandes (Pacífico Mexinol, Gas y Petroquímica de Occidente, DH2 Energy y una terminal de gas de Sempra)',
+    url: 'https://sinaloa.gob.mx/topolobampo-entre-los-cinco-polos-de-desarrollo-economico-para-el-bienestar-con-mayor-inversion/',
+  },
+  'sinaloa-proman': {
+    fuente: 'Gobierno de Sinaloa, 20 de noviembre de 2025: la planta de amoniaco de Proman-GPO en Topolobampo (800 mil toneladas al año) supera el 50 % de su obra, con 1,700 empleos directos, y producirá a finales de 2027',
+    url: 'https://sinaloa.gob.mx/topolobampo-se-consolida-como-polo-de-desarrollo-y-bienestar-con-la-planta-proman-gpo/',
   },
   juego: { fuente: 'Estimación del juego', url: '' },
 };
@@ -1717,6 +1898,91 @@ function interiorParqueIndustrialBajio(g) {
   };
 }
 
+function interiorHermosillo(g) {
+  const ha = (nombre) => km(g.piezas.find((q) => q.nombre === nombre).ha);
+  const h3 = g.subestaciones.find((x) => /Hermosillo 3/.test(x.nombre));
+  const [sx, sy] = g.servicios.subestacion;
+  const kmH3 = Number((Math.hypot(h3.x - sx, h3.y - sy) / 1000).toFixed(2));
+  return {
+    nombre: 'Bienestar e Innovación de Hermosillo',
+    lugar: 'Hermosillo, Sonora',
+    sectores: ['transporte', 'semiconductores', 'computacion', 'alimentos', 'generacion-electrica', 'dispositivos-medicos'],
+    fuentesLista: ['dof-hermosillo', 'sonora-incorpora', 'sonora-presentacion', 'osm', 'sict-dos-bocas'],
+    realNota:
+      'El polo real: el gobernador anunció su incorporación al programa en la conferencia matutina, en junio de 2025, con «más de 100 hectáreas disponibles», y la declaratoria salió el 26 de agosto con 546 (DOF). El 5 de abril de 2026 el Gobierno de Sonora lo presentó junto con su alianza con Arizona y Taiwán para atraer inversión y formar talento en semiconductores y electromovilidad. No se ha reportado obra ni empresas: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el inmueble tiene uso de suelo industrial e «infraestructura urbana básica», con su manifestación de impacto ambiental aprobada en julio de 2024; para lotes de empresas hace falta llevarla a cada uno. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada una de sus tres secciones lleva su calle; se hacen una tras otra.',
+      fuentes: ['dof-hermosillo', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria le da «acceso ferroviario (a 2 km)». La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-hermosillo', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: {
+      mva: ENERGIA.polos.hermosillo.mw,
+      fuenteCorta: 'Sener, en la declaratoria',
+      kmLinea: g.conexionElectrica.km,
+      dato: `La Secretaría de Energía, en la declaratoria: su demanda irá «de 1 MW a 7 MW de 2026 a 2030», servida desde la subestación Hermosillo Tres, de 115 kV, con una línea de unos 3.6 km, y en 2038 esa subestación tendría un segundo banco de 40 MVA; el gas, hasta 75 millones de m³ al año (Energas de México). En OpenStreetMap, la subestación Hermosillo 3 queda a ${km(kmH3)} km de la subestación del juego, y la línea de 115 kV más cercana, a ${km(g.conexionElectrica.km)} km.`,
+      fuentes: ['dof-hermosillo', 'osm'],
+    },
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Tres secciones: el Lado A (${ha('Lado A')} ha), el Lado B (${ha('Lado B')}) y el PIAT (${ha('PIAT')}), que llena una muesca del Lado A. No hay lotes publicados. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 8 a 40 ha, y 5 ha de servicios a la entrada del Lado A; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-hermosillo', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Automotriz', 'Semiconductores y electrónica especializada', 'Agroindustrial', 'Energía', 'Logística', 'Dispositivos médicos y de medición'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, automotriz es el equipo de transporte; semiconductores y electrónica especializada, los semiconductores y la electrónica; agroindustrial, la industria alimentaria; energía, el equipo de generación y distribución de electricidad; dispositivos médicos y de medición, los dispositivos médicos (estimación del juego). Logística no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-hermosillo'],
+    },
+  };
+}
+
+function interiorTopolobampo(g) {
+  const ha = (nombre) => km(g.piezas.find((q) => q.nombre === nombre).ha);
+  return {
+    nombre: 'Topolobampo',
+    lugar: 'Ahome, Sinaloa',
+    sectores: ['quimica', 'petroquimica', 'plastico', 'metalicas'],
+    fuentesLista: ['dof-topolobampo', 'dof-topolobampo-modifica', 'sinaloa-polos', 'sinaloa-proman', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota:
+      'El polo real: declarado el 20 de marzo de 2026 (DOF) en bienes del estado de Sinaloa; el 29 de abril se modificó su declaratoria para dejar fuera la donación a Rosendo G. Castro. A sus alrededores, según el Gobierno de Sinaloa, hay cuatro proyectos grandes, entre ellos la planta de amoniaco de Proman-GPO, que pasaba del 50 % de su obra en noviembre de 2025. No se ha reportado obra ni empresas en el polo: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el polígono ya «dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad»; para lotes de empresas hace falta llevarlas adentro. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus dos polígonos lleva su calle; se hacen uno tras otro.',
+      fuentes: ['dof-topolobampo', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria le da conexión ferroviaria y el puerto de Topolobampo. La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-topolobampo', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra(
+      'topolobampo',
+      g,
+      `La declaratoria dice que tiene energía eléctrica, con «opciones identificadas para ampliar la disponibilidad de energía en el mediano plazo». La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`
+    ),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Dos polígonos: el 2 (${ha('Polígono 2')} ha) y el 1 (${ha('Polígono 1')}). No hay lotes publicados. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 10 a 30 ha, y 4 ha de servicios a la entrada del polígono 2; lo demás es área común y reserva (estimación del juego). La donación a Rosendo G. Castro, junto al polígono 1, ya no es del polo.`,
+      fuentes: ['dof-topolobampo', 'dof-topolobampo-modifica', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Manufactura avanzada', 'Logística', 'Industria química y petroquímica (fertilizantes)', 'Industria del plástico y del hule', 'Industrias metálicas básicas'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, la industria química y petroquímica son dos sectores (los fertilizantes están en la química); el plástico y el hule, y las metálicas básicas, el suyo cada una. Manufactura avanzada no es un sector del censo y logística no es manufactura: el juego no las ofrece para un lote.',
+      fuentes: ['dof-topolobampo'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -1758,6 +2024,8 @@ const POLOS_INTERIOR = [
   [RESERVA_ZAPOTLAN, interiorReservaZapotlan],
   [SAN_JERONIMO, interiorSanJeronimo],
   [PARQUE_INDUSTRIAL_BAJIO, interiorParqueIndustrialBajio],
+  [HERMOSILLO, interiorHermosillo],
+  [TOPOLOBAMPO, interiorTopolobampo],
 ];
 // `id…`: build only those polos and keep the others as they are in interiores.json.
 // `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.

@@ -64,6 +64,7 @@ const CENSO = {
   3255: [24452, 593.639, 276.5],
   3256: [55434, 1118.523, 475.844],
   3259: [28969, 972.857, 193.374],
+  326: [381838, 12281.191, 893.821],
   3344: [196205, 3259.038, 1300.765],
   3353: [74641, 1606.412, 181.077],
   3391: [172298, 1946.929, 438.187],
@@ -164,6 +165,9 @@ const SECTORES = [
     productos: ['fertilizantes', 'fertilizanteAmoniaco', 'jabonPolvo'],
     color: '#e879f9',
   },
+  // Topolobampo's: plastic and rubber products. The yearbook has no product of theirs (its plastic
+  // granules are resins, petrochemicals): they go in containers.
+  { id: 'plastico', nombre: 'Industria del plástico y del hule', corto: 'Plástico y hule', scian: ['326'], productos: [], color: '#cbd5e1' },
 ];
 
 const [pMan, eMan, aMan] = CENSO['31-33'];

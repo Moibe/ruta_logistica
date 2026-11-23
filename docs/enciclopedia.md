@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y ocho polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y diez polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -672,8 +672,9 @@ Un polo puede tener **vista por dentro**: en su ficha, *Entrar al polo ›* llev
 tablero hasta él y abre su acercamiento (`/mexico/polo/huamantla`). Por ahora la tienen
 Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texistepec-por-dentro),
 [Altamira](#altamira-por-dentro), [Nezahualcóyotl](#nezahualcóyotl-por-dentro),
-[Reserva Zapotlán](#reserva-zapotlán-por-dentro), [San Jerónimo](#san-jerónimo-por-dentro) y
-[Parque Industrial Bajío](#parque-industrial-bajío-por-dentro). El reloj sigue corriendo adentro, con el
+[Reserva Zapotlán](#reserva-zapotlán-por-dentro), [San Jerónimo](#san-jerónimo-por-dentro),
+[Parque Industrial Bajío](#parque-industrial-bajío-por-dentro), [Hermosillo](#hermosillo-por-dentro) y
+[Topolobampo](#topolobampo-por-dentro). El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
 **Qué se ve.** El terreno tal como lo declara el DOF, y lo que hay alrededor según
@@ -926,6 +927,9 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
 - **Nezahualcóyotl:** son cuatro lotes catastrales del estado, separados por calles y por una vía.
 - **Parque Industrial Bajío:** son tres polígonos a los dos lados de una autopista, más el camino
   de acceso que los une, que también es del polo.
+- **Hermosillo:** son tres secciones; una de ellas, el PIAT, llena una muesca de otra.
+- **Topolobampo:** son dos polígonos; un tercero, una donación, salió del polo cuando se modificó
+  su declaratoria.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -1362,6 +1366,144 @@ distancia.
 
 No se han reportado empresas instaladas: sus lotes y su acomodo son del juego. En el modo
 Realidad aparece en obra desde noviembre de 2026.
+
+### Hermosillo por dentro
+
+El noveno polo con vista por dentro (`/mexico/polo/hermosillo`), del Plan México: el Polo de
+Desarrollo Económico para el Bienestar e Innovación de Hermosillo, 546.46 ha en la orilla norte
+de la ciudad, a los dos lados de la carretera federal 15.
+
+**El terreno**, de su declaratoria (DOF, 26 de agosto de 2025): tres cuadros en UTM zona 12 (el
+DOF no dice la zona; Sonora está en ella), con coma decimal.
+
+| Sección | Superficie | Dónde |
+| --- | ---: | --- |
+| Lado A | 298.97 ha | Al este de la carretera federal 15 |
+| Lado B | 226.86 ha | Al oeste de la carretera |
+| PIAT | 20.63 ha | En una muesca del Lado A, con el que comparte tres lados |
+
+- **Resultado:** suman 547.18 ha calculadas contra las 546.46 declaradas. El Lado B da 0.3 % más
+  que su cuadro, y su columna de rumbos no son rumbos (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+- **El marcador:** el que el juego ya tenía cae dentro del Lado A.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** «a solo 650 metros de la carretera Hermosillo-Guaymas y conectado por la
+  Carretera Federal 15», con acceso ferroviario a 2 km y el aeropuerto a 17 km. En OpenStreetMap
+  la federal 15 pasa entre el Lado A y el Lado B, en su tramo a Nogales.
+- **Energía:** la Secretaría de Energía calcula una demanda de 1 a 7 MW de 2026 a 2030, servida
+  desde la subestación Hermosillo Tres (115 kV) con una línea de unos 3.6 km; en 2038 esa
+  subestación tendría un segundo banco de 40 MVA. El gas, hasta 75 millones de m³ al año, lo da
+  Energas de México.
+- **Suelo:** uso industrial, con licencia para el Lado A y en trámite para el B; su manifestación
+  de impacto ambiental se aprobó en julio de 2024.
+- **Vocaciones:** automotriz, semiconductores y electrónica especializada, agroindustrial,
+  energía, logística, y dispositivos médicos y de medición.
+- **Propiedad:** el Gobierno de Sonora.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **411 ha en 19 lotes de
+  8 a 40 ha**.
+  - Por sección: 9 lotes en el Lado A (225 ha), 8 en el B (170 ha) y 2 de 8 ha en el PIAT.
+  - Los servicios tienen 5 ha a la entrada del Lado A, al sur.
+  - Lo demás es área común y reserva, sobre todo las puntas norte de los dos lados.
+- **Los empleos:** 60.5 por hectárea, 33,036. Un lote de 20 ha da 1,608 y pide de 1.2 MW
+  (dispositivos médicos) a 3.1 MW (equipo de transporte).
+- **La espuela:** la **Línea T de Ferromex** corre al este del polo: **1.94 km**, casi los 2 de
+  la declaratoria. Cuesta 88 millones con una cuadrilla (5.6 meses) o 128 con cuatro (2 meses).
+  La vía queda fuera de la caja de la vista; el generador la busca hasta 6 km más allá, como
+  hace con la luz.
+- **La energía:** los **7 MW** de la Secretaría de Energía. Lleno, a 1.6 kW por empleo, pide
+  52.9 MW: necesitará dos bancos de 30 MVA de la CFE. En OpenStreetMap la subestación Hermosillo
+  3 (230/115 kV) queda a 2.5 km de la subestación del juego, y la línea de 115 kV más cercana, a
+  0.4 km.
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 3,000 millones con una
+  cuadrilla; las vialidades, 1,200 millones en 19.3 meses, o 1,740 en 6.8 con cuatro.
+- **Las vocaciones en sectores:**
+  - Automotriz es el equipo de transporte.
+  - Semiconductores y electrónica especializada son los semiconductores y la electrónica.
+  - Agroindustrial es la industria alimentaria.
+  - Energía es el equipo de generación y distribución de electricidad.
+  - Dispositivos médicos y de medición son los dispositivos médicos (estimación del juego).
+  - Logística no es manufactura: no se ofrece para un lote.
+
+**En la realidad**:
+- **Junio de 2025:** el gobernador anuncia en la conferencia matutina su incorporación al
+  programa, con «más de 100 hectáreas disponibles».
+- **26 de agosto:** sale la declaratoria (DOF), con 546.
+- **5 de abril de 2026:** el Gobierno de Sonora presenta el polo con su alianza con Arizona y
+  Taiwán, para atraer inversión y formar talento en semiconductores y electromovilidad.
+
+No se ha reportado obra ni empresas.
+
+### Topolobampo por dentro
+
+El décimo polo con vista por dentro (`/mexico/polo/topolobampo`), del Plan México: 277.58 ha en
+Ahome, Sinaloa, junto al puerto de Topolobampo y a la vía del Chihuahua–Pacífico.
+
+**El terreno**, del acuerdo que modificó su declaratoria (DOF, 29 de abril de 2026): dos
+polígonos en UTM zona 12, el 2 (216.16 ha) y el 1 (61.42 ha).
+- **Resultado:** suman 277.5776 ha, exactamente lo declarado.
+- **La donación:** la declaratoria del 20 de marzo traía además un «polígono de donación a
+  Rosendo G. Castro» (3.77 ha) pegado al polígono 1, que el acuerdo de abril dejó fuera (ver la
+  [bitácora](#12-bitácora-de-correcciones-a-los-datos)). El juego la dibuja aparte; junto a ella
+  está la colonia Rosendo G. Castro (OpenStreetMap).
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** el puerto de Topolobampo, de 8 a 12 m de calado, carretera y conexión
+  ferroviaria; en OpenStreetMap la carretera estatal SIN 124 pasa entre los dos polígonos.
+- **Servicios:** «dispone de vialidades, energía eléctrica, agua potable, drenaje y
+  conectividad, con opciones identificadas para ampliar la disponibilidad de energía en el
+  mediano plazo», y gas en el predio.
+- **Vocaciones:** manufactura avanzada, logística, industria química y petroquímica
+  (fertilizantes), industria del plástico y del hule, e industrias metálicas básicas.
+- **Propiedad:** el estado de Sinaloa.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **212 ha en 12 lotes de
+  10 a 30 ha**: 8 en el polígono 2 (160 ha) y 4 en el 1 (52 ha).
+  - Los servicios tienen 4 ha a la entrada del polígono 2, por la SIN 124.
+  - Lo demás es área común y reserva.
+- **Los empleos:** 60.5 por hectárea, 16,781.
+- **La espuela:** la **Línea Q de Ferromex** corre pegada al polígono 2: **0.02 km**, 1 millón
+  con cuatro cuadrillas y el mínimo de 2 meses.
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno de
+  industria promedio pide 26.8 MW: un banco de la CFE. Pero sus vocaciones gastan mucho: un lote
+  de petroquímica o de metálicas básicas de 20 ha pide casi 11 MW. La línea de 230 kV más
+  cercana queda a 0.52 km de su subestación (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,524 millones con una
+  cuadrilla; las vialidades, 610 millones en 15.8 meses, o 884 en 5.6 con cuatro.
+
+Lo que pide cada uno de sus sectores en un lote de 20 ha (1,583 empleos):
+
+| Sector | SCIAN | Personal ocupado (2018) | Luz | Agua | t por trabajador al año | Exporta | MW | t al año por tren |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Química (fertilizantes, pinturas, jabones y otros) | 3253, 3255, 3256, 3259 | 122,757 | 1.21× | 1.72× | 4.73 | 0 % | 3.1 MW | 7,488 t |
+| Petroquímica (química básica y resinas) | 3251, 3252 | 56,630 | 4.28× | 2.92× | 150.31 | 11 % | 10.8 MW | 237,959 t |
+| Industria del plástico y del hule | 326 | 381,838 | 1.30× | 0.34× | 1.49* | 30 % | 3.3 MW | 2,359 t |
+| Industrias metálicas básicas | 331 | 137,249 | 4.32× | 1.78× | 67.83 | 16 % | 10.9 MW | 107,383 t |
+
+- **Plástico y hule** es un sector nuevo (SCIAN 326, INEGI). Gasta 1.30 veces la luz y 0.34
+  veces el agua del promedio de la manufactura. El anuario ferroviario no trae productos suyos
+  (los gránulos de plástico son resinas, de la petroquímica), así que su carga va en contenedores.
+- **Las vocaciones en sectores:** química y petroquímica son dos sectores (los fertilizantes
+  están en la química). Manufactura avanzada no es un sector del censo y logística no es
+  manufactura: no se ofrecen para un lote.
+
+**En la realidad**:
+- **3 de septiembre de 2025:** el Gobierno de Sinaloa dice que el polo tiene 275 hectáreas
+  desarrollables y, a sus alrededores, cuatro proyectos grandes: Pacífico Mexinol (metanol), Gas
+  y Petroquímica de Occidente (amoniaco, metanol y urea), DH2 Energy (hidrógeno verde) y una
+  terminal de gas de Sempra.
+- **20 de noviembre de 2025:** la planta de amoniaco de Proman-GPO pasa del 50 % de su obra, con
+  1,700 empleos directos, y producirá a finales de 2027 (Gobierno de Sinaloa). OpenStreetMap no la
+  tiene, así que el juego no la ubica.
+- **20 de marzo de 2026:** sale la declaratoria (DOF).
+- **29 de abril:** el acuerdo que la modifica deja fuera la donación.
+
+No se ha reportado obra ni empresas en el polo. Los 30 mil empleos que se anuncian con él son de
+todo el norte de Sinaloa (ver [Cuántos empleos da un polo](#cuántos-empleos-da-un-polo)).
 
 ---
 
@@ -3294,6 +3436,22 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
+
+**Hermosillo por dentro (DOF)**
+
+- **El Lado B:** su columna de «rumbo» trae ángulos que no son los rumbos de sus lados; las
+  distancias sí cuadran con sus vértices, así que no se mueve ninguno. Un renglón dice «216 -
+  217» donde el lado va del 215 al 216.
+- **El resultado:** el Lado A da 298.97 ha y el PIAT 20.63, lo de sus cuadros; el Lado B da 227.57
+  contra 226.86 (0.3 % más). Las tres suman 547.18 ha contra las 546.46 declaradas.
+
+**Topolobampo por dentro (DOF)**
+
+- **La donación:** la declaratoria del 20 de marzo de 2026 traía tres cuadros, los polígonos 1 y
+  2 y un «polígono de donación a Rosendo G. Castro» (3.77 ha, pegado al polígono 1), que sumaban
+  281.35 ha contra 277.58 declaradas. El acuerdo del 29 de abril, para «precisar las coordenadas
+  de los polígonos», dejó solo los dos primeros, que suman exactamente lo declarado. El juego ya
+  usaba el polígono corregido; ahora dibuja la donación fuera del polo.
 
 **San Jerónimo por dentro (DOF)**
 
