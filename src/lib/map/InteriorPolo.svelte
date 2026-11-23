@@ -146,11 +146,11 @@
     return [...porNombre].map(([texto, pts]) => ({ texto, p: etiquetaDe(pts) }));
   });
   const etiquetaCarretera = $derived.by(() => {
-    const c = geo.carretera ? geo.caminos.filter((x) => x.ref === geo.carretera) : [];
+    const c = geo.carretera ? geo.caminos.filter((x) => (x.ref ?? x.nombre) === geo.carretera) : [];
     // Clear of the polo, which it runs along: about 900 m from its centre.
     const pts = c.flatMap((x) => x.puntos);
     const p = pts.reduce((m, q) => (Math.abs(Math.hypot(...q) - 900) < Math.abs(Math.hypot(...m) - 900) ? q : m), pts[0]);
-    return c.length ? { texto: c[0].ref!, p } : null;
+    return c.length ? { texto: c[0].ref ?? c[0].nombre!, p } : null;
   });
 
   /** Each piece's road axis, from its entrance; the services' piece first. */

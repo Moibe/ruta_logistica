@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y doce polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y catorce polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -674,8 +674,9 @@ Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texiste
 [Altamira](#altamira-por-dentro), [Nezahualcóyotl](#nezahualcóyotl-por-dentro),
 [Reserva Zapotlán](#reserva-zapotlán-por-dentro), [San Jerónimo](#san-jerónimo-por-dentro),
 [Parque Industrial Bajío](#parque-industrial-bajío-por-dentro), [Hermosillo](#hermosillo-por-dentro),
-[Topolobampo](#topolobampo-por-dentro), [Puerta Logística del Bajío](#puerta-logística-del-bajío-por-dentro)
-y [Durango](#durango-por-dentro). El reloj sigue corriendo adentro, con el
+[Topolobampo](#topolobampo-por-dentro), [Puerta Logística del Bajío](#puerta-logística-del-bajío-por-dentro),
+[Durango](#durango-por-dentro), [Salina Cruz](#salina-cruz-por-dentro) y [Arriaga](#arriaga-por-dentro).
+El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
 **Qué se ve.** El terreno tal como lo declara el DOF, y lo que hay alrededor según
@@ -1640,6 +1641,87 @@ DOF no dice la zona; Durango está en ella), con números en formato europeo (2.
   polo.
 
 No se ha reportado obra del polo; sus lotes y su acomodo son del juego.
+
+### Salina Cruz por dentro
+
+El decimotercer polo con vista por dentro (`/mexico/polo/salina-cruz`), del Corredor
+Interoceánico: 82.09 ha en Salina Cruz, Oaxaca, junto a la refinería Antonio Dovalí, a 8 km del
+puerto.
+
+**El terreno**, de su declaratoria (DOF, 12 de mayo de 2023): un polígono en UTM zona 15 con tres
+curvas, con su centro y su radio.
+- **Resultado:** cada lado cuadra con su rumbo y su distancia; con las curvas da 820,867 m² contra
+  los 820,864 declarados.
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** a 3 km de la línea Z, a pie de la carretera estatal a San Antonio Monterrey y
+  de la avenida Oleoducto, a 2.5 km de la MEX-185, a 8 km del puerto y a 36.8 km del aeropuerto de
+  Ixtepec.
+- **Vocaciones:** las mismas once de Coatzacoalcos I.
+- **Propiedad:** el INDAABIN la aportó al Corredor Interoceánico (DOF, 5 de enero de 2021).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **63 ha en 8 lotes de 4 a
+  12 ha**, con 2 ha de servicios a la entrada. La entrada mira a la avenida Oleoducto: no hay
+  carretera con número a menos de 2 km.
+- **Los empleos:** 60.5 por hectárea, 4,963. Un lote de 10 ha da 788 y pide de 0.6 MW
+  (dispositivos médicos) a 5.4 MW (metálicas básicas o petroquímica).
+- **La espuela:** la **Línea Z de Ferroistmo** queda al oeste: **2.26 km** (el DOF dice 3; el
+  desarrollador, 2). Cuesta 103 millones con una cuadrilla (5.6 meses) o 149 con cuatro (2 meses).
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  7.9 MW: cabe justo. La línea de 115 kV más cercana queda a 1.07 km de su subestación
+  (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 451 millones con una cuadrilla;
+  las vialidades, 180 millones en 10.9 meses, o 261 en 3.9 con cuatro.
+
+**En la realidad**:
+- **28 de noviembre de 2023:** fallo de su licitación (DOF); la gana Desarrolladora Multimodal del
+  Istmo.
+- **19 de septiembre de 2024:** el Gobierno de Oaxaca presenta sus avances con el arranque de sus
+  obras; el consorcio invertirá más de 5 mil millones en su primera etapa.
+- **19 de febrero de 2025:** la Presidenta lo da por concesionado, con 90 % de avance en sus
+  estudios.
+
+En el modo Realidad aparece en obra desde septiembre de 2024. En 2026 el Corredor reporta solo
+cinco polos del Istmo concesionados, sin decir cuáles. No se han reportado empresas.
+
+### Arriaga por dentro
+
+El decimocuarto polo con vista por dentro (`/mexico/polo/arriaga`), del Corredor Interoceánico:
+48.83 ha en Arriaga, Chiapas, pegado a la Línea K.
+
+**El terreno**, de su declaratoria (DOF, 8 de junio de 2026): la Finca Rústica El Cocal, un
+polígono de nueve vértices en UTM zona 15, con rumbos escritos «NW 84°…».
+- **Resultado:** cada lado cuadra con su rumbo y su distancia; da 48.76 ha contra las 48.83
+  declaradas (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+- **El marcador:** el que el juego ya tenía cae dentro del terreno.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** colindante con la Línea K y a 3 km de la estación Arriaga, a 3.5 km de la
+  ciudad, a pie del libramiento Arriaga–Tapanatepec y a 5 km de la MEX-200.
+- **Vocaciones:** agroindustria, equipo de generación y distribución de energía eléctrica, y
+  metales, «enunciativas y no limitativas».
+- **Propiedad:** el ayuntamiento la aportó al Corredor Interoceánico (Periódico Oficial de
+  Chiapas, 23 de julio de 2025).
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **37 ha en 6 lotes de 3 a
+  10 ha**, con 1.5 ha de servicios a la entrada, del lado de la MEX-200.
+- **Los empleos:** 60.5 por hectárea, 2,952. Un lote de 10 ha da 798 y pide de 0.8 MW
+  (agroindustria) a 5.5 MW (metálicas básicas).
+- **La espuela:** la **Línea K de Ferroistmo** corre pegada a su lado suroeste: **0.02 km**, 1
+  millón con cuatro cuadrillas y el mínimo de 2 meses.
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  4.7 MW; un lote de metálicas básicas ya pide 5.5. La línea de 115 kV más cercana queda a 0.68 km
+  de su subestación (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 268 millones con una cuadrilla;
+  las vialidades, 107 millones en 9.4 meses, o 156 en 3.3 con cuatro.
+- **Las vocaciones en sectores:** agroindustria es la industria alimentaria; el equipo eléctrico,
+  su sector, y metales, las metálicas básicas.
+
+**En la realidad**: el ayuntamiento aportó el terreno en julio de 2025 y la declaratoria salió el 8
+de junio de 2026 (DOF). No se ha reportado licitación ni obra.
 
 ---
 
@@ -3572,6 +3654,14 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
+
+**Arriaga por dentro (DOF)**
+
+- **Una fecha imposible:** la declaratoria, publicada el 8 de junio de 2026, cita el oficio
+  DES/285/2025 de la CONANP «de fecha 16 de julio de 2026», un mes después. Por su número es de
+  2025. No cambia nada del juego.
+- **El área:** su cuadro da 48.76 ha contra las 48.83 declaradas (0.15 % menos); todos sus lados
+  cuadran con su rumbo y su distancia.
 
 **Puerta Logística del Bajío por dentro (DOF)**
 

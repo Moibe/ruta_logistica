@@ -178,6 +178,22 @@
    "fuente": "El Economista, entrevista con el director de Guanajuato Puerto Interior, reproducida en el blog de GPI (11 de marzo de 2026): la Puerta Logística del Bajío empezaría su obra en 2026 y operaría en 2027, con 2,500 millones de pesos de Cointer México (Grupo AZVI), 12 km de vías, seis naves de 10,800 m² y una refrigerada, 144 mil toneladas de almacenamiento y una sección aduanal",
    "url": "https://puertointerior.guanajuato.gob.mx/blog/2026/03/11/puerta-logistica-del-bajio-sera-ancla-de-desarrollo-en-la-region/"
   },
+  "dof-salina-cruz": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Salina Cruz (12 de mayo de 2023): cuadro de construcción con tres curvas, 82.09 ha; a 3 km de la línea Z, a pie de la carretera estatal a San Antonio Monterrey y de la avenida Oleoducto, a 2.5 km de la MEX-185 y a 8 km del puerto; sus vocaciones productivas y su propiedad (el INDAABIN la aportó al Corredor Interoceánico)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5688610&fecha=12/05/2023"
+  },
+  "ciit-salina-cruz": {
+   "fuente": "Corredor Interoceánico, ficha del PODEBI Salina Cruz (22 de junio de 2023): 82.08 ha cerca de la avenida Oleoducto y de la refinería Antonio Dovalí",
+   "url": "https://www.gob.mx/ciit/articulos/podebi-salina-cruz"
+  },
+  "oaxaca-salina-cruz": {
+   "fuente": "Gobierno de Oaxaca (Sedeco), 19 de septiembre de 2024: avances y arranque de las obras del polo; Desarrolladora Multimodal del Istmo invertirá más de 5 mil millones en su primera etapa, y el polo queda a 2 km de la línea Z",
+   "url": "https://www.oaxaca.gob.mx/sedeco/avances-del-proyecto-del-polo-de-desarrollo-para-el-bienestar-de-salina-cruz-consolidan-la-transformacion-en-oaxaca/"
+  },
+  "dof-arriaga": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Arriaga (8 de junio de 2026): cuadro de construcción de la Finca Rústica El Cocal, 48.83 ha; colindante con la Línea K y a 3 km de la estación Arriaga, a pie del libramiento Arriaga–Tapanatepec y a 5 km de la MEX-200; sus vocaciones productivas y su propiedad (el ayuntamiento la aportó al Corredor Interoceánico)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5789894&fecha=08/06/2026"
+  },
   "dof-durango": {
    "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Centro Logístico e Industrial de Durango (26 de agosto de 2025): cuadros de construcción del polígono 1 y de las reservas 1, 2, 4 y 5, 315.42 ha; a pie de la carretera 40D y de la vía férrea, a 780 m de la zona urbana Cinco de Mayo y a 4 km del aeropuerto; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (el estado de Durango)",
    "url": "https://dof.gob.mx/nota_detalle.php?codigo=5766563&fecha=26/08/2025"
@@ -2334,6 +2350,279 @@
     "dato": "Vocaciones productivas de la declaratoria (DOF), que repite manufactura avanzada. En el juego, movilidad eléctrica es el equipo de transporte y los aparatos eléctricos, donde están las baterías; autopartes y automotriz, el equipo de transporte; electrónica especializada, la electrónica (estimación del juego); la textil y la del papel, sus sectores. Manufactura avanzada no es un sector del censo y la industria cinematográfica no es manufactura: el juego no las ofrece para un lote.",
     "fuentes": [
      "dof-durango"
+    ]
+   }
+  },
+  "salina-cruz": {
+   "nombre": "Salina Cruz",
+   "lugar": "Salina Cruz, Oaxaca",
+   "sectores": [
+    "computacion",
+    "semiconductores",
+    "transporte",
+    "dispositivos-medicos",
+    "farmaceutica",
+    "alimentos",
+    "generacion-electrica",
+    "maquinaria",
+    "metalicas",
+    "petroquimica"
+   ],
+   "fuentesLista": [
+    "dof-salina-cruz",
+    "ciit-salina-cruz",
+    "oaxaca-salina-cruz",
+    "presidencia-istmo-2025",
+    "piciit-2026",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: declarado el 12 de mayo de 2023 (DOF) en un terreno federal que el INDAABIN aportó al Corredor Interoceánico, junto a la refinería Antonio Dovalí. Su licitación tuvo fallo en noviembre de 2023 y la ganó Desarrolladora Multimodal del Istmo; el 19 de septiembre de 2024 el Gobierno de Oaxaca presentó sus avances con el arranque de sus obras y una inversión del consorcio de más de 5 mil millones en su primera etapa, y la Presidenta lo dio por concesionado el 19 de febrero de 2025. En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se han reportado empresas: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 2.26,
+    "via": "Línea Z",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "El polo «se encuentra a 3 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la Línea Z (Ferroistmo), la más cercana, al polo: 2.26 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-salina-cruz",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 1.07,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 1.07 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 12,
+      "empresa": null
+     }
+    ],
+    "dato": "Un polígono con tres curvas. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 63 ha en 8 lotes de 4 a 12 ha, y 2 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-salina-cruz",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Eléctrica y electrónica",
+    "Semiconductores",
+    "Automotriz (electromovilidad), autopartes y equipo de transporte",
+    "Dispositivos médicos",
+    "Farmacéutica",
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica (energías limpias)",
+    "Maquinaria y equipo",
+    "Tecnologías de la Información y la Comunicación",
+    "Metales",
+    "Petroquímica"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.",
+    "fuentes": [
+     "dof-salina-cruz"
+    ]
+   }
+  },
+  "arriaga": {
+   "nombre": "Arriaga",
+   "lugar": "Arriaga, Chiapas",
+   "sectores": [
+    "alimentos",
+    "generacion-electrica",
+    "metalicas"
+   ],
+   "fuentesLista": [
+    "dof-arriaga",
+    "osm",
+    "sict-dos-bocas",
+    "energia-polos"
+   ],
+   "realNota": "El polo real: el ayuntamiento de Arriaga aportó el terreno, la Finca Rústica El Cocal, al Corredor Interoceánico (Periódico Oficial de Chiapas, 23 de julio de 2025), y la declaratoria salió el 8 de junio de 2026 (DOF). No se ha reportado licitación ni obra: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0.02,
+    "via": "Línea K",
+    "operador": "Ferroistmo",
+    "mesesMinimos": 2,
+    "dato": "El polo «es colindante con la vía de la Línea K» y queda a 3 km de la estación Arriaga (DOF). La espuela del juego es el tramo de la Línea K (Ferroistmo) al polo, 0.02 km, con su cambio de vía: cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-arriaga",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 8,
+    "fuenteCorta": "estimación del juego",
+    "kmLinea": 0.68,
+    "dato": "No hay cifra oficial de su energía: el juego le da la mediana de los siete polos que sí la tienen, 8 MW, y la toma como lo que da su subestación en su primera fase (estimación del juego). La línea de alta tensión más cercana a su subestación queda a 0.68 km (OpenStreetMap).",
+    "fuentes": [
+     "energia-polos",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 3,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 10,
+      "empresa": null
+     }
+    ],
+    "dato": "Un polígono de nueve vértices. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): 37 ha en 6 lotes de 3 a 10 ha, y 1.5 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-arriaga",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Agroindustria",
+    "Equipo de generación y distribución de energía eléctrica",
+    "Metales"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF), «enunciativas y no limitativas». En el juego, agroindustria es la industria alimentaria; el equipo eléctrico, su sector, y metales, las industrias metálicas básicas.",
+    "fuentes": [
+     "dof-arriaga"
     ]
    }
   }

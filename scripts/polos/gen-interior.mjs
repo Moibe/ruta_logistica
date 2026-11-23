@@ -5,8 +5,8 @@
 //   node scripts/polos/gen-interior.mjs
 //
 // Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San
-// Jerónimo, Parque Industrial Bajío, Hermosillo, Topolobampo, Puerta Logística del Bajío and
-// Durango. Writes:
+// Jerónimo, Parque Industrial Bajío, Hermosillo, Topolobampo, Puerta Logística del Bajío,
+// Durango, Salina Cruz and Arriaga. Writes:
 //   static/data/polos/<id>.json            the geometry, in metres around the polo (fetched by the view)
 //   src/lib/domain/datos/interiores.json   the works by front and the real facts (read by the game)
 //
@@ -15,6 +15,7 @@
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -1126,26 +1127,160 @@ const DURANGO = {
   carretera: /40/,
 };
 
+/**
+ * Salina Cruz, from its declaratoria (DOF, 12 May 2023): one polygon in UTM zone 15 with three
+ * curves (their centres and radii in the table), 820,864.43 m². Every side agrees with its bearing
+ * and length; with the curves drawn every 2°, the area is the table's.
+ */
+const SALINA_CRUZ = {
+  id: 'salina-cruz',
+  zona: 15,
+  vertices: [
+    [265579.12, 1796923.55], [265615.2, 1796923.13], [265619.38, 1796923.08], [265691.76, 1796840.62],
+    [265771.76, 1796840.62], [265771.76, 1796921.02], [265880.66, 1796919.39], [265967.63, 1796918.09],
+    [265973.76, 1796911.8], [266046.5, 1796910.75], [266056.49, 1796909.85], [266196.46, 1796907.83],
+    [266206.44, 1796906.68], [266297.29, 1796905.37], [266316.23, 1796904.45], [266326.2, 1796903.46],
+    [266446.12, 1796897.61], [266456.09, 1796896.63], [266502.15, 1796894.38], [266536.77, 1796896.02],
+    [266546.83, 1796895], [266604.25, 1796897.72], [266632.33, 1796932.76], [266642.83, 1796945.87],
+    [266663.52, 1796970.76], [266669.03, 1796978.47], [266673.08, 1796983.82], [266680.86, 1796992.76],
+    [266685.57, 1796997.97], [266696.64, 1797008.63], [266708.96, 1797015.81], [266722.44, 1797021.86],
+    [266766.45, 1797035.31], [266778.05, 1797038.05], [266807.14, 1797047.03], [266824.6, 1797052.54],
+    [266842.62, 1797058.27], [266882.81, 1797071.53], [266897.7, 1797075.99], [266896.22, 1797067.32],
+    [266891.99, 1797041.84], [266883.37, 1797006.17], [266880.41, 1796987.97], [266875.15, 1796966.22],
+    [266874.53, 1796959.8], [266873.43, 1796951.9], [266869.68, 1796932.31], [266868.86, 1796918.49],
+    [266867.6, 1796903.41], [266868.44, 1796892.48], [266863.15, 1796858.81], [266869.24, 1796757.61],
+    [266875.27, 1796657.67], [266875.359, 1796655.589], [266875.382, 1796653.506], [266875.336, 1796651.423],
+    [266875.223, 1796649.343], [266875.041, 1796647.268], [266874.791, 1796645.2], [266874.473, 1796643.141],
+    [266874.088, 1796641.094], [266873.637, 1796639.061], [266873.118, 1796637.043], [266872.534, 1796635.044],
+    [266871.885, 1796633.064], [266871.171, 1796631.107], [266870.393, 1796629.175], [266869.55, 1796627.27],
+    [266773.73, 1796439.31], [266637.38, 1796181.35], [266636.931, 1796180.465], [266636.513, 1796179.564],
+    [266636.127, 1796178.649], [266635.772, 1796177.722], [266635.45, 1796176.782], [266635.161, 1796175.833],
+    [266634.905, 1796174.873], [266634.682, 1796173.906], [266634.493, 1796172.931], [266634.338, 1796171.95],
+    [266634.217, 1796170.965], [266634.131, 1796169.976], [266634.078, 1796168.984], [266634.06, 1796167.991],
+    [266634.077, 1796166.999], [266634.128, 1796166.007], [266634.213, 1796165.018], [266634.332, 1796164.032],
+    [266634.486, 1796163.051], [266634.674, 1796162.076], [266634.895, 1796161.108], [266635.149, 1796160.148],
+    [266635.437, 1796159.198], [266635.758, 1796158.258], [266636.11, 1796157.33], [266555.17, 1796001.8],
+    [266469.44, 1795829.11], [266425.21, 1795740.04], [266414.56, 1795718.62], [266400.96, 1795771.89],
+    [266393.46, 1795801.25], [266391.495, 1795808.437], [266389.291, 1795815.555], [266386.851, 1795822.596],
+    [266384.177, 1795829.55], [266381.272, 1795836.412], [266378.138, 1795843.172], [266374.781, 1795849.824],
+    [266371.203, 1795856.36], [266367.409, 1795862.773], [266363.402, 1795869.055], [266359.188, 1795875.2],
+    [266354.77, 1795881.2], [266289.73, 1795967.31], [266220.08, 1796058.7], [266113.52, 1796198.5],
+    [265975.18, 1796380], [265805.95, 1796602.03], [265750.15, 1796675.23], [265588.15, 1796887.75],
+    [265591.92, 1796891.05], [265575.34, 1796912.84],
+  ],
+  areaDof: 820864.43,
+  control: null,
+  marcador: { lat: 16.23821, lon: -95.18602 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 63 ha in 8 lots of 4 to 12 ha (an estimate).
+   */
+  lotes: [
+    { ha: 12, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 5, lado: 'a' },
+    { ha: 10, lado: 'b' }, { ha: 8, lado: 'b' }, { ha: 6, lado: 'b' }, { ha: 4, lado: 'b' },
+  ],
+  serviciosHa: 2,
+  anchoVialidad: 26,
+  anchoAcceso: 14,
+  /** The MEX-185 is 2.5 km away: the entrance faces the Avenida Oleoducto the declaratoria names. */
+  carretera: /185/,
+  carreteraNombre: /Oleoducto/,
+};
+
+/**
+ * Arriaga, from its declaratoria (DOF, 8 Jun 2026): one polygon of nine vertices in UTM zone 15,
+ * the Finca Rústica El Cocal. Every side agrees with its bearing and length; the area is 48.76 ha
+ * against the 48.83 declared (0.15 % less).
+ */
+const ARRIAGA = {
+  id: 'arriaga',
+  zona: 15,
+  vertices: [
+    [406533.12, 1791769.64], [406181.54, 1791805.17], [406056.19, 1791862.04], [405466.13, 1792523.3],
+    [405831.53, 1792612.98], [405696.46, 1792810.83], [405765.29, 1792839.66], [406381.76, 1792125.76],
+    [406660.42, 1792101.07],
+  ],
+  areaDof: 488280.92,
+  control: null,
+  marcador: { lat: 16.20859, lon: -93.87885 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 37 ha in 6 lots of 3 to 10 ha (an estimate).
+   */
+  lotes: [
+    { ha: 10, lado: 'a' }, { ha: 6, lado: 'a' }, { ha: 3, lado: 'a' },
+    { ha: 8, lado: 'b' }, { ha: 6, lado: 'b' }, { ha: 4, lado: 'b' },
+  ],
+  serviciosHa: 1.5,
+  anchoVialidad: 26,
+  anchoAcceso: 14,
+  carretera: /200/,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
+/**
+ * What the generator asks OpenStreetMap for, as data: each query is parts [type, box, filters],
+ * a filter [key] (it has it), [key, '=', value], [key, '~', regex] or [key, '!'] (it hasn't).
+ * The same queries go to Overpass (`ql`) or to a Geofabrik extract (`osm-local.py`).
+ */
 const CONSULTAS = (p) => ({
-  caminos: `way["highway"](${p.cerca});`,
-  vias: `way["railway"](${p.lejos});`,
-  electricidad: `way["power"~"line|minor_line"](${p.cerca});node["power"="substation"](${p.lejos});way["power"="substation"](${p.lejos});way["man_made"="pipeline"](${p.lejos});`,
-  suelo: `way["landuse"](${p.cerca});`,
-  'agua-lugares': `way["waterway"](${p.cerca});node["place"](${p.lejos});`,
-  edificios: `way["building"](${p.cerca});`,
+  caminos: [['way', p.cerca, [['highway']]]],
+  vias: [['way', p.lejos, [['railway']]]],
+  electricidad: [
+    ['way', p.cerca, [['power', '~', 'line|minor_line']]],
+    ['node', p.lejos, [['power', '=', 'substation']]],
+    ['way', p.lejos, [['power', '=', 'substation']]],
+    ['way', p.lejos, [['man_made', '=', 'pipeline']]],
+  ],
+  suelo: [['way', p.cerca, [['landuse']]]],
+  'agua-lugares': [['way', p.cerca, [['waterway']]], ['node', p.lejos, [['place']]]],
+  edificios: [['way', p.cerca, [['building']]]],
   // The main lines of a wider box, when the track the polo can reach is farther (San Jerónimo).
-  ...(p.viasLejos ? { 'vias-lejos': `way["railway"="rail"][!"service"](${p.viasLejos});` } : {}),
+  ...(p.viasLejos ? { 'vias-lejos': [['way', p.viasLejos, [['railway', '=', 'rail'], ['service', '!']]]] } : {}),
   // The international border, for a polo by it.
-  ...(p.frontera ? { frontera: `way["boundary"="administrative"]["admin_level"="2"](${p.lejos});` } : {}),
+  ...(p.frontera ? { frontera: [['way', p.lejos, [['boundary', '=', 'administrative'], ['admin_level', '=', '2']]]] } : {}),
 });
+
+/** A query in Overpass QL. */
+const ql = (partes) =>
+  partes.map(([tipo, caja, filtros]) => tipo + filtros.map(([k, op, v]) => (op === '!' ? `[!"${k}"]` : op ? `["${k}"${op}"${v}"]` : `["${k}"]`)).join('') + `(${caja});`).join('');
+
+/**
+ * Geofabrik's extract of Mexico (download.geofabrik.de/north-america/mexico-latest.osm.pbf),
+ * when it's there: the queries are answered from it, without Overpass. It's a day old at most.
+ */
+const PBF = join(ROOT, '.cache', 'geofabrik', 'mexico-latest.osm.pbf');
+
+/** A polo's queries not in its cache yet: [file, parts]. */
+function faltantes(p) {
+  const dir = join(ROOT, '.cache', 'osm', p.id);
+  return Object.entries(CONSULTAS(p))
+    .filter(([k]) => !existsSync(join(dir, `${k}.json`)))
+    .map(([k, partes]) => [join(dir, `${k}.json`), partes]);
+}
+
+/** Answers queries from the extract, all of them in one pass over the file (minutes, however many). */
+async function desdeGeofabrik(salidas) {
+  await mkdir(join(ROOT, '.cache', 'osm'), { recursive: true });
+  for (const [archivo] of salidas) await mkdir(dirname(archivo), { recursive: true });
+  const pedido = join(ROOT, '.cache', 'osm', 'pedido.json');
+  await writeFile(pedido, JSON.stringify({ pbf: PBF, salidas: salidas.map(([archivo, partes]) => ({ archivo, partes })) }));
+  console.log(`Geofabrik: ${salidas.length} consultas en una pasada por el extracto de México`);
+  const r = spawnSync('python', [join(ROOT, 'scripts', 'polos', 'osm-local.py'), pedido], { encoding: 'utf8', stdio: ['ignore', 'inherit', 'pipe'] });
+  if (r.status !== 0) throw new Error(`osm-local.py: ${r.stderr || r.error}`);
+}
 
 async function osm(p) {
   const dir = join(ROOT, '.cache', 'osm', p.id);
   await mkdir(dir, { recursive: true });
   const out = {};
-  for (const [k, q] of Object.entries(CONSULTAS(p))) {
+  const consultas = CONSULTAS(p);
+  // What's missing, from the extract when it's downloaded (the main loop asks for every polo at once first).
+  const faltan = faltantes(p);
+  if (faltan.length && existsSync(PBF)) await desdeGeofabrik(faltan);
+  for (const [k, partes] of Object.entries(consultas)) {
+    const q = ql(partes);
     const file = join(dir, `${k}.json`);
     if (!existsSync(file)) {
       let ok = false;
@@ -1185,7 +1320,7 @@ async function osm(p) {
 
 // ---- build -----------------------------------------------------------------------------------
 
-async function construir(p) {
+async function construir(p, { soloCajas = false } = {}) {
   // The land, in metres around the mean of its vertices (UTM grid: north is the grid's, a fraction of a degree off true north).
   const piezas = piezasDe(p);
   // A strip comes as its ring, as named vertices, or as a road's axis and its width.
@@ -1209,7 +1344,7 @@ async function construir(p) {
     // The game's marker (polos.json) is near the centre, or on the land when it comes in far-apart pieces.
     const d = Math.hypot((lon0 - p.marcador.lon) * 105700, (lat0 - p.marcador.lat) * 110600);
     const enTerreno = piezas.some((q) => dentroDe(aLocal(aUtm(p.marcador.lon, p.marcador.lat, p.zona)), q.local));
-    console.log(`${p.id}: área ${a.toFixed(0)} m² (DOF ${p.areaDof}) · perímetro ${per.toFixed(1)} m · centro a ${d.toFixed(0)} m del marcador${enTerreno ? ', que cae en el terreno' : ''}`);
+    if (!soloCajas) console.log(`${p.id}: área ${a.toFixed(0)} m² (DOF ${p.areaDof}) · perímetro ${per.toFixed(1)} m · centro a ${d.toFixed(0)} m del marcador${enTerreno ? ', que cae en el terreno' : ''}`);
     if (d > 300 && !enTerreno) throw new Error('El polígono no cae donde el marcador del polo');
   }
   // Within 0.5 %, or what the config says the declaratoria is off by (San Jerónimo's).
@@ -1257,6 +1392,8 @@ async function construir(p) {
     return partes.filter((l) => l.length > 1).map((l) => simplificar(l, tol).map(([x, y]) => [r0(x), r0(y)]));
   };
 
+  // `soloCajas`: just the boxes, to ask OpenStreetMap for several polos at once.
+  if (soloCajas) return null;
   const datos = await osm(p);
   const caminos = [];
   for (const e of datos.caminos) {
@@ -1333,7 +1470,8 @@ async function construir(p) {
 
   // ---- the layout: in each piece a main road down its long axis, lots on both sides -------------
 
-  const carretera = caminos.filter((c) => c.ref && p.carretera.test(c.ref));
+  // The highway by its ref, or by its name when there is none with a number near (Salina Cruz).
+  const carretera = caminos.filter((c) => (c.ref && p.carretera?.test(c.ref)) || (!c.ref && c.nombre && p.carreteraNombre?.test(c.nombre)));
   const puntosCarretera = carretera.flatMap((c) => c.puntos);
   const lotes = [];
   const vialidades = [];
@@ -1425,7 +1563,7 @@ async function construir(p) {
     },
     conexionElectrica: { puntos: [conexion.pa, conexion.pb].map(([x, y]) => [r1(x), r1(y)]), km: Number((conexion.d / 1000).toFixed(2)), kv: conexion.linea.kv },
     /** The highway the polo faces, for its label. */
-    carretera: carretera[0]?.ref ?? null,
+    carretera: carretera[0]?.ref ?? carretera[0]?.nombre ?? null,
     caminos,
     vias,
     lineas,
@@ -1719,6 +1857,22 @@ const FUENTES = {
   'economista-plb': {
     fuente: 'El Economista, entrevista con el director de Guanajuato Puerto Interior, reproducida en el blog de GPI (11 de marzo de 2026): la Puerta Logística del Bajío empezaría su obra en 2026 y operaría en 2027, con 2,500 millones de pesos de Cointer México (Grupo AZVI), 12 km de vías, seis naves de 10,800 m² y una refrigerada, 144 mil toneladas de almacenamiento y una sección aduanal',
     url: 'https://puertointerior.guanajuato.gob.mx/blog/2026/03/11/puerta-logistica-del-bajio-sera-ancla-de-desarrollo-en-la-region/',
+  },
+  'dof-salina-cruz': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Salina Cruz (12 de mayo de 2023): cuadro de construcción con tres curvas, 82.09 ha; a 3 km de la línea Z, a pie de la carretera estatal a San Antonio Monterrey y de la avenida Oleoducto, a 2.5 km de la MEX-185 y a 8 km del puerto; sus vocaciones productivas y su propiedad (el INDAABIN la aportó al Corredor Interoceánico)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5688610&fecha=12/05/2023',
+  },
+  'ciit-salina-cruz': {
+    fuente: 'Corredor Interoceánico, ficha del PODEBI Salina Cruz (22 de junio de 2023): 82.08 ha cerca de la avenida Oleoducto y de la refinería Antonio Dovalí',
+    url: 'https://www.gob.mx/ciit/articulos/podebi-salina-cruz',
+  },
+  'oaxaca-salina-cruz': {
+    fuente: 'Gobierno de Oaxaca (Sedeco), 19 de septiembre de 2024: avances y arranque de las obras del polo; Desarrolladora Multimodal del Istmo invertirá más de 5 mil millones en su primera etapa, y el polo queda a 2 km de la línea Z',
+    url: 'https://www.oaxaca.gob.mx/sedeco/avances-del-proyecto-del-polo-de-desarrollo-para-el-bienestar-de-salina-cruz-consolidan-la-transformacion-en-oaxaca/',
+  },
+  'dof-arriaga': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo para el Bienestar Arriaga (8 de junio de 2026): cuadro de construcción de la Finca Rústica El Cocal, 48.83 ha; colindante con la Línea K y a 3 km de la estación Arriaga, a pie del libramiento Arriaga–Tapanatepec y a 5 km de la MEX-200; sus vocaciones productivas y su propiedad (el ayuntamiento la aportó al Corredor Interoceánico)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5789894&fecha=08/06/2026',
   },
   'dof-durango': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Centro Logístico e Industrial de Durango (26 de agosto de 2025): cuadros de construcción del polígono 1 y de las reservas 1, 2, 4 y 5, 315.42 ha; a pie de la carretera 40D y de la vía férrea, a 780 m de la zona urbana Cinco de Mayo y a 4 km del aeropuerto; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (el estado de Durango)',
@@ -2278,6 +2432,76 @@ function interiorDurango(g) {
   };
 }
 
+function interiorSalinaCruz(g) {
+  return {
+    nombre: 'Salina Cruz',
+    lugar: 'Salina Cruz, Oaxaca',
+    sectores: ['computacion', 'semiconductores', 'transporte', 'dispositivos-medicos', 'farmaceutica', 'alimentos', 'generacion-electrica', 'maquinaria', 'metalicas', 'petroquimica'],
+    fuentesLista: ['dof-salina-cruz', 'ciit-salina-cruz', 'oaxaca-salina-cruz', 'presidencia-istmo-2025', 'piciit-2026', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota:
+      'El polo real: declarado el 12 de mayo de 2023 (DOF) en un terreno federal que el INDAABIN aportó al Corredor Interoceánico, junto a la refinería Antonio Dovalí. Su licitación tuvo fallo en noviembre de 2023 y la ganó Desarrolladora Multimodal del Istmo; el 19 de septiembre de 2024 el Gobierno de Oaxaca presentó sus avances con el arranque de sus obras y una inversión del consorcio de más de 5 mil millones en su primera etapa, y la Presidenta lo dio por concesionado el 19 de febrero de 2025. En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se han reportado empresas: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo «se encuentra a 3 km de la vía férrea correspondiente a la línea Z» (DOF). La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-salina-cruz', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('salina-cruz', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono con tres curvas. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 4 a 12 ha, y 2 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-salina-cruz', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Eléctrica y electrónica', 'Semiconductores', 'Automotriz (electromovilidad), autopartes y equipo de transporte', 'Dispositivos médicos', 'Farmacéutica', 'Agroindustria', 'Equipo de generación y distribución de energía eléctrica (energías limpias)', 'Maquinaria y equipo', 'Tecnologías de la Información y la Comunicación', 'Metales', 'Petroquímica'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), las mismas que las de Coatzacoalcos I. Tecnologías de la información no es manufactura: el juego no la ofrece para un lote.',
+      fuentes: ['dof-salina-cruz'],
+    },
+  };
+}
+
+function interiorArriaga(g) {
+  return {
+    nombre: 'Arriaga',
+    lugar: 'Arriaga, Chiapas',
+    sectores: ['alimentos', 'generacion-electrica', 'metalicas'],
+    fuentesLista: ['dof-arriaga', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota:
+      'El polo real: el ayuntamiento de Arriaga aportó el terreno, la Finca Rústica El Cocal, al Corredor Interoceánico (Periódico Oficial de Chiapas, 23 de julio de 2025), y la declaratoria salió el 8 de junio de 2026 (DOF). No se ha reportado licitación ni obra: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `El polo «es colindante con la vía de la Línea K» y queda a 3 km de la estación Arriaga (DOF). La espuela del juego es el tramo de la ${g.espuela.via} (${g.espuela.operador}) al polo, ${km(g.espuela.km)} km, con su cambio de vía: cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-arriaga', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: energiaSinCifra('arriaga', g, `La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Un polígono de nueve vértices. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 3 a 10 ha, y 1.5 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-arriaga', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Agroindustria', 'Equipo de generación y distribución de energía eléctrica', 'Metales'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF), «enunciativas y no limitativas». En el juego, agroindustria es la industria alimentaria; el equipo eléctrico, su sector, y metales, las industrias metálicas básicas.',
+      fuentes: ['dof-arriaga'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -2323,6 +2547,8 @@ const POLOS_INTERIOR = [
   [TOPOLOBAMPO, interiorTopolobampo],
   [PUERTA_LOGISTICA_BAJIO, interiorPuertaLogisticaBajio],
   [DURANGO, interiorDurango],
+  [SALINA_CRUZ, interiorSalinaCruz],
+  [ARRIAGA, interiorArriaga],
 ];
 // `id…`: build only those polos and keep the others as they are in interiores.json.
 // `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.
@@ -2331,8 +2557,17 @@ const solo = process.argv.slice(2).filter((x) => !x.startsWith('--'));
 const INTERIORES = join(ROOT, 'src', 'lib', 'domain', 'datos', 'interiores.json');
 await mkdir(join(ROOT, 'static', 'data', 'polos'), { recursive: true });
 const polos = solo.length && !prueba ? JSON.parse(await readFile(INTERIORES, 'utf8')).polos : {};
-for (const [p, interior] of POLOS_INTERIOR) {
-  if (solo.length && !solo.includes(p.id)) continue;
+const aConstruir = POLOS_INTERIOR.filter(([p]) => !solo.length || solo.includes(p.id));
+// Everything the polos to build lack, from the extract in a single pass.
+if (existsSync(PBF)) {
+  const salidas = [];
+  for (const [p] of aConstruir) {
+    await construir(p, { soloCajas: true });
+    salidas.push(...faltantes(p));
+  }
+  if (salidas.length) await desdeGeofabrik(salidas);
+}
+for (const [p, interior] of aConstruir) {
   const g = await construir(p);
   if (prueba) continue;
   await writeFile(join(ROOT, 'static', 'data', 'polos', `${p.id}.json`), JSON.stringify(g) + '\n');

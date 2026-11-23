@@ -413,7 +413,7 @@ los primeros 15 polos entre sus hectáreas (60.5). Las cifras salen de fuentes o
 `datos/calibracion.json`; la tabla y sus fuentes, en la
 [enciclopedia](docs/enciclopedia.md#construirlos).
 
-**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San Jerónimo, Parque Industrial Bajío, Hermosillo, Topolobampo, Puerta Logística del Bajío y Durango). *Entrar al polo ›* en su ficha
+**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San Jerónimo, Parque Industrial Bajío, Hermosillo, Topolobampo, Puerta Logística del Bajío, Durango, Salina Cruz y Arriaga). *Entrar al polo ›* en su ficha
 pide a la cámara del tablero que baje hasta él (`tablero.entrarPolo`, pedido `polo:<id>`) y abre
 la ruta; *← México* o Esc vuelven sobre él (`tablero.salirPolo`, pedido `polo-fuera:<id>`). El
 tablero atiende un pedido de cámara una sola vez, cuando su proyección ya existe
@@ -422,7 +422,8 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
 - **Datos:** `scripts/polos/gen-interior.mjs` tiene una configuración por polo (`HUAMANTLA`,
   `COATZACOALCOS_I`, `TEXISTEPEC`, `ALTAMIRA`, `NEZAHUALCOYOTL`, `RESERVA_ZAPOTLAN`,
   `SAN_JERONIMO`, `PARQUE_INDUSTRIAL_BAJIO`, `HERMOSILLO`, `TOPOLOBAMPO`,
-  `PUERTA_LOGISTICA_BAJIO`, `DURANGO`, con los vértices del DOF ya corregidos) y un texto
+  `PUERTA_LOGISTICA_BAJIO`, `DURANGO`, `SALINA_CRUZ`, `ARRIAGA`, con los vértices del DOF ya
+  corregidos) y un texto
   por polo (`interiorHuamantla`, …). `node scripts/polos/gen-interior.mjs id…` rehace solo esos
   polos y conserva los demás en `interiores.json`; con `--prueba [id…]` los arma e imprime cómo
   salen, sin escribir nada.
@@ -442,11 +443,20 @@ tablero atiende un pedido de cámara una sola vez, cuando su proyección ya exis
   - Si la configuración no da `caja`, `cerca` y `lejos`, los saca de la extensión del terreno
     (`margen`, 1,500 m por omisión); la vista crece hasta la línea de alta tensión a la que se
     conecta.
-  - Lee los alrededores de OpenStreetMap (Overpass en consultas chicas, guardadas en
-    `.cache/osm/<polo>/`; si overpass-api.de falla, prueba por turnos su gemelo lz4 y dos
-    espejos).
+  - Lee los alrededores de OpenStreetMap y los guarda en `.cache/osm/<polo>/`. Las consultas son
+    datos (`CONSULTAS`: tipo, caja y filtros de etiquetas) y salen de dos lados:
+    - del extracto de México de Geofabrik, si está en
+      `.cache/geofabrik/mexico-latest.osm.pbf` (650 MB, se actualiza a diario: bajarlo de
+      download.geofabrik.de/north-america/mexico-latest.osm.pbf). `scripts/polos/osm-local.py`
+      contesta todo lo que le falta a un polo en una pasada, con el mismo formato de Overpass;
+      necesita pyosmium (`python -m pip install --user osmium`);
+    - si no, de Overpass (`ql`), en consultas chicas; si overpass-api.de falla, prueba por turnos
+      su gemelo lz4 y dos espejos.
+    - Un polo junto a la frontera necesita lo del otro lado (San Jerónimo, ya en caché, vino de
+      Overpass); el extracto de México no lo trae.
   - Acomoda los lotes en cada pieza (`trazar`): una calle por su eje largo desde el extremo más
-    cercano a la carretera, y las superficies que dio el gobierno, o las del juego, a los lados.
+    cercano a la carretera (`carretera`, por su número; o `carreteraNombre`, por su nombre, cuando
+    no hay ninguna con número cerca, como la avenida Oleoducto de Salina Cruz), y las superficies que dio el gobierno, o las del juego, a los lados.
     Avisa (⚠) si un lote no cabe.
   - Traza la espuela a la vía principal en servicio con nombre más cercana (si no hay, a la línea
     con nombre más cercana, en obra o abandonada) y la conexión a la línea de alta tensión más
