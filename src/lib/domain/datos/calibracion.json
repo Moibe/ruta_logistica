@@ -50,6 +50,14 @@
    "url": "https://www.neza.gob.mx/prensa_2025/single.php?id=100",
    "consultado": "2026-11-23"
   },
+  "empleosParqueBajio": {
+   "valor": 27000,
+   "unidad": "empleos formales dentro del polo en sus primeros 10 años",
+   "dato": "Parque Industrial Bajío, 342 ha: «las acciones a desarrollarse dentro del Parque Bajío generarán en los próximos 10 años 27 mil empleos formales y especializados» (el secretario de Desarrollo Económico de Michoacán)",
+   "fuente": "Gobierno de Michoacán, «Entrega Bedolla a Herso y Citelis primeras áreas de desarrollo del Parque Bajío; invertirán 6 mil 300 mdp», 30 ene 2026",
+   "url": "https://michoacan.gob.mx/noticias/entrega-bedolla-a-herso-y-citelis-primeras-areas-de-desarrollo-del-parque-bajio-invertiran-6-mil-300-mdp/",
+   "consultado": "2026-11-23"
+  },
   "empleosPolosPlanMexico": {
    "valor": 300000,
    "unidad": "empleos de los primeros 15 polos del Plan México en esta administración",

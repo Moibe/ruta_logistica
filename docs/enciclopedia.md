@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y seis polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y ocho polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -107,7 +107,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [Reforma a la Ley Reglamentaria del Servicio Ferroviario](https://dof.gob.mx/nota_detalle.php?codigo=5763165&fecha=16/07/2025) | El derecho de paso: quien usa la vía de otro le paga una contraprestación | DOF, 16 de julio de 2025 | Documento oficial público |
 | INEGI (convención cartográfica) | Parámetros de la proyección del tablero: cónica conforme de Lambert, paralelos 17.5° y 29.5°, meridiano central 102° O | — | — |
 | [INEGI, Censos Económicos 2024](https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mver_ce24.pdf) | Empleos que da la obra por cada millón de pesos (construcción en Veracruz, 2023) | Resultados definitivos, 2025 | Documento oficial público |
-| Empleos de los polos: [Presidencia, 26 jun 2025](https://www.gob.mx/presidencia/prensa/plan-mexico-presidenta-claudia-sheinbaum-pone-en-marcha-los-primeros-15-polos-de-desarrollo-economico-para-el-bienestar-en-14-estados?idiom=es-MX) (los primeros 15 polos, 300 mil empleos), [Gobierno de Nezahualcóyotl, 26 jun 2025](https://www.neza.gob.mx/prensa_2025/single.php?id=100) (4,500 empleos directos en la primera etapa) y [Presidencia, 19 ago 2026](https://www.gob.mx/presidencia/prensa/presidenta-destaca-inversion-de-10-mil-106-mdp-para-el-podecobi-de-zapotlan-hidalgo-que-ya-reune-147-mil-mdp-en-proyectos) (Zapotlán: 5,100 de DEWA en su primera fase; los 191 mil de 130 proyectos del estado) | Cuántos empleos da un polo lleno: su propia cifra o la densidad del conjunto. Se revisaron también los anuncios de [Quintana Roo](https://qroo.gob.mx/firma-quintana-roo-el-polo-de-desarrollo-economico-para-el-bienestar-mas-empleo-inversion-y-una-economia-justa-para-chetumal/) y [Sinaloa](https://sinaloa.gob.mx/topolobampo-entre-los-cinco-polos-de-desarrollo-economico-para-el-bienestar-con-mayor-inversion/), que suman proyectos de fuera del polo | 2025 y 2026 | Comunicado oficial |
+| Empleos de los polos: [Presidencia, 26 jun 2025](https://www.gob.mx/presidencia/prensa/plan-mexico-presidenta-claudia-sheinbaum-pone-en-marcha-los-primeros-15-polos-de-desarrollo-economico-para-el-bienestar-en-14-estados?idiom=es-MX) (los primeros 15 polos, 300 mil empleos), [Gobierno de Nezahualcóyotl, 26 jun 2025](https://www.neza.gob.mx/prensa_2025/single.php?id=100) (4,500 empleos directos en la primera etapa), [Presidencia, 19 ago 2026](https://www.gob.mx/presidencia/prensa/presidenta-destaca-inversion-de-10-mil-106-mdp-para-el-podecobi-de-zapotlan-hidalgo-que-ya-reune-147-mil-mdp-en-proyectos) (Zapotlán: 5,100 de DEWA en su primera fase; los 191 mil de 130 proyectos del estado) y [Gobierno de Michoacán, 30 ene 2026](https://michoacan.gob.mx/noticias/entrega-bedolla-a-herso-y-citelis-primeras-areas-de-desarrollo-del-parque-bajio-invertiran-6-mil-300-mdp/) (27 mil empleos dentro del Parque Bajío en 10 años) | Cuántos empleos da un polo lleno: su propia cifra o la densidad del conjunto. Se revisaron también los anuncios de [Quintana Roo](https://qroo.gob.mx/firma-quintana-roo-el-polo-de-desarrollo-economico-para-el-bienestar-mas-empleo-inversion-y-una-economia-justa-para-chetumal/) y [Sinaloa](https://sinaloa.gob.mx/topolobampo-entre-los-cinco-polos-de-desarrollo-economico-para-el-bienestar-con-mayor-inversion/), que suman proyectos de fuera del polo | 2025 y 2026 | Comunicado oficial |
 | Presidencia de la República y Gobierno de Tlaxcala | Tiempos y empleos del polo de Huamantla, el único terminado: su ritmo de obra y su proyección de empleos; en la [versión estenográfica de su inauguración](https://www.gob.mx/presidencia/es/articulos/version-estenografica-inauguracion-del-polo-de-desarrollo-economico-para-el-bienestar-podecobi-huamantla?idiom=es), los siete lotes vendidos con su superficie, las obras que hizo el estado y cómo se paga la urbanización | Comunicados del 14 oct 2025 al 12 abr 2026 | Documento oficial público |
 | [CFE, Programas y Proyectos de Inversión 2024](https://portales-transparencia.cfe.mx/corporativo/31%20Informe%20presupuestl%20balance%20general%20y%20estado%20fi/Direcci%C3%B3n%20Corporativa%20de%20Finanzas/Gerencia%20de%20Presupuestos/2024/Cartera%20de%20CFE%20pre%20cierre%20DIC%2010012025%204o%20trim.pdf) | Cada proyecto de inversión de la CFE con sus MVA, km-c, fechas y costo total: el costo por MVA de las subestaciones de distribución y lo que tardaron las subestaciones Kantenah y Leona Vicario, para ampliar la subestación de un polo | Cierre de diciembre de 2024 | Documento oficial público |
 | Secretaría de Economía, [ficha del polo Huamantla](https://podecobi.economia.gob.mx/polos-de-desarrollo) y [nota del 18 de diciembre de 2025](https://podecobi.economia.gob.mx/en/news/plan-mexico-avanza-polo-de-desarrollo-economico-en-tlaxcala/) | Energía disponible (8 MVA), agua, gas a 3 km, conexión ferroviaria y superficie total (61.8 ha) de Huamantla; su CECI y su fecha de término | 2025 | Documento oficial público |
@@ -640,6 +640,7 @@ en los gobiernos estatales y municipales.
 | --- | ---: | ---: | ---: | --- |
 | Huamantla | 53 | 5,000 | 94 | «Más de 5 mil empleos directos e indirectos» con el polo vendido (Presidencia; Segundo Informe) |
 | Nezahualcóyotl | 68.4 | 4,500 | 66 | «4 mil 500 empleos directos» en su primera etapa (la gobernadora, en el boletín del municipio) |
+| Parque Industrial Bajío | 342.1 | 27,000 | 79 | «27 mil empleos formales y especializados» dentro del parque en sus primeros 10 años (la Secretaría de Desarrollo Económico de Michoacán, 30 ene 2026) |
 | Reserva Zapotlán | 910.8 | 5,100 | — | Los de su desarrollador, DEWA, en la primera de cinco fases: la urbanización y las dos primeras naves (Presidencia, 19 ago 2026) |
 
 **Cifras que no son de un polo, aunque se anuncien con él:**
@@ -654,23 +655,25 @@ tiene 14 de ellos, con 4,962 ha; el 15.º, de economía circular en Hidalgo, no 
 publicada. Eso da **60.5 empleos por hectárea**, cerca de los 66 de Nezahualcóyotl.
 
 **Cómo los usa el juego:**
-- **Un polo con cifra oficial de su terreno la usa:** Huamantla 5,000 y Nezahualcóyotl 4,500.
+- **Un polo con cifra oficial de su terreno la usa:** Huamantla 5,000, Nezahualcóyotl 4,500 y
+  Parque Industrial Bajío 27,000.
 - **Los demás usan los 60.5 por hectárea del gobierno**, una estimación del juego con la cifra
   oficial de conjunto.
 - **Por qué por hectárea:** a diferencia de la electricidad, los empleos sí crecen con el terreno,
   porque las empresas ocupan lotes. Las cifras de primera fase se parecen (unos 5 mil), pero un
   polo lleno no es su primera fase.
 - **Antes** todos usaban los 94.3 por hectárea de Huamantla, un polo chico y vendido completo. Así
-  Altamira daba 154 mil empleos y los 32 polos, 815 mil. Ahora Altamira da 99 mil y los 32, 525
-  mil.
+  Altamira daba 154 mil empleos y los 32 polos, 815 mil. Ahora Altamira da 99 mil y los 32, 531
+  mil (525 mil antes de usar la cifra de Bajío, que con la densidad daba 20,681).
 
 ### Huamantla por dentro
 
 Un polo puede tener **vista por dentro**: en su ficha, *Entrar al polo ›* lleva la cámara del
 tablero hasta él y abre su acercamiento (`/mexico/polo/huamantla`). Por ahora la tienen
 Huamantla, [Coatzacoalcos I](#coatzacoalcos-i-por-dentro), [Texistepec](#texistepec-por-dentro),
-[Altamira](#altamira-por-dentro), [Nezahualcóyotl](#nezahualcóyotl-por-dentro) y
-[Reserva Zapotlán](#reserva-zapotlán-por-dentro). El reloj sigue corriendo adentro, con el
+[Altamira](#altamira-por-dentro), [Nezahualcóyotl](#nezahualcóyotl-por-dentro),
+[Reserva Zapotlán](#reserva-zapotlán-por-dentro), [San Jerónimo](#san-jerónimo-por-dentro) y
+[Parque Industrial Bajío](#parque-industrial-bajío-por-dentro). El reloj sigue corriendo adentro, con el
 presupuesto arriba; *← México* o Esc vuelven al tablero, encima del polo.
 
 **Qué se ve.** El terreno tal como lo declara el DOF, y lo que hay alrededor según
@@ -921,6 +924,8 @@ Huamantla y Coatzacoalcos I son un solo polígono. Otros polos no:
   una vía que lo cruzan, y quedan tres predios separados.
 - **Altamira:** son tres polígonos a varios kilómetros uno de otro.
 - **Nezahualcóyotl:** son cuatro lotes catastrales del estado, separados por calles y por una vía.
+- **Parque Industrial Bajío:** son tres polígonos a los dos lados de una autopista, más el camino
+  de acceso que los une, que también es del polo.
 
 El juego arma cada pieza como un polo chico:
 - **Calle y lotes:** cada pieza lleva su calle a lo largo, desde el extremo más cercano a la
@@ -930,8 +935,9 @@ El juego arma cada pieza como un polo chico:
 - **Obra:** los frentes de vialidades, agua y energía avanzan por las calles una tras otra, en ese
   orden; las cuadrillas trabajan donde va cada frente.
 - **Franjas:** se dibujan los derechos de vía excluidos. Si una franja cruza una pieza (el
-  gasoducto de Altamira), ningún lote se pone encima: el lote que no cabe antes de ella va
-  después.
+  gasoducto de Altamira, el camino de Bajío), ningún lote se pone encima: el lote que no cabe
+  antes de ella va después. Un camino que la declaratoria da por su eje se dibuja con su ancho, y
+  cuenta en la superficie si es parte del polo.
 - **Comprobación:** el generador compara cada tabla con su área declarada (el polígono general,
   cada franja y la suma de las piezas).
 
@@ -1206,6 +1212,156 @@ invertirá **10,106 millones** para urbanizarlo en cinco fases. La primera:
 
 No se ha reportado que la obra empezara. El juego no usa esos 5,100 como sus empleos: son los de
 una fase de cinco (ver [Cuántos empleos da un polo](#cuántos-empleos-da-un-polo)).
+
+
+### San Jerónimo por dentro
+
+El séptimo polo con vista por dentro (`/mexico/polo/san-jeronimo`), del Plan México y el único en
+la frontera norte: junto al cruce San Jerónimo–Santa Teresa, en Juárez, Chihuahua, frente a
+Nuevo México.
+
+**El terreno**, de su declaratoria (DOF, 30 de junio de 2025): la fracción B-3B, un cuadro de
+ocho vértices y dos curvas en UTM zona 13 (el DOF no dice la zona; Juárez está en ella).
+- **Resultado:** cada lado cuadra con su rumbo y su distancia, y cada curva con su delta, su
+  longitud y su subtangente. El polígono encierra **56.46 ha**.
+- **Una errata:** su cuadro y el artículo declaran 60.32 ha, 6.4 % más de lo que dan sus
+  vértices (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)). El juego dibuja el
+  cuadro y usa las 60.32 ha para el costo y los empleos.
+- **Sus orillas:** el lado norte sigue la carretera estatal CHIH 174, San Jerónimo–Anapra, y la
+  frontera corre a unos metros (OpenStreetMap). La vista dibuja la frontera, con Estados Unidos
+  del otro lado.
+- **El marcador:** el del tablero está 750 m al sur del terreno, para quedar del lado mexicano
+  de la frontera dibujada (ver la nota ³ de [Cómo se ubicaron](#cómo-se-ubicaron)).
+
+**Lo que dice la declaratoria**:
+- **Ubicación:** al pie de la frontera, junto al cruce internacional Santa Teresa–San Jerónimo,
+  «a 15 km de la red férrea y a 800 m de la zona urbana de Ciudad Juárez»; el aeropuerto queda a
+  25.3 km.
+- **Servicios:** uso de suelo industrial, «infraestructura urbana básica», y gas y electricidad
+  dentro del predio.
+- **Vocaciones:** logística, centro de innovación industrial, automotriz, electromovilidad,
+  dispositivos médicos y servicios tecnológicos.
+- **Propiedad:** el Gobierno de Chihuahua.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 % de las 60.32 ha): **46 ha
+  en 8 lotes de 2 a 10 ha**.
+  - Los servicios tienen 1.5 ha a la entrada.
+  - Como el cuadro tiene menos terreno del que declara, la reserva es chica: 2.7 ha.
+- **Los empleos:** 60.5 por hectárea, 3,647. Un lote de 10 ha da 793 y pide de 0.6 MW
+  (dispositivos médicos) a 1.6 MW (equipo de transporte).
+- **La espuela**, la más larga de los polos con vista:
+  - La vía más cercana es la UP Lordsburg Subdivision de Union Pacific, a 4.24 km, del otro lado
+    de la frontera (OpenStreetMap). Las terminales de Union Pacific y BNSF que el gobierno de
+    Chihuahua cuenta entre sus ventajas están en Estados Unidos.
+  - La del juego va a la más cercana de México, la **Línea A de Ferromex** en Ciudad Juárez:
+    **15.33 km**, casi los 15 de la declaratoria.
+  - Cuesta 696 millones con una cuadrilla (7.7 meses) o 1,009 con cuatro (2.7 meses): dos o tres
+    veces el polo entero. Alejando la vista se ve llegar a Juárez.
+- **La energía:** los **20 MW** de Economía. Lleno pide 5.8 MW: le sobra. La línea de 115 kV más
+  cercana queda a 0.35 km de su subestación (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 331 millones con una cuadrilla;
+  las vialidades, 132 millones en 10 meses, o 192 en 3.5 con cuatro.
+- **Las vocaciones en sectores:**
+  - Automotriz es el equipo de transporte.
+  - Electromovilidad es el equipo de transporte y los aparatos eléctricos, donde están las
+    baterías (estimación del juego).
+  - Dispositivos médicos es su sector.
+  - Logística, centro de innovación industrial y servicios tecnológicos no son manufactura: no se
+    ofrecen para un lote.
+
+**En la realidad**, el Gobierno de Chihuahua lo propuso en un predio suyo:
+- **22 de mayo de 2025:** Ciudad Juárez se incorpora al Plan México como polo.
+- **26 de junio:** la gobernadora firma el acuerdo en Palacio Nacional y pide a la Presidenta
+  apoyo para renovar el cruce San Jerónimo–Santa Teresa, asegurar la energía y «adaptar la
+  infraestructura ferroviaria».
+- **30 de junio:** sale la declaratoria (DOF).
+- **1 de marzo de 2026:** en su 4.º Informe, la gobernadora anuncia 315 millones del estado para
+  el polo.
+
+No se ha reportado obra ni empresas.
+
+### Parque Industrial Bajío por dentro
+
+El octavo polo con vista por dentro (`/mexico/polo/parque-industrial-bajio`), del Plan México:
+342.08 ha en Zinapécuaro, Michoacán, por Estación Queréndaro, a los dos lados de la autopista
+México–Morelia (MEX 15D) y junto a la vía de CPKC.
+
+**El terreno**, de su declaratoria (DOF, 7 de julio de 2025): cinco cuadros de construcción en
+UTM zona 14 (el DOF no dice la zona; Michoacán está en ella), cada lado con su rumbo y su
+distancia.
+
+| Cuadro | Superficie | Dónde |
+| --- | ---: | --- |
+| Polígono 1 | 201.40 ha | Al norte de la autopista |
+| Polígono 2 | 49.34 ha | Al sur de la autopista |
+| Polígono 3 | 85.59 ha | Más al sur, pegado a la vía |
+| Camino de acceso | 5.92 ha | Un eje de 1,988 m con dos curvas, de unos 30 m de ancho, que llega desde el sur |
+| Parcela | 1.00 ha | Junto al polígono 3; la declaratoria no dice qué es |
+
+- **Resultado:** los tres polígonos y el camino suman 342.25 ha contra las 342.08 declaradas. La
+  parcela no entra en esa suma (con ella serían 343.25): el juego la dibuja y no la cuenta.
+- **Dos erratas:** el vértice 328, con dos dígitos invertidos, y el 200, que abre y cierra su tabla
+  con 20 cm de diferencia (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)).
+- **Se enciman:** el camino cruza el polígono 3, la punta del 2 y la parcela, y los cuadros no lo
+  restan. El juego dibuja el camino con su ancho y no pone lotes sobre él.
+- **El marcador:** el que el juego ya tenía cae dentro del polígono 1.
+
+**Lo que dice la declaratoria**:
+- **Conectividad:** la carretera federal 15 y la autopista México–Morelia–Guadalajara, el
+  aeropuerto de Morelia a poco más de 7 km y «acceso directo a la red férrea a cargo de Kansas
+  City Southern de México», hoy CPKC.
+- **Servicios:** «dispone de vialidades, energía eléctrica, agua potable, drenaje y
+  conectividad». El portal de Economía añade 12.9 MW de origen hidroeléctrico y geotérmico,
+  1.15 millones de m³ de agua y gas natural a 19 km.
+- **Vocaciones:** agroindustrial, automotriz y autopartes, electrodomésticos, logístico, y
+  maquinaria y equipo.
+- **Propiedad:** el Gobierno de Michoacán.
+
+**Lo que es del juego**:
+- **Los lotes:** la parte de uso industrial de Coatzacoalcos I (76.46 %): **257 ha en 20 lotes de
+  5 a 30 ha**.
+  - Por polígono: 10 lotes en el 1 (154 ha), 4 en el 2 (38 ha) y 6 en el 3 (65 ha).
+  - Los servicios tienen 4 ha a la entrada del polígono 1, del lado de la autopista.
+  - Lo demás es área común y reserva.
+- **Los empleos:** los **27,000** que calcula la Sedeco de Michoacán dentro del parque para sus
+  primeros 10 años: el tercer polo con cifra propia, después de Huamantla y Nezahualcóyotl (ver
+  [Cuántos empleos da un polo](#cuántos-empleos-da-un-polo)). Con la densidad del conjunto
+  serían 20,681. Un lote de 30 ha da 3,152 empleos y pide de 3.3 MW (agroindustria) a 6.2 MW
+  (equipo de transporte).
+- **La espuela:** la **Línea N de CPKC** corre pegada al polígono 3, así que la espuela es solo
+  su cambio de vía. Como el juego la cobra por km, no cuesta nada; tarda los 2 meses mínimos con
+  cuatro cuadrillas.
+- **La energía:** los **12.9 MW** de Economía. Lleno, a 1.6 kW por empleo, pide 43.2 MW:
+  necesitará uno o dos bancos de 30 MVA de la CFE, según sus sectores. La línea de 115 kV más
+  cercana queda a 2.51 km de su subestación (OpenStreetMap).
+- **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,878 millones con una
+  cuadrilla; las vialidades, 751 millones en 16.8 meses, o 1,089 en 5.9 con cuatro.
+  - La cifra oficial de su obra es mayor: la Presidencia estima 9,310 millones para su
+    infraestructura y su conexión con la carretera federal 120, y sus dos desarrolladores
+    anunciaron más de 6,300 millones en sus áreas.
+  - El juego no la usa: el costo por hectárea es el mismo en todos los polos (el de Zapotlán).
+- **Las vocaciones en sectores:**
+  - Agroindustrial es la industria alimentaria.
+  - Automotriz y autopartes es el equipo de transporte.
+  - Electrodomésticos son los aparatos eléctricos.
+  - Maquinaria y equipo es su sector.
+  - Logístico no es manufactura: no se ofrece para un lote.
+
+**En la realidad**:
+- **7 de julio de 2025:** sale su declaratoria (DOF), en terrenos del Gobierno de Michoacán.
+- **7 de agosto:** Citelis anuncia su primera inversión, mil millones, en la conferencia de la
+  Presidenta.
+- **30 de enero de 2026:** el estado entrega sus dos primeras áreas de desarrollo a Grupo Herso y
+  a Citelis, que harán obras de infraestructura por más de 6,300 millones.
+- **6 de febrero:** la SCOP termina su infraestructura base: un tanque de agua de 200 m³, el cerco y
+  la línea eléctrica de media tensión.
+- **20 de agosto:** se firma su fideicomiso.
+- **Noviembre:** según la Presidencia (4 de noviembre), empieza su obra de infraestructura y su
+  conexión con la carretera federal 120.
+
+No se han reportado empresas instaladas: sus lotes y su acomodo son del juego. En el modo
+Realidad aparece en obra desde noviembre de 2026.
 
 ---
 
@@ -3102,6 +3258,14 @@ los otros dos aún no se capturan.
 - **Un polo se conecta a la luz donde dice su declaratoria.** *(23 nov 2026.)* La conexión del
   dibujo va a la línea de alta tensión más cercana de OpenStreetMap. Cuando no hay ninguna cerca
   (Reserva Zapotlán), va a la subestación que nombra la declaratoria, aunque quede a 24 km.
+- **La espuela va a una vía de México.** *(23 nov 2026.)* La vía más cercana a San Jerónimo
+  es la de Union Pacific, del otro lado de la frontera; su espuela va a la de Ferromex en Ciudad
+  Juárez, a 15.8 km, como dice su declaratoria («a 15 km de la red férrea»). Un cruce ferroviario
+  nuevo con Estados Unidos sería otra obra, con su propio permiso.
+- **Si la superficie declarada no sale del cuadro, manda el cuadro.** *(23 nov 2026.)* El dibujo
+  es el polígono de la tabla, como en todos los polos; las cifras del polo (costo y empleos)
+  siguen con la superficie declarada, que es la oficial. San Jerónimo es el único caso: su
+  cuadro encierra 6.4 % menos de lo que declara.
 - **La espuela va a la vía que hay.** *(23 nov 2026.)* A la vía principal en servicio más
   cercana; si no hay ninguna, a la línea con nombre más cercana aunque esté en obra o
   abandonada (la México–Pachuca de Zapotlán, que la red del juego de 2018 tiene en servicio).
@@ -3130,6 +3294,29 @@ los otros dos aún no se capturan.
 Todo lo que se cambió respecto a las fuentes, y por qué.
 
 ### 23 de noviembre de 2026
+
+**San Jerónimo por dentro (DOF)**
+
+- **La superficie:** el cuadro de la fracción B-3B y el artículo que la declara dicen 603,190.225
+  m² (60.32 ha), pero el cuadro encierra 564,641 m² (56.46 ha), 6.4 % menos. No es un vértice
+  equivocado: cada lado cuadra con su rumbo y su distancia, y cada curva con su delta, su
+  longitud y su subtangente. El juego dibuja el cuadro y conserva las 60.32 ha para sus cifras
+  (costo y empleos). Con cuerdas en lugar de curvas da 57.29 ha, lo que se leyó al ubicar los
+  32 polos.
+
+**Parque Industrial Bajío por dentro (DOF)**
+
+- **Vértice 328 del polígono 3:** dice 2,199,839.737 de norte, pero sus dos lados lo ponen en
+  2,199,837.937: dos dígitos invertidos. Con él, el polígono da 85.5912 ha, lo de su cuadro.
+- **Vértice 200 del polígono 2:** abre su tabla en 2,200,214.54 de norte y la cierra en
+  2,200,214.34, que es donde termina el lado que llega desde el vértice 231. Se usa el segundo.
+- **Números con puntos por comas:** «2.201,054.262» y «294.706.584» (vértices 124 y 157 del
+  polígono 1) se leen como los números que son; el renglón del polígono 2 que dice «222 → 225»
+  va del 222 al 223.
+- **La suma:** los tres polígonos y el camino de acceso dan 342.25 ha contra las 342.08
+  declaradas. La parcela de 1 ha, que también trae su cuadro, no entra en esa suma (con ella
+  serían 343.25): el juego la dibuja y no la cuenta. Los cuadros tampoco restan dónde se
+  enciman: el camino cruza el polígono 3, la punta del 2 y la parcela.
 
 **Nezahualcóyotl por dentro (DOF)**
 
@@ -3437,6 +3624,9 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
 - **Espuela**: el ramal corto de vía que une un polo o una planta con la línea principal.
 - **Derecho de vía**: la franja de terreno de una carretera, una vía o un ducto, a los lados de
   la obra. Una declaratoria puede excluirlo del polo (Texistepec).
+- **Fideicomiso**: un contrato en el que alguien entrega bienes o dinero a una institución (la
+  fiduciaria) para que los administre con un fin. El Parque Industrial Bajío firmó el suyo en
+  agosto de 2026; Altamira iba rumbo al suyo en marzo de 2026.
 - **Servidumbre de paso**: el derecho de pasar por un terreno ajeno, por ejemplo con un ducto,
   sin ser su dueño (el gasoducto que cruza Altamira).
 - **Lote**: el pedazo del polo que compra una empresa para poner su nave.

@@ -408,40 +408,53 @@ hay vía a ≤ 15 km, la red se reconstruye con el polo en servicio (`construirR
 polosEnServicio)`) y nace su estación (`sim.versionRed` avisa al tablero que re-hornee la
 vía). Ya operando y con tren, se llena de empresas en tres años; los empleos (en obra y
 permanentes) van al panel `Erario`. Los empleos del polo lleno (`empleosLleno`) son su cifra
-oficial (Huamantla, Nezahualcóyotl) o su superficie por `EMPLEOS_POR_HA`, los 300 mil empleos de
+oficial (Huamantla, Nezahualcóyotl, Parque Industrial Bajío) o su superficie por `EMPLEOS_POR_HA`, los 300 mil empleos de
 los primeros 15 polos entre sus hectáreas (60.5). Las cifras salen de fuentes oficiales y viven en
 `datos/calibracion.json`; la tabla y sus fuentes, en la
 [enciclopedia](docs/enciclopedia.md#construirlos).
 
-**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl y Reserva Zapotlán). *Entrar al polo ›* en su ficha
+**Un polo por dentro** (`/mexico/polo/[id]`, por ahora Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San Jerónimo y Parque Industrial Bajío). *Entrar al polo ›* en su ficha
 pide a la cámara del tablero que baje hasta él (`tablero.entrarPolo`, pedido `polo:<id>`) y abre
 la ruta; *← México* o Esc vuelven sobre él (`tablero.salirPolo`, pedido `polo-fuera:<id>`). El
 tablero atiende un pedido de cámara una sola vez, cuando su proyección ya existe
 (`proyeccionLista`).
 
 - **Datos:** `scripts/polos/gen-interior.mjs` tiene una configuración por polo (`HUAMANTLA`,
-  `COATZACOALCOS_I`, `TEXISTEPEC`, `ALTAMIRA`, `NEZAHUALCOYOTL`, `RESERVA_ZAPOTLAN`, con los vértices
-  del DOF ya corregidos) y un texto
-  por polo (`interiorHuamantla`, …).
+  `COATZACOALCOS_I`, `TEXISTEPEC`, `ALTAMIRA`, `NEZAHUALCOYOTL`, `RESERVA_ZAPOTLAN`,
+  `SAN_JERONIMO`, `PARQUE_INDUSTRIAL_BAJIO`, con los vértices del DOF ya corregidos) y un texto
+  por polo (`interiorHuamantla`, …). `node scripts/polos/gen-interior.mjs id…` rehace solo esos
+  polos y conserva los demás en `interiores.json`; con `--prueba [id…]` los arma e imprime cómo
+  salen, sin escribir nada.
   - **El terreno** puede ser un polígono (`vertices`) o varias piezas (`piezas`, cada una con sus
     lotes). Una pieza se da con sus vértices o con los nombres de los vértices del DOF
     (`nombres`), con las curvas de la tabla (`['arco', de, a, centro]`, centros en `centros`).
-  - **Las franjas** (`franjas`: derechos de vía, servidumbres) se dibujan; la que tiene `cruza`
-    es obstáculo para los lotes de esa pieza.
-  - Comprueba la conversión UTM contra el área declarada (la suma de las piezas, cada franja y
-    las tablas de `comprobar`) y contra un vértice en grados o el marcador del polo (cerca del
-    centro o dentro del terreno).
+  - **Las franjas** (`franjas`: derechos de vía, servidumbres, parcelas) se dibujan; la que tiene
+    `cruza` (una pieza o una lista) es obstáculo para los lotes de esas piezas. Una franja se da
+    con su anillo, o con el eje de un camino y su ancho (`eje`, `ancho`: esquinas a inglete, su
+    área es ancho por largo); la que tiene `delPolo` cuenta en la superficie del polo.
+  - Comprueba la conversión UTM contra el área declarada (la suma de las piezas y de las franjas
+    `delPolo`, cada franja y las tablas de `comprobar`) y contra un vértice en grados o el
+    marcador del polo (cerca del centro o dentro del terreno). Si la declaratoria declara una
+    superficie que su propio cuadro no da, `areaNoCuadra` dice cuánto se aleja (San Jerónimo).
   - Si la configuración no da `caja`, `cerca` y `lejos`, los saca de la extensión del terreno
     (`margen`, 1,500 m por omisión); la vista crece hasta la línea de alta tensión a la que se
     conecta.
   - Lee los alrededores de OpenStreetMap (Overpass en consultas chicas, guardadas en
-    `.cache/osm/<polo>/`; si overpass-api.de falla, prueba dos espejos por turnos).
+    `.cache/osm/<polo>/`; si overpass-api.de falla, prueba por turnos su gemelo lz4 y dos
+    espejos).
   - Acomoda los lotes en cada pieza (`trazar`): una calle por su eje largo desde el extremo más
     cercano a la carretera, y las superficies que dio el gobierno, o las del juego, a los lados.
     Avisa (⚠) si un lote no cabe.
   - Traza la espuela a la vía principal en servicio con nombre más cercana (si no hay, a la línea
     con nombre más cercana, en obra o abandonada) y la conexión a la línea de alta tensión más
     cercana, o al punto que da `conexion` (la subestación que nombra la declaratoria).
+    - `viaDe` limita la espuela a las líneas de un operador. San Jerónimo la usa porque la vía
+      más cercana está del otro lado de la frontera, y la salida la nombra en
+      `espuela.masCercana`.
+    - `viasLejos` (una caja más amplia) y `margenVias` traen las líneas principales hasta donde
+      llegue la espuela. La vista crece hasta la punta de la espuela cuando queda fuera de su
+      caja.
+  - `frontera` dibuja la frontera internacional (OpenStreetMap) y el nombre del otro país.
   - Escribe `static/data/polos/<id>.json` (metros alrededor del polo, lo baja la vista) y
     `src/lib/domain/datos/interiores.json` (los frentes, el lugar, los sectores que se pueden
     promover, la nota de Realidad y las fuentes de cada polo).

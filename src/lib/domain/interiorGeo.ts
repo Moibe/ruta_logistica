@@ -15,8 +15,11 @@ export type GeoInterior = {
   caja: { x0: number; x1: number; y0: number; y1: number };
   /** The land: one ring per piece of the declaratoria (named when there are several). */
   piezas: { nombre: string | null; ha: number; puntos: Pt[] }[];
-  /** Rights of way the declaratoria leaves out of the land (a highway, a track) or that cross it (a pipeline's easement). */
-  franjas: { nombre: string; tipo: 'carretera' | 'via' | 'ducto'; ha: number; nota: string; puntos: Pt[] }[];
+  /**
+   * Rights of way the declaratoria leaves out of the land (a highway, a track), that cross it (a
+   * pipeline's easement) or that are part of it (an access road), and parcels it doesn't explain.
+   */
+  franjas: { nombre: string; tipo: 'carretera' | 'via' | 'ducto' | 'parcela'; ha: number; nota: string; puntos: Pt[] }[];
   areaM2: number;
   perimetroM: number;
   lotes: Lote[];
@@ -25,7 +28,16 @@ export type GeoInterior = {
   ejes: [Pt, Pt][];
   servicios: { centro: Pt; subestacion: Pt; tanque: Pt };
   /** From the polo's boundary (first point) to the main track (second). */
-  espuela: { puntos: [Pt, Pt]; km: number; via: string; operador: string; /** When the track isn't in service in OpenStreetMap: 'construction', 'abandoned'. */ estado?: string };
+  espuela: {
+    puntos: [Pt, Pt];
+    km: number;
+    via: string;
+    operador: string;
+    /** When the track isn't in service in OpenStreetMap: 'construction', 'abandoned'. */
+    estado?: string;
+    /** A nearer line the spur can't go to (San Jerónimo's, across the border). */
+    masCercana?: { via: string; operador: string; km: number };
+  };
   /** From the substation (first point) to the high-voltage line (second). */
   conexionElectrica: { puntos: [Pt, Pt]; km: number; kv: string };
   /** The highway the polo faces (its OpenStreetMap ref), for its label. */
@@ -38,6 +50,8 @@ export type GeoInterior = {
   agua: (Linea & { tipo: string })[];
   lugares: { nombre: string; tipo: string; x: number; y: number }[];
   edificios: { nombre: string; tipo: string; x: number; y: number }[];
+  /** The international border, for a polo by it, and the other country's name. */
+  frontera?: { con: string; lineas: Pt[][]; rotulo: { texto: string; x: number; y: number } };
 };
 
 export async function cargarInterior(id: string): Promise<GeoInterior> {

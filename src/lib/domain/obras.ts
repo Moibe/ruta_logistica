@@ -33,7 +33,11 @@ export const cifra = (k: string) => CALIBRACION.cifras[k].valor;
 const c = cifra;
 
 /** Polos with their own official figure of jobs, and the calibration figure that holds it. */
-const EMPLEOS_OFICIALES: Record<string, string> = { huamantla: 'empleosHuamantla', nezahualcoyotl: 'empleosNezahualcoyotl' };
+const EMPLEOS_OFICIALES: Record<string, string> = {
+  huamantla: 'empleosHuamantla',
+  nezahualcoyotl: 'empleosNezahualcoyotl',
+  'parque-industrial-bajio': 'empleosParqueBajio',
+};
 /**
  * The first 15 polos of the Plan México (Presidencia, 26 Jun 2025) that the
  * game has: 14. The 15th, economía circular in Hidalgo, has no published area.

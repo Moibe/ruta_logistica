@@ -82,6 +82,54 @@
    "fuente": "Presidencia, comunicado del 19 de agosto de 2026: DEWA invertirá 10,106 millones de pesos en el PODECOBI de Zapotlán; en su primera fase, 1,277 millones para urbanización y 2,000 millones para las dos primeras naves, con obras desde septiembre y 5,100 empleos directos e indirectos",
    "url": "https://www.gob.mx/presidencia/prensa/presidenta-destaca-inversion-de-10-mil-106-mdp-para-el-podecobi-de-zapotlan-hidalgo-que-ya-reune-147-mil-mdp-en-proyectos"
   },
+  "dof-san-jeronimo": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar San Jerónimo, Chihuahua (30 de junio de 2025): cuadro de construcción de la fracción B-3B (ocho vértices y dos curvas, 603,190.225 m²); al pie de la frontera, junto al cruce internacional Santa Teresa–San Jerónimo, a 15 km de la red férrea y a 800 m de la zona urbana de Ciudad Juárez; uso de suelo industrial, con gas y electricidad dentro del predio; sus vocaciones productivas y su propiedad (el Gobierno de Chihuahua)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5761460&fecha=30/06/2025"
+  },
+  "economia-san-jeronimo": {
+   "fuente": "Secretaría de Economía, portal de los Polos de Desarrollo, ficha de San Jerónimo: energía «Disponibilidad de hasta 20MW», gas con ducto a 25 km, red ferroviaria a 15 km, aeropuerto de Ciudad Juárez a 25 km",
+   "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo"
+  },
+  "chihuahua-polo": {
+   "fuente": "Gobierno de Chihuahua, 22 de mayo de 2025, «Ciudad Juárez se incorpora al Plan México como Polo de Desarrollo Económico»: 60.32 ha en un predio del estado, con acceso a la Carretera Federal 2 y a la Pete Domenici Highway de Estados Unidos, cerca de terminales ferroviarias de Union Pacific y BNSF",
+   "url": "https://chihuahua.gob.mx/prensa/ciudad-juarez-se-incorpora-al-plan-mexico-como-polo-de-desarrollo-economico"
+  },
+  "chihuahua-acuerdo": {
+   "fuente": "Gobierno de Chihuahua, 26 de junio de 2025: la gobernadora firma en Palacio Nacional el acuerdo del polo, en una reserva de 60 hectáreas en San Jerónimo, y pide a la Presidenta apoyo para renovar el puerto fronterizo San Jerónimo–Santa Teresa, asegurar la suficiencia energética y «adaptar la infraestructura ferroviaria»",
+   "url": "https://chihuahua.gob.mx/prensa/maru-campos-firma-en-palacio-nacional-acuerdo-para-consolidar-polo-de-desarrollo-para-0"
+  },
+  "chihuahua-informe-2026": {
+   "fuente": "Gobierno de Chihuahua, 1 de marzo de 2026: en su 4.º Informe, la gobernadora anuncia 315 millones de pesos para el polo de Desarrollo de San Jerónimo",
+   "url": "https://chihuahua.gob.mx/prensa/maru-campos-anuncia-inversion-historica-en-obra-publica-para-ciudad-juarez-durante"
+  },
+  "dof-bajio": {
+   "fuente": "DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Parque Industrial Bajío, Michoacán (7 de julio de 2025): cuadros de construcción de tres polígonos (201.40, 49.34 y 85.59 ha), del eje de un camino (1,988.45 m, 5.92 ha) y de una parcela de 1 ha, 342.08 ha; junto a la carretera federal 15 y a la autopista México–Morelia–Guadalajara, a poco más de 7 km del aeropuerto de Morelia, con acceso directo a la red férrea de Kansas City Southern de México; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (el Gobierno de Michoacán)",
+   "url": "https://dof.gob.mx/nota_detalle.php?codigo=5762147&fecha=07/07/2025"
+  },
+  "economia-bajio": {
+   "fuente": "Secretaría de Economía, portal de los Polos de Desarrollo, ficha del Parque Industrial Bajío: energía «12.9 MW disponible (hidroeléctrica y geotérmica)», agua 1.15 millones de m³, gas natural a 19 km, aeropuerto de Morelia a 9.4 km, enlace con CPKC",
+   "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo"
+  },
+  "michoacan-citelis": {
+   "fuente": "Gobierno de Michoacán, 7 de agosto de 2025: en la conferencia de la Presidenta, el gobernador anuncia la primera inversión del polo, mil millones de pesos de Citelis; sobre la autopista de Occidente, con conexión ferroviaria de CPKC al puerto de Lázaro Cárdenas",
+   "url": "https://michoacan.gob.mx/noticias/anuncian-sheinbaum-y-bedolla-primera-inversion-por-mil-mdp-para-el-polo-del-bienestar-de-michoacan/"
+  },
+  "michoacan-areas": {
+   "fuente": "Gobierno de Michoacán, 30 de enero de 2026: el gobernador entrega a Grupo Herso y a Citelis las dos primeras áreas de desarrollo del Parque Bajío, donde harán obras de infraestructura por más de 6,300 millones de pesos y atraerán inversiones; la Sedeco calcula 27 mil empleos formales dentro del parque en los próximos 10 años",
+   "url": "https://michoacan.gob.mx/noticias/entrega-bedolla-a-herso-y-citelis-primeras-areas-de-desarrollo-del-parque-bajio-invertiran-6-mil-300-mdp/"
+  },
+  "scop-bajio": {
+   "fuente": "SCOP de Michoacán, 6 de febrero de 2026: 6.1 millones de pesos en la infraestructura base del Parque Bajío: un tanque elevado de agua de 200 m³, el cerco perimetral, tubería de 8 pulgadas para sus etapas 1 y 2 y la ampliación de la línea eléctrica de media tensión, en Estación Queréndaro",
+   "url": "https://scop.michoacan.gob.mx/invertidos-mas-de-6-1-mdp-para-el-arranque-del-parque-bajio-rogelio-zarazua/"
+  },
+  "sedeco-fideicomiso": {
+   "fuente": "Sedeco de Michoacán, 20 de agosto de 2026: con la firma de su fideicomiso, el Parque Industrial Bajío entra en su etapa de ejecución; dispone de 1.15 millones de m³ de agua y 12.9 MW, con prefactibilidad de gas natural, junto a la autopista 15D México–Guadalajara y la red de CPKC",
+   "url": "https://sedeco.michoacan.gob.mx/parque-bajio-entra-en-etapa-de-ejecucion-para-atraer-nuevas-inversiones/"
+  },
+  "presidencia-plan-michoacan": {
+   "fuente": "Presidencia, 4 de noviembre de 2026, avance del Plan Michoacán por la Paz y la Justicia: «Inicia en noviembre de 2026 la obra de infraestructura y conexión con la Carretera Federal 120 para el Parque Industrial Bajío», con 9,310 millones de pesos estimados",
+   "url": "https://www.gob.mx/presidencia/prensa/plan-michoacan-por-la-paz-y-la-justicia-registra-un-avance-de-67-a-un-ano-de-su-implementacion?idiom=es"
+  },
   "juego": {
    "fuente": "Estimación del juego",
    "url": ""
@@ -1218,6 +1266,352 @@
     "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, automotriz y aeroespacial son el equipo de transporte; manufactura, a secas, son los productos metálicos, la maquinaria, los aparatos eléctricos y la electrónica (estimación del juego); farmacéutico y dispositivos médicos, sus dos sectores. Logístico no es manufactura: el juego no lo ofrece para un lote.",
     "fuentes": [
      "dof-zapotlan"
+    ]
+   }
+  },
+  "san-jeronimo": {
+   "nombre": "San Jerónimo",
+   "lugar": "Juárez, Chihuahua",
+   "sectores": [
+    "transporte",
+    "electricos",
+    "dispositivos-medicos"
+   ],
+   "fuentesLista": [
+    "dof-san-jeronimo",
+    "chihuahua-polo",
+    "chihuahua-acuerdo",
+    "chihuahua-informe-2026",
+    "economia-san-jeronimo",
+    "osm",
+    "sict-dos-bocas"
+   ],
+   "realNota": "El polo real: el Gobierno de Chihuahua lo propuso en un predio suyo junto al cruce fronterizo San Jerónimo–Santa Teresa; la gobernadora firmó el acuerdo en Palacio Nacional el 26 de junio de 2025 y la declaratoria salió el 30 (DOF). En su 4.º Informe, el 1 de marzo de 2026, anunció 315 millones del estado para el polo. No se ha reportado obra ni empresas: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el predio tiene uso de suelo industrial e «infraestructura urbana básica», y adentro gas y electricidad; para lotes de empresas hace falta llevarlas a cada uno. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).",
+    "fuentes": [
+     "dof-san-jeronimo",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 15.33,
+    "via": "Línea A",
+    "operador": "Ferromex",
+    "mesesMinimos": 2,
+    "dato": "La declaratoria lo pone «a 15 km de la red férrea». La vía más cercana es la UP Lordsburg Subdivision de Union Pacific Railroad, a 4.24 km, del otro lado de la frontera; la espuela del juego va a la más cercana de México, la Línea A de Ferromex, en Ciudad Juárez: 15.33 km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego). Al firmar el acuerdo del polo, la gobernadora pidió a la Presidenta apoyo para renovar el cruce San Jerónimo–Santa Teresa y «adaptar la infraestructura ferroviaria» (Gobierno de Chihuahua).",
+    "fuentes": [
+     "dof-san-jeronimo",
+     "osm",
+     "chihuahua-acuerdo",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 20,
+    "fuenteCorta": "Economía",
+    "kmLinea": 0.35,
+    "dato": "Disponibilidad «de hasta 20 MW» (portal de Economía); la declaratoria dice que el predio ya tiene electricidad. La línea de alta tensión más cercana a la subestación del juego queda a 0.35 km (OpenStreetMap).",
+    "fuentes": [
+     "economia-san-jeronimo",
+     "dof-san-jeronimo",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 9,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 6,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 4,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 2,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 3,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 7,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 10,
+      "empresa": null
+     }
+    ],
+    "dato": "La declaratoria da al predio uso de suelo industrial y no publica lotes. Su cuadro encierra 56.46 ha, no las 60.32 que declara. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 % de las 60.32 ha): 46 ha en 8 lotes de 2 a 10 ha, y 1.5 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).",
+    "fuentes": [
+     "dof-san-jeronimo",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Logística",
+    "Centro de innovación industrial",
+    "Automotriz",
+    "Electromovilidad",
+    "Dispositivos médicos",
+    "Servicios tecnológicos"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, automotriz es el equipo de transporte; electromovilidad, el equipo de transporte y los aparatos eléctricos, donde están las baterías (estimación del juego); dispositivos médicos, su sector. Logística, centro de innovación industrial y servicios tecnológicos no son manufactura: el juego no los ofrece para un lote.",
+    "fuentes": [
+     "dof-san-jeronimo"
+    ]
+   }
+  },
+  "parque-industrial-bajio": {
+   "nombre": "Parque Industrial Bajío",
+   "lugar": "Zinapécuaro, Michoacán",
+   "sectores": [
+    "alimentos",
+    "transporte",
+    "electricos",
+    "maquinaria"
+   ],
+   "fuentesLista": [
+    "dof-bajio",
+    "michoacan-citelis",
+    "michoacan-areas",
+    "scop-bajio",
+    "sedeco-fideicomiso",
+    "presidencia-plan-michoacan",
+    "economia-bajio",
+    "osm",
+    "sict-dos-bocas"
+   ],
+   "realNota": "El polo real: declarado el 7 de julio de 2025 (DOF) en terrenos del Gobierno de Michoacán. El 7 de agosto Citelis anunció su primera inversión, mil millones; el 30 de enero de 2026 el estado entregó sus dos primeras áreas de desarrollo a Grupo Herso y Citelis, que harán obras de infraestructura por más de 6,300 millones, y en febrero la SCOP terminó su infraestructura base: un tanque de agua de 200 m³, el cerco y la línea eléctrica. Su fideicomiso se firmó el 20 de agosto, y la Presidencia reportó el 4 de noviembre que ese mes empieza su obra de infraestructura y su conexión con la Carretera Federal 120, con 9,310 millones estimados. No se han reportado empresas instaladas: sus lotes y su acomodo son del juego.",
+   "frentes": [
+    {
+     "id": "vialidades",
+     "nombre": "Vialidades e iluminación",
+     "corto": "Vialidades",
+     "parte": 0.4
+    },
+    {
+     "id": "agua",
+     "nombre": "Agua potable y drenaje",
+     "corto": "Agua y drenaje",
+     "parte": 0.25
+    },
+    {
+     "id": "energia",
+     "nombre": "Energía eléctrica",
+     "corto": "Energía",
+     "parte": 0.25
+    },
+    {
+     "id": "servicios",
+     "nombre": "Centro de servicios",
+     "corto": "Servicios",
+     "parte": 0.1
+    }
+   ],
+   "frentesDato": {
+    "dato": "La declaratoria dice que el polígono ya «dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad», y la SCOP le hizo un tanque de agua y le amplió la línea eléctrica; para lotes de empresas hace falta llevarlas adentro. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus tres polígonos lleva su calle; se hacen uno tras otro.",
+    "fuentes": [
+     "dof-bajio",
+     "scop-bajio",
+     "juego"
+    ]
+   },
+   "espuela": {
+    "km": 0,
+    "via": "Línea N",
+    "operador": "Canadian Pacific Kansas City",
+    "mesesMinimos": 2,
+    "dato": "La declaratoria le da «acceso directo a la red férrea a cargo de Kansas City Southern de México», hoy CPKC: su Línea N corre pegada al polígono 3, por Estación Queréndaro (OpenStreetMap). La espuela del juego es solo su cambio de vía: como cuesta por km lo que el ramal a Dos Bocas (SICT), no cuesta nada, y tarda por lo menos 2 meses (estimación del juego).",
+    "fuentes": [
+     "dof-bajio",
+     "osm",
+     "sict-dos-bocas",
+     "juego"
+    ]
+   },
+   "energia": {
+    "mva": 12.9,
+    "fuenteCorta": "Economía",
+    "kmLinea": 2.51,
+    "dato": "«12.9 MW disponible (hidroeléctrica y geotérmica)» (portal de Economía; la Sedeco lo repite al firmar su fideicomiso). La SCOP ya le amplió la línea de media tensión. La línea de alta tensión más cercana a la subestación del juego queda a 2.51 km (OpenStreetMap).",
+    "fuentes": [
+     "economia-bajio",
+     "sedeco-fideicomiso",
+     "scop-bajio",
+     "osm"
+    ]
+   },
+   "lotes": {
+    "lista": [
+     {
+      "n": 1,
+      "ha": 25,
+      "empresa": null
+     },
+     {
+      "n": 2,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 3,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 4,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 5,
+      "ha": 5,
+      "empresa": null
+     },
+     {
+      "n": 6,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 7,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 8,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 9,
+      "ha": 20,
+      "empresa": null
+     },
+     {
+      "n": 10,
+      "ha": 30,
+      "empresa": null
+     },
+     {
+      "n": 11,
+      "ha": 12,
+      "empresa": null
+     },
+     {
+      "n": 12,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 13,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 14,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 15,
+      "ha": 15,
+      "empresa": null
+     },
+     {
+      "n": 16,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 17,
+      "ha": 7,
+      "empresa": null
+     },
+     {
+      "n": 18,
+      "ha": 8,
+      "empresa": null
+     },
+     {
+      "n": 19,
+      "ha": 10,
+      "empresa": null
+     },
+     {
+      "n": 20,
+      "ha": 15,
+      "empresa": null
+     }
+    ],
+    "dato": "Tres polígonos, de 201.4, 49.34 y 85.59 ha, su camino de acceso (5.92 ha) y una parcela de 1 ha que la declaratoria no explica. No hay lotes publicados: el estado entregó sus dos primeras áreas de desarrollo a Grupo Herso y Citelis, que las urbanizan. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): 257 ha en 20 lotes de 5 a 30 ha, y 4 ha de servicios a la entrada del polígono 1; lo demás es área común y reserva (estimación del juego). Sus empleos son los que calcula la Sedeco para sus primeros 10 años, 27 mil.",
+    "fuentes": [
+     "dof-bajio",
+     "michoacan-areas",
+     "dof-coatzacoalcos-i",
+     "juego"
+    ]
+   },
+   "vocaciones": [
+    "Agroindustrial",
+    "Automotriz y autopartes",
+    "Electrodomésticos",
+    "Logístico",
+    "Maquinaria y equipo"
+   ],
+   "vocacionesDato": {
+    "dato": "Vocaciones productivas de la declaratoria (DOF). En el juego, agroindustrial es la industria alimentaria; automotriz y autopartes, el equipo de transporte; electrodomésticos, los aparatos eléctricos; maquinaria y equipo, su sector. Logístico no es manufactura: el juego no lo ofrece para un lote.",
+    "fuentes": [
+     "dof-bajio"
     ]
    }
   }

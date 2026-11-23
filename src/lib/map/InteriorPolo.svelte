@@ -40,7 +40,8 @@
   const LIBRE = { izq: 290, der: 340, arriba: 96, abajo: 70 };
 
   function encuadrar() {
-    const pts: Pt[] = [...geo.piezas.flatMap((q) => q.puntos), ...geo.espuela.puntos];
+    // The land, and its spur when it's short: San Jerónimo's runs 15 km, to Ciudad Juárez.
+    const pts: Pt[] = [...geo.piezas.flatMap((q) => q.puntos), ...(geo.espuela.km <= 2.5 ? geo.espuela.puntos : [])];
     const xs = pts.map((p) => p[0]);
     const ys = pts.map((p) => p[1]);
     const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
@@ -259,6 +260,14 @@
     {#each geo.agua as a, i (i)}
       <path d={linea(a.puntos)} class="agua-cauce" />
     {/each}
+
+    <!-- The international border, for a polo by it (San Jerónimo). -->
+    {#if geo.frontera}
+      {@const f = geo.frontera}
+      {#each f.lineas as l, i (i)}
+        <path d={linea(l)} class="frontera" role="presentation" onpointerenter={ver(`Frontera con ${f.con}`, 'OpenStreetMap')} onpointerleave={salir} />
+      {/each}
+    {/if}
 
     <!-- Streets and roads. -->
     <path d={pathMenores} class="camino" stroke={CAMINO} />
@@ -503,6 +512,9 @@
     {#each geo.lugares as l, i (i)}
       <text x={l.x} y={-l.y} font-size={(l.tipo === 'town' ? 13 : 10) * fs} class="rotulo lugar" class:pueblo={l.tipo === 'town'} text-anchor="middle">{l.nombre}</text>
     {/each}
+    {#if geo.frontera}
+      <text x={geo.frontera.rotulo.x} y={-geo.frontera.rotulo.y} font-size={12 * fs} class="rotulo pais" text-anchor="middle">{geo.frontera.rotulo.texto}</text>
+    {/if}
     {#each geo.edificios as b, i (i)}
       <circle cx={b.x} cy={-b.y} r={3 * fs} class="edificio-osm" />
       <text x={b.x + 6 * fs} y={-b.y + 3.5 * fs} font-size={9.5 * fs} class="rotulo lugar">{b.nombre}</text>
@@ -578,6 +590,13 @@
     fill: none;
     stroke: rgba(96, 165, 250, 0.35);
     stroke-width: 1;
+  }
+
+  .frontera {
+    fill: none;
+    stroke: rgba(248, 113, 113, 0.7);
+    stroke-width: 1.6;
+    stroke-dasharray: 10 4 2 4;
   }
 
   .camino {
@@ -697,6 +716,11 @@
   .franja.ducto {
     fill: rgba(251, 146, 60, 0.16);
     stroke: rgba(251, 146, 60, 0.65);
+  }
+
+  .franja.parcela {
+    fill: rgba(167, 139, 250, 0.1);
+    stroke: rgba(167, 139, 250, 0.55);
   }
 
   .franja:hover {
@@ -841,6 +865,13 @@
   .rotulo.carretera {
     fill: #d6e4f3;
     font-weight: 600;
+  }
+
+  .rotulo.pais {
+    fill: rgba(248, 113, 113, 0.85);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
   .rotulo.lote-rotulo {

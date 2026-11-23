@@ -4,7 +4,8 @@
 //
 //   node scripts/polos/gen-interior.mjs
 //
-// Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl and Reserva Zapotlán. Writes:
+// Huamantla, Coatzacoalcos I, Texistepec, Altamira, Nezahualcóyotl, Reserva Zapotlán, San
+// Jerónimo and Parque Industrial Bajío. Writes:
 //   static/data/polos/<id>.json            the geometry, in metres around the polo (fetched by the view)
 //   src/lib/domain/datos/interiores.json   the works by front and the real facts (read by the game)
 //
@@ -195,6 +196,27 @@ function anilloDe(p, secuencia) {
 function piezasDe(p) {
   if (p.vertices) return [{ nombre: null, vertices: p.vertices, lotes: p.lotes, servicios: true }];
   return p.piezas.map((q) => ({ ...q, vertices: q.vertices ?? anilloDe(p, q.anillo) }));
+}
+
+/**
+ * The ring of a strip `ancho` metres wide along a road's axis (a polyline), with mitred corners:
+ * its area is its width times the axis's length.
+ */
+function franjaDeEje(eje, ancho) {
+  const normal = (a, b) => {
+    const l = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    return [-(b[1] - a[1]) / l, (b[0] - a[0]) / l];
+  };
+  const borde = (s) =>
+    eje.map((q, i) => {
+      const n0 = normal(eje[Math.max(0, i - 1)], eje[Math.max(1, i)]);
+      const n1 = normal(eje[Math.min(i, eje.length - 2)], eje[Math.min(i + 1, eje.length - 1)]);
+      const l = Math.hypot(n0[0] + n1[0], n0[1] + n1[1]);
+      const m = [(n0[0] + n1[0]) / l, (n0[1] + n1[1]) / l];
+      const k = ancho / 2 / (m[0] * n0[0] + m[1] * n0[1]);
+      return [q[0] + s * k * m[0], q[1] + s * k * m[1]];
+    });
+  return [...borde(1), ...borde(-1).reverse()];
 }
 
 // ---- the polo --------------------------------------------------------------------------------
@@ -587,6 +609,188 @@ const RESERVA_ZAPOTLAN = {
   conexion: { nombre: 'Tizayuca', lon: -98.9902, lat: 19.8248, kv: '230000' },
 };
 
+/**
+ * San Jerónimo, from its declaratoria (DOF, 30 Jun 2025): fraction B-3B of fraction B, by the
+ * San Jerónimo–Santa Teresa border crossing, in UTM zone 13 (the DOF doesn't say the zone;
+ * Juárez is in it): eight vertices and two curves, with their centres and radii, 603,190.225 m².
+ */
+const SAN_JERONIMO = {
+  id: 'san-jeronimo',
+  zona: 13,
+  /** The table's vertices by number (east, north); 3 and 6 are the centres of its two curves. */
+  nombres: {
+    1: [343295.657, 3517210.995], 2: [343480.182, 3517208.158], 4: [343883.039, 3517337.376], 5: [344066.593, 3517472.883],
+    7: [344270.665, 3517571.725], 8: [344341.862, 3517571.776], 9: [344341.862, 3516716.581], 10: [343675.195, 3516716.606],
+  },
+  centros: { 3: [343490.341, 3517869.08], 6: [344432.88, 3516976.722] },
+  piezas: [
+    {
+      nombre: 'Fracción B-3B',
+      servicios: true,
+      anillo: [1, 2, ['arco', 2, 4, 3], 4, 5, ['arco', 5, 7, 6], 7, 8, 9, 10],
+      /**
+       * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+       * zones industrial (76.46 %): 46 ha in 8 lots of 2 to 10 ha (an estimate).
+       */
+      lotes: [
+        { ha: 10, lado: 'a' }, { ha: 7, lado: 'a' }, { ha: 5, lado: 'a' }, { ha: 3, lado: 'a' },
+        { ha: 9, lado: 'b' }, { ha: 6, lado: 'b' }, { ha: 4, lado: 'b' }, { ha: 2, lado: 'b' },
+      ],
+    },
+  ],
+  areaDof: 603190.225,
+  /**
+   * The table's vertices, sides and curves agree with each other (every side's bearing and length,
+   * every curve's delta, length and subtangent) and enclose 56.46 ha: 6.4 % less than the 60.32 ha
+   * the same table and the article declare. The game draws the table.
+   */
+  areaNoCuadra: 0.07,
+  control: null,
+  /** Where the land's centre is. The board's marker (polos.json) is 750 m south of it, on the Mexican side of the board's border. */
+  marcador: { lat: 31.7786, lon: -106.648 },
+  serviciosHa: 1.5,
+  anchoVialidad: 26,
+  anchoAcceso: 14,
+  /** The road to the border crossing, by its north side: the state's CHIH 174, San Jerónimo–Anapra (no federal highway near). */
+  carretera: /174/,
+  /**
+   * The nearest track is the Union Pacific's, 5 km north in New Mexico. The spur goes to the
+   * nearest Mexican line, Ferromex's in Ciudad Juárez: the main lines of a box up to there.
+   */
+  viasLejos: '31.65,-106.80,31.86,-106.44',
+  margenVias: 17000,
+  viaDe: /Ferromex/,
+  /** The border runs along its north side. */
+  frontera: 'Estados Unidos',
+};
+
+/**
+ * Parque Industrial Bajío, from its declaratoria (DOF, 7 Jul 2025): three polygons in UTM zone 14
+ * (the DOF doesn't say the zone; Michoacán is in it), the axis of an access road (1,988.45 m long,
+ * 5.9162 ha) and a parcel of 1 ha. Every side comes with its bearing and length, which show two
+ * typos:
+ * - vertex 328 is written 2,199,839.737 north; both of its sides put it at 2,199,837.937 (two
+ *   digits swapped);
+ * - vertex 200 opens its table at 2,200,214.54 north and closes it at 2,200,214.34, where the side
+ *   from vertex 231 ends.
+ * With them the polygons are 201.4006, 49.3417 and 85.5912 ha, as their tables say; with the road,
+ * 342.25 ha against the 342.08 declared. With the parcel too they'd be 343.25: the game draws it and
+ * doesn't count it. The tables don't take out where they overlap: the road crosses polygon 3, the
+ * tip of polygon 2 and the parcel.
+ */
+const PARQUE_INDUSTRIAL_BAJIO = {
+  id: 'parque-industrial-bajio',
+  zona: 14,
+  piezas: [
+    {
+      nombre: 'Polígono 1',
+      servicios: true,
+      vertices: [
+        [294555.18, 2200498.41], [294492.95, 2200570], [294465.96, 2200595.98], [294455.07, 2200580.31],
+        [294436.62, 2200603.11], [294410.37, 2200596.14], [294425.64, 2200640.3], [294617.61, 2200662.47],
+        [294589.82, 2200726.02], [294521.08, 2200702.65], [294480.24, 2200695.17], [294470.42, 2200703.3],
+        [294419.62, 2200702.68], [294423.66, 2200799], [294400.82, 2200849.23], [294408.4, 2200866.85],
+        [294436.75, 2200866.72], [294439.32, 2200881.71], [294518.68, 2200889.63], [294462.87, 2200997.64],
+        [294451.88, 2200997.16], [294453.33, 2201001.11], [294247.51, 2201066.81], [294265.54, 2201114.56],
+        [294438.3, 2201054.262], [294329.42, 2201299.16], [294319.54, 2201317.28], [294136.6, 2201379.19],
+        [294132.02, 2201380.21], [294129.02, 2201324.51], [294129.2, 2201255.34], [294132, 2201219.8],
+        [293932.67, 2201222.04], [293933.27, 2201260.3], [293934.56, 2201329.75], [293934.89, 2201368.5],
+        [293927.32, 2201367.54], [293725.29, 2201376.35], [293713.98, 2201376.91], [293708.23, 2201554.06],
+        [293703.65, 2201664.86], [294072.16, 2201866.25], [294178.34, 2201793.78], [294306.9, 2201794.1],
+        [294681.37, 2201360.33], [295742.63, 2201690.18], [295871.852, 2201246.81], [295826.83, 2200789.42],
+        [296073.64, 2200522.7], [295765.6, 2200203.24], [295901.87, 2200102.63], [295674.75, 2200204.26],
+        [295557.97, 2200256.51], [295528.68, 2200254.28], [295363.54, 2200321.58], [295178.91, 2200387.38],
+        [294966.64, 2200442.29], [294706.584, 2200482.26],
+      ],
+      lotes: [
+        { ha: 30, lado: 'a' }, { ha: 20, lado: 'a' }, { ha: 15, lado: 'a' }, { ha: 12, lado: 'a' }, { ha: 10, lado: 'a' },
+        { ha: 25, lado: 'b' }, { ha: 15, lado: 'b' }, { ha: 12, lado: 'b' }, { ha: 10, lado: 'b' }, { ha: 5, lado: 'b' },
+      ],
+    },
+    {
+      nombre: 'Polígono 2',
+      vertices: [
+        [295467.23, 2200214.34], [294918.61, 2200258.51], [294824.12, 2200255.23], [294697.94, 2200183.23],
+        [294685.53, 2200172.85], [294578.63, 2200112.72], [294526.83, 2200078.23], [294498.46, 2200060.3],
+        [294473.47, 2200047.86], [294422.82, 2200019.92], [294397.04, 2200003.33], [294372.26, 2199987.71],
+        [294343.85, 2199968.83], [294254.91, 2199918.58], [294212.06, 2199899.33], [294216.19, 2199884.32],
+        [294170.76, 2199857.21], [294053.46, 2199784.41], [293908.19, 2199698.74], [293778.25, 2199773.51],
+        [293792.02, 2199800.83], [293923.9, 2200167.24], [293964.1, 2200284.17], [293983.45, 2200334.96],
+        [293999.85, 2200388.6], [294016.94, 2200438.88], [294036.82, 2200493.32], [294039.21, 2200496.55],
+        [294249.6, 2200472.64], [294958.4, 2200382.57], [295162.48, 2200330.25], [295335.36, 2200268.84],
+      ],
+      lotes: [{ ha: 10, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 12, lado: 'b' }, { ha: 8, lado: 'b' }],
+    },
+    {
+      nombre: 'Polígono 3',
+      vertices: [
+        [295219.755, 2199427.105], [295164.131, 2199412.97], [295120.595, 2199436.316], [295133.464, 2199461.996],
+        [295128.905, 2199511.488], [295118.44, 2199618.375], [295049.832, 2199611.525], [295050.104, 2199626.764],
+        [295064.13, 2199670.559], [295061.947, 2199712.679], [294899.713, 2199629.612], [294893.646, 2199643.914],
+        [294891.499, 2199650.667], [294566.741, 2199492.538], [294508.909, 2199460.994], [294337.788, 2199418.514],
+        [293969.747, 2199304.378], [293882.625, 2199271.124], [293760.955, 2199207.274], [293699.656, 2199154.584],
+        [293636.185, 2199092.86], [293555.426, 2198993.902], [293506.773, 2199023.757], [293686.197, 2199516.209],
+        [293720.537, 2199554.701], [293810.786, 2199612.637], [293889.721, 2199659.219], [294130.664, 2199801.337],
+        [294199.498, 2199837.937], [294330.327, 2199918.27], [294494.83, 2200018.038], [294703.126, 2200144.328],
+        [294832.592, 2200206.084], [295242.062, 2200190.219], [295409.437, 2200183.734], [295393.073, 2200007.753],
+        [295362.587, 2200011.144], [295334.699, 2200015.818], [295338.191, 2200048.346], [295300.166, 2200050.23],
+        [295298.717, 2200022.179], [295269.012, 2200027.646], [295266.817, 2199998.017], [295296.948, 2199987.476],
+        [295305.156, 2199974.17], [295257.337, 2199991.801], [295248.558, 2199966.797], [295252.4, 2199936.085],
+        [295162.543, 2199924.275], [295179.456, 2199804.632], [295265.043, 2199834.804], [295263.689, 2199845.585],
+        [295293.923, 2199852.232], [295296.042, 2199845.792], [295364.094, 2199861.595], [295362.85, 2199840.818],
+        [295362.42, 2199818.42], [295210.215, 2199777.635], [295212.503, 2199767.175], [295247.705, 2199761.966],
+        [295291.752, 2199594.449], [295275.781, 2199593.308], [295247.573, 2199692.145], [295220.443, 2199713.91],
+        [295191.051, 2199707.351], [295199.755, 2199687.712], [295152.513, 2199673.869], [295157.982, 2199658.51],
+        [295219.414, 2199460.037],
+      ],
+      lotes: [{ ha: 15, lado: 'a' }, { ha: 10, lado: 'a' }, { ha: 8, lado: 'a' }, { ha: 15, lado: 'b' }, { ha: 10, lado: 'b' }, { ha: 7, lado: 'b' }],
+    },
+  ],
+  /**
+   * The road's axis by its stations (east, north) and the parcel's vertices. The table gives each
+   * curve's radius, not its centre: the centre is at that radius from both ends of the curve, on
+   * the side it turns to.
+   */
+  nombres: {
+    'PST 0+000': [295554.57, 2198443.5], 'PI 0+120': [295530.41, 2198561.05], 'PC 0+467.63': [295441.44, 2198896.39],
+    'PT 0+588.52': [295408.7867, 2199012.7158], 'PC 0+824.02': [295337.88, 2199235.89], 'PT 0+964.98': [295283.9871, 2199365.886],
+    'PI 1+701.92': [295129.59, 2200084.44], 'PST 1+988.45': [295227.91, 2200353.58],
+    P1: [295162.42, 2199925.2], P2: [295252.07, 2199938.61], P3: [295264.93, 2199835.73], P4: [295179.325, 2199805.557],
+  },
+  centros: { C1: [296399.728, 2199228.133], C2: [295959.996, 2199569.972], CC: [295504.326, 2199020.061] },
+  franjas: [
+    {
+      nombre: 'Camino de acceso',
+      tipo: 'carretera',
+      ha: 5.916164,
+      nota: 'Parte del polo según su declaratoria (DOF): un eje de 1,988 m y unos 30 m de ancho',
+      delPolo: true,
+      cruza: ['Polígono 3', 'Polígono 2'],
+      eje: ['PST 0+000', 'PI 0+120', 'PC 0+467.63', ['arco', 'PC 0+467.63', 'PT 0+588.52', 'C1'], 'PT 0+588.52', 'PC 0+824.02', ['arco', 'PC 0+824.02', 'PT 0+964.98', 'C2'], 'PT 0+964.98', 'PI 1+701.92', 'PST 1+988.45'],
+      /** Its 5.9162 ha over the 1,988.45 m of its axis. */
+      ancho: 29.75,
+    },
+    {
+      nombre: 'Parcela de 1 ha',
+      tipo: 'parcela',
+      ha: 1,
+      nota: 'Su cuadro viene en la declaratoria (DOF), que no dice qué es; el juego no la cuenta en la superficie del polo',
+      anillo: ['P1', 'P2', 'P3', ['arco', 'P3', 'P4', 'CC'], 'P4'],
+    },
+  ],
+  areaDof: 3420807.29,
+  control: null,
+  marcador: { lat: 19.8949, lon: -100.9579 },
+  /**
+   * No lots are published. The game gives them about the share Coatzacoalcos I's declaratoria
+   * zones industrial (76.46 %): 257 ha in 20 lots of 5 to 30 ha (an estimate).
+   */
+  serviciosHa: 4,
+  anchoVialidad: 30,
+  anchoAcceso: 16,
+  carretera: /15D/,
+};
+
 // ---- OpenStreetMap ----------------------------------------------------------------------------
 
 const CONSULTAS = (p) => ({
@@ -596,6 +800,10 @@ const CONSULTAS = (p) => ({
   suelo: `way["landuse"](${p.cerca});`,
   'agua-lugares': `way["waterway"](${p.cerca});node["place"](${p.lejos});`,
   edificios: `way["building"](${p.cerca});`,
+  // The main lines of a wider box, when the track the polo can reach is farther (San Jerónimo).
+  ...(p.viasLejos ? { 'vias-lejos': `way["railway"="rail"][!"service"](${p.viasLejos});` } : {}),
+  // The international border, for a polo by it.
+  ...(p.frontera ? { frontera: `way["boundary"="administrative"]["admin_level"="2"](${p.lejos});` } : {}),
 });
 
 async function osm(p) {
@@ -606,9 +814,15 @@ async function osm(p) {
     const file = join(dir, `${k}.json`);
     if (!existsSync(file)) {
       let ok = false;
-      // The main server, then two mirrors, in turns: any of them can be overloaded for a while.
-      const servidores = ['https://overpass-api.de/api/interpreter', 'https://overpass.private.coffee/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
-      for (let intento = 1; intento <= 9 && !ok; intento++) {
+      // The main server, its lz4 twin and two mirrors, in turns: any of them can be overloaded for
+      // a while (on 23 Nov 2026 only lz4 answered).
+      const servidores = [
+        'https://overpass-api.de/api/interpreter',
+        'https://lz4.overpass-api.de/api/interpreter',
+        'https://overpass.private.coffee/api/interpreter',
+        'https://overpass.kumi.systems/api/interpreter',
+      ];
+      for (let intento = 1; intento <= 12 && !ok; intento++) {
         const servidor = servidores[(intento - 1) % servidores.length];
         try {
           const res = await fetch(servidor, {
@@ -639,14 +853,16 @@ async function osm(p) {
 async function construir(p) {
   // The land, in metres around the mean of its vertices (UTM grid: north is the grid's, a fraction of a degree off true north).
   const piezas = piezasDe(p);
-  const franjas = (p.franjas ?? []).map((f) => ({ ...f, vertices: f.vertices ?? anilloDe(p, f.anillo) }));
+  // A strip comes as its ring, as named vertices, or as a road's axis and its width.
+  const franjas = (p.franjas ?? []).map((f) => ({ ...f, vertices: f.vertices ?? (f.eje ? franjaDeEje(anilloDe(p, f.eje), f.ancho) : anilloDe(p, f.anillo)) }));
   const todos = piezas.flatMap((q) => q.vertices);
   const cx = todos.reduce((s, q) => s + q[0], 0) / todos.length;
   const cy = todos.reduce((s, q) => s + q[1], 0) / todos.length;
   const aLocal = ([x, y]) => [x - cx, y - cy];
   for (const q of [...piezas, ...franjas]) q.local = q.vertices.map(aLocal);
   const [lon0, lat0] = deUtm(cx, cy, p.zona);
-  const a = piezas.reduce((s, q) => s + area(q.local), 0);
+  // The land: its pieces, and the strips that are part of it (Parque Industrial Bajío's access road).
+  const a = piezas.reduce((s, q) => s + area(q.local), 0) + franjas.filter((f) => f.delPolo).reduce((s, f) => s + area(f.local), 0);
   const per = piezas.reduce((s, q) => s + perimetro(q.local), 0);
   if (p.control) {
     const v0 = piezas[0].vertices[0];
@@ -661,7 +877,10 @@ async function construir(p) {
     console.log(`${p.id}: área ${a.toFixed(0)} m² (DOF ${p.areaDof}) · perímetro ${per.toFixed(1)} m · centro a ${d.toFixed(0)} m del marcador${enTerreno ? ', que cae en el terreno' : ''}`);
     if (d > 300 && !enTerreno) throw new Error('El polígono no cae donde el marcador del polo');
   }
-  if (Math.abs(a - p.areaDof) / p.areaDof > 0.005) throw new Error('El área no cuadra con la del DOF');
+  // Within 0.5 %, or what the config says the declaratoria is off by (San Jerónimo's).
+  const desvio = Math.abs(a - p.areaDof) / p.areaDof;
+  if (desvio > (p.areaNoCuadra ?? 0.005)) throw new Error('El área no cuadra con la del DOF');
+  if (desvio > 0.005) console.log(`  ⚠ el área queda ${(desvio * 100).toFixed(1)} % lejos de la del DOF (areaNoCuadra)`);
   // The other tables of the declaratoria (a general polygon, rights of way): each against its own area.
   for (const c of [...(p.comprobar ?? []).map((c) => ({ ...c, local: anilloDe(p, c.anillo) })), ...franjas.filter((f) => f.ha)]) {
     const ha = area(c.local) / 1e4;
@@ -712,11 +931,22 @@ async function construir(p) {
     for (const puntos of trazos(e.geometry)) caminos.push({ tipo: t.highway, ...(t.name ? { nombre: t.name } : {}), ...(t.ref ? { ref: t.ref } : {}), puntos });
   }
   const vias = [];
+  const viasVistas = new Set();
   for (const e of datos.vias) {
     const t = e.tags ?? {};
     if (!e.geometry || !['rail', 'abandoned', 'disused', 'construction'].includes(t.railway)) continue;
-    for (const puntos of trazos(e.geometry, 2))
+    viasVistas.add(e.id);
+    // A main line reaches `margenVias` past the view when the config gives it.
+    const m = p.margenVias && t.railway === 'rail' && !t.service ? p.margenVias : 0;
+    for (const puntos of trazos(e.geometry, 2, m))
       vias.push({ estado: t.railway, ...(t.name ? { nombre: t.name } : {}), ...(t.operator ? { operador: t.operator } : {}), ...(t.service ? { servicio: t.service } : {}), puntos });
+  }
+  // The main lines of the wider box, as far as `margenVias` past the view.
+  for (const e of datos['vias-lejos'] ?? []) {
+    const t = e.tags ?? {};
+    if (!e.geometry || viasVistas.has(e.id)) continue;
+    for (const puntos of trazos(e.geometry, 2, p.margenVias))
+      vias.push({ estado: t.railway, ...(t.name ? { nombre: t.name } : {}), ...(t.operator ? { operador: t.operator } : {}), puntos });
   }
   const lineas = [];
   const subestaciones = [];
@@ -743,6 +973,19 @@ async function construir(p) {
       lugares.push({ nombre: t.name, tipo: t.place, x: r0(x), y: r0(y) });
     } else if (e.geometry) for (const puntos of trazos(e.geometry, 3)) agua.push({ tipo: t.waterway, puntos });
   }
+  // The border, and the other country's name 600 m past it, where it's nearest the polo.
+  let frontera = null;
+  if (p.frontera) {
+    const lineas = (datos.frontera ?? []).filter((e) => e.geometry).flatMap((e) => trazos(e.geometry, 3, 20000));
+    let cerca = null;
+    for (const l of lineas) {
+      const m = masCercanos([[0, 0], [0, 0]], l);
+      if (!cerca || m.d < cerca.d) cerca = m;
+    }
+    const [bx, by] = cerca.pb;
+    const [ux, uy] = [bx / cerca.d, by / cerca.d];
+    frontera = { con: p.frontera, lineas, rotulo: { texto: p.frontera, x: r0(bx + ux * 600), y: r0(by + uy * 600) } };
+  }
   // One label per name (a plant's cooling towers come in sets), and none of the bare «building=yes» ones.
   const vistos = new Set();
   const edificios = datos.edificios
@@ -764,7 +1007,7 @@ async function construir(p) {
   // The piece with the services goes first: the roads are built in this order.
   for (const pieza of [...piezas].sort((x, y) => Number(!!y.servicios) - Number(!!x.servicios))) {
     // Only a strip that crosses the piece is in the way of its lots (Texistepec's are already outside the land).
-    const t = trazar(p, pieza, puntosCarretera, franjas.filter((f) => f.cruza === pieza.nombre).map((f) => f.local));
+    const t = trazar(p, pieza, puntosCarretera, franjas.filter((f) => [f.cruza].flat().includes(pieza.nombre)).map((f) => f.local));
     lotes.push(...t.lotes);
     vialidades.push(t.vialidad);
     ejes.push(t.eje);
@@ -773,8 +1016,11 @@ async function construir(p) {
   const { subestacion } = servicios;
 
   // The rail spur: from the nearest main track to the nearest piece. With none in service near
-  // (Reserva Zapotlán), the nearest named line, abandoned or being rebuilt.
-  const conNombre = vias.filter((x) => x.nombre && !['siding', 'yard', 'spur'].includes(x.servicio ?? ''));
+  // (Reserva Zapotlán), the nearest named line, abandoned or being rebuilt. Only the lines of
+  // `p.viaDe` when it's given: the nearest to San Jerónimo are across the border.
+  const conNombre = vias.filter(
+    (x) => x.nombre && !['siding', 'yard', 'spur'].includes(x.servicio ?? '') && (!p.viaDe || p.viaDe.test(`${x.operador ?? ''} ${x.nombre}`))
+  );
   const enServicio = conNombre.filter((x) => x.estado === 'rail');
   let espuela = null;
   for (const pieza of piezas)
@@ -782,6 +1028,15 @@ async function construir(p) {
       const m = masCercanos(pieza.local, via.puntos, true);
       if (!espuela || m.d < espuela.d) espuela = { ...m, via };
     }
+  // The nearest main line `viaDe` leaves out, to say so (San Jerónimo's, in New Mexico).
+  let otra = null;
+  if (p.viaDe)
+    for (const pieza of piezas)
+      for (const via of vias.filter((x) => x.nombre && x.estado === 'rail' && !['siding', 'yard', 'spur'].includes(x.servicio ?? ''))) {
+        const m = masCercanos(pieza.local, via.puntos, true);
+        if (!otra || m.d < otra.d) otra = { ...m, via };
+      }
+  if (otra && (otra.via === espuela.via || otra.d >= espuela.d)) otra = null;
   // The power connection: from the substation to the nearest high-voltage line, or to the
   // substation the declaratoria names when there's no line near (Reserva Zapotlán's Tizayuca).
   let conexion = null;
@@ -795,9 +1050,12 @@ async function construir(p) {
       const m = masCercanos([subestacion, subestacion], l.puntos);
       if (!conexion || m.d < conexion.d) conexion = { ...m, linea: l };
     }
-  // The view reaches the line the polo connects to.
+  // The view reaches the line the polo connects to, and the track of its spur when it's outside.
   const [lx, ly] = conexion.pb;
   p.caja = { x0: Math.min(x0, cien(lx - 400)), x1: Math.max(x1, cien(lx + 400)), y0: Math.min(y0, cien(ly - 400)), y1: Math.max(y1, cien(ly + 400)) };
+  for (const [ex, ey] of [espuela.pb, ...(otra ? [otra.pb] : [])])
+    if (!dentro([ex, ey]))
+      p.caja = { x0: Math.min(p.caja.x0, cien(ex - 400)), x1: Math.max(p.caja.x1, cien(ex + 400)), y0: Math.min(p.caja.y0, cien(ey - 400)), y1: Math.max(p.caja.y1, cien(ey + 400)) };
 
   const anillo1 =(q) => q.map(([x, y]) => [r1(x), r1(y)]);
   const geometria = {
@@ -821,6 +1079,7 @@ async function construir(p) {
       via: espuela.via.nombre ?? '',
       operador: espuela.via.operador ?? '',
       ...(espuela.via.estado !== 'rail' ? { estado: espuela.via.estado } : {}),
+      ...(otra ? { masCercana: { via: otra.via.nombre, operador: otra.via.operador ?? '', km: Number((otra.d / 1000).toFixed(2)) } } : {}),
     },
     conexionElectrica: { puntos: [conexion.pa, conexion.pb].map(([x, y]) => [r1(x), r1(y)]), km: Number((conexion.d / 1000).toFixed(2)), kv: conexion.linea.kv },
     /** The highway the polo faces, for its label. */
@@ -833,9 +1092,12 @@ async function construir(p) {
     agua,
     lugares,
     edificios,
+    ...(frontera ? { frontera } : {}),
   };
   console.log(`vialidades: ${(vialidades.reduce((s, v) => s + area(v), 0) / 1e4).toFixed(1)} ha · lotes: ${lotes.map((l) => `${l.empresa ?? l.tipo} ${(area(l.puntos) / 1e4).toFixed(2)}`).join(', ')}`);
   console.log(`espuela a la ${geometria.espuela.via} (${geometria.espuela.operador}): ${geometria.espuela.km} km · conexión a la línea de ${conexion.linea.kv} V: ${geometria.conexionElectrica.km} km`);
+  if (otra) console.log(`  la vía más cercana, que no sirve: ${otra.via.nombre} (${otra.via.operador ?? ''}), a ${(otra.d / 1000).toFixed(2)} km`);
+  if (frontera) console.log(`  frontera con ${frontera.con}: ${frontera.lineas.length} trazos, a ${(Math.hypot(frontera.rotulo.x, frontera.rotulo.y) / 1000 - 0.6).toFixed(2)} km del centro`);
   console.log(`caminos ${caminos.length}, vías ${vias.length}, líneas ${lineas.length}, subestaciones ${subestaciones.length}, lugares ${lugares.length}`);
   return geometria;
 }
@@ -1019,6 +1281,54 @@ const FUENTES = {
   'presidencia-zapotlan': {
     fuente: 'Presidencia, comunicado del 19 de agosto de 2026: DEWA invertirá 10,106 millones de pesos en el PODECOBI de Zapotlán; en su primera fase, 1,277 millones para urbanización y 2,000 millones para las dos primeras naves, con obras desde septiembre y 5,100 empleos directos e indirectos',
     url: 'https://www.gob.mx/presidencia/prensa/presidenta-destaca-inversion-de-10-mil-106-mdp-para-el-podecobi-de-zapotlan-hidalgo-que-ya-reune-147-mil-mdp-en-proyectos',
+  },
+  'dof-san-jeronimo': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar San Jerónimo, Chihuahua (30 de junio de 2025): cuadro de construcción de la fracción B-3B (ocho vértices y dos curvas, 603,190.225 m²); al pie de la frontera, junto al cruce internacional Santa Teresa–San Jerónimo, a 15 km de la red férrea y a 800 m de la zona urbana de Ciudad Juárez; uso de suelo industrial, con gas y electricidad dentro del predio; sus vocaciones productivas y su propiedad (el Gobierno de Chihuahua)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5761460&fecha=30/06/2025',
+  },
+  'economia-san-jeronimo': {
+    fuente: 'Secretaría de Economía, portal de los Polos de Desarrollo, ficha de San Jerónimo: energía «Disponibilidad de hasta 20MW», gas con ducto a 25 km, red ferroviaria a 15 km, aeropuerto de Ciudad Juárez a 25 km',
+    url: 'https://podecobi.economia.gob.mx/polos-de-desarrollo',
+  },
+  'chihuahua-polo': {
+    fuente: 'Gobierno de Chihuahua, 22 de mayo de 2025, «Ciudad Juárez se incorpora al Plan México como Polo de Desarrollo Económico»: 60.32 ha en un predio del estado, con acceso a la Carretera Federal 2 y a la Pete Domenici Highway de Estados Unidos, cerca de terminales ferroviarias de Union Pacific y BNSF',
+    url: 'https://chihuahua.gob.mx/prensa/ciudad-juarez-se-incorpora-al-plan-mexico-como-polo-de-desarrollo-economico',
+  },
+  'chihuahua-acuerdo': {
+    fuente: 'Gobierno de Chihuahua, 26 de junio de 2025: la gobernadora firma en Palacio Nacional el acuerdo del polo, en una reserva de 60 hectáreas en San Jerónimo, y pide a la Presidenta apoyo para renovar el puerto fronterizo San Jerónimo–Santa Teresa, asegurar la suficiencia energética y «adaptar la infraestructura ferroviaria»',
+    url: 'https://chihuahua.gob.mx/prensa/maru-campos-firma-en-palacio-nacional-acuerdo-para-consolidar-polo-de-desarrollo-para-0',
+  },
+  'chihuahua-informe-2026': {
+    fuente: 'Gobierno de Chihuahua, 1 de marzo de 2026: en su 4.º Informe, la gobernadora anuncia 315 millones de pesos para el polo de Desarrollo de San Jerónimo',
+    url: 'https://chihuahua.gob.mx/prensa/maru-campos-anuncia-inversion-historica-en-obra-publica-para-ciudad-juarez-durante',
+  },
+  'dof-bajio': {
+    fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Parque Industrial Bajío, Michoacán (7 de julio de 2025): cuadros de construcción de tres polígonos (201.40, 49.34 y 85.59 ha), del eje de un camino (1,988.45 m, 5.92 ha) y de una parcela de 1 ha, 342.08 ha; junto a la carretera federal 15 y a la autopista México–Morelia–Guadalajara, a poco más de 7 km del aeropuerto de Morelia, con acceso directo a la red férrea de Kansas City Southern de México; ya dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad; sus vocaciones productivas y su propiedad (el Gobierno de Michoacán)',
+    url: 'https://dof.gob.mx/nota_detalle.php?codigo=5762147&fecha=07/07/2025',
+  },
+  'economia-bajio': {
+    fuente: 'Secretaría de Economía, portal de los Polos de Desarrollo, ficha del Parque Industrial Bajío: energía «12.9 MW disponible (hidroeléctrica y geotérmica)», agua 1.15 millones de m³, gas natural a 19 km, aeropuerto de Morelia a 9.4 km, enlace con CPKC',
+    url: 'https://podecobi.economia.gob.mx/polos-de-desarrollo',
+  },
+  'michoacan-citelis': {
+    fuente: 'Gobierno de Michoacán, 7 de agosto de 2025: en la conferencia de la Presidenta, el gobernador anuncia la primera inversión del polo, mil millones de pesos de Citelis; sobre la autopista de Occidente, con conexión ferroviaria de CPKC al puerto de Lázaro Cárdenas',
+    url: 'https://michoacan.gob.mx/noticias/anuncian-sheinbaum-y-bedolla-primera-inversion-por-mil-mdp-para-el-polo-del-bienestar-de-michoacan/',
+  },
+  'michoacan-areas': {
+    fuente: 'Gobierno de Michoacán, 30 de enero de 2026: el gobernador entrega a Grupo Herso y a Citelis las dos primeras áreas de desarrollo del Parque Bajío, donde harán obras de infraestructura por más de 6,300 millones de pesos y atraerán inversiones; la Sedeco calcula 27 mil empleos formales dentro del parque en los próximos 10 años',
+    url: 'https://michoacan.gob.mx/noticias/entrega-bedolla-a-herso-y-citelis-primeras-areas-de-desarrollo-del-parque-bajio-invertiran-6-mil-300-mdp/',
+  },
+  'scop-bajio': {
+    fuente: 'SCOP de Michoacán, 6 de febrero de 2026: 6.1 millones de pesos en la infraestructura base del Parque Bajío: un tanque elevado de agua de 200 m³, el cerco perimetral, tubería de 8 pulgadas para sus etapas 1 y 2 y la ampliación de la línea eléctrica de media tensión, en Estación Queréndaro',
+    url: 'https://scop.michoacan.gob.mx/invertidos-mas-de-6-1-mdp-para-el-arranque-del-parque-bajio-rogelio-zarazua/',
+  },
+  'sedeco-fideicomiso': {
+    fuente: 'Sedeco de Michoacán, 20 de agosto de 2026: con la firma de su fideicomiso, el Parque Industrial Bajío entra en su etapa de ejecución; dispone de 1.15 millones de m³ de agua y 12.9 MW, con prefactibilidad de gas natural, junto a la autopista 15D México–Guadalajara y la red de CPKC',
+    url: 'https://sedeco.michoacan.gob.mx/parque-bajio-entra-en-etapa-de-ejecucion-para-atraer-nuevas-inversiones/',
+  },
+  'presidencia-plan-michoacan': {
+    fuente: 'Presidencia, 4 de noviembre de 2026, avance del Plan Michoacán por la Paz y la Justicia: «Inicia en noviembre de 2026 la obra de infraestructura y conexión con la Carretera Federal 120 para el Parque Industrial Bajío», con 9,310 millones de pesos estimados',
+    url: 'https://www.gob.mx/presidencia/prensa/plan-michoacan-por-la-paz-y-la-justicia-registra-un-avance-de-67-a-un-ano-de-su-implementacion?idiom=es',
   },
   juego: { fuente: 'Estimación del juego', url: '' },
 };
@@ -1320,6 +1630,93 @@ function interiorReservaZapotlan(g) {
   };
 }
 
+function interiorSanJeronimo(g) {
+  const otra = g.espuela.masCercana;
+  return {
+    nombre: 'San Jerónimo',
+    lugar: 'Juárez, Chihuahua',
+    sectores: ['transporte', 'electricos', 'dispositivos-medicos'],
+    fuentesLista: ['dof-san-jeronimo', 'chihuahua-polo', 'chihuahua-acuerdo', 'chihuahua-informe-2026', 'economia-san-jeronimo', 'osm', 'sict-dos-bocas'],
+    realNota:
+      'El polo real: el Gobierno de Chihuahua lo propuso en un predio suyo junto al cruce fronterizo San Jerónimo–Santa Teresa; la gobernadora firmó el acuerdo en Palacio Nacional el 26 de junio de 2025 y la declaratoria salió el 30 (DOF). En su 4.º Informe, el 1 de marzo de 2026, anunció 315 millones del estado para el polo. No se ha reportado obra ni empresas: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el predio tiene uso de suelo industrial e «infraestructura urbana básica», y adentro gas y electricidad; para lotes de empresas hace falta llevarlas a cada uno. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego).',
+      fuentes: ['dof-san-jeronimo', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato: `La declaratoria lo pone «a 15 km de la red férrea». La vía más cercana es la ${otra.via} de ${otra.operador}, a ${km(otra.km)} km, del otro lado de la frontera; la espuela del juego va a la más cercana de México, la ${g.espuela.via} de ${g.espuela.operador}, en Ciudad Juárez: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego). Al firmar el acuerdo del polo, la gobernadora pidió a la Presidenta apoyo para renovar el cruce San Jerónimo–Santa Teresa y «adaptar la infraestructura ferroviaria» (Gobierno de Chihuahua).`,
+      fuentes: ['dof-san-jeronimo', 'osm', 'chihuahua-acuerdo', 'sict-dos-bocas', 'juego'],
+    },
+    energia: {
+      mva: ENERGIA.polos['san-jeronimo'].mw,
+      fuenteCorta: 'Economía',
+      kmLinea: g.conexionElectrica.km,
+      dato: `Disponibilidad «de hasta 20 MW» (portal de Economía); la declaratoria dice que el predio ya tiene electricidad. La línea de alta tensión más cercana a la subestación del juego queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`,
+      fuentes: ['economia-san-jeronimo', 'dof-san-jeronimo', 'osm'],
+    },
+    lotes: {
+      lista: listaLotes(g),
+      dato: `La declaratoria da al predio uso de suelo industrial y no publica lotes. Su cuadro encierra 56.46 ha, no las 60.32 que declara. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 % de las 60.32 ha): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 2 a 10 ha, y 1.5 ha de servicios a la entrada; lo demás es área común y reserva (estimación del juego).`,
+      fuentes: ['dof-san-jeronimo', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Logística', 'Centro de innovación industrial', 'Automotriz', 'Electromovilidad', 'Dispositivos médicos', 'Servicios tecnológicos'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, automotriz es el equipo de transporte; electromovilidad, el equipo de transporte y los aparatos eléctricos, donde están las baterías (estimación del juego); dispositivos médicos, su sector. Logística, centro de innovación industrial y servicios tecnológicos no son manufactura: el juego no los ofrece para un lote.',
+      fuentes: ['dof-san-jeronimo'],
+    },
+  };
+}
+
+function interiorParqueIndustrialBajio(g) {
+  const ha = (nombre) => km(g.piezas.find((q) => q.nombre === nombre).ha);
+  return {
+    nombre: 'Parque Industrial Bajío',
+    lugar: 'Zinapécuaro, Michoacán',
+    sectores: ['alimentos', 'transporte', 'electricos', 'maquinaria'],
+    fuentesLista: ['dof-bajio', 'michoacan-citelis', 'michoacan-areas', 'scop-bajio', 'sedeco-fideicomiso', 'presidencia-plan-michoacan', 'economia-bajio', 'osm', 'sict-dos-bocas'],
+    realNota:
+      'El polo real: declarado el 7 de julio de 2025 (DOF) en terrenos del Gobierno de Michoacán. El 7 de agosto Citelis anunció su primera inversión, mil millones; el 30 de enero de 2026 el estado entregó sus dos primeras áreas de desarrollo a Grupo Herso y Citelis, que harán obras de infraestructura por más de 6,300 millones, y en febrero la SCOP terminó su infraestructura base: un tanque de agua de 200 m³, el cerco y la línea eléctrica. Su fideicomiso se firmó el 20 de agosto, y la Presidencia reportó el 4 de noviembre que ese mes empieza su obra de infraestructura y su conexión con la Carretera Federal 120, con 9,310 millones estimados. No se han reportado empresas instaladas: sus lotes y su acomodo son del juego.',
+    frentes: FRENTES_COMUNES,
+    frentesDato: {
+      dato: 'La declaratoria dice que el polígono ya «dispone de vialidades, energía eléctrica, agua potable, drenaje y conectividad», y la SCOP le hizo un tanque de agua y le amplió la línea eléctrica; para lotes de empresas hace falta llevarlas adentro. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus tres polígonos lleva su calle; se hacen uno tras otro.',
+      fuentes: ['dof-bajio', 'scop-bajio', 'juego'],
+    },
+    espuela: {
+      km: g.espuela.km,
+      via: g.espuela.via,
+      operador: g.espuela.operador,
+      mesesMinimos: 2,
+      dato:
+        g.espuela.km < 0.05
+          ? `La declaratoria le da «acceso directo a la red férrea a cargo de Kansas City Southern de México», hoy CPKC: su ${g.espuela.via} corre pegada al polígono 3, por Estación Queréndaro (OpenStreetMap). La espuela del juego es solo su cambio de vía: como cuesta por km lo que el ramal a Dos Bocas (SICT), no cuesta nada, y tarda por lo menos 2 meses (estimación del juego).`
+          : `La declaratoria le da «acceso directo a la red férrea a cargo de Kansas City Southern de México», hoy CPKC. La espuela del juego va de la ${g.espuela.via} (${g.espuela.operador}), la más cercana, al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap). Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego).`,
+      fuentes: ['dof-bajio', 'osm', 'sict-dos-bocas', 'juego'],
+    },
+    energia: {
+      mva: ENERGIA.polos['parque-industrial-bajio'].mw,
+      fuenteCorta: 'Economía',
+      kmLinea: g.conexionElectrica.km,
+      dato: `«12.9 MW disponible (hidroeléctrica y geotérmica)» (portal de Economía; la Sedeco lo repite al firmar su fideicomiso). La SCOP ya le amplió la línea de media tensión. La línea de alta tensión más cercana a la subestación del juego queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`,
+      fuentes: ['economia-bajio', 'sedeco-fideicomiso', 'scop-bajio', 'osm'],
+    },
+    lotes: {
+      lista: listaLotes(g),
+      dato: `Tres polígonos, de ${ha('Polígono 1')}, ${ha('Polígono 2')} y ${ha('Polígono 3')} ha, su camino de acceso (5.92 ha) y una parcela de 1 ha que la declaratoria no explica. No hay lotes publicados: el estado entregó sus dos primeras áreas de desarrollo a Grupo Herso y Citelis, que las urbanizan. El juego les da a los lotes la parte que Coatzacoalcos I tiene de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 5 a 30 ha, y 4 ha de servicios a la entrada del polígono 1; lo demás es área común y reserva (estimación del juego). Sus empleos son los que calcula la Sedeco para sus primeros 10 años, 27 mil.`,
+      fuentes: ['dof-bajio', 'michoacan-areas', 'dof-coatzacoalcos-i', 'juego'],
+    },
+    vocaciones: ['Agroindustrial', 'Automotriz y autopartes', 'Electrodomésticos', 'Logístico', 'Maquinaria y equipo'],
+    vocacionesDato: {
+      dato: 'Vocaciones productivas de la declaratoria (DOF). En el juego, agroindustrial es la industria alimentaria; automotriz y autopartes, el equipo de transporte; electrodomésticos, los aparatos eléctricos; maquinaria y equipo, su sector. Logístico no es manufactura: el juego no lo ofrece para un lote.',
+      fuentes: ['dof-bajio'],
+    },
+  };
+}
+
 // ---- enlarging a polo's substation ------------------------------------------------------------
 
 /**
@@ -1359,15 +1756,24 @@ const POLOS_INTERIOR = [
   [ALTAMIRA, interiorAltamira],
   [NEZAHUALCOYOTL, interiorNezahualcoyotl],
   [RESERVA_ZAPOTLAN, interiorReservaZapotlan],
+  [SAN_JERONIMO, interiorSanJeronimo],
+  [PARQUE_INDUSTRIAL_BAJIO, interiorParqueIndustrialBajio],
 ];
+// `id…`: build only those polos and keep the others as they are in interiores.json.
+// `--prueba [id…]`: build those polos (or all) and print how they come out, writing nothing.
+const prueba = process.argv.includes('--prueba');
+const solo = process.argv.slice(2).filter((x) => !x.startsWith('--'));
+const INTERIORES = join(ROOT, 'src', 'lib', 'domain', 'datos', 'interiores.json');
 await mkdir(join(ROOT, 'static', 'data', 'polos'), { recursive: true });
-const polos = {};
+const polos = solo.length && !prueba ? JSON.parse(await readFile(INTERIORES, 'utf8')).polos : {};
 for (const [p, interior] of POLOS_INTERIOR) {
+  if (solo.length && !solo.includes(p.id)) continue;
   const g = await construir(p);
+  if (prueba) continue;
   await writeFile(join(ROOT, 'static', 'data', 'polos', `${p.id}.json`), JSON.stringify(g) + '\n');
   polos[p.id] = interior(g);
 }
-await writeFile(
-  join(ROOT, 'src', 'lib', 'domain', 'datos', 'interiores.json'),
+if (!prueba) await writeFile(
+  INTERIORES,
   JSON.stringify({ corte: '2026-11-23', nota: 'Generado por scripts/polos/gen-interior.mjs.', fuentes: FUENTES, subestacion: SUBESTACION, polos }, null, 1) + '\n'
 );
