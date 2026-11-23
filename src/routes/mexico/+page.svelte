@@ -49,4 +49,9 @@
   .columna > :global(*) {
     pointer-events: auto;
   }
+
+  /* Both folded, the roster would sit on Tijuana's label: it drops below it. */
+  .columna:has(:global(nav.capas.plegado)) > :global(aside.flota.plegado) {
+    margin-top: 3.75rem;
+  }
 </style>
