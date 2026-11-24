@@ -130,6 +130,10 @@
    "fuente": "Bloomberg Línea, 3 de abril de 2025 (prensa): Nissan deja de vender en Estados Unidos los Infiniti QX50 y QX55 hechos en México",
    "url": "https://www.bloomberglinea.com/negocios/nissan-decide-detener-las-ventas-en-eeuu-de-sus-todoterrenos-fabricados-en-mexico/"
   },
+  "jornada-stellantis": {
+   "fuente": "La Jornada, 4 de abril de 2025 (prensa; leída solo en el resumen del buscador, el sitio bloquea la descarga): Stellantis para su planta de Toluca todo abril, un día después de que entró el arancel de 25 % de Estados Unidos",
+   "url": "https://www.jornada.com.mx/2025/04/04/politica/007n2pol"
+  },
   "eua-232": {
    "fuente": "Estados Unidos, Proclamación 10908 (26 de marzo de 2025; Federal Register del 3 de abril): arancel de 25 % a los autos importados desde el 3 de abril de 2025, que en los que cumplen el T-MEC se cobra solo sobre su contenido no estadounidense; recuerda que la revisión de 2019 terminó en una orden de negociar",
    "url": "https://www.govinfo.gov/content/pkg/FR-2025-04-03/html/2025-05930.htm"
@@ -1203,8 +1207,11 @@
    "estado": "MEX",
    "que": "SUV de Jeep (Compass, Wagoneer S, Cherokee)",
    "desde": "1968",
+   "nota": "Paró todo abril de 2025, un día después de que entró el arancel de 25 % de Estados Unidos a los autos; según la nota, Stellantis habló de «las dinámicas actuales del mercado» (prensa, leída solo en el resumen del buscador).",
    "fuentes": [
     "stellantis",
+    "jornada-stellantis",
+    "eua-232",
     "raiavl",
     "osm"
    ],

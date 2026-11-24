@@ -2595,6 +2595,9 @@ marca y no por planta: la ficha de cada planta muestra las de su marca en el añ
     prensa), y su producción cayó de entre 1,100 y 1,400 al mes a 408 en abril y 223 en mayo; se
     recuperó hasta octubre y terminó en noviembre (INEGI). El GLB mandaba a Estados Unidos una cuarta
     parte de lo que exportaba en 2024 y 2025, y en 2025 mandó más a Alemania (45 %; INEGI).
+  - **Stellantis Toluca**, que no se fue, paró todo abril de 2025, un día después de que entró el
+    arancel ([La Jornada](https://www.jornada.com.mx/2025/04/04/politica/007n2pol), prensa, leída solo
+    en el resumen del buscador porque el sitio bloquea la descarga).
 - **T-MEX Park** no es un Polo del Bienestar ni tiene dinero público: es un parque privado de Grupo
   El-Mann que el gobierno federal listó en 2020 entre los proyectos con el sector privado. Su
   primer inquilino en operación es DHL Supply Chain (160,000 m² en 2026, dicho de DHL). Su

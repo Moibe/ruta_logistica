@@ -33,6 +33,7 @@ export const FUENTES = {
   'nissan-compas': { fuente: 'Nissan, resultados del primer semestre de su año fiscal 2025 (6 de noviembre de 2025): COMPAS, la sexta planta de Re:Nissan, deja de hacer vehículos Nissan a fines de noviembre de 2025', url: 'https://www.nissan-global.com/EN/IR/FINANCIAL_RESULTS/ASSETS/DATA/2025/20252nd_presentation_script_303_e.pdf' },
   'mercedes-compas': { fuente: 'Mercedes-Benz Group, 12 de febrero de 2026: ajusta su capacidad mundial a unos 2.2 millones de unidades para 2028; el ensamble de Mercedes-Benz en COMPAS termina en 2026', url: 'https://media.mercedes-benz.nl/download/47b110a2-e280-46bb-a2ca-f3442b0da31e/20260212_mbgroupag_pressinformation_annualresults_2025_capitalmarketday-embargo.pdf' },
   'bloomberg-infiniti': { fuente: 'Bloomberg Línea, 3 de abril de 2025 (prensa): Nissan deja de vender en Estados Unidos los Infiniti QX50 y QX55 hechos en México', url: 'https://www.bloomberglinea.com/negocios/nissan-decide-detener-las-ventas-en-eeuu-de-sus-todoterrenos-fabricados-en-mexico/' },
+  'jornada-stellantis': { fuente: 'La Jornada, 4 de abril de 2025 (prensa; leída solo en el resumen del buscador, el sitio bloquea la descarga): Stellantis para su planta de Toluca todo abril, un día después de que entró el arancel de 25 % de Estados Unidos', url: 'https://www.jornada.com.mx/2025/04/04/politica/007n2pol' },
   'eua-232': { fuente: 'Estados Unidos, Proclamación 10908 (26 de marzo de 2025; Federal Register del 3 de abril): arancel de 25 % a los autos importados desde el 3 de abril de 2025, que en los que cumplen el T-MEC se cobra solo sobre su contenido no estadounidense; recuerda que la revisión de 2019 terminó en una orden de negociar', url: 'https://www.govinfo.gov/content/pkg/FR-2025-04-03/html/2025-05930.htm' },
   ford: { fuente: 'Ford, plantas en el mundo: Hermosillo y Cuautitlán', url: 'https://corporate.ford.com/operations/locations/global-plants/' },
   stellantis: { fuente: 'Stellantis Norteamérica, fichas de sus plantas de Saltillo (camiones, 1995; vans, 2013) y Toluca (1968)', url: 'https://media.stellantisnorthamerica.com/newsrelease.do?id=319' },
@@ -92,7 +93,9 @@ export const PLANTAS = [
   a('ford-hermosillo', 'Ford Hermosillo', 'Ford, planta de estampado y ensamble de Hermosillo', 'ford', 'Hermosillo', 'SON', 'Bronco Sport y la pickup Maverick', '1986', ['ford']),
   a('ford-cuautitlan', 'Ford Cuautitlán', 'Ford, planta Cuautitlán', 'ford', 'Cuautitlán Izcalli', 'MEX', 'El eléctrico Mustang Mach-E (desde noviembre de 2020; antes, el Fiesta)', '1964', ['ford']),
   a('stellantis-saltillo', 'Stellantis Saltillo', 'Stellantis, plantas de camiones y de vans de Saltillo', 'stellantis', 'Saltillo', 'COAH', 'Pickups Ram y vans Ram ProMaster', '1995', ['stellantis']),
-  a('stellantis-toluca', 'Stellantis Toluca', 'Stellantis, planta Toluca', 'stellantis', 'Toluca', 'MEX', 'SUV de Jeep (Compass, Wagoneer S, Cherokee)', '1968', ['stellantis']),
+  a('stellantis-toluca', 'Stellantis Toluca', 'Stellantis, planta Toluca', 'stellantis', 'Toluca', 'MEX', 'SUV de Jeep (Compass, Wagoneer S, Cherokee)', '1968', ['stellantis', 'jornada-stellantis', 'eua-232'], {
+    nota: 'Paró todo abril de 2025, un día después de que entró el arancel de 25 % de Estados Unidos a los autos; según la nota, Stellantis habló de «las dinámicas actuales del mercado» (prensa, leída solo en el resumen del buscador).',
+  }),
   a('jac-sahagun', 'JAC', 'Giant Motors Latinoamérica (JAC), Ciudad Sahagún', 'jac', 'Tepeapulco', 'HGO', 'SUV y pickups JAC, armados con kits', '2017', ['jac']),
   // ---- what the mines feed: the integrated steel mills and the copper smelter (sources in scripts/mineria/minas.mjs).
   {
