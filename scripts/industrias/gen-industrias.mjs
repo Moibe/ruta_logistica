@@ -19,7 +19,7 @@ const DESDE = 2018;
 async function pedir(tabla, cuerpo) {
   const r = await fetch(API + tabla, {
     method: cuerpo ? 'POST' : 'GET',
-    headers: { 'User-Agent': 'Mozilla/5.0', 'Content-Type': 'application/json' },
+    headers: { 'User-Agent': 'ruta-logistica-juego/1.0', 'Content-Type': 'application/json' },
     body: cuerpo ? JSON.stringify(cuerpo) : undefined,
   });
   if (!r.ok) throw new Error(`INEGI ${tabla}: HTTP ${r.status}`);

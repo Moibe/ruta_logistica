@@ -2575,6 +2575,26 @@ marca y no por planta: la ficha de cada planta muestra las de su marca en el añ
   juego le falta esa espuela.
 - **El tren de cada armadora:** solo Mazda tiene espuela confirmada por una fuente oficial (el
   Congreso de Guanajuato); de las demás no hay fuente, y la ficha no lo afirma.
+- **Las que se fueron y los aranceles.** Desde el 3 de abril de 2025 Estados Unidos cobra 25 % a los
+  autos importados; a los que cumplen el T-MEC, solo sobre su contenido no estadounidense
+  ([Proclamación 10908](https://www.govinfo.gov/content/pkg/FR-2025-04-03/html/2025-05930.htm)). Ninguna de
+  las tres salidas se explicó por aranceles:
+  - **Honda El Salto** pasó sus autos a Celaya a principios de 2020 «para mejorar la eficiencia del
+    negocio» ([Honda](https://global.honda/en/newsroom/news/2019/c190907eng.html)), y ese año Estados
+    Unidos no subió los aranceles a los autos: su revisión de 2019 terminó en una orden de negociar.
+  - **Nissan CIVAC** cerró dentro de Re:Nissan, el plan con el que Nissan baja de 17 a 10 plantas
+    ([Nissan](https://mexico.nissannews.com/es-MX/releases/nissan-integrara-la-produccion-de-vehiculos-de-la-planta-civac-al-complejo-de-aguascalientes-en-mexico)),
+    y la Presidencia lo llamó una decisión de eficiencia de la empresa, «una estrategia que venía,
+    ya, desde hace tiempo» ([versión estenográfica del 1 de agosto de 2025](https://www.gob.mx/presidencia/articulos/version-estenografica-conferencia-de-prensa-de-la-presidenta-claudia-sheinbaum-pardo-del-01-de-agosto-de-2025)).
+    Su NP300 no se exportó a Estados Unidos ningún año desde 2018 (INEGI).
+  - **COMPAS** cerró por los recortes de sus dos dueños ([Nissan](https://www.nissan-global.com/EN/IR/FINANCIAL_RESULTS/ASSETS/DATA/2025/20252nd_presentation_script_303_e.pdf),
+    [Mercedes-Benz](https://media.mercedes-benz.nl/download/47b110a2-e280-46bb-a2ca-f3442b0da31e/20260212_mbgroupag_pressinformation_annualresults_2025_capitalmarketday-embargo.pdf)),
+    pero ahí los aranceles sí pegaron. Sus Infiniti, que en 2025 solo se exportaron a Estados Unidos,
+    dejaron de recibir pedidos de allá el día que entró el arancel
+    ([Bloomberg Línea](https://www.bloomberglinea.com/negocios/nissan-decide-detener-las-ventas-en-eeuu-de-sus-todoterrenos-fabricados-en-mexico/),
+    prensa), y su producción cayó de entre 1,100 y 1,400 al mes a 408 en abril y 223 en mayo; se
+    recuperó hasta octubre y terminó en noviembre (INEGI). El GLB mandaba a Estados Unidos una cuarta
+    parte de lo que exportaba en 2024 y 2025, y en 2025 mandó más a Alemania (45 %; INEGI).
 - **T-MEX Park** no es un Polo del Bienestar ni tiene dinero público: es un parque privado de Grupo
   El-Mann que el gobierno federal listó en 2020 entre los proyectos con el sector privado. Su
   primer inquilino en operación es DHL Supply Chain (160,000 m² en 2026, dicho de DHL). Su
