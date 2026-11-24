@@ -106,6 +106,8 @@ saltar al siguiente libre.
   ferroviario. Sus minas y plantas son sitios con estación (`SITIOS_CADENA`); la simulación guarda su
   carga en un patio por flujo, la sube solo a trenes que paran en su destino y cuenta lo entregado
   (`sim.cadena`); los flujos nacionales se restan de la carga genérica del estado.
+  Las armadoras también son sitios con estación: su exportación de vehículos (`autosAño`, 4.9 Mt de
+  2018 escaladas con el RAIAVL) espera en su patio y sale como exportación, restada de la del estado.
 - Etiquetas con colisión: cada una prueba cuatro posiciones alrededor de su punto y gana la
   de mayor prioridad (puertos > capital del país > capitales > ciudades por población >
   estados > mares y países). Una ciudad portuaria (Veracruz, Mazatlán…) se etiqueta una sola

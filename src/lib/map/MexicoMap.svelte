@@ -10,7 +10,7 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, kmALaVia, type Dueño } from '$lib/domain/red';
   import { MINAS, NOMBRE_MINERAL, cifraMina, type Mina } from '$lib/domain/mineria';
-  import { FLUJOS, NOMBRE_PRODUCTO, toneladasAño } from '$lib/domain/cadenas';
+  import { FLUJOS, NOMBRE_PRODUCTO, autosAño, toneladasAño } from '$lib/domain/cadenas';
   import { EMPRESAS_INDUSTRIA, INDUSTRIAS, PARCIAL_RAIAVL, añoRaiavl, plantasDe, type Industria } from '$lib/domain/industrias';
   import { obraVia } from '$lib/domain/obrasVia';
   import { clavePolo, estadoReal, fechaEnPalabras, fichaReal, TEXTO_ETAPA } from '$lib/domain/realidad';
@@ -3185,6 +3185,11 @@
         {@const llego = llegan.reduce((x, f) => x + (sim.cadena[f.id]?.porAño[String(año)] ?? 0), 0)}
         <span class="tip-rail">
           Abasto por tren en {año}: {fmt.format(Math.round(llego))} t de {fmt.format(Math.round(espera))} esperadas ({Math.round((100 * llego) / Math.max(1, espera))} %) · {[...new Set(llegan.map((f) => NOMBRE_PRODUCTO[f.producto]))].join(', ')}
+        </span>
+      {/if}
+      {#if p.tipo === 'armadora' && autosAño(p, sim.horas, añoDe(sim.horas)) > 0}
+        <span class="tip-rail">
+          Exporta por tren: {fmt.format(Math.round(autosAño(p, sim.horas, añoDe(sim.horas)) / 1000))} mil t de vehículos al año (estimación del juego){sim.red?.estaciones.has(`industria:${p.id}`) ? `; esperan ${fmt.format(Math.round(sim.enPatioAutos(p.id)))} t` : ' (sin estación: queda lejos de la vía)'}{sim.autos[p.id] ? `; tus trenes han llevado ${fmt.format(Math.round(sim.autos[p.id]))} t` : ''}
         </span>
       {/if}
       {#if p.tren}<span class="tip-sub">{p.tren}</span>{/if}

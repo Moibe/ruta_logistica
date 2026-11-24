@@ -1,4 +1,4 @@
-import { INDUSTRIAS } from './industrias';
+import { EMPRESAS_INDUSTRIA, INDUSTRIAS, PARCIAL_RAIAVL, añoRaiavl, type Industria } from './industrias';
 import { MINAS, cifraMina } from './mineria';
 import { horasDeFecha } from './calendario';
 import type { LonLat } from './geo';
@@ -41,7 +41,7 @@ export const SITIOS_CADENA: SitioCadena[] = [
     lonLat: m.lonLat,
     lonLatEstacion: m.id === 'pena-colorada' ? ESTACION_PENA_COLORADA : undefined,
   })),
-  ...INDUSTRIAS.filter((p) => PLANTAS_CADENA.includes(p.id)).map((p) => ({ clave: `industria:${p.id}`, tipo: 'industria' as const, id: p.id, nombre: p.corto, estado: p.estado, lonLat: p.lonLat })),
+  ...INDUSTRIAS.filter((p) => PLANTAS_CADENA.includes(p.id) || p.tipo === 'armadora').map((p) => ({ clave: `industria:${p.id}`, tipo: 'industria' as const, id: p.id, nombre: p.corto, estado: p.estado, lonLat: p.lonLat })),
 ];
 
 export type Flujo = {
@@ -133,6 +133,33 @@ export function toneladasAño(f: Flujo, horas: number, año: number): number {
   if (!m || (m.hasta && horas >= horasDeFecha(m.hasta))) return 0;
   return (cifraMina(m, año)?.toneladas ?? 0) * (f.parte ?? 0);
 }
+
+// ---- cars: the vehicles exported by train leave from the carmakers' stations ---------------
+
+/**
+ * Vehicles that left the country by train in 2018 (ARTF, table 10: 4.9 million tonnes; 77.6 % by
+ * Nuevo Laredo and Piedras Negras). Each year scales with the units the carmakers exported (INEGI,
+ * RAIAVL), and each brand's share is its exports; a brand with several plants splits it equally
+ * among those working (estimate of the game).
+ */
+export const T_AUTOS_2018 = 4_900_000;
+
+function exportadas(empresa: string, año: number): number {
+  const a = añoRaiavl(año);
+  const x = EMPRESAS_INDUSTRIA[empresa]?.serie[String(a)]?.exportacion ?? 0;
+  return PARCIAL_RAIAVL && a === PARCIAL_RAIAVL.año ? (x * 12) / PARCIAL_RAIAVL.meses : x;
+}
+const TOTAL_2018 = Object.keys(EMPRESAS_INDUSTRIA).reduce((s, e) => s + exportadas(e, 2018), 0);
+const trabaja = (p: Industria, horas: number) => (!p.desde || horas >= horasDeFecha(p.desde)) && (!p.hasta || horas < horasDeFecha(p.hasta));
+
+/** Tonnes a year of vehicles a carmaker sends to export by train at a game hour. */
+export function autosAño(p: Industria, horas: number, año: number): number {
+  if (p.tipo !== 'armadora' || !p.empresa || !trabaja(p, horas)) return 0;
+  const activas = INDUSTRIAS.filter((x) => x.empresa === p.empresa && x.tipo === 'armadora' && trabaja(x, horas)).length;
+  return (T_AUTOS_2018 * exportadas(p.empresa, año)) / TOTAL_2018 / Math.max(1, activas);
+}
+
+export const ARMADORAS = INDUSTRIAS.filter((p) => p.tipo === 'armadora');
 
 /** The domestic flows that load in each state, to take out of its generic domestic cargo. */
 export const FLUJOS_DEL_ESTADO = new Map<string, Flujo[]>();

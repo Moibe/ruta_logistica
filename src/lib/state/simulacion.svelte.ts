@@ -111,7 +111,7 @@ import {
   resumir,
 } from '$lib/domain/interior';
 import { DIAS_PATIO_POLO } from '$lib/domain/sectores';
-import { DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, toneladasAño } from '$lib/domain/cadenas';
+import { ARMADORAS, DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, autosAño, toneladasAño } from '$lib/domain/cadenas';
 
 const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
 
@@ -260,6 +260,10 @@ class Simulacion {
   #bodegasNacional = new Map<string, number>();
   /** Each supply-chain flow's cargo waiting at its origin's station, tonnes (`cadenas.ts`). Mutated by the clock. */
   #patiosCadena = new Map<string, number>();
+  /** Vehicles for export waiting at each carmaker's station, tonnes. */
+  #patiosAutos = new Map<string, number>();
+  /** Vehicles the player's trains have taken from each carmaker to an exit, tonnes. */
+  autos = $state.raw<Record<string, number>>({});
   /** What the player's trains have delivered of each flow: tonnes and tonne-km, in all and by year. */
   cadena = $state.raw<Record<string, { t: number; tkm: number; porAño: Record<string, number> }>>({});
   /**
@@ -406,6 +410,7 @@ class Simulacion {
         this.barcos = barcos;
         for (const e of ESTADOS_EXPORTADORES) this.#bodegas.set(e, flujoDelEstado(e, añoDe(this.horas)) * 24 * 7);
         for (const e of ESTADOS_PRODUCTIVOS) this.#bodegasNacional.set(e, flujoNacional(e, añoDe(this.horas)) * 24 * 7);
+        for (const p of ARMADORAS) this.#patiosAutos.set(p.id, (autosAño(p, this.horas, añoDe(this.horas)) / 365.25) * 7);
         for (const f of FLUJOS) this.#patiosCadena.set(f.id, (toneladasAño(f, this.horas, añoDe(this.horas)) / 365.25) * 7);
         // The ports open with a week of their trade waiting.
         const h = 24 * DIAS_INICIO;
@@ -950,8 +955,15 @@ class Simulacion {
   /** Each state's export cargo piles up at its stations, up to a month of it. */
   #producir(horas: number) {
     const año = añoDe(this.horas);
+    const autosEstado = new Map<string, number>();
+    for (const p of ARMADORAS) {
+      const h = autosAño(p, this.horas, año) / (365.25 * 24);
+      autosEstado.set(p.estado, (autosEstado.get(p.estado) ?? 0) + h);
+      this.#patiosAutos.set(p.id, Math.min((this.#patiosAutos.get(p.id) ?? 0) + h * horas, h * 24 * DIAS_PATIO_CADENA));
+    }
     for (const e of ESTADOS_EXPORTADORES) {
-      const f = flujoDelEstado(e, año);
+      // The cars leave from their plants: they come out of the state's generic export cargo.
+      const f = Math.max(0, flujoDelEstado(e, año) - (autosEstado.get(e) ?? 0));
       this.#bodegas.set(e, Math.min((this.#bodegas.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
     }
     for (const f of FLUJOS) {
@@ -1073,6 +1085,11 @@ class Simulacion {
       this.#patiosCadena.set(f.id, hay - sube);
       t.cadena[f.id] = (t.cadena[f.id] ?? 0) + sube;
     }
+  }
+
+  /** Vehicles waiting at a carmaker's station, tonnes. */
+  enPatioAutos(id: string): number {
+    return this.#patiosAutos.get(id) ?? 0;
   }
 
   /** A flow's cargo waiting at its origin, tonnes. */
@@ -1412,6 +1429,18 @@ class Simulacion {
     }
     const estado = SITIOS_POR_CLAVE.get(destino)?.estado;
     if (!estado) return;
+    // A carmaker's vehicles first.
+    if (destino.startsWith('industria:')) {
+      const id = destino.slice('industria:'.length);
+      const hay = this.#patiosAutos.get(id) ?? 0;
+      const sube = Math.min(this.#espacioTren(t), hay);
+      if (sube >= 1) {
+        this.#patiosAutos.set(id, hay - sube);
+        t.carga += sube;
+        t.cargaDe[estado] = (t.cargaDe[estado] ?? 0) + sube;
+        this.autos = { ...this.autos, [id]: (this.autos[id] ?? 0) + sube };
+      }
+    }
     // A polo's companies' exports first.
     const delPolo = this.#cargarDelPolo(t, destino, 'exportacion');
     if (delPolo > 0) {

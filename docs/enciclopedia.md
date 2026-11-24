@@ -2711,6 +2711,24 @@ su patio; la de una planta, su **abasto por tren** del año: lo que le llegó co
 esta fecha. Por ahora solo se mide: una planta mal surtida no produce menos (eso irá cuando se sepa
 a dónde va su acero).
 
+### Las cadenas de suministro: los autos
+
+Los vehículos que salen del país por tren ya no salen de cualquier estación del estado: salen de
+las **estaciones de las armadoras**, que tienen estación como una ciudad (todas menos Nissan CIVAC,
+a 42 km de la vía). Un tren que para en una armadora sube sus vehículos primero y los entrega como
+exportación en la primera salida a la que llega, como el resto de la carga de exportación.
+
+- **Cuántos:** en 2018 salieron del país por tren 4.9 millones de toneladas de vehículos armados, el
+  77.6 % por Nuevo Laredo y Piedras Negras (ARTF, tabla 10). Cada año se escala con las unidades
+  que exportaron las armadoras (INEGI, RAIAVL; el año en curso, anualizado).
+- **De quién:** cada marca lleva su parte de las exportaciones; una marca con varias plantas la
+  reparte por igual entre las que trabajan (**estimación del juego**).
+- **Sin sumar toneladas:** lo que exportan las armadoras se resta de la carga de exportación
+  genérica de su estado.
+
+La ficha de una armadora dice cuánto exporta por tren al año, cuánto espera en su patio y cuánto
+han llevado tus trenes.
+
 ---
 
 ## 6. Red ferroviaria
