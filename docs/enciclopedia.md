@@ -2673,6 +2673,44 @@ mina:
   de Nueva Rosita (cerrada desde 2017), las demás salinas (solo hay totales por estado) y el carbón
   importado que quema Petacalco.
 
+### Las cadenas de suministro: los minerales
+
+El primer eslabón: el mineral que va **en tren** de una mina (o de un puerto o frontera de entrada)
+a la planta que lo usa. Cada flujo es carga con origen y destino, como el combustible: espera en la
+estación de su origen, hasta un mes de ella (la partida abre con una semana), y solo sube a un tren
+que vaya a parar en su destino. Entregada, cuenta en toneladas y toneladas-km. Las minas y plantas
+de una cadena tienen estación, como una ciudad, si quedan a 15 km de la vía o menos; al trazar un
+tren se pueden elegir como paradas.
+
+**Sin inventar toneladas.** Un flujo de mina es su propia producción (el reporte de su empresa, ver
+[Minería](#minería)); uno importado es lo que registró el anuario ferroviario de 2018 (ARTF). Cómo se
+reparte la producción de una mina entre sus destinos es **estimación del juego**, y lo dice su
+ficha. Los flujos nacionales se restan de la carga genérica de su estado, así que el total del país
+sigue siendo el del anuario. Como referencia, en 2018 el tren movió 7.04 millones de toneladas de
+mineral de hierro, 5.29 de carbón, 2.06 de coque y 1.67 de concentrados de cobre (ARTF, tablas 6-1
+y 6-2).
+
+| Flujo | De | A | Toneladas | Hasta |
+| --- | --- | --- | --- | --- |
+| Hierro | Peña Colorada (carga en su peletizadora de Manzanillo) | Ternium Monterrey y Ternium Puebla | La mitad de Ternium de sus pélets, por partes iguales (estimación) | — |
+| Hierro | Las Encinas (Alzada) | Ternium Monterrey y Ternium Puebla | Sus pélets, por partes iguales (estimación) | — |
+| Hierro | Cerro de Mercado | AHMSA | Todo su concentrado | diciembre de 2022 |
+| Carbón | MIMOSA | AHMSA | Su carbón metalúrgico: 44 % de lo que sacó en 2018 (1.39 de 3.15 millones de t) | diciembre de 2022 |
+| Carbón importado | Piedras Negras | AHMSA | 2.1 millones de t al año (lo que entró por tren en 2018; el destino es estimación) | diciembre de 2022 |
+| Coque importado | Altamira | AHMSA | 1.7 millones de t al año (ídem) | diciembre de 2022 |
+| Cobre | Buenavista del Cobre | Fundición La Caridad | 43 %: lo que fundió en 2018 menos lo de su propia mina (estimación) | — |
+| Cobre | Buenavista del Cobre | Puerto de Guaymas | El 57 % restante, para exportar (estimación) | — |
+
+**Lo que no va en tren:** MICARE manda su carbón a Nava por banda; Las Truchas, por ferroducto;
+Hércules (a 81 km de la vía) y la mina de La Caridad no tienen fuente de cómo viaja su mineral; y en
+Baja California Sur no hay tren. El carbón térmico a las carboeléctricas de Nava queda para después:
+no hay fuente de en qué viaja, y las centrales todavía no son estaciones.
+
+**En el mapa,** la ficha de una mina dice lo que manda por tren al año, a dónde y cuánto espera en
+su patio; la de una planta, su **abasto por tren** del año: lo que le llegó contra lo que esperaba a
+esta fecha. Por ahora solo se mide: una planta mal surtida no produce menos (eso irá cuando se sepa
+a dónde va su acero).
+
 ---
 
 ## 6. Red ferroviaria

@@ -7,6 +7,7 @@ import interioresJson from './datos/interiores.json';
 import polosJson from './datos/polos.json';
 import puertasJson from './datos/puertas.json';
 import puertosJson from './datos/puertos.json';
+import { SITIOS_CADENA } from './cadenas';
 
 /**
  * The fixed places of the board. Pure data: nothing here knows how a site is
@@ -288,7 +289,7 @@ export const CENTRO_MEXICO: LonLat = [-102.5, 23.6];
 
 // ---- one registry for every kind of site ------------------------------------
 
-export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo' | 'aeropuerto' | 'refineria' | 'plataforma';
+export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo' | 'aeropuerto' | 'refineria' | 'plataforma' | 'mina' | 'industria';
 
 /**
  * Pemex's offshore complexes in the Bay of Campeche are stops at sea for the
@@ -363,6 +364,8 @@ export const SITIOS: readonly Sitio[] = [
     estado: c.estado,
     lonLat: [c.lon, c.lat] as LonLat,
   })),
+  // The mines and plants of a supply chain (`cadenas.ts`): within reach of the track they get a station.
+  ...SITIOS_CADENA,
 ];
 
 export function polo(clave: string): Polo | null {

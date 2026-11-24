@@ -101,6 +101,11 @@ saltar al siguiente libre.
   extracto de OpenStreetMap (por nombre, sus tajos y salinas, y los pueblos mineros), `ver.mjs` lista
   lo encontrado y `ubicar.mjs` fija su lugar (`ubicaciones.json`; también el de las acereras de la
   capa de industrias); `gen-mineria.mjs` escribe `datos/mineria.json`.
+- **Cadenas de suministro** (`domain/cadenas.ts`): flujos de mineral con origen y destino (mina o
+  puerto de entrada → acerera, fundición o puerto), con las toneladas de cada mina o del anuario
+  ferroviario. Sus minas y plantas son sitios con estación (`SITIOS_CADENA`); la simulación guarda su
+  carga en un patio por flujo, la sube solo a trenes que paran en su destino y cuenta lo entregado
+  (`sim.cadena`); los flujos nacionales se restan de la carga genérica del estado.
 - Etiquetas con colisión: cada una prueba cuatro posiciones alrededor de su punto y gana la
   de mayor prioridad (puertos > capital del país > capitales > ciudades por población >
   estados > mares y países). Una ciudad portuaria (Veracruz, Mazatlán…) se etiqueta una sola

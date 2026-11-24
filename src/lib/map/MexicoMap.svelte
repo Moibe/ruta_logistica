@@ -10,6 +10,7 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, kmALaVia, type Dueño } from '$lib/domain/red';
   import { MINAS, NOMBRE_MINERAL, cifraMina, type Mina } from '$lib/domain/mineria';
+  import { FLUJOS, NOMBRE_PRODUCTO, toneladasAño } from '$lib/domain/cadenas';
   import { EMPRESAS_INDUSTRIA, INDUSTRIAS, PARCIAL_RAIAVL, añoRaiavl, plantasDe, type Industria } from '$lib/domain/industrias';
   import { obraVia } from '$lib/domain/obrasVia';
   import { clavePolo, estadoReal, fechaEnPalabras, fichaReal, TEXTO_ETAPA } from '$lib/domain/realidad';
@@ -65,6 +66,7 @@
     toneladas,
     type Aeropuerto,
     type Ciudad,
+    nombreCorto,
     type Polo,
     type Puerta,
     type Puerto,
@@ -1588,7 +1590,7 @@
         if (!onScreen(x, y)) return;
         const hot = hovered?.kind === 'mina' && hovered.mina.id === m.id;
         const s = 4.6 * (hot ? 1.15 : 1);
-        ctx.globalAlpha = tablero.trazando ? 0.3 : 1;
+        ctx.globalAlpha = tablero.trazando && !(trazaTren && conEstacion(`mina:${m.id}`)) ? 0.3 : 1;
         ctx.beginPath();
         ctx.moveTo(x - s, y + s * 0.7);
         ctx.lineTo(x - s * 0.35, y - s * 0.8);
@@ -1617,7 +1619,7 @@
     }
 
     // The big private industries: a factory with a sawtooth roof (a warehouse for a logistics park).
-    // They aren't stops: they fade back while a route is laid out.
+    // Only the plants of a supply chain with a station are stops: the rest fade back while a route is laid out.
     if (layers.industrias) {
       INDUSTRIAS.forEach((p, i) => {
         if (!industriaVisible(p)) return;
@@ -1626,7 +1628,7 @@
         if (!onScreen(x, y)) return;
         const hot = hovered?.kind === 'industria' && hovered.industria.id === p.id;
         const s = (p.tipo === 'logistica' ? 4.6 : 4.2) * (hot ? 1.15 : 1);
-        ctx.globalAlpha = tablero.trazando ? 0.3 : 1;
+        ctx.globalAlpha = tablero.trazando && !(trazaTren && conEstacion(`industria:${p.id}`)) ? 0.3 : 1;
         ctx.beginPath();
         if (p.tipo === 'logistica') {
           ctx.moveTo(x - s, y + s * 0.7);
@@ -2289,9 +2291,11 @@
         }
       });
     }
-    if (layers.mineria && !tablero.trazando) {
+    // While laying out a train, a mine with a station is a stop (its chain cargo loads there).
+    if (layers.mineria && (!tablero.trazando || tablero.tipoNuevo === 'tren')) {
       MINAS.forEach((m, i) => {
         if (!industriaVisible(m)) return;
+        if (tablero.trazando && !sim.red?.estaciones.has(`mina:${m.id}`)) return;
         const d = Math.hypot(transform.applyX(minaPts[i][0]) - mx, transform.applyY(minaPts[i][1]) - my);
         if (d < 9 && d < bestD) {
           best = { kind: 'mina', mina: m };
@@ -2299,8 +2303,9 @@
         }
       });
     }
-    if (layers.industrias && !tablero.trazando) {
+    if (layers.industrias && (!tablero.trazando || tablero.tipoNuevo === 'tren')) {
       INDUSTRIAS.forEach((p, i) => {
+        if (tablero.trazando && !sim.red?.estaciones.has(`industria:${p.id}`)) return;
         if (!industriaVisible(p)) return;
         const d = Math.hypot(transform.applyX(industriaPts[i][0]) - mx, transform.applyY(industriaPts[i][1]) - my);
         if (d < 9 && d < bestD) {
@@ -3143,6 +3148,13 @@
       {#if via !== null}
         <span class="tip-sub">{via <= 2 ? 'Junto a la vía férrea' : `Vía férrea en operación a ${Math.round(via)} km`}</span>
       {/if}
+      {@const sale = FLUJOS.filter((f) => f.origen === `mina:${m.id}`)}
+      {#if sale.length}
+        {@const conEst = !!sim.red?.estaciones.has(`mina:${m.id}`)}
+        <span class="tip-rail">
+          Por tren: {sale.map((f) => `${fmt.format(Math.round(toneladasAño(f, sim.horas, añoDe(sim.horas)) / 1000))} mil t al año a ${nombreCorto(f.destino)}`).join('; ')}{conEst ? `; esperan ${fmt.format(Math.round(sale.reduce((x, f) => x + sim.enPatioCadena(f.id), 0)))} t` : ' (sin estación: queda lejos de la vía)'}
+        </span>
+      {/if}
       {#if m.nota}<span class="tip-sub">{m.nota}</span>{/if}
     {:else if hovered.kind === 'industria'}
       {@const p = hovered.industria}
@@ -3164,6 +3176,16 @@
       {/if}
       {#if surten.length}
         <span class="tip-sub">La surten: {surten.map((m) => `${m.corto} (${NOMBRE_MINERAL[m.mineral]})`).join(', ')}</span>
+      {/if}
+      {@const llegan = FLUJOS.filter((f) => f.destino === `industria:${p.id}` && toneladasAño(f, sim.horas, añoDe(sim.horas)) > 0)}
+      {#if llegan.length}
+        {@const año = añoDe(sim.horas)}
+        {@const transcurrido = Math.max(1 / 365, Math.min(1, (sim.horas - horasDeFecha(`${año}-01-01`)) / (365.25 * 24)))}
+        {@const espera = llegan.reduce((x, f) => x + toneladasAño(f, sim.horas, año), 0) * transcurrido}
+        {@const llego = llegan.reduce((x, f) => x + (sim.cadena[f.id]?.porAño[String(año)] ?? 0), 0)}
+        <span class="tip-rail">
+          Abasto por tren en {año}: {fmt.format(Math.round(llego))} t de {fmt.format(Math.round(espera))} esperadas ({Math.round((100 * llego) / Math.max(1, espera))} %) · {[...new Set(llegan.map((f) => NOMBRE_PRODUCTO[f.producto]))].join(', ')}
+        </span>
       {/if}
       {#if p.tren}<span class="tip-sub">{p.tren}</span>{/if}
       {#if p.nota}<span class="tip-sub">{p.nota}</span>{/if}

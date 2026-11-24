@@ -111,6 +111,7 @@ import {
   resumir,
 } from '$lib/domain/interior';
 import { DIAS_PATIO_POLO } from '$lib/domain/sectores';
+import { DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, toneladasAño } from '$lib/domain/cadenas';
 
 const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
 
@@ -257,6 +258,10 @@ class Simulacion {
   });
   /** Domestic cargo waiting at each state's stations, tonnes. */
   #bodegasNacional = new Map<string, number>();
+  /** Each supply-chain flow's cargo waiting at its origin's station, tonnes (`cadenas.ts`). Mutated by the clock. */
+  #patiosCadena = new Map<string, number>();
+  /** What the player's trains have delivered of each flow: tonnes and tonne-km, in all and by year. */
+  cadena = $state.raw<Record<string, { t: number; tkm: number; porAño: Record<string, number> }>>({});
   /**
    * How fuel gets around now (`combustibles.ts`): each state's use, what its
    * pipelines bring, what it still lacks, what each refinery has left over.
@@ -401,6 +406,7 @@ class Simulacion {
         this.barcos = barcos;
         for (const e of ESTADOS_EXPORTADORES) this.#bodegas.set(e, flujoDelEstado(e, añoDe(this.horas)) * 24 * 7);
         for (const e of ESTADOS_PRODUCTIVOS) this.#bodegasNacional.set(e, flujoNacional(e, añoDe(this.horas)) * 24 * 7);
+        for (const f of FLUJOS) this.#patiosCadena.set(f.id, (toneladasAño(f, this.horas, añoDe(this.horas)) / 365.25) * 7);
         // The ports open with a week of their trade waiting.
         const h = 24 * DIAS_INICIO;
         for (const clave of PUERTOS_COMERCIO) {
@@ -927,6 +933,8 @@ class Simulacion {
       nuevo.exportado = viejo.exportado;
       nuevo.cargaNacional = viejo.cargaNacional;
       nuevo.movidoNacional = viejo.movidoNacional;
+      nuevo.cadena = viejo.cadena;
+      nuevo.entregadoCadena = viejo.entregadoCadena;
       nuevo.combustible = viejo.combustible;
       nuevo.combustibleDe = viejo.combustibleDe;
       nuevo.entregadoCombustible = viejo.entregadoCombustible;
@@ -946,8 +954,15 @@ class Simulacion {
       const f = flujoDelEstado(e, año);
       this.#bodegas.set(e, Math.min((this.#bodegas.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
     }
+    for (const f of FLUJOS) {
+      const ta = toneladasAño(f, this.horas, año);
+      const h = ta / (365.25 * 24);
+      this.#patiosCadena.set(f.id, Math.min((this.#patiosCadena.get(f.id) ?? 0) + h * horas, h * 24 * DIAS_PATIO_CADENA));
+    }
     for (const e of ESTADOS_PRODUCTIVOS) {
-      const f = flujoNacional(e, año);
+      // The chains' domestic flows come out of the state's generic cargo: the yearbook's total stays.
+      const enCadena = (FLUJOS_DEL_ESTADO.get(e) ?? []).reduce((s, x) => s + toneladasAño(x, this.horas, año), 0) / (365.25 * 24);
+      const f = Math.max(0, flujoNacional(e, año) - enCadena);
       this.#bodegasNacional.set(e, Math.min((this.#bodegasNacional.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
     }
     // The ports: exports come by road to the yard, imports are asked for, and what leaves by rail waits for a train.
@@ -1014,6 +1029,7 @@ class Simulacion {
       const destino = t.destinos[pierna];
       this.#entregarNacional(t, t.piernas[pierna].km);
       this.#entregarImportacion(t, t.piernas[pierna].km);
+      this.#moverCadena(t, destino, t.piernas[pierna].km);
       this.#exportar(t, destino);
       this.#descargarCombustible(t, destino);
       this.#cargarCombustible(t, destino, t.combustible + this.#espacioTren(t) / T_POR_BARRIL);
@@ -1024,7 +1040,44 @@ class Simulacion {
 
   /** Tonnes a train still has room for: exports, imports, fuel and domestic cargo share its net load. */
   #espacioTren(t: Tren): number {
-    return Math.max(0, CARGA_POR_TREN - t.carga - t.importacion - t.cargaNacional - t.combustible * T_POR_BARRIL);
+    const cadena = Object.values(t.cadena).reduce((s, x) => s + x, 0);
+    return Math.max(0, CARGA_POR_TREN - t.carga - t.importacion - t.cargaNacional - cadena - t.combustible * T_POR_BARRIL);
+  }
+
+  /**
+   * Supply chains at a stop: the flows aboard ran the leg (tonne-km), those bound here are
+   * delivered, and the flows that start here board if the train will stop at their destination.
+   */
+  #moverCadena(t: Tren, destino: string, km: number) {
+    const año = String(añoDe(this.horas));
+    let cuenta = this.cadena;
+    for (const [id, ton] of Object.entries(t.cadena)) {
+      if (ton <= 0) continue;
+      const c = cuenta[id] ?? { t: 0, tkm: 0, porAño: {} };
+      const llega = FLUJO.get(id)?.destino === destino;
+      cuenta = {
+        ...cuenta,
+        [id]: { t: c.t + (llega ? ton : 0), tkm: c.tkm + ton * km, porAño: llega ? { ...c.porAño, [año]: (c.porAño[año] ?? 0) + ton } : c.porAño },
+      };
+      if (llega) {
+        t.entregadoCadena += ton;
+        delete t.cadena[id];
+      }
+    }
+    this.cadena = cuenta;
+    for (const f of FLUJOS) {
+      if (f.origen !== destino || !t.destinos.includes(f.destino) || f.destino === destino) continue;
+      const hay = this.#patiosCadena.get(f.id) ?? 0;
+      const sube = Math.min(this.#espacioTren(t), hay);
+      if (sube < 1) continue;
+      this.#patiosCadena.set(f.id, hay - sube);
+      t.cadena[f.id] = (t.cadena[f.id] ?? 0) + sube;
+    }
+  }
+
+  /** A flow's cargo waiting at its origin, tonnes. */
+  enPatioCadena(id: string): number {
+    return this.#patiosCadena.get(id) ?? 0;
   }
 
   #entregarImportacion(t: Tren, km: number) {
