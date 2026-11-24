@@ -10,7 +10,7 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, kmALaVia, type Dueño } from '$lib/domain/red';
   import { MINAS, NOMBRE_MINERAL, cifraMina, type Mina } from '$lib/domain/mineria';
-  import { ACERERAS, FLUJOS, NOMBRE_PRODUCTO, aceroAño, autosAño, toneladasAño } from '$lib/domain/cadenas';
+  import { PARTE_PRIVADOS, llevanPrivados, ACERERAS, FLUJOS, NOMBRE_PRODUCTO, aceroAño, autosAño, toneladasAño } from '$lib/domain/cadenas';
   import { EMPRESAS_INDUSTRIA, INDUSTRIAS, PARCIAL_RAIAVL, añoRaiavl, plantasDe, type Industria } from '$lib/domain/industrias';
   import { obraVia } from '$lib/domain/obrasVia';
   import { clavePolo, estadoReal, fechaEnPalabras, fichaReal, TEXTO_ETAPA } from '$lib/domain/realidad';
@@ -3152,7 +3152,7 @@
       {#if sale.length}
         {@const conEst = !!sim.red?.estaciones.has(`mina:${m.id}`)}
         <span class="tip-rail">
-          Por tren: {sale.map((f) => `${fmt.format(Math.round(toneladasAño(f, sim.horas, añoDe(sim.horas)) / 1000))} mil t al año a ${nombreCorto(f.destino)}`).join('; ')}{conEst ? `; esperan ${fmt.format(Math.round(sale.reduce((x, f) => x + sim.enPatioCadena(f.id), 0)))} t` : ' (sin estación: queda lejos de la vía)'}
+          Por tren: {sale.map((f) => `${fmt.format(Math.round(toneladasAño(f, sim.horas, añoDe(sim.horas)) / 1000))} mil t al año a ${nombreCorto(f.destino)}`).join('; ')}{sale.some(llevanPrivados) ? ` (la ${PARTE_PRIVADOS === 0.5 ? 'mitad' : 'parte'} la llevan Ferromex y CPKC; el resto espera tus trenes)` : ''}{conEst ? `; esperan ${fmt.format(Math.round(sale.reduce((x, f) => x + sim.enPatioCadena(f.id), 0)))} t` : ' (sin estación: queda lejos de la vía)'}
         </span>
       {/if}
       {#if m.nota}<span class="tip-sub">{m.nota}</span>{/if}

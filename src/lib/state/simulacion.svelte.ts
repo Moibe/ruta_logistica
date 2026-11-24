@@ -111,7 +111,7 @@ import {
   resumir,
 } from '$lib/domain/interior';
 import { DIAS_PATIO_POLO } from '$lib/domain/sectores';
-import { ACERERAS, MEMORIA_DIAS, RESERVA_DIAS, aceroAño, insumosAño, ARMADORAS, DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, autosAño, toneladasAño } from '$lib/domain/cadenas';
+import { PARTE_PRIVADOS, llevanPrivados, ACERERAS, MEMORIA_DIAS, RESERVA_DIAS, aceroAño, insumosAño, ARMADORAS, DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, autosAño, toneladasAño } from '$lib/domain/cadenas';
 
 const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
 
@@ -422,7 +422,7 @@ class Simulacion {
           this.#patiosAcero.set(a.id, (aceroAño(a.id, h, 1) / 365.25) * 7);
         }
         for (const p of ARMADORAS) this.#patiosAutos.set(p.id, (autosAño(p, this.horas, añoDe(this.horas)) / 365.25) * 7);
-        for (const f of FLUJOS) this.#patiosCadena.set(f.id, (toneladasAño(f, this.horas, añoDe(this.horas)) / 365.25) * 7);
+        for (const f of FLUJOS) this.#patiosCadena.set(f.id, ((toneladasAño(f, this.horas, añoDe(this.horas)) * (llevanPrivados(f) ? 1 - PARTE_PRIVADOS : 1)) / 365.25) * 7);
         // The ports open with a week of their trade waiting.
         const h = 24 * DIAS_INICIO;
         for (const clave of PUERTOS_COMERCIO) {
@@ -979,7 +979,14 @@ class Simulacion {
     }
     for (const f of FLUJOS) {
       const ta = toneladasAño(f, this.horas, año);
-      const h = ta / (365.25 * 24);
+      // The private railroads' share goes straight to its destination: a mill stores it.
+      const privados = llevanPrivados(f) ? PARTE_PRIVADOS : 0;
+      const planta = f.destino.startsWith('industria:') ? f.destino.slice('industria:'.length) : '';
+      if (privados > 0 && ACERERAS.some((a) => a.id === planta)) {
+        const tope = (insumosAño(planta, this.horas, año) / 365.25) * RESERVA_DIAS;
+        this.#reservasAcero.set(planta, Math.min(tope, (this.#reservasAcero.get(planta) ?? 0) + ((ta * privados) / (365.25 * 24)) * horas));
+      }
+      const h = (ta * (1 - privados)) / (365.25 * 24);
       this.#patiosCadena.set(f.id, Math.min((this.#patiosCadena.get(f.id) ?? 0) + h * horas, h * 24 * DIAS_PATIO_CADENA));
     }
     // The steel mills use up their inputs; how they were supplied sets the steel they make.

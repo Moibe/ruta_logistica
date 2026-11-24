@@ -163,6 +163,13 @@ function internacional(id: string, año: number): number {
 }
 
 export const FLUJO = new Map(FLUJOS.map((f) => [f.id, f]));
+/**
+ * Rule of the game: the private railroads (Ferromex, CPKC) carry this share of every mineral flow on
+ * their own, straight to its destination; only the rest waits for the player's trains. In reality
+ * they carry all of it; the share keeps the chains from collapsing before the player runs a train.
+ */
+export const PARTE_PRIVADOS = 0.5;
+export const llevanPrivados = (f: Flujo) => f.producto !== 'aerea';
 /** A flow's cargo waits at its origin this many days of it, like the states' cargo. */
 export const DIAS_EN_PATIO = 30;
 

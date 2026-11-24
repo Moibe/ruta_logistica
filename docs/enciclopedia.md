@@ -2751,6 +2751,10 @@ plataformas del Golfo:
   memoria de un mes;
 - su acero es el posible por el surtido, y **sin nada cae a la mitad** (también usan chatarra, gas y
   mineral que llega por otros medios). En Realidad siempre están surtidas.
+- **los ferrocarriles privados llevan la mitad** de cada flujo de mineral por su cuenta (Ferromex y
+  CPKC), directo a su destino; solo la otra mitad espera tus trenes. Es **regla del juego**: en la
+  realidad lo llevan todo, pero así la cadena no se cae antes de que pongas un tren. Sin trenes
+  tuyos, una acerera queda surtida al 50 % y su acero al 75 % del posible; con los tuyos llega al 100 %.
 
 **Cuánto acero.** En 2018 el tren movió 6,468,776 t de láminas y planchas y 2,646,656 t de fierro
 para construcción; sin los 2.7 millones de toneladas de lámina que entraron por Matamoros quedan unos
@@ -2764,8 +2768,7 @@ unidad de Ternium, con todo surtido.
 al tren que pasa y se entrega en la siguiente parada. Se resta de la carga genérica de su estado.
 
 **Qué tanto pide.** Ternium Monterrey espera unas 5,200 t diarias de pélets (Peña Colorada y Las
-Encinas): dos trenes llenos al día. Sin trenes de la cadena, en unos dos meses las tres acereras
-están al 25 % de surtido y su acero se acerca a la mitad.
+Encinas); los privados llevan la mitad y a tus trenes les toca la otra: un tren lleno al día.
 
 La ficha de cada acerera dice su acero al año contra el posible, su surtido del último mes, los
 insumos que tiene en reserva, el acero que espera y cuánto se han llevado tus trenes.
