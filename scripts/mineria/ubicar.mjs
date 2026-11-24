@@ -24,7 +24,7 @@ export const ELEGIDAS = {
   micare: { archivo: 'tajo-micare', way: 345567553, de: `${OSM}: el tajo grande al oriente de Nava, sin nombre (estimación del juego)` },
   mimosa: { archivo: 'lugar-palau', node: 2037552876, de: 'aproximada (estimación del juego): el pueblo de Palaú; ni AHMSA ni OpenStreetMap dan el lugar de sus minas' },
   'region-carbonifera': { archivo: 'lugar-sabinas', node: 298252745, de: `${OSM} (la ciudad de Sabinas): la ficha junta a muchos productores de la región` },
-  'el-boleo': { archivo: 'lugar-santa-rosalia', node: 303082729, de: `${OSM} (Santa Rosalía, el pueblo de la mina): no dibuja la mina` },
+  'el-boleo': { archivo: 'lugar-santa-rosalia', node: 303082729, de: `${OSM}: Santa Rosalía, el pueblo de la mina, que no está dibujada (estimación del juego)` },
   'guerrero-negro': { archivo: 'guerrero-negro', way: 1381253171, de: `${OSM} («Exportadora de Sal - Terminal marítima», donde se cargan las barcazas)` },
 };
 
