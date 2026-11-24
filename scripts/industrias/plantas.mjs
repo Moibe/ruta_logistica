@@ -4,7 +4,7 @@
 import { FUENTES as FUENTES_MINERIA } from '../mineria/minas.mjs';
 
 export const FUENTES = {
-  ...Object.fromEntries(['ahmsa-2019', 'jornada-ahmsa', 'arcelor-2024', 'arcelor-2026', 'ternium-2024', 'southern-2025', 'southern-2018'].map((k) => [k, FUENTES_MINERIA[k]])),
+  ...Object.fromEntries(['ahmsa-2019', 'jornada-ahmsa', 'arcelor-2024', 'arcelor-2026', 'ternium-2024', 'southern-2025', 'southern-2018', 'penoles-2024', 'fresnillo-2024'].map((k) => [k, FUENTES_MINERIA[k]])),
   raiavl: {
     fuente: 'INEGI, Registro Administrativo de la Industria Automotriz de Vehículos Ligeros (RAIAVL): producción y exportación mensual por marca',
     url: 'https://www.inegi.org.mx/datosprimarios/iavl/',
@@ -154,6 +154,18 @@ export const PLANTAS = [
     desde: '1986',
     tren: 'Recibe por tren y camión los concentrados de Buenavista del Cobre, La Caridad, Santa Bárbara y Charcas; Nacozari tiene tren a Guaymas y a la frontera (dicho de la empresa).',
     fuentes: ['southern-2025', 'southern-2018', 'osm'],
+  },
+  {
+    id: 'met-mex',
+    corto: 'Met-Mex Peñoles',
+    nombre: 'Met-Mex Peñoles, Torreón',
+    tipo: 'metalurgica',
+    municipio: 'Torreón',
+    estado: 'COAH',
+    que: 'Fundición y refinería de plomo, plata y oro, y planta de zinc: en 2024 recibió 306,950 t de concentrados en la fundición y 619,961 t en el circuito de zinc, y dio 76.3 millones de onzas de plata, 877,923 de oro, 114,933 t de plomo y 241,216 t de zinc',
+    tren: 'Lo de Fresnillo plc (99.6 % de su producción de 2024) le llega en camión; de cómo llega lo de terceros y lo importado no hay fuente (dicho de las empresas).',
+    nota: 'Las cifras son dichos de la empresa (Peñoles, Informe Anual 2024); 34.4 % de los concentrados de su fundición fueron de terceros.',
+    fuentes: ['penoles-2024', 'fresnillo-2024', 'osm'],
   },
   {
     id: 'tmex-park',

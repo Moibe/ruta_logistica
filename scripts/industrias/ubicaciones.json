@@ -181,6 +181,13 @@
   ],
   "de": "OpenStreetMap («Fundicion Mina La Caridad»)"
  },
+ "met-mex": {
+  "lonLat": [
+   -103.44124,
+   25.52783
+  ],
+  "de": "OpenStreetMap («Met-Mex Peñoles»)"
+ },
  "tmex-park": {
   "lonLat": [
    -99.07,

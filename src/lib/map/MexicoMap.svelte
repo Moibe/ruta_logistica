@@ -9,7 +9,7 @@
   import { CLASES_BARCO, fueraDelMapa } from '$lib/domain/barcos';
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, kmALaVia, type Dueño } from '$lib/domain/red';
-  import { MINAS, NOMBRE_MINERAL, cifraMina, type Mina } from '$lib/domain/mineria';
+  import { MINAS, NOMBRE_MEDIDA, NOMBRE_MINERAL, cifraMina, type Mina } from '$lib/domain/mineria';
   import { PARTE_PRIVADOS, llevanPrivados, ACERERAS, FLUJOS, NOMBRE_PRODUCTO, aceroAño, autosAño, toneladasAño } from '$lib/domain/cadenas';
   import { EMPRESAS_INDUSTRIA, INDUSTRIAS, PARCIAL_RAIAVL, añoRaiavl, plantasDe, type Industria } from '$lib/domain/industrias';
   import { obraVia } from '$lib/domain/obrasVia';
@@ -3142,7 +3142,7 @@
       <span class="tip-sub">{m.empresa}</span>
       <span class="tip-rail">{m.que}</span>
       {#if c}
-        <span class="tip-rail">{fmt.format(c.toneladas)} toneladas de {m.unidad} en {c.año}</span>
+        <span class="tip-rail">{fmt.format(c.toneladas)} {NOMBRE_MEDIDA[m.medida ?? 't']} de {m.unidad} en {c.año}</span>
       {/if}
       {#if m.destino}<span class="tip-sub">{m.destino}</span>{/if}
       {#if via !== null}

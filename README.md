@@ -94,8 +94,8 @@ saltar al siguiente libre.
   exportación anual por marca y escribe `datos/industrias.json`. La ficha de una planta da las
   cifras de su marca en el año del reloj y su distancia a la vía en operación (`kmALaVia`). Por
   ahora no mueven carga: es el primer paso hacia las cadenas de suministro.
-- **Minería** (capa *Minería*, `domain/mineria.ts`): las grandes minas de hierro, carbón, cobre y
-  sal, visibles entre su inicio y su cierre en los dos modos, con lo que producen y a qué plantas o
+- **Minería** (capa *Minería*, `domain/mineria.ts`): las grandes minas de hierro, carbón, cobre,
+  sal, oro y plata (estas en onzas, `medida`), visibles entre su inicio y su cierre en los dos modos, con lo que producen y a qué plantas o
   puertos lo mandan (`destinos`, para las cadenas de suministro). `scripts/mineria/minas.mjs` tiene
   cada mina con sus fuentes y los totales nacionales del SGM; `buscar-osm.mjs` las busca en el
   extracto de OpenStreetMap (por nombre, sus tajos y salinas, y los pueblos mineros), `ver.mjs` lista

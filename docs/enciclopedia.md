@@ -2673,6 +2673,62 @@ mina:
   de Nueva Rosita (cerrada desde 2017), las demás salinas (solo hay totales por estado) y el carbón
   importado que quema Petacalco.
 
+### Oro y plata
+
+La capa de minería suma 15 fichas de oro y plata: las mayores del país de 2018 a 2025, según
+las listas de las diez principales de cada metal que publica la cámara minera (CAMIMEX, con
+información de las empresas). Su producción es la que reporta cada empresa, en onzas.
+
+**No son carga de tren.** Ninguna fuente dice que su mineral viaje en tren: los concentrados de
+Fresnillo plc van en camión a **Met-Mex Peñoles**, en Torreón (que entra a la capa de industrias y
+dice qué minas la surten); los de Peñasquito y La Colorada, en camión a fundidoras o a puertos como
+Manzanillo; y el doré (barras de oro y plata), en camión o en avión. Por eso son fichas, como la sal,
+sin flujos de tren.
+
+| Mina | Metal | Empresa | Municipio, estado | Producción | Desde | Fuente |
+| --- | --- | --- | --- | --- | --- | --- |
+| Peñasquito | Oro | Newmont (Goldcorp hasta 2019) | Mazapil, ZAC | 272 mil (2018) → 415 mil (2025) onzas de oro | 2007 | [fuente](https://www.sec.gov/Archives/edgar/data/919239/000091923919000004/a12312018mda.htm) |
+| Camino Rojo ¹ | Oro | Orla Mining | Mazapil, ZAC | 97 mil (2025) onzas de oro | 2022 | [fuente](https://www.camimex.org.mx/application/files/5717/8665/5408/InfoCamimex2026.pdf) |
+| La Herradura y Noche Buena ¹ | Oro | Fresnillo plc (Penmont) | Caborca, SON | 641 mil (2018) → 374 mil (2025) onzas de oro | 1997 | [fuente](https://www.fresnilloplc.com/media/kivnnxfl/fres-operating-statistics-ar24-web.pdf) |
+| El Limón-Guajes y Media Luna (complejo Morelos) ¹ | Oro | Torex Gold | Cocula, GRO | 354 mil (2018) → 316 mil (2025) onzas de oro | 2016 | [fuente](https://www.sec.gov/Archives/edgar/data/0001561540/000119312526450219/d376163dex991.htm) |
+| Los Filos ¹ | Oro | Equinox Gold | Eduardo Neri, GRO | 195 mil (2018) → 170 mil (2024) onzas de oro | — (hasta 2025-03) | [fuente](https://www.equinoxgold.com/wp-content/uploads/2025/02/20250219-EQX-PR-Q4Results.pdf) |
+| Mulatos y La Yaqui Grande ¹ | Oro | Alamos Gold | Sahuaripa, SON | 176 mil (2018) → 142 mil (2025) onzas de oro | — | [fuente](https://www.camimex.org.mx/application/files/1815/7064/6694/Info_2019.pdf) |
+| Pinos Altos ¹ | Oro | Agnico Eagle | Ocampo, CHIH | 221 mil (2018) → 82 mil (2025) onzas de oro | 2009 | [fuente](https://www.camimex.org.mx/application/files/1815/7064/6694/Info_2019.pdf) |
+| Dolores | Oro | Pan American Silver | Madera, CHIH | 137 mil (2018) → 38 mil (2025) onzas de oro | — | [fuente](https://panamericansilver.com/wp-content/uploads/2026/02/AIF-2025YE.pdf) |
+| Palmarejo ¹ | Oro | Coeur Mining | Chínipas, CHIH | 123 mil (2018) → 101 mil (2025) onzas de oro | 2009 | [fuente](https://www.camimex.org.mx/application/files/1815/7064/6694/Info_2019.pdf) |
+| San Dimas (Tayoltita) ¹ | Plata | First Majestic (Primero Mining hasta mayo de 2018) | San Dimas, DGO | 6.30 (2019) millones de onzas de plata | — | [fuente](https://www.sgm.gob.mx/productos/pdf/Anuario_2019_Edicion_2020.pdf) |
+| Distrito Fresnillo: Proaño, Saucito y Juanicipio ¹ | Plata | Fresnillo plc (Juanicipio, 56 %, con Pan American desde septiembre de 2025) | Fresnillo, ZAC | 34.90 (2018) → 41.27 (2025) millones de onzas de plata | 1554 | [fuente](https://www.fresnilloplc.com/media/kivnnxfl/fres-operating-statistics-ar24-web.pdf) |
+| San Julián | Plata | Fresnillo plc | Guadalupe y Calvo, CHIH | 14.63 (2018) → 8.29 (2025) millones de onzas de plata | 2016 | [fuente](https://www.fresnilloplc.com/media/kivnnxfl/fres-operating-statistics-ar24-web.pdf) |
+| La Ciénega | Plata | Fresnillo plc | Santiago Papasquiaro, DGO | 6.00 (2018) → 2.78 (2025) millones de onzas de plata | 1992 | [fuente](https://www.fresnilloplc.com/media/kivnnxfl/fres-operating-statistics-ar24-web.pdf) |
+| Cerro Los Gatos ¹ | Plata | First Majestic (70 %) y Dowa (30 %); Gatos Silver hasta enero de 2025 | Satevó, CHIH | 9.68 (2024) → 8.39 (2025) millones de onzas de plata | 2019 | [fuente](https://www.sec.gov/Archives/edgar/data/1517006/000162828024005761/gato-20231231.htm) |
+| La Colorada ¹ | Plata | Pan American Silver | Chalchihuites, ZAC | 7.60 (2018) → 6.00 (2025) millones de onzas de plata | — | [fuente](https://panamericansilver.com/wp-content/uploads/2026/02/AIF-2025YE.pdf) |
+
+¹ Ubicación estimada (estimación del juego): OpenStreetMap no tiene la mina; su ficha dice si el
+punto es su tajo sin nombre o el pueblo minero. Los municipios se comprobaron con los límites de
+OpenStreetMap.
+
+- **Por distrito:** Proaño, Saucito y Juanicipio comparten la ficha del distrito Fresnillo, y Herradura
+  y Noche Buena la de Caborca, porque quedarían encimadas; la nota da cada mina por separado.
+  Juanicipio va al 100 %, calculado con el 56 % que reporta Fresnillo; Cerro Los Gatos, con el 70 %
+  de First Majestic.
+- **Cambios con fecha:** la huelga de Peñasquito (junio a octubre de 2023), el robo que suspendió La
+  Colorada (octubre de 2023), el fin del minado de Noche Buena (mayo de 2023) y de Dolores (2024), y
+  la suspensión de Los Filos desde el 31 de marzo de 2025, al vencer su convenio con Carrizalillo.
+
+**Cuánto produce el país** (kilos de metal contenido en los concentrados que salen de las minas;
+Dirección General de Minas, en el [anuario del SGM](https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf); 2024, preliminar). En
+2024, Zacatecas dio la mitad de la plata y, con Sonora, casi dos tercios del oro:
+
+| Año | Oro (kg) | Plata (kg) |
+| --- | ---: | ---: |
+| 2018 | 141,143 | 7,243,341 |
+| 2019 | 133,893 | 7,485,602 |
+| 2020 | 142,787 | 7,424,554 |
+| 2021 | 133,340 | 6,492,180 |
+| 2022 | 147,700 | 7,067,580 |
+| 2023 | 131,842 | 7,277,840 |
+| 2024 | 119,528 | 7,221,026 |
+
 ### Las cadenas de suministro: los minerales
 
 El primer eslabón: el mineral que va **en tren** de una mina (o de un puerto o frontera de entrada)

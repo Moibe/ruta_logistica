@@ -13,8 +13,12 @@ import type { ClaveEstado } from './sitios';
 
 type Fuente = { fuente: string; url: string };
 
-export type Mineral = 'hierro' | 'carbon' | 'cobre' | 'sal';
-export const NOMBRE_MINERAL: Record<Mineral, string> = { hierro: 'hierro', carbon: 'carbón', cobre: 'cobre', sal: 'sal' };
+export type Mineral = 'hierro' | 'carbon' | 'cobre' | 'sal' | 'oro' | 'plata';
+export const NOMBRE_MINERAL: Record<Mineral, string> = { hierro: 'hierro', carbon: 'carbón', cobre: 'cobre', sal: 'sal', oro: 'oro', plata: 'plata' };
+
+/** What a mine's `serie` is measured in: tonnes unless it says so (gold and silver come in kilograms or troy ounces). */
+export type Medida = 't' | 'kg' | 'oz';
+export const NOMBRE_MEDIDA: Record<Medida, string> = { t: 'toneladas', kg: 'kilos', oz: 'onzas' };
 
 export type Mina = {
   id: string;
@@ -30,6 +34,8 @@ export type Mina = {
   que: string;
   /** What `serie` counts ("concentrado de cobre"). */
   unidad: string;
+  /** The measure of `serie`; tonnes when absent. */
+  medida?: Medida;
   /** Tonnes a year, the years a source gives. */
   serie: Record<string, number>;
   /** Where its product goes, as its sources say it. */
@@ -45,7 +51,7 @@ export type Mina = {
 type MineriaJson = {
   corte: string;
   fuentes: Record<string, Fuente>;
-  nacional: { dato: string; fuentes: string[] } & Record<Mineral, Record<string, number>>;
+  nacional: { dato: string; fuentes: string[] } & Partial<Record<Mineral, Record<string, number>>>;
   minas: Mina[];
 };
 

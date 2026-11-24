@@ -30,6 +30,14 @@
    "fuente": "Southern Copper (Grupo México), informe anual 10-K 2018 (dicho de la empresa)",
    "url": "https://www.sec.gov/Archives/edgar/data/1001838/000104746919000845/a2237832z10-k.htm"
   },
+  "penoles-2024": {
+   "fuente": "Peñoles, Informe Anual 2024 (dicho de la empresa): Met-Mex en Torreón, lo que recibe y produce",
+   "url": "https://minedocs.com/28/Industrias-Pe%c3%b1oles-SABdeCV-AR-2024.pdf"
+  },
+  "fresnillo-2024": {
+   "fuente": "Fresnillo plc, estadísticas de operación del informe anual 2024 (dicho de la empresa): producción de 2018 a 2024 por mina, y sus concentrados y doré a Met-Mex en camión",
+   "url": "https://www.fresnilloplc.com/media/kivnnxfl/fres-operating-statistics-ar24-web.pdf"
+  },
   "raiavl": {
    "fuente": "INEGI, Registro Administrativo de la Industria Automotriz de Vehículos Ligeros (RAIAVL): producción y exportación mensual por marca",
    "url": "https://www.inegi.org.mx/datosprimarios/iavl/"
@@ -1341,6 +1349,27 @@
     30.49412
    ],
    "ubicacion": "OpenStreetMap («Fundicion Mina La Caridad»)"
+  },
+  {
+   "id": "met-mex",
+   "corto": "Met-Mex Peñoles",
+   "nombre": "Met-Mex Peñoles, Torreón",
+   "tipo": "metalurgica",
+   "municipio": "Torreón",
+   "estado": "COAH",
+   "que": "Fundición y refinería de plomo, plata y oro, y planta de zinc: en 2024 recibió 306,950 t de concentrados en la fundición y 619,961 t en el circuito de zinc, y dio 76.3 millones de onzas de plata, 877,923 de oro, 114,933 t de plomo y 241,216 t de zinc",
+   "tren": "Lo de Fresnillo plc (99.6 % de su producción de 2024) le llega en camión; de cómo llega lo de terceros y lo importado no hay fuente (dicho de las empresas).",
+   "nota": "Las cifras son dichos de la empresa (Peñoles, Informe Anual 2024); 34.4 % de los concentrados de su fundición fueron de terceros.",
+   "fuentes": [
+    "penoles-2024",
+    "fresnillo-2024",
+    "osm"
+   ],
+   "lonLat": [
+    -103.44124,
+    25.52783
+   ],
+   "ubicacion": "OpenStreetMap («Met-Mex Peñoles»)"
   },
   {
    "id": "tmex-park",

@@ -40,6 +40,7 @@ const ELEGIDAS = {
   'ternium-guerrero': { archivo: 'mineria/ternium-guerrero', way: 162887171 },
   'ternium-puebla': { archivo: 'mineria/ternium-puebla', way: 97343931 },
   'la-caridad-fundicion': { archivo: 'mineria/la-caridad-fundicion', way: 193506161 },
+  'met-mex': { archivo: 'mineria/met-mex', way: 116771096 },
   'tmex-park': { lonLat: [-99.07, 19.725], de: 'aproximada (estimación del juego): en Nextlalpan, al poniente del AIFA, como lo describe el desarrollador' },
 };
 

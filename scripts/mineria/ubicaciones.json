@@ -76,6 +76,111 @@
   ],
   "de": "OpenStreetMap: Santa Rosalía, el pueblo de la mina, que no está dibujada (estimación del juego)"
  },
+ "penasquito": {
+  "lonLat": [
+   -101.69679,
+   24.63749
+  ],
+  "de": "OpenStreetMap («Mina Peñasquito»)"
+ },
+ "camino-rojo": {
+  "lonLat": [
+   -101.55313,
+   24.63936
+  ],
+  "de": "OpenStreetMap: Mazapil, la cabecera de su municipio; la mina no está (estimación del juego)"
+ },
+ "herradura": {
+  "lonLat": [
+   -112.15626,
+   30.7166
+  ],
+  "de": "OpenStreetMap: la ciudad de Caborca, cabecera de su municipio; las minas no están (estimación del juego)"
+ },
+ "morelos-torex": {
+  "lonLat": [
+   -99.76167,
+   18.03361
+  ],
+  "de": "OpenStreetMap: Nuevo Balsas, el pueblo de Cocula junto a las minas, que no están (estimación del juego)"
+ },
+ "los-filos": {
+  "lonLat": [
+   -99.68224,
+   17.8739
+  ],
+  "de": "OpenStreetMap: el tajo más grande de la zona, sin nombre (estimación del juego)"
+ },
+ "mulatos": {
+  "lonLat": [
+   -108.74374,
+   28.64785
+  ],
+  "de": "OpenStreetMap: el tajo junto al pueblo de Mulatos, sin nombre (estimación del juego)"
+ },
+ "pinos-altos": {
+  "lonLat": [
+   -108.3006,
+   28.26961
+  ],
+  "de": "OpenStreetMap: un tajo sin nombre en la zona de la mina (estimación del juego)"
+ },
+ "dolores": {
+  "lonLat": [
+   -108.53681,
+   28.99437
+  ],
+  "de": "OpenStreetMap («Mina Dolores»)"
+ },
+ "palmarejo": {
+  "lonLat": [
+   -108.40312,
+   27.38526
+  ],
+  "de": "OpenStreetMap: el tajo de la zona, sin nombre (estimación del juego)"
+ },
+ "san-dimas": {
+  "lonLat": [
+   -105.93063,
+   24.10385
+  ],
+  "de": "OpenStreetMap: Tayoltita, el pueblo de la mina, que no está (estimación del juego)"
+ },
+ "fresnillo": {
+  "lonLat": [
+   -102.87291,
+   23.18113
+  ],
+  "de": "OpenStreetMap: la ciudad de Fresnillo; sus tres minas están a su alrededor (estimación del juego)"
+ },
+ "san-julian": {
+  "lonLat": [
+   -106.5074,
+   26.03583
+  ],
+  "de": "OpenStreetMap («Mina San Julian»)"
+ },
+ "cienega": {
+  "lonLat": [
+   -106.34274,
+   25.04632
+  ],
+  "de": "OpenStreetMap («Minera MExicana La Cienega»)"
+ },
+ "cerro-los-gatos": {
+  "lonLat": [
+   -106.10642,
+   27.95573
+  ],
+  "de": "OpenStreetMap: Satevó, la cabecera de su municipio; la mina no está (estimación del juego)"
+ },
+ "la-colorada": {
+  "lonLat": [
+   -103.88223,
+   23.47539
+  ],
+  "de": "OpenStreetMap: Chalchihuites, la cabecera de su municipio; la mina no está (estimación del juego)"
+ },
  "guerrero-negro": {
   "lonLat": [
    -114.12562,
