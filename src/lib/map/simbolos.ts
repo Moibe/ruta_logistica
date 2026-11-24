@@ -7,6 +7,8 @@
 export const POLO = '#f472b6';
 /** Cargo airports: periwinkle, apart from ports (cyan), polos (pink) and plants. */
 export const AEROPUERTO = '#a5b4fc';
+/** The big private industries: a lime green, apart from the gas pipelines' pale green and the rail's amber. */
+export const INDUSTRIA = '#bef264';
 /** Refineries: crude's own brown-gold, apart from the plants' orange and the exits' amber. */
 export const REFINERIA = '#e0a458';
 /** Gas pipelines: a pale green, apart from the sea's cyan and the rail's amber. Petroleum ones in the refineries' brown-gold, crude darker. */

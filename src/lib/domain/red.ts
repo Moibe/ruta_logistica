@@ -196,6 +196,16 @@ function sobreSegmento(p: LonLat, a: LonLat, b: LonLat): { km: number; u: number
 
 export const claseDe = (rango: number): Clase => (rango <= RANGO_MAX_PRIMARIA ? 'primaria' : 'secundaria');
 
+/** How far `p` is from the nearest track in service, in km (a big plant's card says it). */
+export function kmALaVia(red: Red, p: LonLat): number {
+  let best = Infinity;
+  for (const t of red.tramos) {
+    if (!t.operando) continue;
+    for (let i = 0; i < t.puntos.length - 1; i++) best = Math.min(best, sobreSegmento(p, t.puntos[i], t.puntos[i + 1]).km);
+  }
+  return best;
+}
+
 // ---- building ------------------------------------------------------------------------
 
 function nuevoTramo(

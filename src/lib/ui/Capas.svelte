@@ -3,7 +3,7 @@
   import { Plegable } from '$lib/state/plegable.svelte';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero, type Capa } from '$lib/state/tablero.svelte';
-  import { AEROPUERTO, AVION_SVG, COMBUSTIBLE, GAS, GOTA_SVG, PLATAFORMA, POLO, REFINERIA } from '$lib/map/simbolos';
+  import { AEROPUERTO, AVION_SVG, COMBUSTIBLE, GAS, GOTA_SVG, INDUSTRIA, PLATAFORMA, POLO, REFINERIA } from '$lib/map/simbolos';
 
   /**
    * The board's layers, top left under the clock, each with its name and the
@@ -30,6 +30,7 @@
         { capa: 'aeropuertos', nombre: 'Aeropuertos' },
         { capa: 'ciudades', nombre: 'Ciudades' },
         { capa: 'polos', nombre: 'Polos' },
+        { capa: 'industrias', nombre: 'Industrias' },
       ],
     },
     {
@@ -102,6 +103,10 @@
                   stroke-width="1.3"
                   stroke-dasharray="2 1.4"
                 />
+              </svg>
+            {:else if c.capa === 'industrias'}
+              <svg class="sw" width="13" height="11" viewBox="0 0 13 11" aria-hidden="true">
+                <path d="M1 10V1.5l3.7 3.4V1.5l3.6 3.4V1.5L12 4.9V10z" fill={INDUSTRIA} />
               </svg>
             {:else if c.capa === 'energia'}
               <svg class="sw" width="10" height="13" viewBox="0 0 10 13" aria-hidden="true">

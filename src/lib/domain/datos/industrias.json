@@ -1,0 +1,1198 @@
+{
+ "corte": "2026-11-23",
+ "nota": "Generado por scripts/industrias/gen-industrias.mjs.",
+ "fuentes": {
+  "raiavl": {
+   "fuente": "INEGI, Registro Administrativo de la Industria Automotriz de Vehículos Ligeros (RAIAVL): producción y exportación mensual por marca",
+   "url": "https://www.inegi.org.mx/datosprimarios/iavl/"
+  },
+  "osm": {
+   "fuente": "OpenStreetMap (ODbL, © colaboradores de OpenStreetMap): ubicación de cada planta",
+   "url": "https://www.openstreetmap.org/copyright"
+  },
+  "vw": {
+   "fuente": "Volkswagen de México, historia: el primer Sedán de Puebla, el 23 de octubre de 1967",
+   "url": "https://www.vw.com.mx/es/experiencia/cultura/historia-volkswagen-mexico.html"
+  },
+  "audi": {
+   "fuente": "Audi México: planta de San José Chiapa, inaugurada el 30 de septiembre de 2016; produce el Q5",
+   "url": "https://www.audi.com.mx/es/audi-en-mexico/media-center/notas/210930_futuro-actitud-audi-mexico-quinto-aniversario-produciendo/"
+  },
+  "gm-silao": {
+   "fuente": "Gobierno de Guanajuato, 15 de julio de 2026: el complejo Silao de GM (pickups)",
+   "url": "https://boletines.guanajuato.gob.mx/2026/07/15/inaugura-gobernadora-la-nueva-instalacion-de-paneles-solares-en-gm-complejo-silao/"
+  },
+  "gm-ramos": {
+   "fuente": "Secretaría de Economía: participación del secretario y del director de General Motors de México (Ramos Arizpe, 45 años; SUV eléctricas)",
+   "url": "https://www.gob.mx/se/prensa/participacion-del-secretario-de-economia-marcelo-ebrard-y-del-presidente-y-director-general-de-general-motors-de-mexico"
+  },
+  "gm-slp": {
+   "fuente": "Secretaría de Economía, ficha automotriz de San Luis Potosí: la planta de GM, desde 2008",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/77151/San_Luis_Potosi_Automotriz.pdf"
+  },
+  "nissan": {
+   "fuente": "Nissan Mexicana, «Nosotros»: CIVAC desde 1966 y Aguascalientes desde 1982",
+   "url": "https://www.nissan.com.mx/corporate/nosotros.html"
+  },
+  "nissan-a2": {
+   "fuente": "Nissan, 12 de noviembre de 2013: inaugura su planta Aguascalientes A2",
+   "url": "https://mexico.nissannews.com/es-MX/releases/nissan-inaugurates-all-new-aguascalientes-mexico-plant-building-on-a-reputation-for-quality-and-efficiency"
+  },
+  "nissan-civac": {
+   "fuente": "Nissan: integrará la producción de CIVAC al complejo de Aguascalientes, al cierre de su año fiscal 2025 (marzo de 2026)",
+   "url": "https://mexico.nissannews.com/es-MX/releases/nissan-integrara-la-produccion-de-vehiculos-de-la-planta-civac-al-complejo-de-aguascalientes-en-mexico"
+  },
+  "compas": {
+   "fuente": "La Jornada, 23 de octubre de 2025 (prensa): COMPAS, de Nissan y Mercedes-Benz, cerrará en mayo de 2026",
+   "url": "https://www.jornada.com.mx/noticia/2025/10/23/economia/complejo-manufacturero-de-infiniti-y-mercedesbenz-en-aguascalientes-cerrara-en-mayo-de-2026"
+  },
+  "kia": {
+   "fuente": "Secretaría de Economía: demostración del Kia EV3 en Pesquería (4 de agosto de 2026)",
+   "url": "https://www.gob.mx/se/prensa/participacion-del-secretario-de-economia-marcelo-ebrard-durante-la-demostracion-de-la-unidad-kia-sub-ev3"
+  },
+  "toyota": {
+   "fuente": "Toyota, plantas en Norteamérica: Tijuana (TMMBC, Tacoma desde 2004) y Guanajuato (TMMGT, desde diciembre de 2019)",
+   "url": "https://global.toyota/en/company/profile/facilities/manufacturing-worldwide/north_america.html"
+  },
+  "toyota-gto": {
+   "fuente": "Secretaría de Economía: Toyota inaugura su segunda planta en México (Apaseo el Grande, 6 de febrero de 2020)",
+   "url": "https://www.gob.mx/se/es/articulos/inaugura-la-compania-automotriz-toyota-segunda-planta-en-mexico"
+  },
+  "bmw": {
+   "fuente": "BMW Group, planta San Luis Potosí: producción en serie desde abril de 2019, apertura el 6 de junio de 2019",
+   "url": "https://www.bmwgroup-werke.com/san-luis-potosi/es/linea-del-tiempo.html"
+  },
+  "mazda": {
+   "fuente": "Mazda de México, planta Salamanca: primer Mazda3 el 6 de enero de 2014",
+   "url": "https://www.mazda.mx/por-que-mazda/acerca-de-nosotros/planta-salamanca"
+  },
+  "mazda-tren": {
+   "fuente": "Congreso de Guanajuato, expediente 7319: la espuela ferroviaria de la planta de Mazda en Salamanca",
+   "url": "https://www.congresogto.gob.mx/expedientes_legislativos_digitales/iniciativas/7319"
+  },
+  "honda": {
+   "fuente": "Honda de México, «Cuatro décadas de compromiso»: El Salto (autos desde 1995) y Celaya (2014)",
+   "url": "https://rp.honda.mx/wp-content/documentos/556_HDM_cuatro_decadas_de_compromiso.pdf"
+  },
+  "honda-salto": {
+   "fuente": "Honda, 7 de septiembre de 2019: la producción de autos de El Salto pasa a Celaya a principios de 2020",
+   "url": "https://global.honda/en/newsroom/news/2019/c190907eng.html"
+  },
+  "ford": {
+   "fuente": "Ford, plantas en el mundo: Hermosillo y Cuautitlán",
+   "url": "https://corporate.ford.com/operations/locations/global-plants/"
+  },
+  "stellantis": {
+   "fuente": "Stellantis Norteamérica, fichas de sus plantas de Saltillo (camiones, 1995; vans, 2013) y Toluca (1968)",
+   "url": "https://media.stellantisnorthamerica.com/newsrelease.do?id=319"
+  },
+  "jac": {
+   "fuente": "Secretaría de Economía: Giant Motors Latinoamérica anuncia su planta en Hidalgo (Ciudad Sahagún, 2017)",
+   "url": "https://www.gob.mx/se/articulos/giant-motors-latinoamerica-anuncia-inversion-de-planta-automotriz-en-el-estado-de-hidalgo"
+  },
+  "tmex-fidepar": {
+   "fuente": "FIDEPAR (Gobierno del Estado de México), listado de parques industriales, septiembre de 2026: T-MEX Park, Nextlalpan, carretera Teoloyucan–Jaltocan",
+   "url": "https://fidepar.edomex.gob.mx/"
+  },
+  "tmex-dhl": {
+   "fuente": "DHL Supply Chain México (dicho de la empresa), 2026: inaugura la nave 3 de su campus en T-MEX Park y llega a 160,000 m²; primeras naves en agosto de 2025",
+   "url": "https://www.dhl.com/mx-es/home/prensa/archivo-de-prensa/2026/dhl-supply-chain-mexico-inaugura-la-nave-3-de-su-mega-campus-tmex-y-alcanza-los-160-000-m2-de-infraestructura-logistica.html"
+  },
+  "tmex-anuncio": {
+   "fuente": "Gobierno de México, segundo paquete de proyectos de infraestructura con el sector privado (30 de noviembre de 2020): «T-MEC Park», 13,020 millones de pesos, logística",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/730917/002_SEGUNDO_ANUNCIO_30_NOVIEMBRE_2020.pdf"
+  }
+ },
+ "parcial": {
+  "año": 2026,
+  "meses": 10
+ },
+ "empresas": {
+  "gm": {
+   "nombre": "General Motors de México",
+   "marcas": [
+    "General Motors"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 834414,
+     "exportacion": 811954
+    },
+    "2019": {
+     "produccion": 864143,
+     "exportacion": 827843
+    },
+    "2020": {
+     "produccion": 728768,
+     "exportacion": 682217
+    },
+    "2021": {
+     "produccion": 567380,
+     "exportacion": 531383
+    },
+    "2022": {
+     "produccion": 743246,
+     "exportacion": 694977
+    },
+    "2023": {
+     "produccion": 722631,
+     "exportacion": 721886
+    },
+    "2024": {
+     "produccion": 889072,
+     "exportacion": 830820
+    },
+    "2025": {
+     "produccion": 857431,
+     "exportacion": 822858
+    },
+    "2026": {
+     "produccion": 706365,
+     "exportacion": 669981
+    }
+   }
+  },
+  "nissan": {
+   "nombre": "Nissan Mexicana",
+   "marcas": [
+    "Nissan"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 762408,
+     "exportacion": 496333
+    },
+    "2019": {
+     "produccion": 672700,
+     "exportacion": 442248
+    },
+    "2020": {
+     "produccion": 521730,
+     "exportacion": 341128
+    },
+    "2021": {
+     "produccion": 536323,
+     "exportacion": 390501
+    },
+    "2022": {
+     "produccion": 391002,
+     "exportacion": 239283
+    },
+    "2023": {
+     "produccion": 615751,
+     "exportacion": 367014
+    },
+    "2024": {
+     "produccion": 669941,
+     "exportacion": 456866
+    },
+    "2025": {
+     "produccion": 658536,
+     "exportacion": 401242
+    },
+    "2026": {
+     "produccion": 433610,
+     "exportacion": 266465
+    }
+   }
+  },
+  "stellantis": {
+   "nombre": "Stellantis México (antes FCA, Chrysler)",
+   "marcas": [
+    "Chrysler",
+    "Fiat"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 639022,
+     "exportacion": 630967
+    },
+    "2019": {
+     "produccion": 560141,
+     "exportacion": 554225
+    },
+    "2020": {
+     "produccion": 442107,
+     "exportacion": 423637
+    },
+    "2021": {
+     "produccion": 406973,
+     "exportacion": 404453
+    },
+    "2022": {
+     "produccion": 414952,
+     "exportacion": 360775
+    },
+    "2023": {
+     "produccion": 467459,
+     "exportacion": 412892
+    },
+    "2024": {
+     "produccion": 419426,
+     "exportacion": 353307
+    },
+    "2025": {
+     "produccion": 396281,
+     "exportacion": 336149
+    },
+    "2026": {
+     "produccion": 368432,
+     "exportacion": 347844
+    }
+   }
+  },
+  "ford": {
+   "nombre": "Ford de México",
+   "marcas": [
+    "Ford Motor"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 280499,
+     "exportacion": 273009
+    },
+    "2019": {
+     "produccion": 249605,
+     "exportacion": 251454
+    },
+    "2020": {
+     "produccion": 136067,
+     "exportacion": 130750
+    },
+    "2021": {
+     "produccion": 218289,
+     "exportacion": 214424
+    },
+    "2022": {
+     "produccion": 303419,
+     "exportacion": 290274
+    },
+    "2023": {
+     "produccion": 365365,
+     "exportacion": 371087
+    },
+    "2024": {
+     "produccion": 386776,
+     "exportacion": 379849
+    },
+    "2025": {
+     "produccion": 417280,
+     "exportacion": 423283
+    },
+    "2026": {
+     "produccion": 337318,
+     "exportacion": 314694
+    }
+   }
+  },
+  "vw": {
+   "nombre": "Volkswagen de México",
+   "marcas": [
+    "Volkswagen"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 435373,
+     "exportacion": 377437
+    },
+    "2019": {
+     "produccion": 443414,
+     "exportacion": 415921
+    },
+    "2020": {
+     "produccion": 298972,
+     "exportacion": 277468
+    },
+    "2021": {
+     "produccion": 294408,
+     "exportacion": 254331
+    },
+    "2022": {
+     "produccion": 301865,
+     "exportacion": 276915
+    },
+    "2023": {
+     "produccion": 349227,
+     "exportacion": 311876
+    },
+    "2024": {
+     "produccion": 382312,
+     "exportacion": 326217
+    },
+    "2025": {
+     "produccion": 335716,
+     "exportacion": 273410
+    },
+    "2026": {
+     "produccion": 314370,
+     "exportacion": 258234
+    }
+   }
+  },
+  "toyota": {
+   "nombre": "Toyota",
+   "marcas": [
+    "Toyota"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 191978,
+     "exportacion": 187569
+    },
+    "2019": {
+     "produccion": 192722,
+     "exportacion": 191669
+    },
+    "2020": {
+     "produccion": 169350,
+     "exportacion": 161431
+    },
+    "2021": {
+     "produccion": 222346,
+     "exportacion": 220126
+    },
+    "2022": {
+     "produccion": 268344,
+     "exportacion": 255400
+    },
+    "2023": {
+     "produccion": 250015,
+     "exportacion": 262225
+    },
+    "2024": {
+     "produccion": 245007,
+     "exportacion": 245121
+    },
+    "2025": {
+     "produccion": 310152,
+     "exportacion": 318812
+    },
+    "2026": {
+     "produccion": 263163,
+     "exportacion": 248743
+    }
+   }
+  },
+  "kia": {
+   "nombre": "Kia México",
+   "marcas": [
+    "KIA"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 294600,
+     "exportacion": 231695
+    },
+    "2019": {
+     "produccion": 286600,
+     "exportacion": 220587
+    },
+    "2020": {
+     "produccion": 206800,
+     "exportacion": 161377
+    },
+    "2021": {
+     "produccion": 219400,
+     "exportacion": 168360
+    },
+    "2022": {
+     "produccion": 265000,
+     "exportacion": 200099
+    },
+    "2023": {
+     "produccion": 256000,
+     "exportacion": 190440
+    },
+    "2024": {
+     "produccion": 270700,
+     "exportacion": 206246
+    },
+    "2025": {
+     "produccion": 288100,
+     "exportacion": 217440
+    },
+    "2026": {
+     "produccion": 260700,
+     "exportacion": 197660
+    }
+   }
+  },
+  "mazda": {
+   "nombre": "Mazda",
+   "marcas": [
+    "Mazda"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 149589,
+     "exportacion": 137463
+    },
+    "2019": {
+     "produccion": 91830,
+     "exportacion": 70889
+    },
+    "2020": {
+     "produccion": 138855,
+     "exportacion": 118791
+    },
+    "2021": {
+     "produccion": 127293,
+     "exportacion": 109408
+    },
+    "2022": {
+     "produccion": 148098,
+     "exportacion": 107806
+    },
+    "2023": {
+     "produccion": 202506,
+     "exportacion": 152739
+    },
+    "2024": {
+     "produccion": 209303,
+     "exportacion": 141933
+    },
+    "2025": {
+     "produccion": 174524,
+     "exportacion": 88576
+    },
+    "2026": {
+     "produccion": 130585,
+     "exportacion": 70708
+    }
+   }
+  },
+  "honda": {
+   "nombre": "Honda de México",
+   "marcas": [
+    "Honda",
+    "Acura"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 147158,
+     "exportacion": 130542
+    },
+    "2019": {
+     "produccion": 204414,
+     "exportacion": 179174
+    },
+    "2020": {
+     "produccion": 128568,
+     "exportacion": 119391
+    },
+    "2021": {
+     "produccion": 152187,
+     "exportacion": 139349
+    },
+    "2022": {
+     "produccion": 126319,
+     "exportacion": 120518
+    },
+    "2023": {
+     "produccion": 167249,
+     "exportacion": 154255
+    },
+    "2024": {
+     "produccion": 194642,
+     "exportacion": 232433
+    },
+    "2025": {
+     "produccion": 191700,
+     "exportacion": 216701
+    },
+    "2026": {
+     "produccion": 185186,
+     "exportacion": 186811
+    }
+   }
+  },
+  "audi": {
+   "nombre": "Audi México",
+   "marcas": [
+    "Audi"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 173098,
+     "exportacion": 172232
+    },
+    "2019": {
+     "produccion": 156661,
+     "exportacion": 156127
+    },
+    "2020": {
+     "produccion": 123955,
+     "exportacion": 121090
+    },
+    "2021": {
+     "produccion": 137500,
+     "exportacion": 137740
+    },
+    "2022": {
+     "produccion": 178000,
+     "exportacion": 170558
+    },
+    "2023": {
+     "produccion": 175121,
+     "exportacion": 178387
+    },
+    "2024": {
+     "produccion": 144223,
+     "exportacion": 143783
+    },
+    "2025": {
+     "produccion": 146579,
+     "exportacion": 140687
+    },
+    "2026": {
+     "produccion": 129906,
+     "exportacion": 126593
+    }
+   }
+  },
+  "bmw": {
+   "nombre": "BMW Group",
+   "marcas": [
+    "BMW Group"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2019": {
+     "produccion": 24755,
+     "exportacion": 23449
+    },
+    "2020": {
+     "produccion": 55832,
+     "exportacion": 53840
+    },
+    "2021": {
+     "produccion": 68919,
+     "exportacion": 65834
+    },
+    "2022": {
+     "produccion": 63465,
+     "exportacion": 62494
+    },
+    "2023": {
+     "produccion": 117462,
+     "exportacion": 111266
+    },
+    "2024": {
+     "produccion": 95151,
+     "exportacion": 98712
+    },
+    "2025": {
+     "produccion": 95449,
+     "exportacion": 91490
+    },
+    "2026": {
+     "produccion": 81616,
+     "exportacion": 75590
+    }
+   }
+  },
+  "mercedes": {
+   "nombre": "Mercedes-Benz (en COMPAS)",
+   "marcas": [
+    "Mercedes Benz_Prod_Expo"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 7510,
+     "exportacion": 1956
+    },
+    "2019": {
+     "produccion": 59336,
+     "exportacion": 54719
+    },
+    "2020": {
+     "produccion": 85392,
+     "exportacion": 90686
+    },
+    "2021": {
+     "produccion": 74337,
+     "exportacion": 71071
+    },
+    "2022": {
+     "produccion": 87562,
+     "exportacion": 86542
+    },
+    "2023": {
+     "produccion": 67846,
+     "exportacion": 66809
+    },
+    "2024": {
+     "produccion": 57539,
+     "exportacion": 63799
+    },
+    "2025": {
+     "produccion": 57063,
+     "exportacion": 55137
+    },
+    "2026": {
+     "produccion": 22060,
+     "exportacion": 23437
+    }
+   }
+  },
+  "jac": {
+   "nombre": "JAC (Giant Motors Latinoamérica)",
+   "marcas": [
+    "JAC"
+   ],
+   "fuentes": [
+    "raiavl"
+   ],
+   "serie": {
+    "2018": {
+     "produccion": 2954,
+     "exportacion": 0
+    },
+    "2019": {
+     "produccion": 4747,
+     "exportacion": 0
+    },
+    "2020": {
+     "produccion": 3782,
+     "exportacion": 0
+    },
+    "2021": {
+     "produccion": 3126,
+     "exportacion": 0
+    },
+    "2022": {
+     "produccion": 17074,
+     "exportacion": 0
+    },
+    "2023": {
+     "produccion": 22519,
+     "exportacion": 0
+    },
+    "2024": {
+     "produccion": 25391,
+     "exportacion": 0
+    },
+    "2025": {
+     "produccion": 24683,
+     "exportacion": 0
+    },
+    "2026": {
+     "produccion": 18994,
+     "exportacion": 0
+    }
+   }
+  }
+ },
+ "plantas": [
+  {
+   "id": "vw-puebla",
+   "corto": "VW Puebla",
+   "nombre": "Volkswagen de México, planta Puebla",
+   "tipo": "armadora",
+   "empresa": "vw",
+   "municipio": "Cuautlancingo",
+   "estado": "PUE",
+   "que": "Autos y SUV (Jetta, Taos, Tiguan)",
+   "desde": "1967",
+   "fuentes": [
+    "vw",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -98.254,
+    19.12471
+   ],
+   "ubicacion": "OpenStreetMap («Volkswagen de México»)"
+  },
+  {
+   "id": "audi-san-jose-chiapa",
+   "corto": "Audi",
+   "nombre": "Audi México, San José Chiapa",
+   "tipo": "armadora",
+   "empresa": "audi",
+   "municipio": "San José Chiapa",
+   "estado": "PUE",
+   "que": "La SUV Q5",
+   "desde": "2016-09-30",
+   "fuentes": [
+    "audi",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -97.75553,
+    19.22064
+   ],
+   "ubicacion": "OpenStreetMap («Audi Factory»)"
+  },
+  {
+   "id": "gm-silao",
+   "corto": "GM Silao",
+   "nombre": "General Motors, complejo Silao",
+   "tipo": "armadora",
+   "empresa": "gm",
+   "municipio": "Silao",
+   "estado": "GTO",
+   "que": "Pickups (Silverado, Cheyenne, Sierra)",
+   "desde": "1995",
+   "fuentes": [
+    "gm-silao",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -101.38023,
+    20.94851
+   ],
+   "ubicacion": "OpenStreetMap («General Motors»)"
+  },
+  {
+   "id": "gm-ramos-arizpe",
+   "corto": "GM Ramos Arizpe",
+   "nombre": "General Motors, complejo Ramos Arizpe",
+   "tipo": "armadora",
+   "empresa": "gm",
+   "municipio": "Ramos Arizpe",
+   "estado": "COAH",
+   "que": "SUV, hoy eléctricas (Blazer EV, Equinox EV)",
+   "desde": "1981",
+   "fuentes": [
+    "gm-ramos",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -100.97699,
+    25.5061
+   ],
+   "ubicacion": "OpenStreetMap («General Motors»)"
+  },
+  {
+   "id": "gm-san-luis-potosi",
+   "corto": "GM San Luis Potosí",
+   "nombre": "General Motors, complejo San Luis Potosí",
+   "tipo": "armadora",
+   "empresa": "gm",
+   "municipio": "Villa de Reyes",
+   "estado": "SLP",
+   "que": "SUV (Equinox, Terrain)",
+   "desde": "2008",
+   "fuentes": [
+    "gm-slp",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -100.87545,
+    21.98729
+   ],
+   "ubicacion": "OpenStreetMap (sus accesos «GM San Luis Potosí»)"
+  },
+  {
+   "id": "nissan-a1",
+   "corto": "Nissan A1",
+   "nombre": "Nissan Mexicana, Aguascalientes A1",
+   "tipo": "armadora",
+   "empresa": "nissan",
+   "municipio": "Aguascalientes",
+   "estado": "AGS",
+   "que": "Autos y pickups",
+   "desde": "1982",
+   "fuentes": [
+    "nissan",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -102.283,
+    21.827
+   ],
+   "ubicacion": "aproximada (estimación del juego): OpenStreetMap no la tiene con su nombre"
+  },
+  {
+   "id": "nissan-a2",
+   "corto": "Nissan A2",
+   "nombre": "Nissan Mexicana, Aguascalientes A2",
+   "tipo": "armadora",
+   "empresa": "nissan",
+   "municipio": "Aguascalientes",
+   "estado": "AGS",
+   "que": "Autos (Sentra)",
+   "desde": "2013-11-12",
+   "fuentes": [
+    "nissan-a2",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -102.28044,
+    21.73613
+   ],
+   "ubicacion": "OpenStreetMap («Nissan Mexicana AGS»)"
+  },
+  {
+   "id": "nissan-civac",
+   "corto": "Nissan CIVAC",
+   "nombre": "Nissan Mexicana, planta CIVAC",
+   "tipo": "armadora",
+   "empresa": "nissan",
+   "municipio": "Jiutepec",
+   "estado": "MOR",
+   "que": "Autos y pickups (Versa, NP300, Frontier)",
+   "desde": "1966",
+   "hasta": "2026-03",
+   "nota": "La primera planta de Nissan fuera de Japón. Nissan pasó su producción a Aguascalientes al cierre de su año fiscal 2025.",
+   "fuentes": [
+    "nissan",
+    "nissan-civac",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -99.17292,
+    18.90801
+   ],
+   "ubicacion": "OpenStreetMap («Fabrica NISSAN Mexicana»)"
+  },
+  {
+   "id": "compas",
+   "corto": "COMPAS",
+   "nombre": "COMPAS (Nissan y Mercedes-Benz), Aguascalientes",
+   "tipo": "armadora",
+   "empresa": "mercedes",
+   "municipio": "Aguascalientes",
+   "estado": "AGS",
+   "que": "SUV de lujo (Infiniti QX50 y QX55, Mercedes-Benz GLB)",
+   "desde": "2017",
+   "hasta": "2026-05-31",
+   "nota": "Sociedad a partes iguales de Nissan y Daimler. Su arranque en 2017 y su cierre solo tienen fuente de prensa; el INEGI ya no registra producción de Mercedes-Benz desde agosto de 2026. Sus cifras son las de Mercedes-Benz: los Infiniti cuentan en Nissan.",
+   "fuentes": [
+    "compas",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -102.29047,
+    21.73043
+   ],
+   "ubicacion": "OpenStreetMap («COMPAS - Cooperation Manufacturing Plant Aguascalientes»)"
+  },
+  {
+   "id": "kia-pesqueria",
+   "corto": "Kia",
+   "nombre": "Kia México, Pesquería",
+   "tipo": "armadora",
+   "empresa": "kia",
+   "municipio": "Pesquería",
+   "estado": "NL",
+   "que": "Autos (K3, K4) y el eléctrico EV3",
+   "desde": "2016",
+   "fuentes": [
+    "kia",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -99.98956,
+    25.74564
+   ],
+   "ubicacion": "OpenStreetMap («KIA Motores Mexico»)"
+  },
+  {
+   "id": "toyota-tijuana",
+   "corto": "Toyota Tijuana",
+   "nombre": "Toyota Motor Manufacturing de Baja California",
+   "tipo": "armadora",
+   "empresa": "toyota",
+   "municipio": "Tijuana",
+   "estado": "BC",
+   "que": "La pickup Tacoma",
+   "desde": "2004",
+   "fuentes": [
+    "toyota",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -116.72009,
+    32.50061
+   ],
+   "ubicacion": "OpenStreetMap"
+  },
+  {
+   "id": "toyota-guanajuato",
+   "corto": "Toyota Guanajuato",
+   "nombre": "Toyota Motor Manufacturing de Guanajuato",
+   "tipo": "armadora",
+   "empresa": "toyota",
+   "municipio": "Apaseo el Grande",
+   "estado": "GTO",
+   "que": "La pickup Tacoma",
+   "desde": "2019-12",
+   "fuentes": [
+    "toyota",
+    "toyota-gto",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -100.53933,
+    20.57355
+   ],
+   "ubicacion": "OpenStreetMap (la subestación «Planta Toyota», junto a la planta)"
+  },
+  {
+   "id": "bmw-san-luis-potosi",
+   "corto": "BMW",
+   "nombre": "BMW Group, planta San Luis Potosí",
+   "tipo": "armadora",
+   "empresa": "bmw",
+   "municipio": "Villa de Reyes",
+   "estado": "SLP",
+   "que": "Autos (Serie 3, Serie 2 Coupé, M2)",
+   "desde": "2019-04",
+   "fuentes": [
+    "bmw",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -100.84917,
+    21.96853
+   ],
+   "ubicacion": "OpenStreetMap («BMW Planta San Luis Potosi»)"
+  },
+  {
+   "id": "mazda-salamanca",
+   "corto": "Mazda",
+   "nombre": "Mazda de México Vehicle Operation, Salamanca",
+   "tipo": "armadora",
+   "empresa": "mazda",
+   "municipio": "Salamanca",
+   "estado": "GTO",
+   "que": "Autos y SUV (Mazda2, Mazda3, CX-3, CX-30)",
+   "desde": "2014-01",
+   "tren": "Tiene espuela propia para exportar por tren (Congreso de Guanajuato).",
+   "fuentes": [
+    "mazda",
+    "mazda-tren",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -101.24004,
+    20.6116
+   ],
+   "ubicacion": "OpenStreetMap («Planta Mazda»)"
+  },
+  {
+   "id": "honda-celaya",
+   "corto": "Honda Celaya",
+   "nombre": "Honda de México, planta Celaya",
+   "tipo": "armadora",
+   "empresa": "honda",
+   "municipio": "Celaya",
+   "estado": "GTO",
+   "que": "SUV (HR-V, Acura ADX)",
+   "desde": "2014",
+   "fuentes": [
+    "honda",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -100.77757,
+    20.47123
+   ],
+   "ubicacion": "OpenStreetMap («Honda de México»)"
+  },
+  {
+   "id": "honda-el-salto",
+   "corto": "Honda El Salto",
+   "nombre": "Honda de México, planta El Salto",
+   "tipo": "armadora",
+   "empresa": "honda",
+   "municipio": "El Salto",
+   "estado": "JAL",
+   "que": "Autos y SUV hasta 2020; hoy solo motocicletas",
+   "desde": "1995",
+   "hasta": "2020-01",
+   "nota": "Sus autos pasaron a Celaya a principios de 2020; la planta sigue, con motocicletas.",
+   "fuentes": [
+    "honda",
+    "honda-salto",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -103.25362,
+    20.53679
+   ],
+   "ubicacion": "OpenStreetMap («Planta Honda de México El Salto»)"
+  },
+  {
+   "id": "ford-hermosillo",
+   "corto": "Ford Hermosillo",
+   "nombre": "Ford, planta de estampado y ensamble de Hermosillo",
+   "tipo": "armadora",
+   "empresa": "ford",
+   "municipio": "Hermosillo",
+   "estado": "SON",
+   "que": "Bronco Sport y la pickup Maverick",
+   "desde": "1986",
+   "fuentes": [
+    "ford",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -110.91662,
+    29.01351
+   ],
+   "ubicacion": "OpenStreetMap («Ford Autos de Hermosillo S.A. de C.V.»)"
+  },
+  {
+   "id": "ford-cuautitlan",
+   "corto": "Ford Cuautitlán",
+   "nombre": "Ford, planta Cuautitlán",
+   "tipo": "armadora",
+   "empresa": "ford",
+   "municipio": "Cuautitlán Izcalli",
+   "estado": "MEX",
+   "que": "El eléctrico Mustang Mach-E (desde noviembre de 2020; antes, el Fiesta)",
+   "desde": "1964",
+   "fuentes": [
+    "ford",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -99.19193,
+    19.64342
+   ],
+   "ubicacion": "OpenStreetMap («Armadora Ford Motor Company»)"
+  },
+  {
+   "id": "stellantis-saltillo",
+   "corto": "Stellantis Saltillo",
+   "nombre": "Stellantis, plantas de camiones y de vans de Saltillo",
+   "tipo": "armadora",
+   "empresa": "stellantis",
+   "municipio": "Saltillo",
+   "estado": "COAH",
+   "que": "Pickups Ram y vans Ram ProMaster",
+   "desde": "1995",
+   "fuentes": [
+    "stellantis",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -101.10752,
+    25.26292
+   ],
+   "ubicacion": "OpenStreetMap («FCA Saltillo Van»)"
+  },
+  {
+   "id": "stellantis-toluca",
+   "corto": "Stellantis Toluca",
+   "nombre": "Stellantis, planta Toluca",
+   "tipo": "armadora",
+   "empresa": "stellantis",
+   "municipio": "Toluca",
+   "estado": "MEX",
+   "que": "SUV de Jeep (Compass, Wagoneer S, Cherokee)",
+   "desde": "1968",
+   "fuentes": [
+    "stellantis",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -99.598,
+    19.287
+   ],
+   "ubicacion": "aproximada (estimación del juego): OpenStreetMap no la tiene con su nombre"
+  },
+  {
+   "id": "jac-sahagun",
+   "corto": "JAC",
+   "nombre": "Giant Motors Latinoamérica (JAC), Ciudad Sahagún",
+   "tipo": "armadora",
+   "empresa": "jac",
+   "municipio": "Tepeapulco",
+   "estado": "HGO",
+   "que": "SUV y pickups JAC, armados con kits",
+   "desde": "2017",
+   "fuentes": [
+    "jac",
+    "raiavl",
+    "osm"
+   ],
+   "lonLat": [
+    -98.58028,
+    19.77139
+   ],
+   "ubicacion": "OpenStreetMap: Ciudad Sahagún, la localidad (la planta no está con su nombre)"
+  },
+  {
+   "id": "tmex-park",
+   "corto": "T-MEX Park",
+   "nombre": "T-MEX Park",
+   "tipo": "logistica",
+   "municipio": "Nextlalpan",
+   "estado": "MEX",
+   "que": "Parque logístico privado junto al AIFA; su primer inquilino en operación es DHL Supply Chain (160,000 m² en 2026)",
+   "desde": "2025-08",
+   "tren": "El desarrollador planea espuelas y una zona intermodal con Ferrovalle; no hay evidencia de que operen.",
+   "nota": "De Grupo El-Mann. El gobierno federal lo anunció en 2020 como «T-MEC Park» entre los proyectos con el sector privado; no tiene dinero público ni es un Polo del Bienestar. Su superficie (4 a 6 millones de m²) y sus empleos son cifras del desarrollador. Su enlace de carga con el AIFA es un dicho del desarrollador: el aeropuerto no lo menciona.",
+   "fuentes": [
+    "tmex-fidepar",
+    "tmex-dhl",
+    "tmex-anuncio",
+    "osm"
+   ],
+   "lonLat": [
+    -99.07,
+    19.725
+   ],
+   "ubicacion": "aproximada (estimación del juego): en Nextlalpan, al poniente del AIFA, como lo describe el desarrollador"
+  }
+ ]
+}

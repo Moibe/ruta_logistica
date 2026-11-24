@@ -6,7 +6,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 
 > **Cifras al 23 de noviembre de 2026, con trenes, barcos, travesías oceánicas, los Polos del
 > Bienestar, los dueños, el tráfico y la capacidad de cada vía, las obras del Estado, su
-> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar y los 32 polos por dentro.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
+> presupuesto, la electricidad, el petróleo, los ductos, los combustibles, el comercio por mar, los 32 polos por dentro y las grandes industrias privadas.** No están escritas de memoria: se calcularon ejecutando el mismo código del juego
 > que usa el tablero (`domain/red.ts`, `domain/mar.ts`, `domain/trenes.ts`,
 > `domain/barcos.ts`, `domain/sitios.ts`). Si cambian los datos, se recalculan.
 
@@ -2499,6 +2499,81 @@ curvas; el centro de cada una viene en el renglón que sigue al lado que dobla.
 
 En 2026 el Corredor reporta solo cinco polos del Istmo concesionados, sin decir cuáles. No se ha
 reportado obra.
+
+### Grandes industrias privadas
+
+Una capa aparte (*Industrias*, en el panel de capas): plantas y parques reales que el jugador no
+construye, pero que viven de su red. Están en el tablero desde el día en que empezaron a trabajar
+y hasta el día en que pararon, en el juego y en Realidad, como las centrales eléctricas privadas.
+Es el primer paso hacia las cadenas de suministro: por ahora son fichas (dónde están, qué hacen,
+cuánto producen); todavía no mueven carga propia.
+
+**Qué entra, por ahora:** las 21 armadoras de vehículos ligeros que trabajaron desde
+diciembre de 2018 y un parque logístico, T-MEX Park, junto al AIFA. Al empezar la partida hay 19
+en el mapa; después llegan Toyota Guanajuato (diciembre de 2019), BMW (abril de 2019) y T-MEX Park
+(agosto de 2025), y se van Honda El Salto como armadora (enero de 2020), Nissan CIVAC (marzo de
+2026) y COMPAS (mayo de 2026).
+
+| Planta | Municipio, estado | Qué hace | Desde | Vía en operación (2018) | Fuente |
+| --- | --- | --- | --- | ---: | --- |
+| Volkswagen de México, planta Puebla | Cuautlancingo, PUE | Autos y SUV (Jetta, Taos, Tiguan) | 1967 | 4.8 km | [fuente](https://www.vw.com.mx/es/experiencia/cultura/historia-volkswagen-mexico.html) |
+| Audi México, San José Chiapa | San José Chiapa, PUE | La SUV Q5 | 2016 | 1.6 km | [fuente](https://www.audi.com.mx/es/audi-en-mexico/media-center/notas/210930_futuro-actitud-audi-mexico-quinto-aniversario-produciendo/) |
+| General Motors, complejo Silao | Silao, GTO | Pickups (Silverado, Cheyenne, Sierra) | 1995 | 0.8 km | [fuente](https://boletines.guanajuato.gob.mx/2026/07/15/inaugura-gobernadora-la-nueva-instalacion-de-paneles-solares-en-gm-complejo-silao/) |
+| General Motors, complejo Ramos Arizpe | Ramos Arizpe, COAH | SUV, hoy eléctricas (Blazer EV, Equinox EV) | 1981 | 2.5 km | [fuente](https://www.gob.mx/se/prensa/participacion-del-secretario-de-economia-marcelo-ebrard-y-del-presidente-y-director-general-de-general-motors-de-mexico) |
+| General Motors, complejo San Luis Potosí | Villa de Reyes, SLP | SUV (Equinox, Terrain) | 2008 | 0.2 km | [fuente](https://www.gob.mx/cms/uploads/attachment/file/77151/San_Luis_Potosi_Automotriz.pdf) |
+| Nissan Mexicana, Aguascalientes A1 ¹ | Aguascalientes, AGS | Autos y pickups | 1982 | 1.9 km | [fuente](https://www.nissan.com.mx/corporate/nosotros.html) |
+| Nissan Mexicana, Aguascalientes A2 | Aguascalientes, AGS | Autos (Sentra) | 2013 | 2.2 km | [fuente](https://mexico.nissannews.com/es-MX/releases/nissan-inaugurates-all-new-aguascalientes-mexico-plant-building-on-a-reputation-for-quality-and-efficiency) |
+| Nissan Mexicana, planta CIVAC | Jiutepec, MOR | Autos y pickups (Versa, NP300, Frontier) | 1966 (hasta 2026-03) | 41.7 km | [fuente](https://www.nissan.com.mx/corporate/nosotros.html) |
+| COMPAS (Nissan y Mercedes-Benz), Aguascalientes | Aguascalientes, AGS | SUV de lujo (Infiniti QX50 y QX55, Mercedes-Benz GLB) | 2017 (hasta 2026-05) | 2.7 km | [fuente](https://www.jornada.com.mx/noticia/2025/10/23/economia/complejo-manufacturero-de-infiniti-y-mercedesbenz-en-aguascalientes-cerrara-en-mayo-de-2026) |
+| Kia México, Pesquería | Pesquería, NL | Autos (K3, K4) y el eléctrico EV3 | 2016 | 1.8 km | [fuente](https://www.gob.mx/se/prensa/participacion-del-secretario-de-economia-marcelo-ebrard-durante-la-demostracion-de-la-unidad-kia-sub-ev3) |
+| Toyota Motor Manufacturing de Baja California | Tijuana, BC | La pickup Tacoma | 2004 | 2.0 km | [fuente](https://global.toyota/en/company/profile/facilities/manufacturing-worldwide/north_america.html) |
+| Toyota Motor Manufacturing de Guanajuato | Apaseo el Grande, GTO | La pickup Tacoma | 2019 | 1.3 km | [fuente](https://global.toyota/en/company/profile/facilities/manufacturing-worldwide/north_america.html) |
+| BMW Group, planta San Luis Potosí | Villa de Reyes, SLP | Autos (Serie 3, Serie 2 Coupé, M2) | 2019 | 3.2 km | [fuente](https://www.bmwgroup-werke.com/san-luis-potosi/es/linea-del-tiempo.html) |
+| Mazda de México Vehicle Operation, Salamanca | Salamanca, GTO | Autos y SUV (Mazda2, Mazda3, CX-3, CX-30) | 2014 | 1.2 km | [fuente](https://www.mazda.mx/por-que-mazda/acerca-de-nosotros/planta-salamanca) |
+| Honda de México, planta Celaya | Celaya, GTO | SUV (HR-V, Acura ADX) | 2014 | 2.4 km | [fuente](https://rp.honda.mx/wp-content/documentos/556_HDM_cuatro_decadas_de_compromiso.pdf) |
+| Honda de México, planta El Salto | El Salto, JAL | Autos y SUV hasta 2020; hoy solo motocicletas | 1995 (hasta 2020-01) | 0.4 km | [fuente](https://rp.honda.mx/wp-content/documentos/556_HDM_cuatro_decadas_de_compromiso.pdf) |
+| Ford, planta de estampado y ensamble de Hermosillo | Hermosillo, SON | Bronco Sport y la pickup Maverick | 1986 | 2.5 km | [fuente](https://corporate.ford.com/operations/locations/global-plants/) |
+| Ford, planta Cuautitlán | Cuautitlán Izcalli, MEX | El eléctrico Mustang Mach-E (desde noviembre de 2020; antes, el Fiesta) | 1964 | 2.2 km | [fuente](https://corporate.ford.com/operations/locations/global-plants/) |
+| Stellantis, plantas de camiones y de vans de Saltillo | Saltillo, COAH | Pickups Ram y vans Ram ProMaster | 1995 | 2.8 km | [fuente](https://media.stellantisnorthamerica.com/newsrelease.do?id=319) |
+| Stellantis, planta Toluca ¹ | Toluca, MEX | SUV de Jeep (Compass, Wagoneer S, Cherokee) | 1968 | 1.2 km | [fuente](https://media.stellantisnorthamerica.com/newsrelease.do?id=319) |
+| Giant Motors Latinoamérica (JAC), Ciudad Sahagún ¹ | Tepeapulco, HGO | SUV y pickups JAC, armados con kits | 2017 | 1.2 km | [fuente](https://www.gob.mx/se/articulos/giant-motors-latinoamerica-anuncia-inversion-de-planta-automotriz-en-el-estado-de-hidalgo) |
+| T-MEX Park ¹ | Nextlalpan, MEX | Parque logístico privado junto al AIFA; su primer inquilino en operación es DHL Supply Chain (160,000 m² en 2026) | 2025 | 2.3 km | [fuente](https://fidepar.edomex.gob.mx/) |
+
+¹ Ubicación aproximada (estimación del juego): OpenStreetMap no tiene la planta con su nombre. Las
+demás salen de OpenStreetMap; ninguna fuente oficial da coordenadas.
+
+**Lo que producen**, del registro del INEGI ([RAIAVL](https://www.inegi.org.mx/datosprimarios/iavl/)), que da las cifras por
+marca y no por planta: la ficha de cada planta muestra las de su marca en el año del reloj.
+
+| Empresa | Producción 2018 | Exportación 2018 | Producción 2025 | Exportación 2025 |
+| --- | ---: | ---: | ---: | ---: |
+| General Motors de México | 834,414 | 811,954 | 857,431 | 822,858 |
+| Nissan Mexicana | 762,408 | 496,333 | 658,536 | 401,242 |
+| Stellantis México (antes FCA, Chrysler) | 639,022 | 630,967 | 396,281 | 336,149 |
+| Volkswagen de México | 435,373 | 377,437 | 335,716 | 273,410 |
+| Kia México | 294,600 | 231,695 | 288,100 | 217,440 |
+| Ford de México | 280,499 | 273,009 | 417,280 | 423,283 |
+| Toyota | 191,978 | 187,569 | 310,152 | 318,812 |
+| Audi México | 173,098 | 172,232 | 146,579 | 140,687 |
+| Mazda | 149,589 | 137,463 | 174,524 | 88,576 |
+| Honda de México | 147,158 | 130,542 | 191,700 | 216,701 |
+| Mercedes-Benz (en COMPAS) | 7,510 | 1,956 | 57,063 | 55,137 |
+| JAC (Giant Motors Latinoamérica) | 2,954 | 0 | 24,683 | 0 |
+| BMW Group | — | — | 95,449 | 91,490 |
+| **Total** | **3,918,603** | **3,451,157** | **3,953,494** | **3,385,785** |
+
+- **COMPAS** lleva las cifras de Mercedes-Benz; sus Infiniti cuentan en Nissan.
+- **Casi todas están junto al tren:** 21 de las 22 quedan a 5 km o menos de una vía en
+  operación de la red de 2018. La excepción es Nissan CIVAC, a 42 km.
+- **El tren de cada planta:** solo Mazda tiene espuela confirmada por una fuente oficial (el
+  Congreso de Guanajuato); de las demás no hay fuente, y la ficha no lo afirma.
+- **T-MEX Park** no es un Polo del Bienestar ni tiene dinero público: es un parque privado de Grupo
+  El-Mann que el gobierno federal listó en 2020 entre los proyectos con el sector privado. Su
+  primer inquilino en operación es DHL Supply Chain (160,000 m² en 2026, dicho de DHL). Su
+  superficie, sus empleos y su enlace de carga con el AIFA son dichos del desarrollador: el
+  aeropuerto no lo menciona, y no hay evidencia de espuela en operación.
+- **Fuera:** Foton (camiones), Zacua (100 autos) y BAIC, que el INEGI nunca registró, y las plantas
+  de motores (GM Toluca, Ford Chihuahua).
 
 ---
 

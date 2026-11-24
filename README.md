@@ -85,6 +85,14 @@ saltar al siguiente libre.
   arma en el servidor). Las
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, y abajo a la derecha
   solo el zoom y *Reencuadrar*. Colores e íconos compartidos: `map/simbolos.ts`.
+- **Grandes industrias privadas** (capa *Industrias*, `domain/industrias.ts`): las armadoras de
+  vehículos ligeros y T-MEX Park, visibles entre su fecha de inicio y la de cierre en los dos modos.
+  `scripts/industrias/plantas.mjs` tiene cada planta con sus fuentes; `buscar-osm.mjs` y
+  `buscar-overpass.mjs` las buscan en OpenStreetMap y `ubicar.mjs` fija su lugar
+  (`ubicaciones.json`); `gen-industrias.mjs` baja del INEGI (RAIAVL, API PxWeb) la producción y la
+  exportación anual por marca y escribe `datos/industrias.json`. La ficha de una planta da las
+  cifras de su marca en el año del reloj y su distancia a la vía en operación (`kmALaVia`). Por
+  ahora no mueven carga: es el primer paso hacia las cadenas de suministro.
 - Etiquetas con colisión: cada una prueba cuatro posiciones alrededor de su punto y gana la
   de mayor prioridad (puertos > capital del país > capitales > ciudades por población >
   estados > mares y países). Una ciudad portuaria (Veracruz, Mazatlán…) se etiqueta una sola

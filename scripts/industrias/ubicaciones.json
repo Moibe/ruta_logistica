@@ -1,0 +1,156 @@
+{
+ "vw-puebla": {
+  "lonLat": [
+   -98.254,
+   19.12471
+  ],
+  "de": "OpenStreetMap («Volkswagen de México»)"
+ },
+ "audi-san-jose-chiapa": {
+  "lonLat": [
+   -97.75553,
+   19.22064
+  ],
+  "de": "OpenStreetMap («Audi Factory»)"
+ },
+ "gm-silao": {
+  "lonLat": [
+   -101.38023,
+   20.94851
+  ],
+  "de": "OpenStreetMap («General Motors»)"
+ },
+ "gm-ramos-arizpe": {
+  "lonLat": [
+   -100.97699,
+   25.5061
+  ],
+  "de": "OpenStreetMap («General Motors»)"
+ },
+ "gm-san-luis-potosi": {
+  "lonLat": [
+   -100.87545,
+   21.98729
+  ],
+  "de": "OpenStreetMap (sus accesos «GM San Luis Potosí»)"
+ },
+ "nissan-a1": {
+  "lonLat": [
+   -102.283,
+   21.827
+  ],
+  "de": "aproximada (estimación del juego): OpenStreetMap no la tiene con su nombre"
+ },
+ "nissan-a2": {
+  "lonLat": [
+   -102.28044,
+   21.73613
+  ],
+  "de": "OpenStreetMap («Nissan Mexicana AGS»)"
+ },
+ "nissan-civac": {
+  "lonLat": [
+   -99.17292,
+   18.90801
+  ],
+  "de": "OpenStreetMap («Fabrica NISSAN Mexicana»)"
+ },
+ "compas": {
+  "lonLat": [
+   -102.29047,
+   21.73043
+  ],
+  "de": "OpenStreetMap («COMPAS - Cooperation Manufacturing Plant Aguascalientes»)"
+ },
+ "kia-pesqueria": {
+  "lonLat": [
+   -99.98956,
+   25.74564
+  ],
+  "de": "OpenStreetMap («KIA Motores Mexico»)"
+ },
+ "toyota-tijuana": {
+  "lonLat": [
+   -116.72009,
+   32.50061
+  ],
+  "de": "OpenStreetMap"
+ },
+ "toyota-guanajuato": {
+  "lonLat": [
+   -100.53933,
+   20.57355
+  ],
+  "de": "OpenStreetMap (la subestación «Planta Toyota», junto a la planta)"
+ },
+ "bmw-san-luis-potosi": {
+  "lonLat": [
+   -100.84917,
+   21.96853
+  ],
+  "de": "OpenStreetMap («BMW Planta San Luis Potosi»)"
+ },
+ "mazda-salamanca": {
+  "lonLat": [
+   -101.24004,
+   20.6116
+  ],
+  "de": "OpenStreetMap («Planta Mazda»)"
+ },
+ "honda-celaya": {
+  "lonLat": [
+   -100.77757,
+   20.47123
+  ],
+  "de": "OpenStreetMap («Honda de México»)"
+ },
+ "honda-el-salto": {
+  "lonLat": [
+   -103.25362,
+   20.53679
+  ],
+  "de": "OpenStreetMap («Planta Honda de México El Salto»)"
+ },
+ "ford-hermosillo": {
+  "lonLat": [
+   -110.91662,
+   29.01351
+  ],
+  "de": "OpenStreetMap («Ford Autos de Hermosillo S.A. de C.V.»)"
+ },
+ "ford-cuautitlan": {
+  "lonLat": [
+   -99.19193,
+   19.64342
+  ],
+  "de": "OpenStreetMap («Armadora Ford Motor Company»)"
+ },
+ "stellantis-saltillo": {
+  "lonLat": [
+   -101.10752,
+   25.26292
+  ],
+  "de": "OpenStreetMap («FCA Saltillo Van»)"
+ },
+ "stellantis-toluca": {
+  "lonLat": [
+   -99.598,
+   19.287
+  ],
+  "de": "aproximada (estimación del juego): OpenStreetMap no la tiene con su nombre"
+ },
+ "jac-sahagun": {
+  "lonLat": [
+   -98.58028,
+   19.77139
+  ],
+  "de": "OpenStreetMap: Ciudad Sahagún, la localidad (la planta no está con su nombre)"
+ },
+ "tmex-park": {
+  "lonLat": [
+   -99.07,
+   19.725
+  ],
+  "de": "aproximada (estimación del juego): en Nextlalpan, al poniente del AIFA, como lo describe el desarrollador"
+ }
+}

@@ -17,6 +17,7 @@ export type Capa =
   | 'aeropuertos'
   | 'ciudades'
   | 'polos'
+  | 'industrias'
   | 'energia'
   | 'refinerias'
   | 'plataformas'
@@ -43,6 +44,7 @@ class Tablero {
     aeropuertos: true,
     ciudades: true,
     polos: true,
+    industrias: true,
     energia: false,
     refinerias: true,
     plataformas: true,
