@@ -2740,6 +2740,36 @@ esa proporción, es **estimación del juego**: no hay cifra oficial de lo que se
 y en la realidad va por carretera. No se resta de la carga de nadie: la carga aérea no estaba en el
 tráfico del tren.
 
+### Las cadenas de suministro: la acerera que no se surte produce menos
+
+Las acereras de la cadena (AHMSA y las dos unidades de Ternium) ya no solo miden su abasto: **el
+acero que mandan por tren depende de cómo se surtieron**, con las mismas reglas del juego que las
+plataformas del Golfo:
+
+- guardan hasta 15 días de los insumos que les llegan por tren (la partida abre con 7.5);
+- cada hora usan lo que les toca de sus flujos; su **surtido** es qué parte de eso tuvieron, con
+  memoria de un mes;
+- su acero es el posible por el surtido, y **sin nada cae a la mitad** (también usan chatarra, gas y
+  mineral que llega por otros medios). En Realidad siempre están surtidas.
+
+**Cuánto acero.** En 2018 el tren movió 6,468,776 t de láminas y planchas y 2,646,656 t de fierro
+para construcción; sin los 2.7 millones de toneladas de lámina que entraron por Matamoros quedan unos
+6.4 millones de acero mexicano (ARTF). A cada acerera le toca su parte de la producción del país:
+AHMSA 4,652 y Ternium 3,515 de 18,811 miles de toneladas en 2016, la última cifra por empresa
+(CANACERO, en el anuario del SGM); la de Ternium, por partes iguales entre Monterrey y Puebla
+(**estimación del juego**). Eso da unas 1.59 millones de toneladas al año a AHMSA y 0.6 a cada
+unidad de Ternium, con todo surtido.
+
+**El acero es carga nacional:** espera en la estación de la acerera, hasta un mes de él, sube primero
+al tren que pasa y se entrega en la siguiente parada. Se resta de la carga genérica de su estado.
+
+**Qué tanto pide.** Ternium Monterrey espera unas 5,200 t diarias de pélets (Peña Colorada y Las
+Encinas): dos trenes llenos al día. Sin trenes de la cadena, en unos dos meses las tres acereras
+están al 25 % de surtido y su acero se acerca a la mitad.
+
+La ficha de cada acerera dice su acero al año contra el posible, su surtido del último mes, los
+insumos que tiene en reserva, el acero que espera y cuánto se han llevado tus trenes.
+
 ---
 
 ## 6. Red ferroviaria

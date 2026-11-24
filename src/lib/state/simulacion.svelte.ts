@@ -111,7 +111,7 @@ import {
   resumir,
 } from '$lib/domain/interior';
 import { DIAS_PATIO_POLO } from '$lib/domain/sectores';
-import { ARMADORAS, DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, autosAño, toneladasAño } from '$lib/domain/cadenas';
+import { ACERERAS, MEMORIA_DIAS, RESERVA_DIAS, aceroAño, insumosAño, ARMADORAS, DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, autosAño, toneladasAño } from '$lib/domain/cadenas';
 
 const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
 
@@ -262,6 +262,12 @@ class Simulacion {
   #patiosCadena = new Map<string, number>();
   /** Vehicles for export waiting at each carmaker's station, tonnes. */
   #patiosAutos = new Map<string, number>();
+  /** Rail inputs each steel mill has in store, tonnes, and how it was supplied in the last month (0 to 1). */
+  #reservasAcero = new Map<string, number>();
+  #surtidoAcero = new Map<string, number>(ACERERAS.map((a) => [a.id, 1]));
+  /** Steel waiting at each mill's station for a train, tonnes, and what the player's trains have taken. */
+  #patiosAcero = new Map<string, number>();
+  acero = $state.raw<Record<string, number>>({});
   /** Vehicles the player's trains have taken from each carmaker to an exit, tonnes. */
   autos = $state.raw<Record<string, number>>({});
   /** What the player's trains have delivered of each flow: tonnes and tonne-km, in all and by year. */
@@ -410,6 +416,11 @@ class Simulacion {
         this.barcos = barcos;
         for (const e of ESTADOS_EXPORTADORES) this.#bodegas.set(e, flujoDelEstado(e, añoDe(this.horas)) * 24 * 7);
         for (const e of ESTADOS_PRODUCTIVOS) this.#bodegasNacional.set(e, flujoNacional(e, añoDe(this.horas)) * 24 * 7);
+        for (const a of ACERERAS) {
+          const h = this.horas;
+          this.#reservasAcero.set(a.id, (insumosAño(a.id, h, añoDe(h)) / 365.25) * RESERVA_DIAS * 0.5);
+          this.#patiosAcero.set(a.id, (aceroAño(a.id, h, 1) / 365.25) * 7);
+        }
         for (const p of ARMADORAS) this.#patiosAutos.set(p.id, (autosAño(p, this.horas, añoDe(this.horas)) / 365.25) * 7);
         for (const f of FLUJOS) this.#patiosCadena.set(f.id, (toneladasAño(f, this.horas, añoDe(this.horas)) / 365.25) * 7);
         // The ports open with a week of their trade waiting.
@@ -971,9 +982,25 @@ class Simulacion {
       const h = ta / (365.25 * 24);
       this.#patiosCadena.set(f.id, Math.min((this.#patiosCadena.get(f.id) ?? 0) + h * horas, h * 24 * DIAS_PATIO_CADENA));
     }
+    // The steel mills use up their inputs; how they were supplied sets the steel they make.
+    const aceroEstado = new Map<string, number>();
+    for (const a of ACERERAS) {
+      const pide = (insumosAño(a.id, this.horas, año) / (365.25 * 24)) * horas;
+      const hay = this.#reservasAcero.get(a.id) ?? 0;
+      const cubierto = pide > 0 ? Math.min(1, hay / pide) : 1;
+      this.#reservasAcero.set(a.id, Math.max(0, hay - pide));
+      const s = this.#surtidoAcero.get(a.id) ?? 1;
+      const peso = Math.min(1, horas / (24 * MEMORIA_DIAS));
+      const surtido = this.modo === 'realidad' ? 1 : s + (cubierto - s) * peso;
+      this.#surtidoAcero.set(a.id, surtido);
+      const h = aceroAño(a.id, this.horas, surtido) / (365.25 * 24);
+      const estado = SITIOS_POR_CLAVE.get(`industria:${a.id}`)?.estado ?? '';
+      aceroEstado.set(estado, (aceroEstado.get(estado) ?? 0) + aceroAño(a.id, this.horas, 1) / (365.25 * 24));
+      this.#patiosAcero.set(a.id, Math.min((this.#patiosAcero.get(a.id) ?? 0) + h * horas, h * 24 * DIAS_PATIO_CADENA));
+    }
     for (const e of ESTADOS_PRODUCTIVOS) {
-      // The chains' domestic flows come out of the state's generic cargo: the yearbook's total stays.
-      const enCadena = (FLUJOS_DEL_ESTADO.get(e) ?? []).reduce((s, x) => s + toneladasAño(x, this.horas, año), 0) / (365.25 * 24);
+      // The chains' domestic flows and the mills' steel come out of the state's generic cargo: the yearbook's total stays.
+      const enCadena = (FLUJOS_DEL_ESTADO.get(e) ?? []).reduce((s, x) => s + toneladasAño(x, this.horas, año), 0) / (365.25 * 24) + (aceroEstado.get(e) ?? 0);
       const f = Math.max(0, flujoNacional(e, año) - enCadena);
       this.#bodegasNacional.set(e, Math.min((this.#bodegasNacional.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
     }
@@ -1072,6 +1099,11 @@ class Simulacion {
         [id]: { t: c.t + (llega ? ton : 0), tkm: c.tkm + ton * km, porAño: llega ? { ...c.porAño, [año]: (c.porAño[año] ?? 0) + ton } : c.porAño },
       };
       if (llega) {
+        const planta = destino.startsWith('industria:') ? destino.slice('industria:'.length) : '';
+        if (ACERERAS.some((a) => a.id === planta)) {
+          const tope = (insumosAño(planta, this.horas, añoDe(this.horas)) / 365.25) * RESERVA_DIAS;
+          this.#reservasAcero.set(planta, Math.min(tope, (this.#reservasAcero.get(planta) ?? 0) + ton));
+        }
         t.entregadoCadena += ton;
         delete t.cadena[id];
       }
@@ -1085,6 +1117,17 @@ class Simulacion {
       this.#patiosCadena.set(f.id, hay - sube);
       t.cadena[f.id] = (t.cadena[f.id] ?? 0) + sube;
     }
+  }
+
+  /** How a steel mill was supplied in the last month (0 to 1), its inputs in store and its steel waiting, tonnes. */
+  surtidoAcero(id: string): number {
+    return this.modo === 'realidad' ? 1 : (this.#surtidoAcero.get(id) ?? 1);
+  }
+  reservaAcero(id: string): number {
+    return this.#reservasAcero.get(id) ?? 0;
+  }
+  enPatioAcero(id: string): number {
+    return this.#patiosAcero.get(id) ?? 0;
   }
 
   /** Vehicles waiting at a carmaker's station, tonnes. */
@@ -1397,6 +1440,17 @@ class Simulacion {
     const estado = SITIOS_POR_CLAVE.get(destino)?.estado;
     if (!estado) return;
     t.cargaNacional += this.#cargarDelPolo(t, destino, 'nacional');
+    // A steel mill's steel boards first: it's domestic cargo, delivered at the next stop.
+    if (destino.startsWith('industria:')) {
+      const id = destino.slice('industria:'.length);
+      const hayAcero = this.#patiosAcero.get(id) ?? 0;
+      const subeAcero = Math.min(this.#espacioTren(t), hayAcero);
+      if (subeAcero >= 1) {
+        this.#patiosAcero.set(id, hayAcero - subeAcero);
+        t.cargaNacional += subeAcero;
+        this.acero = { ...this.acero, [id]: (this.acero[id] ?? 0) + subeAcero };
+      }
+    }
     const hay = this.#bodegasNacional.get(estado) ?? 0;
     const sube = Math.min(this.#espacioTren(t), hay);
     if (sube <= 0) return;

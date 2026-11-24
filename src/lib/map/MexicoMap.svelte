@@ -10,7 +10,7 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, kmALaVia, type Dueño } from '$lib/domain/red';
   import { MINAS, NOMBRE_MINERAL, cifraMina, type Mina } from '$lib/domain/mineria';
-  import { FLUJOS, NOMBRE_PRODUCTO, autosAño, toneladasAño } from '$lib/domain/cadenas';
+  import { ACERERAS, FLUJOS, NOMBRE_PRODUCTO, aceroAño, autosAño, toneladasAño } from '$lib/domain/cadenas';
   import { EMPRESAS_INDUSTRIA, INDUSTRIAS, PARCIAL_RAIAVL, añoRaiavl, plantasDe, type Industria } from '$lib/domain/industrias';
   import { obraVia } from '$lib/domain/obrasVia';
   import { clavePolo, estadoReal, fechaEnPalabras, fichaReal, TEXTO_ETAPA } from '$lib/domain/realidad';
@@ -3185,6 +3185,12 @@
         {@const llego = llegan.reduce((x, f) => x + (sim.cadena[f.id]?.porAño[String(año)] ?? 0), 0)}
         <span class="tip-rail">
           Abasto por tren en {año}: {fmt.format(Math.round(llego))} t de {fmt.format(Math.round(espera))} esperadas ({Math.round((100 * llego) / Math.max(1, espera))} %) · {[...new Set(llegan.map((f) => NOMBRE_PRODUCTO[f.producto]))].join(', ')}
+        </span>
+      {/if}
+      {#if ACERERAS.some((a) => a.id === p.id) && aceroAño(p.id, sim.horas, 1) > 0}
+        {@const surtido = sim.surtidoAcero(p.id)}
+        <span class="tip-rail">
+          Acero por tren: {fmt.format(Math.round(aceroAño(p.id, sim.horas, surtido) / 1000))} mil t al año de {fmt.format(Math.round(aceroAño(p.id, sim.horas, 1) / 1000))} posibles · surtida el último mes al {Math.round(surtido * 100)} % · {fmt.format(Math.round(sim.reservaAcero(p.id)))} t de insumos en reserva; esperan {fmt.format(Math.round(sim.enPatioAcero(p.id)))} t de acero{sim.acero[p.id] ? `; tus trenes han llevado ${fmt.format(Math.round(sim.acero[p.id]))} t` : ''}
         </span>
       {/if}
       {#if p.tipo === 'armadora' && autosAño(p, sim.horas, añoDe(sim.horas)) > 0}

@@ -204,6 +204,37 @@ export function autosAño(p: Industria, horas: number, año: number): number {
 
 export const ARMADORAS = INDUSTRIAS.filter((p) => p.tipo === 'armadora');
 
+// ---- step 3: what the steel mills make depends on what reaches them ---------------------------
+
+/**
+ * Domestic steel by train in 2018 (ARTF, tables 6-1 and 6-2): 6,468,776 t of sheets and plates plus
+ * 2,646,656 t of construction bar, less the 2.7 million tonnes of sheet imported by Matamoros.
+ */
+export const T_ACERO_TREN = 6_468_776 + 2_646_656 - 2_700_000;
+/** Each mill's share of the country's steel (CANACERO in the SGM yearbook, 2016, the last by company: AHMSA 4,652 and Ternium 3,515 of 18,811 thousand tonnes); Ternium's split equally between its two units (estimate). */
+export const ACERERAS: { id: string; parte: number; hasta?: string }[] = [
+  { id: 'ahmsa', parte: 4652 / 18811, hasta: HASTA_AHMSA },
+  { id: 'ternium-guerrero', parte: 3515 / 18811 / 2 },
+  { id: 'ternium-puebla', parte: 3515 / 18811 / 2 },
+];
+/** Rules of the game, as the offshore complexes': a mill keeps up to 15 days of its rail inputs; it makes steel by how it was supplied in the last month, and with nothing, half. */
+export const RESERVA_DIAS = 15;
+export const MEMORIA_DIAS = 30;
+export const PISO_ACERO = 0.5;
+export const factorAcero = (surtido: number) => PISO_ACERO + (1 - PISO_ACERO) * Math.max(0, Math.min(1, surtido));
+
+/** Tonnes a year of rail inputs a plant expects now (its chain flows). */
+export function insumosAño(planta: string, horas: number, año: number): number {
+  return FLUJOS.filter((f) => f.destino === `industria:${planta}`).reduce((s, f) => s + toneladasAño(f, horas, año), 0);
+}
+
+/** Tonnes a year of steel a mill sends by train at a game hour, given how it was supplied. */
+export function aceroAño(id: string, horas: number, surtido: number): number {
+  const a = ACERERAS.find((x) => x.id === id);
+  if (!a || (a.hasta && horas >= horasDeFecha(a.hasta))) return 0;
+  return T_ACERO_TREN * a.parte * factorAcero(surtido);
+}
+
 /** The domestic flows that load in each state, to take out of its generic domestic cargo. */
 export const FLUJOS_DEL_ESTADO = new Map<string, Flujo[]>();
 for (const f of FLUJOS) {
