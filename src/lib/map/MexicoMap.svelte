@@ -9,6 +9,7 @@
   import { CLASES_BARCO, fueraDelMapa } from '$lib/domain/barcos';
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, kmALaVia, type Dueño } from '$lib/domain/red';
+  import { MINAS, NOMBRE_MINERAL, cifraMina, type Mina } from '$lib/domain/mineria';
   import { EMPRESAS_INDUSTRIA, INDUSTRIAS, PARCIAL_RAIAVL, añoRaiavl, plantasDe, type Industria } from '$lib/domain/industrias';
   import { obraVia } from '$lib/domain/obrasVia';
   import { clavePolo, estadoReal, fechaEnPalabras, fichaReal, TEXTO_ETAPA } from '$lib/domain/realidad';
@@ -75,7 +76,7 @@
   import { tablero } from '$lib/state/tablero.svelte';
   import { duracion, estadoUnidad, km as fmtKm } from '$lib/ui/formato';
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
-  import { COLOR_DUEÑO, COLOR_USO, INDUSTRIA, AEROPUERTO, COMBUSTIBLE, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
+  import { COLOR_DUEÑO, COLOR_USO, INDUSTRIA, MINERIA, AEROPUERTO, COMBUSTIBLE, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
   import { abastoDiario, BASES_ABASTO, CAYO_ARCAS, COMPLEJOS, produccionComplejo, type Complejo } from '$lib/domain/plataformas';
   import { comercioDe, NOMBRE_CARGA, TIPOS_CARGA, type TipoCarga } from '$lib/domain/comercioMar';
 
@@ -321,7 +322,13 @@
   /** The layers live in `tablero`: the layers panel toggles them, the map draws them. */
   const layers = tablero.capas;
   /** A big private industry is on the board from the day it starts working until the day it stops. */
-  const industriaVisible = (p: Industria) => sim.horas >= horasDeFecha(p.desde) && (!p.hasta || sim.horas < horasDeFecha(p.hasta));
+  const industriaVisible = (p: { desde?: string; hasta?: string }) => (!p.desde || sim.horas >= horasDeFecha(p.desde)) && (!p.hasta || sim.horas < horasDeFecha(p.hasta));
+  const TIPO_INDUSTRIA: Record<Industria['tipo'], string> = {
+    armadora: 'Armadora de vehículos · industria privada',
+    logistica: 'Parque logístico · privado',
+    acerera: 'Siderúrgica · industria privada',
+    metalurgica: 'Fundición y refinería · industria privada',
+  };
   /** Its company's figures at the clock's year, and whether that year is the register's partial one. */
   function cifrasIndustria(p: Industria) {
     const e = p.empresa ? EMPRESAS_INDUSTRIA[p.empresa] : null;
@@ -409,6 +416,7 @@
     | { kind: 'planta'; indice: number }
     | { kind: 'refineria'; refineria: Refineria }
     | { kind: 'industria'; industria: Industria }
+    | { kind: 'mina'; mina: Mina }
     | { kind: 'terminal'; terminal: Terminal }
     | { kind: 'complejo'; complejo: Complejo }
     | { kind: 'cayo-arcas' }
@@ -493,6 +501,7 @@
   let plantaPts: [number, number][] = [];
   let refineriaPts: [number, number][] = [];
   let industriaPts: [number, number][] = [];
+  let minaPts: [number, number][] = [];
   let terminalPts: [number, number][] = [];
   let complejoPts: [number, number][] = [];
   let cayoArcasPt: [number, number] = [NaN, NaN];
@@ -567,6 +576,7 @@
     plantaPts = LONLAT_PLANTAS.map((p) => projection!(p) ?? [NaN, NaN]);
     refineriaPts = REFINERIAS.map((r) => projection!(r.lonLat) ?? [NaN, NaN]);
     industriaPts = INDUSTRIAS.map((r) => projection!(r.lonLat) ?? [NaN, NaN]);
+    minaPts = MINAS.map((r) => projection!(r.lonLat) ?? [NaN, NaN]);
     terminalPts = TERMINALES.map((t) => projection!(t.lonLat) ?? [NaN, NaN]);
     complejoPts = COMPLEJOS.map((c) => projection!(c.lonLat) ?? [NaN, NaN]);
     cayoArcasPt = projection!(CAYO_ARCAS.lonLat) ?? [NaN, NaN];
@@ -1569,6 +1579,43 @@
       });
     }
 
+    // The big mines: two peaks. Like the industries, they aren't stops yet.
+    if (layers.mineria) {
+      MINAS.forEach((m, i) => {
+        if (!industriaVisible(m)) return;
+        const x = sx(minaPts[i]);
+        const y = sy(minaPts[i]);
+        if (!onScreen(x, y)) return;
+        const hot = hovered?.kind === 'mina' && hovered.mina.id === m.id;
+        const s = 4.6 * (hot ? 1.15 : 1);
+        ctx.globalAlpha = tablero.trazando ? 0.3 : 1;
+        ctx.beginPath();
+        ctx.moveTo(x - s, y + s * 0.7);
+        ctx.lineTo(x - s * 0.35, y - s * 0.8);
+        ctx.lineTo(x + s * 0.05, y - s * 0.05);
+        ctx.lineTo(x + s * 0.35, y - s * 0.45);
+        ctx.lineTo(x + s, y + s * 0.7);
+        ctx.closePath();
+        ctx.fillStyle = hot ? '#ffffff' : MINERIA;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
+        ctx.lineWidth = 0.9;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        taken.push([x - s - 1, y - s - 1, x + s + 1, y + s + 1]);
+        if (tablero.trazando) return;
+        labels.push({
+          text: m.corto,
+          spots: spotsAround(x, y, s + 1.5),
+          size: 9.5,
+          font: '600 9.5px Inter, "Segoe UI", system-ui, sans-serif',
+          color: hot ? '#ffffff' : 'rgba(214, 211, 209, 0.92)',
+          priority: (hot ? 1e9 : 0) + 2.1e7,
+          halo: true,
+        });
+      });
+    }
+
     // The big private industries: a factory with a sawtooth roof (a warehouse for a logistics park).
     // They aren't stops: they fade back while a route is laid out.
     if (layers.industrias) {
@@ -2242,6 +2289,16 @@
         }
       });
     }
+    if (layers.mineria && !tablero.trazando) {
+      MINAS.forEach((m, i) => {
+        if (!industriaVisible(m)) return;
+        const d = Math.hypot(transform.applyX(minaPts[i][0]) - mx, transform.applyY(minaPts[i][1]) - my);
+        if (d < 9 && d < bestD) {
+          best = { kind: 'mina', mina: m };
+          bestD = d;
+        }
+      });
+    }
     if (layers.industrias && !tablero.trazando) {
       INDUSTRIAS.forEach((p, i) => {
         if (!industriaVisible(p)) return;
@@ -2416,6 +2473,8 @@
                   ? `ducto:${t.ducto.id}`
                 : t.kind === 'industria'
                   ? `industria:${t.industria.id}`
+                : t.kind === 'mina'
+                  ? `mina:${t.mina.id}`
                 : `estado:${t.estado.clave}${t.region ? `:${t.region}` : ''}`;
 
   /** The site key of a target, if it is a site. */
@@ -2522,6 +2581,8 @@
               ? target.complejo.lonLat
               : target.kind === 'industria'
                 ? target.industria.lonLat
+                : target.kind === 'mina'
+                  ? target.mina.lonLat
                 : target.ciudad.lonLat;
     const p = projection(lonLat);
     if (p) flyTo(p[0], p[1], Math.max(transform.k, target.kind === 'puerta' ? 3 : 9));
@@ -2755,6 +2816,7 @@
     layers.puertos;
     layers.aeropuertos;
     layers.industrias;
+    layers.mineria;
     layers.ciudades;
     layers.polos;
     layers.combustibles;
@@ -3065,13 +3127,31 @@
           ({fmt.format(Math.round(antes))} t)
         </span>
       {/if}
+    {:else if hovered.kind === 'mina'}
+      {@const m = hovered.mina}
+      {@const c = cifraMina(m, añoDe(sim.horas))}
+      {@const via = sim.red ? kmALaVia(sim.red, m.lonLat) : null}
+      <span class="label tip-kind" style:color={MINERIA}>{m.mineral === 'sal' ? 'Salina' : `Mina de ${NOMBRE_MINERAL[m.mineral]}`}</span>
+      <strong>{m.nombre}</strong>
+      <span class="tip-sub">{m.municipio}, {estadoNombre.get(m.estado) ?? m.estado}{m.desde ? ` · desde ${m.desde.slice(0, 4)}` : ''}</span>
+      <span class="tip-sub">{m.empresa}</span>
+      <span class="tip-rail">{m.que}</span>
+      {#if c}
+        <span class="tip-rail">{fmt.format(c.toneladas)} toneladas de {m.unidad} en {c.año}</span>
+      {/if}
+      {#if m.destino}<span class="tip-sub">{m.destino}</span>{/if}
+      {#if via !== null}
+        <span class="tip-sub">{via <= 2 ? 'Junto a la vía férrea' : `Vía férrea en operación a ${Math.round(via)} km`}</span>
+      {/if}
+      {#if m.nota}<span class="tip-sub">{m.nota}</span>{/if}
     {:else if hovered.kind === 'industria'}
       {@const p = hovered.industria}
       {@const c = cifrasIndustria(p)}
       {@const via = sim.red ? kmALaVia(sim.red, p.lonLat) : null}
-      <span class="label tip-kind" style:color={INDUSTRIA}>{p.tipo === 'armadora' ? 'Armadora de vehículos · industria privada' : 'Parque logístico · privado'}</span>
+      {@const surten = MINAS.filter((m) => industriaVisible(m) && m.destinos.includes(`industria:${p.id}`))}
+      <span class="label tip-kind" style:color={INDUSTRIA}>{TIPO_INDUSTRIA[p.tipo]}</span>
       <strong>{p.nombre}</strong>
-      <span class="tip-sub">{p.municipio}, {estadoNombre.get(p.estado) ?? p.estado} · desde {p.desde.slice(0, 4)}</span>
+      <span class="tip-sub">{p.municipio}, {estadoNombre.get(p.estado) ?? p.estado}{p.desde ? ` · desde ${p.desde.slice(0, 4)}` : ''}</span>
       <span class="tip-rail">{p.que}</span>
       {#if c}
         <span class="tip-rail">
@@ -3081,6 +3161,9 @@
       {/if}
       {#if via !== null}
         <span class="tip-sub">{via <= 2 ? 'Junto a la vía férrea' : `Vía férrea en operación a ${Math.round(via)} km`}</span>
+      {/if}
+      {#if surten.length}
+        <span class="tip-sub">La surten: {surten.map((m) => `${m.corto} (${NOMBRE_MINERAL[m.mineral]})`).join(', ')}</span>
       {/if}
       {#if p.tren}<span class="tip-sub">{p.tren}</span>{/if}
       {#if p.nota}<span class="tip-sub">{p.nota}</span>{/if}

@@ -2506,13 +2506,14 @@ Una capa aparte (*Industrias*, en el panel de capas): plantas y parques reales q
 construye, pero que viven de su red. Están en el tablero desde el día en que empezaron a trabajar
 y hasta el día en que pararon, en el juego y en Realidad, como las centrales eléctricas privadas.
 Es el primer paso hacia las cadenas de suministro: por ahora son fichas (dónde están, qué hacen,
-cuánto producen); todavía no mueven carga propia.
+cuánto producen, qué minas las surten); todavía no mueven carga propia.
 
 **Qué entra, por ahora:** las 21 armadoras de vehículos ligeros que trabajaron desde
-diciembre de 2018 y un parque logístico, T-MEX Park, junto al AIFA. Al empezar la partida hay 19
-en el mapa; después llegan Toyota Guanajuato (diciembre de 2019), BMW (abril de 2019) y T-MEX Park
-(agosto de 2025), y se van Honda El Salto como armadora (enero de 2020), Nissan CIVAC (marzo de
-2026) y COMPAS (mayo de 2026).
+diciembre de 2018; un parque logístico, T-MEX Park, junto al AIFA; y las 5 plantas que reciben el
+mineral de la capa de [minería](#minería): las acereras integradas (AHMSA, ArcelorMittal y Ternium en
+Monterrey y en Puebla) y el complejo de cobre de La Caridad. Al empezar la partida hay 24 en el
+mapa; después llegan BMW (abril de 2019), Toyota Guanajuato (diciembre de 2019) y T-MEX Park (agosto de 2025), y se van
+Honda El Salto como armadora (enero de 2020), AHMSA (diciembre de 2022), Nissan CIVAC (marzo de 2026) y COMPAS (mayo de 2026).
 
 | Planta | Municipio, estado | Qué hace | Desde | Vía en operación (2018) | Fuente |
 | --- | --- | --- | --- | ---: | --- |
@@ -2537,12 +2538,17 @@ en el mapa; después llegan Toyota Guanajuato (diciembre de 2019), BMW (abril de
 | Stellantis, plantas de camiones y de vans de Saltillo | Saltillo, COAH | Pickups Ram y vans Ram ProMaster | 1995 | 2.8 km | [fuente](https://media.stellantisnorthamerica.com/newsrelease.do?id=319) |
 | Stellantis, planta Toluca ¹ | Toluca, MEX | SUV de Jeep (Compass, Wagoneer S, Cherokee) | 1968 | 1.2 km | [fuente](https://media.stellantisnorthamerica.com/newsrelease.do?id=319) |
 | Giant Motors Latinoamérica (JAC), Ciudad Sahagún ¹ | Tepeapulco, HGO | SUV y pickups JAC, armados con kits | 2017 | 1.2 km | [fuente](https://www.gob.mx/se/articulos/giant-motors-latinoamerica-anuncia-inversion-de-planta-automotriz-en-el-estado-de-hidalgo) |
+| Altos Hornos de México, siderúrgicas 1 y 2 | Monclova, COAH | Siderúrgica integrada: 4.52 millones de toneladas de acero líquido en 2018, con su propio hierro (Hércules, Cerro de Mercado) y su propio carbón (MIMOSA) | — (hasta 2022-12) | 1.3 km | [fuente](https://www.ahmsa.com/assets/files/infromacion_financiera/es/2019/Reporte_Anual_AHMSA_2019.pdf) |
+| ArcelorMittal México, Lázaro Cárdenas | Lázaro Cárdenas, MICH | Acería junto al puerto, con alto horno y reducción directa; recibe mineral de Las Truchas por ferroducto y de Peña Colorada por barco | — | 1.9 km | [fuente](https://www.sec.gov/Archives/edgar/data/0001243429/000124342925000017/mt-20241231.htm) |
+| Ternium México, unidad Guerrero | San Nicolás de los Garza, NL | Acería de reducción directa y horno eléctrico; su mineral viene por tren de Las Encinas y Peña Colorada | — | 0.6 km | [fuente](https://www.sec.gov/Archives/edgar/data/1342874/000134287425000024/tx-20241231.htm) |
+| Ternium México, unidad Puebla | San Miguel Xoxtla, PUE | Acería de reducción directa y horno eléctrico; su mineral viene por tren de Las Encinas y Peña Colorada | — | 11.3 km | [fuente](https://www.sec.gov/Archives/edgar/data/1342874/000134287425000024/tx-20241231.htm) |
+| Complejo metalúrgico La Caridad | Nacozari de García, SON | Fundición, refinería y planta de alambrón de cobre: fundió 1.04 millones de toneladas de concentrado en 2018 y dio 239 mil de cátodos | 1986 | 3.3 km | [fuente](https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf) |
 | T-MEX Park ¹ | Nextlalpan, MEX | Parque logístico privado junto al AIFA; su primer inquilino en operación es DHL Supply Chain (160,000 m² en 2026) | 2025 | 2.3 km | [fuente](https://fidepar.edomex.gob.mx/) |
 
 ¹ Ubicación aproximada (estimación del juego): OpenStreetMap no tiene la planta con su nombre. Las
 demás salen de OpenStreetMap; ninguna fuente oficial da coordenadas.
 
-**Lo que producen**, del registro del INEGI ([RAIAVL](https://www.inegi.org.mx/datosprimarios/iavl/)), que da las cifras por
+**Lo que producen las armadoras**, del registro del INEGI ([RAIAVL](https://www.inegi.org.mx/datosprimarios/iavl/)), que da las cifras por
 marca y no por planta: la ficha de cada planta muestra las de su marca en el año del reloj.
 
 | Empresa | Producción 2018 | Exportación 2018 | Producción 2025 | Exportación 2025 |
@@ -2563,17 +2569,86 @@ marca y no por planta: la ficha de cada planta muestra las de su marca en el añ
 | **Total** | **3,918,603** | **3,451,157** | **3,953,494** | **3,385,785** |
 
 - **COMPAS** lleva las cifras de Mercedes-Benz; sus Infiniti cuentan en Nissan.
-- **Casi todas están junto al tren:** 21 de las 22 quedan a 5 km o menos de una vía en
-  operación de la red de 2018. La excepción es Nissan CIVAC, a 42 km.
-- **El tren de cada planta:** solo Mazda tiene espuela confirmada por una fuente oficial (el
+- **Casi todas están junto al tren:** 25 de las 27 quedan a 5 km o menos de una vía en
+  operación de la red de 2018. Las excepciones son Nissan CIVAC, a 42 km, y Ternium
+  Puebla, a 11 km, aunque Ternium dice que su mineral le llega por tren: a la red del
+  juego le falta esa espuela.
+- **El tren de cada armadora:** solo Mazda tiene espuela confirmada por una fuente oficial (el
   Congreso de Guanajuato); de las demás no hay fuente, y la ficha no lo afirma.
 - **T-MEX Park** no es un Polo del Bienestar ni tiene dinero público: es un parque privado de Grupo
   El-Mann que el gobierno federal listó en 2020 entre los proyectos con el sector privado. Su
   primer inquilino en operación es DHL Supply Chain (160,000 m² en 2026, dicho de DHL). Su
   superficie, sus empleos y su enlace de carga con el AIFA son dichos del desarrollador: el
   aeropuerto no lo menciona, y no hay evidencia de espuela en operación.
-- **Fuera:** Foton (camiones), Zacua (100 autos) y BAIC, que el INEGI nunca registró, y las plantas
-  de motores (GM Toluca, Ford Chihuahua).
+- **Las acereras y la fundición** solo tienen cifras de sus empresas (reportes anuales); la ficha
+  dice qué minas del tablero las surten. AHMSA paró en diciembre de 2022 y está en quiebra (prensa).
+- **Fuera:** Foton (camiones), Zacua (100 autos) y BAIC, que el INEGI nunca registró; las plantas
+  de motores (GM Toluca, Ford Chihuahua); y el Centro Industrial de Ternium en Pesquería, que hoy
+  lamina planchón importado y cuya acería no arranca antes de 2027 (dicho de la empresa).
+
+### Minería
+
+Otra capa (*Minería*, en el panel de capas): las grandes minas de carga pesada. Son el primer
+eslabón de las cadenas de suministro: su mineral es materia prima de otras industrias del tablero
+(las acereras, la fundición de cobre, las carboeléctricas de la CFE) o sale por sus puertos. Como
+las industrias, están en el tablero desde que empezaron hasta que pararon, en el juego y en
+Realidad, y por ahora son fichas: qué sacan, cuánto, a dónde lo mandan; todavía no mueven carga.
+
+**Qué entra, por ahora:** cuatro minerales que se mueven en volumen y alimentan a otras industrias
+del mapa (hierro, carbón, cobre y sal) en 12 fichas; el oro y la plata vienen después. Al empezar la
+partida están las 12; se van MICARE en junio de 2020; Hércules, Cerro de Mercado y MIMOSA en diciembre de 2022.
+
+| Mina | Mineral | Empresa | Municipio, estado | Cifra en millones de toneladas | La reciben | Desde | Vía en operación (2018) | Fuente |
+| --- | --- | --- | --- | --- | --- | --- | ---: | --- |
+| Peña Colorada | Hierro | Consorcio Minero Benito Juárez Peña Colorada (Ternium y ArcelorMittal, mitad y mitad) | Minatitlán, COL | pélets y concentrado vendibles: 4.00 (2018) → 2.80 (2024) | puerto de Manzanillo, Ternium Monterrey, Ternium Puebla, ArcelorMittal | 1974 | 36.7 km | [fuente](https://www.sec.gov/Archives/edgar/data/1342874/000134287425000024/tx-20241231.htm) |
+| Las Encinas, peletizadora de Alzada | Hierro | Las Encinas (Ternium) | Cuauhtémoc, COL | pélets vendibles: 1.80 (2018) → 1.60 (2024) | Ternium Monterrey, Ternium Puebla | 1970 | 0.3 km | [fuente](https://www.sec.gov/Archives/edgar/data/1342874/000134287425000024/tx-20241231.htm) |
+| Las Truchas ¹ | Hierro | ArcelorMittal México | Lázaro Cárdenas, MICH | concentrado, trozo y finos: 1.10 (2018) → 1.00 (2025) | ArcelorMittal | — | 16.9 km | [fuente](https://www.sec.gov/Archives/edgar/data/0001243429/000124342925000017/mt-20241231.htm) |
+| Hércules (con La Perla) ¹ | Hierro | Minera del Norte (AHMSA) | Sierra Mojada, COAH | concentrado: 3.09 (2017) → 3.17 (2019) | AHMSA | — (hasta 2022-12) | 80.9 km | [fuente](https://www.ahmsa.com/assets/files/infromacion_financiera/es/2019/Reporte_Anual_AHMSA_2019.pdf) |
+| Cerro de Mercado | Hierro | Minera del Norte (AHMSA) | Durango, DGO | concentrado: 0.24 (2017) → 0.31 (2019) | AHMSA | — (hasta 2022-12) | 2.3 km | [fuente](https://www.ahmsa.com/assets/files/infromacion_financiera/es/2019/Reporte_Anual_AHMSA_2019.pdf) |
+| MICARE (Minera Carbonífera Río Escondido) ¹ | Carbón | Minera del Norte (AHMSA) | Nava, COAH | carbón térmico: 6.54 (2017) → 4.59 (2019) | carboeléctricas de Nava (CFE) | — (hasta 2020-06) | 3.6 km | [fuente](https://www.ahmsa.com/assets/files/infromacion_financiera/es/2019/Reporte_Anual_AHMSA_2019.pdf) |
+| MIMOSA (Minerales Monclova) ¹ | Carbón | Minera del Norte (AHMSA) | Múzquiz, COAH | carbón (metalúrgico y térmico): 3.08 (2017) → 2.68 (2019) | AHMSA, carboeléctricas de Nava (CFE) | — (hasta 2022-12) | 1.4 km | [fuente](https://www.ahmsa.com/assets/files/infromacion_financiera/es/2019/Reporte_Anual_AHMSA_2019.pdf) |
+| Productores de la Región Carbonífera | Carbón | Decenas de micro, pequeños y medianos productores | Sabinas, San Juan de Sabinas, Múzquiz y Progreso, COAH | carbón térmico entregado o contratado: — | carboeléctricas de Nava (CFE) | — | 0.5 km | [fuente](https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/MesaCarb%C3%B3n.pdf) |
+| Buenavista del Cobre (Cananea) | Cobre | Southern Copper (Grupo México) | Cananea, SON | concentrado de cobre: 1.37 (2018) → 1.48 (2025) | Fundición La Caridad, puerto de Guaymas | 1899 | 4.9 km | [fuente](https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf) |
+| La Caridad | Cobre | Mexicana de Cobre (Southern Copper, Grupo México) | Nacozari de García, SON | concentrado de cobre: 0.45 (2018) → 0.44 (2025) | Fundición La Caridad | 1979 | 14.5 km | [fuente](https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf) |
+| El Boleo | Cobre | Minera y Metalúrgica del Boleo (mayoría de la coreana KOMIR) | Mulegé, BCS | cobre: — | — | 2015 | 150.9 km | [fuente](https://www.sgm.gob.mx/productos/pdf/Anuario_2018_Edicion_2019.pdf) |
+| Exportadora de Sal, Guerrero Negro | Sal | Exportadora de Sal (paraestatal: 75 % FIFOMI y 25 % SGM desde 2024) | Mulegé, BCS | sal producida: 7.20 (2018) → 4.10 (2025) | — | 1954 | 318.1 km | [fuente](https://www.cuentapublica.hacienda.gob.mx/) |
+
+¹ Ubicación estimada (estimación del juego): OpenStreetMap no tiene la mina con su nombre; su ficha
+dice de dónde sale el punto (el tajo sin nombre junto al pueblo minero, o el pueblo). Las demás son
+la mina o la planta con su nombre en OpenStreetMap. Los municipios se comprobaron con los límites de
+OpenStreetMap.
+
+**Cuánto produce el país**, en toneladas, del [anuario del Servicio Geológico Mexicano](https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf)
+con cifras de la Dirección General de Minas (2024, preliminar). El hierro es contenido metálico en
+mina:
+
+| Año | Hierro | Carbón | Cobre | Sal |
+| --- | ---: | ---: | ---: | ---: |
+| 2018 | 14,021,344 | 6,772,528 | 696,580 | 9,392,050 |
+| 2019 | 17,218,785 | 6,175,726 | 713,704 | 8,845,240 |
+| 2020 | 17,957,645 | 2,185,295 | 800,316 | 9,084,859 |
+| 2021 | 22,384,351 | 2,180,463 | 782,136 | 7,001,505 |
+| 2022 | 18,272,230 | 1,875,720 | 828,180 | 7,914,780 |
+| 2023 | 23,639,214 | 531,904 | 778,839 | 7,686,773 |
+| 2024 | 14,677,431 | 416,941 | 777,106 | 6,760,329 |
+
+- **El carbón se desplomó:** de 6.77 millones de toneladas en 2018 a 0.42 en 2024. MICARE
+  paró en junio de 2020, cuando la CFE le canceló los contratos y pasó a comprar a los productores
+  de la Región Carbonífera, y las minas de AHMSA pararon con ella en diciembre de 2022 (prensa).
+- **El hierro de la Dirección General de Minas salta de un año a otro** (Colima, 13.5 millones de
+  toneladas en 2023; Michoacán, 12.8 en 2021): así viene en la fuente.
+- **Lejos del tren:** Guerrero Negro (318 km), El Boleo (151 km), Hércules (81 km), Peña Colorada (37 km), Las Truchas (17 km) y La Caridad (14 km). No todas lo necesitan: Peña Colorada
+  manda su concentrado por un ducto de 45 km a su peletizadora junto al puerto de Manzanillo, Las
+  Truchas lo bombea por un ferroducto a la acería, La Caridad lo lleva a su fundición a 24 km, y la
+  sal y el cobre de Baja California Sur salen por mar: la península no tiene tren.
+- **Las cifras son de cada empresa** (reportes anuales de Ternium, AHMSA y Southern Copper; Cuenta
+  Pública para Exportadora de Sal). ArcelorMittal bloquea la descarga de sus informes: lo de Las
+  Truchas se leyó en el resumen del buscador, y así lo dice su fuente. Las de Peña Colorada de 2024
+  son el doble de la mitad que reporta Ternium, su dueña a medias.
+- **Fuera, por ahora:** las minas subterráneas de Grupo México (Charcas, Santa Bárbara, San Martín),
+  Milpillas, Piedras Verdes, María y Cozamin (sin cifras por mina en fuente oficial), la coquizadora
+  de Nueva Rosita (cerrada desde 2017), las demás salinas (solo hay totales por estado) y el carbón
+  importado que quema Petacalco.
 
 ---
 

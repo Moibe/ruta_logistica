@@ -1,8 +1,10 @@
 // The big private industries of the board, by hand, each fact with its source (official first:
 // the company, a government, the INEGI; the press only where it says so). Coordinates aren't here:
 // no official source gives them, so they come from OpenStreetMap (ubicar.mjs → ubicaciones.json).
+import { FUENTES as FUENTES_MINERIA } from '../mineria/minas.mjs';
 
 export const FUENTES = {
+  ...Object.fromEntries(['ahmsa-2019', 'jornada-ahmsa', 'arcelor-2024', 'arcelor-2026', 'ternium-2024', 'southern-2025', 'southern-2018'].map((k) => [k, FUENTES_MINERIA[k]])),
   raiavl: {
     fuente: 'INEGI, Registro Administrativo de la Industria Automotriz de Vehículos Ligeros (RAIAVL): producción y exportación mensual por marca',
     url: 'https://www.inegi.org.mx/datosprimarios/iavl/',
@@ -85,6 +87,64 @@ export const PLANTAS = [
   a('stellantis-saltillo', 'Stellantis Saltillo', 'Stellantis, plantas de camiones y de vans de Saltillo', 'stellantis', 'Saltillo', 'COAH', 'Pickups Ram y vans Ram ProMaster', '1995', ['stellantis']),
   a('stellantis-toluca', 'Stellantis Toluca', 'Stellantis, planta Toluca', 'stellantis', 'Toluca', 'MEX', 'SUV de Jeep (Compass, Wagoneer S, Cherokee)', '1968', ['stellantis']),
   a('jac-sahagun', 'JAC', 'Giant Motors Latinoamérica (JAC), Ciudad Sahagún', 'jac', 'Tepeapulco', 'HGO', 'SUV y pickups JAC, armados con kits', '2017', ['jac']),
+  // ---- what the mines feed: the integrated steel mills and the copper smelter (sources in scripts/mineria/minas.mjs).
+  {
+    id: 'ahmsa',
+    corto: 'AHMSA',
+    nombre: 'Altos Hornos de México, siderúrgicas 1 y 2',
+    tipo: 'acerera',
+    municipio: 'Monclova',
+    estado: 'COAH',
+    que: 'Siderúrgica integrada: 4.52 millones de toneladas de acero líquido en 2018, con su propio hierro (Hércules, Cerro de Mercado) y su propio carbón (MIMOSA)',
+    hasta: '2022-12-23',
+    nota: 'Dejó de operar el 23 de diciembre de 2022 y fue declarada en quiebra en noviembre de 2024; sus subastas de 2026 no han cerrado (prensa). Las cifras de producción son dichos de la empresa.',
+    fuentes: ['ahmsa-2019', 'jornada-ahmsa', 'osm'],
+  },
+  {
+    id: 'arcelormittal-lazaro-cardenas',
+    corto: 'ArcelorMittal',
+    nombre: 'ArcelorMittal México, Lázaro Cárdenas',
+    tipo: 'acerera',
+    municipio: 'Lázaro Cárdenas',
+    estado: 'MICH',
+    que: 'Acería junto al puerto, con alto horno y reducción directa; recibe mineral de Las Truchas por ferroducto y de Peña Colorada por barco',
+    nota: 'Estuvo en huelga del 4 de junio al 18 de julio de 2024 (prensa); su alto horno paró el 30 de julio de 2025 y empezó a reactivarse el 15 de enero de 2026.',
+    fuentes: ['arcelor-2024', 'arcelor-2026', 'osm'],
+  },
+  {
+    id: 'ternium-guerrero',
+    corto: 'Ternium Monterrey',
+    nombre: 'Ternium México, unidad Guerrero',
+    tipo: 'acerera',
+    municipio: 'San Nicolás de los Garza',
+    estado: 'NL',
+    que: 'Acería de reducción directa y horno eléctrico; su mineral viene por tren de Las Encinas y Peña Colorada',
+    nota: 'Entre esta unidad y la de Puebla consumieron 2.9 millones de toneladas de mineral mexicano en 2024, unas 0.9 por tonelada de acero (dicho de la empresa). Ternium dice «área metropolitana de Monterrey»: el municipio y el lugar son los de sus terrenos en OpenStreetMap, que no distingue sus unidades.',
+    fuentes: ['ternium-2024', 'osm'],
+  },
+  {
+    id: 'ternium-puebla',
+    corto: 'Ternium Puebla',
+    nombre: 'Ternium México, unidad Puebla',
+    tipo: 'acerera',
+    municipio: 'San Miguel Xoxtla',
+    estado: 'PUE',
+    que: 'Acería de reducción directa y horno eléctrico; su mineral viene por tren de Las Encinas y Peña Colorada',
+    nota: 'Ternium solo dice «Puebla»: el municipio es el de su terreno en OpenStreetMap.',
+    fuentes: ['ternium-2024', 'osm'],
+  },
+  {
+    id: 'la-caridad-fundicion',
+    corto: 'Fundición La Caridad',
+    nombre: 'Complejo metalúrgico La Caridad',
+    tipo: 'metalurgica',
+    municipio: 'Nacozari de García',
+    estado: 'SON',
+    que: 'Fundición, refinería y planta de alambrón de cobre: fundió 1.04 millones de toneladas de concentrado en 2018 y dio 239 mil de cátodos',
+    desde: '1986',
+    tren: 'Recibe por tren y camión los concentrados de Buenavista del Cobre, La Caridad, Santa Bárbara y Charcas; Nacozari tiene tren a Guaymas y a la frontera (dicho de la empresa).',
+    fuentes: ['southern-2025', 'southern-2018', 'osm'],
+  },
   {
     id: 'tmex-park',
     corto: 'T-MEX Park',

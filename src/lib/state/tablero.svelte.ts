@@ -18,6 +18,7 @@ export type Capa =
   | 'ciudades'
   | 'polos'
   | 'industrias'
+  | 'mineria'
   | 'energia'
   | 'refinerias'
   | 'plataformas'
@@ -45,6 +46,7 @@ class Tablero {
     ciudades: true,
     polos: true,
     industrias: true,
+    mineria: true,
     energia: false,
     refinerias: true,
     plataformas: true,

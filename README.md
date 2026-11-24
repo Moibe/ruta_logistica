@@ -86,13 +86,21 @@ saltar al siguiente libre.
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, y abajo a la derecha
   solo el zoom y *Reencuadrar*. Colores e íconos compartidos: `map/simbolos.ts`.
 - **Grandes industrias privadas** (capa *Industrias*, `domain/industrias.ts`): las armadoras de
-  vehículos ligeros y T-MEX Park, visibles entre su fecha de inicio y la de cierre en los dos modos.
+  vehículos ligeros, T-MEX Park y las acereras y la fundición que reciben el mineral de la capa de
+  minería, visibles entre su fecha de inicio y la de cierre en los dos modos.
   `scripts/industrias/plantas.mjs` tiene cada planta con sus fuentes; `buscar-osm.mjs` y
   `buscar-overpass.mjs` las buscan en OpenStreetMap y `ubicar.mjs` fija su lugar
   (`ubicaciones.json`); `gen-industrias.mjs` baja del INEGI (RAIAVL, API PxWeb) la producción y la
   exportación anual por marca y escribe `datos/industrias.json`. La ficha de una planta da las
   cifras de su marca en el año del reloj y su distancia a la vía en operación (`kmALaVia`). Por
   ahora no mueven carga: es el primer paso hacia las cadenas de suministro.
+- **Minería** (capa *Minería*, `domain/mineria.ts`): las grandes minas de hierro, carbón, cobre y
+  sal, visibles entre su inicio y su cierre en los dos modos, con lo que producen y a qué plantas o
+  puertos lo mandan (`destinos`, para las cadenas de suministro). `scripts/mineria/minas.mjs` tiene
+  cada mina con sus fuentes y los totales nacionales del SGM; `buscar-osm.mjs` las busca en el
+  extracto de OpenStreetMap (por nombre, sus tajos y salinas, y los pueblos mineros), `ver.mjs` lista
+  lo encontrado y `ubicar.mjs` fija su lugar (`ubicaciones.json`; también el de las acereras de la
+  capa de industrias); `gen-mineria.mjs` escribe `datos/mineria.json`.
 - Etiquetas con colisión: cada una prueba cuatro posiciones alrededor de su punto y gana la
   de mayor prioridad (puertos > capital del país > capitales > ciudades por población >
   estados > mares y países). Una ciudad portuaria (Veracruz, Mazatlán…) se etiqueta una sola

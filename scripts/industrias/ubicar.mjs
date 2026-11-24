@@ -1,17 +1,18 @@
 // Writes scripts/industrias/ubicaciones.json: where each plant is. From OpenStreetMap when it has
 // the plant: the centre of its shape in the Geofabrik extract (buscar-osm.mjs), or the point
 // Overpass gave (buscar-overpass.mjs). Four it doesn't have by name are placed approximately, and
-// their cards say so.
+// their cards say so. The steel mills and the smelter come from the mining search (scripts/mineria).
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { centro } from '../mineria/ubicar.mjs';
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(AQUI, '..', '..');
 const OSM = 'OpenStreetMap';
 const APROX = 'aproximada (estimación del juego): OpenStreetMap no la tiene con su nombre';
 
-/** id → the way of the extract to take, or the place itself. */
+/** id → the way of the extract to take (`archivo`: from another search's answers), or the place itself. */
 const ELEGIDAS = {
   'vw-puebla': { way: 22901189 },
   'audi-san-jose-chiapa': { way: 351862753 },
@@ -34,6 +35,11 @@ const ELEGIDAS = {
   'stellantis-saltillo': { way: 605392567 },
   'stellantis-toluca': { lonLat: [-99.598, 19.287], de: APROX },
   'jac-sahagun': { lonLat: [-98.58028, 19.77139], de: `${OSM}: Ciudad Sahagún, la localidad (la planta no está con su nombre)` },
+  ahmsa: { archivo: 'mineria/ahmsa', way: 551945160 },
+  'arcelormittal-lazaro-cardenas': { archivo: 'mineria/arcelormittal-lazaro-cardenas', way: 314801836 },
+  'ternium-guerrero': { archivo: 'mineria/ternium-guerrero', way: 162887171 },
+  'ternium-puebla': { archivo: 'mineria/ternium-puebla', way: 97343931 },
+  'la-caridad-fundicion': { archivo: 'mineria/la-caridad-fundicion', way: 193506161 },
   'tmex-park': { lonLat: [-99.07, 19.725], de: 'aproximada (estimación del juego): en Nextlalpan, al poniente del AIFA, como lo describe el desarrollador' },
 };
 
@@ -42,6 +48,11 @@ const out = {};
 for (const [id, e] of Object.entries(ELEGIDAS)) {
   if (e.lonLat) {
     out[id] = { lonLat: e.lonLat, de: e.de };
+    continue;
+  }
+  if (e.archivo) {
+    const c = centro(join(ROOT, '.cache', 'osm'), e);
+    out[id] = { lonLat: c.lonLat, de: e.de ?? `${OSM} («${c.nombre}»)` };
     continue;
   }
   const d = JSON.parse(readFileSync(join(ROOT, '.cache', 'osm', 'industrias', `${id}.json`), 'utf8'));

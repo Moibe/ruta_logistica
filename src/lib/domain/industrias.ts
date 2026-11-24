@@ -6,7 +6,8 @@ import type { LonLat } from './geo';
  * The big private industries (`datos/industrias.json`, from `scripts/industrias/gen-industrias.mjs`):
  * plants and parks the player doesn't build but that live off the network, each with its place, its
  * dates and its sources. For now the light vehicle assembly plants, with their company's yearly
- * production and exports (INEGI, RAIAVL: by brand, not by plant), and the logistics parks.
+ * production and exports (INEGI, RAIAVL: by brand, not by plant), the logistics parks, and what the
+ * mines feed: the integrated steel mills and the copper smelter.
  *
  * They're on the board from the day they start working until the day they stop, in both modes:
  * like the private power plants, they come on their own dates.
@@ -14,7 +15,7 @@ import type { LonLat } from './geo';
 
 type Fuente = { fuente: string; url: string };
 
-export type TipoIndustria = 'armadora' | 'logistica';
+export type TipoIndustria = 'armadora' | 'logistica' | 'acerera' | 'metalurgica';
 
 export type Empresa = {
   nombre: string;
@@ -40,8 +41,8 @@ export type Industria = {
   ubicacion: string;
   /** What it makes or does. */
   que: string;
-  /** When it started working, and when it stopped, as precise as known ("1967", "2019-06"). */
-  desde: string;
+  /** When it started working (when a source says) and when it stopped, as precise as known ("1967", "2019-06"). */
+  desde?: string;
   hasta?: string;
   /** What its sources say about rail. */
   tren?: string;

@@ -3,7 +3,7 @@
   import { Plegable } from '$lib/state/plegable.svelte';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero, type Capa } from '$lib/state/tablero.svelte';
-  import { AEROPUERTO, AVION_SVG, COMBUSTIBLE, GAS, GOTA_SVG, INDUSTRIA, PLATAFORMA, POLO, REFINERIA } from '$lib/map/simbolos';
+  import { AEROPUERTO, AVION_SVG, COMBUSTIBLE, GAS, GOTA_SVG, INDUSTRIA, MINERIA, PLATAFORMA, POLO, REFINERIA } from '$lib/map/simbolos';
 
   /**
    * The board's layers, top left under the clock, each with its name and the
@@ -31,6 +31,7 @@
         { capa: 'ciudades', nombre: 'Ciudades' },
         { capa: 'polos', nombre: 'Polos' },
         { capa: 'industrias', nombre: 'Industrias' },
+        { capa: 'mineria', nombre: 'Minería' },
       ],
     },
     {
@@ -107,6 +108,10 @@
             {:else if c.capa === 'industrias'}
               <svg class="sw" width="13" height="11" viewBox="0 0 13 11" aria-hidden="true">
                 <path d="M1 10V1.5l3.7 3.4V1.5l3.6 3.4V1.5L12 4.9V10z" fill={INDUSTRIA} />
+              </svg>
+            {:else if c.capa === 'mineria'}
+              <svg class="sw" width="13" height="10" viewBox="0 0 13 10" aria-hidden="true">
+                <path d="M0.5 9.5 4.5 0.8 7 5 8.8 2.8 12.5 9.5z" fill={MINERIA} />
               </svg>
             {:else if c.capa === 'energia'}
               <svg class="sw" width="10" height="13" viewBox="0 0 10 13" aria-hidden="true">

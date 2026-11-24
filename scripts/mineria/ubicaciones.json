@@ -1,0 +1,86 @@
+{
+ "pena-colorada": {
+  "lonLat": [
+   -104.1048,
+   19.3782
+  ],
+  "de": "OpenStreetMap («Mina Peña Colorada»)"
+ },
+ "cerro-de-mercado": {
+  "lonLat": [
+   -104.66888,
+   24.04712
+  ],
+  "de": "OpenStreetMap («Mina Cerro del Mercado»)"
+ },
+ "buenavista-del-cobre": {
+  "lonLat": [
+   -110.33248,
+   30.95453
+  ],
+  "de": "OpenStreetMap («Mina de Cananea»)"
+ },
+ "la-caridad": {
+  "lonLat": [
+   -109.56339,
+   30.31831
+  ],
+  "de": "OpenStreetMap («Mina La Caridad»)"
+ },
+ "las-encinas": {
+  "lonLat": [
+   -103.5347,
+   19.25397
+  ],
+  "de": "OpenStreetMap («Ternium Las Encinas Planta Peletizadora Alzada»)"
+ },
+ "las-truchas": {
+  "lonLat": [
+   -102.36409,
+   18.06297
+  ],
+  "de": "OpenStreetMap: el tajo más grande de la zona, sin nombre (estimación del juego)"
+ },
+ "hercules": {
+  "lonLat": [
+   -103.78554,
+   28.0265
+  ],
+  "de": "OpenStreetMap: el tajo junto al pueblo de Hércules, sin nombre (estimación del juego)"
+ },
+ "micare": {
+  "lonLat": [
+   -100.66435,
+   28.45765
+  ],
+  "de": "OpenStreetMap: el tajo grande al oriente de Nava, sin nombre (estimación del juego)"
+ },
+ "mimosa": {
+  "lonLat": [
+   -101.42126,
+   27.89101
+  ],
+  "de": "aproximada (estimación del juego): el pueblo de Palaú; ni AHMSA ni OpenStreetMap dan el lugar de sus minas"
+ },
+ "region-carbonifera": {
+  "lonLat": [
+   -101.11838,
+   27.8524
+  ],
+  "de": "OpenStreetMap (la ciudad de Sabinas): la ficha junta a muchos productores de la región"
+ },
+ "el-boleo": {
+  "lonLat": [
+   -112.26805,
+   27.33643
+  ],
+  "de": "OpenStreetMap (Santa Rosalía, el pueblo de la mina): no dibuja la mina"
+ },
+ "guerrero-negro": {
+  "lonLat": [
+   -114.12562,
+   27.90065
+  ],
+  "de": "OpenStreetMap («Exportadora de Sal - Terminal marítima», donde se cargan las barcazas)"
+ }
+}

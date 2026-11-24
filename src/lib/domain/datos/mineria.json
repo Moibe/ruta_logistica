@@ -1,0 +1,495 @@
+{
+ "corte": "2026-11-24",
+ "nota": "Generado por scripts/mineria/gen-mineria.mjs.",
+ "fuentes": {
+  "sgm-2018": {
+   "fuente": "Servicio Geológico Mexicano, Anuario Estadístico de la Minería Mexicana 2018 (edición 2019)",
+   "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2018_Edicion_2019.pdf"
+  },
+  "sgm-2024": {
+   "fuente": "Servicio Geológico Mexicano, Anuario Estadístico de la Minería Mexicana 2024 (edición 2025): producción por estado y municipio",
+   "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf"
+  },
+  "ternium-2024": {
+   "fuente": "Ternium, informe anual 20-F 2024 (dicho de la empresa): Peña Colorada y Las Encinas, sus minas, sus plantas y a dónde va su mineral",
+   "url": "https://www.sec.gov/Archives/edgar/data/1342874/000134287425000024/tx-20241231.htm"
+  },
+  "ternium-2018": {
+   "fuente": "Ternium, informe anual 20-F 2018 (dicho de la empresa)",
+   "url": "https://www.sec.gov/Archives/edgar/data/1342874/000134287419000026/a2018ternium20-f.htm"
+  },
+  "ahmsa-2019": {
+   "fuente": "Altos Hornos de México, Reporte Anual 2019 (dicho de la empresa): sus minas de hierro y de carbón, su acero y sus ventas de carbón a la CFE",
+   "url": "https://www.ahmsa.com/assets/files/infromacion_financiera/es/2019/Reporte_Anual_AHMSA_2019.pdf"
+  },
+  "southern-2025": {
+   "fuente": "Southern Copper (Grupo México), informe anual 2025 (dicho de la empresa): Buenavista del Cobre, La Caridad y su complejo metalúrgico",
+   "url": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926044985/scco-20251231xars.pdf"
+  },
+  "southern-2018": {
+   "fuente": "Southern Copper (Grupo México), informe anual 10-K 2018 (dicho de la empresa)",
+   "url": "https://www.sec.gov/Archives/edgar/data/1001838/000104746919000845/a2237832z10-k.htm"
+  },
+  "essa-cuenta": {
+   "fuente": "Cuenta Pública, Exportadora de Sal (2018 a 2025): sal producida y vendida, y su capital",
+   "url": "https://www.cuentapublica.hacienda.gob.mx/"
+  },
+  "asf-essa": {
+   "fuente": "Auditoría Superior de la Federación, auditoría 117 a Exportadora de Sal (Cuenta Pública 2024): la compra del 49 % de Mitsubishi",
+   "url": "https://www.asf.gob.mx/Trans/Informes/IR2024b/Documentos/Auditorias/2024_0117_a.pdf"
+  },
+  "cfe-carbon": {
+   "fuente": "CFE, mesa sobre la compra de carbón (14 de julio de 2020): contratos con los productores de la Región Carbonífera para las centrales de Nava",
+   "url": "https://www.cfe.gob.mx/cdn/2019/Archivos/Boletines/MesaCarb%C3%B3n.pdf"
+  },
+  "financiero-carbon": {
+   "fuente": "El Financiero, 10 de octubre de 2025 (prensa, citando a la CFE): 7,988,087 toneladas de carbón adjudicadas para las centrales de Coahuila",
+   "url": "https://www.elfinanciero.com.mx/nacional/2025/10/10/cfe-concluye-proceso-de-contratacion-de-carbon-mineral-para-centrales-termoelectricas-de-coahuila/"
+  },
+  "arcelor-2024": {
+   "fuente": "ArcelorMittal, informe anual 20-F 2024 (dicho de la empresa; leído en resumen, el documento bloquea la descarga): Las Truchas y sus minas de Sonora",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001243429/000124342925000017/mt-20241231.htm"
+  },
+  "arcelor-2026": {
+   "fuente": "ArcelorMittal México, 15 de enero de 2026: reactiva su alto horno de Lázaro Cárdenas tras seis meses de paro",
+   "url": "https://mexico.arcelormittal.com/reactiva-arcelormittal-mexico-su-alto-horno-en-lc-tras-seis-meses-de-paro/"
+  },
+  "jornada-ahmsa": {
+   "fuente": "La Jornada, 7 de noviembre de 2024 (prensa): declaran la quiebra de AHMSA, parada desde diciembre de 2022",
+   "url": "https://www.jornada.com.mx/noticia/2024/11/07/economia/declaran-quiebra-de-ahmsa-7445"
+  },
+  "osm": {
+   "fuente": "OpenStreetMap (ODbL, © colaboradores de OpenStreetMap): ubicación de cada mina y planta",
+   "url": "https://www.openstreetmap.org/copyright"
+  }
+ },
+ "nacional": {
+  "dato": "Producción minera por año, en toneladas (Servicio Geológico Mexicano, con cifras de la Dirección General de Minas; 2024 preliminar). El hierro es contenido metálico en mina.",
+  "fuentes": [
+   "sgm-2018",
+   "sgm-2024"
+  ],
+  "cobre": {
+   "2018": 696580,
+   "2019": 713704,
+   "2020": 800316,
+   "2021": 782136,
+   "2022": 828180,
+   "2023": 778839,
+   "2024": 777106
+  },
+  "hierro": {
+   "2018": 14021344,
+   "2019": 17218785,
+   "2020": 17957645,
+   "2021": 22384351,
+   "2022": 18272230,
+   "2023": 23639214,
+   "2024": 14677431
+  },
+  "carbon": {
+   "2018": 6772528,
+   "2019": 6175726,
+   "2020": 2185295,
+   "2021": 2180463,
+   "2022": 1875720,
+   "2023": 531904,
+   "2024": 416941
+  },
+  "sal": {
+   "2018": 9392050,
+   "2019": 8845240,
+   "2020": 9084859,
+   "2021": 7001505,
+   "2022": 7914780,
+   "2023": 7686773,
+   "2024": 6760329
+  }
+ },
+ "minas": [
+  {
+   "id": "pena-colorada",
+   "corto": "Peña Colorada",
+   "nombre": "Peña Colorada",
+   "mineral": "hierro",
+   "empresa": "Consorcio Minero Benito Juárez Peña Colorada (Ternium y ArcelorMittal, mitad y mitad)",
+   "municipio": "Minatitlán",
+   "estado": "COL",
+   "que": "Mina a cielo abierto y concentradora; su peletizadora está junto al puerto de Manzanillo",
+   "unidad": "pélets y concentrado vendibles",
+   "serie": {
+    "2018": 4000000,
+    "2024": 2800000
+   },
+   "destino": "El concentrado baja en pulpa por un ducto de 45 km a Manzanillo; los pélets van por tren a las plantas de Ternium o salen por el puerto, y por barco a ArcelorMittal en Lázaro Cárdenas.",
+   "destinos": [
+    "puerto:manzanillo",
+    "industria:ternium-guerrero",
+    "industria:ternium-puebla",
+    "industria:arcelormittal-lazaro-cardenas"
+   ],
+   "desde": "1974",
+   "nota": "Extrajo 13.3 millones de toneladas de mineral en 2018 y 7.8 en 2024, cuando bajó por la demora de un permiso ambiental.",
+   "fuentes": [
+    "ternium-2024",
+    "ternium-2018",
+    "osm"
+   ],
+   "lonLat": [
+    -104.1048,
+    19.3782
+   ],
+   "ubicacion": "OpenStreetMap («Mina Peña Colorada»)"
+  },
+  {
+   "id": "las-encinas",
+   "corto": "Las Encinas",
+   "nombre": "Las Encinas, peletizadora de Alzada",
+   "mineral": "hierro",
+   "empresa": "Las Encinas (Ternium)",
+   "municipio": "Cuauhtémoc",
+   "estado": "COL",
+   "que": "Peletizadora de Ternium en Alzada; la surten sus minas de Aquila (Michoacán) y Palomas (Jalisco)",
+   "unidad": "pélets vendibles",
+   "serie": {
+    "2018": 1800000,
+    "2024": 1600000
+   },
+   "destino": "El preconcentrado de Aquila llega por camión a Tecomán y de ahí por tren y camión a Alzada, unos 160 km; el de Palomas, por camión, unos 60. Los pélets salen por tren a las plantas de Ternium en Monterrey y Puebla.",
+   "destinos": [
+    "industria:ternium-guerrero",
+    "industria:ternium-puebla"
+   ],
+   "desde": "1970",
+   "nota": "Aquila estuvo parada el primer semestre de 2023 por la crisis de seguridad. El mapa la pone en su peletizadora, de donde sale el tren: OpenStreetMap no dibuja la mina de Aquila.",
+   "fuentes": [
+    "ternium-2024",
+    "ternium-2018",
+    "osm"
+   ],
+   "lonLat": [
+    -103.5347,
+    19.25397
+   ],
+   "ubicacion": "OpenStreetMap («Ternium Las Encinas Planta Peletizadora Alzada»)"
+  },
+  {
+   "id": "las-truchas",
+   "corto": "Las Truchas",
+   "nombre": "Las Truchas",
+   "mineral": "hierro",
+   "empresa": "ArcelorMittal México",
+   "municipio": "Lázaro Cárdenas",
+   "estado": "MICH",
+   "que": "Mina a unos 27 km de la acería",
+   "unidad": "concentrado, trozo y finos",
+   "serie": {
+    "2018": 1100000,
+    "2019": 1400000,
+    "2023": 1200000,
+    "2024": 1000000,
+    "2025": 1000000
+   },
+   "destino": "El concentrado se bombea por un ferroducto de 26 a 27 km a la acería de Lázaro Cárdenas.",
+   "destinos": [
+    "industria:arcelormittal-lazaro-cardenas"
+   ],
+   "nota": "Su ampliación a 2.3 millones de toneladas al año se retrasó a 2027 en adelante.",
+   "fuentes": [
+    "arcelor-2024",
+    "osm"
+   ],
+   "lonLat": [
+    -102.36409,
+    18.06297
+   ],
+   "ubicacion": "OpenStreetMap: el tajo más grande de la zona, sin nombre (estimación del juego)"
+  },
+  {
+   "id": "hercules",
+   "corto": "Hércules",
+   "nombre": "Hércules (con La Perla)",
+   "mineral": "hierro",
+   "empresa": "Minera del Norte (AHMSA)",
+   "municipio": "Sierra Mojada",
+   "estado": "COAH",
+   "que": "Minas de Hércules, Coahuila, y La Perla, Chihuahua, a unos 290 km de Monclova",
+   "unidad": "concentrado",
+   "serie": {
+    "2017": 3090000,
+    "2018": 3390000,
+    "2019": 3170000
+   },
+   "destino": "Todo va a la siderúrgica de AHMSA en Monclova.",
+   "destinos": [
+    "industria:ahmsa"
+   ],
+   "hasta": "2022-12-23",
+   "nota": "Parada con AHMSA, que dejó de operar el 23 de diciembre de 2022 y está en quiebra (prensa). El SGM lo confirma por su lado: el hierro de Coahuila pasó de 3.8 millones de toneladas en 2018 a 0.06 en 2023 y a cero en 2024. El municipio es el de su tajo en OpenStreetMap: el reporte de AHMSA no lo nombra.",
+   "fuentes": [
+    "ahmsa-2019",
+    "sgm-2024",
+    "jornada-ahmsa",
+    "osm"
+   ],
+   "lonLat": [
+    -103.78554,
+    28.0265
+   ],
+   "ubicacion": "OpenStreetMap: el tajo junto al pueblo de Hércules, sin nombre (estimación del juego)"
+  },
+  {
+   "id": "cerro-de-mercado",
+   "corto": "Cerro de Mercado",
+   "nombre": "Cerro de Mercado",
+   "mineral": "hierro",
+   "empresa": "Minera del Norte (AHMSA)",
+   "municipio": "Durango",
+   "estado": "DGO",
+   "que": "Mina en la ciudad de Durango",
+   "unidad": "concentrado",
+   "serie": {
+    "2017": 240000,
+    "2018": 340000,
+    "2019": 310000
+   },
+   "destino": "A Monclova, por la Línea Coahuila–Durango, de la que AHMSA es dueña a medias con Peñoles.",
+   "destinos": [
+    "industria:ahmsa"
+   ],
+   "hasta": "2022-12-23",
+   "nota": "Parada con AHMSA, que dejó de operar el 23 de diciembre de 2022 y está en quiebra (prensa). El SGM lo confirma por su lado: el hierro de Coahuila pasó de 3.8 millones de toneladas en 2018 a 0.06 en 2023 y a cero en 2024.",
+   "fuentes": [
+    "ahmsa-2019",
+    "sgm-2024",
+    "jornada-ahmsa",
+    "osm"
+   ],
+   "lonLat": [
+    -104.66888,
+    24.04712
+   ],
+   "ubicacion": "OpenStreetMap («Mina Cerro del Mercado»)"
+  },
+  {
+   "id": "micare",
+   "corto": "MICARE",
+   "nombre": "MICARE (Minera Carbonífera Río Escondido)",
+   "mineral": "carbon",
+   "empresa": "Minera del Norte (AHMSA)",
+   "municipio": "Nava",
+   "estado": "COAH",
+   "que": "Carbón térmico: dos tajos y una mina subterránea",
+   "unidad": "carbón térmico",
+   "serie": {
+    "2017": 6540000,
+    "2018": 6230000,
+    "2019": 4590000
+   },
+   "destino": "A las carboeléctricas de la CFE en Nava, a unos 10 km, por banda transportadora.",
+   "destinos": [
+    "central:nava"
+   ],
+   "hasta": "2020-06-18",
+   "nota": "La CFE canceló sus contratos el 18 de junio de 2020 y la mina entró en paro, con unos 2,000 trabajadores liquidados; la CFE pasó a comprar a los productores de la Región Carbonífera.",
+   "fuentes": [
+    "ahmsa-2019",
+    "cfe-carbon",
+    "osm"
+   ],
+   "lonLat": [
+    -100.66435,
+    28.45765
+   ],
+   "ubicacion": "OpenStreetMap: el tajo grande al oriente de Nava, sin nombre (estimación del juego)"
+  },
+  {
+   "id": "mimosa",
+   "corto": "MIMOSA",
+   "nombre": "MIMOSA (Minerales Monclova)",
+   "mineral": "carbon",
+   "empresa": "Minera del Norte (AHMSA)",
+   "municipio": "Múzquiz",
+   "estado": "COAH",
+   "que": "Carbón metalúrgico y térmico: cuatro minas subterráneas y un tajo, a unos 130 km de Monclova por tren",
+   "unidad": "carbón (metalúrgico y térmico)",
+   "serie": {
+    "2017": 3080000,
+    "2018": 3150000,
+    "2019": 2680000
+   },
+   "destino": "El metalúrgico va por tren (Línea Coahuila–Durango) a las coquizadoras de Monclova; el térmico, a la CFE.",
+   "destinos": [
+    "industria:ahmsa",
+    "central:nava"
+   ],
+   "hasta": "2022-12-23",
+   "nota": "Parada con AHMSA (prensa). Su lugar es una aproximación: el reporte de AHMSA no nombra dónde están sus minas, y el mapa la pone en Palaú, en Múzquiz, el mayor productor de carbón de Coahuila (SGM).",
+   "fuentes": [
+    "ahmsa-2019",
+    "sgm-2024",
+    "jornada-ahmsa",
+    "osm"
+   ],
+   "lonLat": [
+    -101.42126,
+    27.89101
+   ],
+   "ubicacion": "aproximada (estimación del juego): el pueblo de Palaú; ni AHMSA ni OpenStreetMap dan el lugar de sus minas"
+  },
+  {
+   "id": "region-carbonifera",
+   "corto": "Región Carbonífera",
+   "nombre": "Productores de la Región Carbonífera",
+   "mineral": "carbon",
+   "empresa": "Decenas de micro, pequeños y medianos productores",
+   "municipio": "Sabinas, San Juan de Sabinas, Múzquiz y Progreso",
+   "estado": "COAH",
+   "que": "Carbón térmico que la CFE compra por contratos desde julio de 2020",
+   "unidad": "carbón térmico entregado o contratado",
+   "serie": {},
+   "destino": "A las centrales José López Portillo y Carbón II, en Nava.",
+   "destinos": [
+    "central:nava"
+   ],
+   "nota": "Primer contrato (julio de 2020 a diciembre de 2021): 2 millones de toneladas con 60 productores. En octubre de 2025 la CFE adjudicó 7.99 millones de toneladas (prensa). El carbón de Coahuila cayó de 6.7 millones de toneladas en 2018 a 0.4 en 2024 (SGM).",
+   "fuentes": [
+    "cfe-carbon",
+    "financiero-carbon",
+    "sgm-2024",
+    "osm"
+   ],
+   "lonLat": [
+    -101.11838,
+    27.8524
+   ],
+   "ubicacion": "OpenStreetMap (la ciudad de Sabinas): la ficha junta a muchos productores de la región"
+  },
+  {
+   "id": "buenavista-del-cobre",
+   "corto": "Buenavista del Cobre",
+   "nombre": "Buenavista del Cobre (Cananea)",
+   "mineral": "cobre",
+   "empresa": "Southern Copper (Grupo México)",
+   "municipio": "Cananea",
+   "estado": "SON",
+   "que": "La mayor mina de cobre del país, a cielo abierto; desde 2024 también concentra zinc",
+   "unidad": "concentrado de cobre",
+   "serie": {
+    "2018": 1371100,
+    "2025": 1482000
+   },
+   "destino": "El concentrado va por tren a la fundición de La Caridad, o por tren o camión al puerto de Guaymas para exportarse.",
+   "destinos": [
+    "industria:la-caridad-fundicion",
+    "puerto:guaymas"
+   ],
+   "desde": "1899",
+   "nota": "Molió 70.3 millones de toneladas de mineral en 2018 y 73.2 en 2025; el cobre contenido, 325 y 323 mil toneladas. Cananea da 74 % del cobre de Sonora, y Sonora 70 % del nacional (SGM, 2024).",
+   "fuentes": [
+    "southern-2025",
+    "southern-2018",
+    "sgm-2024",
+    "osm"
+   ],
+   "lonLat": [
+    -110.33248,
+    30.95453
+   ],
+   "ubicacion": "OpenStreetMap («Mina de Cananea»)"
+  },
+  {
+   "id": "la-caridad",
+   "corto": "La Caridad",
+   "nombre": "La Caridad",
+   "mineral": "cobre",
+   "empresa": "Mexicana de Cobre (Southern Copper, Grupo México)",
+   "municipio": "Nacozari de García",
+   "estado": "SON",
+   "que": "Mina a cielo abierto, a 23 km de Nacozari",
+   "unidad": "concentrado de cobre",
+   "serie": {
+    "2018": 446200,
+    "2025": 435400
+   },
+   "destino": "El concentrado va a su propia fundición, a 24 km.",
+   "destinos": [
+    "industria:la-caridad-fundicion"
+   ],
+   "desde": "1979",
+   "nota": "Molió 34.5 millones de toneladas de mineral en 2018 y 35 en 2025.",
+   "fuentes": [
+    "southern-2025",
+    "southern-2018",
+    "osm"
+   ],
+   "lonLat": [
+    -109.56339,
+    30.31831
+   ],
+   "ubicacion": "OpenStreetMap («Mina La Caridad»)"
+  },
+  {
+   "id": "el-boleo",
+   "corto": "El Boleo",
+   "nombre": "El Boleo",
+   "mineral": "cobre",
+   "empresa": "Minera y Metalúrgica del Boleo (mayoría de la coreana KOMIR)",
+   "municipio": "Mulegé",
+   "estado": "BCS",
+   "que": "Mina de cobre en Santa Rosalía; produce cátodos",
+   "unidad": "cobre",
+   "serie": {},
+   "destino": "",
+   "destinos": [],
+   "desde": "2015",
+   "nota": "Su producción por año no tiene fuente oficial: el SGM da el cobre de toda Baja California Sur, 19 mil toneladas en 2018 y 14 mil en 2024.",
+   "fuentes": [
+    "sgm-2018",
+    "sgm-2024",
+    "osm"
+   ],
+   "lonLat": [
+    -112.26805,
+    27.33643
+   ],
+   "ubicacion": "OpenStreetMap (Santa Rosalía, el pueblo de la mina): no dibuja la mina"
+  },
+  {
+   "id": "guerrero-negro",
+   "corto": "Guerrero Negro",
+   "nombre": "Exportadora de Sal, Guerrero Negro",
+   "mineral": "sal",
+   "empresa": "Exportadora de Sal (paraestatal: 75 % FIFOMI y 25 % SGM desde 2024)",
+   "municipio": "Mulegé",
+   "estado": "BCS",
+   "que": "La mayor salina del país; da 78 % de la sal nacional (SGM, 2024)",
+   "unidad": "sal producida",
+   "serie": {
+    "2018": 7200000,
+    "2019": 6900000,
+    "2020": 6500000,
+    "2021": 6200000,
+    "2022": 6800000,
+    "2023": 6500000,
+    "2024": 5200000,
+    "2025": 4100000
+   },
+   "destino": "En barcaza a Isla de Cedros (100 km) y de ahí en barco; casi toda es sal industrial de exportación.",
+   "destinos": [],
+   "desde": "1954",
+   "nota": "Era 51 % del Estado y 49 % de Mitsubishi; en 2024 el FIFOMI compró esa parte por 1,500 millones de pesos. La caída de 2024 y 2025 se atribuye a fallas de sus barcazas y remolcadores.",
+   "fuentes": [
+    "essa-cuenta",
+    "asf-essa",
+    "sgm-2024",
+    "osm"
+   ],
+   "lonLat": [
+    -114.12562,
+    27.90065
+   ],
+   "ubicacion": "OpenStreetMap («Exportadora de Sal - Terminal marítima», donde se cargan las barcazas)"
+  }
+ ]
+}

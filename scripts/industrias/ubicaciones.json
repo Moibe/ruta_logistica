@@ -146,6 +146,41 @@
   ],
   "de": "OpenStreetMap: Ciudad Sahagún, la localidad (la planta no está con su nombre)"
  },
+ "ahmsa": {
+  "lonLat": [
+   -101.45035,
+   26.88801
+  ],
+  "de": "OpenStreetMap («Altos Hornos de Mexico»)"
+ },
+ "arcelormittal-lazaro-cardenas": {
+  "lonLat": [
+   -102.20233,
+   17.93548
+  ],
+  "de": "OpenStreetMap («ArcelorMittal Steel Lázaro Cárdenas»)"
+ },
+ "ternium-guerrero": {
+  "lonLat": [
+   -100.30009,
+   25.72156
+  ],
+  "de": "OpenStreetMap («Ternium»)"
+ },
+ "ternium-puebla": {
+  "lonLat": [
+   -98.31881,
+   19.16762
+  ],
+  "de": "OpenStreetMap («Ternium»)"
+ },
+ "la-caridad-fundicion": {
+  "lonLat": [
+   -109.63555,
+   30.49412
+  ],
+  "de": "OpenStreetMap («Fundicion Mina La Caridad»)"
+ },
  "tmex-park": {
   "lonLat": [
    -99.07,
