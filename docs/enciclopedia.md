@@ -2729,6 +2729,17 @@ exportación en la primera salida a la que llega, como el resto de la carga de e
 La ficha de una armadora dice cuánto exporta por tren al año, cuánto espera en su patio y cuánto
 han llevado tus trenes.
 
+### Las cadenas de suministro: T-MEX y el AIFA
+
+T-MEX Park tiene estación (queda a 2.3 km de la vía) y, desde que abrió en agosto de 2025, cambia
+carga con el AIFA en los dos sentidos: lo que llega del extranjero al aeropuerto se guarda en el
+parque, y lo que sale del parque vuela desde el aeropuerto. Son dos flujos con origen y destino,
+como los minerales: cada uno es **la mitad de la carga internacional del AIFA** del año (AFAC; el
+año en curso, anualizado): unas 206 mil toneladas al año cada uno en 2026. Que pase por T-MEX, y en
+esa proporción, es **estimación del juego**: no hay cifra oficial de lo que se mueve entre los dos,
+y en la realidad va por carretera. No se resta de la carga de nadie: la carga aérea no estaba en el
+tráfico del tren.
+
 ---
 
 ## 6. Red ferroviaria

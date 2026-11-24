@@ -1,6 +1,7 @@
 import { EMPRESAS_INDUSTRIA, INDUSTRIAS, PARCIAL_RAIAVL, añoRaiavl, type Industria } from './industrias';
 import { MINAS, cifraMina } from './mineria';
 import { horasDeFecha } from './calendario';
+import aeropuertosJson from './datos/aeropuertos.json';
 import type { LonLat } from './geo';
 import type { ClaveEstado } from './sitios';
 
@@ -19,8 +20,8 @@ import type { ClaveEstado } from './sitios';
  * mine of La Caridad (no source for how they ship) and Baja California Sur (no railway) don't load.
  */
 
-export type Producto = 'hierro' | 'carbon' | 'coque' | 'cobre';
-export const NOMBRE_PRODUCTO: Record<Producto, string> = { hierro: 'mineral de hierro', carbon: 'carbón', coque: 'coque', cobre: 'concentrado de cobre' };
+export type Producto = 'hierro' | 'carbon' | 'coque' | 'cobre' | 'aerea';
+export const NOMBRE_PRODUCTO: Record<Producto, string> = { hierro: 'mineral de hierro', carbon: 'carbón', coque: 'coque', cobre: 'concentrado de cobre', aerea: 'carga aérea' };
 
 /** The mines and plants that are stops of a chain: they get a station like a city. */
 export type SitioCadena = { clave: string; tipo: 'mina' | 'industria'; id: string; nombre: string; estado: ClaveEstado; lonLat: LonLat; lonLatEstacion?: LonLat };
@@ -41,7 +42,7 @@ export const SITIOS_CADENA: SitioCadena[] = [
     lonLat: m.lonLat,
     lonLatEstacion: m.id === 'pena-colorada' ? ESTACION_PENA_COLORADA : undefined,
   })),
-  ...INDUSTRIAS.filter((p) => PLANTAS_CADENA.includes(p.id) || p.tipo === 'armadora').map((p) => ({ clave: `industria:${p.id}`, tipo: 'industria' as const, id: p.id, nombre: p.corto, estado: p.estado, lonLat: p.lonLat })),
+  ...INDUSTRIAS.filter((p) => PLANTAS_CADENA.includes(p.id) || p.tipo === 'armadora' || p.tipo === 'logistica').map((p) => ({ clave: `industria:${p.id}`, tipo: 'industria' as const, id: p.id, nombre: p.corto, estado: p.estado, lonLat: p.lonLat })),
 ];
 
 export type Flujo = {
@@ -55,6 +56,10 @@ export type Flujo = {
   parte?: number;
   /** An import's flow: tonnes a year (ARTF 2018, carried on). */
   fijo?: number;
+  /** An airport's flow: this share of its international air cargo (AFAC). */
+  aeropuerto?: string;
+  /** The flow starts when its newer end opens. */
+  desde?: string;
   /** Imports come from abroad: they don't come out of the state's domestic cargo. */
   importado?: boolean;
   /** The flow stops when either end stops (`hasta`). */
@@ -119,7 +124,43 @@ export const FLUJOS: Flujo[] = [
     dato: 'Lo que la fundición fundió en 2018 menos lo de su propia mina (1.04 − 0.45 millones de toneladas), 43 % del concentrado de Buenavista (estimación del juego)',
   },
   { id: 'buenavista-guaymas', producto: 'cobre', origen: 'mina:buenavista-del-cobre', destino: 'puerto:guaymas', mina: 'buenavista-del-cobre', parte: 0.57, dato: 'El resto de su concentrado sale a exportar por Guaymas (estimación del juego)' },
+  // T-MEX Park, next to the AIFA: the international air cargo of the airport goes through the park.
+  {
+    id: 'aifa-tmex',
+    producto: 'aerea',
+    origen: 'aeropuerto:aifa',
+    destino: 'industria:tmex-park',
+    aeropuerto: 'aifa',
+    parte: 0.5,
+    desde: '2025-08',
+    importado: true,
+    dato: 'Lo que llega del extranjero al AIFA y se almacena en T-MEX: la mitad de su carga internacional (AFAC); que pase por T-MEX y en esa proporción es estimación del juego',
+  },
+  {
+    id: 'tmex-aifa',
+    producto: 'aerea',
+    origen: 'industria:tmex-park',
+    destino: 'aeropuerto:aifa',
+    aeropuerto: 'aifa',
+    parte: 0.5,
+    desde: '2025-08',
+    importado: true,
+    dato: 'Lo que sale de T-MEX para volar desde el AIFA: la otra mitad de su carga internacional (AFAC; estimación del juego)',
+  },
 ];
+
+type AñoAereo = { nacional: number; internacional: number };
+const AEREOS = (aeropuertosJson as unknown as { aeropuertos: { id: string; serie: Record<string, AñoAereo> }[]; serie: { parcial: { año: number; meses: number } } });
+
+/** An airport's international cargo in a year (the running year annualized; the last year carried on). */
+function internacional(id: string, año: number): number {
+  const s = AEREOS.aeropuertos.find((a) => a.id === id)?.serie ?? {};
+  const años = Object.keys(s).map(Number).sort((a, b) => a - b);
+  const a = años.filter((x) => x <= año).pop() ?? años[0];
+  if (a === undefined) return 0;
+  const p = AEREOS.serie.parcial;
+  return a === p.año ? (s[String(a)].internacional * 12) / p.meses : s[String(a)].internacional;
+}
 
 export const FLUJO = new Map(FLUJOS.map((f) => [f.id, f]));
 /** A flow's cargo waits at its origin this many days of it, like the states' cargo. */
@@ -128,7 +169,9 @@ export const DIAS_EN_PATIO = 30;
 /** Tonnes a year of a flow at a game hour: 0 once it stopped. */
 export function toneladasAño(f: Flujo, horas: number, año: number): number {
   if (f.hasta && horas >= horasDeFecha(f.hasta)) return 0;
+  if (f.desde && horas < horasDeFecha(f.desde)) return 0;
   if (f.fijo) return f.fijo;
+  if (f.aeropuerto) return internacional(f.aeropuerto, año) * (f.parte ?? 0);
   const m = MINAS.find((x) => x.id === f.mina);
   if (!m || (m.hasta && horas >= horasDeFecha(m.hasta))) return 0;
   return (cifraMina(m, año)?.toneladas ?? 0) * (f.parte ?? 0);
