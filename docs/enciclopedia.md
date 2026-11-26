@@ -79,6 +79,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [ASF, auditoría 2020-0430 «Erogaciones por Mantenimiento en Refinerías»](https://www.asf.gob.mx/Trans/Informes/IR2020c/Documentos/Auditorias/2020_0430_a.pdf) | El combustóleo que hizo cada refinería en 2019 y 2020 | Cuenta Pública 2020 | Documento oficial público |
 | [ASF, auditoría 2017-0522 a CFEnergía](https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf) | El combustóleo que la CFE compraba en Estados Unidos llegaba en buque tanque a Tuxpan; el gas natural licuado, a Altamira y Manzanillo | Cuenta Pública 2017 | Documento oficial público |
 | [SENER, Balance Nacional de Energía 2019](https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf) | Lo que el país exportó e importó de cada petrolífero en 2018 (en PJ) y el poder calorífico neto del combustóleo (cuadro 29) | Febrero de 2021 | Documento oficial público |
+| [SHCP, comunicado 008/2019](https://www.gob.mx/shcp/prensa/comunicado-no-008-2019-el-gobierno-de-mexico-amplia-la-estrategia-de-combate-al-robo-de-combustible-mediante-la-compra-de-pipas) | Las pipas que se compraron por el desabasto: 671 autotanques con capacidad equivalente a 144 mil barriles diarios, por 92 millones de dólares | 24 de enero de 2019 | Documento oficial público |
+| [La Jornada, «Afecta el desabasto a 40 municipios del Edomex»](https://www.jornada.com.mx/2019/01/09/politica/004n1pol) | Que el desabasto ya se reportaba el 9 de enero de 2019. El sitio no deja leerla automáticamente: se usa lo que muestra el buscador | 9 de enero de 2019 | Prensa |
 | [SEMAR, Anuario Estadístico de los Puertos de México 2024](https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024) | Petróleo y derivados por puerto en 2018 y 2024: importación, exportación y cabotaje; la carga que sale de Dos Bocas y Ciudad del Carmen a las plataformas y cuántos barcos la llevan; el crudo que exporta Cayo Arcas; lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (contenerizada, granel agrícola y mineral, general suelta) y en cuántos barcos | 2025 | Documento oficial público |
 | [EIA (gobierno de EUA), unidades de International Energy Statistics](https://www.eia.gov/cfapps/ipdbproject/docs/unitswithpetro.php) | Barriles por tonelada de gasolina, diésel y turbosina, para pasar a toneladas lo que cabe en un tren | Consultado el 22 de noviembre de 2026 | Dato oficial público (gobierno de EUA) |
 | [Pemex, boletines regionales de Tampico 2019-004 y 2024-005](https://www.pemex.com/saladeprensa/boletines_regionales/Paginas/2024-005_tampico.aspx) | Lo que carga un buque tanque de su flota: 320 mil barriles. El sitio de Pemex no deja leerlos automáticamente; la cifra es la que muestra el buscador | 2019 y 2024 | Comunicado oficial |
@@ -4169,7 +4171,8 @@ vino del país, y dibuja las 78 terminales de Pemex en el color de cómo les lle
 Al pasar el cursor:
 
 - **un estado** dice lo que usa, cómo se surte, lo que le traen hoy sus ductos, lo que le falta y
-  por dónde se importa, lo que le llega por cabotaje y, si no le llegó, cuánto le faltó;
+  por dónde se importa, lo que le llega por cabotaje y, si no le llegó, cuánto le faltó; si tiene
+  desabasto, cuánto baja su carga, cuántos días lleva y las pipas que le compró el Estado;
 - **una terminal** dice cómo se surte, según el mapa de la SENER;
 - **un puerto** da su petróleo y derivados de 2018 (de 2024 en Realidad, desde ese año). En el
   juego dice además cuánto importa este año y cuánto puede, lo que le llega por cabotaje, lo que
@@ -4240,7 +4243,8 @@ anuario de puertos de la SEMAR:
   15 días, a tus buques tanque y trenes. Las dos cosas son **reglas del juego**, como la mitad que
   llevan los ferrocarriles privados en las cadenas de los minerales.
 - **Si no llega, falta.** Lo que un estado no recibe se cuenta como **desabasto**: lo dicen su
-  ficha, la de su puerto, la leyenda y la barra. Por ahora solo se mide.
+  ficha, la de su puerto, la leyenda y la barra. Tiene consecuencias (ver [Cuando falta: el
+  desabasto](#cuando-falta-el-desabasto)).
 - **El combustible del país va primero.** Lo que tus trenes y buques dejan en una terminal sustituye
   importaciones. Lo que dejan para el cabotaje se guarda para lo que el puerto no alcanza a
   importar, y no se gasta antes en lo que sí podía importar.
@@ -4294,6 +4298,51 @@ Lo que entra por tierra sale por diferencia: no se encontró una cifra oficial p
 Con la flota inicial no falta combustible al empezar. Con todas las obras de Pemex hechas (sin Deer
 Park), los buques que renta Pemex llevan ya combustible del país, de Salina Cruz y de la Olmeca, y
 del país llega el 60 %: el resto del sobrante espera tus trenes y buques.
+
+#### Cuando falta: el desabasto
+
+Si la gasolina y el diésel no llegan, un estado lo resiente. Hoy solo puede faltarles a los estados
+que reciben por cabotaje lo que su puerto no alcanza a importar: Guerrero, Michoacán, Sonora y la
+península. Con la flota inicial no les falta; les falta si quitas o cambias un buque tanque. Las
+consecuencias son **reglas del juego**, con cifras del desabasto de enero de 2019:
+
+- **Se frena su economía.** Su carga nacional y de exportación baja en la misma proporción que el
+  combustible que le faltó en la última semana. Si le faltó la mitad, sus estaciones juntan la mitad
+  de carga.
+- **Sus polos no reciben empresas** mientras le falte: basta con que el día anterior le haya faltado
+  más del 1 %. La ficha del polo dice por qué.
+- **A los 14 días seguidos de desabasto, el Estado compra pipas.** Compra las que cubren lo que le
+  faltó ese día, y las paga de su caja. Si no le alcanza el dinero, compra las que pueda, y a los 14
+  días vuelve a intentar.
+- **Las pipas se quedan en ese estado** y llevan cada día lo que pueden de lo que le falte, con
+  combustible importado. Cuentan como importado «en pipas».
+
+**De dónde salen las cifras de las pipas.** Hacienda informó el 24 de enero de 2019 que Pemex
+contaría con «671 autotanques con una capacidad equivalente a 144 mil barriles diarios. El monto
+total es de 92 millones de dólares» (comunicado 008/2019). Por pipa son unos **215 barriles
+diarios** y **137 mil dólares**: 2.5 millones de pesos con el tipo de cambio del juego (el promedio de
+2024). La Jornada ya reportaba el desabasto el 9 de enero (leída en el resumen del buscador): de ahí
+al anuncio de Hacienda pasaron unas dos semanas, y de ahí los **14 días**.
+
+**Prueba.** Al quitar el buque tanque del Pacífico de la flota inicial:
+
+1. Durante 15 días no pasa nada: las terminales empiezan con 15 días de reserva.
+2. Después a Guerrero le falta la mitad de su combustible: la mitad que llevan los buques que renta
+   Pemex sí llega. A Michoacán le falta el 21 % y a Sonora el 5 %, y sus polos dejan de recibir
+   empresas.
+3. La carga de Guerrero baja hasta el 58 %.
+4. A los 14 días el Estado compra 48 pipas para Guerrero (121 millones de pesos), 43 para Michoacán
+   (108) y 11 para Sonora (28): 256 millones de su caja.
+5. Desde entonces no falta, y la carga se recupera en una o dos semanas.
+
+**Lo que falta o es estimación:**
+
+- cuánto baja la economía (en la misma proporción es regla del juego);
+- que las pipas lleguen el mismo día: Hacienda dijo que las de 2019 se entregarían poco a poco hasta
+  el 29 de marzo (en la prensa, leída en el resumen del buscador);
+- lo que cuesta operarlas;
+- que el desabasto también pase por falta de ductos: en el juego los ductos siempre traen lo que hace
+  su zona.
 
 #### El combustóleo
 
@@ -5002,6 +5051,15 @@ los otros dos aún no se capturan.
   final combustible para sustituir importaciones. En un concentrador solo carga lo importado que sus
   paradas pueden recibir. Antes un buque se llenaba con lo que hubiera, y le podía quitar a otro lo
   que este sí iba a entregar.
+- **El desabasto frena al estado y, si dura, el Estado compra pipas.** *(26 nov 2026.)* Le di al
+  usuario a elegir entre frenar al estado, pipas pagadas por el Estado, las dos o solo un indicador, y
+  eligió las dos:
+  - su carga baja en la misma proporción que el combustible que le falta;
+  - sus polos no reciben empresas mientras le falte;
+  - a los 14 días seguidos, el Estado le compra pipas al precio de las de enero de 2019 y las paga de
+    su caja.
+
+  Ver [Cuando falta: el desabasto](#cuando-falta-el-desabasto).
 - **La exportación solo sube a un tren que pasa por una salida.** *(26 nov 2026.)* Antes un tren
   cargaba la exportación de cada estado aunque su vuelta no tocara ninguna salida, y la llevaba a
   bordo para siempre: el tren quedaba lleno. Lo encontré al probar trenes de combustóleo.

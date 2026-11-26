@@ -391,6 +391,12 @@ El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedi
   refinerías de esa costa si sobra y si no importado) y la otra mitad espera en `#patiosImp` a los
   vehículos del jugador, que la llevan como `combustibleImp`. Lo que dejan para el cabotaje se
   guarda aparte (`#inventariosCab`, `#inventariosImp`); lo que no llega se cuenta como `faltante`.
+- **El desabasto** (`desabasto` en el JSON, `DESABASTO`): lo que le falta a un estado frena su carga
+  nacional y de exportación en la misma proporción (`surtidoCombustible`, memoria de una semana) y
+  deja a sus polos sin empresas mientras le falte (`hayCombustible`, `poloConCombustible`). A los 14
+  días seguidos (`#cerrarDiaDesabasto`) el Estado compra pipas de su caja (`sim.pipas`; 215 barriles
+  diarios y 2.5 millones de pesos cada una, por las 671 de enero de 2019) que cubren lo que falte con
+  importado (`EN_PIPAS`).
 - **Los vehículos:**
   - las refinerías son sitios (`refineria:<id>`) y paradas de tren donde hay vía a ≤ 15 km;
   - las de la costa cargan también en su puerto (`PUERTO_DE_REFINERIA`);
@@ -750,7 +756,7 @@ costa del mundo solo sube de resolución). Además:
     ya se dibujan con las tablas del mapa de la SENER de 2018);
   - el gas LP y la turbosina como cargas aparte; hoy la gasolina, el diésel y la turbosina son una
     sola mezcla (el combustóleo ya va aparte);
-  - que lo que falte (el desabasto de combustibles, que ya se mide) tenga consecuencias;
+  - el desabasto, lo que sigue: que las pipas tarden en llegar y cuesten al operarlas;
   - el combustóleo, lo que sigue: la demanda de la CFE por año (conversiones a gas, retiros) y su
     precio de exportación;
   - las cifras por refinería de 2022 a septiembre de 2024, si se consigue el Anuario Estadístico

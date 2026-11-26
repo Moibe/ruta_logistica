@@ -17,6 +17,15 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 const FUENTES = {
+  'shcp-008-2019': {
+    fuente:
+      'SHCP, comunicado 008/2019 (24 de enero de 2019): Pemex contará con «671 autotanques con una capacidad equivalente a 144 mil barriles diarios. El monto total es de 92 millones de dólares»',
+    url: 'https://www.gob.mx/shcp/prensa/comunicado-no-008-2019-el-gobierno-de-mexico-amplia-la-estrategia-de-combate-al-robo-de-combustible-mediante-la-compra-de-pipas',
+  },
+  'jornada-2019-01-09': {
+    fuente: 'La Jornada, «Afecta el desabasto a 40 municipios del Edomex» (9 de enero de 2019). El sitio no deja leerla automáticamente: se usa lo que muestra el buscador',
+    url: 'https://www.jornada.com.mx/2019/01/09/politica/004n1pol',
+  },
   'cne-expendio': {
     fuente:
       'Comisión Nacional de Energía (antes CRE), datos abiertos «Volúmenes de venta de expendio al público»: litros de gasolina regular y premium y de diésel (automotriz, agrícola y marino) vendidos en las estaciones de servicio de cada estado, abril a diciembre de 2018',
@@ -553,6 +562,18 @@ const datos = {
       'Reglas del juego: una refinería guarda hasta 15 días de lo que produce esperando tren o barco, y un estado recibe de una vez hasta 15 días de lo ' +
       'que sus ductos no le traen.',
     fuentes: [],
+  },
+  desabasto: {
+    memoriaDias: 7,
+    diasParaPipas: 14,
+    pipas: { compradas: 671, barrilesDiarios: 144000, costoUsd: 92000000 },
+    dato:
+      'Reglas del juego para lo que le falta a un estado. Su carga nacional y de exportación baja en la misma proporción que el combustible que le ' +
+      'faltó la última semana, y sus polos no reciben empresas mientras le falte. Si le falta 14 días seguidos, el Estado le compra las pipas que ' +
+      'cubren lo que le falta, al precio de las de enero de 2019: 671 autotanques con capacidad equivalente a 144 mil barriles diarios por 92 ' +
+      'millones de dólares (Hacienda), unos 215 barriles diarios y 137 mil dólares por pipa. Los 14 días son los que pasaron entre los primeros ' +
+      'reportes de desabasto (La Jornada, 9 de enero de 2019, leída en el resumen del buscador) y el anuncio de Hacienda (24 de enero).',
+    fuentes: ['shcp-008-2019', 'jornada-2019-01-09'],
   },
   real: {
     crudo: {

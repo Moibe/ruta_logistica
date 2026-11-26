@@ -45,6 +45,7 @@ import { avanzar } from '$lib/domain/servicio';
 import {
   abastoJuego,
   barrilesEn,
+  BARRILES_POR_PIPA,
   BARRILES_POR_TANQUE,
   CONCENTRADORES,
   concentradorDe,
@@ -52,7 +53,10 @@ import {
   cuentaVacia,
   DIAS_EN_PATIO,
   DIAS_POR_SURTIR,
+  DESABASTO,
+  EN_PIPAS,
   estadosQueSurte,
+  MDP_POR_PIPA,
   PARTE_RENTADOS,
   POR_TIERRA,
   PUERTA_MAR,
@@ -61,6 +65,7 @@ import {
   REFINERIAS_DE_COSTA,
   T_POR_BARRIL,
   topeImportacion,
+  UMBRAL_DESABASTO,
   type Abasto,
   type Cuenta,
 } from '$lib/domain/combustibles';
@@ -341,6 +346,18 @@ class Simulacion {
       cabotaje: Record<string, number>;
     }
   >();
+  /**
+   * A shortage's consequences (`combustibles.ts`, `DESABASTO`): the share of its fuel each state got
+   * over the last week (its cargo goes with it), the share it lacked yesterday (its polos take no
+   * companies while it lacks), its days in a row short, and what's being counted today.
+   */
+  #surtidoComb = new Map<string, number>();
+  #faltaAyer = new Map<string, number>();
+  #diasFalta = new Map<string, number>();
+  #diaComb = new Map<string, { usa: number; falta: number; horas: number }>();
+  #diaDesabasto = -1;
+  /** The State's emergency tanker trucks, by state: how many, what they cost (millions of pesos) and each purchase. */
+  pipas = $state.raw<Record<string, { n: number; mdp: number; compras: { horas: number; n: number; mdp: number }[] }>>({});
   /** Fuel oil each Mexican refinery makes now, Mbd (`combustoleo.ts`). Recomputed with the refineries. */
   combustoleo = $state.raw<Map<string, number>>(new Map());
   /** Fuel oil waiting in each refinery's yard, barrels. Mutated by the clock. */
@@ -850,6 +867,12 @@ class Simulacion {
     return this.energia.find((e) => e.region.id === r) ?? null;
   }
 
+  /** Whether the polo's state has its fuel: companies don't move in while it lacks. */
+  poloConCombustible(id: string): boolean {
+    const e = POLOS.find((p) => p.id === id)?.estado;
+    return !e || this.hayCombustible(e);
+  }
+
   /** Whether companies can still move into the polo: its region has margin at both peaks. */
   hayEnergia(id: string): boolean {
     return this.energiaDelPolo(id)?.alcanza ?? true;
@@ -948,8 +971,8 @@ class Simulacion {
       // A polo built by fronts: each front with crews advances (urbanized, or its spur done, changes the network).
       if (o.frentes && avanzarInterior(o, horas, caja, cajaCfe)) terminadas = true;
       if (o.fase === 'por-construir') continue;
-      // Companies come only with a train and with electricity in the region.
-      if (avanzarObra(o, horas, caja, this.conectado(o.id) && this.hayEnergia(o.id))) terminadas = true;
+      // Companies come only with a train, with electricity in the region and with fuel in the state.
+      if (avanzarObra(o, horas, caja, this.conectado(o.id) && this.hayEnergia(o.id) && this.poloConCombustible(o.id))) terminadas = true;
       // Companies take the promoted lots.
       if (o.lotes) {
         const polo = POLOS.find((p) => p.id === o.id);
@@ -1070,7 +1093,8 @@ class Simulacion {
     }
     for (const e of ESTADOS_EXPORTADORES) {
       // The cars leave from their plants: they come out of the state's generic export cargo.
-      const f = Math.max(0, flujoDelEstado(e, año) - (autosEstado.get(e) ?? 0));
+      // A state short of fuel makes that much less cargo (`DESABASTO`).
+      const f = Math.max(0, flujoDelEstado(e, año) - (autosEstado.get(e) ?? 0)) * this.surtidoCombustible(e);
       this.#bodegas.set(e, Math.min((this.#bodegas.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
     }
     const surtidoDe = (clave: string) => this.surtido(clave);
@@ -1103,7 +1127,7 @@ class Simulacion {
     for (const e of ESTADOS_PRODUCTIVOS) {
       // The chains' domestic flows and the mills' steel come out of the state's generic cargo: the yearbook's total stays.
       const enCadena = (FLUJOS_DEL_ESTADO.get(e) ?? []).reduce((s, x) => s + toneladasAño(x, this.horas, año), 0) / (365.25 * 24) + (aceroEstado.get(e) ?? 0);
-      const f = Math.max(0, flujoNacional(e, año) - enCadena);
+      const f = Math.max(0, flujoNacional(e, año) - enCadena) * this.surtidoCombustible(e);
       this.#bodegasNacional.set(e, Math.min((this.#bodegasNacional.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
     }
     // The ports: exports come by road to the yard, imports are asked for, and what leaves by rail waits for a train.
@@ -1430,6 +1454,7 @@ class Simulacion {
     };
     const porZona = new Map<string, number>();
     const porMar = new Map<string, number>();
+    const faltaEstado = new Map<string, number>();
     for (const [estado, mbd] of a.consumo) {
       const c = this.#cuentaEstado(cuenta, estado);
       const usa = barrilesEn(mbd, horas);
@@ -1507,9 +1532,20 @@ class Simulacion {
         inv.set(estado, hayAqui - u);
         falta -= u;
       }
+      // The State's emergency tanker trucks, if it bought them for this state, bring what they can (imported).
+      const pipas = this.pipas[estado]?.n ?? 0;
+      if (pipas > 0 && falta > 0) {
+        const u = Math.min(falta, barrilesEn((pipas * BARRILES_POR_PIPA) / 1000, horas));
+        falta -= u;
+        c.pipas += u;
+        pais.pipas += u;
+        importar(c, u);
+        entra(EN_PIPAS, u);
+      }
       if (falta > 1e-6) {
         c.faltante += falta;
         pais.faltante += falta;
+        faltaEstado.set(estado, falta);
       }
     }
     // What the rented tankers don't carry waits at the hubs for the player's, up to some days of it.
@@ -1527,6 +1563,71 @@ class Simulacion {
       }
       this.#patios.set(id, p);
     }
+    this.#contarDesabasto(a, faltaEstado, horas);
+  }
+
+  /**
+   * What a state lacked this hour: a week's memory of it slows its cargo, and each new day settles
+   * the one before (`#cerrarDiaDesabasto`).
+   */
+  #contarDesabasto(a: Abasto, faltaEstado: ReadonlyMap<string, number>, horas: number) {
+    const dia = Math.floor(this.horas / 24);
+    if (dia !== this.#diaDesabasto) {
+      if (this.#diaDesabasto >= 0) this.#cerrarDiaDesabasto();
+      this.#diaDesabasto = dia;
+    }
+    const peso = Math.min(1, horas / (24 * DESABASTO.memoriaDias));
+    for (const [estado, mbd] of a.consumo) {
+      const usa = barrilesEn(mbd, horas);
+      const falta = faltaEstado.get(estado) ?? 0;
+      const s = this.#surtidoComb.get(estado) ?? 1;
+      this.#surtidoComb.set(estado, s + ((usa > 0 ? 1 - falta / usa : 1) - s) * peso);
+      const d = this.#diaComb.get(estado) ?? { usa: 0, falta: 0, horas: 0 };
+      d.usa += usa;
+      d.falta += falta;
+      d.horas += horas;
+      this.#diaComb.set(estado, d);
+    }
+  }
+
+  /**
+   * A day of fuel is over. A state short of it that day (past `UMBRAL_DESABASTO`) adds a day in a
+   * row; after `DESABASTO.diasParaPipas` of them the State buys the tanker trucks that cover what
+   * it lacks, as many as its till can pay, and the count starts again.
+   */
+  #cerrarDiaDesabasto() {
+    for (const [estado, d] of this.#diaComb) {
+      const parte = d.usa > 0 ? d.falta / d.usa : 0;
+      this.#faltaAyer.set(estado, parte);
+      const dias = parte > UMBRAL_DESABASTO ? (this.#diasFalta.get(estado) ?? 0) + 1 : 0;
+      this.#diasFalta.set(estado, dias);
+      if (dias < DESABASTO.diasParaPipas) continue;
+      this.#diasFalta.set(estado, 0);
+      const porDia = d.horas > 0 ? (d.falta * 24) / d.horas : 0;
+      const n = Math.min(Math.ceil(porDia / BARRILES_POR_PIPA), Math.floor(this.dinero / MDP_POR_PIPA));
+      if (n <= 0) continue;
+      const mdp = n * MDP_POR_PIPA;
+      this.dinero -= mdp;
+      const p = this.pipas[estado] ?? { n: 0, mdp: 0, compras: [] };
+      this.pipas = { ...this.pipas, [estado]: { n: p.n + n, mdp: p.mdp + mdp, compras: [...p.compras, { horas: this.horas, n, mdp }] } };
+    }
+    this.#diaComb.clear();
+  }
+
+  /** Share of its fuel a state got over the last week (0-1): its cargo goes with it. Whole in Realidad. */
+  surtidoCombustible(estado: string): number {
+    return this.modo === 'realidad' ? 1 : (this.#surtidoComb.get(estado) ?? 1);
+  }
+  /** Share of its fuel a state lacked yesterday, and whether that left it short: then its polos take no companies. */
+  faltaAyer(estado: string): number {
+    return this.modo === 'realidad' ? 0 : (this.#faltaAyer.get(estado) ?? 0);
+  }
+  hayCombustible(estado: string): boolean {
+    return this.faltaAyer(estado) <= UMBRAL_DESABASTO;
+  }
+  /** Days in a row a state has been short of fuel (the State buys tanker trucks at `DESABASTO.diasParaPipas`). */
+  diasSinCombustible(estado: string): number {
+    return this.modo === 'realidad' ? 0 : (this.#diasFalta.get(estado) ?? 0);
   }
 
   /** Fuel the player left in a state's terminals for the coastwise trade, the country's and imported, barrels. */

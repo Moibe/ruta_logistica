@@ -5,7 +5,7 @@
   import { CAJA_CFE_MES, ENERGIA } from '$lib/domain/energia';
   import { km, mdp, personas } from './formato';
   import { añoDe } from '$lib/domain/calendario';
-  import { delPais, POR_TIERRA, REAL_COMBUSTIBLES, realDelAño } from '$lib/domain/combustibles';
+  import { DESABASTO, delPais, MDP_POR_PIPA, nombrePuerta, REAL_COMBUSTIBLES, realDelAño } from '$lib/domain/combustibles';
   import { realCombustoleo } from '$lib/domain/combustoleo';
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
   import { OBRAS_ENERGIA } from '$lib/domain/energia';
@@ -79,6 +79,9 @@
     const petroleo = realDelAño(a.año);
     return { ...cuenta, cfe, polos, carga, ferro, ferroNacional, refino, petroleo, año: a.año, federal: a.federal, serie };
   });
+
+  /** What the State's till has paid for emergency tanker trucks (millions of pesos). */
+  const gastoPipas = $derived(Object.values(sim.pipas).reduce((s, p) => s + p.mdp, 0));
 
   /** This month's payment and the year it comes from, with the sources in words. */
   const llegada = $derived.by(() => {
@@ -175,10 +178,11 @@
     const pct = Math.round(delPais(c) * 100);
     const sinSalida = sim.sinSalida(año);
     const crudo = sim.crudoExportado;
+    const pipas = Object.values(sim.pipas).reduce((s, p) => ({ n: s.n + p.n, mdp: s.mdp + p.mdp }), { n: 0, mdp: 0 });
     const puertas = Object.entries(sim.importadoPorPuerta(año))
       .filter(([, b]) => mbd(b) >= 0.5)
       .sort((x, y) => y[1] - x[1])
-      .map(([k, b]) => `${k === POR_TIERRA ? 'por tierra' : nombreCorto(k)} ${mil(mbd(b))}`)
+      .map(([k, b]) => `${nombrePuerta(k)} ${mil(mbd(b))}`)
       .join(', ');
     return {
       año,
@@ -190,7 +194,14 @@
         `Del país llega el ${pct} %: ${mil(mbd(c.ducto))} mil por ducto, ${mil(mbd(c.tren))} mil en tus trenes, ${mil(mbd(c.barco))} mil en tus buques tanque ` +
         `y ${mil(mbd(c.rentados))} mil en los que renta Pemex.\n` +
         `Se importan ${mil(mbd(c.importado))} mil${puertas ? `: ${puertas}` : ''}.` +
-        (mbd(c.faltante) >= 0.5 ? `\nFaltaron ${mil(mbd(c.faltante))} mil: no les llegó el cabotaje a los puertos que no alcanzan a importar.` : '') +
+        (mbd(c.faltante) >= 0.5
+          ? `\nFaltaron ${mil(mbd(c.faltante))} mil: no les llegó el cabotaje a los puertos que no alcanzan a importar. ` +
+            `Donde falta, la carga baja en la misma proporción y los polos no reciben empresas; a los ${DESABASTO.diasParaPipas} días seguidos el Estado compra pipas.`
+          : '') +
+        (pipas.n > 0
+          ? `\nEl Estado tiene ${mil(pipas.n)} pipas de emergencia (${mil(pipas.mdp)} millones de pesos, a ${MDP_POR_PIPA.toLocaleString('es-MX', { maximumFractionDigits: 1 })} cada una)` +
+            `${c.pipas > 0 ? `: este año llevaron ${mil(mbd(c.pipas))} mil, importado` : ''}.`
+          : '') +
         (sinSalida > 0 ? `\nLas refinerías se quedaron sin salida para ${mil(sinSalida / 1000)} mil barriles: su patio se llenó.` : ''),
       detalleCombustoleo: (() => {
         const k = sim.cuentaCombustoleo(año);
@@ -306,7 +317,12 @@
       <span class="valor ir"><span class="conteo">Ver todas</span> {tablero.catalogo ? '×' : '→'}</span>
     </button>
   {:else}
-    <div class="celda caja" title={`En caja: ${mdp(cuenta.dinero)} de pesos (M: millones).` + (llegada ? String.fromCharCode(10) + llegada.detalle : '')}>
+    <div
+      class="celda caja"
+      title={`En caja: ${mdp(cuenta.dinero)} de pesos (M: millones).` +
+        (llegada ? String.fromCharCode(10) + llegada.detalle : '') +
+        (gastoPipas > 0 ? `${String.fromCharCode(10)}Pipas de emergencia por el desabasto: ${mdp(gastoPipas)} pagados de esta caja.` : '')}
+    >
       <span class="label">Presupuesto</span>
       <span class="valor">
         <b class="mono" class:agotado={cuenta.dinero < 1}>{corto(cuenta.dinero)}</b>

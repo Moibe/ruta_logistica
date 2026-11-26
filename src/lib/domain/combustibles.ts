@@ -1,8 +1,9 @@
 import DATOS from './datos/combustibles.json';
 import { añoDe } from './calendario';
 import { CARGA_POR_TREN } from './exportaciones';
+import { ENERGIA } from './energia';
 import { DEMANDA_COMBUSTIBLES, type Refinacion } from './petroleo';
-import { PUERTOS } from './sitios';
+import { nombreCorto, PUERTOS } from './sitios';
 
 /**
  * Fuels as cargo (`datos/combustibles.json`, every figure with its source).
@@ -108,6 +109,11 @@ type CombustiblesJson = {
   crudoPorPuerto: { toneladas: Record<string, number> } & Dato;
   /** Days of surplus a refinery holds, and days of a state's shortfall a delivery can cover at once. */
   dias: { patio: number; porSurtir: number } & Dato;
+  /**
+   * What a shortage does: the days of memory its effect on a state's cargo has, the days in a row
+   * after which the State buys emergency tanker trucks, and the trucks bought in January 2019.
+   */
+  desabasto: { memoriaDias: number; diasParaPipas: number; pipas: { compradas: number; barrilesDiarios: number; costoUsd: number } } & Dato;
   real: {
     /** Pemex's crude production and crude exports, Mbd. */
     crudo: { produccion: Serie; exportacion: Serie; parcial: Record<string, string> } & Dato;
@@ -282,14 +288,27 @@ export function abastoJuego(r: Refinacion): Abasto {
  * pipeline, on the player's trains and tankers and on the tankers Pemex
  * rents; imported; and what a state lacked because nobody brought it.
  */
-export type Cuenta = { consumo: number; ducto: number; tren: number; barco: number; rentados: number; importado: number; faltante: number };
-export const cuentaVacia = (): Cuenta => ({ consumo: 0, ducto: 0, tren: 0, barco: 0, rentados: 0, importado: 0, faltante: 0 });
+export type Cuenta = { consumo: number; ducto: number; tren: number; barco: number; rentados: number; importado: number; faltante: number; pipas: number };
+export const cuentaVacia = (): Cuenta => ({ consumo: 0, ducto: 0, tren: 0, barco: 0, rentados: 0, importado: 0, faltante: 0, pipas: 0 });
 
 /** Share of a year's use that came from the country's refineries (0–1). */
 export const delPais = (c: Cuenta) => (c.consumo > 0 ? (c.ducto + c.tren + c.barco + c.rentados) / c.consumo : 0);
 
 /** Where the year's imports came in, barrels: a port's key, or `tierra` for what came by land from the US. */
 export const POR_TIERRA = 'tierra';
+/** …or `pipas`, what the State's emergency tanker trucks brought (imported). */
+export const EN_PIPAS = 'pipas';
+/** How a gateway reads: «Tuxpan», «por tierra», «en pipas». */
+export const nombrePuerta = (k: string) => (k === POR_TIERRA ? 'por tierra' : k === EN_PIPAS ? 'en pipas' : nombreCorto(k));
+
+// ---- a shortage's consequences (`desabasto` in the JSON) -----------------------------------------
+
+export const DESABASTO = COMBUSTIBLES.desabasto;
+/** Barrels a day an emergency tanker truck moves, and what one costs (millions of pesos): the January 2019 purchase. */
+export const BARRILES_POR_PIPA = DESABASTO.pipas.barrilesDiarios / DESABASTO.pipas.compradas;
+export const MDP_POR_PIPA = (DESABASTO.pipas.costoUsd / DESABASTO.pipas.compradas) * ENERGIA.tipoCambio / 1e6;
+/** A state is short when what it lacked in a day passes this share of what it uses. */
+export const UMBRAL_DESABASTO = 0.01;
 
 // ---- the real series (Pemex's crude in the game: `plataformas.ts`) ------------------------------------
 

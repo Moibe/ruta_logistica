@@ -35,6 +35,9 @@
     estadosQueSurte,
     realDelAño,
     ESTADOS_CONSUMO,
+    nombrePuerta,
+    BARRILES_POR_PIPA,
+    DESABASTO,
     POR_TIERRA,
     PUERTA_MAR,
     PUERTAS_ZONA,
@@ -408,7 +411,7 @@
       .filter(([, b]) => mbdDelAño(b, año) >= 0.5)
       .sort((x, y) => y[1] - x[1])
       .slice(0, cuantas)
-      .map(([k, b]) => `${k === POR_TIERRA ? 'por tierra' : nombreCorto(k)} ${fmtMil(mbdDelAño(b, año))}`)
+      .map(([k, b]) => `${nombrePuerta(k)} ${fmtMil(mbdDelAño(b, año))}`)
       .join(', ');
   }
 
@@ -453,11 +456,13 @@
     const mbd = (b: number) => fmtMil(b / dias / 1000);
     const crudo = sim.crudoExportado;
     const puertas = puertasDelAño(año, 3);
+    const pipas = Object.values(sim.pipas).reduce((s, p) => s + p.n, 0);
     return (
       `${año}: del país vino el ${Math.round(delPais(c) * 100)} % (${mbd(c.ducto)} mil b/d por ducto, ${mbd(c.tren)} en tren, ${mbd(c.barco)} en barco` +
       `${c.rentados > 0 ? `, ${mbd(c.rentados)} en los buques que renta Pemex` : ''}); se importan ${mbd(c.importado)} mil b/d` +
       `${puertas ? `, sobre todo ${puertas.startsWith('por ') ? '' : 'por '}${puertas}` : ''}` +
-      `${c.faltante / dias >= 500 ? `; faltaron ${mbd(c.faltante)} mil b/d` : ''}. Crudo exportado: ${fmtMil(crudo)} mil b/d.` +
+      `${c.faltante / dias >= 500 ? `; faltaron ${mbd(c.faltante)} mil b/d` : ''}` +
+      `${pipas > 0 ? `; el Estado compró ${fmt.format(pipas)} pipas de emergencia` : ''}. Crudo exportado: ${fmtMil(crudo)} mil b/d.` +
       combustoleo
     );
   });
@@ -3691,6 +3696,23 @@
         {/if}
         {#if mbdDelAño(c.faltante, año) >= 0.05}
           <span class="tip-sub alerta-tip">En {año} le faltaron {fmtMil(mbdDelAño(c.faltante, año))} mil b/d: no le llegó el cabotaje</span>
+        {/if}
+        {@const surtido = sim.surtidoCombustible(clave)}
+        {@const dias = sim.diasSinCombustible(clave)}
+        {#if !sim.hayCombustible(clave) || surtido < 0.995}
+          <span class="tip-sub alerta-tip">
+            {sim.hayCombustible(clave)
+              ? `La última semana le faltó el ${Math.round((1 - surtido) * 100)} % de su combustible: su carga va al ${Math.round(surtido * 100)} %`
+              : `Desabasto: ayer le faltó el ${Math.round(sim.faltaAyer(clave) * 100)} % de su combustible. Su carga va al ${Math.round(surtido * 100)} % y sus polos no reciben empresas`}{dias > 0
+              ? `; lleva ${dias} ${dias === 1 ? 'día' : 'días'} así y a los ${DESABASTO.diasParaPipas} el Estado le compra pipas`
+              : ''}
+          </span>
+        {/if}
+        {@const pipas = sim.pipas[clave]}
+        {#if pipas}
+          <span class="tip-sub">
+            Tiene {fmt.format(pipas.n)} pipas de emergencia del Estado ({fmt.format(Math.round(pipas.mdp))} millones de pesos): cubren hasta {fmtMil((pipas.n * BARRILES_POR_PIPA) / 1000)} mil b/d de lo que le falte, con combustible importado
+          </span>
         {/if}
         <span class="tip-sub">
           En sus terminales: {fmtMil(sim.enTerminales(clave) / 1000)} mil barriles del país que llevaste{imp >= 1000 ? ` y ${fmtMil(imp / 1000)} mil importados` : ''}

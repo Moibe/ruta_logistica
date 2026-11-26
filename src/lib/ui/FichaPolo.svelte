@@ -109,6 +109,13 @@
           : `Debajo del ${UMBRALES[e.region.sistema].operativo} % mínimo: no llegan empresas hasta que haya más generación en la región.`}
       </p>
     {/if}
+    {#if sim.modo === 'juego' && !sim.hayCombustible(p.estado)}
+      {@const _reloj = sim.horas}
+      <p class="energia sin-energia">
+        Combustible · desabasto en el estado: ayer le faltó el {Math.round(sim.faltaAyer(p.estado) * 100)} % de su gasolina y diésel. No llegan empresas
+        hasta que le llegue todo.
+      </p>
+    {/if}
 
     {#if sim.modo === 'realidad'}
       {@const r = sim.real.get(clavePolo(p.id))}
@@ -224,14 +231,17 @@
       </dl>
     {:else if obra.fase === 'operando'}
       {@const conEnergia = ficha.energia?.alcanza ?? true}
-      <p class="status" class:operando={ficha.conectado && conEnergia} class:aislado={!ficha.conectado || !conEnergia}>
+      {@const conCombustible = sim.poloConCombustible(p.id)}
+      <p class="status" class:operando={ficha.conectado && conEnergia && conCombustible} class:aislado={!ficha.conectado || !conEnergia || !conCombustible}>
         {!ficha.conectado
           ? 'Construido, sin tren: no llegan empresas'
           : obra.lotes && !obra.lotes.some((l) => l.sector)
             ? 'Operando: promueve sus lotes desde adentro'
-            : conEnergia
-            ? 'Operando · llegan empresas'
-            : 'Operando, sin energía en la región: no llegan empresas'}
+            : !conEnergia
+              ? 'Operando, sin energía en la región: no llegan empresas'
+              : !conCombustible
+                ? 'Operando, con desabasto de combustible en el estado: no llegan empresas'
+                : 'Operando · llegan empresas'}
       </p>
       <div class="barra"><span style:width="{obra.ocupacion * 100}%"></span></div>
       <dl>
