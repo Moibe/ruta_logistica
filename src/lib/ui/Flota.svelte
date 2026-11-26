@@ -19,7 +19,9 @@
   import { refineria } from '$lib/domain/petroleo';
   import { sim, type Unidad } from '$lib/state/simulacion.svelte';
   import { tablero, type TipoUnidad } from '$lib/state/tablero.svelte';
-  import { duracion, estadoUnidad, horaDeJuego, km, nudos } from './formato';
+  import { duracion, estadoUnidad, horaDeJuego, km, mdp, nudos } from './formato';
+  /** Millions of pesos, with a decimal while they're few. */
+  const millones = (m: number) => (Math.abs(m) < 10 ? `${m.toLocaleString('es-MX', { maximumFractionDigits: 1 })} millones` : mdp(m));
 
   /**
    * A roster of one kind of vehicle, trains or ships (each one, where it is,
@@ -266,6 +268,15 @@
         {:else}
           <div class="aviso-carga">Sin salida al mundo en su vuelta: no lleva comercio exterior (el cabotaje entre puertos del país aún no cuenta).</div>
         {/if}
+      {/if}
+      {#if ficha.u.tipo === 'tren' && ficha.u.cobrado + ficha.u.gastado > 0}
+        {@const neto = ficha.u.cobrado - ficha.u.gastado}
+        <div>
+          <dt>Dinero</dt>
+          <dd class="mono" title="Cobra 0.68 pesos por tonelada-km y cuesta 1,186 pesos por km de tren, más 112 de derecho de paso en vía privada (ARTF y concesionarias, 2018)">
+            cobró {millones(ficha.u.cobrado)}, costó {millones(ficha.u.gastado)} · {neto >= 0 ? 'ganó' : 'perdió'} {millones(Math.abs(neto))}
+          </dd>
+        </div>
       {/if}
       {#if ficha.u.tipo === 'barco' && ficha.u.clase === 'abastecedor'}
         <div><dt>Abasto</dt><dd class="mono">{barriles(ficha.u.abasto)} de {barriles(TONELADAS_ABASTECEDOR)} t a bordo</dd></div>

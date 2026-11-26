@@ -127,6 +127,7 @@ import {
   resumir,
 } from '$lib/domain/interior';
 import { DIAS_PATIO_POLO } from '$lib/domain/sectores';
+import { COSTO_TREN_KM, cuentaTrenesVacia, kmPrivados, PASO_TREN_KM, PESOS_POR_TKM, type CuentaTrenes } from '$lib/domain/tarifas';
 import {
   CENTRALES_CO,
   combustoleoJuego,
@@ -364,6 +365,8 @@ class Simulacion {
   #diaDesabasto = -1;
   /** The State's emergency tanker trucks, by state: how many, what they cost (millions of pesos) and each purchase. */
   pipas = $state.raw<Record<string, { n: number; mdp: number; compras: { horas: number; n: number; mdp: number }[] }>>({});
+  /** What the State's trains charged and cost each year, millions of pesos (`tarifas.ts`). */
+  #cuentasTrenes = new Map<string, CuentaTrenes>();
   /** Fuel oil each Mexican refinery makes now, Mbd (`combustoleo.ts`). Recomputed with the refineries. */
   combustoleo = $state.raw<Map<string, number>>(new Map());
   /** Fuel oil waiting in each refinery's yard, barrels. Mutated by the clock. */
@@ -1079,6 +1082,8 @@ class Simulacion {
       nuevo.combustoleo = viejo.combustoleo;
       nuevo.combustoleoDe = viejo.combustoleoDe;
       nuevo.entregadoCombustoleo = viejo.entregadoCombustoleo;
+      nuevo.cobrado = viejo.cobrado;
+      nuevo.gastado = viejo.gastado;
       nuevo.importacion = viejo.importacion;
       nuevo.importacionDe = viejo.importacionDe;
       nuevo.importado = viejo.importado;
@@ -1198,6 +1203,7 @@ class Simulacion {
     while (llegadas.length) {
       const pierna = llegadas.shift()!;
       const destino = t.destinos[pierna];
+      this.#cobrarPierna(t, pierna);
       this.#entregarNacional(t, t.piernas[pierna].km);
       this.#entregarImportacion(t, t.piernas[pierna].km);
       this.#moverCadena(t, destino, t.piernas[pierna].km);
@@ -1208,6 +1214,36 @@ class Simulacion {
       this.#cargarImportacion(t, destino);
       this.#cargarNacional(t, destino);
     }
+  }
+
+  /**
+   * A train finished a leg: it charges the tonnes it had aboard by the leg's km, pays the km it ran
+   * and its trackage rights on private track, all into and out of the State's till (`tarifas.ts`).
+   */
+  #cobrarPierna(t: Tren, pierna: number) {
+    const p = t.piernas[pierna];
+    if (!p || !this.red || this.modo !== 'juego') return;
+    const cadena = Object.values(t.cadena).reduce((s, x) => s + x, 0);
+    const ton = t.carga + t.importacion + t.cargaNacional + cadena + (t.combustible + t.combustibleImp) * T_POR_BARRIL + t.combustoleo * T_POR_BARRIL_CO;
+    const ingreso = (ton * p.km * PESOS_POR_TKM) / 1e6;
+    const costo = (p.km * COSTO_TREN_KM) / 1e6;
+    const paso = (kmPrivados(p, this.red) * PASO_TREN_KM) / 1e6;
+    this.dinero += ingreso - costo - paso;
+    t.cobrado += ingreso;
+    t.gastado += costo + paso;
+    const año = String(añoDe(this.horas));
+    const c = this.#cuentasTrenes.get(año) ?? cuentaTrenesVacia();
+    c.ingreso += ingreso;
+    c.costo += costo;
+    c.paso += paso;
+    c.tkm += ton * p.km;
+    c.km += p.km;
+    this.#cuentasTrenes.set(año, c);
+  }
+
+  /** A year of the State's trains: charged, run and trackage rights (millions of pesos), tonne-km and train-km. Read it with `horas`. */
+  cuentaTrenes(año: number): CuentaTrenes {
+    return this.#cuentasTrenes.get(String(año)) ?? cuentaTrenesVacia();
   }
 
   /** Tonnes a train still has room for: exports, imports, fuel and domestic cargo share its net load. */

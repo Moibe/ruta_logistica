@@ -1,0 +1,65 @@
+{
+ "corte": "2026-11-26",
+ "nota": "Lo que cobran y lo que cuestan los trenes del Estado. Generado por scripts/dinero/gen-tarifas.mjs; cada cifra con su fuente.",
+ "fuentes": {
+  "artf-indicadores-2020": {
+   "fuente": "ARTF, Indicadores Ferroviarios 2020 (SNIF): ingreso por tonelada-km de carga (T-C-1), toneladas-km netas por concesionario (tabla 11), trenes-km (tabla 12) y carros por tren (tabla 10), 2016–2019",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/559416/Indicadores_Ferroviarios_ARTF_2020_Final.pdf"
+  },
+  "gmxt-4t18": {
+   "fuente": "GMXT (Ferromex y Ferrosur), reporte del cuarto trimestre de 2018 ante la BMV: ingresos de 45,431.4 millones de pesos y utilidad de operación de 12,397.0 en 2018",
+   "url": "https://gmxt.mx/wp-content/uploads/2019/07/4TRIM18D-GMXT.pdf"
+  },
+  "kcs-4t18": {
+   "fuente": "Kansas City Southern (dueña de KCSM), resultados del cuarto trimestre de 2018: razón de operación de 63.7 % en 2018 (toda la empresa, con su parte en EUA). El documento no se leyó: se usa lo que muestra el buscador",
+   "url": "https://www.sec.gov/Archives/edgar/data/54480/000005448019000012/kcs1231201810k.htm"
+  },
+  "cofece-2021": {
+   "fuente": "Cofece, Estudio de competencia en el servicio público de transporte ferroviario de carga (2021), nota 125: «la SCT le impuso a la empresa LCD una contraprestación de 16.5 centavos de dólar a la empresa Ferromex por carro-kilómetro» (citando a la Cámara de Diputados, 2017)",
+   "url": "https://www.cofece.mx/wp-content/uploads/2021/08/FERRO_doc-2021.pdf"
+  },
+  "artf-2019": {
+   "fuente": "ARTF, Anuario Estadístico Ferroviario 2019, tabla 4-2: ingresos de las concesionarias en 2018",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/574090/Anuario_Estadi_stico_Ferroviario_2019__2_.pdf"
+  }
+ },
+ "ingreso": {
+  "pesosPorTkm": 0.68,
+  "porEmpresa": {
+   "KCSM": 0.81,
+   "FSRR": 0.73,
+   "FXE": 0.6,
+   "LCD": 0.59,
+   "FIT": 0.35
+  },
+  "dato": "Cobran lo que cobraba en promedio el ferrocarril de carga en 2018: 0.68 pesos por tonelada-km (ARTF; Kansas City de México 0.81, Ferrosur 0.73, Ferromex 0.60, el Istmo 0.35). Cada tramo cobra las toneladas que lleva a bordo por sus km.",
+  "fuentes": [
+   "artf-indicadores-2020"
+  ]
+ },
+ "costo": {
+  "razonOperacion": 0.691,
+  "razonGmxt": 0.727,
+  "razonKcs": 0.637,
+  "ingresos2018Mdp": 61979.9,
+  "trenesKm2018Millones": 36.09,
+  "pesosPorTrenKm": 1186,
+  "dato": "Cuestan lo que le costaba a las concesionarias mover un tren un km en 2018: gastaban 69.1 centavos por cada peso que cobraban (GMXT, de Ferromex y Ferrosur, 72.7 %; Kansas City Southern 63.7 %, ponderadas por sus ingresos), y cobraron 61,979.9 millones con 36.09 millones de trenes-km: 1,186 pesos por km de tren, cargado o vacío. Incluye todo: diésel, tripulación, mantenimiento, depreciación y administración (cálculo del juego).",
+  "fuentes": [
+   "gmxt-4t18",
+   "kcs-4t18",
+   "artf-2019",
+   "artf-indicadores-2020"
+  ]
+ },
+ "derechoPaso": {
+  "usdPorCarroKm": 0.165,
+  "carrosPorTren": 37.11,
+  "pesosPorTrenKm": 112.2,
+  "dato": "En vía privada pagan derecho de paso: 16.5 centavos de dólar por carro-km, la contraprestación que la SCT le impuso a Coahuila–Durango con Ferromex (Cofece), por los 37.11 carros de un tren promedio de 2018 (ARTF): 112.2 pesos por km de tren con el tipo de cambio del juego. No hay una tarifa pública vigente: es estimación del juego.",
+  "fuentes": [
+   "cofece-2021",
+   "artf-indicadores-2020"
+  ]
+ }
+}

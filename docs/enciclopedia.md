@@ -79,6 +79,9 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [ASF, auditoría 2020-0430 «Erogaciones por Mantenimiento en Refinerías»](https://www.asf.gob.mx/Trans/Informes/IR2020c/Documentos/Auditorias/2020_0430_a.pdf) | El combustóleo que hizo cada refinería en 2019 y 2020 | Cuenta Pública 2020 | Documento oficial público |
 | [ASF, auditoría 2017-0522 a CFEnergía](https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf) | El combustóleo que la CFE compraba en Estados Unidos llegaba en buque tanque a Tuxpan; el gas natural licuado, a Altamira y Manzanillo | Cuenta Pública 2017 | Documento oficial público |
 | [SENER, Balance Nacional de Energía 2019](https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf) | Lo que el país exportó e importó de cada petrolífero en 2018 (en PJ) y el poder calorífico neto del combustóleo (cuadro 29) | Febrero de 2021 | Documento oficial público |
+| [ARTF, Indicadores Ferroviarios 2020](https://www.gob.mx/cms/uploads/attachment/file/559416/Indicadores_Ferroviarios_ARTF_2020_Final.pdf) | Ingreso por tonelada-km de cada concesionaria, toneladas-km, trenes-km y carros por tren de 2016 a 2019 | 2020 | Documento oficial público |
+| [GMXT, reporte del cuarto trimestre de 2018 ante la BMV](https://gmxt.mx/wp-content/uploads/2019/07/4TRIM18D-GMXT.pdf) | Ingresos y utilidad de operación de Ferromex y Ferrosur en 2018: cuánto gastaban por peso cobrado | Febrero de 2019 | Reporte regulatorio de la empresa |
+| [Cofece, estudio de competencia en el ferrocarril de carga](https://www.cofece.mx/wp-content/uploads/2021/08/FERRO_doc-2021.pdf) | La contraprestación de 16.5 centavos de dólar por carro-km que fijó la SCT por un derecho de paso | 2021 | Documento oficial público |
 | [SHCP, comunicado 008/2019](https://www.gob.mx/shcp/prensa/comunicado-no-008-2019-el-gobierno-de-mexico-amplia-la-estrategia-de-combate-al-robo-de-combustible-mediante-la-compra-de-pipas) | Las pipas que se compraron por el desabasto: 671 autotanques con capacidad equivalente a 144 mil barriles diarios, por 92 millones de dólares | 24 de enero de 2019 | Documento oficial público |
 | [ASF, auditoría 2019-0412 «Adquisición de Pipas para Transporte de Combustible»](https://www.asf.gob.mx/Trans/Informes/IR2019c/Documentos/Auditorias/2019_0412_a.pdf) | Cuándo se entregaron las pipas de 2019 (del 5 de febrero al 22 de abril), lo que costó operarlas (nómina de los operadores de la Sedena y mantenimiento) y su renta | Cuenta Pública 2019 | Documento oficial público |
 | [SENER, Informe Pormenorizado 2023, tabla 12](https://www.gob.mx/cms/uploads/attachment/file/972693/Informe_Pormenorizado_2023.pdf) | El combustóleo que quemó la CFE cada año de 2014 a 2023 (miles de m³) | 2024 | Documento oficial público |
@@ -3539,6 +3542,44 @@ de noviembre del año anterior y el proyecto se presenta el 8 de septiembre.
 En la barra de arriba, junto al saldo va cuánto llega cada mes; al
 pasar el cursor, de dónde sale.
 
+#### Lo que cobran y cuestan tus trenes
+
+Tus trenes son del Estado y su dinero entra y sale de la misma caja que paga las obras. El usuario
+eligió costos completos y dejar fuera el ISR de las concesionarias, que va a la Tesorería y no al
+presupuesto de ferrocarriles. En cada tramo que termina, un tren:
+
+- **cobra 0.68 pesos por tonelada-km**: las toneladas que lleva a bordo por los km del tramo. Es lo
+  que cobraba en promedio el ferrocarril de carga en 2018 (ARTF, *Indicadores Ferroviarios 2020*:
+  Kansas City de México 0.81, Ferrosur 0.73, Ferromex 0.60, el Istmo 0.35);
+- **cuesta 1,186 pesos por km**, cargado o vacío. Es lo que les costaba a las concesionarias mover un
+  tren un km en 2018, con todo (diésel, tripulación, mantenimiento, depreciación y administración):
+  - GMXT, de Ferromex y Ferrosur, gastó 72.7 centavos por cada peso que cobró en 2018 (su reporte
+    del cuarto trimestre ante la BMV);
+  - Kansas City Southern, 63.7 % (sus resultados de 2018, leídos en el resumen del buscador);
+  - ponderadas por sus ingresos dan 69.1 %. Con los 61,979.9 millones que cobraron en 2018 y sus
+    36.09 millones de trenes-km (ARTF), salen 1,186 pesos por km de tren (**cálculo del juego**);
+- **paga derecho de paso en vía privada**: 112 pesos por km. Es la contraprestación de 16.5 centavos
+  de dólar por carro-km que la SCT le impuso a Coahuila–Durango con Ferromex (Cofece, 2021, citando a
+  la Cámara de Diputados), por los 37.11 carros de un tren promedio de 2018. No hay una tarifa pública
+  vigente: **estimación del juego**.
+
+Con eso, un tren sale tablas con unas 1,744 toneladas a bordo en promedio por vía del Estado (el 72 %
+de su carga) y con 1,909 por vía privada. Si la caja queda en rojo, las obras se detienen hasta que
+vuelva a haber dinero.
+
+**Prueba con la flota inicial** (diciembre de 2018, 30 días): los trenes cobraron 383 millones y
+costaron 313 (292 de operación y 21 de derecho de paso). Ganaron 70 millones, unos 850 al año, con
+2,284 toneladas a bordo en promedio: cerca del 8 % del presupuesto federal de 2019. Solo pierde el
+Coatzacoalcos ⇄ Progreso, que lleva poca carga por la vía del Mayab.
+
+Lo dicen la caja de la barra (al pasar el cursor) y la ficha de cada tren.
+
+**Lo que falta o es estimación:**
+
+- las tarifas y los costos se quedan en los de 2018, sin inflación;
+- el derecho de paso es una sola tarifa para toda la vía privada;
+- los buques del jugador todavía no cobran ni cuestan.
+
 ### La energía
 
 Los polos necesitan electricidad. El país se divide en las **regiones del sistema eléctrico**
@@ -5105,6 +5146,10 @@ los otros dos aún no se capturan.
     su caja.
 
   Ver [Cuando falta: el desabasto](#cuando-falta-el-desabasto).
+- **Tus trenes cobran y cuestan.** *(26 nov 2026.)* El usuario eligió costos completos (no solo el
+  diésel ni sin costos) y dejar fuera el ISR de las concesionarias. Cobran 0.68 pesos por
+  tonelada-km, cuestan 1,186 pesos por km y pagan 112 por km de derecho de paso en vía privada. Ver
+  [Lo que cobran y cuestan tus trenes](#lo-que-cobran-y-cuestan-tus-trenes).
 - **El combustóleo y las pipas, cada año.** *(26 nov 2026.)* El usuario pidió las dos cosas que
   propuse:
   - las pipas tardan en llegar (de 15 a 91 días, por las entregas de 2019) y cuestan al operarlas

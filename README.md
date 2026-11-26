@@ -413,6 +413,13 @@ El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedi
 El tablero tiene la capa *Combustibles*: los estados por la parte que vino del país y las 78
 terminales de Pemex. Detalle en la [enciclopedia](docs/enciclopedia.md#los-combustibles).
 
+**El dinero de los trenes** (`domain/tarifas.ts`, `datos/tarifas.json`, generado por
+`scripts/dinero/gen-tarifas.mjs`): al terminar cada tramo (`#cobrarPierna`) un tren cobra 0.68 pesos
+por tonelada-km a bordo (ARTF 2018), cuesta 1,186 pesos por km (razón de operación de GMXT y KCS por
+los ingresos y trenes-km de 2018) y paga 112 por km en vía privada (`kmPrivados`); todo a la caja del
+Estado (`sim.dinero`). Cuentas en `cuentaTrenes(año)` y `Tren.cobrado`/`gastado`. Detalle en la
+[enciclopedia](docs/enciclopedia.md#lo-que-cobran-y-cuestan-tus-trenes).
+
 **El combustóleo** (`domain/combustoleo.ts`, `datos/combustoleo.json`, generado por
 `scripts/combustibles/gen-combustoleo.mjs`), como el carbón de Nava:
 
@@ -760,8 +767,7 @@ costa del mundo solo sube de resolución). Además:
 - **Energía**: el Plan de Expansión de la CFE 2026–2030 (52 proyectos) en el catálogo, cuando se
   publique la lista por central. Sin él, de 2028 en adelante varias regiones se quedan sin
   margen.
-- **Más dinero del Estado**, con la carga: lo que cobran los trenes del Estado, lo que pagan
-  sus trenes por pasar por vía privada y los impuestos de las concesionarias.
+- **Dinero, lo que sigue**: que los buques del jugador cobren y cuesten; tarifas por año.
 - **Otros sitios por dentro**: la vista de un puerto o una refinería, como la de los polos.
 - **Comercio por mar, lo que sigue**: el cabotaje de carga entre puertos del país; más salidas al mundo (Estados Unidos, Sudamérica) para que las rutas
   reales tengan a dónde ir; el valor en dólares de lo que se mueve.

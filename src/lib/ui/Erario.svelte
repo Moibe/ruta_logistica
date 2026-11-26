@@ -80,6 +80,13 @@
     return { ...cuenta, cfe, polos, carga, ferro, ferroNacional, refino, petroleo, año: a.año, federal: a.federal, serie };
   });
 
+  /** What the State's trains charged and cost this game year (millions of pesos). */
+  const trenesAño = $derived.by(() => {
+    sim.horas;
+    const año = añoDe(sim.horas);
+    return { año, ...sim.cuentaTrenes(año) };
+  });
+
   /** What the State's till has paid for emergency tanker trucks (millions of pesos). */
   const gastoPipas = $derived.by(() => {
     sim.horas;
@@ -324,7 +331,13 @@
       class="celda caja"
       title={`En caja: ${mdp(cuenta.dinero)} de pesos (M: millones).` +
         (llegada ? String.fromCharCode(10) + llegada.detalle : '') +
-        (gastoPipas > 0 ? `${String.fromCharCode(10)}Pipas de emergencia por el desabasto: ${mdp(gastoPipas)} pagados de esta caja, entre comprarlas y operarlas.` : '')}
+        (gastoPipas > 0 ? `${String.fromCharCode(10)}Pipas de emergencia por el desabasto: ${mdp(gastoPipas)} pagados de esta caja, entre comprarlas y operarlas.` : '') +
+        (trenesAño.km > 0
+          ? `${String.fromCharCode(10)}Tus trenes en ${trenesAño.año}: cobraron ${mdp(trenesAño.ingreso)} y costaron ${mdp(trenesAño.costo + trenesAño.paso)} ` +
+            `(${mdp(trenesAño.costo)} de operación y ${mdp(trenesAño.paso)} de derecho de paso en vía privada): ` +
+            `${trenesAño.ingreso >= trenesAño.costo + trenesAño.paso ? 'ganaron' : 'perdieron'} ${mdp(Math.abs(trenesAño.ingreso - trenesAño.costo - trenesAño.paso))}, ` +
+            `con ${Math.round(trenesAño.tkm / trenesAño.km).toLocaleString('es-MX')} toneladas a bordo en promedio.`
+          : '')}
     >
       <span class="label">Presupuesto</span>
       <span class="valor">
