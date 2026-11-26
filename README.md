@@ -81,8 +81,7 @@ saltar al siguiente libre.
   `tipo`), cada una con su capa encendida, su *＋ Nuevo* (`tablero.nuevo(tipo)`; el de la otra
   cambia el trazo en curso) y la ficha de su vehículo elegido; con las dos abiertas se reparten el
   alto. Entre las dos va la leyenda de las vías (`ui/LeyendaVias.svelte`: color por clase, dueño o
-  uso, en `tablero.modoVias`), que antes flotaba sobre el mapa. Los paneles se pliegan con su flecha (la misma de *Vistas*): Capas queda en su título con
-  cuántas capas están encendidas, y cada lista en su nombre y *＋ Nuevo* (con las listas y la
+  uso, en `tablero.modoVias`), que antes flotaba sobre el mapa. Los paneles se pliegan con su flecha (la misma de *Vistas*): Capas queda en su título, y cada lista en su nombre y *＋ Nuevo* (con las listas y la
   leyenda plegadas, sus barras bajan juntas 120 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
   los dejó (`state/plegable.svelte.ts`, en `localStorage`, leído al montar porque el tablero se
   arma en el servidor). Las cifras del tablero (puertos, ciudades, polos, km de vía, trenes y

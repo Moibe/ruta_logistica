@@ -46,11 +46,9 @@
     },
   ];
 
-  /** The bar folds to its title, which then says how many layers are on. */
+  /** The bar folds to its title. */
   const panel = new Plegable('capas');
   const grupos = $derived(GRUPOS.filter((g) => !g.soloJuego || sim.modo === 'juego'));
-  const visibles = $derived(grupos.flatMap((g) => g.capas));
-  const encendidas = $derived(visibles.filter((c) => tablero.capas[c.capa]).length);
 
   /**
    * How much the bar says, richest first: group and layer names, layer names,
@@ -155,9 +153,6 @@
     onclick={() => panel.alternar()}
   >
     <span class="label">Capas</span>
-    {#if plegado}
-      <span class="cuenta mono">{encendidas} de {visibles.length}</span>
-    {/if}
     <svg class="flecha" viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5" /></svg>
   </button>
   {#if !plegado}
@@ -210,7 +205,7 @@
     pointer-events: auto;
   }
 
-  /* Folded, only its title: «Capas 12 de 15». */
+  /* Folded, only its title. */
   .capas.plegado {
     width: max-content;
   }
@@ -246,10 +241,6 @@
 
   .plegar:hover {
     color: var(--ink);
-  }
-
-  .cuenta {
-    font-size: 0.62rem;
   }
 
   .flecha {
