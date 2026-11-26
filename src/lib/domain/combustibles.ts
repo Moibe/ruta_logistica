@@ -91,6 +91,8 @@ type CombustiblesJson = {
   puertos: { porPuerto: Record<string, { '2018': MovimientoPuerto; '2024': MovimientoPuerto; nota?: string }> } & Dato;
   /** Where each coastal refinery loads tankers. */
   puertoDeRefineria: Record<string, string>;
+  /** Deer Park, once Pemex's: the share of its fuel that goes to Mexico, where it loads (Houston) and where it comes in (Tuxpan). */
+  deerPark: { parteAMexico: number; puerto: string; entra: string } & Dato;
   /**
    * Imports: the most each port takes from abroad (Mbd), the ports each zone
    * imports through, the share of a sea-fed state's fuel that comes through
@@ -153,7 +155,18 @@ export const DIAS_POR_SURTIR = COMBUSTIBLES.dias.porSurtir;
 
 /** The tanker port of each coastal refinery, and the refinery of each such port. */
 export const PUERTO_DE_REFINERIA = new Map(Object.entries(COMBUSTIBLES.puertoDeRefineria));
-export const REFINERIA_DEL_PUERTO = new Map([...PUERTO_DE_REFINERIA].map(([r, p]) => [p, r] as const));
+/**
+ * Deer Park (`deerPark`): once Pemex's, only part of its fuel goes to Mexico, on Pemex's tankers from
+ * Houston to Tuxpan, into the central zone's pipelines. The rest is sold in the United States unless
+ * the player's tankers pick it up in Houston, where its yard is.
+ */
+export const DEER_PARK_MX = COMBUSTIBLES.deerPark;
+export const PARTE_DEER_PARK_A_MEXICO = DEER_PARK_MX.parteAMexico;
+/** The refinery of each tanker port: the coastal ones' and Deer Park's, at Houston. */
+export const REFINERIA_DEL_PUERTO = new Map([
+  ...[...PUERTO_DE_REFINERIA].map(([r, p]) => [p, r] as const),
+  [DEER_PARK_MX.puerto, 'deer-park'] as const,
+]);
 
 export const ESTADOS_CONSUMO = Object.keys(COMBUSTIBLES.consumo.parte);
 
@@ -240,8 +253,10 @@ export function abastoJuego(r: Refinacion): Abasto {
   const porDucto = new Map(ESTADOS_CONSUMO.map((e) => [e, 0]));
   const sobrante = new Map<string, number>();
   const faltaZona = new Map<string, Map<string, number>>();
+  // What each refinery gives its zone: all it makes, but Deer Park only the part that goes to Mexico.
+  const aSuZona = (id: string) => (r.porRefineria.get(id)?.combustibles ?? 0) * (id === 'deer-park' ? PARTE_DEER_PARK_A_MEXICO : 1);
   for (const z of ZONAS) {
-    const prod = z.refinerias.reduce((s, id) => s + (r.porRefineria.get(id)?.combustibles ?? 0), 0);
+    const prod = z.refinerias.reduce((s, id) => s + aSuZona(id), 0);
     const demanda = Object.entries(z.estados).reduce((s, [e, f]) => s + (consumo.get(e) ?? 0) * f, 0);
     const llega = demanda > 0 ? Math.min(1, prod / demanda) : 0;
     for (const [e, f] of Object.entries(z.estados)) {
@@ -251,14 +266,17 @@ export function abastoJuego(r: Refinacion): Abasto {
     }
     const sobra = Math.max(0, prod - demanda);
     for (const id of z.refinerias) {
-      const p = r.porRefineria.get(id)?.combustibles ?? 0;
-      // A refinery with nowhere to load (Deer Park, through an import terminal) keeps nothing in a yard.
+      const p = aSuZona(id);
+      // Deer Park's part comes in through an import terminal: none of it waits in a yard.
       const sale = id === 'deer-park' ? 0 : prod > 0 ? (sobra * p) / prod : 0;
       sobrante.set(id, (sobrante.get(id) ?? 0) + sale);
     }
   }
   // A coastal refinery outside every zone sends all it makes by sea.
   for (const [id, e] of r.porRefineria) if (!ZONA_DE_REFINERIA.has(id) && id !== 'deer-park') sobrante.set(id, e.combustibles);
+  // The rest of Deer Park's waits in its yard, in Houston, for the player's tankers: what they don't take is sold in the United States.
+  const dp = (r.porRefineria.get('deer-park')?.combustibles ?? 0) * (1 - PARTE_DEER_PARK_A_MEXICO);
+  if (dp > 0) sobrante.set('deer-park', dp);
   const hueco = new Map(ESTADOS_CONSUMO.map((e) => [e, Math.max(0, consumo.get(e)! - porDucto.get(e)!)]));
   const porMar = new Map(ESTADOS_CONSUMO.map((e) => [e, consumo.get(e)! * (REPARTO[e]?.mar ?? 0)]));
   const porTren = new Map(ESTADOS_CONSUMO.map((e) => [e, consumo.get(e)! * (REPARTO[e]?.tren ?? 0)]));

@@ -42,6 +42,8 @@
     PUERTA_MAR,
     PUERTAS_ZONA,
     PUERTO_DE_REFINERIA,
+    PARTE_DEER_PARK_A_MEXICO,
+    DEER_PARK_MX,
     PUERTOS_COMBUSTIBLE,
     REFINERIA_DEL_PUERTO,
     REPARTO,
@@ -2136,11 +2138,13 @@
       if (hx < -40 || hx > width + 40 || hy < -40 || hy > height + 40) continue;
       petroleroPts.push({ petrolero: p, x: hx, y: hy });
       const hot = hovered?.kind === 'petrolero' && hovered.petrolero.id === p.id;
+      // Crude's tone for the buyers', fuel's for Pemex's from Deer Park.
+      const color = p.carga === 'combustible' ? COMBUSTIBLE : PETROLERO;
       if (estela.length >= 2) {
         const [ax, ay] = estela[0];
         const g = ctx.createLinearGradient(ax, ay, hx, hy);
-        g.addColorStop(0, conAlfa(CRUDO, 0));
-        g.addColorStop(1, conAlfa(PETROLERO, 0.4));
+        g.addColorStop(0, conAlfa(color, 0));
+        g.addColorStop(1, conAlfa(color, 0.4));
         ctx.save();
         ctx.strokeStyle = g;
         ctx.lineWidth = 2;
@@ -2153,8 +2157,8 @@
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
       const brillo = ctx.createRadialGradient(hx, hy, 0, hx, hy, 10);
-      brillo.addColorStop(0, conAlfa(PETROLERO, hot ? 0.5 : 0.28));
-      brillo.addColorStop(1, conAlfa(PETROLERO, 0));
+      brillo.addColorStop(0, conAlfa(color, hot ? 0.5 : 0.28));
+      brillo.addColorStop(1, conAlfa(color, 0));
       ctx.fillStyle = brillo;
       ctx.fillRect(hx - 10, hy - 10, 20, 20);
       ctx.restore();
@@ -2170,7 +2174,7 @@
       ctx.lineTo(-L, W / 2);
       ctx.lineTo(-L * 0.3, W / 2);
       ctx.closePath();
-      ctx.fillStyle = PETROLERO;
+      ctx.fillStyle = color;
       ctx.fill();
       ctx.strokeStyle = 'rgba(10, 14, 22, 0.8)';
       ctx.lineWidth = 1;
@@ -3179,15 +3183,35 @@
       {@const _reloj = sim.horas}
       {@const destino = PUERTAS.find((x) => `puerta:${x.id}` === p.destino)}
       {@const faltan = Math.max(0, p.trayecto.horas - (sim.horas - p.salida))}
-      <span class="label tip-kind" style:color={CRUDO}>Petrolero de un comprador</span>
-      <strong>Crudo de {p.origen === 'cayo-arcas' ? 'Cayo Arcas' : nombreCorto(p.origen)} a {destino?.hacia ?? p.destino}</strong>
-      <span class="tip-sub">{fmt.format(Math.round(p.barriles / 1000))} mil barriles · llega en {faltan >= 48 ? `${Math.round(faltan / 24)} días` : `${Math.round(faltan)} horas`}</span>
-      <span class="tip-sub">No es tuyo: es el barco de quien compra el crudo que el país no refina. En 2018 se fue el 53 % a Estados Unidos, el 17 % a Europa y el 27 % al Lejano Oriente (Balance Nacional de Energía).</span>
+      {@const llega = `${fmt.format(Math.round(p.barriles / 1000))} mil barriles · llega en ${faltan >= 48 ? `${Math.round(faltan / 24)} días` : `${Math.round(faltan)} horas`}`}
+      {#if p.carga === 'combustible'}
+        <span class="label tip-kind" style:color={COMBUSTIBLE}>Buque tanque que renta Pemex</span>
+        <strong>Combustibles de Deer Park a {nombreCorto(p.destino)}</strong>
+        <span class="tip-sub">{llega}</span>
+        <span class="tip-sub">
+          No es tuyo. Lleva la parte de Deer Park que llega a México, el {Math.round(PARTE_DEER_PARK_A_MEXICO * 100)} % de lo que hace (Pemex, 2022): {fmtMil(sim.deerParkAMexico)} mil barriles diarios, que entran por Tuxpan a los poliductos del centro. Lo demás se vende en Estados Unidos, salvo lo que tus buques tanque recojan en Houston.
+        </span>
+      {:else}
+        <span class="label tip-kind" style:color={CRUDO}>Petrolero de un comprador</span>
+        <strong>Crudo de {p.origen === 'cayo-arcas' ? 'Cayo Arcas' : nombreCorto(p.origen)} a {destino?.hacia ?? p.destino}</strong>
+        <span class="tip-sub">{llega}</span>
+        <span class="tip-sub">No es tuyo: es el barco de quien compra el crudo que el país no refina. En 2018 se fue el 53 % a Estados Unidos, el 17 % a Europa y el 27 % al Lejano Oriente (Balance Nacional de Energía).</span>
+      {/if}
     {:else if hovered.kind === 'puerta'}
       <span class="label tip-kind" style:color="var(--accent)">Salida al mundo</span>
       {#if hovered.puerta.enTablero}
+        {@const _reloj = sim.horas}
         <strong>{hovered.puerta.hacia}</strong>
         <span class="tip-sub">{hovered.puerta.nombre} · al final de su canal de navegación, que entra por Galveston</span>
+        {#if `puerta:${hovered.puerta.id}` === DEER_PARK_MX.puerto}
+          {#if sim.modo === 'juego' && sim.deerParkPropia}
+            <span class="tip-rail" style:color={COMBUSTIBLE}>
+              Deer Park manda a México {fmtMil(sim.deerParkAMexico)} mil b/d en buques que renta Pemex, a Tuxpan; en su patio esperan {fmtMil(sim.enPatio('deer-park') / 1000)} mil barriles para tus buques tanque. Lo que no recogen se vende en Estados Unidos.
+            </span>
+          {:else if sim.modo === 'juego'}
+            <span class="tip-sub">Deer Park es mitad de Shell: su combustible no cuenta para el país hasta que Pemex compre esa mitad.</span>
+          {/if}
+        {/if}
       {:else}
         <strong>Hacia {hovered.puerta.nombre}</strong>
         <span class="tip-sub">
@@ -3473,6 +3497,12 @@
             <span class="tip-sub">Lo que produce no cuenta para el país hasta comprar la parte de Shell</span>
           {:else}
             <span class="tip-sub">{fmt.format(Math.round(e.combustibles))} mil barriles diarios de gasolina, diésel y turbosina</span>
+            {#if r.extranjera}
+              {@const _reloj2 = sim.horas}
+              <span class="tip-rail" style:color={COMBUSTIBLE}>
+                A México llegan {fmtMil(sim.deerParkAMexico)} mil b/d ({Math.round(PARTE_DEER_PARK_A_MEXICO * 100)} %), en buques que renta Pemex de Houston a Tuxpan. En su patio esperan {fmtMil(sim.enPatio(r.id) / 1000)} mil barriles para tus buques tanque, en Houston; lo que no recogen se vende en Estados Unidos.
+              </span>
+            {/if}
           {/if}
           {@const sobra = sim.abasto?.sobrante.get(r.id) ?? 0}
           {@const _reloj = sim.horas}

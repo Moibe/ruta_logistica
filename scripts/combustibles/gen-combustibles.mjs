@@ -22,6 +22,16 @@ const FUENTES = {
       'SHCP, comunicado 008/2019 (24 de enero de 2019): Pemex contará con «671 autotanques con una capacidad equivalente a 144 mil barriles diarios. El monto total es de 92 millones de dólares»',
     url: 'https://www.gob.mx/shcp/prensa/comunicado-no-008-2019-el-gobierno-de-mexico-amplia-la-estrategia-de-combate-al-robo-de-combustible-mediante-la-compra-de-pipas',
   },
+  'expansion-deer-park-2023': {
+    fuente:
+      'Expansión, nota del 18 de enero de 2023 sobre la gasolina que Deer Park manda a México: México ha recibido alrededor de 14 mil barriles diarios de gasolina y 17 mil de destilados desde que se formalizó la compra, según cifras internas de Pemex',
+    url: 'https://expansion.mx/empresas/2023/01/18/refineria-deer-park-envia-gasolina-mexico-volumen-minimo',
+  },
+  'expansion-deer-park-2026': {
+    fuente:
+      'Expansión, nota del 28 de octubre de 2026 sobre lo que Deer Park manda a México: el analista Ramsés Pech estima que lo que Deer Park manda a México es entre 15 y 20 % de su producción; Pemex no publica el volumen',
+    url: 'https://expansion.mx/empresas/2026/10/28/deer-park-mejor-refineria-pemex-enviar-combustibles-mexico',
+  },
   'argus-aframax': {
     fuente:
       'Argus, «Lower Venezuela cargo demand weighs on Aframaxes» (2019): el flete de Aframax del Caribe a la costa del Golfo de EUA promedió 7.14 dólares por tonelada del 1 de abril al 15 de agosto de 2019, 11 % menos que en 2018. No se leyó la nota: se usa lo que muestra el buscador',
@@ -316,7 +326,7 @@ const ZONAS = [
     refinerias: ['tula', 'salamanca', 'minatitlan', 'deer-park'],
     dato:
       'Tula, Salamanca y Minatitlán están unidas por sus poliductos, que llegan del Golfo a Jalisco y Michoacán; Tuxpan, la terminal ' +
-      'de importación, entra a la misma red. Lo que hace Deer Park entra al país por esa terminal (estimación del juego).',
+      'de importación, entra a la misma red. La parte de Deer Park que llega a México entra por esa terminal (ver deerPark).',
   },
   {
     id: 'noreste',
@@ -516,6 +526,14 @@ const FLETE_USD = {
   'puerta:asia': FLETE_ASIA,
 };
 
+// Deer Park's fuel that goes to Mexico: about 14 thousand b/d of gasoline and 17 thousand of
+// distillates from its purchase (January 2022) to January 2023, Pemex's internal figures seen by
+// Expansión, out of what it made in 2022 (its run that year by its yield).
+const PETROLEO = JSON.parse(await readFile(join(ROOT, 'src', 'lib', 'domain', 'datos', 'petroleo.json'), 'utf8'));
+const DP_A_MEXICO = 14 + 17;
+const DP_HIZO_2022 = PETROLEO.refinerias.find((r) => r.id === 'deer-park').anual['2022'] * PETROLEO.rendimientos.deerPark;
+const DP_PARTE = Math.round((DP_A_MEXICO / DP_HIZO_2022) * 1000) / 1000;
+
 const datos = {
   corte: '2026-11-22',
   nota: 'Generado por scripts/combustibles/gen-combustibles.mjs. Lo que se calcula aquí son estimaciones del juego con cifras oficiales; cada dato dice de dónde sale.',
@@ -605,6 +623,18 @@ const datos = {
       'Reglas del juego: una refinería guarda hasta 15 días de lo que produce esperando tren o barco, y un estado recibe de una vez hasta 15 días de lo ' +
       'que sus ductos no le traen.',
     fuentes: [],
+  },
+  deerPark: {
+    parteAMexico: DP_PARTE,
+    puerto: 'puerta:eua',
+    entra: 'puerto:tuxpan',
+    dato:
+      `Lo que hace Deer Park, ya de Pemex, que llega a México: el ${(DP_PARTE * 100).toFixed(0)} %. Desde la compra (enero de 2022) hasta enero de ` +
+      `2023 México recibió unos 14 mil barriles diarios de gasolina y 17 mil de destilados (cifras internas de Pemex vistas por Expansión), ` +
+      `${DP_A_MEXICO} mil de los ${DP_HIZO_2022.toFixed(0)} mil que hizo en 2022 (procesó ${PETROLEO.refinerias.find((r) => r.id === 'deer-park').anual['2022']} ` +
+      `mil de crudo, a ${PETROLEO.rendimientos.deerPark} de rendimiento). Un analista estimaba en 2026 entre 15 y 20 %. Llega en buques tanque de ` +
+      'Pemex de Houston a Tuxpan; lo demás se vende en Estados Unidos, salvo lo que tus buques tanque recojan en Houston.',
+    fuentes: ['expansion-deer-park-2023', 'expansion-deer-park-2026'],
   },
   crudoPorDestino: {
     mbd: {

@@ -230,6 +230,8 @@
     blending: AdditiveBlending,
     depthWrite: false,
   });
+  // Pemex's tankers with Deer Park's fuel, in fuel's tone.
+  const combustibleMat = new MeshBasicMaterial({ color: new Color('#f5b971'), side: DoubleSide });
   const petroleros: { casco: Mesh; brillo: Mesh }[] = [];
   function cascosPetroleros(n: number) {
     while (petroleros.length < n) {
@@ -344,6 +346,7 @@
         F.subVectors(B, A);
         F.addScaledVector(N, -F.dot(N));
         const v = petroleros[i];
+        v.casco.material = p.carga === 'combustible' ? combustibleMat : petroleroMat;
         if (F.lengthSq() > 1e-14) {
           F.normalize();
           L.crossVectors(N, F);
@@ -429,6 +432,7 @@
     vistas = [];
     for (const g of [cascoGeom, puenteGeom, brilloGeom, anilloGeom, puertoGeom]) g.dispose();
     puenteMat.dispose();
+    combustibleMat.dispose();
     puertoMat.dispose();
   });
 

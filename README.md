@@ -413,6 +413,13 @@ El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedi
 El tablero tiene la capa *Combustibles*: los estados por la parte que vino del país y las 78
 terminales de Pemex. Detalle en la [enciclopedia](docs/enciclopedia.md#los-combustibles).
 
+**Deer Park, ya de Pemex** (`deerPark` en `datos/combustibles.json`, `DEER_PARK_MX`): a su zona
+le da solo el 12 % de lo que hace (`PARTE_DEER_PARK_A_MEXICO`, cifras de Pemex de 2022); esa parte
+zarpa de Houston a Tuxpan en buques que renta Pemex (`sim.petroleros` con `carga: 'combustible'`), y lo
+demás espera en su patio para los buques tanque del jugador, que cargan en Houston
+(`REFINERIA_DEL_PUERTO`); lo que no cabe en el patio se vende en Estados Unidos. Un buque cuya ruta va
+al extranjero solo sube el combustible que sus paradas pueden recibir (`#cabeAdelante`).
+
 **Los petroleros de los compradores** (`domain/petroleros.ts`, `crudoPorDestino` en
 `datos/combustibles.json`): el crudo exportado (`sim.crudoExportado`) se reparte por puerto de salida
 (`crudoPorPuerto`) y por destino (Balance Nacional de Energía, 2018: Houston, Róterdam, Shanghái;
@@ -781,7 +788,7 @@ costa del mundo solo sube de resolución). Además:
 - **Dinero, lo que sigue**: lo que cuesta operar los buques del jugador; que cobren los que llevan
   carga de contenedores, granel y autos; tarifas por año.
 - **Exportaciones por mar, lo que sigue**: que el combustóleo y la gasolina que sobren también salgan
-  en petroleros.
+  en petroleros; que lo que Deer Park vende en Estados Unidos mueva la caja de Pemex.
 - **Otros sitios por dentro**: la vista de un puerto o una refinería, como la de los polos.
 - **Comercio por mar, lo que sigue**: el cabotaje de carga entre puertos del país; más salidas al mundo (Estados Unidos, Sudamérica) para que las rutas
   reales tengan a dónde ir; el valor en dólares de lo que se mueve.

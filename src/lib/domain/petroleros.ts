@@ -72,8 +72,20 @@ export function rutasPetroleras(exportado: number): RutaPetrolera[] {
   return rutas;
 }
 
-/** A buyer's tanker under way: its route, the game hour it sailed and the barrels it carries. */
-export type Petrolero = { id: number; origen: string; destino: string; trayecto: Trayecto; salida: number; barriles: number };
+/**
+ * A tanker the player doesn't run, under way: its route, the game hour it sailed and the barrels it
+ * carries. `crudo`, a buyer's with exported crude; `combustible`, Pemex's with Deer Park's fuel for
+ * Mexico, from Houston to Tuxpan.
+ */
+export type Petrolero = {
+  id: number;
+  origen: string;
+  destino: string;
+  trayecto: Trayecto;
+  salida: number;
+  barriles: number;
+  carga: 'crudo' | 'combustible';
+};
 
 /** Km run along a path `h` hours after setting out, at each segment's speed (the Canal is slower). */
 export function kmEnHoras(t: Trayecto, h: number): number {

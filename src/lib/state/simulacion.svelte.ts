@@ -57,6 +57,8 @@ import {
   barrilesEn,
   BARRILES_POR_PIPA,
   BARRILES_POR_TANQUE,
+  DEER_PARK_MX,
+  PARTE_DEER_PARK_A_MEXICO,
   CONCENTRADORES,
   concentradorDe,
   costaDe,
@@ -379,6 +381,8 @@ class Simulacion {
   petroleros = $state.raw<Petrolero[]>([]);
   /** Barrels each route (port → gateway) has waiting for its next tanker, and each route's path. */
   #cargaPetroleros = new Map<string, number>();
+  /** Deer Park's fuel for Mexico waiting in Houston for Pemex's next tanker, barrels. */
+  #cargaDeerPark = 0;
   #rutasPetroleros = new Map<string, Trayecto | null>();
   #siguientePetrolero = 1;
   /** What the State's trains charged and cost each year, millions of pesos (`tarifas.ts`). */
@@ -1272,6 +1276,28 @@ class Simulacion {
     return this.#rutasPetroleros.get(k) ?? null;
   }
 
+  /** Deer Park's fuel that goes to Mexico now on Pemex's tankers, Mbd (0 while it isn't Pemex's). */
+  get deerParkAMexico(): number {
+    return this.#mbdDeerParkMexico();
+  }
+
+  /** Deer Park's fuel that goes to Mexico now, Mbd: its share of what it makes, once it's Pemex's. */
+  #mbdDeerParkMexico(): number {
+    return (this.refinacion?.porRefineria.get('deer-park')?.combustibles ?? 0) * PARTE_DEER_PARK_A_MEXICO;
+  }
+
+  #petroleroDeerPark(t: Trayecto, salida: number): Petrolero {
+    return {
+      id: this.#siguientePetrolero++,
+      origen: DEER_PARK_MX.puerto,
+      destino: DEER_PARK_MX.entra,
+      trayecto: t,
+      salida,
+      barriles: BARRILES_POR_TANQUE,
+      carga: 'combustible',
+    };
+  }
+
   /** The game opens with the tankers that would be at sea already, spread along each route, and part of the next load waiting. */
   #sembrarPetroleros() {
     const nuevos: Petrolero[] = [];
@@ -1282,9 +1308,18 @@ class Simulacion {
       const cada = (carga / (r.mbd * 1000)) * 24;
       const fase = (i * 0.618) % 1;
       for (let atras = cada * fase; atras < t.horas; atras += cada)
-        nuevos.push({ id: this.#siguientePetrolero++, origen: r.origen, destino: r.destino, trayecto: t, salida: this.horas - atras, barriles: carga });
+        nuevos.push({ id: this.#siguientePetrolero++, origen: r.origen, destino: r.destino, trayecto: t, salida: this.horas - atras, barriles: carga, carga: 'crudo' });
       this.#cargaPetroleros.set(`${r.origen}|${r.destino}`, carga * (1 - fase));
     });
+    // Pemex's tankers with Deer Park's fuel, if it's Pemex's.
+    const dp = this.#mbdDeerParkMexico();
+    const t = this.#rutaPetrolera(DEER_PARK_MX.puerto, DEER_PARK_MX.entra);
+    if (t && dp > 0) {
+      const cada = (BARRILES_POR_TANQUE / (dp * 1000)) * 24;
+      for (let atras = cada * 0.4; atras < t.horas; atras += cada)
+        nuevos.push(this.#petroleroDeerPark(t, this.horas - atras));
+      this.#cargaDeerPark = BARRILES_POR_TANQUE * 0.6;
+    }
     this.petroleros = nuevos;
   }
 
@@ -1298,10 +1333,17 @@ class Simulacion {
       let hay = (this.#cargaPetroleros.get(k) ?? 0) + barrilesEn(r.mbd, horas);
       while (hay >= carga) {
         const t = this.#rutaPetrolera(r.origen, r.destino);
-        if (t) nuevos.push({ id: this.#siguientePetrolero++, origen: r.origen, destino: r.destino, trayecto: t, salida: this.horas, barriles: carga });
+        if (t) nuevos.push({ id: this.#siguientePetrolero++, origen: r.origen, destino: r.destino, trayecto: t, salida: this.horas, barriles: carga, carga: 'crudo' });
         hay -= carga;
       }
       this.#cargaPetroleros.set(k, hay);
+    }
+    // Deer Park's part for Mexico sails from Houston on Pemex's tankers, a full one at a time.
+    this.#cargaDeerPark += barrilesEn(this.#mbdDeerParkMexico(), horas);
+    while (this.#cargaDeerPark >= BARRILES_POR_TANQUE) {
+      const t = this.#rutaPetrolera(DEER_PARK_MX.puerto, DEER_PARK_MX.entra);
+      if (t) nuevos.push(this.#petroleroDeerPark(t, this.horas));
+      this.#cargaDeerPark -= BARRILES_POR_TANQUE;
     }
     const siguen = this.petroleros.filter((p) => this.horas - p.salida < p.trayecto.horas);
     if (nuevos.length || siguen.length !== this.petroleros.length) this.petroleros = [...siguen, ...nuevos];
@@ -1721,7 +1763,8 @@ class Simulacion {
       const tope = barrilesEn(r?.combustibles ?? 0, 24 * DIAS_EN_PATIO);
       let p = (this.#patios.get(id) ?? 0) + barrilesEn(mbd, horas);
       if (p > tope) {
-        cuenta.sinSalida += p - tope;
+        // Past its yard's room Deer Park's is sold in the United States: it has a way out.
+        if (id !== 'deer-park') cuenta.sinSalida += p - tope;
         p = tope;
       }
       this.#patios.set(id, p);
@@ -1886,6 +1929,34 @@ class Simulacion {
     return suma;
   }
 
+  /**
+   * Room for the country's fuel at the rest of a vehicle's run, after the stop at leg `pierna` and
+   * before it gets back to its refinery: what each state's terminals can take, coastwise and to save
+   * imports, as it will be when the vehicle gets there (each state once, up to its days of stock).
+   */
+  #cabeAdelante(u: Tren | Barco, pierna: number, origen: string): number {
+    const n = u.destinos.length;
+    const aqui = SITIOS_POR_CLAVE.get(u.destinos[pierna])?.estado;
+    const vistos = new Set(aqui ? estadosQueSurte(u.destinos[pierna], aqui) : []);
+    let suma = 0;
+    let horas = u.esperas[pierna] ?? 0;
+    for (let k = 1; k < n; k++) {
+      const j = (pierna + k) % n;
+      horas += u.piernas[j]?.horas ?? 0;
+      const parada = u.destinos[j];
+      if (parada === `refineria:${origen}` || REFINERIA_DEL_PUERTO.get(parada) === origen) break;
+      const propio = SITIOS_POR_CLAVE.get(parada)?.estado;
+      for (const e of propio ? estadosQueSurte(parada, propio) : []) {
+        if (vistos.has(e)) continue;
+        vistos.add(e);
+        const ritmo = this.abasto?.hueco.get(e) ?? 0;
+        suma += Math.min(barrilesEn(ritmo, 24 * DIAS_POR_SURTIR), this.#cabeEn(e) + this.#cabeCabotaje(e) + barrilesEn(ritmo, horas));
+      }
+      horas += u.esperas[j] ?? 0;
+    }
+    return suma;
+  }
+
   /** Whether a vehicle's run calls somewhere fuel has to come coastwise, other than `hub`. */
   #llevaCabotaje(u: Tren | Barco, hub: string): boolean {
     return u.paradas.some((p) => {
@@ -1985,7 +2056,10 @@ class Simulacion {
       const hay = this.#patios.get(id) ?? 0;
       const libre = cabe - u.combustible - u.combustibleImp;
       const cabotaje = reservar > 0 ? Math.max(0, this.#cabotajeAdelante(u, pierna, id) - u.combustible) : 0;
-      const sube = Math.min(hay, Math.max(Math.min(cabotaje, libre), libre - reservar));
+      let sube = Math.min(hay, Math.max(Math.min(cabotaje, libre), libre - reservar));
+      // A tanker whose run goes abroad takes no more than its stops can take before it's back: the
+      // rest would ride along and keep the room of the crude it can export.
+      if (u.tipo === 'barco' && u.paradas.some((p) => puerta(p))) sube = Math.min(sube, Math.max(0, this.#cabeAdelante(u, pierna, id) - u.combustible));
       if (sube >= 1) {
         this.#patios.set(id, hay - sube);
         u.combustible += sube;

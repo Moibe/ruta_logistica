@@ -80,6 +80,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [ASF, auditoría 2017-0522 a CFEnergía](https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf) | El combustóleo que la CFE compraba en Estados Unidos llegaba en buque tanque a Tuxpan; el gas natural licuado, a Altamira y Manzanillo | Cuenta Pública 2017 | Documento oficial público |
 | [Argus, «Lower Venezuela cargo demand weighs on Aframaxes»](https://www.argusmedia.com/zh/news/1960292-lower-venezuela-cargo-demand-weighs-on-aframaxes) | El flete de un Aframax del Caribe a la costa del Golfo de EUA: 7.14 dólares por tonelada de abril a agosto de 2019, 11 % menos que en 2018. No se leyó la nota: se usa lo que muestra el buscador | 2019 | Prensa especializada |
 | [S&P Global, «Record US crude exports boost VLCC tanker demand, rates»](https://www.spglobal.com/energy/en/news-research/blog/crude-oil/030519-in-the-loop-record-us-crude-exports-boost-vlcc-tanker-demand-rates) | El flete de un VLCC de la costa del Golfo de EUA a China: 6.63 millones de dólares por viaje a principios de 2019. No se leyó la nota: se usa lo que muestra el buscador | Marzo de 2019 | Prensa especializada |
+| [Expansión, nota del 18 de enero de 2023](https://expansion.mx/empresas/2023/01/18/refineria-deer-park-envia-gasolina-mexico-volumen-minimo) | Lo que Deer Park mandó a México desde la compra: unos 14 mil barriles diarios de gasolina y 17 mil de destilados (cifras internas de Pemex vistas por Expansión); de ahí el 12 % | Enero de 2023 | Prensa |
+| [Expansión, nota del 28 de octubre de 2026](https://expansion.mx/empresas/2026/10/28/deer-park-mejor-refineria-pemex-enviar-combustibles-mexico) | La estimación de un analista: Deer Park manda a México entre 15 y 20 % de su producción; Pemex no publica el volumen | Octubre de 2026 | Prensa |
 | [SENER, Balance Nacional de Energía 2019](https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf) | Lo que el país exportó e importó de cada petrolífero en 2018 (en PJ), el poder calorífico neto del combustóleo (cuadro 29) y a dónde se exportó el crudo (cuadro 49) | Febrero de 2021 | Documento oficial público |
 | [ARTF, Indicadores Ferroviarios 2020](https://www.gob.mx/cms/uploads/attachment/file/559416/Indicadores_Ferroviarios_ARTF_2020_Final.pdf) | Ingreso por tonelada-km de cada concesionaria, toneladas-km, trenes-km y carros por tren de 2016 a 2019 | 2020 | Documento oficial público |
 | [GMXT, reporte del cuarto trimestre de 2018 ante la BMV](https://gmxt.mx/wp-content/uploads/2019/07/4TRIM18D-GMXT.pdf) | Ingresos y utilidad de operación de Ferromex y Ferrosur en 2018: cuánto gastaban por peso cobrado | Febrero de 2019 | Reporte regulatorio de la empresa |
@@ -3818,6 +3820,16 @@ alcanza al rehabilitarla:
   87/2026). No hay un costo oficial: el juego usa el mismo costo por barril recuperado (4,567
   millones) y un año de obra, **estimaciones del juego**.
 
+  Comprada, **no todo lo que hace llega a México: el 12 %**. De la compra (enero de 2022) a enero
+  de 2023 México recibió unos 14 mil barriles diarios de gasolina y 17 mil de destilados (cifras
+  internas de Pemex vistas por Expansión), 31 mil de los 258 mil que hizo en 2022 (procesó 277 mil
+  de crudo, a 0.93). Un analista estimaba en 2026 entre 15 y 20 % (Expansión); Pemex no publica el
+  volumen. Ese 12 % (unos 30 mil barriles diarios con lo que procesa al comprarla) llega en **buques
+  tanque que renta Pemex de Houston a Tuxpan**, que se ven navegar, y entra a los poliductos del
+  centro. Lo demás espera en su patio, en Houston, a **tus buques tanque**: lo que no recogen se
+  vende en Estados Unidos. Pemex sí cuenta todo Deer Park como refinación propia; el juego también
+  (en «Refinación»), pero al abasto del país solo llega lo que de verdad cruza.
+
 Los costos en dólares se pasan a pesos a 18.33, el promedio de 2024.
 
 **Los combustibles.** Cada refinería da gasolina, diésel y turbosina por barril de crudo:
@@ -4080,7 +4092,7 @@ ventas. El reparto es una **estimación del juego**:
 
 | Zona | Refinerías | Estados (la parte que alcanzan sus ductos) | Usa (Mbd) |
 | --- | --- | --- | ---: |
-| Centro, Golfo y Occidente | Tula, Salamanca, Minatitlán (y Deer Park, por Tuxpan) | Aguascalientes, Ciudad de México, Estado de México, Guanajuato, Hidalgo, Jalisco, Michoacán (30 %), Morelos, Puebla, Querétaro, San Luis Potosí (46 %), Tabasco, Tlaxcala, Veracruz, Zacatecas | 651 |
+| Centro, Golfo y Occidente | Tula, Salamanca, Minatitlán (y el 12 % de Deer Park, por Tuxpan) | Aguascalientes, Ciudad de México, Estado de México, Guanajuato, Hidalgo, Jalisco, Michoacán (30 %), Morelos, Puebla, Querétaro, San Luis Potosí (46 %), Tabasco, Tlaxcala, Veracruz, Zacatecas | 651 |
 | Noreste y Norte | Cadereyta, Madero | Chihuahua, Coahuila, Durango (87 %), Nuevo León, San Luis Potosí (17 %), Tamaulipas (98 %) | 214 |
 | Salina Cruz | Salina Cruz | Chiapas, Oaxaca | 54 |
 | Por mar | — | Baja California, Baja California Sur, Campeche, Colima, Guerrero, Michoacán (70 %), Nayarit, Quintana Roo, Sinaloa, Sonora, Yucatán | 297 |
@@ -4256,6 +4268,15 @@ ya no lo lleva el de ellos: el país exporta lo mismo, solo cambia quién lo tra
 
 La ficha de cada buque dice cuánto crudo lleva y a dónde, cuánto ha llevado y el flete que cobró; la
 de la caja, lo del año.
+
+**De regreso, combustible de Deer Park.** En Houston un buque tanque tuyo puede cargar el combustible
+de Deer Park que no va a México (ya que sea de Pemex) y llevarlo a los puertos del país, como el de
+cualquier refinería. Así un buque en Dos Bocas ⇄ Houston saca crudo y trae combustible. Un buque cuya
+ruta va al extranjero solo sube el combustible que sus paradas pueden recibir antes de volver: lo demás
+le quitaría lugar al crudo. En 20 días de juego, uno en Houston ⇄ Tuxpan trajo 643 mil barriles; uno
+en Dos Bocas ⇄ Houston sacó 696 mil de crudo y trajo 274 mil de combustible a Tabasco. Además,
+cada 11 días más o menos zarpa de Houston a Tuxpan un buque que renta Pemex con la parte de Deer Park
+que sí llega a México (ver [El petróleo](#el-petróleo)).
 
 | Año | Crudo producido | Crudo exportado | Combustibles que hizo Pemex | Combustibles que importó Pemex |
 | --- | ---: | ---: | ---: | ---: |
@@ -5336,6 +5357,11 @@ los otros dos aún no se capturan.
   cifras de mercado marcadas como estimación del juego (no hay flete oficial: el de Pemex Logística
   en 2018, 92.9 pesos por barril según la ASF, es de cabotaje corto y no sirve para cruzar el
   océano). Lo que cuesta operar los buques queda para después.
+- **De Deer Park solo llega a México lo que de verdad cruza.** *(26 nov 2026.)* El usuario preguntó
+  si lo de Deer Park no viaja en barco a México y aprobó tres cosas: que al país le llegue solo la
+  parte que se manda (el 12 %, con las cifras de Pemex de 2022, en vez del 100 % de antes), que esa
+  parte se vea en buques que renta Pemex de Houston a Tuxpan, y que sus buques tanque puedan cargar
+  en Houston lo demás. Lo que se vende en Estados Unidos todavía no mueve la caja de Pemex.
 - **Las travesías se calculan como las rutas de México, no se dibujan.** Es el mismo método
   (malla, ruta más corta lejos de la costa, enderezado, auditoría), solo que sobre el mundo
   y enderezado en círculos máximos. *(19 nov 2026; reemplaza el tiempo fijo "gran círculo +

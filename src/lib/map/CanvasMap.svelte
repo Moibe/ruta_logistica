@@ -532,6 +532,7 @@
 
   /** The buyers' tankers (`petroleros.ts`): small hulls in a light crude tone, under the player's ships, all the way to their far port. */
   const PETROLERO = '#e3935a';
+  const COMBUSTIBLE_PEMEX = '#f5b971';
   function pintarPetroleros(ctx: CanvasRenderingContext2D) {
     if (!projection) return;
     const pxKm = pxPorKm();
@@ -550,11 +551,13 @@
         const hx = transform.applyX(head[0] + ox);
         const hy = transform.applyY(head[1]);
         if (hx < -30 || hx > width + 30 || hy < -30 || hy > height + 30) continue;
+        // Crude's tone for the buyers', fuel's for Pemex's from Deer Park.
+        const color = p.carga === 'combustible' ? COMBUSTIBLE_PEMEX : PETROLERO;
         ctx.save();
         ctx.globalCompositeOperation = 'lighter';
         const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, 9);
-        glow.addColorStop(0, conAlfa(PETROLERO, 0.3));
-        glow.addColorStop(1, conAlfa(PETROLERO, 0));
+        glow.addColorStop(0, conAlfa(color, 0.3));
+        glow.addColorStop(1, conAlfa(color, 0));
         ctx.fillStyle = glow;
         ctx.fillRect(hx - 9, hy - 9, 18, 18);
         ctx.restore();
@@ -570,7 +573,7 @@
         ctx.lineTo(-L, W / 2);
         ctx.lineTo(-L * 0.3, W / 2);
         ctx.closePath();
-        ctx.fillStyle = PETROLERO;
+        ctx.fillStyle = color;
         ctx.fill();
         ctx.strokeStyle = 'rgba(10, 14, 22, 0.8)';
         ctx.lineWidth = 1;
