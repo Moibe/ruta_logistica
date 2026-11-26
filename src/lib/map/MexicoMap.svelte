@@ -4010,11 +4010,15 @@
     color: #bfeaff;
   }
 
+  /* Just under the Erario bar, centred on it: there it sits over the United
+     States, which is empty, instead of over Tijuana and Mexicali at the bar's
+     left end. The bottom edge stays free. */
   .stats {
     position: fixed;
-    left: calc(1rem + var(--vistas) + 0.5rem);
-    min-height: var(--vistas-alto);
-    bottom: 1rem;
+    top: calc(1rem + var(--libro) + 0.5rem);
+    left: calc((100vw + 260px - var(--libro)) / 2);
+    transform: translateX(-50%);
+    white-space: nowrap;
     z-index: 30;
     display: flex;
     align-items: center;
@@ -4223,14 +4227,14 @@
     color: #fca5a5;
   }
 
-  /* The stats share the bottom edge with the legend: they give way first. */
-  @media (max-width: 1600px) {
+  /* On narrow screens the stats would reach the cards on the right: they give way first. */
+  @media (max-width: 1440px) {
     .stat.opcional {
       display: none;
     }
   }
 
-  @media (max-width: 1360px) {
+  @media (max-width: 1100px) {
     .stats {
       display: none;
     }
