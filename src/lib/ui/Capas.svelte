@@ -147,8 +147,13 @@
 </nav>
 
 <style>
+  /* At the bottom of the left column: when the column runs short (a laptop with
+     both rosters open), the layers give up height and scroll, like the rosters,
+     instead of slipping under the views pill. */
   .capas {
-    flex: none;
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -158,6 +163,10 @@
   .titulo {
     font-size: 0.58rem;
     padding: 0.2rem 0.15rem 0;
+  }
+
+  .capas:not(.plegado) {
+    min-height: 7.5rem;
   }
 
   .capas.plegado {

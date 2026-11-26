@@ -19,9 +19,8 @@
 <MexicoMap />
 <Reloj />
 <Erario />
-<!-- The left column, under the clock: the layers, and a roster for trains and one for ships when their layers are on. -->
+<!-- The left column, under the clock: a roster for trains and one for ships when their layers are on, and the layers at the bottom. -->
 <div class="columna">
-  <Capas />
   {#if sim.modo === 'juego' && tablero.capas.trenes}
     <Flota tipo="tren" />
   {/if}
@@ -32,6 +31,7 @@
   {#if sim.modo === 'juego' && tablero.capas.barcos}
     <Flota tipo="barco" />
   {/if}
+  <Capas />
 </div>
 {#if sim.modo === 'juego'}
   <Trazado />
@@ -58,8 +58,13 @@
     pointer-events: auto;
   }
 
-  /* All folded (the layers and the rosters on), the bars would sit on Tijuana's label: together, they drop below it. */
-  .columna:has(:global(nav.capas.plegado)):has(:global(aside.flota)):not(:has(:global(aside.flota:not(.plegado)))):not(:has(:global(section.vias:not(.plegado)))) > :global(nav.capas) {
+  /* The layers sit at the bottom of the column, right over the views pill. */
+  .columna > :global(nav.capas) {
+    margin-top: auto;
+  }
+
+  /* The rosters and the track legend all folded, their bars would sit on Tijuana's label: together, they drop below it. */
+  .columna:has(:global(aside.flota)):not(:has(:global(aside.flota:not(.plegado)))):not(:has(:global(section.vias:not(.plegado)))) > :global(:first-child) {
     margin-top: 7.5rem;
   }
 </style>

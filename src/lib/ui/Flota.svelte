@@ -364,6 +364,13 @@
     min-height: 8.5rem;
   }
 
+  /* On a short screen (a 1366 laptop with the browser's bars) one row each, so the layers below still fit. */
+  @media (max-height: 700px) {
+    .flota.en-columna:not(.plegado) {
+      min-height: 6rem;
+    }
+  }
+
   .flota header {
     display: flex;
     align-items: center;

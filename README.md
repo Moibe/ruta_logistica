@@ -70,17 +70,18 @@ saltar al siguiente libre.
   línea de luz, vías férreas (primarias más intensas y gruesas que secundarias; con
   durmientes a partir de 4×; estaciones sobre la vía a partir de 3.5×), puertos (rombo con halo; los cuatro principales más grandes), ciudades (anillo + punto
   para capitales), polos (hexágono punteado). Cada capa se apaga desde el panel **Capas**
-  (`ui/Capas.svelte`), arriba a la izquierda bajo el reloj, en tres grupos: movimiento (trenes y
+  (`ui/Capas.svelte`), abajo en la columna de la izquierda, sobre la pastilla de vistas (si la
+  columna no alcanza, se encoge y se desplaza por dentro), en tres grupos: movimiento (trenes y
   barcos, solo en el juego), territorio, y energía y petróleo. El estado de las capas vive en
   `tablero.capas`, que comparten el mapa, el panel y la lista de vehículos (`tablero.alternar`:
   energía y combustibles se excluyen; apagar trenes o barcos esconde su lista y cierra su ficha y
-  su trazado). Debajo de las capas van dos listas, la de trenes y la de barcos (`Flota` con
+  su trazado). Arriba, bajo el reloj, van dos listas, la de trenes y la de barcos (`Flota` con
   `tipo`), cada una con su capa encendida, su *＋ Nuevo* (`tablero.nuevo(tipo)`; el de la otra
   cambia el trazo en curso) y la ficha de su vehículo elegido; con las dos abiertas se reparten el
   alto. Entre las dos va la leyenda de las vías (`ui/LeyendaVias.svelte`: color por clase, dueño o
   uso, en `tablero.modoVias`), que antes flotaba sobre el mapa. Los paneles se pliegan con su flecha (la misma de *Vistas*): Capas queda en su título con
-  cuántas capas están encendidas, y cada lista en su nombre y *＋ Nuevo* (con todo plegado, las
-  barras bajan juntas 120 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
+  cuántas capas están encendidas, y cada lista en su nombre y *＋ Nuevo* (con las listas y la
+  leyenda plegadas, sus barras bajan juntas 120 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
   los dejó (`state/plegable.svelte.ts`, en `localStorage`, leído al montar porque el tablero se
   arma en el servidor). Las
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, y abajo a la derecha
