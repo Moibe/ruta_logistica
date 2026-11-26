@@ -91,7 +91,7 @@
   import { duracion, estadoUnidad, km as fmtKm } from '$lib/ui/formato';
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
   import { COLOR_DUEÑO, COLOR_USO, INDUSTRIA, MINERIA, AEROPUERTO, COMBUSTIBLE, COMBUSTOLEO, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
-  import { CENTRALES_CO, CENTRAL_CO_DE_PLANTA, COMBUSTOLEO as DATOS_CO, ENTREGAS_CO, factorCentral, porDuctoCo, realCombustoleo } from '$lib/domain/combustoleo';
+  import { CENTRALES_CO, CENTRAL_CO_DE_PLANTA, COMBUSTOLEO as DATOS_CO, ENTREGAS_CO, factorCentral, factorDemandaCo, mbdCentralCo, porDuctoCo, realCombustoleo } from '$lib/domain/combustoleo';
   import { abastoDiario, BASES_ABASTO, CAYO_ARCAS, COMPLEJOS, produccionComplejo, type Complejo } from '$lib/domain/plataformas';
   import { comercioDe, NOMBRE_CARGA, TIPOS_CARGA, type TipoCarga } from '$lib/domain/comercioMar';
 
@@ -3217,7 +3217,7 @@
       {@const centralesCo = ENTREGAS_CO.get(`puerto:${hovered.puerto.id}`) ?? []}
       {#if centralesCo.length && (layers.combustibles || layers.energia) && sim.modo === 'juego'}
         {@const _relojCo = sim.horas}
-        {@const resto = centralesCo.reduce((s, c) => s + c.mbd - porDuctoCo(c, sim.combustoleo), 0)}
+        {@const resto = centralesCo.reduce((s, c) => s + mbdCentralCo(c, añoDe(sim.horas)) - porDuctoCo(c, sim.combustoleo, añoDe(sim.horas)), 0)}
         {@const nombres = centralesCo.map((c) => c.nombre.replace(/ \(.*\)$/, ''))}
         <span class="tip-sub" style:color={COMBUSTOLEO}>
           Por aquí recibe{centralesCo.length > 1 ? 'n' : ''} su combustóleo {centralesCo.length > 1
@@ -3389,7 +3389,7 @@
           {#if !r.extranjera}
             {@const co = sim.combustoleo.get(r.id) ?? 0}
             {@const ductos = CENTRALES_CO.filter((c) => c.ducto === r.id)}
-            {@const porDucto = ductos.reduce((s, c) => s + porDuctoCo(c, sim.combustoleo), 0)}
+            {@const porDucto = ductos.reduce((s, c) => s + porDuctoCo(c, sim.combustoleo, añoDe(sim.horas)), 0)}
             {@const año = añoDe(sim.horas)}
             {@const exporta = sim.cuentaCombustoleo(año).exportadoDe[r.id] ?? 0}
             {#if co >= 0.05}
@@ -3589,12 +3589,12 @@
         {@const _reloj = sim.horas}
         {@const empresa = DATOS_CO.empresas.find((e) => e.id === co.empresa)}
         <span class="tip-rail" style:color={COMBUSTOLEO}>
-          Quema {fmtMil(co.mbd)} mil b/d de combustóleo en {fmt.format(Math.round(co.mw))} MW{co.mw < p.mw ? ' de vapor' : ''} ({co.combustible}, según el PRODESEN)
+          Quema {fmtMil(sim.modo === 'juego' ? mbdCentralCo(co, añoDe(sim.horas)) : co.mbd)} mil b/d de combustóleo{sim.modo === 'juego' ? ` en ${añoDe(sim.horas)}` : ' (2018)'} en {fmt.format(Math.round(co.mw))} MW{co.mw < p.mw ? ' de vapor' : ''} ({co.combustible}, según el PRODESEN)
         </span>
         {#if sim.modo === 'juego'}
           {@const surtido = sim.surtidoCo(co.id)}
-          {@const ducto = porDuctoCo(co, sim.combustoleo)}
-          {@const resto = co.mbd - ducto}
+          {@const ducto = porDuctoCo(co, sim.combustoleo, añoDe(sim.horas))}
+          {@const resto = mbdCentralCo(co, añoDe(sim.horas)) - ducto}
           {@const ritmo = sim.ritmoJugadorCo(co)}
           <span class="tip-sub" class:alerta-tip={surtido < 0.97}>
             Da {fmt.format(Math.round(co.mw * factorCentral(surtido)))} de esos MW: su combustóleo la surtió el último mes al {Math.round(surtido * 100)} %{ritmo > 0.05
@@ -3609,7 +3609,7 @@
           {#if co.entregaDato}<span class="tip-sub">{co.entregaDato}.</span>{/if}
         {/if}
         {#if empresa}
-          <span class="tip-sub">Cuánto quema es estimación del juego: lo de {empresa.nombre} en 2018 (Informe Anual de la CFE) repartido por MW entre sus centrales de combustóleo.</span>
+          <span class="tip-sub">Cuánto quema es estimación del juego: lo de {empresa.nombre} en 2018 (Informe Anual de la CFE) repartido por MW entre sus centrales de combustóleo, y cada año cambia con lo que quemó toda la CFE (en {añoDe(sim.horas)}, el {Math.round(factorDemandaCo(añoDe(sim.horas)) * 100)} % de 2018).</span>
         {/if}
       {/if}
     {:else if hovered.kind === 'estado' && layers.energia && sim.energia.length}
@@ -3698,20 +3698,25 @@
           <span class="tip-sub alerta-tip">En {año} le faltaron {fmtMil(mbdDelAño(c.faltante, año))} mil b/d: no le llegó el cabotaje</span>
         {/if}
         {@const surtido = sim.surtidoCombustible(clave)}
+        {@const enCamino = !!sim.pipas[clave] && sim.pipasEnServicio(clave) < sim.pipas[clave].n - 0.5}
         {@const dias = sim.diasSinCombustible(clave)}
         {#if !sim.hayCombustible(clave) || surtido < 0.995}
           <span class="tip-sub alerta-tip">
             {sim.hayCombustible(clave)
               ? `La última semana le faltó el ${Math.round((1 - surtido) * 100)} % de su combustible: su carga va al ${Math.round(surtido * 100)} %`
               : `Desabasto: ayer le faltó el ${Math.round(sim.faltaAyer(clave) * 100)} % de su combustible. Su carga va al ${Math.round(surtido * 100)} % y sus polos no reciben empresas`}{dias > 0
-              ? `; lleva ${dias} ${dias === 1 ? 'día' : 'días'} así y a los ${DESABASTO.diasParaPipas} el Estado le compra pipas`
+              ? `; lleva ${dias} ${dias === 1 ? 'día' : 'días'} así${enCamino ? ' y sus pipas van llegando' : ` y a los ${DESABASTO.diasParaPipas} el Estado le compra pipas`}`
               : ''}
           </span>
         {/if}
         {@const pipas = sim.pipas[clave]}
         {#if pipas}
+          {@const trabajan = sim.pipasEnServicio(clave)}
           <span class="tip-sub">
-            Tiene {fmt.format(pipas.n)} pipas de emergencia del Estado ({fmt.format(Math.round(pipas.mdp))} millones de pesos): cubren hasta {fmtMil((pipas.n * BARRILES_POR_PIPA) / 1000)} mil b/d de lo que le falte, con combustible importado
+            Tiene {fmt.format(pipas.n)} pipas de emergencia del Estado{trabajan < pipas.n - 0.5
+              ? `: ${fmt.format(Math.floor(trabajan))} ya trabajan y las demás van llegando (las de 2019 tardaron de 15 días a 3 meses)`
+              : ''}. Cubren hasta {fmtMil((trabajan * BARRILES_POR_PIPA) / 1000)} mil b/d de lo que le falte, con combustible importado ·
+            costaron {fmt.format(Math.round(pipas.mdp))} millones de pesos y operarlas, {sim.operacionPipas(clave).toLocaleString('es-MX', { maximumFractionDigits: 1 })} millones
           </span>
         {/if}
         <span class="tip-sub">

@@ -43,12 +43,16 @@
    "url": "https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf"
   },
   "cfe-ia2024": {
-   "fuente": "CFE, Informe Anual 2024: «se incrementó en 23 % la capacidad de transporte de combustóleo» a las centrales de Lerma, Mérida II y Valladolid",
+   "fuente": "CFE, Informe Anual 2024: «se incrementó en 23 % la capacidad de transporte de combustóleo» a las centrales de Lerma, Mérida II y Valladolid; el combustóleo para generación bajó de 162,313 TJ en 2023 a 132,950 en 2024 (−18.1 %)",
    "url": "https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf"
   },
   "cnh-2018": {
    "fuente": "CNH, capa de ductos con fecha de referencia 14 de febrero de 2018: Combustoleoducto Refinería Madero–CFE Altamira, 29 km",
    "url": "https://agsserver.sigsa.info/arcgis/rest/services/Monitoreo_de_flujo_en_tiempo_real_MIL1/MapServer/4"
+  },
+  "sener-ip2023": {
+   "fuente": "SENER, Informe pormenorizado sobre el desempeño y las tendencias de la industria eléctrica nacional 2023, tabla 12: consumo de combustibles en CFE 2014–2023 (miles de metros cúbicos de combustóleo)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/972693/Informe_Pormenorizado_2023.pdf"
   },
   "asf-2018-0474": {
    "fuente": "ASF, auditoría 474-DE «Desempeño de Pemex Logística», Cuenta Pública 2018: en 2018 movió 20.8 Mbd de combustóleo en buque tanque y 31.0 en carro tanque",
@@ -394,6 +398,40 @@
   "dato": "El combustóleo que CFEnergía compraba en Estados Unidos llegaba en buque tanque al puerto de Tuxpan (ASF, Cuenta Pública 2017).",
   "fuentes": [
    "asf-2017-0522"
+  ]
+ },
+ "demanda": {
+  "milesM3": {
+   "2018": 6382.1,
+   "2019": 5725.9,
+   "2020": 3319.1,
+   "2021": 3904.4,
+   "2022": 3716.7,
+   "2023": 3893.3,
+   "2024": 3189,
+   "2025": 3656.5,
+   "2026": 4054.5
+  },
+  "estimados": [
+   "2025",
+   "2026"
+  ],
+  "factor": {
+   "2018": 1,
+   "2019": 0.897,
+   "2020": 0.52,
+   "2021": 0.612,
+   "2022": 0.582,
+   "2023": 0.61,
+   "2024": 0.5,
+   "2025": 0.573,
+   "2026": 0.635
+  },
+  "dato": "Lo que quema cada central cambia cada año con lo que quemó toda la CFE, en la proporción de 2018. De 2018 a 2023, miles de metros cúbicos de la SENER (Informe Pormenorizado 2023, tabla 12). 2024, lo de 2023 menos el 18.1 % que bajó según el Informe Anual 2024 de la CFE (162,313 a 132,950 TJ). 2025 y 2026, estimación del juego: lo de 2024 por lo que cambió el combustóleo que se quedó en el país (lo que se hizo más lo que se importó menos lo que se exportó, Segundo Informe; 2026, de enero a junio). Después se repite el último año.",
+  "fuentes": [
+   "sener-ip2023",
+   "cfe-ia2024",
+   "ig2-2026"
   ]
  },
  "modos2018": {

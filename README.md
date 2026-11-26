@@ -396,7 +396,8 @@ El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedi
   deja a sus polos sin empresas mientras le falte (`hayCombustible`, `poloConCombustible`). A los 14
   días seguidos (`#cerrarDiaDesabasto`) el Estado compra pipas de su caja (`sim.pipas`; 215 barriles
   diarios y 2.5 millones de pesos cada una, por las 671 de enero de 2019) que cubren lo que falte con
-  importado (`EN_PIPAS`).
+  importado (`EN_PIPAS`). Llegan de los 15 a los 91 días (`llegadaPipas`, `pipasEnServicio`) y cada
+  barril que llevan cuesta su operación (`PESOS_POR_BARRIL_PIPA`, de la caja; `operacionPipas`).
 - **Los vehículos:**
   - las refinerías son sitios (`refineria:<id>`) y paradas de tren donde hay vía a ≤ 15 km;
   - las de la costa cargan también en su puerto (`PUERTO_DE_REFINERIA`);
@@ -419,7 +420,8 @@ terminales de Pemex. Detalle en la [enciclopedia](docs/enciclopedia.md#los-combu
   rendimiento de 2019–2020 (ASF); la Olmeca, nada; una coquizadora le quita tanto como los
   combustibles que agrega.
 - **Lo que quema cada central** (`CENTRALES_CO`, 15): lo de su empresa de generación en 2018
-  (Informe Anual de la CFE) repartido por MW entre las que el PRODESEN marca con combustóleo.
+  (Informe Anual de la CFE) repartido por MW entre las que el PRODESEN marca con combustóleo, y cada
+  año por lo que quemó toda la CFE (`mbdCentralCo`, `factorDemandaCo`; `demanda` en el JSON).
 - **Cómo le llega** (`#abastecerCombustoleo`): por ducto de su refinería (Tula, Salamanca, Altamira
   desde Madero); del resto, la mitad sola (`PARTE_AUTOMATICA_CO`: buques rentados o Ferromex y CPKC,
   de los patios de las refinerías, `#patiosCo`, o importado) y la otra mitad de lo que dejaron los
@@ -756,8 +758,7 @@ costa del mundo solo sube de resolución). Además:
     ya se dibujan con las tablas del mapa de la SENER de 2018);
   - el gas LP y la turbosina como cargas aparte; hoy la gasolina, el diésel y la turbosina son una
     sola mezcla (el combustóleo ya va aparte);
-  - el desabasto, lo que sigue: que las pipas tarden en llegar y cuesten al operarlas;
-  - el combustóleo, lo que sigue: la demanda de la CFE por año (conversiones a gas, retiros) y su
+  - el combustóleo, lo que sigue: las conversiones a gas y los retiros de unidades por central, y su
     precio de exportación;
   - las cifras por refinería de 2022 a septiembre de 2024, si se consigue el Anuario Estadístico
     de Pemex (su sitio no deja bajarlo automáticamente).

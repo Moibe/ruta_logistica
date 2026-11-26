@@ -113,7 +113,13 @@ type CombustiblesJson = {
    * What a shortage does: the days of memory its effect on a state's cargo has, the days in a row
    * after which the State buys emergency tanker trucks, and the trucks bought in January 2019.
    */
-  desabasto: { memoriaDias: number; diasParaPipas: number; pipas: { compradas: number; barrilesDiarios: number; costoUsd: number } } & Dato;
+  desabasto: {
+    memoriaDias: number;
+    diasParaPipas: number;
+    pipas: { compradas: number; barrilesDiarios: number; costoUsd: number };
+    llegada: { primeraDias: number; todasDias: number } & Dato;
+    operacion: { pipas: number; operadoresPesos: number; operadoresDias: number; mantenimientoPesos: number; mantenimientoDias: number } & Dato;
+  } & Dato;
   real: {
     /** Pemex's crude production and crude exports, Mbd. */
     crudo: { produccion: Serie; exportacion: Serie; parcial: Record<string, string> } & Dato;
@@ -307,6 +313,15 @@ export const DESABASTO = COMBUSTIBLES.desabasto;
 /** Barrels a day an emergency tanker truck moves, and what one costs (millions of pesos): the January 2019 purchase. */
 export const BARRILES_POR_PIPA = DESABASTO.pipas.barrilesDiarios / DESABASTO.pipas.compradas;
 export const MDP_POR_PIPA = (DESABASTO.pipas.costoUsd / DESABASTO.pipas.compradas) * ENERGIA.tipoCambio / 1e6;
+/** Share of a purchase's trucks already in service `dias` days after it: the first come at 15 days, the last at 91. */
+export function llegadaPipas(dias: number): number {
+  const { primeraDias, todasDias } = DESABASTO.llegada;
+  return Math.max(0, Math.min(1, (dias - primeraDias) / (todasDias - primeraDias)));
+}
+/** What a truck costs to run a day it works (its drivers, guard and upkeep, 2019), and so each barrel it brings (pesos). */
+const OPERACION = DESABASTO.operacion;
+export const PESOS_PIPA_DIA = OPERACION.operadoresPesos / OPERACION.operadoresDias / OPERACION.pipas + OPERACION.mantenimientoPesos / OPERACION.mantenimientoDias / OPERACION.pipas;
+export const PESOS_POR_BARRIL_PIPA = PESOS_PIPA_DIA / BARRILES_POR_PIPA;
 /** A state is short when what it lacked in a day passes this share of what it uses. */
 export const UMBRAL_DESABASTO = 0.01;
 

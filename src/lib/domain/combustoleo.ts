@@ -64,6 +64,8 @@ type CombustoleoJson = {
   importacionCfe: { puerto: string } & Dato;
   modos2018: { buque: number; carrotanque: number; trenToneladas: number } & Dato;
   real: { produccion: Record<string, number>; importacion: Record<string, number>; exportacion: Record<string, number>; parcial: Record<string, string> } & Dato;
+  /** Fuel oil the whole CFE burned each year (thousand m³) and its share of 2018's; which years are the game's estimate. */
+  demanda: { milesM3: Record<string, number>; factor: Record<string, number>; estimados: string[] } & Dato;
 };
 
 export const COMBUSTOLEO = DATOS as unknown as CombustoleoJson;
@@ -144,8 +146,18 @@ export const factorCentral = (surtido: number) => PISO_CO + (1 - PISO_CO) * Math
 /** MW a plant fails to give its region for want of fuel oil. */
 export const mwSinCombustoleo = (c: CentralCombustoleo, surtido: number) => c.mw * (1 - factorCentral(surtido));
 
+/** Share of its 2018 fuel oil the CFE burned in a year (the last known one after it). */
+const AÑOS_DEMANDA = Object.keys(COMBUSTOLEO.demanda.factor).map(Number).sort((a, b) => a - b);
+export function factorDemandaCo(año: number): number {
+  const a = AÑOS_DEMANDA.filter((x) => x <= año).pop() ?? AÑOS_DEMANDA[0];
+  return COMBUSTOLEO.demanda.factor[String(a)] ?? 1;
+}
+/** Thousand barrels a day a plant burns in a year: its 2018 share of what the whole CFE burned. */
+export const mbdCentralCo = (c: CentralCombustoleo, año: number) => c.mbd * factorDemandaCo(año);
+
 /** Thousand barrels a day the pipeline brings a plant now, from what its refinery makes. */
-export const porDuctoCo = (c: CentralCombustoleo, produccion: ReadonlyMap<string, number>) => (c.ducto ? Math.min(c.mbd, produccion.get(c.ducto) ?? 0) : 0);
+export const porDuctoCo = (c: CentralCombustoleo, produccion: ReadonlyMap<string, number>, año: number) =>
+  c.ducto ? Math.min(mbdCentralCo(c, año), produccion.get(c.ducto) ?? 0) : 0;
 
 /** The real year: what Pemex made, imported and exported, Mbd (null when not published). */
 export function realCombustoleo(año: number) {

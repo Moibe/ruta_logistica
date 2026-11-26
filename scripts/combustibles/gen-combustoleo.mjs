@@ -63,12 +63,18 @@ const FUENTES = {
     url: 'https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf',
   },
   'cfe-ia2024': {
-    fuente: 'CFE, Informe Anual 2024: «se incrementó en 23 % la capacidad de transporte de combustóleo» a las centrales de Lerma, Mérida II y Valladolid',
+    fuente:
+      'CFE, Informe Anual 2024: «se incrementó en 23 % la capacidad de transporte de combustóleo» a las centrales de Lerma, Mérida II y Valladolid; el combustóleo para generación bajó de 162,313 TJ en 2023 a 132,950 en 2024 (−18.1 %)',
     url: 'https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf',
   },
   'cnh-2018': {
     fuente: 'CNH, capa de ductos con fecha de referencia 14 de febrero de 2018: Combustoleoducto Refinería Madero–CFE Altamira, 29 km',
     url: 'https://agsserver.sigsa.info/arcgis/rest/services/Monitoreo_de_flujo_en_tiempo_real_MIL1/MapServer/4',
+  },
+  'sener-ip2023': {
+    fuente:
+      'SENER, Informe pormenorizado sobre el desempeño y las tendencias de la industria eléctrica nacional 2023, tabla 12: consumo de combustibles en CFE 2014–2023 (miles de metros cúbicos de combustóleo)',
+    url: 'https://www.gob.mx/cms/uploads/attachment/file/972693/Informe_Pormenorizado_2023.pdf',
   },
   'asf-2018-0474': {
     fuente:
@@ -113,6 +119,16 @@ const REAL = {
   2025: [208.2, 4.1, 133.3],
   2026: [175.8, 4.8, 93.0],
 };
+
+/**
+ * Fuel oil the whole CFE burned each year, thousand cubic metres: SENER's series to 2023; 2024 with
+ * the CFE's own change in TJ; 2025 and 2026 with what stayed in the country (estimate of the game).
+ */
+const SENER_M3 = { 2018: 6382.1, 2019: 5725.9, 2020: 3319.1, 2021: 3904.4, 2022: 3716.7, 2023: 3893.3 };
+const M3_2024 = SENER_M3[2023] * (132950 / 162313);
+const seQueda = (a) => REAL[a][0] + REAL[a][1] - REAL[a][2];
+const DEMANDA_ESTIMADA = { 2025: (M3_2024 * seQueda(2025)) / seQueda(2024), 2026: (M3_2024 * seQueda(2026)) / seQueda(2024) };
+const DEMANDA_M3 = Object.fromEntries(Object.entries({ ...SENER_M3, 2024: M3_2024, ...DEMANDA_ESTIMADA }).map(([a, v]) => [a, r1(v)]));
 
 const petroleo = JSON.parse(await readFile(join(DATOS, 'petroleo.json'), 'utf8'));
 const refinerias = {};
@@ -283,6 +299,17 @@ const datos = {
     puerto: 'puerto:tuxpan',
     dato: 'El combustóleo que CFEnergía compraba en Estados Unidos llegaba en buque tanque al puerto de Tuxpan (ASF, Cuenta Pública 2017).',
     fuentes: ['asf-2017-0522'],
+  },
+  demanda: {
+    milesM3: DEMANDA_M3,
+    estimados: Object.keys(DEMANDA_ESTIMADA),
+    factor: Object.fromEntries(Object.entries(DEMANDA_M3).map(([a, v]) => [a, r3(v / DEMANDA_M3[2018])])),
+    dato:
+      'Lo que quema cada central cambia cada año con lo que quemó toda la CFE, en la proporción de 2018. De 2018 a 2023, miles de metros cúbicos de la SENER ' +
+      '(Informe Pormenorizado 2023, tabla 12). 2024, lo de 2023 menos el 18.1 % que bajó según el Informe Anual 2024 de la CFE (162,313 a 132,950 TJ). ' +
+      '2025 y 2026, estimación del juego: lo de 2024 por lo que cambió el combustóleo que se quedó en el país (lo que se hizo más lo que se importó menos ' +
+      'lo que se exportó, Segundo Informe; 2026, de enero a junio). Después se repite el último año.',
+    fuentes: ['sener-ip2023', 'cfe-ia2024', 'ig2-2026'],
   },
   modos2018: {
     buque: 20.8,

@@ -81,7 +81,10 @@
   });
 
   /** What the State's till has paid for emergency tanker trucks (millions of pesos). */
-  const gastoPipas = $derived(Object.values(sim.pipas).reduce((s, p) => s + p.mdp, 0));
+  const gastoPipas = $derived.by(() => {
+    sim.horas;
+    return Object.entries(sim.pipas).reduce((s, [e, p]) => s + p.mdp + sim.operacionPipas(e), 0);
+  });
 
   /** This month's payment and the year it comes from, with the sources in words. */
   const llegada = $derived.by(() => {
@@ -200,7 +203,7 @@
           : '') +
         (pipas.n > 0
           ? `\nEl Estado tiene ${mil(pipas.n)} pipas de emergencia (${mil(pipas.mdp)} millones de pesos, a ${MDP_POR_PIPA.toLocaleString('es-MX', { maximumFractionDigits: 1 })} cada una)` +
-            `${c.pipas > 0 ? `: este año llevaron ${mil(mbd(c.pipas))} mil, importado` : ''}.`
+            `${c.pipas > 0 ? `: este año llevaron ${mil(mbd(c.pipas))} mil, importado, y operarlas costó ${mil(sim.operacionPipasDelAño(año))} millones` : ''}.`
           : '') +
         (sinSalida > 0 ? `\nLas refinerías se quedaron sin salida para ${mil(sinSalida / 1000)} mil barriles: su patio se llenó.` : ''),
       detalleCombustoleo: (() => {
@@ -321,7 +324,7 @@
       class="celda caja"
       title={`En caja: ${mdp(cuenta.dinero)} de pesos (M: millones).` +
         (llegada ? String.fromCharCode(10) + llegada.detalle : '') +
-        (gastoPipas > 0 ? `${String.fromCharCode(10)}Pipas de emergencia por el desabasto: ${mdp(gastoPipas)} pagados de esta caja.` : '')}
+        (gastoPipas > 0 ? `${String.fromCharCode(10)}Pipas de emergencia por el desabasto: ${mdp(gastoPipas)} pagados de esta caja, entre comprarlas y operarlas.` : '')}
     >
       <span class="label">Presupuesto</span>
       <span class="valor">

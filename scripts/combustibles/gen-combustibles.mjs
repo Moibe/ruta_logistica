@@ -22,6 +22,11 @@ const FUENTES = {
       'SHCP, comunicado 008/2019 (24 de enero de 2019): Pemex contará con «671 autotanques con una capacidad equivalente a 144 mil barriles diarios. El monto total es de 92 millones de dólares»',
     url: 'https://www.gob.mx/shcp/prensa/comunicado-no-008-2019-el-gobierno-de-mexico-amplia-la-estrategia-de-combate-al-robo-de-combustible-mediante-la-compra-de-pipas',
   },
+  'asf-2019-0412': {
+    fuente:
+      'ASF, auditoría de desempeño 2019-6-90T9N-07-0412-2020 «Adquisición de Pipas para Transporte de Combustible» (Pemex Corporativo, Cuenta Pública 2019): entregas, arrendamiento, operación y mantenimiento de las pipas',
+    url: 'https://www.asf.gob.mx/Trans/Informes/IR2019c/Documentos/Auditorias/2019_0412_a.pdf',
+  },
   'jornada-2019-01-09': {
     fuente: 'La Jornada, «Afecta el desabasto a 40 municipios del Edomex» (9 de enero de 2019). El sitio no deja leerla automáticamente: se usa lo que muestra el buscador',
     url: 'https://www.jornada.com.mx/2019/01/09/politica/004n1pol',
@@ -567,6 +572,27 @@ const datos = {
     memoriaDias: 7,
     diasParaPipas: 14,
     pipas: { compradas: 671, barrilesDiarios: 144000, costoUsd: 92000000 },
+    llegada: {
+      primeraDias: 15,
+      todasDias: 91,
+      dato:
+        'Las pipas de 2019 no llegaron de inmediato: las primeras se entregaron el 5 de febrero, 15 días después de la fecha que fijó el Ejecutivo ' +
+        '(21 de enero), y las últimas hasta el 22 de abril (ASF). En el juego las que compra el Estado empiezan a llegar a los 15 días y terminan de ' +
+        'llegar a los 91, parejo.',
+      fuentes: ['asf-2019-0412'],
+    },
+    operacion: {
+      pipas: 612,
+      operadoresPesos: 1020196000,
+      operadoresDias: (22 * 365.25) / 24,
+      mantenimientoPesos: 33852600,
+      mantenimientoDias: 275,
+      dato:
+        'Operarlas cuesta: en 2019 la Sedena pidió 1,020.2 millones de pesos para la nómina de los operadores y el resguardo de las 612 pipas en 22 ' +
+        'quincenas, y su mantenimiento de abril a diciembre costó 33.9 millones (ASF). Son unos 5,180 pesos al día por pipa. En el juego cuestan ' +
+        'solo los días que trabajan, por lo que llevan, y se pagan de la caja del Estado; si no alcanza, llevan menos.',
+      fuentes: ['asf-2019-0412'],
+    },
     dato:
       'Reglas del juego para lo que le falta a un estado. Su carga nacional y de exportación baja en la misma proporción que el combustible que le ' +
       'faltó la última semana, y sus polos no reciben empresas mientras le falte. Si le falta 14 días seguidos, el Estado le compra las pipas que ' +

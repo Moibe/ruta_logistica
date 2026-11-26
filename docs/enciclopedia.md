@@ -80,6 +80,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [ASF, auditoría 2017-0522 a CFEnergía](https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf) | El combustóleo que la CFE compraba en Estados Unidos llegaba en buque tanque a Tuxpan; el gas natural licuado, a Altamira y Manzanillo | Cuenta Pública 2017 | Documento oficial público |
 | [SENER, Balance Nacional de Energía 2019](https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf) | Lo que el país exportó e importó de cada petrolífero en 2018 (en PJ) y el poder calorífico neto del combustóleo (cuadro 29) | Febrero de 2021 | Documento oficial público |
 | [SHCP, comunicado 008/2019](https://www.gob.mx/shcp/prensa/comunicado-no-008-2019-el-gobierno-de-mexico-amplia-la-estrategia-de-combate-al-robo-de-combustible-mediante-la-compra-de-pipas) | Las pipas que se compraron por el desabasto: 671 autotanques con capacidad equivalente a 144 mil barriles diarios, por 92 millones de dólares | 24 de enero de 2019 | Documento oficial público |
+| [ASF, auditoría 2019-0412 «Adquisición de Pipas para Transporte de Combustible»](https://www.asf.gob.mx/Trans/Informes/IR2019c/Documentos/Auditorias/2019_0412_a.pdf) | Cuándo se entregaron las pipas de 2019 (del 5 de febrero al 22 de abril), lo que costó operarlas (nómina de los operadores de la Sedena y mantenimiento) y su renta | Cuenta Pública 2019 | Documento oficial público |
+| [SENER, Informe Pormenorizado 2023, tabla 12](https://www.gob.mx/cms/uploads/attachment/file/972693/Informe_Pormenorizado_2023.pdf) | El combustóleo que quemó la CFE cada año de 2014 a 2023 (miles de m³) | 2024 | Documento oficial público |
 | [La Jornada, «Afecta el desabasto a 40 municipios del Edomex»](https://www.jornada.com.mx/2019/01/09/politica/004n1pol) | Que el desabasto ya se reportaba el 9 de enero de 2019. El sitio no deja leerla automáticamente: se usa lo que muestra el buscador | 9 de enero de 2019 | Prensa |
 | [SEMAR, Anuario Estadístico de los Puertos de México 2024](https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024) | Petróleo y derivados por puerto en 2018 y 2024: importación, exportación y cabotaje; la carga que sale de Dos Bocas y Ciudad del Carmen a las plataformas y cuántos barcos la llevan; el crudo que exporta Cayo Arcas; lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (contenerizada, granel agrícola y mineral, general suelta) y en cuántos barcos | 2025 | Documento oficial público |
 | [EIA (gobierno de EUA), unidades de International Energy Statistics](https://www.eia.gov/cfapps/ipdbproject/docs/unitswithpetro.php) | Barriles por tonelada de gasolina, diésel y turbosina, para pasar a toneladas lo que cabe en un tren | Consultado el 22 de noviembre de 2026 | Dato oficial público (gobierno de EUA) |
@@ -4312,10 +4314,15 @@ consecuencias son **reglas del juego**, con cifras del desabasto de enero de 201
 - **Sus polos no reciben empresas** mientras le falte: basta con que el día anterior le haya faltado
   más del 1 %. La ficha del polo dice por qué.
 - **A los 14 días seguidos de desabasto, el Estado compra pipas.** Compra las que cubren lo que le
-  faltó ese día, y las paga de su caja. Si no le alcanza el dinero, compra las que pueda, y a los 14
-  días vuelve a intentar.
+  faltó ese día, sin contar las que ya tiene (también las que vienen en camino), y las paga de su
+  caja. Si no le alcanza el dinero, compra las que pueda, y a los 14 días vuelve a intentar.
+- **No llegan de inmediato.** Las primeras empiezan a trabajar a los 15 días de la compra y las
+  últimas a los 91, parejo.
 - **Las pipas se quedan en ese estado** y llevan cada día lo que pueden de lo que le falte, con
   combustible importado. Cuentan como importado «en pipas».
+- **Operarlas cuesta.** Cada pipa cuesta unos 5,180 pesos al día que trabaja (24 pesos por barril que
+  lleva), y se pagan de la caja del Estado. Una pipa que no trabaja no cuesta. Si la caja no alcanza,
+  llevan solo lo que se puede pagar.
 
 **De dónde salen las cifras de las pipas.** Hacienda informó el 24 de enero de 2019 que Pemex
 contaría con «671 autotanques con una capacidad equivalente a 144 mil barriles diarios. El monto
@@ -4324,23 +4331,36 @@ diarios** y **137 mil dólares**: 2.5 millones de pesos con el tipo de cambio de
 2024). La Jornada ya reportaba el desabasto el 9 de enero (leída en el resumen del buscador): de ahí
 al anuncio de Hacienda pasaron unas dos semanas, y de ahí los **14 días**.
 
-**Prueba.** Al quitar el buque tanque del Pacífico de la flota inicial:
+**Cuándo llegan y cuánto cuesta operarlas.** La auditoría de la ASF a la compra (2019-0412, Cuenta
+Pública 2019) dice que las primeras se entregaron el 5 de febrero, 15 días después de la fecha que fijó
+el Ejecutivo (el 21 de enero), y que algunas se entregaron hasta el 22 de abril: de ahí los **15 y 91
+días**. También dice que en 2019 la Sedena pidió 1,020.2 millones de pesos para la nómina de los
+operadores y el resguardo de las 612 pipas en 22 quincenas, y que su mantenimiento de abril a
+diciembre costó 33.9 millones. Repartido entre 612 pipas y los días de cada cosa, son **5,180 pesos al
+día por pipa** (cálculo del juego). En la realidad Pemex también las rentaba (1,065.6 millones de
+febrero a diciembre de 2019); el juego no lo cuenta, porque esa renta pagaba la deuda de su compra, que
+el juego ya cobra.
+
+**Prueba.** Al quitar el buque tanque del Pacífico de la flota inicial (125 días):
 
 1. Durante 15 días no pasa nada: las terminales empiezan con 15 días de reserva.
 2. Después a Guerrero le falta la mitad de su combustible: la mitad que llevan los buques que renta
    Pemex sí llega. A Michoacán le falta el 21 % y a Sonora el 5 %, y sus polos dejan de recibir
    empresas.
-3. La carga de Guerrero baja hasta el 58 %.
-4. A los 14 días el Estado compra 48 pipas para Guerrero (121 millones de pesos), 43 para Michoacán
-   (108) y 11 para Sonora (28): 256 millones de su caja.
-5. Desde entonces no falta, y la carga se recupera en una o dos semanas.
+3. La carga de Guerrero baja hasta el 51 %.
+4. Al día 29 el Estado compra 48 pipas para Guerrero (121 millones de pesos), 43 para Michoacán (108)
+   y 11 para Sonora (28): 256 millones de su caja.
+5. Las primeras trabajan desde el día 44 y todas hacia el día 120. Mientras llegan, lo que falta baja
+   poco a poco, y el Estado no compra más.
+6. Al día 120 ya no falta. Operarlas costó 9.6 millones en Guerrero, 8.6 en Michoacán y 2.2 en
+   Sonora.
 
 **Lo que falta o es estimación:**
 
 - cuánto baja la economía (en la misma proporción es regla del juego);
-- que las pipas lleguen el mismo día: Hacienda dijo que las de 2019 se entregarían poco a poco hasta
-  el 29 de marzo (en la prensa, leída en el resumen del buscador);
-- lo que cuesta operarlas;
+- que lleguen parejo entre los días 15 y 91: la ASF da la primera y la última entrega, no cuántas
+  llegaron cada semana;
+- que una pipa sin trabajo no cueste: en la realidad su renta y sus operadores se pagaban igual;
 - que el desabasto también pase por falta de ductos: en el juego los ductos siempre traen lo que hace
   su zona.
 
@@ -4454,6 +4474,29 @@ cogeneración. Los de Manzanillo II son lo que queda de los 1,131 MW de vapor de
 12 % de sus 9,422) sin Samalayuca (316) ni Punta Prieta (113): **cálculo del juego**. El combustóleo de
 San Carlos llega por Puerto San Carlos, que no está en el juego: lo recibe en La Paz.
 
+**Cada año quema distinto.** Lo que quema cada central cambia con lo que quemó toda la CFE, en la
+proporción de 2018: el reparto entre centrales se queda como en 2018. La SENER da el combustóleo de
+la CFE año por año hasta 2023 (Informe Pormenorizado 2023, tabla 12). Su cifra de 2018, 6,382.1 miles
+de m³, queda a 1.2 % de la suma de las empresas de generación que usa el juego. Para 2024, el Informe
+Anual de la CFE dice que bajó 18.1 % (de 162,313 a 132,950 TJ). Para 2025 y 2026 no hay cifra de la
+CFE: el juego usa lo de 2024 por lo que cambió el combustóleo que se quedó en el país (**estimación
+del juego**). De ahí en adelante se repite el último año.
+
+| Año | Miles de m³ | De 2018 | Mil barriles diarios en el juego |
+| --- | ---: | ---: | ---: |
+| 2018 | 6,382.1 | 100 % | 108.7 |
+| 2019 | 5,725.9 | 89.7 % | 97.5 |
+| 2020 | 3,319.1 | 52.0 % | 56.5 |
+| 2021 | 3,904.4 | 61.2 % | 66.5 |
+| 2022 | 3,716.7 | 58.2 % | 63.3 |
+| 2023 | 3,893.3 | 61.0 % | 66.3 |
+| 2024 | 3,189.0 | 50.0 % | 54.3 |
+| 2025 (estimación) | 3,656.5 | 57.3 % | 62.3 |
+| 2026 (estimación) | 4,054.5 | 63.5 % | 69.0 |
+
+Lo que la CFE deja de quemar se queda en los patios de las refinerías y se exporta: así pasó entre
+2020 y 2024, cuando el país exportó más combustóleo que en 2018.
+
 **Cómo le llega.**
 
 - **Por ducto.** Tula y Salamanca están junto a su refinería, y a Altamira le llega por el
@@ -4535,7 +4578,8 @@ Entre 2022 y 2024 el país hizo de 258 a 271 mil barriles diarios: más que el j
 **Lo que falta o es estimación:**
 
 - cuánto quema cada central;
-- la demanda, fija en la de 2018: no hay conversiones a gas ni retiros de unidades;
+- la demanda de cada central: cambia con la de toda la CFE, sin conversiones a gas ni retiros de unidades
+  por central;
 - los demás usuarios del combustóleo (unos 3 mil barriles diarios);
 - por dónde sale lo que exportan las refinerías de tierra adentro;
 - cuánto quitan las coquizadoras;
@@ -5036,7 +5080,8 @@ los otros dos aún no se capturan.
   que sobra se exporta. Decisiones mías, por si las quiere cambiar:
   - las 15 centrales y cuánto quema cada una salen de repartir lo de cada empresa de generación por
     MW;
-  - la demanda se queda fija en la de 2018;
+  - la demanda se quedaba fija en la de 2018 (cambió el mismo día: ver la decisión «El combustóleo y
+    las pipas, cada año»);
   - lo que no llega por ducto, la mitad llega sola: en los buques que renta Pemex o en los trenes
     de Ferromex y CPKC, del país o importado;
   - la otra mitad espera los vehículos del jugador;
@@ -5060,6 +5105,15 @@ los otros dos aún no se capturan.
     su caja.
 
   Ver [Cuando falta: el desabasto](#cuando-falta-el-desabasto).
+- **El combustóleo y las pipas, cada año.** *(26 nov 2026.)* El usuario pidió las dos cosas que
+  propuse:
+  - las pipas tardan en llegar (de 15 a 91 días, por las entregas de 2019) y cuestan al operarlas
+    (5,180 pesos al día por pipa que trabaja, por lo que pagó la Sedena en 2019);
+  - lo que quema cada central cambia con lo que quemó toda la CFE cada año (SENER; 2024 del Informe
+    Anual de la CFE; 2025 y 2026 estimados).
+
+  Decidí yo que una pipa sin trabajo no cueste, para que las compradas no sean un gasto sin fin. Ver
+  [Cuando falta: el desabasto](#cuando-falta-el-desabasto) y [El combustóleo](#el-combustóleo).
 - **La exportación solo sube a un tren que pasa por una salida.** *(26 nov 2026.)* Antes un tren
   cargaba la exportación de cada estado aunque su vuelta no tocara ninguna salida, y la llevaba a
   bordo para siempre: el tren quedaba lleno. Lo encontré al probar trenes de combustóleo.

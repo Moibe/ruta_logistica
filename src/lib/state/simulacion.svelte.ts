@@ -56,7 +56,9 @@ import {
   DESABASTO,
   EN_PIPAS,
   estadosQueSurte,
+  llegadaPipas,
   MDP_POR_PIPA,
+  PESOS_POR_BARRIL_PIPA,
   PARTE_RENTADOS,
   POR_TIERRA,
   PUERTA_MAR,
@@ -132,6 +134,7 @@ import {
   DIAS_PATIO_CO,
   DIAS_RESERVA_CO,
   ENTREGAS_CO,
+  mbdCentralCo,
   mwSinCombustoleo,
   PARTE_AUTOMATICA_CO,
   porDuctoCo,
@@ -354,7 +357,10 @@ class Simulacion {
   #surtidoComb = new Map<string, number>();
   #faltaAyer = new Map<string, number>();
   #diasFalta = new Map<string, number>();
-  #diaComb = new Map<string, { usa: number; falta: number; horas: number }>();
+  #diaComb = new Map<string, { usa: number; falta: number; pipas: number; horas: number }>();
+  /** What running the trucks has cost the State's till (millions of pesos), by state and by year. */
+  #operacionPipas = new Map<string, number>();
+  #operacionPipasAño = new Map<string, number>();
   #diaDesabasto = -1;
   /** The State's emergency tanker trucks, by state: how many, what they cost (millions of pesos) and each purchase. */
   pipas = $state.raw<Record<string, { n: number; mdp: number; compras: { horas: number; n: number; mdp: number }[] }>>({});
@@ -1455,6 +1461,7 @@ class Simulacion {
     const porZona = new Map<string, number>();
     const porMar = new Map<string, number>();
     const faltaEstado = new Map<string, number>();
+    const pipasEstado = new Map<string, number>();
     for (const [estado, mbd] of a.consumo) {
       const c = this.#cuentaEstado(cuenta, estado);
       const usa = barrilesEn(mbd, horas);
@@ -1532,15 +1539,22 @@ class Simulacion {
         inv.set(estado, hayAqui - u);
         falta -= u;
       }
-      // The State's emergency tanker trucks, if it bought them for this state, bring what they can (imported).
-      const pipas = this.pipas[estado]?.n ?? 0;
-      if (pipas > 0 && falta > 0) {
-        const u = Math.min(falta, barrilesEn((pipas * BARRILES_POR_PIPA) / 1000, horas));
+      // The State's emergency tanker trucks in service in this state bring what they can (imported), as far as
+      // its till pays their running.
+      const pipas = this.pipasEnServicio(estado);
+      if (pipas > 0 && falta > 0 && this.dinero > 0) {
+        const u = Math.min(falta, barrilesEn((pipas * BARRILES_POR_PIPA) / 1000, horas), (this.dinero * 1e6) / PESOS_POR_BARRIL_PIPA);
         falta -= u;
         c.pipas += u;
         pais.pipas += u;
         importar(c, u);
         entra(EN_PIPAS, u);
+        pipasEstado.set(estado, u);
+        const mdp = (u * PESOS_POR_BARRIL_PIPA) / 1e6;
+        this.dinero -= mdp;
+        this.#operacionPipas.set(estado, (this.#operacionPipas.get(estado) ?? 0) + mdp);
+        const año = String(añoDe(this.horas));
+        this.#operacionPipasAño.set(año, (this.#operacionPipasAño.get(año) ?? 0) + mdp);
       }
       if (falta > 1e-6) {
         c.faltante += falta;
@@ -1563,14 +1577,14 @@ class Simulacion {
       }
       this.#patios.set(id, p);
     }
-    this.#contarDesabasto(a, faltaEstado, horas);
+    this.#contarDesabasto(a, faltaEstado, pipasEstado, horas);
   }
 
   /**
    * What a state lacked this hour: a week's memory of it slows its cargo, and each new day settles
    * the one before (`#cerrarDiaDesabasto`).
    */
-  #contarDesabasto(a: Abasto, faltaEstado: ReadonlyMap<string, number>, horas: number) {
+  #contarDesabasto(a: Abasto, faltaEstado: ReadonlyMap<string, number>, pipasEstado: ReadonlyMap<string, number>, horas: number) {
     const dia = Math.floor(this.horas / 24);
     if (dia !== this.#diaDesabasto) {
       if (this.#diaDesabasto >= 0) this.#cerrarDiaDesabasto();
@@ -1582,9 +1596,10 @@ class Simulacion {
       const falta = faltaEstado.get(estado) ?? 0;
       const s = this.#surtidoComb.get(estado) ?? 1;
       this.#surtidoComb.set(estado, s + ((usa > 0 ? 1 - falta / usa : 1) - s) * peso);
-      const d = this.#diaComb.get(estado) ?? { usa: 0, falta: 0, horas: 0 };
+      const d = this.#diaComb.get(estado) ?? { usa: 0, falta: 0, pipas: 0, horas: 0 };
       d.usa += usa;
       d.falta += falta;
+      d.pipas += pipasEstado.get(estado) ?? 0;
       d.horas += horas;
       this.#diaComb.set(estado, d);
     }
@@ -1593,7 +1608,8 @@ class Simulacion {
   /**
    * A day of fuel is over. A state short of it that day (past `UMBRAL_DESABASTO`) adds a day in a
    * row; after `DESABASTO.diasParaPipas` of them the State buys the tanker trucks that cover what
-   * it lacks, as many as its till can pay, and the count starts again.
+   * it lacks, besides the ones it has (on their way too), as many as its till can pay, and the
+   * count starts again.
    */
   #cerrarDiaDesabasto() {
     for (const [estado, d] of this.#diaComb) {
@@ -1603,8 +1619,9 @@ class Simulacion {
       this.#diasFalta.set(estado, dias);
       if (dias < DESABASTO.diasParaPipas) continue;
       this.#diasFalta.set(estado, 0);
-      const porDia = d.horas > 0 ? (d.falta * 24) / d.horas : 0;
-      const n = Math.min(Math.ceil(porDia / BARRILES_POR_PIPA), Math.floor(this.dinero / MDP_POR_PIPA));
+      // What it would lack without trucks, a day: the trucks it needs, less the ones it has.
+      const porDia = d.horas > 0 ? ((d.falta + d.pipas) * 24) / d.horas : 0;
+      const n = Math.min(Math.ceil(porDia / BARRILES_POR_PIPA) - (this.pipas[estado]?.n ?? 0), Math.floor(this.dinero / MDP_POR_PIPA));
       if (n <= 0) continue;
       const mdp = n * MDP_POR_PIPA;
       this.dinero -= mdp;
@@ -1625,6 +1642,20 @@ class Simulacion {
   hayCombustible(estado: string): boolean {
     return this.faltaAyer(estado) <= UMBRAL_DESABASTO;
   }
+  /** A state's trucks already in service: each purchase's come in over the months after it (`llegadaPipas`). */
+  pipasEnServicio(estado: string): number {
+    const p = this.pipas[estado];
+    if (!p) return 0;
+    return p.compras.reduce((s, c) => s + c.n * llegadaPipas((this.horas - c.horas) / 24), 0);
+  }
+  /** What running the trucks has cost the State's till, millions of pesos: in a state, or all of them in a year. */
+  operacionPipas(estado: string): number {
+    return this.#operacionPipas.get(estado) ?? 0;
+  }
+  operacionPipasDelAño(año: number): number {
+    return this.#operacionPipasAño.get(String(año)) ?? 0;
+  }
+
   /** Days in a row a state has been short of fuel (the State buys tanker trucks at `DESABASTO.diasParaPipas`). */
   diasSinCombustible(estado: string): number {
     return this.modo === 'realidad' ? 0 : (this.#diasFalta.get(estado) ?? 0);
@@ -1835,7 +1866,8 @@ class Simulacion {
 
   /** Thousand barrels a day of a plant's fuel oil that wait for the player's trains and tankers: half of what its pipeline doesn't bring. */
   ritmoJugadorCo(c: Central): number {
-    return (c.mbd - porDuctoCo(c, this.combustoleo)) * (1 - PARTE_AUTOMATICA_CO);
+    const año = añoDe(this.horas);
+    return (mbdCentralCo(c, año) - porDuctoCo(c, this.combustoleo, año)) * (1 - PARTE_AUTOMATICA_CO);
   }
 
   /** The most a plant keeps of what the player brings, barrels. */
@@ -1845,7 +1877,8 @@ class Simulacion {
 
   /** The most a refinery keeps in its yard: some days of what it makes and its pipelines don't take, barrels. */
   #topePatioCo(id: string): number {
-    const ducto = CENTRALES_CO.reduce((s, c) => s + (c.ducto === id ? porDuctoCo(c, this.combustoleo) : 0), 0);
+    const año = añoDe(this.horas);
+    const ducto = CENTRALES_CO.reduce((s, c) => s + (c.ducto === id ? porDuctoCo(c, this.combustoleo, año) : 0), 0);
     return barrilesEn(Math.max(0, (this.combustoleo.get(id) ?? 0) - ducto), 24 * DIAS_PATIO_CO);
   }
 
@@ -1867,10 +1900,11 @@ class Simulacion {
       hecho.set(id, b);
       cuenta.producido += b;
     }
+    const año = añoDe(this.horas);
     const porDucto = new Map<string, number>();
     for (const c of CENTRALES_CO) {
       if (!c.ducto) continue;
-      const d = Math.min(barrilesEn(c.mbd, horas), hecho.get(c.ducto) ?? 0);
+      const d = Math.min(barrilesEn(mbdCentralCo(c, año), horas), hecho.get(c.ducto) ?? 0);
       hecho.set(c.ducto, (hecho.get(c.ducto) ?? 0) - d);
       porDucto.set(c.id, d);
     }
@@ -1888,7 +1922,7 @@ class Simulacion {
     };
     const peso = Math.min(1, horas / (24 * MEMORIA_DIAS));
     for (const c of CENTRALES_CO) {
-      const pide = barrilesEn(c.mbd, horas);
+      const pide = barrilesEn(mbdCentralCo(c, año), horas);
       const ducto = porDucto.get(c.id) ?? 0;
       const resto = pide - ducto;
       const auto = resto * PARTE_AUTOMATICA_CO;
