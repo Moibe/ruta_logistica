@@ -1,0 +1,451 @@
+{
+ "corte": "2026-11-26",
+ "nota": "Combustóleo: lo que hace cada refinería, lo que quema cada central de la CFE y cómo le llega. Generado por scripts/combustibles/gen-combustoleo.mjs; cada cifra con su fuente.",
+ "fuentes": {
+  "asf-2020-0430": {
+   "fuente": "ASF, auditoría 2020-6-90T9M-19-0430-2021 «Erogaciones por Mantenimiento en Refinerías» (Pemex Transformación Industrial, Cuenta Pública 2020): tabla «Producción de petrolíferos 2019-2020 del SNR», combustóleo de cada refinería en miles de barriles diarios",
+   "url": "https://www.asf.gob.mx/Trans/Informes/IR2020c/Documentos/Auditorias/2020_0430_a.pdf"
+  },
+  "cfe-ia2018": {
+   "fuente": "CFE, Informe Anual 2018 (Gaceta de la Cámara de Diputados, 21 de mayo de 2019): «Utilización de fuentes primarias de energía» y «Escenario tecnológico» de cada empresa de generación",
+   "url": "https://gaceta.diputados.gob.mx/Gaceta/64/2019/may/CFE_IA-20190521.pdf"
+  },
+  "prodesen-2019": {
+   "fuente": "SENER, PRODESEN 2019–2033, capítulo V, tabla 5.2: centrales principales a diciembre de 2018, con su tecnología, su combustible y su capacidad",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/475497/PRODESEN_V.pdf"
+  },
+  "ig2-2026": {
+   "fuente": "Segundo Informe de Gobierno 2025–2026, anexo estadístico (SENER y Pemex): «Producción, importación y exportación de productos petrolíferos de PEMEX», combustóleo; 2026, de enero a junio",
+   "url": "https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf"
+  },
+  "pmx-ia2023": {
+   "fuente": "Pemex, Informe Anual 2023: la Olmeca busca «maximizar el aprovechamiento de la materia prima para la producción de gasolina y diésel, sin producción de asfalto ni combustóleo»",
+   "url": "https://gaceta.diputados.gob.mx/PDF/65/2024/may/Pemex-20240514.pdf"
+  },
+  "cpm-2024": {
+   "fuente": "Presidencia de la República, presentación de resultados de Pemex (3 de mayo de 2024): la coquizadora de Tula «reduce la producción de combustóleo de las refinerías Tula y Salamanca» y la de Salina Cruz «reduce la producción de combustóleo»",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf"
+  },
+  "pmx-c38-2022": {
+   "fuente": "Pemex, comunicado 38/2022 (1 de julio de 2022): con la coquizadora de Salina Cruz «se dejará de producir combustóleo»",
+   "url": "https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1202976_1.pdf"
+  },
+  "bne-2019": {
+   "fuente": "SENER, Balance Nacional de Energía 2019, cuadro 29: poder calorífico neto del combustóleo, 6,397 MJ por barril en 2018",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf"
+  },
+  "eia-unidades": {
+   "fuente": "EIA (gobierno de EUA), International Energy Statistics, unidades: 6.66 barriles por tonelada métrica de combustóleo (residual fuel oil)",
+   "url": "https://www.eia.gov/cfapps/ipdbproject/docs/unitswithpetro.php"
+  },
+  "asf-2017-0522": {
+   "fuente": "ASF, auditoría 2017-6-90TVV-15-0522-2018 «Ingresos por Comercialización de Gas Natural, Combustóleo y Diésel» (CFEnergía, Cuenta Pública 2017): el combustóleo que CFEnergía compró en Estados Unidos «se entregó en buque tanques que descargaron en el puerto de Tuxpan, Veracruz»",
+   "url": "https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf"
+  },
+  "cfe-ia2024": {
+   "fuente": "CFE, Informe Anual 2024: «se incrementó en 23 % la capacidad de transporte de combustóleo» a las centrales de Lerma, Mérida II y Valladolid",
+   "url": "https://www.cfe.gob.mx/finanzas/reportes-financieros/Reportes%20Anuales%20Documentos/Informe%20Anual%202024.pdf"
+  },
+  "cnh-2018": {
+   "fuente": "CNH, capa de ductos con fecha de referencia 14 de febrero de 2018: Combustoleoducto Refinería Madero–CFE Altamira, 29 km",
+   "url": "https://agsserver.sigsa.info/arcgis/rest/services/Monitoreo_de_flujo_en_tiempo_real_MIL1/MapServer/4"
+  },
+  "asf-2018-0474": {
+   "fuente": "ASF, auditoría 474-DE «Desempeño de Pemex Logística», Cuenta Pública 2018: en 2018 movió 20.8 Mbd de combustóleo en buque tanque y 31.0 en carro tanque",
+   "url": "https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0474_a.pdf"
+  },
+  "attrapi-2018": {
+   "fuente": "ATTRAPI, Anuario Estadístico Ferroviario 2018, tabla 6-4: 1.639 millones de toneladas de combustóleo por tren",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/1099335/Anuario_2018.pdf"
+  }
+ },
+ "unidades": {
+  "barrilesPorM3": 6.28981,
+  "barrilesPorTonelada": 6.66,
+  "mjPorBarril": 6397,
+  "dato": "Un metro cúbico son 6.28981 barriles; una tonelada de combustóleo, 6.66 barriles (EIA); un barril da 6,397 MJ (Balance Nacional de Energía, 2018).",
+  "fuentes": [
+   "eia-unidades",
+   "bne-2019"
+  ]
+ },
+ "refinerias": {
+  "madero": {
+   "rendimiento": 0.217,
+   "dato": "Hizo 10 y 22 mil barriles diarios de combustóleo en 2019 y 2020 (ASF) al procesar 58.0 y 89.8 de crudo: 0.217 barriles de combustóleo por barril de crudo",
+   "fuentes": [
+    "asf-2020-0430"
+   ]
+  },
+  "cadereyta": {
+   "rendimiento": 0.151,
+   "dato": "Hizo 12 y 19 mil barriles diarios de combustóleo en 2019 y 2020 (ASF) al procesar 103.2 y 102.7 de crudo: 0.151 barriles de combustóleo por barril de crudo",
+   "fuentes": [
+    "asf-2020-0430"
+   ]
+  },
+  "minatitlan": {
+   "rendimiento": 0.141,
+   "dato": "Hizo 7 y 17 mil barriles diarios de combustóleo en 2019 y 2020 (ASF) al procesar 91.6 y 78.5 de crudo: 0.141 barriles de combustóleo por barril de crudo",
+   "fuentes": [
+    "asf-2020-0430"
+   ]
+  },
+  "salamanca": {
+   "rendimiento": 0.285,
+   "dato": "Hizo 25 y 29 mil barriles diarios de combustóleo en 2019 y 2020 (ASF) al procesar 92.9 y 96.5 de crudo: 0.285 barriles de combustóleo por barril de crudo",
+   "fuentes": [
+    "asf-2020-0430"
+   ]
+  },
+  "salina-cruz": {
+   "rendimiento": 0.391,
+   "dato": "Hizo 47 y 51 mil barriles diarios de combustóleo en 2019 y 2020 (ASF) al procesar 125.1 y 125.4 de crudo: 0.391 barriles de combustóleo por barril de crudo",
+   "fuentes": [
+    "asf-2020-0430"
+   ]
+  },
+  "tula": {
+   "rendimiento": 0.393,
+   "dato": "Hizo 48 y 38 mil barriles diarios de combustóleo en 2019 y 2020 (ASF) al procesar 121.2 y 97.7 de crudo: 0.393 barriles de combustóleo por barril de crudo",
+   "fuentes": [
+    "asf-2020-0430"
+   ]
+  },
+  "olmeca": {
+   "rendimiento": 0,
+   "dato": "Está hecha para sacar gasolina y diésel «sin producción de asfalto ni combustóleo» (Pemex, Informe Anual 2023)",
+   "fuentes": [
+    "pmx-ia2023"
+   ]
+  }
+ },
+ "produccion": {
+  "calculado2018": 186.4,
+  "real2018": 185.1,
+  "dato": "Cada refinería hace combustóleo en proporción a su crudo, con su rendimiento de 2019 y 2020 (ASF). Con el crudo de 2018 da 186.4 mil barriles diarios; el país hizo 185.1 (Segundo Informe).",
+  "fuentes": [
+   "asf-2020-0430",
+   "ig2-2026"
+  ]
+ },
+ "coquizadoras": {
+  "coquizadora-tula": {
+   "refinerias": [
+    "tula",
+    "salamanca"
+   ],
+   "dato": "Reduce el combustóleo de Tula y Salamanca (Presidencia); el juego les quita tantos barriles de combustóleo como barriles de gasolina y diésel agrega la coquizadora, primero a Tula (estimación del juego)",
+   "fuentes": [
+    "cpm-2024"
+   ]
+  },
+  "coquizadora-salina-cruz": {
+   "refinerias": [
+    "salina-cruz"
+   ],
+   "dato": "Con ella Salina Cruz «dejará de producir combustóleo» (Pemex): el juego le quita tantos barriles de combustóleo como barriles de gasolina y diésel agrega la coquizadora (estimación del juego)",
+   "fuentes": [
+    "pmx-c38-2022",
+    "cpm-2024"
+   ]
+  }
+ },
+ "empresas": [
+  {
+   "id": "I",
+   "nombre": "CFE Generación I",
+   "m3": 2458462,
+   "mbd": 42.37,
+   "centrales": [
+    "tula",
+    "villa-de-reyes",
+    "salamanca",
+    "bcs-i"
+   ],
+   "dato": "Quemó 2,458,462 m³ de combustóleo en 2018, 42.4 mil barriles diarios. Se reparte por MW entre Sus 4 centrales de vapor y combustión interna, que el Informe marca con gas y combustóleo o combustóleo y diésel"
+  },
+  {
+   "id": "II",
+   "nombre": "CFE Generación II",
+   "m3": 620466.85,
+   "mbd": 10.69,
+   "centrales": [
+    "altamira",
+    "lerdo",
+    "san-carlos"
+   ],
+   "dato": "Quemó 620,467 m³ de combustóleo en 2018, 10.7 mil barriles diarios. Se reparte por MW entre Altamira, que quemó combustóleo por la falta de gas (Informe Anual 2018), Lerdo y San Carlos; Valle de México queda fuera porque solo quema gas (PRODESEN)"
+  },
+  {
+   "id": "III",
+   "nombre": "CFE Generación III",
+   "m3": 1152246,
+   "mbd": 19.86,
+   "centrales": [
+    "mazatlan-ii",
+    "topolobampo-ii"
+   ],
+   "dato": "Quemó 1,152,246 m³ de combustóleo en 2018, 19.9 mil barriles diarios. Se reparte por MW entre Mazatlán II y Topolobampo II, las suyas que el PRODESEN marca solo con combustóleo; sus centrales duales (Puerto Libertad, Presidente Juárez, Río Bravo, Manzanillo I) tenían gas y quedan fuera (estimación del juego)"
+  },
+  {
+   "id": "IV",
+   "nombre": "CFE Generación IV",
+   "tcal": 3922.8,
+   "mbd": 7.03,
+   "centrales": [
+    "manzanillo",
+    "punta-prieta"
+   ],
+   "dato": "Quemó 3,922.8 Tcal de combustóleo en 2018, 7.0 mil barriles diarios. Se reparte por MW entre Punta Prieta, la única suya solo de combustóleo, no alcanzaría a quemarlo todo: entra también Manzanillo II, su central de vapor más grande con combustóleo según el PRODESEN (estimación del juego). El Informe la da en «Gcal» junto a su carbón (40,988) y su gas (13,839) en Tcal: por su tamaño el juego la lee como Tcal y la pasa a barriles con el poder calorífico neto del combustóleo (6,397 MJ por barril)"
+  },
+  {
+   "id": "VI",
+   "nombre": "CFE Generación VI",
+   "m3": 1667000,
+   "mbd": 28.73,
+   "centrales": [
+    "tuxpan",
+    "guaymas-ii",
+    "merida-ii",
+    "valladolid"
+   ],
+   "dato": "Quemó 1,667,000 m³ de combustóleo en 2018, 28.7 mil barriles diarios. Se reparte por MW entre Tuxpan y Guaymas II, solo de combustóleo (PRODESEN), y Mérida II y Valladolid, a las que la CFE lleva combustóleo (Informe Anual 2024); Lerma no está entre las centrales del PRODESEN que tiene el juego y su parte se reparte entre las demás"
+  }
+ ],
+ "centrales": [
+  {
+   "id": "tula",
+   "planta": "Tula (Francisco Pérez Ríos)",
+   "mw": 1605.6,
+   "mwDato": "su termoeléctrica (Informe Anual 2018)",
+   "combustible": "combustóleo y gas",
+   "ducto": "tula",
+   "entrega": "refineria:tula",
+   "mbd": 22.19,
+   "region": "central",
+   "empresa": "I"
+  },
+  {
+   "id": "villa-de-reyes",
+   "planta": "Villa de Reyes",
+   "mw": 700,
+   "combustible": "combustóleo",
+   "entrega": "central:villa-de-reyes",
+   "mbd": 9.67,
+   "region": "occidental",
+   "empresa": "I"
+  },
+  {
+   "id": "salamanca",
+   "planta": "Salamanca TC y Cogeneración",
+   "mw": 550,
+   "mwDato": "su termoeléctrica, sin la cogeneración (Informe Anual 2018)",
+   "combustible": "combustóleo y gas",
+   "ducto": "salamanca",
+   "entrega": "refineria:salamanca",
+   "mbd": 7.6,
+   "region": "occidental",
+   "empresa": "I"
+  },
+  {
+   "id": "bcs-i",
+   "planta": "Baja California Sur I",
+   "mw": 209.766,
+   "combustible": "combustóleo y diésel",
+   "entrega": "puerto:la-paz",
+   "mbd": 2.9,
+   "region": "baja-california-sur",
+   "empresa": "I"
+  },
+  {
+   "id": "altamira",
+   "planta": "Altamira",
+   "mw": 465,
+   "combustible": "combustóleo y gas",
+   "ducto": "madero",
+   "entrega": "puerto:altamira",
+   "mbd": 5.59,
+   "region": "noreste",
+   "empresa": "II"
+  },
+  {
+   "id": "lerdo",
+   "planta": "Lerdo (Guadalupe Victoria)",
+   "mw": 320,
+   "combustible": "combustóleo",
+   "entrega": "central:lerdo",
+   "mbd": 3.85,
+   "region": "norte",
+   "empresa": "II"
+  },
+  {
+   "id": "san-carlos",
+   "planta": "San Carlos (Agustín Olachea A.)",
+   "mw": 104.125,
+   "combustible": "combustóleo y diésel",
+   "entrega": "puerto:la-paz",
+   "entregaDato": "Su combustóleo llega por Puerto San Carlos, que no está en el juego: lo recibe en La Paz",
+   "mbd": 1.25,
+   "region": "baja-california-sur",
+   "empresa": "II"
+  },
+  {
+   "id": "mazatlan-ii",
+   "planta": "Mazatlán II (José Aceves Pozos)",
+   "mw": 616,
+   "combustible": "combustóleo",
+   "entrega": "puerto:mazatlan",
+   "mbd": 13.07,
+   "region": "noroeste",
+   "empresa": "III"
+  },
+  {
+   "id": "topolobampo-ii",
+   "planta": "Topolobampo II (Juan de Dios Bátiz)",
+   "mw": 320,
+   "combustible": "combustóleo",
+   "entrega": "puerto:topolobampo",
+   "mbd": 6.79,
+   "region": "noroeste",
+   "empresa": "III"
+  },
+  {
+   "id": "manzanillo",
+   "planta": "Manzanillo",
+   "mw": 700,
+   "mwDato": "Manzanillo II: lo que queda de los 1,131 MW de vapor de CFE Generación IV (el 12 % de sus 9,422) sin Samalayuca, 316, ni Punta Prieta, 113 (cálculo del juego)",
+   "combustible": "combustóleo y gas",
+   "entrega": "puerto:manzanillo",
+   "mbd": 6.06,
+   "region": "occidental",
+   "empresa": "IV"
+  },
+  {
+   "id": "punta-prieta",
+   "planta": "Punta Prieta",
+   "mw": 113,
+   "combustible": "combustóleo",
+   "entrega": "puerto:la-paz",
+   "mbd": 0.98,
+   "region": "baja-california-sur",
+   "empresa": "IV"
+  },
+  {
+   "id": "tuxpan",
+   "planta": "Tuxpan (Adolfo López Mateos)",
+   "mw": 1750,
+   "combustible": "combustóleo",
+   "entrega": "puerto:tuxpan",
+   "mbd": 18.43,
+   "region": "oriental",
+   "empresa": "VI"
+  },
+  {
+   "id": "guaymas-ii",
+   "planta": "Guaymas II (Carlos Rodríguez Rivero)",
+   "mw": 484,
+   "combustible": "combustóleo",
+   "entrega": "puerto:guaymas",
+   "mbd": 5.1,
+   "region": "noroeste",
+   "empresa": "VI"
+  },
+  {
+   "id": "merida-ii",
+   "planta": "Mérida II",
+   "mw": 198,
+   "combustible": "combustóleo y gas",
+   "entrega": "puerto:progreso",
+   "mbd": 2.09,
+   "region": "peninsular",
+   "empresa": "VI"
+  },
+  {
+   "id": "valladolid",
+   "planta": "Valladolid (Felipe Carrillo Puerto)",
+   "mw": 295,
+   "combustible": "combustóleo y gas",
+   "entrega": "puerto:progreso",
+   "mbd": 3.11,
+   "region": "peninsular",
+   "empresa": "VI"
+  }
+ ],
+ "cfe": {
+  "mbd": 108.68,
+  "dato": "La CFE quemó 108.7 mil barriles diarios de combustóleo en 2018 (suma de sus empresas de generación); el país usó 111.8 (lo que hizo más lo que importó menos lo que exportó). Cuánto quema cada central es estimación del juego: el PRODESEN dice cuáles queman combustóleo y el juego reparte lo de cada empresa por los MW de sus centrales de vapor y combustión interna.",
+  "fuentes": [
+   "cfe-ia2018",
+   "prodesen-2019",
+   "ig2-2026"
+  ]
+ },
+ "reglas": {
+  "parteAutomatica": 0.5,
+  "piso": 0.5,
+  "diasReserva": 15,
+  "diasPatio": 15,
+  "dato": "Reglas del juego: lo que no llega por ducto, la mitad lo llevan solos los buques que renta Pemex (a las centrales que lo reciben en un puerto) o Ferromex y CPKC (a las que lo reciben en tren), primero de lo que hay en las refinerías (las de su costa, o la más cercana) y si no, importado; la otra mitad espera los trenes y buques del jugador. Una central guarda hasta 15 días de esa mitad; sin nada de su combustóleo da la mitad de sus MW, como Nava sin carbón. Una refinería guarda hasta 15 días de su combustóleo; lo que no cabe se exporta.",
+  "fuentes": []
+ },
+ "importacionCfe": {
+  "puerto": "puerto:tuxpan",
+  "dato": "El combustóleo que CFEnergía compraba en Estados Unidos llegaba en buque tanque al puerto de Tuxpan (ASF, Cuenta Pública 2017).",
+  "fuentes": [
+   "asf-2017-0522"
+  ]
+ },
+ "modos2018": {
+  "buque": 20.8,
+  "carrotanque": 31,
+  "trenToneladas": 1639000,
+  "dato": "En 2018 Pemex movió 20.8 mil barriles diarios de combustóleo en buque tanque y 31.0 en carro tanque (ASF); el tren llevó 1.639 millones de toneladas, unos 29.9 mil barriles diarios (ATTRAPI).",
+  "fuentes": [
+   "asf-2018-0474",
+   "attrapi-2018"
+  ]
+ },
+ "real": {
+  "produccion": {
+   "2018": 185.1,
+   "2019": 149.8,
+   "2020": 176,
+   "2021": 244.3,
+   "2022": 258.3,
+   "2023": 260.3,
+   "2024": 271.4,
+   "2025": 208.2,
+   "2026": 175.8
+  },
+  "importacion": {
+   "2018": 16.5,
+   "2019": 11.8,
+   "2020": 4.3,
+   "2021": 0,
+   "2022": 0,
+   "2023": 0.5,
+   "2024": 0.6,
+   "2025": 4.1,
+   "2026": 4.8
+  },
+  "exportacion": {
+   "2018": 89.8,
+   "2019": 69.3,
+   "2020": 109.6,
+   "2021": 157.5,
+   "2022": 174.5,
+   "2023": 170.7,
+   "2024": 203.1,
+   "2025": 133.3,
+   "2026": 93
+  },
+  "parcial": {
+   "2026": "enero a junio"
+  },
+  "dato": "Lo que Pemex hizo, importó y exportó de combustóleo, miles de barriles diarios.",
+  "fuentes": [
+   "ig2-2026"
+  ]
+ }
+}

@@ -107,7 +107,8 @@ saltar al siguiente libre.
   carga en un patio por flujo, la sube solo a trenes que paran en su destino y cuenta lo entregado
   (`sim.cadena`); los flujos nacionales se restan de la carga genérica del estado.
   `PLANTAS_INSUMO` son las plantas que producen según su surtido (acereras, la fundición de La Caridad
-  y las carboeléctricas de Nava, cuyos MW faltantes se restan de su región en `estadoEnergia`); el
+  y las carboeléctricas de Nava, cuyos MW faltantes se restan de su región en `estadoEnergia`, como
+  los de las centrales de combustóleo); el
   acero de cada acerera va en parte a las armadoras cercanas como flujos propios.
   Las armadoras también son sitios con estación: su exportación de vehículos (`autosAño`, 4.9 Mt de
   2018 escaladas con el RAIAVL) espera en su patio y sale como exportación, restada de la del estado.
@@ -246,6 +247,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `src/lib/domain/datos/petroleo-real.json` | Etapa real de cada obra de Pemex (rehabilitaciones, Olmeca, coquizadoras, compra de Deer Park) |
 | `src/lib/domain/datos/plataformas.json` | **Plataformas**: los 4 complejos de Pemex en la Sonda de Campeche con su crudo por año (Segundo Informe), Cayo Arcas, el abasto que llevan los barcos (SEMAR), la carga de un barco abastecedor y las reglas del abasto. También lo lee `npm run datos` para las rutas marítimas |
 | `src/lib/domain/datos/combustibles.json` | **Combustibles**: consumo por estado (CNE, SENER), las 78 terminales de Pemex con su medio de suministro y las zonas de ductos (SENER, mapa de 2018), petróleo por puerto (SEMAR), barriles por tonelada (EIA), capacidad del buque tanque, y las series reales de crudo producido y exportado y de combustibles hechos e importados (Segundo Informe de Gobierno). Lo genera `scripts/combustibles/gen-combustibles.mjs` |
+| `src/lib/domain/datos/combustoleo.json` | **Combustóleo**: rendimiento de cada refinería (ASF 2020-0430), lo que quemó cada empresa de generación de la CFE en 2018 (Informe Anual) y las 15 centrales que lo queman con sus MW, su combustible (PRODESEN) y cómo les llega, las reglas del juego y la serie real de producción, importación y exportación (Segundo Informe de Gobierno). Lo genera `scripts/combustibles/gen-combustoleo.mjs` |
 | `src/lib/domain/datos/exportaciones.json` | **Exportaciones**: valor por estado y año (INEGI), toneladas que salen por tren por año y por salida y tráfico interior (ATTRAPI), carga por tren (SNIF), campo e industria por estado sin petróleo (INEGI, PIBE) |
 | `src/lib/domain/datos/interiores.json` | **Polos por dentro**: los frentes de obra de cada polo con vista y su parte del costo, la espuela, la energía, los lotes vendidos y las vocaciones, con sus fuentes. Lo genera `scripts/polos/gen-interior.mjs` |
 | `src/lib/domain/datos/sectores.json` | **Sectores**: lo que pide una empresa de cada vocación de un polo, por trabajador: electricidad y agua contra el promedio de la manufactura (INEGI, Censos Económicos 2019) y toneladas por tren con su parte exportada (ARTF 2018). Lo genera `scripts/polos/gen-sectores.mjs` |
@@ -403,6 +405,29 @@ El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedi
 
 El tablero tiene la capa *Combustibles*: los estados por la parte que vino del país y las 78
 terminales de Pemex. Detalle en la [enciclopedia](docs/enciclopedia.md#los-combustibles).
+
+**El combustóleo** (`domain/combustoleo.ts`, `datos/combustoleo.json`, generado por
+`scripts/combustibles/gen-combustoleo.mjs`), como el carbón de Nava:
+
+- **Lo que hace cada refinería** (`combustoleoJuego`, en `sim.combustoleo`): su crudo por su
+  rendimiento de 2019–2020 (ASF); la Olmeca, nada; una coquizadora le quita tanto como los
+  combustibles que agrega.
+- **Lo que quema cada central** (`CENTRALES_CO`, 15): lo de su empresa de generación en 2018
+  (Informe Anual de la CFE) repartido por MW entre las que el PRODESEN marca con combustóleo.
+- **Cómo le llega** (`#abastecerCombustoleo`): por ducto de su refinería (Tula, Salamanca, Altamira
+  desde Madero); del resto, la mitad sola (`PARTE_AUTOMATICA_CO`: buques rentados o Ferromex y CPKC,
+  de los patios de las refinerías, `#patiosCo`, o importado) y la otra mitad de lo que dejaron los
+  vehículos del jugador (`#reservasCo`, hasta 15 días). Lo que no cabe en el patio se exporta.
+- **Sin él da menos MW** (`#surtidoCo`, memoria de un mes; `mwSinCombustoleo`, hasta la mitad), que
+  se restan de su región en `estadoEnergia` junto con los de Nava.
+- **Los vehículos** llevan `combustoleo`, `combustoleoDe` y `entregadoCombustoleo`; cargan en
+  `#cargarLiquidos` (primero el cabotaje, luego el combustóleo que piden las centrales de su vuelta,
+  `#combustoleoAdelante`, luego lo que sustituye importaciones) y descargan en el punto de entrega de
+  cada central (`ENTREGAS_CO`: su puerto, su refinería o su estación; Villa de Reyes y Lerdo son
+  sitios `central:<id>` como Nava).
+- **Cuentas del año:** `cuentaCombustoleo`, `diasContadosCo`.
+
+Detalle en la [enciclopedia](docs/enciclopedia.md#el-combustóleo).
 
 **Las plataformas del Golfo** (`domain/plataformas.ts`, `datos/plataformas.json`, curado a mano con la fuente de cada
 cifra). Las cerca de 240 plataformas de la Sonda de Campeche son 4 complejos, uno por activo de Pemex
@@ -723,10 +748,11 @@ costa del mundo solo sube de resolución). Además:
 - **Petróleo, lo que sigue**:
   - los oleoductos troncales, que no están en las fuentes abiertas (los poliductos que faltaban
     ya se dibujan con las tablas del mapa de la SENER de 2018);
-  - el combustóleo, el gas LP y la turbosina como cargas aparte; hoy los combustibles son una sola
-    mezcla. El combustóleo iría como el carbón de Nava: de las refinerías a las centrales de la CFE,
-    y lo demás a exportar;
-  - que lo que falte (el desabasto, que ya se mide) tenga consecuencias;
+  - el gas LP y la turbosina como cargas aparte; hoy la gasolina, el diésel y la turbosina son una
+    sola mezcla (el combustóleo ya va aparte);
+  - que lo que falte (el desabasto de combustibles, que ya se mide) tenga consecuencias;
+  - el combustóleo, lo que sigue: la demanda de la CFE por año (conversiones a gas, retiros) y su
+    precio de exportación;
   - las cifras por refinería de 2022 a septiembre de 2024, si se consigue el Anuario Estadístico
     de Pemex (su sitio no deja bajarlo automáticamente).
 - **Energía**: el Plan de Expansión de la CFE 2026–2030 (52 proyectos) en el catálogo, cuando se

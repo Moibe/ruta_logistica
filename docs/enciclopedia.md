@@ -48,7 +48,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [ARTF, Pulso de Interconexión, 1er semestre 2024](https://www.gob.mx/cms/uploads/attachment/file/947545/Pulso_Interconexion_VF7.pdf) | La tabla de derechos de paso obligatorios: quién es dueño de cada línea y kilómetro, donde OpenStreetMap no lo dice | 2024 | Documento oficial público |
 | [ATTRAPI, Anuario Estadístico Ferroviario 2025](https://www.gob.mx/cms/uploads/attachment/file/1100990/Anuario_2025.pdf) | Toneladas por par origen–destino, para estimar cuántos trenes de Nuevo Laredo siguen al sur de Monterrey; los ingresos de cada concesionaria de 2019 a 2025 (tabla A36), sobre los que pagan su derecho | 2026 | Documento oficial público |
 | [SHCP, Transparencia Presupuestaria, datos abiertos](https://www.transparenciapresupuestaria.gob.mx/Datos-Abiertos) | El presupuesto federal para ferrocarriles de cada año: lo ejercido de 2018 a 2025 (Cuenta Pública), lo aprobado en 2026 (PEF) y el proyecto 2027 (PPEF), por clave presupuestaria | Bases consultadas el 20 de noviembre de 2026 | Datos abiertos del gobierno federal |
-| [SENER, PRODESEN 2019–2033](https://www.gob.mx/cms/uploads/attachment/file/475497/PRODESEN_V.pdf) | Capacidad por región y centrales principales a diciembre de 2018 (cap. V); márgenes de reserva de 2019 en el pico de la tarde y de la noche (cap. VII, tablas 7.6 y 7.7) | 2019 | Documento oficial público |
+| [SENER, PRODESEN 2019–2033](https://www.gob.mx/cms/uploads/attachment/file/475497/PRODESEN_V.pdf) | Capacidad por región y centrales principales a diciembre de 2018, con el combustible de cada una (cap. V, tabla 5.2); márgenes de reserva de 2019 en el pico de la tarde y de la noche (cap. VII, tablas 7.6 y 7.7) | 2019 | Documento oficial público |
 | [SENER, Plan de Desarrollo del Sector Eléctrico 2025–2039](https://dof.gob.mx/nota_detalle_popup.php?codigo=5770297) | Demanda máxima por región de 2018 a 2024; cómo se mide el margen de reserva y sus mínimos; costo de inversión por kW de cada tecnología | DOF, 14 de octubre de 2025 | Documento oficial público |
 | [SICT, AFAC, Estadística Operacional de Aeropuertos, diciembre de 2025](https://www.gob.mx/cms/uploads/attachment/file/1051974/producto-aeropuertos-es-dic-25-27012026.pdf) | Toneladas de carga de 2024 y 2025 de los diez aeropuertos que más mueven; doméstica e internacional de los primeros | Enero de 2026 | Documento oficial público |
 | [AFAC, Estadística operativa de aeropuertos 2006–2026](https://www.gob.mx/cms/uploads/attachment/file/1112825/producto-aeropuertos-2006-2026-sep-27102026.xlsx) | Carga nacional e internacional de cada aeropuerto, mes por mes, de 2006 a septiembre de 2026: la serie del modo Realidad | Octubre de 2026 | Dato oficial público |
@@ -60,7 +60,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [Pemex, Informe Anual 2023](https://gaceta.diputados.gob.mx/PDF/65/2024/may/Pemex-20240514.pdf) (enviado al Congreso) | Proceso de 2022 y 2023; Tula, Salina Cruz y Minatitlán en 2023; Deer Park en 2022 y 2023; la producción que sustenta la Olmeca; lo que movió en 2023 por ducto, por tierra y por mar, y su flota | Mayo de 2024 | Documento oficial público |
 | [Presidencia, presentación de resultados de Pemex](https://www.gob.mx/cms/uploads/attachment/file/913864/CPM_Pemex_resultados_03may24.pdf) | Combustibles producidos y déficit desde diciembre de 2018; transferencias del Gobierno Federal a Pemex 2019–abril de 2024; costo de la Olmeca y de las coquizadoras | 3 de mayo de 2024 | Documento oficial público |
 | Pemex, comunicados en la Bolsa Mexicana de Valores: [24/2019](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_928185_1.pdf), [159/2021](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1102962_1.pdf), [6/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1159261_1.pdf), [38/2022](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1202976_1.pdf), [9/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1440766_1.pdf), [11/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1444789_1.pdf), [37/2025](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1501814_1.pdf), [51/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1560083_1.pdf) y [87/2026](https://www.bmv.com.mx/docs-pub/eventemi/eventemi_1602784_1.pdf) | Arranque de la Olmeca; compra de Deer Park; acuerdos de las coquizadoras; Plan de Trabajo 2025–2030; proceso de 2024; avance de las coquizadoras; Deer Park en 2026 | 2019–2026 | Comunicado oficial |
-| [Primer](https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf) y [Segundo Informe de Gobierno](https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf) | Crudo procesado por cada refinería, mes por mes, de octubre de 2024 a junio de 2026 (SENER con datos de Pemex); en el anexo estadístico del segundo, la producción y la exportación de crudo y la gasolina, el diésel y la turbosina que Pemex produjo e importó cada año, y el crudo de cada bloque de producción (Cantarell, Ku-Maloob-Zaap, Abkatún-Pol-Chuc, Litoral de Tabasco y los de tierra) | Septiembre de 2025 y de 2026 | Documento oficial público |
+| [Primer](https://gaceta.diputados.gob.mx/PDF/66/2025/sep/primer-informe-de-gobierno.pdf) y [Segundo Informe de Gobierno](https://gaceta.diputados.gob.mx/PDF/66/2026/sep/segundo-informe-de-gobierno.pdf) | Crudo procesado por cada refinería, mes por mes, de octubre de 2024 a junio de 2026 (SENER con datos de Pemex); en el anexo estadístico del segundo, la producción y la exportación de crudo y la gasolina, el diésel y la turbosina que Pemex produjo e importó cada año, el crudo de cada bloque de producción (Cantarell, Ku-Maloob-Zaap, Abkatún-Pol-Chuc, Litoral de Tabasco y los de tierra), y el combustóleo que Pemex hizo, importó y exportó cada año | Septiembre de 2025 y de 2026 | Documento oficial público |
 | [SEMAR, Cuaderno de Faros del Golfo de México y Mar Caribe](https://www.gob.mx/cms/uploads/attachment/file/908970/CDF_GOLFO_MARZO_2024.pdf) | La posición de los complejos Akal-C y Pol-A, del rebombeo del Litoral y de la terminal de Cayo Arcas | Marzo de 2024 | Documento oficial público |
 | CNH, dictámenes técnicos de los campos [Sinán](https://www.gob.mx/cms/uploads/attachment/file/856365/II.9_Dictamen_Tecnico_Mod_Plan_Desarrollo_Campo_Sinan.pdf), May, Koban y [Maloob](https://www.gob.mx/cms/uploads/attachment/file/524951/Dictamen_Tecnico_MPD_Maloob.pdf) | Los ductos del Centro de Proceso Litoral-A, para ubicarlo; el campo Maloob | 2019–2023 | Documento oficial público |
 | ASF, auditorías [2017-0485](https://www.asf.gob.mx/trans/informes/ir2017c/Documentos/Auditorias/2017_0485_d.pdf) y [2017-0486](https://www.asf.gob.mx/trans/informes/ir2017c/Documentos/Auditorias/2017_0486_a.pdf) | Qué bloque de producción de Pemex era Cantarell y cuál Ku-Maloob-Zaap | Cuenta Pública 2017 | Documento oficial público |
@@ -75,6 +75,10 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [CNH, capa de terminales de almacenamiento de Pemex](https://geomaticasig1.semarnat.gob.mx/arcgis/rest/services/Hosted/Terminal_de_almacenamiento_Pemex/FeatureServer/1) | La ubicación de cada terminal (copia en el servidor de la SEMARNAT) | 2016 | Documento oficial público |
 | [CNE, datos abiertos de petrolíferos](https://www.gob.mx/cne/articulos/consulta-de-datos-abiertos) | Litros de gasolina y diésel vendidos en las gasolineras de cada estado y de turbosina entregados en sus aeródromos: el consumo de cada estado | Abril a diciembre de 2018 | Dato oficial público |
 | ASF, auditorías [474-DE](https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0474_a.pdf) y [476](https://www.asf.gob.mx/Trans/Informes/IR2018c/Documentos/Auditorias/2018_0476_a.pdf) a Pemex Logística | Lo que movió Pemex en 2018 por ducto, autotanque, carro tanque y buque tanque; su flota al cierre de 2018 | Cuenta Pública 2018 | Documento oficial público |
+| [CFE, Informe Anual 2018](https://gaceta.diputados.gob.mx/Gaceta/64/2019/may/CFE_IA-20190521.pdf) (en la Gaceta de la Cámara de Diputados) | El combustóleo que quemó en 2018 cada una de sus empresas de generación, y las centrales de cada una por tecnología | 21 de mayo de 2019 | Documento oficial público |
+| [ASF, auditoría 2020-0430 «Erogaciones por Mantenimiento en Refinerías»](https://www.asf.gob.mx/Trans/Informes/IR2020c/Documentos/Auditorias/2020_0430_a.pdf) | El combustóleo que hizo cada refinería en 2019 y 2020 | Cuenta Pública 2020 | Documento oficial público |
+| [ASF, auditoría 2017-0522 a CFEnergía](https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf) | El combustóleo que la CFE compraba en Estados Unidos llegaba en buque tanque a Tuxpan; el gas natural licuado, a Altamira y Manzanillo | Cuenta Pública 2017 | Documento oficial público |
+| [SENER, Balance Nacional de Energía 2019](https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf) | Lo que el país exportó e importó de cada petrolífero en 2018 (en PJ) y el poder calorífico neto del combustóleo (cuadro 29) | Febrero de 2021 | Documento oficial público |
 | [SEMAR, Anuario Estadístico de los Puertos de México 2024](https://www.gob.mx/asuntosmaritimosyportuarios/documentos/anuario-estadistico-de-los-puertos-de-mexico-2024) | Petróleo y derivados por puerto en 2018 y 2024: importación, exportación y cabotaje; la carga que sale de Dos Bocas y Ciudad del Carmen a las plataformas y cuántos barcos la llevan; el crudo que exporta Cayo Arcas; lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (contenerizada, granel agrícola y mineral, general suelta) y en cuántos barcos | 2025 | Documento oficial público |
 | [EIA (gobierno de EUA), unidades de International Energy Statistics](https://www.eia.gov/cfapps/ipdbproject/docs/unitswithpetro.php) | Barriles por tonelada de gasolina, diésel y turbosina, para pasar a toneladas lo que cabe en un tren | Consultado el 22 de noviembre de 2026 | Dato oficial público (gobierno de EUA) |
 | [Pemex, boletines regionales de Tampico 2019-004 y 2024-005](https://www.pemex.com/saladeprensa/boletines_regionales/Paginas/2024-005_tampico.aspx) | Lo que carga un buque tanque de su flota: 320 mil barriles. El sitio de Pemex no deja leerlos automáticamente; la cifra es la que muestra el buscador | 2019 y 2024 | Comunicado oficial |
@@ -3669,8 +3673,9 @@ publicado; el juego lo **estima** y lo dice en la ficha:
   en el plan oficial.
 
 En el juego Oasis casi no se nota: Mulegé ya tiene margen de sobra y no tiene polos. Lo que
-cambia en la realidad es el diésel y el combustóleo que deja de quemar, y el juego todavía no
-mide combustibles ni emisiones.
+cambia en la realidad es el diésel y el combustóleo que deja de quemar. El juego mide el combustóleo
+de las centrales grandes de la CFE (ver [El combustóleo](#el-combustóleo)), pero no el de las de
+Mulegé ni las emisiones.
 
 **Lo que piden los polos.** Ocho tienen cifra oficial. Las declaratorias dan lo que pedirán, el
 portal de Economía lo que tendrán disponible, siempre en su primera fase, y el Gobierno de Puebla
@@ -4042,6 +4047,9 @@ enero a octubre (SEMAR, cifras preliminares). En el juego todo lo que hace va a 
    tanque dejaron en sus terminales. Cuando se acaba, **se importa** por un puerto o por tierra, y lo
    que su puerto no alcanza a importar tiene que llegarle por cabotaje (ver [Por dónde entra lo
    importado](#por-dónde-entra-lo-importado)).
+4. **El combustóleo.** Las refinerías lo hacen y las centrales de la CFE lo queman: por ducto, en los
+   buques que renta Pemex o en los trenes de Ferromex y CPKC, y lo que les dejaron tus vehículos. Lo
+   que no cabe en el patio de una refinería se exporta (ver [El combustóleo](#el-combustóleo)).
 
 Los 15 días son reglas del juego, no cifras oficiales.
 
@@ -4057,10 +4065,11 @@ Los 15 días son reglas del juego, no cifras oficiales.
 - **Cuánto cabe.**
   - Un tren lleva su carga neta promedio, 2,436 toneladas: unos **19,800 barriles** con los
     barriles por tonelada de la EIA (8.53 de gasolina, 7.46 de diésel, 7.93 de turbosina,
-    ponderados por lo que usa el país). Las exportaciones van primero, luego el combustible, y la
-    carga nacional llena lo que queda.
+    ponderados por lo que usa el país). Las exportaciones van primero, si su vuelta pasa por una
+    salida; luego el combustible y el combustóleo (6.66 barriles por tonelada), y la carga nacional
+    llena lo que queda.
   - Un buque tanque lleva **320 mil barriles**, lo que carga uno de los de Pemex.
-  - Solo los buques tanque llevan combustible; las demás clases todavía van vacías.
+  - Solo los buques tanque llevan combustible y combustóleo; las demás clases todavía van vacías.
 - **Dónde descargan.** Primero donde el combustible tiene que llegar por cabotaje, porque el
   puerto no alcanza a importarlo (ver abajo). Lo que no hace falta en el resto de su recorrido lo
   dejan en la primera parada cuyo estado tenga falta, hasta 15 días de lo que no le traen sus
@@ -4164,8 +4173,14 @@ Al pasar el cursor:
 - **una terminal** dice cómo se surte, según el mapa de la SENER;
 - **un puerto** da su petróleo y derivados de 2018 (de 2024 en Realidad, desde ese año). En el
   juego dice además cuánto importa este año y cuánto puede, lo que le llega por cabotaje, lo que
-  espera en un concentrador y el crudo que sale por él;
-- **una refinería** dice cuánto espera en su patio.
+  espera en un concentrador, el crudo que sale por él y las centrales de la CFE que reciben ahí su
+  combustóleo;
+- **una refinería** dice cuánto espera en su patio, y cuánto combustóleo hace, cuánto manda por
+  ducto, cuánto guarda y cuánto exporta.
+
+En la capa *Energía*, una central de combustóleo dice cuánto quema, cómo le llega, cómo la surtieron
+el último mes, cuántos MW da y cuánto guarda de lo que le llevan tus vehículos. Una región dice qué
+centrales no dan todos sus MW por falta de carbón o de combustóleo.
 
 La leyenda da las cifras del país en el año. La capa no se puede ver junto con la de Energía: las
 dos pintan los estados. En Realidad no hay cifras por estado; la leyenda da las del país.
@@ -4173,7 +4188,8 @@ dos pintan los estados. En Realidad no hay cifras por estado; la leyenda da las 
 **La barra de arriba.** En la celda *Refinación*, la segunda línea dice qué parte de los
 combustibles que usaron los estados este año vino del país. Al pasar el cursor da cuánto llegó por
 ducto, en tus trenes, en tus buques tanque y en los que renta Pemex; cuánto se importó y por dónde;
-cuánto faltó, y el crudo exportado y por dónde sale. En Realidad dice qué parte de lo que vendió
+cuánto faltó; el combustóleo que hacen las refinerías, cómo llegó a las centrales de la CFE y cuánto
+se exportó; y el crudo exportado y por dónde sale. En Realidad dice qué parte de lo que vendió
 Pemex hizo él mismo: lo que produjo entre lo que produjo más lo que importó.
 
 **Las fichas** de cada tren y cada buque tanque dicen cuánto combustible llevan, de qué refinería y
@@ -4190,8 +4206,9 @@ cuánto han entregado, y aparte lo importado que llevan de un concentrador.
 - **Por dónde entra lo importado:** el tope de cada puerto, los concentradores, la mitad que llevan
   los buques que renta Pemex y el reparto del crudo entre puertos son reglas o estimaciones del juego
   (ver abajo).
-- **Lo que no está todavía:** el combustóleo, el gas LP y la turbosina como carga aparte, y la
-  exportación de combustibles: lo que sobra se queda en los patios.
+- **Lo que no está todavía:** el gas LP y la turbosina como carga aparte, y la exportación de
+  gasolina y diésel: lo que sobra se queda en los patios. El combustóleo ya es carga aparte (ver
+  [El combustóleo](#el-combustóleo)).
 
 **Cómo se generan.** `scripts/combustibles/gen-combustibles.mjs` escribe
 `src/lib/domain/datos/combustibles.json` con todo lo de arriba y la fuente de cada cifra. Es
@@ -4277,6 +4294,209 @@ Lo que entra por tierra sale por diferencia: no se encontró una cifra oficial p
 Con la flota inicial no falta combustible al empezar. Con todas las obras de Pemex hechas (sin Deer
 Park), los buques que renta Pemex llevan ya combustible del país, de Salina Cruz y de la Olmeca, y
 del país llega el 60 %: el resto del sobrante espera tus trenes y buques.
+
+#### El combustóleo
+
+El combustóleo es lo más pesado que sale de una refinería. Es el único petrolífero del que el país
+vendió más de lo que compró en 2018: exportó 224 PJ e importó 88 (Balance Nacional de Energía). Casi
+todo lo que se queda lo quema la CFE en sus centrales de vapor y de combustión interna. En el juego es
+una cadena más, como el carbón de Nava:
+
+1. Las refinerías lo hacen.
+2. Las centrales de la CFE lo queman.
+3. Lo que no cabe en las refinerías se exporta.
+
+Lo que hizo, importó y exportó el país (miles de barriles diarios; Segundo Informe de Gobierno, anexo
+estadístico; 2026, de enero a junio):
+
+| Año | Hizo | Importó | Exportó | Se quedó |
+| --- | ---: | ---: | ---: | ---: |
+| 2018 | 185.1 | 16.5 | 89.8 | 111.8 |
+| 2019 | 149.8 | 11.8 | 69.3 | 92.3 |
+| 2020 | 176.0 | 4.3 | 109.6 | 70.7 |
+| 2021 | 244.3 | 0.0 | 157.5 | 86.8 |
+| 2022 | 258.3 | 0.0 | 174.5 | 83.8 |
+| 2023 | 260.3 | 0.5 | 170.7 | 90.1 |
+| 2024 | 271.4 | 0.6 | 203.1 | 68.9 |
+| 2025 | 208.2 | 4.1 | 133.3 | 79.0 |
+| 2026 | 175.8 | 4.8 | 93.0 | 87.6 |
+
+**Lo que hace cada refinería.** Cada una hace combustóleo en proporción al crudo que procesa, con
+su propio rendimiento. El rendimiento sale de lo que hizo en 2019 y 2020 (ASF, auditoría
+2020-0430, tabla «Producción de petrolíferos 2019-2020 del SNR») entre el crudo que procesó esos dos
+años:
+
+| Refinería | Combustóleo 2019 y 2020 (Mbd) | Crudo 2019 y 2020 (Mbd) | Barriles de combustóleo por barril de crudo | Con su crudo de 2018 (Mbd) |
+| --- | ---: | ---: | ---: | ---: |
+| Tula | 48 y 38 | 121.2 y 97.7 | 0.393 | 56.1 |
+| Salina Cruz | 47 y 51 | 125.1 y 125.4 | 0.391 | 64.6 |
+| Salamanca | 25 y 29 | 92.9 y 96.5 | 0.285 | 40.0 |
+| Madero | 10 y 22 | 58.0 y 89.8 | 0.217 | 4.2 |
+| Cadereyta | 12 y 19 | 103.2 y 102.7 | 0.151 | 17.8 |
+| Minatitlán | 7 y 17 | 91.6 y 78.5 | 0.141 | 3.7 |
+| Olmeca | — | — | 0 | — |
+
+Con el crudo de 2018 dan **186.4** mil barriles diarios; el país hizo 185.1. La Olmeca no hace
+combustóleo: está hecha para sacar gasolina y diésel «sin producción de asfalto ni combustóleo»
+(Pemex, Informe Anual 2023). Las seis viejas hacen más combustóleo al rehabilitarse, porque procesan
+más crudo.
+
+**Las coquizadoras** convierten combustóleo en gasolina y diésel. La de Tula «reduce la producción
+de combustóleo de las refinerías Tula y Salamanca» (Presidencia, 2024), y con la de Salina Cruz esa
+refinería «dejará de producir combustóleo» (Pemex, 2022). El juego le quita a cada refinería tantos
+barriles de combustóleo como barriles de gasolina y diésel agrega su coquizadora: 80 mil la de Tula,
+primero a Tula y luego a Salamanca, y 74 mil la de Salina Cruz. Es **estimación del juego**: en la
+realidad, de cada barril de residuo una coquizadora saca menos de un barril de combustibles, y el resto
+es coque.
+
+**Lo que quema la CFE.** El Informe Anual 2018 de la CFE da el combustóleo que quemó cada una de sus
+empresas de generación. El PRODESEN (tabla 5.2) dice qué combustible usaba en diciembre de 2018 cada
+central grande: solo combustóleo, combustóleo y gas, o combustóleo y diésel. **Cuánto quema cada
+central es estimación del juego:** lo de cada empresa se reparte por los MW de sus centrales de vapor
+y combustión interna que el PRODESEN marca con combustóleo, con estos ajustes:
+
+- **Valle de México queda fuera:** el PRODESEN dice que solo quema gas.
+- **Puerto Libertad, Presidente Juárez, Río Bravo y Manzanillo I quedan fuera.** Son centrales
+  duales de CFE Generación III que tenían gas. De esa empresa solo entran Mazatlán II y
+  Topolobampo II, que el PRODESEN marca solo con combustóleo.
+- **Manzanillo II entra.** En CFE Generación IV la única central solo de combustóleo es Punta Prieta,
+  y no alcanzaría a quemar todo lo de su empresa.
+- **Lerma queda fuera.** No está entre las centrales del PRODESEN que tiene el juego, así que su parte
+  se reparte entre las otras centrales de CFE Generación VI.
+
+Por empresa:
+
+| Empresa | Combustóleo en 2018 | Mil barriles diarios | Centrales del juego |
+| --- | ---: | ---: | --- |
+| CFE Generación I | 2,458,462 m³ | 42.4 | Tula, Villa de Reyes, Salamanca, Baja California Sur I |
+| CFE Generación II | 620,467 m³ | 10.7 | Altamira, Lerdo, San Carlos |
+| CFE Generación III | 1,152,246 m³ | 19.9 | Mazatlán II, Topolobampo II |
+| CFE Generación IV | 3,922.8 Tcal | 7.0 | Manzanillo, Punta Prieta |
+| CFE Generación VI | 1,667,000 m³ | 28.7 | Tuxpan, Guaymas II, Mérida II, Valladolid |
+| **CFE** | | **108.7** | |
+
+El Informe da lo de CFE Generación IV en «Gcal», junto a su carbón (40,988) y su gas (13,839), que
+vienen en Tcal. Por su tamaño, el juego lo lee como Tcal y lo pasa a barriles con el poder calorífico
+neto del combustóleo en 2018: 6,397 MJ por barril (Balance Nacional de Energía). Los 108.7 mil
+barriles diarios de la CFE son casi todo lo que se quedó en el país en 2018: 111.8.
+
+Las 15 centrales (MW de sus unidades de vapor y combustión interna; miles de barriles diarios):
+
+| Central | Región | MW | Su combustible (PRODESEN) | Quema | Cómo le llega |
+| --- | --- | ---: | --- | ---: | --- |
+| Tuxpan (Adolfo López Mateos) | Oriental | 1,750 | combustóleo | 18.4 | por el puerto de Tuxpan |
+| Tula (Francisco Pérez Ríos) | Central | 1,606 | combustóleo y gas | 22.2 | por ducto de su refinería |
+| Mazatlán II (José Aceves Pozos) | Noroeste | 616 | combustóleo | 13.1 | por el puerto de Mazatlán |
+| Villa de Reyes | Occidental | 700 | combustóleo | 9.7 | en tren, a su estación |
+| Salamanca | Occidental | 550 | combustóleo y gas | 7.6 | por ducto de su refinería |
+| Topolobampo II (Juan de Dios Bátiz) | Noroeste | 320 | combustóleo | 6.8 | por el puerto de Topolobampo |
+| Manzanillo (Manzanillo II) | Occidental | 700 | combustóleo y gas | 6.1 | por el puerto de Manzanillo |
+| Altamira | Noreste | 465 | combustóleo y gas | 5.6 | por ducto de Madero; el resto, por el puerto de Altamira |
+| Guaymas II (Carlos Rodríguez Rivero) | Noroeste | 484 | combustóleo | 5.1 | por el puerto de Guaymas |
+| Lerdo (Guadalupe Victoria) | Norte | 320 | combustóleo | 3.9 | en tren, a su estación |
+| Valladolid (Felipe Carrillo Puerto) | Peninsular | 295 | combustóleo y gas | 3.1 | por el puerto de Progreso |
+| Baja California Sur I | BCS | 210 | combustóleo y diésel | 2.9 | por el puerto de La Paz |
+| Mérida II | Peninsular | 198 | combustóleo y gas | 2.1 | por el puerto de Progreso |
+| San Carlos (Agustín Olachea) | BCS | 104 | combustóleo y diésel | 1.3 | por el puerto de La Paz |
+| Punta Prieta | BCS | 113 | combustóleo | 1.0 | por el puerto de La Paz |
+
+Los MW de Tula y Salamanca son los de su termoeléctrica en el Informe, sin el ciclo combinado ni la
+cogeneración. Los de Manzanillo II son lo que queda de los 1,131 MW de vapor de CFE Generación IV (el
+12 % de sus 9,422) sin Samalayuca (316) ni Punta Prieta (113): **cálculo del juego**. El combustóleo de
+San Carlos llega por Puerto San Carlos, que no está en el juego: lo recibe en La Paz.
+
+**Cómo le llega.**
+
+- **Por ducto.** Tula y Salamanca están junto a su refinería, y a Altamira le llega por el
+  combustoleoducto Refinería Madero–CFE Altamira (29 km, capa de la CNH de 2018). Les llega solo,
+  hasta lo que haga su refinería.
+- **Lo demás llega a un puerto o a una estación.** La mitad llega sola: a las que lo reciben en un
+  puerto, en los buques que renta Pemex; a las que lo reciben en tren, en los trenes de Ferromex y
+  CPKC. Los buques lo toman primero de las refinerías de su costa y los trenes de la refinería más
+  cercana que tenga; si no hay, se importa. Así lo hacía la CFE: el combustóleo que compraba en Estados
+  Unidos llegaba en buque tanque a Tuxpan (ASF, Cuenta Pública 2017).
+- **La otra mitad espera tus buques tanque y trenes**, que la cargan en el patio de una refinería: en
+  su estación o, si es de la costa, en su puerto. Una central guarda hasta 15 días de esa mitad.
+- **Villa de Reyes y Lerdo tienen estación propia**, como Nava: se eligen con un clic al trazar un
+  tren. Tula y Salamanca reciben lo que les falte en la estación de su refinería.
+
+Todas son **reglas del juego**, como la mitad que llevan los ferrocarriles privados en las cadenas de
+los minerales.
+
+**Sin su combustóleo, una central da menos MW**, como Nava sin carbón. Lo que da depende de cómo la
+surtieron el último mes, y sin nada da la mitad de sus MW (**regla del juego**). Los MW que no da se
+le restan a su región, en la tarde y en la noche.
+
+**Lo que no cabe se exporta.** Una refinería guarda en su patio hasta 15 días del combustóleo que no
+va por ducto. Lo que no cabe se exporta solo, y el juego lo cuenta por refinería.
+
+**Qué carga primero un vehículo.** En una refinería, un buque tanque o un tren carga en este orden:
+
+1. Lo que su vuelta tiene que llevar por cabotaje: si no llega, falta.
+2. El combustóleo que caben a guardar las centrales de su vuelta.
+3. Combustible para sustituir importaciones, en lo que le quede de espacio.
+
+En un concentrador solo carga lo importado que sus paradas pueden recibir. Así un buque que lleva
+combustóleo no se queda con importado que no puede entregar, que le haría falta a otro.
+
+**Al empezar la partida.** Solo llega solo lo que va por ducto (34 mil barriles diarios: Tula,
+Salamanca y 4.2 de los 5.6 de Altamira) y la mitad del resto (37.4). La otra mitad, también 37.4,
+espera a tus vehículos. En las primeras seis semanas de prueba:
+
+- **Los buques que renta Pemex llevaron unos 23 mil barriles diarios.** En 2018 Pemex movió 20.8 en
+  buque tanque (ASF).
+- **Se importaron de 7.6 a 8.8 mil.** En 2018 el país importó 16.5. Casi todo es para Tuxpan y
+  Altamira: las refinerías del Golfo hacían muy poco combustóleo.
+- **Se exportaron unos 120 mil.** En 2018 fueron 89.8; el juego no importa para las centrales que el
+  jugador surte, ni cuenta a otros usuarios.
+
+Si nadie les lleva, las centrales que no tienen ducto bajan hacia la mitad de su combustóleo y dan el
+75 % de sus MW (cálculo del juego, con el combustóleo de 2018):
+
+| Región | MW que no da | Sobre su demanda de 2018 |
+| --- | ---: | ---: |
+| Oriental (Tuxpan) | 438 | 5.8 % |
+| Noroeste (Mazatlán II, Guaymas II, Topolobampo II) | 355 | 7.5 % |
+| Occidental (Villa de Reyes, Manzanillo) | 350 | 3.4 % |
+| Peninsular (Valladolid, Mérida II) | 123 | 6.0 % |
+| Baja California Sur (BCS I, Punta Prieta, San Carlos) | 107 | 21.3 % |
+| Norte (Lerdo) | 80 | 1.7 % |
+| Noreste (Altamira) | 30 | 0.3 % |
+
+Ninguna región baja así de su margen mínimo. Baja California Sur queda cerca, pero sobre el 11 % de
+los sistemas aislados.
+
+**Prueba con cuatro vehículos** (45 días):
+
+- un buque tanque Salina Cruz → Mazatlán → Topolobampo → Guaymas;
+- un tren Salamanca ⇄ Villa de Reyes;
+- un tren Cadereyta ⇄ Lerdo.
+
+Villa de Reyes, Lerdo, Mazatlán II, Topolobampo II y Guaymas II quedan surtidas al 100 %. Un buque
+Coatzacoalcos ⇄ Tuxpan casi no consigue nada: lo poco que hace Minatitlán se lo llevan los buques
+rentados. Tuxpan mejora al rehabilitar las refinerías del Golfo.
+
+**Con todas las obras de Pemex hechas** (sin Deer Park), las refinerías hacen 178.3 mil barriles
+diarios: Salamanca 48.4, Minatitlán 34.7, Salina Cruz 27.7, Cadereyta 27.2, Madero 26.0 y Tula 14.3.
+Las coquizadoras se comen lo de Tula y Salina Cruz. La termoeléctrica de Tula ya no recibe todo por
+ducto: 14.3 de los 22.2 que quema, y lo demás tiene que llegarle en tren. Mientras tanto, las
+refinerías del Golfo rehabilitadas surten a Altamira, Mérida II y Valladolid, y ya no se importa.
+Entre 2022 y 2024 el país hizo de 258 a 271 mil barriles diarios: más que el juego con todo hecho.
+
+**Lo que falta o es estimación:**
+
+- cuánto quema cada central;
+- la demanda, fija en la de 2018: no hay conversiones a gas ni retiros de unidades;
+- los demás usuarios del combustóleo (unos 3 mil barriles diarios);
+- por dónde sale lo que exportan las refinerías de tierra adentro;
+- cuánto quitan las coquizadoras;
+- el azufre: desde 2020 la Organización Marítima Internacional limita el azufre del combustible de los
+  barcos, y eso le quitó mercado al combustóleo pesado. El juego exporta todo lo que sobra sin precio.
+
+**Cómo se generan.** `scripts/combustibles/gen-combustoleo.mjs` escribe
+`src/lib/domain/datos/combustoleo.json` con las cifras y la fuente de cada una. Lee el crudo de cada
+refinería de los datos del petróleo y los nombres de las centrales de los de la energía; el código está
+en `src/lib/domain/combustoleo.ts`.
 
 ### Las plataformas del Golfo
 
@@ -4762,6 +4982,29 @@ los otros dos aún no se capturan.
 
   La flota inicial cambió para cubrir lo de 2018: el buque del Pacífico escala en Acapulco. Ver
   [Por dónde entra lo importado](#por-dónde-entra-lo-importado).
+- **El combustóleo, como el carbón de Nava.** *(26 nov 2026.)* El usuario aprobó seguir con el
+  combustóleo tal como lo propuse: las refinerías lo hacen, las centrales de la CFE lo queman y lo
+  que sobra se exporta. Decisiones mías, por si las quiere cambiar:
+  - las 15 centrales y cuánto quema cada una salen de repartir lo de cada empresa de generación por
+    MW;
+  - la demanda se queda fija en la de 2018;
+  - lo que no llega por ducto, la mitad llega sola: en los buques que renta Pemex o en los trenes
+    de Ferromex y CPKC, del país o importado;
+  - la otra mitad espera los vehículos del jugador;
+  - sin combustóleo, una central da hasta la mitad de sus MW;
+  - las coquizadoras quitan tanto combustóleo como combustibles agregan.
+
+  La flota inicial no cambió: el buque del Pacífico lleva algo de combustóleo en el lugar que le
+  sobra, y las demás centrales se quedan a medias hasta que el jugador les lleve. Ver
+  [El combustóleo](#el-combustóleo).
+- **Un vehículo carga primero lo que falta.** *(26 nov 2026.)* En una refinería, primero lo que su
+  vuelta tiene que llevar por cabotaje, luego el combustóleo de las centrales de su vuelta y al
+  final combustible para sustituir importaciones. En un concentrador solo carga lo importado que sus
+  paradas pueden recibir. Antes un buque se llenaba con lo que hubiera, y le podía quitar a otro lo
+  que este sí iba a entregar.
+- **La exportación solo sube a un tren que pasa por una salida.** *(26 nov 2026.)* Antes un tren
+  cargaba la exportación de cada estado aunque su vuelta no tocara ninguna salida, y la llevaba a
+  bordo para siempre: el tren quedaba lleno. Lo encontré al probar trenes de combustóleo.
 - **El tren también carga en el puerto de una refinería de la costa.** *(22 nov 2026.)* Salina
   Cruz, Pajaritos (Coatzacoalcos) y Madero (Tampico) tienen la refinería junto al muelle. Así el
   tren del Istmo de la partida ya lleva combustible de Salina Cruz al Golfo, como el corredor que el

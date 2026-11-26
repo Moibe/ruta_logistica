@@ -6,6 +6,7 @@
   import { km, mdp, personas } from './formato';
   import { añoDe } from '$lib/domain/calendario';
   import { delPais, POR_TIERRA, REAL_COMBUSTIBLES, realDelAño } from '$lib/domain/combustibles';
+  import { realCombustoleo } from '$lib/domain/combustoleo';
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
   import { OBRAS_ENERGIA } from '$lib/domain/energia';
   import { AÑOS_AEROPUERTOS, nombreCorto, POLOS, SERIE_AEROPUERTOS } from '$lib/domain/sitios';
@@ -153,7 +154,9 @@
         : '';
     const crudo = p?.exportado != null ? `Exportó ${mil(p.exportado)} mil barriles diarios de crudo, de ${mil(p.crudo ?? 0)} que produjo.\n` : '';
     const parcial = p?.parcial ? `${real.año}: ${p.parcial}.\n` : '';
-    return `${refino}${comb}${crudo}${parcial}\n${PETROLEO.totales.dato}\n${REAL_COMBUSTIBLES.combustibles.dato}`;
+    const rc = realCombustoleo(real.año);
+    const combustoleo = rc ? `Combustóleo: hizo ${mil(rc.produccion)} mil barriles diarios, importó ${mil(rc.importacion)} mil y exportó ${mil(rc.exportacion)} mil.\n` : '';
+    return `${refino}${comb}${crudo}${combustoleo}${parcial}\n${PETROLEO.totales.dato}\n${REAL_COMBUSTIBLES.combustibles.dato}`;
   });
 
   /**
@@ -189,6 +192,21 @@
         `Se importan ${mil(mbd(c.importado))} mil${puertas ? `: ${puertas}` : ''}.` +
         (mbd(c.faltante) >= 0.5 ? `\nFaltaron ${mil(mbd(c.faltante))} mil: no les llegó el cabotaje a los puertos que no alcanzan a importar.` : '') +
         (sinSalida > 0 ? `\nLas refinerías se quedaron sin salida para ${mil(sinSalida / 1000)} mil barriles: su patio se llenó.` : ''),
+      detalleCombustoleo: (() => {
+        const k = sim.cuentaCombustoleo(año);
+        const d = sim.diasContadosCo(año);
+        const m = (b: number) => mil(b / d / 1000);
+        if (k.producido <= 0) return '';
+        const delPaisCo = k.quemado > 0 ? Math.round(((k.quemado - k.importado) / k.quemado) * 100) : 0;
+        return (
+          `Combustóleo: las refinerías hacen ${m(k.producido)} mil barriles diarios. Las centrales de la CFE queman ${m(k.quemado)} mil (del país, el ${delPaisCo} %): ` +
+          `${m(k.ducto)} por ducto, ${m(k.rentados)} en los buques que renta Pemex, ${m(k.privados)} en los trenes de Ferromex y CPKC, ` +
+          `y lo que les llevaron tus trenes (${m(k.tren)}) y buques tanque (${m(k.barco)})` +
+          (k.importado / d >= 500 ? `; se importan ${m(k.importado)} mil` : '') +
+          `. Se exportan ${m(k.exportado)} mil.` +
+          (k.faltante / d >= 500 ? `\nA sus centrales les faltaron ${m(k.faltante)} mil: dan menos MW.` : '')
+        );
+      })(),
       detalleCrudo:
         `Crudo exportado: lo que Pemex produce (${mil(sim.crudo.produccion)} mil barriles diarios: sus campos en tierra al ritmo real y sus complejos del Golfo según cómo los abastecen tus barcos) ` +
         'y no procesan las refinerías del país. Se lo llevan los barcos de los compradores, por Dos Bocas, Cayo Arcas, Coatzacoalcos y Salina Cruz.',
@@ -327,7 +345,10 @@
     </div>
     {#if refino && combustible}
       <!-- Crude run, and the share of the fuel the states got this year that came from the country (the rest, imported: in the title). -->
-      <div class="celda doble" title={`${refino.detalle}\n\n${combustible.detalle}\n\n${combustible.detalleCrudo}`}>
+      <div
+        class="celda doble"
+        title={`${refino.detalle}\n\n${combustible.detalle}\n\n${combustible.detalleCombustoleo ? `${combustible.detalleCombustoleo}\n\n` : ''}${combustible.detalleCrudo}`}
+      >
         <span class="label pemex">Refinación</span>
         <span class="valor"><b class="mono">{refino.proceso}</b> mil b/d</span>
         <span class="label combustible">Combustibles</span>

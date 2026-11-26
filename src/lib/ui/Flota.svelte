@@ -275,7 +275,7 @@
         <div>
           <dt>Combustible</dt>
           <dd class="mono">
-            {barriles(ficha.u.combustible)}{ficha.u.tipo === 'barco' && ficha.u.combustibleImp <= 0 ? ` de ${barriles(BARRILES_POR_TANQUE)}` : ''} b a bordo{#if ficha.u.combustibleDe}{` · de ${refineria(ficha.u.combustibleDe)?.corto}`}{/if}
+            {barriles(ficha.u.combustible)}{ficha.u.tipo === 'barco' && ficha.u.combustibleImp <= 0 && ficha.u.combustoleo <= 0 ? ` de ${barriles(BARRILES_POR_TANQUE)}` : ''} b a bordo{#if ficha.u.combustibleDe}{` · de ${refineria(ficha.u.combustibleDe)?.corto}`}{/if}
           </dd>
         </div>
         <div><dt>Ha llevado</dt><dd class="mono">{barriles(ficha.u.entregadoCombustible)} b de combustible del país</dd></div>
@@ -285,6 +285,13 @@
             <dd class="mono">{barriles(ficha.u.combustibleImp)} b a bordo{#if ficha.u.combustibleImpDe}{` · de ${nombreCorto(ficha.u.combustibleImpDe)}`}{/if}</dd>
           </div>
           <div><dt>Ha llevado</dt><dd class="mono">{barriles(ficha.u.entregadoImp)} b importados, por cabotaje</dd></div>
+        {/if}
+        {#if ficha.u.combustoleo > 0 || ficha.u.entregadoCombustoleo > 0}
+          <div>
+            <dt>Combustóleo</dt>
+            <dd class="mono">{barriles(ficha.u.combustoleo)} b a bordo{#if ficha.u.combustoleoDe}{` · de ${refineria(ficha.u.combustoleoDe)?.corto}`}{/if}</dd>
+          </div>
+          <div><dt>Ha llevado</dt><dd class="mono">{barriles(ficha.u.entregadoCombustoleo)} b a centrales de la CFE</dd></div>
         {/if}
       {/if}
     </dl>

@@ -87,7 +87,8 @@
   import { tablero } from '$lib/state/tablero.svelte';
   import { duracion, estadoUnidad, km as fmtKm } from '$lib/ui/formato';
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
-  import { COLOR_DUEÑO, COLOR_USO, INDUSTRIA, MINERIA, AEROPUERTO, COMBUSTIBLE, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
+  import { COLOR_DUEÑO, COLOR_USO, INDUSTRIA, MINERIA, AEROPUERTO, COMBUSTIBLE, COMBUSTOLEO, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
+  import { CENTRALES_CO, CENTRAL_CO_DE_PLANTA, COMBUSTOLEO as DATOS_CO, ENTREGAS_CO, factorCentral, porDuctoCo, realCombustoleo } from '$lib/domain/combustoleo';
   import { abastoDiario, BASES_ABASTO, CAYO_ARCAS, COMPLEJOS, produccionComplejo, type Complejo } from '$lib/domain/plataformas';
   import { comercioDe, NOMBRE_CARGA, TIPOS_CARGA, type TipoCarga } from '$lib/domain/comercioMar';
 
@@ -244,6 +245,11 @@
   ];
   /** Nava's coal plants are a chain stop (`central:nava`): its index among the power plants. */
   const INDICE_NAVA = ENERGIA.plantas2018.findIndex((p) => p.nombre === NOMBRE_NAVA);
+  /** The power plants that are a train stop, by index: Nava, and the fuel-oil plants with a station of their own. */
+  const PARADA_DE_PLANTA = new Map<number, string>([
+    [INDICE_NAVA, 'central:nava'],
+    ...CENTRALES_CO.filter((c) => c.entrega.startsWith('central:')).map((c) => [ENERGIA.plantas2018.findIndex((p) => p.nombre === c.planta), c.entrega] as [number, string]),
+  ]);
   const LONLAT_PLANTAS: LonLat[] = [...ENERGIA.plantas2018, ...ENERGIA.privadas, ...OBRAS_ENERGIA].map((p) => p.lonLat);
   const radioPlanta = (mw: number) => 1.6 + Math.sqrt(mw) / 7;
 
@@ -390,6 +396,9 @@
     return { como, juego };
   }
 
+  /** Who of the player's can bring fuel to a port: its tankers, and its trains if the port has a station. */
+  const tusVehiculos = (puerto: string) => (sim.red?.estaciones.has(puerto) ? 'tus buques tanque y trenes' : 'tus buques tanque');
+
   /** Thousand barrels a day, on average so far in a game year, of a year's count in barrels. */
   const mbdDelAño = (barriles: number, año: number) => barriles / sim.diasContados(año) / 1000;
 
@@ -423,11 +432,22 @@
     const año = añoDe(sim.horas);
     if (sim.modo === 'realidad') {
       const r = realDelAño(año);
+      const rc = realCombustoleo(año);
       return r && r.hecho != null && r.importado != null
         ? `${año}${r.parcial ? ` (${r.parcial})` : ''}: Pemex hizo ${fmtMil(r.hecho)} mil b/d de gasolina, diésel y turbosina e importó ${fmtMil(r.importado)} mil; ` +
-            `exportó ${fmtMil(r.exportado ?? 0)} mil b/d de crudo.`
+            `exportó ${fmtMil(r.exportado ?? 0)} mil b/d de crudo.` +
+            (rc ? ` Combustóleo: hizo ${fmtMil(rc.produccion)}, importó ${fmtMil(rc.importacion)} y exportó ${fmtMil(rc.exportacion)} mil b/d.` : '')
         : null;
     }
+    const k = sim.cuentaCombustoleo(año);
+    const dco = sim.diasContadosCo(año);
+    const mco = (b: number) => fmtMil(b / dco / 1000);
+    const combustoleo =
+      k.producido > 0
+        ? ` Combustóleo: las refinerías hacen ${mco(k.producido)} mil b/d y la CFE quema ${mco(k.quemado)}` +
+          `${k.importado / dco >= 500 ? ` (${mco(k.importado)} importados)` : ''}; se exportan ${mco(k.exportado)}` +
+          `${k.faltante / dco >= 500 ? `; a sus centrales les faltaron ${mco(k.faltante)}` : ''}.`
+        : '';
     const c = sim.cuentaCombustibles(año);
     const dias = sim.diasContados(año);
     const mbd = (b: number) => fmtMil(b / dias / 1000);
@@ -437,7 +457,8 @@
       `${año}: del país vino el ${Math.round(delPais(c) * 100)} % (${mbd(c.ducto)} mil b/d por ducto, ${mbd(c.tren)} en tren, ${mbd(c.barco)} en barco` +
       `${c.rentados > 0 ? `, ${mbd(c.rentados)} en los buques que renta Pemex` : ''}); se importan ${mbd(c.importado)} mil b/d` +
       `${puertas ? `, sobre todo ${puertas.startsWith('por ') ? '' : 'por '}${puertas}` : ''}` +
-      `${c.faltante / dias >= 500 ? `; faltaron ${mbd(c.faltante)} mil b/d` : ''}. Crudo exportado: ${fmtMil(crudo)} mil b/d.`
+      `${c.faltante / dias >= 500 ? `; faltaron ${mbd(c.faltante)} mil b/d` : ''}. Crudo exportado: ${fmtMil(crudo)} mil b/d.` +
+      combustoleo
     );
   });
 
@@ -2433,11 +2454,12 @@
         }
       });
     }
-    // While laying out a train, Nava's coal plants are a stop (coal for them unloads there).
+    // While laying out a train, Nava's coal plants and the fuel-oil plants with a station are a stop (their fuel unloads there).
     if (layers.energia && (!tablero.trazando || tablero.tipoNuevo === 'tren')) {
       PLANTAS.forEach((p, i) => {
         if (!plantaVisible(p)) return;
-        if (tablero.trazando && !(i === INDICE_NAVA && sim.red?.estaciones.has('central:nava'))) return;
+        const parada = PARADA_DE_PLANTA.get(i);
+        if (tablero.trazando && !(parada && sim.red?.estaciones.has(parada))) return;
         const d = Math.hypot(transform.applyX(plantaPts[i][0]) - mx, transform.applyY(plantaPts[i][1]) - my);
         if (d < Math.max(6, radioPlanta(p.mw) + 2) && d < bestD) {
           best = { kind: 'planta', indice: i };
@@ -2541,8 +2563,8 @@
                   ? `mina:${t.mina.id}`
                   : t?.kind === 'industria'
                     ? `industria:${t.industria.id}`
-                    : t?.kind === 'planta' && t.indice === INDICE_NAVA
-                      ? 'central:nava'
+                    : t?.kind === 'planta'
+                      ? (PARADA_DE_PLANTA.get(t.indice) ?? null)
                       : null;
 
   function onPointerMove(event: PointerEvent) {
@@ -3172,7 +3194,7 @@
         {#if pide && pide.cabotaje > 0.05}
           {@const faltan = estadosQueSurte(clave, hovered.puerto.estado).reduce((s, e) => s + sim.cuentaCombustibles(año, e).faltante, 0)}
           <span class="tip-sub">
-            Sus terminales piden {fmtMil(pide.pide)} mil b/d{pide.tope > 0 ? ` y puede importar ${fmtMil(pide.tope)}` : ' y no importa'}: {fmtMil(pide.cabotaje)} mil le llegan por cabotaje desde {nombreCorto(concentradorDe(clave) ?? '')}, la mitad en los buques que renta Pemex y la otra mitad en tus buques tanque y trenes
+            Sus terminales piden {fmtMil(pide.pide)} mil b/d{pide.tope > 0 ? ` y puede importar ${fmtMil(pide.tope)}` : ' y no importa'}: {fmtMil(pide.cabotaje)} mil le llegan por cabotaje desde {nombreCorto(concentradorDe(clave) ?? '')}, la mitad en los buques que renta Pemex y la otra mitad en {tusVehiculos(clave)}
           </span>
           {#if mbdDelAño(faltan, año) >= 0.05}
             <span class="tip-sub alerta-tip">En {año} les faltaron {fmtMil(mbdDelAño(faltan, año))} mil b/d</span>
@@ -3186,6 +3208,17 @@
         {#if crudo}
           <span class="tip-sub" style:color={CRUDO}>Sale por aquí crudo de exportación: unos {fmtMil(crudo)} mil b/d, en los barcos de los compradores</span>
         {/if}
+      {/if}
+      {@const centralesCo = ENTREGAS_CO.get(`puerto:${hovered.puerto.id}`) ?? []}
+      {#if centralesCo.length && (layers.combustibles || layers.energia) && sim.modo === 'juego'}
+        {@const _relojCo = sim.horas}
+        {@const resto = centralesCo.reduce((s, c) => s + c.mbd - porDuctoCo(c, sim.combustoleo), 0)}
+        {@const nombres = centralesCo.map((c) => c.nombre.replace(/ \(.*\)$/, ''))}
+        <span class="tip-sub" style:color={COMBUSTOLEO}>
+          Por aquí recibe{centralesCo.length > 1 ? 'n' : ''} su combustóleo {centralesCo.length > 1
+            ? `las centrales ${nombres.slice(0, -1).join(', ')} y ${nombres[nombres.length - 1]}`
+            : `la central ${nombres[0]}`}: {fmtMil(resto)} mil b/d, la mitad en los buques que renta Pemex y la otra mitad en {tusVehiculos(`puerto:${hovered.puerto.id}`)}
+        </span>
       {/if}
     {:else if hovered.kind === 'aeropuerto'}
       {@const a = hovered.aeropuerto}
@@ -3347,6 +3380,23 @@
               Su zona no usa {fmtMil(sobra)} mil b/d: en su patio esperan {fmtMil(patio / 1000)} mil barriles
               {lleno ? '· lleno, ya no tiene salida' : `para tus trenes${PUERTO_DE_REFINERIA.has(r.id) ? ' y buques tanque' : ''}`}
             </span>
+          {/if}
+          {#if !r.extranjera}
+            {@const co = sim.combustoleo.get(r.id) ?? 0}
+            {@const ductos = CENTRALES_CO.filter((c) => c.ducto === r.id)}
+            {@const porDucto = ductos.reduce((s, c) => s + porDuctoCo(c, sim.combustoleo), 0)}
+            {@const año = añoDe(sim.horas)}
+            {@const exporta = sim.cuentaCombustoleo(año).exportadoDe[r.id] ?? 0}
+            {#if co >= 0.05}
+              <span class="tip-rail" style:color={COMBUSTOLEO}>
+                Hace {fmtMil(co)} mil b/d de combustóleo{ductos.length ? `: ${fmtMil(porDucto)} van por ducto a la termoeléctrica de ${ductos.map((c) => c.nombre.replace(/ \(.*\)$/, '')).join(' y ')}` : ''}
+              </span>
+              <span class="tip-sub">
+                En su patio esperan {fmtMil(sim.enPatioCo(r.id) / 1000)} mil barriles para las centrales de la CFE (los buques que renta Pemex, Ferromex y CPKC, y tus {PUERTO_DE_REFINERIA.has(r.id) ? 'trenes y buques tanque' : 'trenes'}); lo que no cabe se exporta: {fmtMil(exporta / sim.diasContadosCo(año) / 1000)} mil b/d en {año}
+              </span>
+            {:else if r.nueva}
+              <span class="tip-sub" style:color={COMBUSTOLEO}>No hace combustóleo: está hecha para sacar gasolina y diésel.</span>
+            {/if}
           {/if}
         {/if}
         {#each OBRAS_DE_REFINERIA.get(r.id) ?? [] as o (o.id)}
@@ -3529,6 +3579,34 @@
           <span class="tip-sub">{pi.dato}.</span>
         {/if}
       {/if}
+      {@const co = p.dueño === 'CFE' && !p.obra ? CENTRAL_CO_DE_PLANTA.get(p.nombre) : undefined}
+      {#if co}
+        {@const _reloj = sim.horas}
+        {@const empresa = DATOS_CO.empresas.find((e) => e.id === co.empresa)}
+        <span class="tip-rail" style:color={COMBUSTOLEO}>
+          Quema {fmtMil(co.mbd)} mil b/d de combustóleo en {fmt.format(Math.round(co.mw))} MW{co.mw < p.mw ? ' de vapor' : ''} ({co.combustible}, según el PRODESEN)
+        </span>
+        {#if sim.modo === 'juego'}
+          {@const surtido = sim.surtidoCo(co.id)}
+          {@const ducto = porDuctoCo(co, sim.combustoleo)}
+          {@const resto = co.mbd - ducto}
+          {@const ritmo = sim.ritmoJugadorCo(co)}
+          <span class="tip-sub" class:alerta-tip={surtido < 0.97}>
+            Da {fmt.format(Math.round(co.mw * factorCentral(surtido)))} de esos MW: su combustóleo la surtió el último mes al {Math.round(surtido * 100)} %{ritmo > 0.05
+              ? ` · guarda ${fmtMil(sim.reservaCo(co.id) / 1000)} mil barriles de lo que le llevas`
+              : ''}
+          </span>
+          <span class="tip-sub">
+            {ducto > 0.05 ? `Le llegan ${fmtMil(ducto)} mil b/d por ducto desde la refinería de ${refineriaPorId(co.ducto ?? '')?.corto ?? co.ducto}` : ''}{resto > 0.05
+              ? `${ducto > 0.05 ? '; el resto, ' : 'Le llegan '}${fmtMil(resto)} mil b/d ${co.llega === 'barco' ? `por ${nombreCorto(co.entrega)}: la mitad en los buques que renta Pemex` : `en tren a ${co.entrega.startsWith('refineria:') ? 'su refinería' : 'su estación'}: la mitad en los trenes de Ferromex y CPKC`} y la otra mitad espera ${co.llega === 'barco' ? tusVehiculos(co.entrega) : 'tus trenes'}`
+              : ''}{sim.red && !sim.red.estaciones.has(co.entrega) && co.llega === 'tren' ? ' (sin estación: queda lejos de la vía)' : ''}
+          </span>
+          {#if co.entregaDato}<span class="tip-sub">{co.entregaDato}.</span>{/if}
+        {/if}
+        {#if empresa}
+          <span class="tip-sub">Cuánto quema es estimación del juego: lo de {empresa.nombre} en 2018 (Informe Anual de la CFE) repartido por MW entre sus centrales de combustóleo.</span>
+        {/if}
+      {/if}
     {:else if hovered.kind === 'estado' && layers.energia && sim.energia.length}
       {@const regionEstado = hovered.region ?? REGION_DEL_ESTADO.get(hovered.estado.clave)}
       {@const reg = sim.energia.find((e) => e.region.id === regionEstado)}
@@ -3549,7 +3627,16 @@
             : ''}
         </span>
         {#if reg.mwSinInsumo >= 1}
-          <span class="tip-sub">Le faltan {fmt.format(Math.round(reg.mwSinInsumo))} MW de las carboeléctricas de Nava, que no tienen todo su carbón.</span>
+          {@const nava = PLANTA_INSUMO.get('central:nava')}
+          {@const sinCarbon = nava && nava.region === reg.region.id ? nava.plena - salidaPlanta(nava, sim.horas, sim.surtido(nava.clave)) : 0}
+          {@const sinCo = CENTRALES_CO.filter((c) => c.region === reg.region.id && c.mw * (1 - factorCentral(sim.surtidoCo(c.id))) >= 1)}
+          {@const faltanMw = Math.max(0, sinCarbon) + sinCo.reduce((s, c) => s + c.mw * (1 - factorCentral(sim.surtidoCo(c.id))), 0)}
+          <span class="tip-sub">
+            Le faltan {fmt.format(Math.round(faltanMw))} MW de centrales que no tienen todo su combustible: {[
+              ...(sinCarbon >= 1 ? [`las carboeléctricas de Nava (carbón, ${fmt.format(Math.round(sinCarbon))})`] : []),
+              ...sinCo.map((c) => `${c.nombre.replace(/ \(.*\)$/, '')} (combustóleo, ${fmt.format(Math.round(c.mw * (1 - factorCentral(sim.surtidoCo(c.id)))))})`),
+            ].join(', ')}.
+          </span>
         {/if}
         {#if reg.region.margenCalculado}
           <span class="tip-sub">Sin enlace con el resto del estado. El PRODESEN no publica su margen: lo calcula el juego.</span>
@@ -3599,7 +3686,7 @@
         {#if cab > 0.05 && puerto}
           <span class="tip-sub">
             {topeImportacion(puerto) > 0 ? `${nombreCorto(puerto)} no alcanza a importar ${fmtMil(cab)} mil b/d: le llegan` : `${nombreCorto(puerto)} no importa: sus ${fmtMil(cab)} mil b/d le llegan`}
-            por cabotaje desde {nombreCorto(concentradorDe(puerto) ?? '')}, la mitad en los buques que renta Pemex y la otra mitad en tus buques tanque y trenes
+            por cabotaje desde {nombreCorto(concentradorDe(puerto) ?? '')}, la mitad en los buques que renta Pemex y la otra mitad en {tusVehiculos(puerto)}
           </span>
         {/if}
         {#if mbdDelAño(c.faltante, año) >= 0.05}

@@ -61,6 +61,10 @@ export type Barco = Marcha & {
   combustibleImp: number;
   combustibleImpDe: string | null;
   entregadoImp: number;
+  /** Fuel oil aboard for the CFE's plants (barrels), the refinery it came from, and what it has delivered so far (`combustoleo.ts`). */
+  combustoleo: number;
+  combustoleoDe: string | null;
+  entregadoCombustoleo: number;
   /** Supplies aboard and delivered so far (tonnes): only supply vessels carry them. */
   abasto: number;
   entregadoAbasto: number;
@@ -145,6 +149,9 @@ export function crearBarco(mar: Mar, def: NuevoBarco): Barco | null {
     combustibleImp: 0,
     combustibleImpDe: null,
     entregadoImp: 0,
+    combustoleo: 0,
+    combustoleoDe: null,
+    entregadoCombustoleo: 0,
     abasto: 0,
     entregadoAbasto: 0,
     exportacion: 0,

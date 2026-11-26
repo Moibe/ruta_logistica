@@ -3,6 +3,7 @@ import { MINAS, cifraMina } from './mineria';
 import { horasDeFecha } from './calendario';
 import aeropuertosJson from './datos/aeropuertos.json';
 import energiaJson from './datos/energia.json';
+import combustoleoJson from './datos/combustoleo.json';
 import type { LonLat } from './geo';
 import type { ClaveEstado } from './sitios';
 
@@ -63,6 +64,14 @@ export const SITIOS_CADENA: SitioCadena[] = [
   })),
   ...INDUSTRIAS.filter((p) => PLANTAS_CADENA.includes(p.id) || p.tipo === 'armadora' || p.tipo === 'logistica').map((p) => ({ clave: `industria:${p.id}`, tipo: 'industria' as const, id: p.id, nombre: p.corto, estado: p.estado, lonLat: p.lonLat })),
   { clave: 'central:nava', tipo: 'central', id: 'nava', nombre: 'Carboeléctricas de Nava', estado: NAVA.estado, lonLat: NAVA.lonLat },
+  // The fuel-oil plants that get it by rail at a station of their own (`combustoleo.ts`; read from the data here, which `sitios.ts` builds on).
+  ...(combustoleoJson as unknown as { centrales: { entrega: string; planta: string }[] }).centrales
+    .filter((c) => c.entrega.startsWith('central:'))
+    .map((c) => {
+      const p = (energiaJson as unknown as { plantas2018: PlantaJson[] }).plantas2018.find((x) => x.nombre === c.planta)!;
+      const id = c.entrega.slice('central:'.length);
+      return { clave: c.entrega, tipo: 'central' as const, id, nombre: `Termoeléctrica ${p.nombre.replace(/ \(.*\)$/, '')}`, estado: p.estado, lonLat: p.lonLat };
+    }),
 ];
 
 export type Flujo = {

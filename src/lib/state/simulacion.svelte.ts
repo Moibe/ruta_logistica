@@ -120,6 +120,20 @@ import {
   resumir,
 } from '$lib/domain/interior';
 import { DIAS_PATIO_POLO } from '$lib/domain/sectores';
+import {
+  CENTRALES_CO,
+  combustoleoJuego,
+  cuentaCoVacia,
+  DIAS_PATIO_CO,
+  DIAS_RESERVA_CO,
+  ENTREGAS_CO,
+  mwSinCombustoleo,
+  PARTE_AUTOMATICA_CO,
+  porDuctoCo,
+  T_POR_BARRIL_CO,
+  type Central,
+  type CuentaCo,
+} from '$lib/domain/combustoleo';
 import { PARTE_ARMADORAS, PLANTAS_INSUMO, PLANTA_INSUMO, parteAutomatica, MEMORIA_DIAS, RESERVA_DIAS, salidaPlanta, insumosAño, ARMADORAS, DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, autosAño, toneladasAño } from '$lib/domain/cadenas';
 
 const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
@@ -327,6 +341,15 @@ class Simulacion {
       cabotaje: Record<string, number>;
     }
   >();
+  /** Fuel oil each Mexican refinery makes now, Mbd (`combustoleo.ts`). Recomputed with the refineries. */
+  combustoleo = $state.raw<Map<string, number>>(new Map());
+  /** Fuel oil waiting in each refinery's yard, barrels. Mutated by the clock. */
+  #patiosCo = new Map<string, number>();
+  /** Fuel oil the player's trains and tankers left at each plant, barrels, and how each plant was supplied in the last month (0–1). */
+  #reservasCo = new Map<string, number>();
+  #surtidoCo = new Map<string, number>(CENTRALES_CO.map((c) => [c.id, 1]));
+  /** What happened with fuel oil each year (barrels), and the game hour the year started being counted. */
+  #cuentasCo = new Map<string, CuentaCo & { desde: number }>();
   /**
    * Sea trade (`comercioMar.ts`). What the player's ships have exported
    * (delivered at a gateway, by the port it was loaded at) and imported
@@ -489,7 +512,12 @@ class Simulacion {
             cuenta.cabotaje[hub] = (cuenta.cabotaje[hub] ?? 0) + b;
           }
         }
-        for (const b of barcos) if (b.clase === 'tanque') this.#cargarCombustible(b, b.paradas[0], BARRILES_POR_TANQUE);
+        // The refineries' fuel-oil yards full (what doesn't fit is being exported), and the plants with
+        // all they keep of the half the player brings.
+        for (const id of this.combustoleo.keys()) this.#patiosCo.set(id, this.#topePatioCo(id));
+        for (const c of CENTRALES_CO) this.#reservasCo.set(c.id, this.#topeReservaCo(c));
+        // Its first stop is where its run ends (`destinos`' last).
+        for (const b of barcos) if (b.clase === 'tanque') this.#cargarLiquidos(b, b.paradas[0], b.destinos.length - 1);
         // Half the complexes' storage full, and a supply vessel that has just left its base sails loaded.
         for (const b of barcos) if (b.clase === 'abastecedor' && BASES_ABASTO.has(b.paradas[0])) b.abasto = TONELADAS_ABASTECEDOR;
         // A cargo ship sails with what it loaded at its first stop.
@@ -841,22 +869,25 @@ class Simulacion {
       polos.set(o.id, polo ? mwEnUso(o, polo) : mwDelPolo(o.id) * o.ocupacion);
     }
     const gas = gasDisponible((id) => this.obrasEnergia.get(id)?.fase === 'en-servicio');
-    // A power plant short of its chain's fuel gives fewer MW to its region (Nava, without coal).
+    // A power plant short of its chain's fuel gives fewer MW to its region (Nava, without coal; the fuel-oil plants).
     const sinInsumo = new Map<string, number>();
     for (const p of PLANTAS_INSUMO) {
       if (p.sale !== 'electricidad' || !p.region || salidaPlanta(p, this.horas, 1) <= 0) continue;
       const faltan = p.plena - salidaPlanta(p, this.horas, this.surtido(p.clave));
       sinInsumo.set(p.region, (sinInsumo.get(p.region) ?? 0) + faltan);
     }
+    for (const c of CENTRALES_CO) sinInsumo.set(c.region, (sinInsumo.get(c.region) ?? 0) + mwSinCombustoleo(c, this.surtidoCo(c.id)));
     this.energia = estadoEnergia(this.horas, hechas, polos, gas, sinInsumo);
-    this.refinacion = refinacionJuego({
-      avance: (id) => {
+    const pemex = {
+      avance: (id: string) => {
         const o = this.obrasPemex.get(id);
         return !o ? 0 : o.fase === 'en-servicio' ? 1 : o.avance;
       },
       deerParkPropia: this.deerParkPropia,
-    });
+    };
+    this.refinacion = refinacionJuego(pemex);
     this.abasto = abastoJuego(this.refinacion);
+    this.combustoleo = combustoleoJuego(this.refinacion, pemex);
     // Offshore crude: in Realidad, the real one; in the game, each complex's as it's been supplied.
     const año = añoDe(this.horas);
     const porComplejo = new Map(
@@ -1016,6 +1047,9 @@ class Simulacion {
       nuevo.combustibleImp = viejo.combustibleImp;
       nuevo.combustibleImpDe = viejo.combustibleImpDe;
       nuevo.entregadoImp = viejo.entregadoImp;
+      nuevo.combustoleo = viejo.combustoleo;
+      nuevo.combustoleoDe = viejo.combustoleoDe;
+      nuevo.entregadoCombustoleo = viejo.entregadoCombustoleo;
       nuevo.importacion = viejo.importacion;
       nuevo.importacionDe = viejo.importacionDe;
       nuevo.importado = viejo.importado;
@@ -1139,7 +1173,8 @@ class Simulacion {
       this.#moverCadena(t, destino, t.piernas[pierna].km);
       this.#exportar(t, destino);
       this.#descargarCombustible(t, destino, pierna);
-      this.#cargarCombustible(t, destino, t.combustible + t.combustibleImp + this.#espacioTren(t) / T_POR_BARRIL);
+      this.#descargarCombustoleo(t, destino);
+      this.#cargarLiquidos(t, destino, pierna);
       this.#cargarImportacion(t, destino);
       this.#cargarNacional(t, destino);
     }
@@ -1148,7 +1183,7 @@ class Simulacion {
   /** Tonnes a train still has room for: exports, imports, fuel and domestic cargo share its net load. */
   #espacioTren(t: Tren): number {
     const cadena = Object.values(t.cadena).reduce((s, x) => s + x, 0);
-    return Math.max(0, CARGA_POR_TREN - t.carga - t.importacion - t.cargaNacional - cadena - (t.combustible + t.combustibleImp) * T_POR_BARRIL);
+    return Math.max(0, CARGA_POR_TREN - t.carga - t.importacion - t.cargaNacional - cadena - (t.combustible + t.combustibleImp) * T_POR_BARRIL - t.combustoleo * T_POR_BARRIL_CO);
   }
 
   /**
@@ -1237,8 +1272,9 @@ class Simulacion {
   }
 
   /**
-   * A tanker got to a port: it leaves its fuel where the state lacks it, then
-   * loads at a refinery's port. A supply vessel loads at a supply base and
+   * A tanker got to a port: it leaves its fuel where the state lacks it and
+   * its fuel oil at the power plants that get it there, then loads at a
+   * refinery's port. A supply vessel loads at a supply base and
    * unloads at the offshore complexes.
    */
   #atenderEscalas(b: Barco) {
@@ -1252,7 +1288,8 @@ class Simulacion {
       }
       if (b.clase === 'tanque') {
         this.#descargarCombustible(b, destino, pierna);
-        this.#cargarCombustible(b, destino, BARRILES_POR_TANQUE);
+        this.#descargarCombustoleo(b, destino);
+        this.#cargarLiquidos(b, destino, pierna);
         continue;
       }
       this.#comerciar(b, destino);
@@ -1635,18 +1672,37 @@ class Simulacion {
   }
 
   /**
+   * Load at a stop the liquids a vehicle carries: first the fuel the rest of
+   * the run needs coastwise, then the fuel oil its power plants can take,
+   * then fuel to save imports with the room left (`#cargarCombustible`
+   * keeps the fuel oil's room for it).
+   */
+  #cargarLiquidos(u: Tren | Barco, destino: string, pierna: number) {
+    if (u.tipo === 'barco' && u.clase !== 'tanque') return;
+    const quiere = this.#combustoleoQuiere(u, destino, pierna);
+    // The fuel oil's room in barrels of fuel: a tanker's are barrels, a train's tonnes.
+    const reservar = u.tipo === 'tren' ? (quiere * T_POR_BARRIL_CO) / T_POR_BARRIL : quiere;
+    const cabe = u.tipo === 'tren' ? u.combustible + u.combustibleImp + this.#espacioTren(u) / T_POR_BARRIL : BARRILES_POR_TANQUE - u.combustoleo;
+    this.#cargarCombustible(u, destino, cabe, pierna, reservar);
+    this.#cargarCombustoleo(u, destino, quiere);
+  }
+
+  /**
    * Load fuel, up to `cabe` barrels of fuel aboard in all. At a refinery (a
    * train at its station or at its port, the coastal ones'; a tanker at its
-   * port), what waits in its yard: one refinery's fuel at a time. Then at a
-   * hub, imported fuel for the coastwise trade, if the run calls where it has
-   * to come that way.
+   * port), what waits in its yard: one refinery's fuel at a time, keeping
+   * `reservar` barrels of room for fuel oil unless the run needs it for what
+   * has to come coastwise. Then at a hub, imported fuel for the coastwise
+   * trade, if the run calls where it has to come that way.
    */
-  #cargarCombustible(u: Tren | Barco, destino: string, cabe: number) {
+  #cargarCombustible(u: Tren | Barco, destino: string, cabe: number, pierna: number, reservar = 0) {
     if (u.tipo === 'barco' && u.clase !== 'tanque') return;
     const id = destino.startsWith('refineria:') ? destino.slice('refineria:'.length) : REFINERIA_DEL_PUERTO.get(destino);
     if (id && !(u.combustibleDe && u.combustibleDe !== id && u.combustible > 0)) {
       const hay = this.#patios.get(id) ?? 0;
-      const sube = Math.min(hay, cabe - u.combustible - u.combustibleImp);
+      const libre = cabe - u.combustible - u.combustibleImp;
+      const cabotaje = reservar > 0 ? Math.max(0, this.#cabotajeAdelante(u, pierna, id) - u.combustible) : 0;
+      const sube = Math.min(hay, Math.max(Math.min(cabotaje, libre), libre - reservar));
       if (sube >= 1) {
         this.#patios.set(id, hay - sube);
         u.combustible += sube;
@@ -1656,11 +1712,208 @@ class Simulacion {
     if (!CONCENTRADORES.has(destino) || !this.#llevaCabotaje(u, destino)) return;
     if (u.combustibleImpDe && u.combustibleImpDe !== destino && u.combustibleImp > 0) return;
     const hay = this.#patiosImp.get(destino) ?? 0;
-    const sube = Math.min(hay, cabe - u.combustible - u.combustibleImp);
+    // No more than the rest of the run can leave coastwise: what it couldn't would ride along and take another vehicle's.
+    const pide = Math.max(0, this.#cabotajeAdelante(u, pierna, null) - u.combustible - u.combustibleImp);
+    const sube = Math.min(hay, cabe - u.combustible - u.combustibleImp, pide);
     if (sube < 1) return;
     this.#patiosImp.set(destino, hay - sube);
     u.combustibleImp += sube;
     u.combustibleImpDe = destino;
+  }
+
+  // ---- fuel oil ----------------------------------------------------------------------------------
+
+  #cuentaCoDe(año: string) {
+    let c = this.#cuentasCo.get(año);
+    if (!c) {
+      c = { ...cuentaCoVacia(), desde: this.horas };
+      this.#cuentasCo.set(año, c);
+    }
+    return c;
+  }
+
+  /** Thousand barrels a day of a plant's fuel oil that wait for the player's trains and tankers: half of what its pipeline doesn't bring. */
+  ritmoJugadorCo(c: Central): number {
+    return (c.mbd - porDuctoCo(c, this.combustoleo)) * (1 - PARTE_AUTOMATICA_CO);
+  }
+
+  /** The most a plant keeps of what the player brings, barrels. */
+  #topeReservaCo(c: Central): number {
+    return barrilesEn(this.ritmoJugadorCo(c), 24 * DIAS_RESERVA_CO);
+  }
+
+  /** The most a refinery keeps in its yard: some days of what it makes and its pipelines don't take, barrels. */
+  #topePatioCo(id: string): number {
+    const ducto = CENTRALES_CO.reduce((s, c) => s + (c.ducto === id ? porDuctoCo(c, this.combustoleo) : 0), 0);
+    return barrilesEn(Math.max(0, (this.combustoleo.get(id) ?? 0) - ducto), 24 * DIAS_PATIO_CO);
+  }
+
+  /**
+   * An hour of fuel oil. The refineries make it, and the plants next to one
+   * take theirs by pipeline. Of the rest each plant burns, half comes on its
+   * own — Pemex's rented tankers or the private railroads take it from the
+   * refineries' yards, the nearest first, or import it when they're empty —
+   * and half from what the player's trains and tankers left at the plant;
+   * what isn't there is missing. How a plant was supplied over the last
+   * month sets its MW. What doesn't fit in a refinery's yard is exported.
+   */
+  #abastecerCombustoleo(horas: number) {
+    if (this.modo === 'realidad') return;
+    const cuenta = this.#cuentaCoDe(String(añoDe(this.horas)));
+    const hecho = new Map<string, number>();
+    for (const [id, mbd] of this.combustoleo) {
+      const b = barrilesEn(mbd, horas);
+      hecho.set(id, b);
+      cuenta.producido += b;
+    }
+    const porDucto = new Map<string, number>();
+    for (const c of CENTRALES_CO) {
+      if (!c.ducto) continue;
+      const d = Math.min(barrilesEn(c.mbd, horas), hecho.get(c.ducto) ?? 0);
+      hecho.set(c.ducto, (hecho.get(c.ducto) ?? 0) - d);
+      porDucto.set(c.id, d);
+    }
+    for (const [id, b] of hecho) this.#patiosCo.set(id, (this.#patiosCo.get(id) ?? 0) + b);
+    const tomar = (c: Central, b: number) => {
+      let falta = b;
+      for (const id of c.fuentes) {
+        const hay = this.#patiosCo.get(id) ?? 0;
+        const u = Math.min(hay, falta);
+        this.#patiosCo.set(id, hay - u);
+        falta -= u;
+        if (falta <= 0) break;
+      }
+      return b - falta;
+    };
+    const peso = Math.min(1, horas / (24 * MEMORIA_DIAS));
+    for (const c of CENTRALES_CO) {
+      const pide = barrilesEn(c.mbd, horas);
+      const ducto = porDucto.get(c.id) ?? 0;
+      const resto = pide - ducto;
+      const auto = resto * PARTE_AUTOMATICA_CO;
+      const propio = tomar(c, auto);
+      const jugador = resto - auto;
+      const hay = this.#reservasCo.get(c.id) ?? 0;
+      const usa = Math.min(hay, jugador);
+      this.#reservasCo.set(c.id, hay - usa);
+      const falta = jugador - usa > 1e-6 ? jugador - usa : 0;
+      cuenta.ducto += ducto;
+      cuenta[c.llega === 'barco' ? 'rentados' : 'privados'] += propio;
+      cuenta.importado += auto - propio;
+      cuenta.faltante += falta;
+      cuenta.quemado += pide - falta;
+      const k = (cuenta.centrales[c.id] ??= { pide: 0, quema: 0 });
+      k.pide += pide;
+      k.quema += pide - falta;
+      const cubierto = pide > 0 ? (pide - falta) / pide : 1;
+      const s = this.#surtidoCo.get(c.id) ?? 1;
+      this.#surtidoCo.set(c.id, s + (cubierto - s) * peso);
+    }
+    for (const id of this.combustoleo.keys()) {
+      const tope = this.#topePatioCo(id);
+      const hay = this.#patiosCo.get(id) ?? 0;
+      if (hay <= tope) continue;
+      cuenta.exportado += hay - tope;
+      cuenta.exportadoDe[id] = (cuenta.exportadoDe[id] ?? 0) + hay - tope;
+      this.#patiosCo.set(id, tope);
+    }
+  }
+
+  /**
+   * Fuel oil the rest of a vehicle's run can leave at power plants, after the
+   * stop of leg `pierna` and before it gets back to the refinery `origen`, as
+   * their stores will be when it gets to each one, barrels.
+   */
+  #combustoleoAdelante(u: Tren | Barco, pierna: number, origen: string): number {
+    const n = u.destinos.length;
+    const vistas = new Set<string>();
+    let suma = 0;
+    let horas = u.esperas[pierna] ?? 0;
+    for (let k = 1; k < n; k++) {
+      const j = (pierna + k) % n;
+      horas += u.piernas[j]?.horas ?? 0;
+      const parada = u.destinos[j];
+      if (parada === `refineria:${origen}` || REFINERIA_DEL_PUERTO.get(parada) === origen) break;
+      for (const c of ENTREGAS_CO.get(parada) ?? []) {
+        if (vistas.has(c.id)) continue;
+        vistas.add(c.id);
+        const ritmo = this.ritmoJugadorCo(c);
+        const tope = this.#topeReservaCo(c);
+        if (ritmo > 0) suma += Math.min(tope, tope - (this.#reservasCo.get(c.id) ?? 0) + barrilesEn(ritmo, horas));
+      }
+      horas += u.esperas[j] ?? 0;
+    }
+    return suma;
+  }
+
+  /** The refinery whose yard a stop loads from: its station, or a coastal one's port. */
+  #refineriaDe(destino: string): string | undefined {
+    return destino.startsWith('refineria:') ? destino.slice('refineria:'.length) : REFINERIA_DEL_PUERTO.get(destino);
+  }
+
+  /** Fuel oil a vehicle should load at this stop for the plants on its run, barrels: one refinery's at a time. */
+  #combustoleoQuiere(u: Tren | Barco, destino: string, pierna: number): number {
+    const id = this.#refineriaDe(destino);
+    const hay = id ? (this.#patiosCo.get(id) ?? 0) : 0;
+    if (!id || hay < 1 || (u.combustoleoDe && u.combustoleoDe !== id && u.combustoleo > 0)) return 0;
+    return Math.max(0, Math.min(hay, this.#combustoleoAdelante(u, pierna, id) - u.combustoleo));
+  }
+
+  #cargarCombustoleo(u: Tren | Barco, destino: string, quiere: number) {
+    const id = this.#refineriaDe(destino);
+    if (!id || quiere < 1) return;
+    const libre = u.tipo === 'tren' ? this.#espacioTren(u) / T_POR_BARRIL_CO : BARRILES_POR_TANQUE - u.combustible - u.combustibleImp - u.combustoleo;
+    const sube = Math.min(quiere, this.#patiosCo.get(id) ?? 0, libre);
+    if (sube < 1) return;
+    this.#patiosCo.set(id, (this.#patiosCo.get(id) ?? 0) - sube);
+    u.combustoleo += sube;
+    u.combustoleoDe = id;
+  }
+
+  /** Leave fuel oil for the power plants that get it at this stop, by the room each has (never back at its refinery). */
+  #descargarCombustoleo(u: Tren | Barco, destino: string) {
+    if (u.combustoleo < 1) return;
+    const centrales = ENTREGAS_CO.get(destino);
+    const origen = u.combustoleoDe;
+    if (!centrales || (origen && this.#refineriaDe(destino) === origen)) return;
+    const cabe = centrales.map((c) => [c, Math.max(0, this.#topeReservaCo(c) - (this.#reservasCo.get(c.id) ?? 0))] as const);
+    const total = cabe.reduce((s, [, x]) => s + x, 0);
+    const baja = Math.min(u.combustoleo, total);
+    if (baja < 1) return;
+    for (const [c, x] of cabe) if (x > 0) this.#reservasCo.set(c.id, (this.#reservasCo.get(c.id) ?? 0) + (baja * x) / total);
+    this.#cuentaCoDe(String(añoDe(this.horas)))[u.tipo === 'tren' ? 'tren' : 'barco'] += baja;
+    u.entregadoCombustoleo += baja;
+    u.combustoleo -= baja;
+    if (u.combustoleo < 1) {
+      u.combustoleo = 0;
+      u.combustoleoDe = null;
+    }
+  }
+
+  /** Fuel oil in a refinery's yard, and what a plant keeps of what the player brought, barrels. */
+  enPatioCo(id: string): number {
+    return this.#patiosCo.get(id) ?? 0;
+  }
+  reservaCo(id: string): number {
+    return this.#reservasCo.get(id) ?? 0;
+  }
+
+  /** How a fuel-oil plant was supplied in the last month (0–1); whole in Realidad. */
+  surtidoCo(id: string): number {
+    return this.modo === 'realidad' ? 1 : (this.#surtidoCo.get(id) ?? 1);
+  }
+
+  /** A year of fuel oil (barrels). Read it with `horas` for it to move. */
+  cuentaCombustoleo(año: number): CuentaCo {
+    return this.#cuentasCo.get(String(año)) ?? cuentaCoVacia();
+  }
+
+  /** Days of that year the fuel oil has been counted so far (never less than an hour). */
+  diasContadosCo(año: number): number {
+    const c = this.#cuentasCo.get(String(año));
+    if (!c) return 1 / 24;
+    const fin = añoDe(this.horas) === año ? this.horas : horasDeFecha(`${año + 1}-01-01`);
+    return Math.max(1 / 24, (fin - c.desde) / 24);
   }
 
   /** Fuel waiting in a refinery's yard, barrels. */
@@ -1771,7 +2024,8 @@ class Simulacion {
       return;
     }
     const estado = SITIOS_POR_CLAVE.get(destino)?.estado;
-    if (!estado) return;
+    // Exports only board a train whose run reaches an exit: otherwise they'd ride along for good.
+    if (!estado || !t.paradas.some((p) => SALIDAS.has(p))) return;
     // A carmaker's vehicles first.
     if (destino.startsWith('industria:')) {
       const id = destino.slice('industria:'.length);
@@ -1835,6 +2089,7 @@ class Simulacion {
       if (horas > 0) {
         this.#producir(horas);
         this.#abastecer(horas);
+        this.#abastecerCombustoleo(horas);
         this.#consumirAbasto(horas);
         for (const t of this.trenes) {
           avanzar(t, horas);

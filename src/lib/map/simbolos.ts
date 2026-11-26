@@ -18,6 +18,8 @@ export const GAS = '#6ee7b7';
 export const CRUDO = '#c2672a';
 /** Fuel's own amber, a step lighter than the refineries' brown-gold. */
 export const COMBUSTIBLE = '#f5b971';
+/** Fuel oil: a muted tan, heavier than the fuel's amber and lighter than crude. */
+export const COMBUSTOLEO = '#d4a373';
 /** Offshore complexes: a salmon orange, between crude's brown and the fuel's amber. */
 export const PLATAFORMA = '#f0a27a';
 
