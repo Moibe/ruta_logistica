@@ -46,12 +46,21 @@ import {
   abastoJuego,
   barrilesEn,
   BARRILES_POR_TANQUE,
+  CONCENTRADORES,
+  concentradorDe,
+  costaDe,
   cuentaVacia,
   DIAS_EN_PATIO,
   DIAS_POR_SURTIR,
   estadosQueSurte,
+  PARTE_RENTADOS,
+  POR_TIERRA,
+  PUERTA_MAR,
+  PUERTAS_ZONA,
   REFINERIA_DEL_PUERTO,
+  REFINERIAS_DE_COSTA,
   T_POR_BARRIL,
+  topeImportacion,
   type Abasto,
   type Cuenta,
 } from '$lib/domain/combustibles';
@@ -289,11 +298,35 @@ class Simulacion {
    */
   #inventarios = new Map<string, number>();
   /**
-   * What happened with fuel each year, the country's and each state's
-   * (barrels), what had no way out of the refineries, and the game hour the
-   * year started being counted (the game opens on 1 December 2018).
+   * Fuel the player's tankers and trains left for what has to come to a state
+   * coastwise, barrels: the country's, and imported. Kept for that: it covers
+   * only what the state's ports can't import.
    */
-  #cuentas = new Map<string, { pais: Cuenta; estados: Map<string, Cuenta>; sinSalida: number; desde: number }>();
+  #inventariosCab = new Map<string, number>();
+  #inventariosImp = new Map<string, number>();
+  /**
+   * Imported fuel waiting at each hub for the player's tankers and trains: the
+   * half of the coastwise trade Pemex's rented tankers don't carry, barrels.
+   */
+  #patiosImp = new Map<string, number>();
+  /**
+   * What happened with fuel each year, the country's and each state's
+   * (barrels), what had no way out of the refineries, the game hour the year
+   * started being counted (the game opens on 1 December 2018), where its
+   * imports came in (barrels by port, or `tierra`), and what of that each hub
+   * imported for the coastwise trade.
+   */
+  #cuentas = new Map<
+    string,
+    {
+      pais: Cuenta;
+      estados: Map<string, Cuenta>;
+      sinSalida: number;
+      desde: number;
+      porPuerta: Record<string, number>;
+      cabotaje: Record<string, number>;
+    }
+  >();
   /**
    * Sea trade (`comercioMar.ts`). What the player's ships have exported
    * (delivered at a gateway, by the port it was loaded at) and imported
@@ -440,6 +473,22 @@ class Simulacion {
         // The refineries open with a week of what their zones can't take in the yard, and a
         // tanker that has just left a refinery's port sails loaded.
         for (const [id, mbd] of this.abasto?.sobrante ?? []) this.#patios.set(id, barrilesEn(mbd, 24 * 7));
+        // A week of imported fuel at the hubs, and the terminals it reaches coastwise stocked as if the
+        // trade were running (a tanker takes up to two weeks to come round).
+        for (const [hub, mbd] of this.abasto?.porConcentrador ?? []) this.#patiosImp.set(hub, barrilesEn(mbd * (1 - PARTE_RENTADOS), 24 * 7));
+        const cuenta = this.#cuentaDe(String(añoDe(this.horas)));
+        for (const [e, mbd] of this.abasto?.cabotaje ?? []) {
+          // Imported fuel already in the terminals counts as imported, through its hub.
+          const b = barrilesEn(mbd * (1 - PARTE_RENTADOS), 24 * DIAS_POR_SURTIR);
+          const hub = this.#concentradorDelEstado(e);
+          this.#inventariosImp.set(e, b);
+          this.#cuentaEstado(cuenta, e).importado += b;
+          cuenta.pais.importado += b;
+          if (hub) {
+            cuenta.porPuerta[hub] = (cuenta.porPuerta[hub] ?? 0) + b;
+            cuenta.cabotaje[hub] = (cuenta.cabotaje[hub] ?? 0) + b;
+          }
+        }
         for (const b of barcos) if (b.clase === 'tanque') this.#cargarCombustible(b, b.paradas[0], BARRILES_POR_TANQUE);
         // Half the complexes' storage full, and a supply vessel that has just left its base sails loaded.
         for (const b of barcos) if (b.clase === 'abastecedor' && BASES_ABASTO.has(b.paradas[0])) b.abasto = TONELADAS_ABASTECEDOR;
@@ -964,6 +1013,9 @@ class Simulacion {
       nuevo.combustible = viejo.combustible;
       nuevo.combustibleDe = viejo.combustibleDe;
       nuevo.entregadoCombustible = viejo.entregadoCombustible;
+      nuevo.combustibleImp = viejo.combustibleImp;
+      nuevo.combustibleImpDe = viejo.combustibleImpDe;
+      nuevo.entregadoImp = viejo.entregadoImp;
       nuevo.importacion = viejo.importacion;
       nuevo.importacionDe = viejo.importacionDe;
       nuevo.importado = viejo.importado;
@@ -1086,8 +1138,8 @@ class Simulacion {
       this.#entregarImportacion(t, t.piernas[pierna].km);
       this.#moverCadena(t, destino, t.piernas[pierna].km);
       this.#exportar(t, destino);
-      this.#descargarCombustible(t, destino);
-      this.#cargarCombustible(t, destino, t.combustible + this.#espacioTren(t) / T_POR_BARRIL);
+      this.#descargarCombustible(t, destino, pierna);
+      this.#cargarCombustible(t, destino, t.combustible + t.combustibleImp + this.#espacioTren(t) / T_POR_BARRIL);
       this.#cargarImportacion(t, destino);
       this.#cargarNacional(t, destino);
     }
@@ -1096,7 +1148,7 @@ class Simulacion {
   /** Tonnes a train still has room for: exports, imports, fuel and domestic cargo share its net load. */
   #espacioTren(t: Tren): number {
     const cadena = Object.values(t.cadena).reduce((s, x) => s + x, 0);
-    return Math.max(0, CARGA_POR_TREN - t.carga - t.importacion - t.cargaNacional - cadena - t.combustible * T_POR_BARRIL);
+    return Math.max(0, CARGA_POR_TREN - t.carga - t.importacion - t.cargaNacional - cadena - (t.combustible + t.combustibleImp) * T_POR_BARRIL);
   }
 
   /**
@@ -1192,13 +1244,14 @@ class Simulacion {
   #atenderEscalas(b: Barco) {
     const llegadas = b.llegadas!;
     while (llegadas.length) {
-      const destino = b.destinos[llegadas.shift()!];
+      const pierna = llegadas.shift()!;
+      const destino = b.destinos[pierna];
       if (b.clase === 'abastecedor') {
         this.#abastecerEscala(b, destino);
         continue;
       }
       if (b.clase === 'tanque') {
-        this.#descargarCombustible(b, destino);
+        this.#descargarCombustible(b, destino, pierna);
         this.#cargarCombustible(b, destino, BARRILES_POR_TANQUE);
         continue;
       }
@@ -1297,7 +1350,7 @@ class Simulacion {
   #cuentaDe(año: string) {
     let c = this.#cuentas.get(año);
     if (!c) {
-      c = { pais: cuentaVacia(), estados: new Map(), sinSalida: 0, desde: this.horas };
+      c = { pais: cuentaVacia(), estados: new Map(), sinSalida: 0, desde: this.horas, porPuerta: {}, cabotaje: {} };
       this.#cuentas.set(año, c);
     }
     return c;
@@ -1313,17 +1366,33 @@ class Simulacion {
   }
 
   /**
-   * An hour of fuel: every state uses its share; what its pipelines bring
-   * counts as the country's; the rest comes out of what trains and tankers left
-   * in its terminals, and when that runs out it's imported. What the zones
-   * can't take piles up in the refineries' yards; past their room it has no
-   * way out.
+   * An hour of fuel. Every state uses its share, and what its pipelines bring
+   * counts as the country's. Pemex's rented tankers bring their half of what
+   * has to come to it coastwise: what the refineries of its coast have left
+   * over, or else imported at the hub. Then goes the country's fuel the
+   * player's trains and tankers left in its terminals. The rest is imported:
+   * what its zones lack, through the ports at the head of their pipelines up to
+   * their room and by land past that; what comes by rail, by land; what comes
+   * by sea, through its own ports up to their room and, past that, what the
+   * player brought from a hub. What's still lacking is counted as missing.
+   * What the zones can't take piles up in the refineries' yards (past their
+   * room it has no way out), and what the rented tankers don't carry waits at
+   * the hubs for the player's.
    */
   #abastecer(horas: number) {
     const a = this.abasto;
-    if (!a) return;
+    if (!a || this.modo === 'realidad') return;
     const cuenta = this.#cuentaDe(String(añoDe(this.horas)));
     const pais = cuenta.pais;
+    const entra = (puerta: string, b: number) => {
+      if (b > 0) cuenta.porPuerta[puerta] = (cuenta.porPuerta[puerta] ?? 0) + b;
+    };
+    const importar = (c: Cuenta, b: number) => {
+      c.importado += b;
+      pais.importado += b;
+    };
+    const porZona = new Map<string, number>();
+    const porMar = new Map<string, number>();
     for (const [estado, mbd] of a.consumo) {
       const c = this.#cuentaEstado(cuenta, estado);
       const usa = barrilesEn(mbd, horas);
@@ -1332,16 +1401,84 @@ class Simulacion {
       c.ducto += ducto;
       pais.consumo += usa;
       pais.ducto += ducto;
-      const falta = usa - ducto;
-      if (falta <= 0) continue;
-      const hay = this.#inventarios.get(estado) ?? 0;
-      if (hay >= falta) {
-        this.#inventarios.set(estado, hay - falta);
-      } else {
-        this.#inventarios.set(estado, 0);
-        c.importado += falta - hay;
-        pais.importado += falta - hay;
+      let mar = barrilesEn(a.porMar.get(estado) ?? 0, horas);
+      let tren = barrilesEn(a.porTren.get(estado) ?? 0, horas);
+      const zonas = [...(a.faltaZona.get(estado) ?? [])].map(([z, mbdZ]) => [z, barrilesEn(mbdZ, horas)] as [string, number]);
+      // Pemex's rented tankers: their half of what has to come coastwise.
+      const rentado = Math.min(mar, barrilesEn((a.cabotaje.get(estado) ?? 0) * PARTE_RENTADOS, horas));
+      if (rentado > 0) {
+        const hub = this.#concentradorDelEstado(estado);
+        const propio = this.#tomarDeRefinerias(hub, rentado);
+        c.rentados += propio;
+        pais.rentados += propio;
+        importar(c, rentado - propio);
+        if (hub && rentado - propio > 0) {
+          entra(hub, rentado - propio);
+          cuenta.cabotaje[hub] = (cuenta.cabotaje[hub] ?? 0) + rentado - propio;
+        }
+        mar -= rentado;
       }
+      // The country's fuel the player left in its terminals goes first: by sea, by rail, then what its zones lack.
+      let hay = this.#inventarios.get(estado) ?? 0;
+      const cubrir = (b: number) => {
+        const u = Math.min(hay, b);
+        hay -= u;
+        return b - u;
+      };
+      mar = cubrir(mar);
+      tren = cubrir(tren);
+      for (const z of zonas) z[1] = cubrir(z[1]);
+      this.#inventarios.set(estado, hay);
+      // The rest is imported: by rail, it comes by land; a zone's, through its ports; by sea, through the state's own.
+      importar(c, tren);
+      entra(POR_TIERRA, tren);
+      for (const [z, b] of zonas) {
+        importar(c, b);
+        porZona.set(z, (porZona.get(z) ?? 0) + b);
+      }
+      if (mar > 0) porMar.set(estado, mar);
+    }
+    // A zone's imports come through its ports, up to their room this hour (a hub keeps
+    // what its coast needs coastwise), and by land past that.
+    const libre = (p: string) => barrilesEn(Math.max(0, topeImportacion(p) - (a.porConcentrador.get(p) ?? 0)), horas);
+    for (const [z, b] of porZona) {
+      const puertas = PUERTAS_ZONA.get(z) ?? [];
+      const cabe = puertas.reduce((s, p) => s + libre(p), 0);
+      const porPuertos = Math.min(b, cabe);
+      for (const p of puertas) entra(p, cabe > 0 ? (porPuertos * libre(p)) / cabe : 0);
+      entra(POR_TIERRA, b - porPuertos);
+    }
+    // By sea, each port imports up to its room this hour, shared by the states it supplies...
+    const pide = new Map<string, number>();
+    for (const [estado, b] of porMar) for (const [p, f] of PUERTA_MAR.get(estado) ?? []) pide.set(p, (pide.get(p) ?? 0) + b * f);
+    for (const [estado, b] of porMar) {
+      const c = this.#cuentaEstado(cuenta, estado);
+      let directo = 0;
+      for (const [p, f] of PUERTA_MAR.get(estado) ?? []) {
+        const total = pide.get(p) ?? 0;
+        const x = total > 0 ? b * f * Math.min(1, barrilesEn(topeImportacion(p), horas) / total) : 0;
+        directo += x;
+        entra(p, x);
+      }
+      importar(c, directo);
+      // ...and past that goes what the player left for the coastwise trade, the country's first and then imported
+      // (counted when it was delivered); the rest is missing.
+      let falta = b - directo;
+      for (const inv of [this.#inventariosCab, this.#inventariosImp]) {
+        const hayAqui = inv.get(estado) ?? 0;
+        const u = Math.min(hayAqui, falta);
+        inv.set(estado, hayAqui - u);
+        falta -= u;
+      }
+      if (falta > 1e-6) {
+        c.faltante += falta;
+        pais.faltante += falta;
+      }
+    }
+    // What the rented tankers don't carry waits at the hubs for the player's, up to some days of it.
+    for (const [hub, mbd] of a.porConcentrador) {
+      const h = mbd * (1 - PARTE_RENTADOS);
+      this.#patiosImp.set(hub, Math.min(barrilesEn(h, 24 * DIAS_EN_PATIO), (this.#patiosImp.get(hub) ?? 0) + barrilesEn(h, horas)));
     }
     for (const [id, mbd] of a.sobrante) {
       const r = this.refinacion?.porRefineria.get(id);
@@ -1355,35 +1492,139 @@ class Simulacion {
     }
   }
 
-  /** Barrels a state's terminals can still take: some days of what its pipelines don't bring. */
+  /** Fuel the player left in a state's terminals for the coastwise trade, the country's and imported, barrels. */
+  #paraCabotaje(estado: string): number {
+    return (this.#inventariosCab.get(estado) ?? 0) + (this.#inventariosImp.get(estado) ?? 0);
+  }
+
+  /** Barrels a state's terminals can still take: some days of what its pipelines and Pemex's rented tankers don't bring. */
   #cabeEn(estado: string): number {
-    const hueco = this.abasto?.hueco.get(estado) ?? 0;
-    return Math.max(0, barrilesEn(hueco, 24 * DIAS_POR_SURTIR) - (this.#inventarios.get(estado) ?? 0));
+    const a = this.abasto;
+    const falta = (a?.hueco.get(estado) ?? 0) - (a?.cabotaje.get(estado) ?? 0) * PARTE_RENTADOS;
+    return Math.max(0, barrilesEn(falta, 24 * DIAS_POR_SURTIR) - (this.#inventarios.get(estado) ?? 0) - this.#paraCabotaje(estado));
+  }
+
+  /** Barrels a state's terminals can still take of what has to come to it coastwise and the rented tankers don't bring. */
+  #cabeCabotaje(estado: string): number {
+    const c = (this.abasto?.cabotaje.get(estado) ?? 0) * (1 - PARTE_RENTADOS);
+    return c > 0 ? Math.max(0, barrilesEn(c, 24 * DIAS_POR_SURTIR) - this.#paraCabotaje(estado)) : 0;
+  }
+
+  /** The hub a sea-fed state's coastwise fuel comes from (the one of its main port's coast). */
+  #concentradorDelEstado(estado: string): string | null {
+    const p = PUERTA_MAR.get(estado)?.[0]?.[0];
+    return p ? concentradorDe(p) : null;
+  }
+
+  /** Pemex's rented tankers take the country's fuel first, from the yards of the refineries of the hub's coast: what they got, barrels. */
+  #tomarDeRefinerias(hub: string | null, barriles: number): number {
+    const costa = hub ? costaDe(hub) : null;
+    const ids = costa ? (REFINERIAS_DE_COSTA.get(costa) ?? []) : [];
+    const hay = ids.reduce((s, id) => s + (this.#patios.get(id) ?? 0), 0);
+    const toma = Math.min(barriles, hay);
+    if (toma <= 0) return 0;
+    for (const id of ids) {
+      const x = this.#patios.get(id) ?? 0;
+      this.#patios.set(id, x - (toma * x) / hay);
+    }
+    return toma;
+  }
+
+  /** Spread `cuanto` barrels over states by the room each has (none past it); returns what came off. */
+  #repartir(cabe: readonly (readonly [string, number])[], cuanto: number, dejar: (estado: string, barriles: number) => void): number {
+    const total = cabe.reduce((s, [, c]) => s + c, 0);
+    const baja = Math.min(cuanto, total);
+    if (baja < 1) return 0;
+    for (const [estado, c] of cabe) if (c > 0) dejar(estado, (baja * c) / total);
+    return baja;
   }
 
   /**
-   * Leave fuel where it's lacking (never back at the refinery it came from).
-   * A port that also supplies its neighbours (Progreso the peninsula,
-   * Mazatlán Nayarit) shares what comes off by the room each one has.
+   * Room for coastwise fuel at the rest of a vehicle's run, after the stop at
+   * leg `pierna` and before it gets back to where its fuel came from, as it
+   * will be when the vehicle gets to each stop: the country's fuel keeps that
+   * much aboard for them.
    */
-  #descargarCombustible(u: Tren | Barco, destino: string) {
-    if (u.combustible <= 0) return;
+  #cabotajeAdelante(u: Tren | Barco, pierna: number, origen: string | null): number {
+    const n = u.destinos.length;
+    const aqui = SITIOS_POR_CLAVE.get(u.destinos[pierna])?.estado;
+    const vistos = new Set(aqui ? estadosQueSurte(u.destinos[pierna], aqui) : []);
+    let suma = 0;
+    let horas = u.esperas[pierna] ?? 0;
+    for (let k = 1; k < n; k++) {
+      const j = (pierna + k) % n;
+      horas += u.piernas[j]?.horas ?? 0;
+      const parada = u.destinos[j];
+      if (origen && (parada === `refineria:${origen}` || REFINERIA_DEL_PUERTO.get(parada) === origen)) break;
+      const propio = SITIOS_POR_CLAVE.get(parada)?.estado;
+      for (const e of propio ? estadosQueSurte(parada, propio) : []) {
+        if (vistos.has(e)) continue;
+        vistos.add(e);
+        const ritmo = (this.abasto?.cabotaje.get(e) ?? 0) * (1 - PARTE_RENTADOS);
+        if (ritmo > 0) suma += Math.min(barrilesEn(ritmo, 24 * DIAS_POR_SURTIR), this.#cabeCabotaje(e) + barrilesEn(ritmo, horas));
+      }
+      horas += u.esperas[j] ?? 0;
+    }
+    return suma;
+  }
+
+  /** Whether a vehicle's run calls somewhere fuel has to come coastwise, other than `hub`. */
+  #llevaCabotaje(u: Tren | Barco, hub: string): boolean {
+    return u.paradas.some((p) => {
+      const propio = p !== hub ? SITIOS_POR_CLAVE.get(p)?.estado : undefined;
+      return !!propio && estadosQueSurte(p, propio).some((e) => (this.abasto?.cabotaje.get(e) ?? 0) > 0);
+    });
+  }
+
+  /**
+   * Leave fuel where it's lacking, at the stop of leg `pierna`. Imported fuel
+   * only where it has to come coastwise. The country's goes there first and,
+   * past what the rest of the run needs that way, anywhere it saves an import
+   * (never back at the refinery it came from). A port that also supplies its
+   * neighbours (Progreso the peninsula, Mazatlán Nayarit) shares what comes
+   * off by the room each one has.
+   */
+  #descargarCombustible(u: Tren | Barco, destino: string, pierna: number) {
+    if (u.combustible <= 0 && u.combustibleImp <= 0) return;
     const propio = SITIOS_POR_CLAVE.get(destino)?.estado;
     if (!propio) return;
-    const origen = u.combustibleDe;
-    if (origen && (destino === `refineria:${origen}` || REFINERIA_DEL_PUERTO.get(destino) === origen)) return;
-    const cabe = estadosQueSurte(destino, propio).map((e) => [e, this.#cabeEn(e)] as const);
-    const total = cabe.reduce((s, [, c]) => s + c, 0);
-    const baja = Math.min(u.combustible, total);
-    if (baja < 1) return;
+    const estados = estadosQueSurte(destino, propio);
     const cuenta = this.#cuentaDe(String(añoDe(this.horas)));
-    const modo = u.tipo === 'tren' ? 'tren' : 'barco';
-    for (const [estado, c] of cabe) {
-      const parte = (baja * c) / total;
-      if (parte <= 0) continue;
-      this.#inventarios.set(estado, (this.#inventarios.get(estado) ?? 0) + parte);
-      this.#cuentaEstado(cuenta, estado)[modo] += parte;
+    if (u.combustibleImp > 0) {
+      const hub = u.combustibleImpDe;
+      const baja = this.#repartir(
+        estados.map((e) => [e, this.#cabeCabotaje(e)] as const),
+        u.combustibleImp,
+        (e, x) => {
+          this.#inventariosImp.set(e, (this.#inventariosImp.get(e) ?? 0) + x);
+          this.#cuentaEstado(cuenta, e).importado += x;
+        }
+      );
+      if (baja > 0) {
+        cuenta.pais.importado += baja;
+        if (hub) {
+          cuenta.porPuerta[hub] = (cuenta.porPuerta[hub] ?? 0) + baja;
+          cuenta.cabotaje[hub] = (cuenta.cabotaje[hub] ?? 0) + baja;
+        }
+        u.entregadoImp += baja;
+        u.combustibleImp -= baja;
+        if (u.combustibleImp < 1) {
+          u.combustibleImp = 0;
+          u.combustibleImpDe = null;
+        }
+      }
     }
+    const origen = u.combustibleDe;
+    if (u.combustible <= 0 || (origen && (destino === `refineria:${origen}` || REFINERIA_DEL_PUERTO.get(destino) === origen))) return;
+    const modo = u.tipo === 'tren' ? 'tren' : 'barco';
+    const dejarEn = (inv: Map<string, number>) => (e: string, x: number) => {
+      inv.set(e, (inv.get(e) ?? 0) + x);
+      this.#cuentaEstado(cuenta, e)[modo] += x;
+    };
+    let baja = this.#repartir(estados.map((e) => [e, this.#cabeCabotaje(e)] as const), u.combustible, dejarEn(this.#inventariosCab));
+    const sobra = u.combustible - baja - this.#cabotajeAdelante(u, pierna, origen);
+    if (sobra >= 1) baja += this.#repartir(estados.map((e) => [e, this.#cabeEn(e)] as const), sobra, dejarEn(this.#inventarios));
+    if (baja <= 0) return;
     cuenta.pais[modo] += baja;
     u.entregadoCombustible += baja;
     u.combustible -= baja;
@@ -1394,20 +1635,32 @@ class Simulacion {
   }
 
   /**
-   * Load fuel at a refinery: a train at its station or at its port (the
-   * coastal ones'), a tanker at its port, up to `tope` barrels aboard. A
-   * vehicle carries one refinery's fuel at a time.
+   * Load fuel, up to `cabe` barrels of fuel aboard in all. At a refinery (a
+   * train at its station or at its port, the coastal ones'; a tanker at its
+   * port), what waits in its yard: one refinery's fuel at a time. Then at a
+   * hub, imported fuel for the coastwise trade, if the run calls where it has
+   * to come that way.
    */
-  #cargarCombustible(u: Tren | Barco, destino: string, tope: number) {
+  #cargarCombustible(u: Tren | Barco, destino: string, cabe: number) {
+    if (u.tipo === 'barco' && u.clase !== 'tanque') return;
     const id = destino.startsWith('refineria:') ? destino.slice('refineria:'.length) : REFINERIA_DEL_PUERTO.get(destino);
-    if (!id || (u.tipo === 'barco' && u.clase !== 'tanque')) return;
-    if (u.combustibleDe && u.combustibleDe !== id && u.combustible > 0) return;
-    const hay = this.#patios.get(id) ?? 0;
-    const sube = Math.min(hay, tope - u.combustible);
+    if (id && !(u.combustibleDe && u.combustibleDe !== id && u.combustible > 0)) {
+      const hay = this.#patios.get(id) ?? 0;
+      const sube = Math.min(hay, cabe - u.combustible - u.combustibleImp);
+      if (sube >= 1) {
+        this.#patios.set(id, hay - sube);
+        u.combustible += sube;
+        u.combustibleDe = id;
+      }
+    }
+    if (!CONCENTRADORES.has(destino) || !this.#llevaCabotaje(u, destino)) return;
+    if (u.combustibleImpDe && u.combustibleImpDe !== destino && u.combustibleImp > 0) return;
+    const hay = this.#patiosImp.get(destino) ?? 0;
+    const sube = Math.min(hay, cabe - u.combustible - u.combustibleImp);
     if (sube < 1) return;
-    this.#patios.set(id, hay - sube);
-    u.combustible += sube;
-    u.combustibleDe = id;
+    this.#patiosImp.set(destino, hay - sube);
+    u.combustibleImp += sube;
+    u.combustibleImpDe = destino;
   }
 
   /** Fuel waiting in a refinery's yard, barrels. */
@@ -1415,9 +1668,26 @@ class Simulacion {
     return this.#patios.get(id) ?? 0;
   }
 
-  /** Fuel in a state's terminals that came by train or tanker, barrels. */
+  /** Fuel in a state's terminals that came by train or tanker, barrels: the country's, and imported (brought coastwise). */
   enTerminales(estado: string): number {
-    return this.#inventarios.get(estado) ?? 0;
+    return (this.#inventarios.get(estado) ?? 0) + (this.#inventariosCab.get(estado) ?? 0);
+  }
+  enTerminalesImp(estado: string): number {
+    return this.#inventariosImp.get(estado) ?? 0;
+  }
+
+  /** Imported fuel waiting at a hub for the player's tankers and trains, barrels. */
+  enPatioImp(hub: string): number {
+    return this.#patiosImp.get(hub) ?? 0;
+  }
+
+  /** Where a year's fuel imports came in, barrels by port key (and `tierra`). Read it with `horas` for it to move. */
+  importadoPorPuerta(año: number): Record<string, number> {
+    return this.#cuentas.get(String(año))?.porPuerta ?? {};
+  }
+  /** What of that each hub imported for the coastwise trade, barrels. */
+  importadoParaCabotaje(año: number): Record<string, number> {
+    return this.#cuentas.get(String(año))?.cabotaje ?? {};
   }
 
   /** A year of fuel, the country's or one state's (barrels). Read it with `horas` for it to move. */

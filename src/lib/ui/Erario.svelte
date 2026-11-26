@@ -5,10 +5,10 @@
   import { CAJA_CFE_MES, ENERGIA } from '$lib/domain/energia';
   import { km, mdp, personas } from './formato';
   import { añoDe } from '$lib/domain/calendario';
-  import { delPais, REAL_COMBUSTIBLES, realDelAño } from '$lib/domain/combustibles';
+  import { delPais, POR_TIERRA, REAL_COMBUSTIBLES, realDelAño } from '$lib/domain/combustibles';
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
   import { OBRAS_ENERGIA } from '$lib/domain/energia';
-  import { AÑOS_AEROPUERTOS, POLOS, SERIE_AEROPUERTOS } from '$lib/domain/sitios';
+  import { AÑOS_AEROPUERTOS, nombreCorto, POLOS, SERIE_AEROPUERTOS } from '$lib/domain/sitios';
   import { EXPORTACIONES } from '$lib/domain/exportaciones';
   import { clavePolo } from '$lib/domain/realidad';
   import { DEMANDA_COMBUSTIBLES, PETROLEO, totalReal } from '$lib/domain/petroleo';
@@ -172,6 +172,11 @@
     const pct = Math.round(delPais(c) * 100);
     const sinSalida = sim.sinSalida(año);
     const crudo = sim.crudoExportado;
+    const puertas = Object.entries(sim.importadoPorPuerta(año))
+      .filter(([, b]) => mbd(b) >= 0.5)
+      .sort((x, y) => y[1] - x[1])
+      .map(([k, b]) => `${k === POR_TIERRA ? 'por tierra' : nombreCorto(k)} ${mil(mbd(b))}`)
+      .join(', ');
     return {
       año,
       pct,
@@ -179,12 +184,14 @@
       crudo,
       detalle:
         `En ${año}, en promedio por día: el país usa ${mil(mbd(c.consumo))} mil barriles de gasolina, diésel y turbosina. ` +
-        `Del país llega el ${pct} %: ${mil(mbd(c.ducto))} mil por ducto, ${mil(mbd(c.tren))} mil en tus trenes y ${mil(mbd(c.barco))} mil en tus buques tanque.\n` +
-        `Se importan ${mil(mbd(c.importado))} mil.` +
+        `Del país llega el ${pct} %: ${mil(mbd(c.ducto))} mil por ducto, ${mil(mbd(c.tren))} mil en tus trenes, ${mil(mbd(c.barco))} mil en tus buques tanque ` +
+        `y ${mil(mbd(c.rentados))} mil en los que renta Pemex.\n` +
+        `Se importan ${mil(mbd(c.importado))} mil${puertas ? `: ${puertas}` : ''}.` +
+        (mbd(c.faltante) >= 0.5 ? `\nFaltaron ${mil(mbd(c.faltante))} mil: no les llegó el cabotaje a los puertos que no alcanzan a importar.` : '') +
         (sinSalida > 0 ? `\nLas refinerías se quedaron sin salida para ${mil(sinSalida / 1000)} mil barriles: su patio se llenó.` : ''),
       detalleCrudo:
         `Crudo exportado: lo que Pemex produce (${mil(sim.crudo.produccion)} mil barriles diarios: sus campos en tierra al ritmo real y sus complejos del Golfo según cómo los abastecen tus barcos) ` +
-        'y no procesan las refinerías del país. Se lo llevan los barcos de los compradores.',
+        'y no procesan las refinerías del país. Se lo llevan los barcos de los compradores, por Dos Bocas, Cayo Arcas, Coatzacoalcos y Salina Cruz.',
     };
   });
 

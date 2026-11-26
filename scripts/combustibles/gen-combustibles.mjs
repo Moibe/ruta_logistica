@@ -10,7 +10,7 @@
 //
 // Writes src/lib/domain/datos/combustibles.json.
 
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -340,6 +340,102 @@ const PUERTOS = {
   progreso: { 2018: [609303, 0, 2510362, 0], 2024: [2764219, 0, 864381, 0] },
 };
 
+/**
+ * SEMAR, Rosarito's own series in the same yearbook: Baja California's fuel comes in through Pemex's
+ * terminal there, which isn't a port of the board (Ensenada stands in for it). 2018, tonnes.
+ */
+const ROSARITO_2018 = { importacion: 2491607, cabotaje: 7816 };
+
+// ---- imports: through which port ---------------------------------------------------------------------
+
+/** Thousand barrels a day of the fuel mix in a year's tonnes. */
+const mbdDe = (t) => Number((t / tPorBarril / 365 / 1000).toFixed(1));
+
+/**
+ * The most each port takes from abroad in the game: what it imported in 2018 (SEMAR, petroleum and
+ * products), in barrels of the fuel mix. Rosarito's goes to Ensenada.
+ */
+const TOPE = Object.fromEntries(
+  Object.entries(PUERTOS)
+    .filter(([, v]) => v['2018'][0] > 0)
+    .map(([id, v]) => [`puerto:${id}`, mbdDe(v['2018'][0])])
+);
+TOPE['puerto:ensenada'] = mbdDe(ROSARITO_2018.importacion);
+
+/**
+ * The ports a pipeline zone's imports come in through: the marine terminals at the head of its
+ * pipelines (SENER's 2018 map). Past their room, the rest comes by land from the US.
+ */
+const PUERTAS_ZONA = {
+  centro: ['puerto:tuxpan', 'puerto:coatzacoalcos', 'puerto:veracruz', 'puerto:dos-bocas'],
+  noreste: ['puerto:tampico'],
+  sur: ['puerto:salina-cruz'],
+};
+
+/** The game port that stands for each marine terminal that supplies a state by sea (SENER's 2018 map). */
+const PUERTO_DE_TERMINAL = {
+  Rosarito: 'puerto:ensenada',
+  'La Paz': 'puerto:la-paz',
+  'T.M. Guaymas': 'puerto:guaymas',
+  Topolobampo: 'puerto:topolobampo',
+  Mazatlán: 'puerto:mazatlan',
+  Manzanillo: 'puerto:manzanillo',
+  'Lázaro Cárdenas': 'puerto:lazaro-cardenas',
+  Acapulco: 'puerto:acapulco',
+  // Campeche's terminal gets its tankers at Lerma, which isn't a port of the board: the peninsula comes through Progreso.
+  Campeche: 'puerto:progreso',
+  Progreso: 'puerto:progreso',
+};
+const terminalPorNombre = new Map(terminales.map((t) => [t.nombre, t]));
+/** The marine terminal a sea-fed terminal gets its fuel from: itself, or the one its pipeline or its trucks start at. */
+function terminalMaritima(t) {
+  let x = t;
+  for (let i = 0; x && x.medio !== 'buquetanque' && i < 5; i++) x = terminalPorNombre.get(x.desde);
+  if (!x || x.medio !== 'buquetanque') throw new Error(`Sin terminal marítima: ${t.nombre}`);
+  return x;
+}
+/** By state: the share of what it gets by sea that comes through each port (its sea-fed terminals weighed by capacity). */
+const PUERTA_MAR = {};
+for (const e of ESTADOS) {
+  if (!REPARTO[e].mar) continue;
+  const propias = terminales.filter((t) => t.estado === e && t.red === 'mar');
+  const lista = propias.length ? propias : terminales.filter((t) => t.nombre === SIN_TERMINAL[e]);
+  const total = lista.reduce((s, t) => s + t.capacidad, 0);
+  const r = {};
+  for (const t of lista) {
+    const p = PUERTO_DE_TERMINAL[terminalMaritima(t).nombre];
+    if (!p) throw new Error(`Sin puerto para la terminal ${t.nombre}`);
+    r[p] = (r[p] ?? 0) + t.capacidad / total;
+  }
+  PUERTA_MAR[e] = Object.fromEntries(Object.entries(r).map(([p, f]) => [p, Number(f.toFixed(3))]));
+}
+
+/**
+ * Where what a coast's ports can't import comes from: the two ports the coastwise trade in petroleum
+ * left from in 2018, Coatzacoalcos (with Pajaritos) in the Gulf and Salina Cruz in the Pacific.
+ */
+const CONCENTRADORES = { golfo: 'puerto:coatzacoalcos', pacifico: 'puerto:salina-cruz' };
+const PUERTOS_TABLERO = JSON.parse(await readFile(join(ROOT, 'src', 'lib', 'domain', 'datos', 'puertos.json'), 'utf8'));
+/** The coast of each port that supplies a state by sea, or is a hub. */
+const COSTA = Object.fromEntries(
+  [...new Set([...Object.values(PUERTA_MAR).flatMap((r) => Object.keys(r)), ...Object.values(CONCENTRADORES)])].map((clave) => {
+    const p = PUERTOS_TABLERO.find((x) => `puerto:${x.id}` === clave);
+    if (!p) throw new Error(`Puerto desconocido: ${clave}`);
+    return [clave, p.litoral];
+  })
+);
+
+/**
+ * Where the crude the game exports leaves: the four ports that exported the most petroleum in 2018
+ * (SEMAR, tonnes), Cayo Arcas at sea among them. The yearbook doesn't split crude from products.
+ */
+const CRUDO_POR_PUERTO = {
+  'puerto:dos-bocas': PUERTOS['dos-bocas']['2018'][1],
+  'cayo-arcas': 26882907,
+  'puerto:coatzacoalcos': PUERTOS.coatzacoalcos['2018'][1],
+  'puerto:salina-cruz': PUERTOS['salina-cruz']['2018'][1],
+};
+
 // ---- real series ---------------------------------------------------------------------------------------
 
 /** Segundo Informe de Gobierno, anexo: Pemex's crude production (por activos, total) and crude exports, Mbd. */
@@ -424,6 +520,31 @@ const datos = {
     minatitlan: 'puerto:coatzacoalcos',
     madero: 'puerto:tampico',
     olmeca: 'puerto:dos-bocas',
+  },
+  importacion: {
+    tope: TOPE,
+    puertasZona: PUERTAS_ZONA,
+    puertaMar: PUERTA_MAR,
+    concentradores: CONCENTRADORES,
+    costa: COSTA,
+    parteRentados: 0.5,
+    dato:
+      'Por dónde entra lo importado. Cada puerto importa a lo más lo que importó en 2018 de petróleo y derivados (SEMAR), en barriles de la mezcla ' +
+      `de combustibles; Ensenada toma lo de la terminal de Rosarito (${(ROSARITO_2018.importacion / 1e6).toFixed(2)} millones de toneladas). Una ` +
+      'zona de ductos importa por los puertos que encabezan sus ductos y, pasado su tope, por tierra desde Estados Unidos. Un estado que se surte ' +
+      'por mar importa por sus puertos (sus terminales pesan por capacidad, según el mapa de la SENER); lo que pasa del tope le llega por ' +
+      'cabotaje desde Coatzacoalcos en el Golfo o Salina Cruz en el Pacífico, los dos puertos de donde salió el cabotaje de petróleo en 2018 ' +
+      `(${(PUERTOS.coatzacoalcos['2018'][3] / 1e6).toFixed(2)} y ${(PUERTOS['salina-cruz']['2018'][3] / 1e6).toFixed(2)} millones de toneladas). ` +
+      'La mitad de ese cabotaje la llevan los buques tanque que renta Pemex (en 2018 tenía 16 y 2 eran suyos): regla del juego.',
+    fuentes: ['semar-puertos-2024', 'sener-mapa-2018', 'asf-2018-0476'],
+  },
+  crudoPorPuerto: {
+    toneladas: CRUDO_POR_PUERTO,
+    dato:
+      'El crudo exportado sale por los cuatro puertos que más petróleo exportaron en 2018, repartido por esas toneladas (SEMAR): estimación ' +
+      'del juego, porque el anuario no separa el crudo de los derivados. Tampico (1.38 millones de toneladas) y Lázaro Cárdenas (0.96), que ' +
+      'exportaron menos, se dejan fuera.',
+    fuentes: ['semar-puertos-2024'],
   },
   dias: {
     patio: 15,

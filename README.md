@@ -193,7 +193,7 @@ saltar al siguiente libre.
   (`Trayecto.enTablero`); el tablero dibuja solo esa parte y deja de ver al barco al pasar la
   salida (`enTravesia()`, `posicionEnTablero()`).
 - **16 barcos iniciales**: Shanghái–Manzanillo–Lázaro Cárdenas, Róterdam–Veracruz–Altamira,
-  los combustibles del Pacífico desde Salina Cruz y los del Golfo, autos de Shanghái a Lázaro
+  los combustibles del Pacífico desde Salina Cruz (con Acapulco) y los del Golfo, autos de Shanghái a Lázaro
   Cárdenas y Veracruz (de costa a costa por Panamá), graneles de Guaymas a Shanghái y 10
   abastecedores de las plataformas. Nombres inventados de la geografía de México.
 - **Un motor de servicios común** (`domain/servicio.ts`) para trenes y barcos: cambia cómo se
@@ -380,16 +380,26 @@ El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedi
   días de producción).
 - **Lo que falta** (`hueco`) lo cubren las terminales de cada estado (`#inventarios`) con lo que
   dejan los trenes y buques tanque del jugador; sin eso, se importa. `#abastecer` corre en cada
-  tick y lleva las cuentas del año (`cuentaCombustibles`, `diasContados`).
+  tick y lleva las cuentas del año (`cuentaCombustibles`, `diasContados`, `importadoPorPuerta`).
+- **Por dónde entra lo importado** (`importacion` en el JSON): cada puerto importa a lo más lo de
+  2018 (`topeImportacion`, SEMAR). Una zona importa por los puertos de sus ductos (`PUERTAS_ZONA`)
+  y luego por tierra (`POR_TIERRA`); un estado por mar, por los suyos (`PUERTA_MAR`). Lo que pasa
+  del tope (`abasto.cabotaje`, `abasto.puertos`) llega por cabotaje desde su concentrador
+  (Coatzacoalcos o Salina Cruz): la mitad en los buques que renta Pemex (`PARTE_RENTADOS`, de las
+  refinerías de esa costa si sobra y si no importado) y la otra mitad espera en `#patiosImp` a los
+  vehículos del jugador, que la llevan como `combustibleImp`. Lo que dejan para el cabotaje se
+  guarda aparte (`#inventariosCab`, `#inventariosImp`); lo que no llega se cuenta como `faltante`.
 - **Los vehículos:**
   - las refinerías son sitios (`refineria:<id>`) y paradas de tren donde hay vía a ≤ 15 km;
   - las de la costa cargan también en su puerto (`PUERTO_DE_REFINERIA`);
   - un tren comparte sus 2,436 t con exportaciones y carga nacional (~19,800 barriles con los
     factores de la EIA);
   - un buque tanque lleva 320 mil barriles;
-  - `Barco` y `Tren` llevan `combustible`, `combustibleDe` y `entregadoCombustible`, y los buques
-    tanque tienen `llegadas` como los trenes.
-- **El crudo** se produce al ritmo real (anexo del Segundo Informe) y se exporta lo que no se refina.
+  - `Barco` y `Tren` llevan `combustible`, `combustibleDe` y `entregadoCombustible` (y
+    `combustibleImp`, `combustibleImpDe`, `entregadoImp` para lo importado), y los buques tanque
+    tienen `llegadas` como los trenes.
+- **El crudo** se produce al ritmo real (anexo del Segundo Informe) y se exporta lo que no se
+  refina, por Dos Bocas, Cayo Arcas, Coatzacoalcos y Salina Cruz (`crudoPorPuerto`, como en 2018).
 
 El tablero tiene la capa *Combustibles*: los estados por la parte que vino del país y las 78
 terminales de Pemex. Detalle en la [enciclopedia](docs/enciclopedia.md#los-combustibles).
@@ -714,7 +724,9 @@ costa del mundo solo sube de resolución). Además:
   - los oleoductos troncales, que no están en las fuentes abiertas (los poliductos que faltaban
     ya se dibujan con las tablas del mapa de la SENER de 2018);
   - el combustóleo, el gas LP y la turbosina como cargas aparte; hoy los combustibles son una sola
-    mezcla;
+    mezcla. El combustóleo iría como el carbón de Nava: de las refinerías a las centrales de la CFE,
+    y lo demás a exportar;
+  - que lo que falte (el desabasto, que ya se mide) tenga consecuencias;
   - las cifras por refinería de 2022 a septiembre de 2024, si se consigue el Anuario Estadístico
     de Pemex (su sitio no deja bajarlo automáticamente).
 - **Energía**: el Plan de Expansión de la CFE 2026–2030 (52 proyectos) en el catálogo, cuando se

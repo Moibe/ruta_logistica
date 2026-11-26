@@ -3331,7 +3331,7 @@ los servicios regulares de las navieras.
 | --- | --- | --- | ---: | ---: | ---: |
 | Mar de Cortés | Portacontenedores | Shanghái → Manzanillo → Lázaro Cárdenas → Shanghái | 26,578 km | 3,764 km | 36.7 d |
 | Cabo Corrientes | Portacontenedores | Róterdam → Veracruz → Altamira → Róterdam | 19,472 km | 5,256 km | 27.8 d |
-| Arrecife Alacranes | Buque tanque | Salina Cruz → Lázaro Cárdenas → Manzanillo → Mazatlán → Guaymas → Salina Cruz | 4,781 km | 4,781 km | 12.7 d |
+| Arrecife Alacranes | Buque tanque | Salina Cruz → Acapulco → Lázaro Cárdenas → Manzanillo → Mazatlán → Guaymas → Salina Cruz | 4,808 km | 4,808 km | 13.7 d |
 | Isla Tiburón | Buque tanque | Coatzacoalcos → Dos Bocas → Progreso → Coatzacoalcos | 1,311 km | 1,311 km | 5.1 d |
 | Bahía de Banderas | Ro-ro de autos | Lázaro Cárdenas → Veracruz → Shanghái → Lázaro Cárdenas, de costa a costa por Panamá | 37,888 km | 15,074 km | 51.2 d |
 | Laguna de Términos | Granelero | Guaymas → Shanghái → Guaymas | 25,838 km | 3,024 km | 48.2 d |
@@ -3345,11 +3345,14 @@ salidas al mundo. El ciclo completo suma la navegación y todas las escalas. Una
   Veracruz y Altamira). Traen importaciones y se llevan exportaciones (ver
   [El comercio por mar](#el-comercio-por-mar)).
 - **Arrecife Alacranes**: la distribución de combustibles por la costa del Pacífico desde la
-  refinería de Salina Cruz. Sale cargado con lo que le sobra a Salina Cruz (ver
-  [Los combustibles](#los-combustibles)).
-- **Isla Tiburón**: el reparto de combustibles por el Golfo. Empieza vacío: en 2018 ni Minatitlán
-  ni Dos Bocas tenían qué mandar. Se llena cuando opera la Olmeca o cuando a la zona del centro le
-  sobra combustible.
+  refinería de Salina Cruz. Sale cargado con lo que le sobra a Salina Cruz y con lo que se importa
+  ahí para el cabotaje. Desde el 26 de noviembre de 2026 escala primero en Acapulco, que no importa
+  combustibles y en 2018 recibió 1.23 millones de toneladas por cabotaje (ver
+  [Por dónde entra lo importado](#por-dónde-entra-lo-importado)).
+- **Isla Tiburón**: el reparto de combustibles por el Golfo. En 2018 ni Minatitlán ni Dos Bocas
+  tenían qué mandar: lleva a Progreso lo que se importa en Coatzacoalcos para el cabotaje, como
+  Pajaritos en la realidad. Carga combustible del país cuando opera la Olmeca o cuando a la zona
+  del centro le sobra.
 - **Diez barcos abastecedores** llevan el abasto a los complejos de plataformas desde Dos Bocas y
   Ciudad del Carmen (ver [Las plataformas del Golfo](#las-plataformas-del-golfo)).
 - **Bahía de Banderas**: trae autos de Asia a los dos litorales y se lleva carga general de
@@ -3366,9 +3369,9 @@ Detalle por tramo:
   (16.6 d).
 - **Cabo Corrientes**: Róterdam–Veracruz 9,515 km (11.9 d, de ellos 7,108 km de travesía) ·
   Veracruz–Altamira 419 km (13 h) · Altamira–Róterdam 9,538 km (11.9 d).
-- **Arrecife Alacranes**: Salina Cruz–Lázaro Cárdenas 850 km (1.4 d) · Lázaro Cárdenas–
-  Manzanillo 299 km (12 h) · Manzanillo–Mazatlán 570 km (22 h) · Mazatlán–Guaymas 721 km
-  (1.2 d) · Guaymas–Salina Cruz 2,341 km (3.8 d).
+- **Arrecife Alacranes**: Salina Cruz–Acapulco 584 km (23 h) · Acapulco–Lázaro Cárdenas 292 km
+  (11 h) · Lázaro Cárdenas–Manzanillo 299 km (12 h) · Manzanillo–Mazatlán 570 km (22 h) ·
+  Mazatlán–Guaymas 721 km (1.2 d) · Guaymas–Salina Cruz 2,341 km (3.8 d).
 - **Isla Tiburón**: Coatzacoalcos–Dos Bocas 157 km (6 h) · Dos Bocas–Progreso 516 km (20 h) ·
   Progreso–Coatzacoalcos 638 km (1.0 d).
 - **Bahía de Banderas**: Lázaro Cárdenas–Veracruz 5,698 km (7.5 d) · Veracruz–Shanghái 18,917
@@ -4036,7 +4039,9 @@ enero a octubre (SEMAR, cifras preliminares). En el juego todo lo que hace va a 
    produce cada una. Cabe hasta 15 días de lo que produce la refinería; pasado eso, ya no tiene
    salida, y la barra lo avisa.
 3. **Las terminales.** Lo que a un estado le falta lo cubre el combustible que tus trenes y buques
-   tanque dejaron en sus terminales. Cuando se acaba, **se importa**.
+   tanque dejaron en sus terminales. Cuando se acaba, **se importa** por un puerto o por tierra, y lo
+   que su puerto no alcanza a importar tiene que llegarle por cabotaje (ver [Por dónde entra lo
+   importado](#por-dónde-entra-lo-importado)).
 
 Los 15 días son reglas del juego, no cifras oficiales.
 
@@ -4056,16 +4061,20 @@ Los 15 días son reglas del juego, no cifras oficiales.
     carga nacional llena lo que queda.
   - Un buque tanque lleva **320 mil barriles**, lo que carga uno de los de Pemex.
   - Solo los buques tanque llevan combustible; las demás clases todavía van vacías.
-- **Dónde descargan.** En la primera parada cuyo estado tenga falta, hasta 15 días de lo que no le
-  traen sus ductos, y nunca de vuelta en la refinería de donde salió. Progreso surte también a
-  Campeche y Quintana Roo, y Mazatlán a Nayarit. Un vehículo lleva el combustible de una sola
-  refinería a la vez.
+- **Dónde descargan.** Primero donde el combustible tiene que llegar por cabotaje, porque el
+  puerto no alcanza a importarlo (ver abajo). Lo que no hace falta en el resto de su recorrido lo
+  dejan en la primera parada cuyo estado tenga falta, hasta 15 días de lo que no le traen sus
+  ductos, y nunca de vuelta en la refinería de donde salió. Progreso surte también a Campeche y
+  Quintana Roo, y Mazatlán a Nayarit. Un vehículo lleva el combustible de una sola refinería a la
+  vez, y aparte, lo importado de un concentrador.
 
 **Cómo empieza la partida.** Las refinerías hacen 337 Mbd, el 27 % de lo que usa el país, y 299
-llegan por ducto. Solo a la zona de Salina Cruz le sobra combustible, unos 37 Mbd. Lo llevan el
-buque tanque *Arrecife Alacranes* por el Pacífico y el tren Coatzacoalcos ⇄ Salina Cruz por el
-Istmo. El *Isla Tiburón* empieza vacío: en 2018 Minatitlán no tenía qué mandar, y el Golfo y la
-península se surtían con importaciones. El país importa unos 895 Mbd.
+llegan por ducto. Solo a la zona de Salina Cruz le sobra combustible, unos 37 Mbd. Los buques que
+renta Pemex se llevan 21 al cabotaje del Pacífico; el resto lo llevan el tren Coatzacoalcos ⇄
+Salina Cruz por el Istmo y el buque tanque *Arrecife Alacranes*, que además lleva lo que se importa
+en Salina Cruz para Acapulco, Lázaro Cárdenas y Guaymas. El *Isla Tiburón* y el tren Coatzacoalcos ⇄
+Progreso llevan a la península lo que se importa en Coatzacoalcos: en 2018 Minatitlán no tenía qué
+mandar. El país importa unos 895 Mbd.
 
 Lo que se puede llegar a hacer (cálculos del juego):
 
@@ -4113,6 +4122,18 @@ Por tren se movieron (ATTRAPI, millones de toneladas):
 adelante se repite la de 2026. Lo que no procesan las refinerías del país se exporta, en los barcos
 de los compradores. Al empezar se exportan 1,221 Mbd; en 2018 se exportaron de verdad 1,184.
 
+Sale por los cuatro puertos que más petróleo exportaron en 2018, repartido por esas toneladas
+(SEMAR). El anuario no separa el crudo de los derivados, así que el reparto es **estimación del
+juego**. Tampico (1.38 millones de toneladas) y Lázaro Cárdenas (0.96), que exportaron menos, se
+dejan fuera.
+
+| Puerto | Exportó en 2018 (millones de t) | Parte | Al empezar (Mbd) |
+| --- | ---: | ---: | ---: |
+| Dos Bocas | 30.62 | 43.6 % | 532 |
+| Cayo Arcas, en el mar | 26.88 | 38.2 % | 467 |
+| Coatzacoalcos (con Pajaritos) | 8.31 | 11.8 % | 144 |
+| Salina Cruz | 4.48 | 6.4 % | 78 |
+
 | Año | Crudo producido | Crudo exportado | Combustibles que hizo Pemex | Combustibles que importó Pemex |
 | --- | ---: | ---: | ---: | ---: |
 | 2018 | 1,833 | 1,184 | 359 | 877 |
@@ -4138,21 +4159,25 @@ vino del país, y dibuja las 78 terminales de Pemex en el color de cómo les lle
 
 Al pasar el cursor:
 
-- **un estado** dice lo que usa, cómo se surte, lo que le traen hoy sus ductos y lo que le falta;
+- **un estado** dice lo que usa, cómo se surte, lo que le traen hoy sus ductos, lo que le falta y
+  por dónde se importa, lo que le llega por cabotaje y, si no le llegó, cuánto le faltó;
 - **una terminal** dice cómo se surte, según el mapa de la SENER;
-- **un puerto** da su petróleo y derivados de 2018 (de 2024 en Realidad, desde ese año);
+- **un puerto** da su petróleo y derivados de 2018 (de 2024 en Realidad, desde ese año). En el
+  juego dice además cuánto importa este año y cuánto puede, lo que le llega por cabotaje, lo que
+  espera en un concentrador y el crudo que sale por él;
 - **una refinería** dice cuánto espera en su patio.
 
 La leyenda da las cifras del país en el año. La capa no se puede ver junto con la de Energía: las
 dos pintan los estados. En Realidad no hay cifras por estado; la leyenda da las del país.
 
 **La barra de arriba.** En la celda *Refinación*, la segunda línea dice qué parte de los
-combustibles que usaron los estados este año vino del país. Al pasar el cursor da cuánto se
-importó, cuánto llegó por ducto, en tren y en barco, y el crudo exportado. En Realidad dice qué
-parte de lo que vendió Pemex hizo él mismo: lo que produjo entre lo que produjo más lo que importó.
+combustibles que usaron los estados este año vino del país. Al pasar el cursor da cuánto llegó por
+ducto, en tus trenes, en tus buques tanque y en los que renta Pemex; cuánto se importó y por dónde;
+cuánto faltó, y el crudo exportado y por dónde sale. En Realidad dice qué parte de lo que vendió
+Pemex hizo él mismo: lo que produjo entre lo que produjo más lo que importó.
 
 **Las fichas** de cada tren y cada buque tanque dicen cuánto combustible llevan, de qué refinería y
-cuánto han entregado.
+cuánto han entregado, y aparte lo importado que llevan de un concentrador.
 
 **Lo que falta o es estimación:**
 
@@ -4162,12 +4187,96 @@ cuánto han entregado.
 - **Los patios y las terminales:** los 15 días son reglas del juego.
 - **La carga nacional:** el tráfico interior por tren de la ATTRAPI ya incluye algo de combustible,
   así que cuenta un poco doble.
+- **Por dónde entra lo importado:** el tope de cada puerto, los concentradores, la mitad que llevan
+  los buques que renta Pemex y el reparto del crudo entre puertos son reglas o estimaciones del juego
+  (ver abajo).
 - **Lo que no está todavía:** el combustóleo, el gas LP y la turbosina como carga aparte, y la
-  logística de las importaciones (en el juego llegan solas).
+  exportación de combustibles: lo que sobra se queda en los patios.
 
 **Cómo se generan.** `scripts/combustibles/gen-combustibles.mjs` escribe
 `src/lib/domain/datos/combustibles.json` con todo lo de arriba y la fuente de cada cifra. Es
 autocontenido: las cifras se leyeron una vez de sus fuentes y viven en el script.
+
+#### Por dónde entra lo importado
+
+Lo que el país no hace, o no lleva a donde falta, se importa, y entra por algún lado. El juego lo
+hace entrar por los puertos por donde entró en 2018, con el petróleo y derivados de cada uno en el
+anuario de puertos de la SEMAR:
+
+- **Cada puerto importa, a lo más, lo que importó en 2018**, pasado a barriles de la mezcla de
+  combustibles. El anuario junta todos los petrolíferos (gas LP, combustóleo y otros), así que el
+  tope es holgado: **estimación del juego**. Ensenada toma lo de la terminal de Rosarito, que no es
+  puerto del tablero: 2.49 millones de toneladas.
+- **Una zona de ductos** importa por los puertos que encabezan sus ductos: la del centro por
+  Tuxpan, Coatzacoalcos, Veracruz y Dos Bocas; la del noreste por Tampico; la de Salina Cruz por su
+  puerto. Pasado su tope, lo demás llega **por tierra** desde Estados Unidos: el ducto
+  Brownsville–Cadereyta, el tren y el autotanque. Todo eso llega solo, por ducto.
+- **Lo que va por tren**, a Durango y a Ciudad Valles, también llega solo, por tierra.
+- **Un estado que se surte por mar** importa por sus puertos, cada uno según la capacidad de sus
+  terminales en el mapa de la SENER. **Lo que pasa del tope tiene que llegarle por cabotaje** desde el
+  **concentrador** de su costa: Coatzacoalcos en el Golfo y Salina Cruz en el Pacífico, los dos
+  puertos de donde salió el cabotaje de petróleo en 2018 (3.73 y 3.55 millones de toneladas). Ahí
+  sale primero lo que sobra en las refinerías de esa costa; si no alcanza, se importa en el
+  concentrador, sin tope.
+- **La mitad de ese cabotaje la llevan los buques tanque que renta Pemex**, solos: en 2018 tenía 16
+  buques tanque y solo 2 eran suyos (ASF). La otra mitad espera en el patio del concentrador, hasta
+  15 días, a tus buques tanque y trenes. Las dos cosas son **reglas del juego**, como la mitad que
+  llevan los ferrocarriles privados en las cadenas de los minerales.
+- **Si no llega, falta.** Lo que un estado no recibe se cuenta como **desabasto**: lo dicen su
+  ficha, la de su puerto, la leyenda y la barra. Por ahora solo se mide.
+- **El combustible del país va primero.** Lo que tus trenes y buques dejan en una terminal sustituye
+  importaciones. Lo que dejan para el cabotaje se guarda para lo que el puerto no alcanza a
+  importar, y no se gasta antes en lo que sí podía importar.
+
+Al empezar la partida, cuatro puertos no alcanzan (miles de barriles diarios; cálculo del juego):
+
+| Puerto | Importó en 2018 (millones de t) | Puede importar | Piden sus terminales | Por cabotaje | Desde |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Progreso, con Campeche y Quintana Roo | 0.61 | 13.6 | 70.0 | 56.4 | Coatzacoalcos |
+| Acapulco | 0 | 0 | 20.2 | 20.2 | Salina Cruz |
+| Lázaro Cárdenas | 0.53 | 11.8 | 29.9 | 18.1 | Salina Cruz |
+| Guaymas | 1.74 | 38.8 | 43.4 | 4.6 | Salina Cruz |
+
+Son los cuatro que más recibieron por cabotaje en 2018, en el mismo orden: 2.51, 1.23, 0.67 y 0.61
+millones de toneladas (SEMAR). Los 56.4 mil barriles diarios de Progreso son 2.53 millones de
+toneladas al año, casi lo que recibió. Manzanillo, La Paz, Mazatlán y Topolobampo también recibieron
+algo por cabotaje (de 0.33 a 0.56 millones de toneladas), pero en el juego importan todo lo que piden
+sus terminales; el anuario no dice qué producto era.
+
+Por eso cambió la flota inicial: el *Arrecife Alacranes* escala primero en Acapulco, y el *Isla
+Tiburón* y el tren Coatzacoalcos ⇄ Progreso llevan a la península lo que se importa en
+Coatzacoalcos.
+
+Por dónde entró lo importado en las primeras seis semanas de 2019, con la flota inicial, al lado de
+lo que importó cada puerto en 2018 (miles de barriles diarios; el juego lo calcula, y 2018 está
+pasado a barriles de combustible):
+
+| Por dónde | Juego, 2019 | 2018 (SEMAR) |
+| --- | ---: | ---: |
+| Coatzacoalcos | 248 | 251 |
+| Tuxpan | 221 | 226 |
+| Por tierra | 89 | — |
+| Tampico | 77 | 77 |
+| Ensenada (Rosarito) | 53 | 55 |
+| Veracruz | 40 | 40 |
+| Guaymas | 39 | 39 |
+| Mazatlán | 29 | 44 |
+| Topolobampo | 25 | 36 |
+| Salina Cruz | 20 | 1 |
+| La Paz | 15 | 16 |
+| Progreso | 14 | 14 |
+| Lázaro Cárdenas | 12 | 12 |
+| Manzanillo | 11 | 58 |
+| Dos Bocas | 2 | 2 |
+
+En los puertos del Golfo cuadra casi exacto. Salina Cruz importa en el juego lo que el cabotaje del
+Pacífico no alcanza a llevar de su refinería, y en 2018 casi no importó: **estimación del juego**.
+Manzanillo, Mazatlán y Topolobampo importaron en 2018 más de lo que piden sus terminales en el juego.
+Lo que entra por tierra sale por diferencia: no se encontró una cifra oficial por cruce.
+
+Con la flota inicial no falta combustible al empezar. Con todas las obras de Pemex hechas (sin Deer
+Park), los buques que renta Pemex llevan ya combustible del país, de Salina Cruz y de la Olmeca, y
+del país llega el 60 %: el resto del sobrante espera tus trenes y buques.
 
 ### Las plataformas del Golfo
 
@@ -4640,7 +4749,19 @@ los otros dos aún no se capturan.
 - **Las importaciones y el crudo de exportación llegan y se van solos.** *(22 nov 2026.)* Pemex
   importa con barcos fletados y vende su crudo en sus terminales a buques de los compradores. El
   jugador hace lo que hacía la flota de Pemex: llevar el combustible del país por la costa y por el
-  Istmo.
+  Istmo. Cambió el 26 de noviembre de 2026: ver la decisión siguiente.
+- **Lo importado entra por su puerto.** *(26 nov 2026.)* El usuario preguntó si ya estaban las
+  exportaciones e importaciones de crudo y de gasolina: estaban, pero ocurrían solas. Aprobó la
+  propuesta:
+  - lo importado entra por los puertos por donde entró en 2018, cada uno hasta lo que importó;
+  - lo que un puerto no alcanza le llega por cabotaje desde Coatzacoalcos o Salina Cruz;
+  - la mitad la llevan los buques que renta Pemex, como los ferrocarriles privados en los
+    minerales, y la otra mitad espera a los buques del jugador;
+  - lo que no llega se mide como desabasto, sin consecuencia todavía;
+  - el crudo exportado sale por cuatro puertos, y solo se mide.
+
+  La flota inicial cambió para cubrir lo de 2018: el buque del Pacífico escala en Acapulco. Ver
+  [Por dónde entra lo importado](#por-dónde-entra-lo-importado).
 - **El tren también carga en el puerto de una refinería de la costa.** *(22 nov 2026.)* Salina
   Cruz, Pajaritos (Coatzacoalcos) y Madero (Tampico) tienen la refinería junto al muelle. Así el
   tren del Istmo de la partida ya lleva combustible de Salina Cruz al Golfo, como el corredor que el

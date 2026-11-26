@@ -1521,6 +1521,110 @@
   "madero": "puerto:tampico",
   "olmeca": "puerto:dos-bocas"
  },
+ "importacion": {
+  "tope": {
+   "puerto:guaymas": 38.8,
+   "puerto:topolobampo": 35.7,
+   "puerto:la-paz": 15.6,
+   "puerto:mazatlan": 44,
+   "puerto:manzanillo": 57.9,
+   "puerto:lazaro-cardenas": 11.8,
+   "puerto:salina-cruz": 0.7,
+   "puerto:tampico": 77.2,
+   "puerto:tuxpan": 225.7,
+   "puerto:veracruz": 40.4,
+   "puerto:coatzacoalcos": 251,
+   "puerto:dos-bocas": 2.3,
+   "puerto:progreso": 13.6,
+   "puerto:ensenada": 55.5
+  },
+  "puertasZona": {
+   "centro": [
+    "puerto:tuxpan",
+    "puerto:coatzacoalcos",
+    "puerto:veracruz",
+    "puerto:dos-bocas"
+   ],
+   "noreste": [
+    "puerto:tampico"
+   ],
+   "sur": [
+    "puerto:salina-cruz"
+   ]
+  },
+  "puertaMar": {
+   "BC": {
+    "puerto:ensenada": 1
+   },
+   "BCS": {
+    "puerto:la-paz": 1
+   },
+   "CAMP": {
+    "puerto:progreso": 1
+   },
+   "COL": {
+    "puerto:manzanillo": 1
+   },
+   "GRO": {
+    "puerto:acapulco": 1
+   },
+   "MICH": {
+    "puerto:lazaro-cardenas": 1
+   },
+   "NAY": {
+    "puerto:mazatlan": 1
+   },
+   "QROO": {
+    "puerto:progreso": 1
+   },
+   "SIN": {
+    "puerto:topolobampo": 0.599,
+    "puerto:mazatlan": 0.401
+   },
+   "SON": {
+    "puerto:guaymas": 1
+   },
+   "YUC": {
+    "puerto:progreso": 1
+   }
+  },
+  "concentradores": {
+   "golfo": "puerto:coatzacoalcos",
+   "pacifico": "puerto:salina-cruz"
+  },
+  "costa": {
+   "puerto:ensenada": "pacifico",
+   "puerto:la-paz": "pacifico",
+   "puerto:progreso": "golfo",
+   "puerto:manzanillo": "pacifico",
+   "puerto:acapulco": "pacifico",
+   "puerto:lazaro-cardenas": "pacifico",
+   "puerto:mazatlan": "pacifico",
+   "puerto:topolobampo": "pacifico",
+   "puerto:guaymas": "pacifico",
+   "puerto:coatzacoalcos": "golfo",
+   "puerto:salina-cruz": "pacifico"
+  },
+  "parteRentados": 0.5,
+  "dato": "Por dónde entra lo importado. Cada puerto importa a lo más lo que importó en 2018 de petróleo y derivados (SEMAR), en barriles de la mezcla de combustibles; Ensenada toma lo de la terminal de Rosarito (2.49 millones de toneladas). Una zona de ductos importa por los puertos que encabezan sus ductos y, pasado su tope, por tierra desde Estados Unidos. Un estado que se surte por mar importa por sus puertos (sus terminales pesan por capacidad, según el mapa de la SENER); lo que pasa del tope le llega por cabotaje desde Coatzacoalcos en el Golfo o Salina Cruz en el Pacífico, los dos puertos de donde salió el cabotaje de petróleo en 2018 (3.73 y 3.55 millones de toneladas). La mitad de ese cabotaje la llevan los buques tanque que renta Pemex (en 2018 tenía 16 y 2 eran suyos): regla del juego.",
+  "fuentes": [
+   "semar-puertos-2024",
+   "sener-mapa-2018",
+   "asf-2018-0476"
+  ]
+ },
+ "crudoPorPuerto": {
+  "toneladas": {
+   "puerto:dos-bocas": 30623149,
+   "cayo-arcas": 26882907,
+   "puerto:coatzacoalcos": 8310717,
+   "puerto:salina-cruz": 4481608
+  },
+  "dato": "El crudo exportado sale por los cuatro puertos que más petróleo exportaron en 2018, repartido por esas toneladas (SEMAR): estimación del juego, porque el anuario no separa el crudo de los derivados. Tampico (1.38 millones de toneladas) y Lázaro Cárdenas (0.96), que exportaron menos, se dejan fuera.",
+  "fuentes": [
+   "semar-puertos-2024"
+  ]
+ },
  "dias": {
   "patio": 15,
   "porSurtir": 15,

@@ -26,15 +26,24 @@
   } from '$lib/domain/ductos';
   import { ADUANA_DEL_SITIO, EXPORTACIONES, SALIDAS } from '$lib/domain/exportaciones';
   import {
+    CONCENTRADORES,
+    concentradorDe,
+    costaDe,
+    crudoPorPuerto,
     delPais,
     DIAS_EN_PATIO,
+    estadosQueSurte,
     realDelAño,
     ESTADOS_CONSUMO,
+    POR_TIERRA,
+    PUERTA_MAR,
+    PUERTAS_ZONA,
     PUERTO_DE_REFINERIA,
     PUERTOS_COMBUSTIBLE,
     REFINERIA_DEL_PUERTO,
     REPARTO,
     TERMINALES,
+    topeImportacion,
     ZONA,
     ZONAS_DEL_ESTADO,
     type Terminal,
@@ -381,6 +390,29 @@
     return { como, juego };
   }
 
+  /** Thousand barrels a day, on average so far in a game year, of a year's count in barrels. */
+  const mbdDelAño = (barriles: number, año: number) => barriles / sim.diasContados(año) / 1000;
+
+  /** Where a game year's fuel imports came in, biggest first: «Coatzacoalcos 250, Tuxpan 221…» (Mbd). */
+  function puertasDelAño(año: number, cuantas: number): string {
+    return Object.entries(sim.importadoPorPuerta(año))
+      .filter(([, b]) => mbdDelAño(b, año) >= 0.5)
+      .sort((x, y) => y[1] - x[1])
+      .slice(0, cuantas)
+      .map(([k, b]) => `${k === POR_TIERRA ? 'por tierra' : nombreCorto(k)} ${fmtMil(mbdDelAño(b, año))}`)
+      .join(', ');
+  }
+
+  /** The ports a state's imports come in through: its own by sea, its zones', and by land. */
+  function puertasDelEstado(clave: string): string {
+    const r = REPARTO[clave] ?? {};
+    const zonas = ZONAS_DEL_ESTADO.get(clave) ?? [];
+    const puertos = [...new Set([...(PUERTA_MAR.get(clave) ?? []).map(([p]) => p), ...zonas.flatMap((z) => PUERTAS_ZONA.get(z.id) ?? [])])];
+    const tierra = !!r.tren || zonas.some((z) => z.id === 'noreste');
+    const lista = [...puertos.map(nombreCorto), ...(tierra ? ['por tierra desde Estados Unidos'] : [])];
+    return lista.length > 1 ? `${lista.slice(0, -1).join(', ')} y ${lista[lista.length - 1]}` : (lista[0] ?? '');
+  }
+
   /** The fill of a state on the fuel layer: dark when it imports, amber as more of it comes from the country. */
   const colorCombustible = (parte: number) => `rgba(245, 185, 113, ${(0.05 + 0.5 * Math.max(0, Math.min(1, parte))).toFixed(3)})`;
 
@@ -400,9 +432,12 @@
     const dias = sim.diasContados(año);
     const mbd = (b: number) => fmtMil(b / dias / 1000);
     const crudo = sim.crudoExportado;
+    const puertas = puertasDelAño(año, 3);
     return (
-      `${año}: del país vino el ${Math.round(delPais(c) * 100)} % (${mbd(c.ducto)} mil b/d por ducto, ${mbd(c.tren)} en tren, ${mbd(c.barco)} en barco); ` +
-      `se importan ${mbd(c.importado)} mil b/d. Crudo exportado: ${fmtMil(crudo)} mil b/d.`
+      `${año}: del país vino el ${Math.round(delPais(c) * 100)} % (${mbd(c.ducto)} mil b/d por ducto, ${mbd(c.tren)} en tren, ${mbd(c.barco)} en barco` +
+      `${c.rentados > 0 ? `, ${mbd(c.rentados)} en los buques que renta Pemex` : ''}); se importan ${mbd(c.importado)} mil b/d` +
+      `${puertas ? `, sobre todo ${puertas.startsWith('por ') ? '' : 'por '}${puertas}` : ''}` +
+      `${c.faltante / dias >= 500 ? `; faltaron ${mbd(c.faltante)} mil b/d` : ''}. Crudo exportado: ${fmtMil(crudo)} mil b/d.`
     );
   });
 
@@ -3112,6 +3147,46 @@
         </span>
         {#if pet.nota}<span class="tip-sub">{pet.nota}</span>{/if}
       {/if}
+      {#if layers.combustibles && sim.modo === 'juego' && sim.abasto}
+        {@const clave = `puerto:${hovered.puerto.id}`}
+        {@const _reloj = sim.horas}
+        {@const año = añoDe(sim.horas)}
+        {@const importa = mbdDelAño(sim.importadoPorPuerta(año)[clave] ?? 0, año)}
+        {@const paraCabotaje = mbdDelAño(sim.importadoParaCabotaje(año)[clave] ?? 0, año)}
+        {@const tope = topeImportacion(clave)}
+        {@const pide = sim.abasto.puertos.get(clave)}
+        {@const crudo = crudoPorPuerto(sim.crudoExportado).get(clave)}
+        {#if importa >= 0.05 || tope > 0}
+          <span class="tip-rail" style:color={COMBUSTIBLE}>
+            Este año importa {fmtMil(importa)} mil b/d de combustibles{CONCENTRADORES.has(clave)
+              ? paraCabotaje >= 0.05
+                ? importa - paraCabotaje >= 0.05
+                  ? `: ${fmtMil(paraCabotaje)} para el cabotaje y ${fmtMil(importa - paraCabotaje)} para sus ductos`
+                  : ', todo para el cabotaje'
+                : ''
+              : tope > 0
+                ? `, de ${fmtMil(tope)} que puede: lo que importó en 2018`
+                : ''}
+          </span>
+        {/if}
+        {#if pide && pide.cabotaje > 0.05}
+          {@const faltan = estadosQueSurte(clave, hovered.puerto.estado).reduce((s, e) => s + sim.cuentaCombustibles(año, e).faltante, 0)}
+          <span class="tip-sub">
+            Sus terminales piden {fmtMil(pide.pide)} mil b/d{pide.tope > 0 ? ` y puede importar ${fmtMil(pide.tope)}` : ' y no importa'}: {fmtMil(pide.cabotaje)} mil le llegan por cabotaje desde {nombreCorto(concentradorDe(clave) ?? '')}, la mitad en los buques que renta Pemex y la otra mitad en tus buques tanque y trenes
+          </span>
+          {#if mbdDelAño(faltan, año) >= 0.05}
+            <span class="tip-sub alerta-tip">En {año} les faltaron {fmtMil(mbdDelAño(faltan, año))} mil b/d</span>
+          {/if}
+        {/if}
+        {#if CONCENTRADORES.has(clave)}
+          <span class="tip-sub">
+            Concentrador del cabotaje del {costaDe(clave) === 'golfo' ? 'Golfo' : 'Pacífico'}: aquí cargan tus buques tanque y trenes lo importado para los puertos que no alcanzan a importar · {fmtMil(sim.enPatioImp(clave) / 1000)} mil barriles en espera
+          </span>
+        {/if}
+        {#if crudo}
+          <span class="tip-sub" style:color={CRUDO}>Sale por aquí crudo de exportación: unos {fmtMil(crudo)} mil b/d, en los barcos de los compradores</span>
+        {/if}
+      {/if}
     {:else if hovered.kind === 'aeropuerto'}
       {@const a = hovered.aeropuerto}
       {@const año = añoAeropuerto()}
@@ -3316,6 +3391,9 @@
       <strong>{CAYO_ARCAS.nombre}</strong>
       <span class="tip-sub">Aquí cargan su crudo los barcos de los compradores, que llega por ducto submarino desde los complejos.</span>
       <span class="tip-rail">Exportó {mt(ex['2018'])} de crudo en 2018 y {mt(ex['2024'])} en 2024 (SEMAR)</span>
+      {#if sim.modo === 'juego'}
+        <span class="tip-sub">Hoy salen por aquí unos {fmtMil(crudoPorPuerto(sim.crudoExportado).get('cayo-arcas') ?? 0)} mil b/d del crudo que exporta el país (su parte de 2018)</span>
+      {/if}
     {:else if hovered.kind === 'terminal'}
       {@const t = hovered.terminal}
       {@const txt = textoTerminal(t)}
@@ -3514,9 +3592,21 @@
         <span class="tip-sub">Hoy sus ductos le traen {fmtMil(a.porDucto.get(clave) ?? 0)} mil b/d de refinerías del país</span>
       {/if}
       {#if hueco > 0.05}
-        <span class="tip-sub">Le faltan {fmtMil(hueco)} mil b/d: los traen tus trenes y buques tanque, o se importan</span>
+        {@const cab = a.cabotaje.get(clave) ?? 0}
+        {@const puerto = PUERTA_MAR.get(clave)?.[0]?.[0]}
+        {@const imp = sim.enTerminalesImp(clave)}
+        <span class="tip-sub">Le faltan {fmtMil(hueco)} mil b/d: los traen tus trenes y buques tanque, o se importan por {puertasDelEstado(clave)}</span>
+        {#if cab > 0.05 && puerto}
+          <span class="tip-sub">
+            {topeImportacion(puerto) > 0 ? `${nombreCorto(puerto)} no alcanza a importar ${fmtMil(cab)} mil b/d: le llegan` : `${nombreCorto(puerto)} no importa: sus ${fmtMil(cab)} mil b/d le llegan`}
+            por cabotaje desde {nombreCorto(concentradorDe(puerto) ?? '')}, la mitad en los buques que renta Pemex y la otra mitad en tus buques tanque y trenes
+          </span>
+        {/if}
+        {#if mbdDelAño(c.faltante, año) >= 0.05}
+          <span class="tip-sub alerta-tip">En {año} le faltaron {fmtMil(mbdDelAño(c.faltante, año))} mil b/d: no le llegó el cabotaje</span>
+        {/if}
         <span class="tip-sub">
-          En sus terminales: {fmtMil(sim.enTerminales(clave) / 1000)} mil barriles que llevaste
+          En sus terminales: {fmtMil(sim.enTerminales(clave) / 1000)} mil barriles del país que llevaste{imp >= 1000 ? ` y ${fmtMil(imp / 1000)} mil importados` : ''}
           {#if c.tren + c.barco > 0}· en {año}, {fmtMil(c.tren / 1000)} mil en tren y {fmtMil(c.barco / 1000)} mil en barco{/if}
         </span>
       {/if}

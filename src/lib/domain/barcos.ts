@@ -57,6 +57,10 @@ export type Barco = Marcha & {
   combustible: number;
   combustibleDe: string | null;
   entregadoCombustible: number;
+  /** Imported fuel aboard for the coastwise trade (barrels), the hub it was loaded at, and what it has delivered so far. */
+  combustibleImp: number;
+  combustibleImpDe: string | null;
+  entregadoImp: number;
   /** Supplies aboard and delivered so far (tonnes): only supply vessels carry them. */
   abasto: number;
   entregadoAbasto: number;
@@ -138,6 +142,9 @@ export function crearBarco(mar: Mar, def: NuevoBarco): Barco | null {
     combustible: 0,
     combustibleDe: null,
     entregadoCombustible: 0,
+    combustibleImp: 0,
+    combustibleImpDe: null,
+    entregadoImp: 0,
     abasto: 0,
     entregadoAbasto: 0,
     exportacion: 0,
@@ -202,9 +209,10 @@ export type ServicioBarco = { clase: ClaseBarco; paradas: string[]; desfase: num
 export const SERVICIOS_BARCO: ServicioBarco[] = [
   { clase: 'contenedores', paradas: ['puerta:asia', 'puerto:manzanillo', 'puerto:lazaro-cardenas'], desfase: 22 },
   { clase: 'contenedores', paradas: ['puerta:europa', 'puerto:veracruz', 'puerto:altamira'], desfase: 30 },
+  // Acapulco imports nothing (it got 1.23 million tonnes coastwise in 2018): the Pacific tanker calls there first.
   {
     clase: 'tanque',
-    paradas: ['puerto:salina-cruz', 'puerto:lazaro-cardenas', 'puerto:manzanillo', 'puerto:mazatlan', 'puerto:guaymas'],
+    paradas: ['puerto:salina-cruz', 'puerto:acapulco', 'puerto:lazaro-cardenas', 'puerto:manzanillo', 'puerto:mazatlan', 'puerto:guaymas'],
     desfase: 10,
   },
   { clase: 'tanque', paradas: ['puerto:coatzacoalcos', 'puerto:dos-bocas', 'puerto:progreso'], desfase: 6 },
