@@ -1,7 +1,15 @@
 import { browser } from '$app/environment';
 import { COLORES_BARCO, crearBarco, NOMBRES_BARCO, SERVICIOS_BARCO, type Barco, type ClaseBarco } from '$lib/domain/barcos';
 import { construirMar, rutaMar, type Mar, type RutasMarJson } from '$lib/domain/mar';
-import { barrilesPorPetrolero, KMH_PETROLERO, rutasPetroleras, type Petrolero } from '$lib/domain/petroleros';
+import {
+  barrilesPorPetrolero,
+  cuentaCrudoVacia,
+  fleteMdpPorBarril,
+  KMH_PETROLERO,
+  rutasPetroleras,
+  type CuentaCrudo,
+  type Petrolero,
+} from '$lib/domain/petroleros';
 import type { Trayecto } from '$lib/domain/trayecto';
 import { construirRed, type Red, type RedJson } from '$lib/domain/red';
 import { aplicarSaturacion, costoConUso, trenesDelJugador, usoDe, type Uso } from '$lib/domain/saturacion';
@@ -375,6 +383,8 @@ class Simulacion {
   #siguientePetrolero = 1;
   /** What the State's trains charged and cost each year, millions of pesos (`tarifas.ts`). */
   #cuentasTrenes = new Map<string, CuentaTrenes>();
+  /** The crude the player's tankers took abroad each year and the freight they charged (`petroleros.ts`). */
+  #cuentasCrudo = new Map<string, CuentaCrudo>();
   /** Fuel oil each Mexican refinery makes now, Mbd (`combustoleo.ts`). Recomputed with the refineries. */
   combustoleo = $state.raw<Map<string, number>>(new Map());
   /** Fuel oil waiting in each refinery's yard, barrels. Mutated by the clock. */
@@ -552,7 +562,11 @@ class Simulacion {
         for (const c of CENTRALES_CO) this.#reservasCo.set(c.id, this.#topeReservaCo(c));
         this.#sembrarPetroleros();
         // Its first stop is where its run ends (`destinos`' last).
-        for (const b of barcos) if (b.clase === 'tanque') this.#cargarLiquidos(b, b.paradas[0], b.destinos.length - 1);
+        for (const b of barcos)
+          if (b.clase === 'tanque') {
+            this.#cargarLiquidos(b, b.paradas[0], b.destinos.length - 1);
+            this.#cargarCrudo(b, b.paradas[0], b.destinos.length - 1);
+          }
         // Half the complexes' storage full, and a supply vessel that has just left its base sails loaded.
         for (const b of barcos) if (b.clase === 'abastecedor' && BASES_ABASTO.has(b.paradas[0])) b.abasto = TONELADAS_ABASTECEDOR;
         // A cargo ship sails with what it loaded at its first stop.
@@ -1293,6 +1307,51 @@ class Simulacion {
     if (nuevos.length || siguen.length !== this.petroleros.length) this.petroleros = [...siguen, ...nuevos];
   }
 
+  /**
+   * A player's tanker at a port the country exports crude from, with a gateway ahead on its run: it
+   * loads, with the room the country's fuel and fuel oil leave, the crude waiting there for the
+   * buyers' tankers of that gateway (the first one ahead). That much less sails on theirs.
+   */
+  #cargarCrudo(b: Barco, destino: string, pierna: number) {
+    if (b.clase !== 'tanque' || this.modo !== 'juego') return;
+    const n = b.destinos.length;
+    let salida: string | null = null;
+    for (let k = 1; k < n && !salida; k++) {
+      const p = b.destinos[(pierna + k) % n];
+      if (puerta(p)) salida = p;
+    }
+    if (!salida || (b.crudoA && b.crudoA !== salida)) return;
+    const k = `${destino}|${salida}`;
+    const hay = this.#cargaPetroleros.get(k) ?? 0;
+    const sube = Math.min(hay, BARRILES_POR_TANQUE - b.combustible - b.combustibleImp - b.combustoleo - b.crudo);
+    if (sube < 1) return;
+    this.#cargaPetroleros.set(k, hay - sube);
+    b.crudo += sube;
+    b.crudoA = salida;
+  }
+
+  /** At a gateway a tanker delivers the crude aboard and charges its freight into the State's till. */
+  #entregarCrudo(b: Barco, destino: string) {
+    if (b.crudo <= 0 || !puerta(destino)) return;
+    const mdp = b.crudo * fleteMdpPorBarril(destino);
+    this.dinero += mdp;
+    b.flete += mdp;
+    b.entregadoCrudo += b.crudo;
+    const año = String(añoDe(this.horas));
+    const c = this.#cuentasCrudo.get(año) ?? cuentaCrudoVacia();
+    c.barriles += b.crudo;
+    c.mdp += mdp;
+    c.porPuerta[destino] = (c.porPuerta[destino] ?? 0) + b.crudo;
+    this.#cuentasCrudo.set(año, c);
+    b.crudo = 0;
+    b.crudoA = null;
+  }
+
+  /** A year of the crude the player's tankers took abroad and the freight they charged. Read it with `horas`. */
+  cuentaCrudo(año: number): CuentaCrudo {
+    return this.#cuentasCrudo.get(String(año)) ?? cuentaCrudoVacia();
+  }
+
   /** A year of the State's trains: charged, run and trackage rights (millions of pesos), tonne-km and train-km. Read it with `horas`. */
   cuentaTrenes(año: number): CuentaTrenes {
     return this.#cuentasTrenes.get(String(año)) ?? cuentaTrenesVacia();
@@ -1405,9 +1464,11 @@ class Simulacion {
         continue;
       }
       if (b.clase === 'tanque') {
+        this.#entregarCrudo(b, destino);
         this.#descargarCombustible(b, destino, pierna);
         this.#descargarCombustoleo(b, destino);
         this.#cargarLiquidos(b, destino, pierna);
+        this.#cargarCrudo(b, destino, pierna);
         continue;
       }
       this.#comerciar(b, destino);
@@ -1902,7 +1963,7 @@ class Simulacion {
     const quiere = this.#combustoleoQuiere(u, destino, pierna);
     // The fuel oil's room in barrels of fuel: a tanker's are barrels, a train's tonnes.
     const reservar = u.tipo === 'tren' ? (quiere * T_POR_BARRIL_CO) / T_POR_BARRIL : quiere;
-    const cabe = u.tipo === 'tren' ? u.combustible + u.combustibleImp + this.#espacioTren(u) / T_POR_BARRIL : BARRILES_POR_TANQUE - u.combustoleo;
+    const cabe = u.tipo === 'tren' ? u.combustible + u.combustibleImp + this.#espacioTren(u) / T_POR_BARRIL : BARRILES_POR_TANQUE - u.combustoleo - u.crudo;
     this.#cargarCombustible(u, destino, cabe, pierna, reservar);
     this.#cargarCombustoleo(u, destino, quiere);
   }
@@ -1918,7 +1979,9 @@ class Simulacion {
   #cargarCombustible(u: Tren | Barco, destino: string, cabe: number, pierna: number, reservar = 0) {
     if (u.tipo === 'barco' && u.clase !== 'tanque') return;
     const id = destino.startsWith('refineria:') ? destino.slice('refineria:'.length) : REFINERIA_DEL_PUERTO.get(destino);
-    if (id && !(u.combustibleDe && u.combustibleDe !== id && u.combustible > 0)) {
+    // Only for a run that calls somewhere else in the country: on one that only goes abroad it would ride along for good.
+    const dejaEn = (p: string) => !!SITIOS_POR_CLAVE.get(p)?.estado && p !== `refineria:${id}` && REFINERIA_DEL_PUERTO.get(p) !== id;
+    if (id && u.paradas.some(dejaEn) && !(u.combustibleDe && u.combustibleDe !== id && u.combustible > 0)) {
       const hay = this.#patios.get(id) ?? 0;
       const libre = cabe - u.combustible - u.combustibleImp;
       const cabotaje = reservar > 0 ? Math.max(0, this.#cabotajeAdelante(u, pierna, id) - u.combustible) : 0;
@@ -2085,7 +2148,7 @@ class Simulacion {
   #cargarCombustoleo(u: Tren | Barco, destino: string, quiere: number) {
     const id = this.#refineriaDe(destino);
     if (!id || quiere < 1) return;
-    const libre = u.tipo === 'tren' ? this.#espacioTren(u) / T_POR_BARRIL_CO : BARRILES_POR_TANQUE - u.combustible - u.combustibleImp - u.combustoleo;
+    const libre = u.tipo === 'tren' ? this.#espacioTren(u) / T_POR_BARRIL_CO : BARRILES_POR_TANQUE - u.combustible - u.combustibleImp - u.combustoleo - u.crudo;
     const sube = Math.min(quiere, this.#patiosCo.get(id) ?? 0, libre);
     if (sube < 1) return;
     this.#patiosCo.set(id, (this.#patiosCo.get(id) ?? 0) - sube);

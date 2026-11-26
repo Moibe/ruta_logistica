@@ -78,6 +78,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [CFE, Informe Anual 2018](https://gaceta.diputados.gob.mx/Gaceta/64/2019/may/CFE_IA-20190521.pdf) (en la Gaceta de la Cámara de Diputados) | El combustóleo que quemó en 2018 cada una de sus empresas de generación, y las centrales de cada una por tecnología | 21 de mayo de 2019 | Documento oficial público |
 | [ASF, auditoría 2020-0430 «Erogaciones por Mantenimiento en Refinerías»](https://www.asf.gob.mx/Trans/Informes/IR2020c/Documentos/Auditorias/2020_0430_a.pdf) | El combustóleo que hizo cada refinería en 2019 y 2020 | Cuenta Pública 2020 | Documento oficial público |
 | [ASF, auditoría 2017-0522 a CFEnergía](https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf) | El combustóleo que la CFE compraba en Estados Unidos llegaba en buque tanque a Tuxpan; el gas natural licuado, a Altamira y Manzanillo | Cuenta Pública 2017 | Documento oficial público |
+| [Argus, «Lower Venezuela cargo demand weighs on Aframaxes»](https://www.argusmedia.com/zh/news/1960292-lower-venezuela-cargo-demand-weighs-on-aframaxes) | El flete de un Aframax del Caribe a la costa del Golfo de EUA: 7.14 dólares por tonelada de abril a agosto de 2019, 11 % menos que en 2018. No se leyó la nota: se usa lo que muestra el buscador | 2019 | Prensa especializada |
+| [S&P Global, «Record US crude exports boost VLCC tanker demand, rates»](https://www.spglobal.com/energy/en/news-research/blog/crude-oil/030519-in-the-loop-record-us-crude-exports-boost-vlcc-tanker-demand-rates) | El flete de un VLCC de la costa del Golfo de EUA a China: 6.63 millones de dólares por viaje a principios de 2019. No se leyó la nota: se usa lo que muestra el buscador | Marzo de 2019 | Prensa especializada |
 | [SENER, Balance Nacional de Energía 2019](https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf) | Lo que el país exportó e importó de cada petrolífero en 2018 (en PJ), el poder calorífico neto del combustóleo (cuadro 29) y a dónde se exportó el crudo (cuadro 49) | Febrero de 2021 | Documento oficial público |
 | [ARTF, Indicadores Ferroviarios 2020](https://www.gob.mx/cms/uploads/attachment/file/559416/Indicadores_Ferroviarios_ARTF_2020_Final.pdf) | Ingreso por tonelada-km de cada concesionaria, toneladas-km, trenes-km y carros por tren de 2016 a 2019 | 2020 | Documento oficial público |
 | [GMXT, reporte del cuarto trimestre de 2018 ante la BMV](https://gmxt.mx/wp-content/uploads/2019/07/4TRIM18D-GMXT.pdf) | Ingresos y utilidad de operación de Ferromex y Ferrosur en 2018: cuánto gastaban por peso cobrado | Febrero de 2019 | Reporte regulatorio de la empresa |
@@ -4221,6 +4223,37 @@ Al empezar zarpa uno al día y algo más, y en el mar hay entre 8 y 12. Rumbo a 
 siempre uno o dos; a Asia, cuatro o cinco, porque el viaje dura un mes. Si rehabilitas refinerías o
 terminas la Olmeca, se exporta menos crudo y zarpan menos.
 
+**Tus buques tanque también lo pueden llevar.** Un buque tanque tuyo cuya ruta pasa por Dos Bocas,
+Coatzacoalcos o Salina Cruz y sigue a una salida al mundo carga ahí el crudo que espera al siguiente
+petrolero de los compradores rumbo a esa salida (la primera que tenga adelante). Lo que lleva tu buque
+ya no lo lleva el de ellos: el país exporta lo mismo, solo cambia quién lo transporta.
+
+- **Cuánto carga.** Hasta 320 mil barriles, con el espacio que le dejan el combustible y el combustóleo
+  del país, que van primero. Un buque que solo va al extranjero no sube combustible de la refinería,
+  porque no tendría dónde dejarlo.
+- **Cuánto cobra.** Al llegar a la salida entrega el crudo y cobra el flete por barril, que entra a
+  la caja del Estado (al tipo de cambio de 18.33 pesos por dólar). En la realidad ese flete lo paga
+  el comprador, porque Pemex vende el crudo puesto en el puerto; en el juego tu buque cobra lo que
+  cobraría un buque de mercado. Son cifras leídas en el resumen del buscador: **estimación del
+  juego**.
+
+| Salida | Flete por barril | Pesos por barril | Cómo se sacó |
+| --- | ---: | ---: | --- |
+| Houston | 1.09 dólares | 20 | Unos 8 dólares por tonelada de un Aframax del Caribe a la costa del Golfo en 2018 (Argus: 7.14 de abril a agosto de 2019, 11 % menos que en 2018), a 7.33 barriles por tonelada |
+| Róterdam | 2.49 dólares | 46 | Interpolado por la distancia de las rutas del juego: 1,233 km de Dos Bocas a Houston, 9,331 a Róterdam y 14,094 de Salina Cruz a Shanghái |
+| Shanghái | 3.32 dólares | 61 | 6.63 millones de dólares por viaje de un VLCC (2 millones de barriles) de la costa del Golfo a China, a principios de 2019 (S&P Global) |
+
+- **Qué deja.** Un buque en Dos Bocas ⇄ Houston lleva unos 300 mil barriles por viaje y cobra unos
+  6 millones; en 20 días de juego hizo dos viajes y cobró 11.6 millones. Uno en Coatzacoalcos →
+  Progreso → Róterdam llevó 255 mil barriles y cobró 11.6 millones en un viaje. Lo que cuesta operar
+  tus buques todavía no se cobra.
+- **Salina Cruz exporta poco** (6.4 % del crudo): un buque que llega justo después de que zarpó el
+  petrolero de los compradores encuentra casi nada y sale casi vacío, porque tus buques no esperan a
+  llenarse.
+
+La ficha de cada buque dice cuánto crudo lleva y a dónde, cuánto ha llevado y el flete que cobró; la
+de la caja, lo del año.
+
 | Año | Crudo producido | Crudo exportado | Combustibles que hizo Pemex | Combustibles que importó Pemex |
 | --- | ---: | ---: | ---: | ---: |
 | 2018 | 1,833 | 1,184 | 359 | 877 |
@@ -5290,8 +5323,13 @@ los otros dos aún no se capturan.
   mitad del crudo exportado en 2018.
 - **Los petroleros de los compradores se ven, pero no se controlan.** *(26 nov 2026.)* El usuario
   preguntó a dónde se exporta el crudo y si no debería ver los barcos. Aprobó la salida a Houston y
-  los petroleros que llevan el crudo exportado, como tráfico de fondo. Que tus buques tanque puedan
-  llevar exportación queda para después. Ver [Los combustibles](#los-combustibles).
+  los petroleros que llevan el crudo exportado, como tráfico de fondo. Ver
+  [Los combustibles](#los-combustibles).
+- **Tus buques tanque llevan crudo de exportación y cobran flete.** *(26 nov 2026.)* El usuario
+  pidió que sus buques tanque pudieran llevar exportación y eligió que cobren flete desde ya, con
+  cifras de mercado marcadas como estimación del juego (no hay flete oficial: el de Pemex Logística
+  en 2018, 92.9 pesos por barril según la ASF, es de cabotaje corto y no sirve para cruzar el
+  océano). Lo que cuesta operar los buques queda para después.
 - **Las travesías se calculan como las rutas de México, no se dibujan.** Es el mismo método
   (malla, ruta más corta lejos de la costa, enderezado, auditoría), solo que sobre el mundo
   y enderezado en círculos máximos. *(19 nov 2026; reemplaza el tiempo fijo "gran círculo +

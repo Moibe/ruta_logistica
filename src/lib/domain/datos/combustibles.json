@@ -6,6 +6,14 @@
    "fuente": "SHCP, comunicado 008/2019 (24 de enero de 2019): Pemex contará con «671 autotanques con una capacidad equivalente a 144 mil barriles diarios. El monto total es de 92 millones de dólares»",
    "url": "https://www.gob.mx/shcp/prensa/comunicado-no-008-2019-el-gobierno-de-mexico-amplia-la-estrategia-de-combate-al-robo-de-combustible-mediante-la-compra-de-pipas"
   },
+  "argus-aframax": {
+   "fuente": "Argus, «Lower Venezuela cargo demand weighs on Aframaxes» (2019): el flete de Aframax del Caribe a la costa del Golfo de EUA promedió 7.14 dólares por tonelada del 1 de abril al 15 de agosto de 2019, 11 % menos que en 2018. No se leyó la nota: se usa lo que muestra el buscador",
+   "url": "https://www.argusmedia.com/zh/news/1960292-lower-venezuela-cargo-demand-weighs-on-aframaxes"
+  },
+  "spglobal-vlcc": {
+   "fuente": "S&P Global, «Record US crude exports boost VLCC tanker demand, rates» (marzo de 2019): el flete de un VLCC de la costa del Golfo de EUA a China promedió 6.63 millones de dólares por viaje en lo que iba de 2019. No se leyó la nota: se usa lo que muestra el buscador",
+   "url": "https://www.spglobal.com/energy/en/news-research/blog/crude-oil/030519-in-the-loop-record-us-crude-exports-boost-vlcc-tanker-demand-rates"
+  },
   "bne-2019": {
    "fuente": "SENER, Balance Nacional de Energía 2019, cuadro 49: exportación de petróleo por región de destino 2009–2019 (miles de barriles diarios)",
    "url": "https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf"
@@ -1672,6 +1680,18 @@
    "puerta:eua": 700000,
    "puerta:europa": 1000000,
    "puerta:asia": 2000000
+  },
+  "flete": {
+   "porBarrilUsd": {
+    "puerta:eua": 1.09,
+    "puerta:europa": 2.49,
+    "puerta:asia": 3.32
+   },
+   "dato": "Lo que cobra un buque tanque tuyo por cada barril de crudo que lleva a una salida, en dólares: el flete de mercado, que en la realidad paga el comprador porque Pemex vende el crudo puesto en el puerto. A Houston, unos 8 dólares por tonelada de un Aframax del Caribe a la costa del Golfo en 2018 (Argus), 1.09 por barril; a Asia, 6.63 millones de dólares por viaje de un VLCC de la costa del Golfo a China a principios de 2019 (S&P Global), 3.32 por barril; a Europa, interpolado por la distancia de las rutas del juego (1,233 km de Dos Bocas a Houston, 9,331 a Róterdam y 14,094 de Salina Cruz a Shanghái), 2.49. Las dos cifras se leyeron en el resumen del buscador: estimación del juego.",
+   "fuentes": [
+    "argus-aframax",
+    "spglobal-vlcc"
+   ]
   },
   "dato": "A dónde fue el crudo exportado: Estados Unidos, el resto de América, Europa y el Lejano Oriente y otros (Balance Nacional de Energía 2019, cuadro 49, con el Sistema de Información Energética y el Anuario de Pemex). En el juego, lo de Estados Unidos y el resto de América sale hacia Houston, lo de Europa hacia Róterdam y lo del Lejano Oriente hacia Shanghái; lo de Salina Cruz va primero a Asia. Cada petrolero lleva lo de un buque típico de esa ruta: 700 mil barriles a Houston (Aframax), un millón a Europa (Suezmax) y dos millones a Asia (VLCC): estimación del juego.",
   "fuentes": [

@@ -1,5 +1,6 @@
 import { CLASES_BARCO, KM_POR_MILLA } from './barcos';
 import { COMBUSTIBLES, crudoPorPuerto } from './combustibles';
+import { ENERGIA } from './energia';
 import type { Trayecto } from './trayecto';
 
 /**
@@ -14,6 +15,7 @@ type CrudoPorDestino = {
   mbd: Record<string, Record<string, number>>;
   salidas: Record<string, string>;
   barrilesPorPetrolero: Record<string, number>;
+  flete: { porBarrilUsd: Record<string, number>; dato: string; fuentes: string[] };
   dato: string;
   fuentes: string[];
 };
@@ -23,6 +25,16 @@ export const CRUDO_POR_DESTINO = (COMBUSTIBLES as unknown as { crudoPorDestino: 
 export const KMH_PETROLERO = CLASES_BARCO.tanque.nudos * KM_POR_MILLA;
 /** Barrels a buyer's tanker loads on each route (the usual ship of each: estimate of the game). */
 export const barrilesPorPetrolero = (destino: string) => CRUDO_POR_DESTINO.barrilesPorPetrolero[destino] ?? 1_000_000;
+
+/**
+ * What a player's tanker earns for each barrel of exported crude it takes to a gateway, millions of
+ * pesos: the market freight to Houston, Róterdam or Shanghái (`crudoPorDestino.flete`, estimate of the game).
+ */
+export const fleteMdpPorBarril = (destino: string) => ((CRUDO_POR_DESTINO.flete.porBarrilUsd[destino] ?? 0) * ENERGIA.tipoCambio) / 1e6;
+
+/** A year of the crude the player's tankers took abroad: barrels, the freight charged (millions of pesos), barrels by gateway. */
+export type CuentaCrudo = { barriles: number; mdp: number; porPuerta: Record<string, number> };
+export const cuentaCrudoVacia = (): CuentaCrudo => ({ barriles: 0, mdp: 0, porPuerta: {} });
 
 /** Each gateway's share of the crude exported in 2018. */
 const PARTE_DESTINO = (() => {

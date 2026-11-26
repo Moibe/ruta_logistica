@@ -65,6 +65,14 @@ export type Barco = Marcha & {
   combustoleo: number;
   combustoleoDe: string | null;
   entregadoCombustoleo: number;
+  /**
+   * Exported crude aboard (barrels) and the gateway it goes to; what it has taken abroad so far and
+   * the freight it charged for it, millions of pesos (`petroleros.ts`). Only tankers carry it.
+   */
+  crudo: number;
+  crudoA: string | null;
+  entregadoCrudo: number;
+  flete: number;
   /** Supplies aboard and delivered so far (tonnes): only supply vessels carry them. */
   abasto: number;
   entregadoAbasto: number;
@@ -152,6 +160,10 @@ export function crearBarco(mar: Mar, def: NuevoBarco): Barco | null {
     combustoleo: 0,
     combustoleoDe: null,
     entregadoCombustoleo: 0,
+    crudo: 0,
+    crudoA: null,
+    entregadoCrudo: 0,
+    flete: 0,
     abasto: 0,
     entregadoAbasto: 0,
     exportacion: 0,

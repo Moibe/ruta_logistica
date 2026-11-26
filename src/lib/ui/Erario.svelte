@@ -87,6 +87,13 @@
     return { año, ...sim.cuentaTrenes(año) };
   });
 
+  /** The crude your tankers took abroad this game year and the freight they charged (millions of pesos). */
+  const crudoAño = $derived.by(() => {
+    sim.horas;
+    const año = añoDe(sim.horas);
+    return { año, ...sim.cuentaCrudo(año) };
+  });
+
   /** What the State's till has paid for emergency tanker trucks (millions of pesos). */
   const gastoPipas = $derived.by(() => {
     sim.horas;
@@ -337,6 +344,13 @@
             `(${mdp(trenesAño.costo)} de operación y ${mdp(trenesAño.paso)} de derecho de paso en vía privada): ` +
             `${trenesAño.ingreso >= trenesAño.costo + trenesAño.paso ? 'ganaron' : 'perdieron'} ${mdp(Math.abs(trenesAño.ingreso - trenesAño.costo - trenesAño.paso))}, ` +
             `con ${Math.round(trenesAño.tkm / trenesAño.km).toLocaleString('es-MX')} toneladas a bordo en promedio.`
+          : '') +
+        (crudoAño.barriles > 0
+          ? `${String.fromCharCode(10)}Tus buques tanque en ${crudoAño.año}: llevaron ` +
+            (crudoAño.barriles < 1e6
+              ? `${Math.round(crudoAño.barriles / 1000).toLocaleString('es-MX')} mil barriles`
+              : `${(crudoAño.barriles / 1e6).toLocaleString('es-MX', { maximumFractionDigits: 1 })} millones de barriles`) +
+            ` de crudo de exportación y cobraron ${mdp(crudoAño.mdp)} de flete.`
           : '')}
     >
       <span class="label">Presupuesto</span>

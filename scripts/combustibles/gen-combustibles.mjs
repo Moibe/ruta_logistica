@@ -22,6 +22,16 @@ const FUENTES = {
       'SHCP, comunicado 008/2019 (24 de enero de 2019): Pemex contará con «671 autotanques con una capacidad equivalente a 144 mil barriles diarios. El monto total es de 92 millones de dólares»',
     url: 'https://www.gob.mx/shcp/prensa/comunicado-no-008-2019-el-gobierno-de-mexico-amplia-la-estrategia-de-combate-al-robo-de-combustible-mediante-la-compra-de-pipas',
   },
+  'argus-aframax': {
+    fuente:
+      'Argus, «Lower Venezuela cargo demand weighs on Aframaxes» (2019): el flete de Aframax del Caribe a la costa del Golfo de EUA promedió 7.14 dólares por tonelada del 1 de abril al 15 de agosto de 2019, 11 % menos que en 2018. No se leyó la nota: se usa lo que muestra el buscador',
+    url: 'https://www.argusmedia.com/zh/news/1960292-lower-venezuela-cargo-demand-weighs-on-aframaxes',
+  },
+  'spglobal-vlcc': {
+    fuente:
+      'S&P Global, «Record US crude exports boost VLCC tanker demand, rates» (marzo de 2019): el flete de un VLCC de la costa del Golfo de EUA a China promedió 6.63 millones de dólares por viaje en lo que iba de 2019. No se leyó la nota: se usa lo que muestra el buscador',
+    url: 'https://www.spglobal.com/energy/en/news-research/blog/crude-oil/030519-in-the-loop-record-us-crude-exports-boost-vlcc-tanker-demand-rates',
+  },
   'bne-2019': {
     fuente: 'SENER, Balance Nacional de Energía 2019, cuadro 49: exportación de petróleo por región de destino 2009–2019 (miles de barriles diarios)',
     url: 'https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf',
@@ -482,6 +492,30 @@ const sumar = (k) =>
     Object.keys(PETROLIFEROS.gasolinas[k]).map((a) => [a, Number(Object.values(PETROLIFEROS).reduce((s, p) => s + p[k][a], 0).toFixed(1))])
   );
 
+// Freight a player's tanker earns per barrel of exported crude (see crudoPorDestino.flete). Two market
+// figures: Aframax Caribbean→US Gulf, about 8 USD/t in 2018 (Argus: 7.14 in Apr–Aug 2019, 11 % under
+// 2018), at 7.33 barrels per tonne; VLCC US Gulf→China, 6.63 million USD per 2-million-barrel trip
+// (S&P Global, early 2019). Europe is interpolated by the game's sea distance.
+const RUTAS_MAR = JSON.parse(await readFile(join(ROOT, 'static', 'data', 'rutas-maritimas.json'), 'utf8'));
+const kmMar = (a, b) => {
+  const r = RUTAS_MAR.rutas.find((x) => (x.a === a && x.b === b) || (x.a === b && x.b === a));
+  const t = RUTAS_MAR.travesias.find((x) => x.puerta === b);
+  return Math.round(r.km + t.km);
+};
+const KM_FLETE = {
+  eua: kmMar('puerto:dos-bocas', 'puerta:eua'),
+  europa: kmMar('puerto:dos-bocas', 'puerta:europa'),
+  asia: kmMar('puerto:salina-cruz', 'puerta:asia'),
+};
+const r2 = (x) => Math.round(x * 100) / 100;
+const FLETE_EUA = r2(8 / 7.33);
+const FLETE_ASIA = r2(6.63e6 / 2e6);
+const FLETE_USD = {
+  'puerta:eua': FLETE_EUA,
+  'puerta:europa': r2(FLETE_EUA + ((FLETE_ASIA - FLETE_EUA) * (KM_FLETE.europa - KM_FLETE.eua)) / (KM_FLETE.asia - KM_FLETE.eua)),
+  'puerta:asia': FLETE_ASIA,
+};
+
 const datos = {
   corte: '2026-11-22',
   nota: 'Generado por scripts/combustibles/gen-combustibles.mjs. Lo que se calcula aquí son estimaciones del juego con cifras oficiales; cada dato dice de dónde sale.',
@@ -579,6 +613,18 @@ const datos = {
     },
     salidas: { eua: 'puerta:eua', americaOtros: 'puerta:eua', europa: 'puerta:europa', asia: 'puerta:asia' },
     barrilesPorPetrolero: { 'puerta:eua': 700000, 'puerta:europa': 1000000, 'puerta:asia': 2000000 },
+    flete: {
+      porBarrilUsd: FLETE_USD,
+      dato:
+        'Lo que cobra un buque tanque tuyo por cada barril de crudo que lleva a una salida, en dólares: el flete de mercado, que en la realidad paga ' +
+        'el comprador porque Pemex vende el crudo puesto en el puerto. A Houston, unos 8 dólares por tonelada de un Aframax del Caribe a la costa ' +
+        `del Golfo en 2018 (Argus), ${FLETE_USD['puerta:eua']} por barril; a Asia, 6.63 millones de dólares por viaje de un VLCC de la costa del ` +
+        `Golfo a China a principios de 2019 (S&P Global), ${FLETE_USD['puerta:asia']} por barril; a Europa, interpolado por la distancia de las ` +
+        `rutas del juego (${KM_FLETE.eua.toLocaleString('en')} km de Dos Bocas a Houston, ${KM_FLETE.europa.toLocaleString('en')} a Róterdam y ` +
+        `${KM_FLETE.asia.toLocaleString('en')} de Salina Cruz a Shanghái), ${FLETE_USD['puerta:europa']}. Las dos cifras se leyeron en el resumen ` +
+        'del buscador: estimación del juego.',
+      fuentes: ['argus-aframax', 'spglobal-vlcc'],
+    },
     dato:
       'A dónde fue el crudo exportado: Estados Unidos, el resto de América, Europa y el Lejano Oriente y otros (Balance Nacional de Energía 2019, ' +
       'cuadro 49, con el Sistema de Información Energética y el Anuario de Pemex). En el juego, lo de Estados Unidos y el resto de América sale ' +

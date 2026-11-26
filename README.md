@@ -419,7 +419,10 @@ terminales de Pemex. Detalle en la [enciclopedia](docs/enciclopedia.md#los-combu
 `rutasPetroleras`). Cada ruta zarpa un petrolero al juntar su carga (`#despacharPetroleros`,
 `sim.petroleros`), que sigue `rutaMar` hasta el puerto lejano y desaparece. Se dibujan en el tablero
 (`pintarPetroleros`, con ficha), en el mapa plano y en el globo. Cayo Arcas es un punto de las rutas
-marítimas (`cayo-arcas`).
+marítimas (`cayo-arcas`). Un buque tanque del jugador cuya ruta sigue a una salida carga en el puerto
+el crudo que espera al petrolero de esa salida (`#cargarCrudo`, de `#cargaPetroleros`) y al llegar
+cobra el flete por barril (`fleteMdpPorBarril`, `crudoPorDestino.flete`: 1.09, 2.49 y 3.32 dólares,
+estimación del juego) a la caja del Estado (`#entregarCrudo`, `sim.cuentaCrudo(año)`).
 
 **El dinero de los trenes** (`domain/tarifas.ts`, `datos/tarifas.json`, generado por
 `scripts/dinero/gen-tarifas.mjs`): al terminar cada tramo (`#cobrarPierna`) un tren cobra 0.68 pesos
@@ -775,9 +778,10 @@ costa del mundo solo sube de resolución). Además:
 - **Energía**: el Plan de Expansión de la CFE 2026–2030 (52 proyectos) en el catálogo, cuando se
   publique la lista por central. Sin él, de 2028 en adelante varias regiones se quedan sin
   margen.
-- **Dinero, lo que sigue**: que los buques del jugador cobren y cuesten; tarifas por año.
-- **Exportaciones por mar, lo que sigue**: que tus buques tanque puedan llevar parte del crudo
-  exportado; que el combustóleo y la gasolina que sobren también salgan en petroleros.
+- **Dinero, lo que sigue**: lo que cuesta operar los buques del jugador; que cobren los que llevan
+  carga de contenedores, granel y autos; tarifas por año.
+- **Exportaciones por mar, lo que sigue**: que el combustóleo y la gasolina que sobren también salgan
+  en petroleros.
 - **Otros sitios por dentro**: la vista de un puerto o una refinería, como la de los polos.
 - **Comercio por mar, lo que sigue**: el cabotaje de carga entre puertos del país; más salidas al mundo (Estados Unidos, Sudamérica) para que las rutas
   reales tengan a dónde ir; el valor en dólares de lo que se mueve.
