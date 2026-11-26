@@ -2759,13 +2759,13 @@ y 6-2).
 
 **Lo que no va en tren:** MICARE manda su carbón a Nava por banda; Las Truchas, por ferroducto;
 Hércules (a 81 km de la vía) y la mina de La Caridad no tienen fuente de cómo viaja su mineral; y en
-Baja California Sur no hay tren. El carbón térmico a las carboeléctricas de Nava queda para después:
-no hay fuente de en qué viaja, y las centrales todavía no son estaciones.
+Baja California Sur no hay tren. El carbón térmico a las carboeléctricas de Nava tiene su propia
+sección, más abajo.
 
 **En el mapa,** la ficha de una mina dice lo que manda por tren al año, a dónde y cuánto espera en
 su patio; la de una planta, su **abasto por tren** del año: lo que le llegó contra lo que esperaba a
-esta fecha. Por ahora solo se mide: una planta mal surtida no produce menos (eso irá cuando se sepa
-a dónde va su acero).
+esta fecha, contando lo que llevan los ferrocarriles privados. Las acereras, la fundición y Nava
+producen menos cuando les falta (ver más abajo).
 
 ### Las cadenas de suministro: los autos
 
@@ -2821,13 +2821,63 @@ AHMSA 4,652 y Ternium 3,515 de 18,811 miles de toneladas en 2016, la última cif
 unidad de Ternium, con todo surtido.
 
 **El acero es carga nacional:** espera en la estación de la acerera, hasta un mes de él, sube primero
-al tren que pasa y se entrega en la siguiente parada. Se resta de la carga genérica de su estado.
+al tren que pasa y se entrega en la siguiente parada. Se resta de la carga genérica de su estado. El
+9 % va directo a las armadoras cercanas (ver más abajo).
 
 **Qué tanto pide.** Ternium Monterrey espera unas 5,200 t diarias de pélets (Peña Colorada y Las
 Encinas); los privados llevan la mitad y a tus trenes les toca la otra: un tren lleno al día.
 
 La ficha de cada acerera dice su acero al año contra el posible, su surtido del último mes, los
 insumos que tiene en reserva, el acero que espera y cuánto se han llevado tus trenes.
+
+### Las cadenas de suministro: el carbón de Nava, la fundición y el acero a las armadoras
+
+Tres eslabones más, con la misma regla de las acereras: guardan hasta 15 días de sus insumos, su
+**surtido** es qué parte tuvieron con memoria de un mes, y los ferrocarriles privados llevan la mitad
+de lo que va en tren.
+
+**El carbón de Nava.** Las carboeléctricas José López Portillo («Río Escondido») y Carbón II, en Nava,
+Coahuila, son una estación (a 1.8 km de la vía) y una parada de tren: se eligen con la capa *Energía*
+encendida. Su carbón:
+
+- **MICARE**, por banda transportadora: todo su carbón (6.23 millones de toneladas en 2018, AHMSA)
+  llega solo, sin tren, hasta que la CFE le canceló los contratos en junio de 2020.
+- **MIMOSA**: su carbón térmico, 56 % de lo que sacó en 2018 (1.76 de 3.15 millones de toneladas), que
+  vendía a la CFE (AHMSA), hasta el paro de diciembre de 2022. Que vaya en tren es **estimación del
+  juego**: la fuente no dice en qué viajaba.
+- **Los productores de la Región Carbonífera**, desde julio de 2020: el primer contrato de la CFE, 2
+  millones de toneladas en 18 meses (unas 1.33 al año); desde 2023, todo el carbón de Coahuila del
+  SGM (477,904 t en 2023 y 395,270 en 2024), que el juego supone suyo porque las minas de AHMSA ya
+  pararon (**estimación del juego**). Que vaya en tren también es estimación.
+
+Con todo su carbón dan sus 2,600 MW (PRODESEN 2019–2033, centrales a diciembre de 2018); sin nada, la
+mitad (**regla del juego**). Lo que no dan se le resta a la capacidad de la región Noreste en las dos
+horas pico (90 % de cada MW, como a toda central firme), y la ficha de la región dice cuántos MW le
+faltan. Mientras MICARE manda su carbón por banda, Nava queda surtida al 89 % sin trenes tuyos; desde
+junio de 2020 depende del tren y, sin los tuyos, baja al 50 %: unos 650 MW menos.
+
+**La fundición de La Caridad.** Funde el concentrado de Buenavista que le llega en tren y el de su
+propia mina, que no llega en tren. Con todo da sus cátodos de 2018, 239 mil toneladas (Southern
+Copper); sin nada de Buenavista funde solo lo de su mina: 446 de las 1,042 mil toneladas que fundió en
+2018, el 43 % (dicho de la empresa). La ficha dice sus cátodos al año contra los posibles.
+
+**El acero a las armadoras.** De lo que vendió en el país la industria básica del hierro y del acero
+en 2018, las armadoras de autos y camiones compraron el **9.0 %**: 19,535 de 218,113 millones de pesos
+(INEGI, matriz insumo-producto 2018, flujos domésticos a precios básicos; las de autopartes, otro
+4.4 %). El juego manda esa parte del acero de cada acerera a las armadoras a menos de 300 km, porque
+«la mayoría de los clientes mexicanos de Ternium está cerca de sus plantas» (Ternium, 20-F 2024), y la
+reparte por los vehículos que hace cada una (INEGI, RAIAVL). Usar una parte en pesos para repartir
+toneladas, la distancia y el reparto son **estimación del juego**. Así, con todo surtido, en 2019:
+
+| Acerera | Armadoras (toneladas al año) |
+| --- | --- |
+| AHMSA | GM Ramos Arizpe 47,888 · Kia 47,647 · Stellantis Saltillo 46,562 |
+| Ternium Monterrey | GM Ramos Arizpe 18,092 · Kia 18,001 · Stellantis Saltillo 17,591 |
+| Ternium Puebla | VW Puebla 21,408 · Stellantis Toluca 13,522 · Audi 7,564 · Ford Cuautitlán 6,026 · Honda Celaya 4,935 · JAC 229 · Toyota Guanajuato (desde diciembre de 2019) |
+
+El acero sigue a su acerera: si a la acerera le falta mineral, manda menos acero. A las armadoras
+**solo se les mide** el abasto: su exportación no depende de este acero, porque también reciben
+acero importado y en camión. Nissan CIVAC queda fuera: no tiene estación.
 
 ---
 

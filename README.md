@@ -106,6 +106,9 @@ saltar al siguiente libre.
   ferroviario. Sus minas y plantas son sitios con estación (`SITIOS_CADENA`); la simulación guarda su
   carga en un patio por flujo, la sube solo a trenes que paran en su destino y cuenta lo entregado
   (`sim.cadena`); los flujos nacionales se restan de la carga genérica del estado.
+  `PLANTAS_INSUMO` son las plantas que producen según su surtido (acereras, la fundición de La Caridad
+  y las carboeléctricas de Nava, cuyos MW faltantes se restan de su región en `estadoEnergia`); el
+  acero de cada acerera va en parte a las armadoras cercanas como flujos propios.
   Las armadoras también son sitios con estación: su exportación de vehículos (`autosAño`, 4.9 Mt de
   2018 escaladas con el RAIAVL) espera en su patio y sale como exportación, restada de la del estado.
 - Etiquetas con colisión: cada una prueba cuatro posiciones alrededor de su punto y gana la

@@ -1,5 +1,5 @@
 {
- "corte": "2026-11-24",
+ "corte": "2026-11-26",
  "nota": "Generado por scripts/mineria/gen-mineria.mjs.",
  "fuentes": {
   "sgm-2018": {
@@ -429,13 +429,17 @@
    "municipio": "Sabinas, San Juan de Sabinas, Múzquiz y Progreso",
    "estado": "COAH",
    "que": "Carbón térmico que la CFE compra por contratos desde julio de 2020",
-   "unidad": "carbón térmico entregado o contratado",
-   "serie": {},
+   "unidad": "carbón térmico para la CFE",
+   "serie": {
+    "2020": 1333333,
+    "2023": 477904,
+    "2024": 395270
+   },
    "destino": "A las centrales José López Portillo y Carbón II, en Nava.",
    "destinos": [
     "central:nava"
    ],
-   "nota": "Primer contrato (julio de 2020 a diciembre de 2021): 2 millones de toneladas con 60 productores. En octubre de 2025 la CFE adjudicó 7.99 millones de toneladas (prensa). El carbón de Coahuila cayó de 6.7 millones de toneladas en 2018 a 0.4 en 2024 (SGM).",
+   "nota": "Primer contrato (julio de 2020 a diciembre de 2021): 2 millones de toneladas con 60 productores, unas 1.33 al año (CFE). Desde 2023 la cifra es todo el carbón de Coahuila (SGM), que ya solo sacan estos productores tras el paro de las minas de AHMSA (estimación del juego). En octubre de 2025 la CFE adjudicó 7.99 millones de toneladas (prensa). El carbón de Coahuila cayó de 6.7 millones de toneladas en 2018 a 0.4 en 2024 (SGM).",
    "fuentes": [
     "cfe-carbon",
     "financiero-carbon",

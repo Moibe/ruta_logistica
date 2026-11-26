@@ -174,6 +174,8 @@ export type EstadoRegion = {
   nivel: NivelEnergia;
   /** Polos can take companies: above the operating margin at both peaks. */
   alcanza: boolean;
+  /** MW of its 2018 plants that their fuel doesn't reach (a coal plant short of coal). */
+  mwSinInsumo: number;
   /** MW of private plants and of the player's CFE plants in service. */
   mwPrivados: number;
   mwCfe: number;
@@ -216,7 +218,8 @@ export function estadoEnergia(
   horas: number,
   hechas: readonly ObraEnergia[],
   polos: ReadonlyMap<string, number>,
-  gas: ReadonlyMap<string, number> = new Map()
+  gas: ReadonlyMap<string, number> = new Map(),
+  sinInsumo: ReadonlyMap<string, number> = new Map()
 ): EstadoRegion[] {
   const privadas = privadasEnServicio(horas);
   return REGIONES.map((r) => {
@@ -236,7 +239,9 @@ export function estadoEnergia(
       capacidad[e] =
         CAPACIDAD_INICIAL.get(r.id)![e] +
         propias.reduce((s, p) => s + aporte(p, e), 0) +
-        cfe.reduce((s, o) => s + aporte(o, e) * deGas(o), 0);
+        cfe.reduce((s, o) => s + aporte(o, e) * deGas(o), 0) -
+        // A firm plant short of fuel gives that much less at each peak.
+        (sinInsumo.get(r.id) ?? 0) * FACTORES.firme[e];
       margen[e] = ((capacidad[e] - demanda) / demanda) * 100;
     }
     const margenMinimo = Math.min(margen.tarde, margen.noche);
@@ -249,6 +254,7 @@ export function estadoEnergia(
       margenMinimo,
       nivel: margenMinimo < umbral.operativo ? 'critico' : margenMinimo < umbral.planeacion ? 'justo' : 'holgado',
       alcanza: margenMinimo >= umbral.operativo,
+      mwSinInsumo: sinInsumo.get(r.id) ?? 0,
       mwPrivados: propias.reduce((s, p) => s + p.mw, 0),
       mwCfe: cfe.reduce((s, o) => s + o.mw, 0),
       gas: gasEstado,

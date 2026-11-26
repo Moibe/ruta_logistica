@@ -10,7 +10,7 @@
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, kmALaVia, type Dueño } from '$lib/domain/red';
   import { MINAS, NOMBRE_MEDIDA, NOMBRE_MINERAL, cifraMina, type Mina } from '$lib/domain/mineria';
-  import { PARTE_PRIVADOS, llevanPrivados, ACERERAS, FLUJOS, NOMBRE_PRODUCTO, aceroAño, autosAño, toneladasAño } from '$lib/domain/cadenas';
+  import { FLUJOS, NOMBRE_NAVA, NOMBRE_PRODUCTO, PARTE_PRIVADOS, PLANTA_INSUMO, autosAño, llevanPrivados, parteAutomatica, salidaPlanta, toneladasAño } from '$lib/domain/cadenas';
   import { EMPRESAS_INDUSTRIA, INDUSTRIAS, PARCIAL_RAIAVL, añoRaiavl, plantasDe, type Industria } from '$lib/domain/industrias';
   import { obraVia } from '$lib/domain/obrasVia';
   import { clavePolo, estadoReal, fechaEnPalabras, fichaReal, TEXTO_ETAPA } from '$lib/domain/realidad';
@@ -233,6 +233,8 @@
       ...(o.sitioPorDefinir ? { sitioPorDefinir: o.municipio } : {}),
     })),
   ];
+  /** Nava's coal plants are a chain stop (`central:nava`): its index among the power plants. */
+  const INDICE_NAVA = ENERGIA.plantas2018.findIndex((p) => p.nombre === NOMBRE_NAVA);
   const LONLAT_PLANTAS: LonLat[] = [...ENERGIA.plantas2018, ...ENERGIA.privadas, ...OBRAS_ENERGIA].map((p) => p.lonLat);
   const radioPlanta = (mw: number) => 1.6 + Math.sqrt(mw) / 7;
 
@@ -2396,9 +2398,11 @@
         }
       });
     }
-    if (layers.energia && !tablero.trazando) {
+    // While laying out a train, Nava's coal plants are a stop (coal for them unloads there).
+    if (layers.energia && (!tablero.trazando || tablero.tipoNuevo === 'tren')) {
       PLANTAS.forEach((p, i) => {
         if (!plantaVisible(p)) return;
+        if (tablero.trazando && !(i === INDICE_NAVA && sim.red?.estaciones.has('central:nava'))) return;
         const d = Math.hypot(transform.applyX(plantaPts[i][0]) - mx, transform.applyY(plantaPts[i][1]) - my);
         if (d < Math.max(6, radioPlanta(p.mw) + 2) && d < bestD) {
           best = { kind: 'planta', indice: i };
@@ -2498,7 +2502,13 @@
                 ? `plataforma:${t.complejo.id}`
               : t?.kind === 'refineria' && !t.refineria.extranjera
                 ? `refineria:${t.refineria.id}`
-                : null;
+                : t?.kind === 'mina'
+                  ? `mina:${t.mina.id}`
+                  : t?.kind === 'industria'
+                    ? `industria:${t.industria.id}`
+                    : t?.kind === 'planta' && t.indice === INDICE_NAVA
+                      ? 'central:nava'
+                      : null;
 
   function onPointerMove(event: PointerEvent) {
     if (!canvas || event.buttons) return; // no hover while dragging the map
@@ -2961,6 +2971,8 @@
     return `Clic: ${que} ${n + 1} · ${fmtKm(tablero.kmPrevia)} · ${duracion(tablero.horasPrevia)}${barco ? ' por vuelta' : ''}`;
   });
 
+  /** Tonnes for a card: in thousands from a thousand up. */
+  const tCorto = (t: number) => (t >= 1000 ? `${fmt.format(Math.round(t / 1000))} mil t` : `${fmt.format(Math.round(t))} t`);
   const fmtTrenes = (n: number) => (n < 10 ? n.toFixed(1) : String(Math.round(n)));
 
   const kmDeVia = $derived.by(() => {
@@ -3148,7 +3160,11 @@
       {#if via !== null}
         <span class="tip-sub">{via <= 2 ? 'Junto a la vía férrea' : `Vía férrea en operación a ${Math.round(via)} km`}</span>
       {/if}
-      {@const sale = FLUJOS.filter((f) => f.origen === `mina:${m.id}`)}
+      {@const banda = FLUJOS.filter((f) => f.origen === `mina:${m.id}` && f.medio === 'banda' && toneladasAño(f, sim.horas, añoDe(sim.horas)) > 0)}
+      {#each banda as f (f.id)}
+        <span class="tip-rail">Por banda: {fmt.format(Math.round(toneladasAño(f, sim.horas, añoDe(sim.horas)) / 1000))} mil t al año a las carboeléctricas de Nava, sin tren</span>
+      {/each}
+      {@const sale = FLUJOS.filter((f) => f.origen === `mina:${m.id}` && f.medio !== 'banda' && toneladasAño(f, sim.horas, añoDe(sim.horas)) > 0)}
       {#if sale.length}
         {@const conEst = !!sim.red?.estaciones.has(`mina:${m.id}`)}
         <span class="tip-rail">
@@ -3177,21 +3193,31 @@
       {#if surten.length}
         <span class="tip-sub">La surten: {surten.map((m) => `${m.corto} (${NOMBRE_MINERAL[m.mineral]})`).join(', ')}</span>
       {/if}
-      {@const llegan = FLUJOS.filter((f) => f.destino === `industria:${p.id}` && toneladasAño(f, sim.horas, añoDe(sim.horas)) > 0)}
+      {@const surtidoDe = (clave: string) => sim.surtido(clave)}
+      {@const llegan = FLUJOS.filter((f) => f.destino === `industria:${p.id}` && toneladasAño(f, sim.horas, añoDe(sim.horas), surtidoDe) > 0)}
       {#if llegan.length}
         {@const año = añoDe(sim.horas)}
-        {@const transcurrido = Math.max(1 / 365, Math.min(1, (sim.horas - horasDeFecha(`${año}-01-01`)) / (365.25 * 24)))}
-        {@const espera = llegan.reduce((x, f) => x + toneladasAño(f, sim.horas, año), 0) * transcurrido}
-        {@const llego = llegan.reduce((x, f) => x + (sim.cadena[f.id]?.porAño[String(año)] ?? 0), 0)}
+        {@const transcurrido = Math.max(1 / 365, Math.min(1, (sim.horas - Math.max(horasDeFecha(`${año}-01-01`), horasDeFecha('2018-12-01'))) / (365.25 * 24)))}
+        {@const espera = llegan.reduce((x, f) => x + toneladasAño(f, sim.horas, año, surtidoDe), 0) * transcurrido}
+        {@const solas = llegan.reduce((x, f) => x + toneladasAño(f, sim.horas, año, surtidoDe) * parteAutomatica(f), 0) * transcurrido}
+        {@const tuyas = llegan.reduce((x, f) => x + (sim.cadena[f.id]?.porAño[String(año)] ?? 0), 0)}
         <span class="tip-rail">
-          Abasto por tren en {año}: {fmt.format(Math.round(llego))} t de {fmt.format(Math.round(espera))} esperadas ({Math.round((100 * llego) / Math.max(1, espera))} %) · {[...new Set(llegan.map((f) => NOMBRE_PRODUCTO[f.producto]))].join(', ')}
+          Abasto de su cadena en {año}: {fmt.format(Math.round(solas + tuyas))} t de {fmt.format(Math.round(espera))} esperadas ({Math.round((100 * (solas + tuyas)) / Math.max(1, espera))} %), {fmt.format(Math.round(tuyas))} en tus trenes · {[...new Set(llegan.map((f) => NOMBRE_PRODUCTO[f.producto]))].join(', ')}{llegan.some(llevanPrivados) ? `; ${PARTE_PRIVADOS === 0.5 ? 'la mitad' : 'una parte'} la llevan Ferromex y CPKC` : ''}
         </span>
       {/if}
-      {#if ACERERAS.some((a) => a.id === p.id) && aceroAño(p.id, sim.horas, 1) > 0}
-        {@const surtido = sim.surtidoAcero(p.id)}
+      {@const pi = PLANTA_INSUMO.get(`industria:${p.id}`)}
+      {#if pi && salidaPlanta(pi, sim.horas, 1) > 0}
+        {@const surtido = sim.surtido(pi.clave)}
         <span class="tip-rail">
-          Acero por tren: {fmt.format(Math.round(aceroAño(p.id, sim.horas, surtido) / 1000))} mil t al año de {fmt.format(Math.round(aceroAño(p.id, sim.horas, 1) / 1000))} posibles · surtida el último mes al {Math.round(surtido * 100)} % · {fmt.format(Math.round(sim.reservaAcero(p.id)))} t de insumos en reserva; esperan {fmt.format(Math.round(sim.enPatioAcero(p.id)))} t de acero{sim.acero[p.id] ? `; tus trenes han llevado ${fmt.format(Math.round(sim.acero[p.id]))} t` : ''}
+          {pi.sale === 'acero' ? 'Acero por tren' : 'Cátodos de cobre'}: {fmt.format(Math.round(salidaPlanta(pi, sim.horas, surtido) / 1000))} mil t al año de {fmt.format(Math.round(pi.plena / 1000))} posibles · surtida el último mes al {Math.round(surtido * 100)} % · {fmt.format(Math.round(sim.reservaInsumo(pi.clave)))} t de insumos en reserva{pi.sale === 'acero' ? `; esperan ${fmt.format(Math.round(sim.enPatioAcero(p.id)))} t de acero` : ''}{sim.acero[p.id] ? `; tus trenes han llevado ${fmt.format(Math.round(sim.acero[p.id]))} t` : ''}
         </span>
+        {@const aArmadoras = FLUJOS.filter((f) => f.acerera === p.id && toneladasAño(f, sim.horas, añoDe(sim.horas), surtidoDe) > 0)}
+        {#if aArmadoras.length}
+          <span class="tip-sub">
+            A las armadoras: {aArmadoras.map((f) => `${nombreCorto(f.destino)} ${tCorto(toneladasAño(f, sim.horas, añoDe(sim.horas), surtidoDe))}`).join(', ')} al año; esperan {fmt.format(Math.round(aArmadoras.reduce((x, f) => x + sim.enPatioCadena(f.id), 0)))} t
+          </span>
+        {/if}
+        <span class="tip-sub">{pi.dato}.</span>
       {/if}
       {#if p.tipo === 'armadora' && autosAño(p, sim.horas, añoDe(sim.horas)) > 0}
         <span class="tip-rail">
@@ -3411,6 +3437,20 @@
       {#if p.sitioPorDefinir}
         <span class="tip-sub">Sitio por definir: la CFE aún lo busca; el juego la pone en {p.sitioPorDefinir}.</span>
       {/if}
+      {#if hovered.indice === INDICE_NAVA}
+        {@const pi = PLANTA_INSUMO.get('central:nava')}
+        {#if pi}
+          {@const surtido = sim.surtido(pi.clave)}
+          {@const llegan = FLUJOS.filter((f) => f.destino === pi.clave && toneladasAño(f, sim.horas, añoDe(sim.horas)) > 0)}
+          <span class="tip-rail">
+            Da {fmt.format(Math.round(salidaPlanta(pi, sim.horas, surtido)))} de {fmt.format(pi.plena)} MW: su carbón la surtió el último mes al {Math.round(surtido * 100)} % · {fmt.format(Math.round(sim.reservaInsumo(pi.clave)))} t en reserva
+          </span>
+          <span class="tip-sub">
+            Su carbón: {llegan.map((f) => `${MINAS.find((m) => `mina:${m.id}` === f.origen)?.corto ?? nombreCorto(f.origen)} ${fmt.format(Math.round(toneladasAño(f, sim.horas, añoDe(sim.horas)) / 1000))} mil t al año${f.medio === 'banda' ? ' por banda' : ''}`).join(', ')}{llegan.some(llevanPrivados) ? `; del que va en tren, ${PARTE_PRIVADOS === 0.5 ? 'la mitad' : 'una parte'} lo llevan Ferromex y CPKC y el resto espera tus trenes` : ''}{sim.red?.estaciones.has(pi.clave) ? '' : ' (sin estación: queda lejos de la vía)'}
+          </span>
+          <span class="tip-sub">{pi.dato}.</span>
+        {/if}
+      {/if}
     {:else if hovered.kind === 'estado' && layers.energia && sim.energia.length}
       {@const regionEstado = hovered.region ?? REGION_DEL_ESTADO.get(hovered.estado.clave)}
       {@const reg = sim.energia.find((e) => e.region.id === regionEstado)}
@@ -3430,6 +3470,9 @@
             ? `, ${reg.demandaPolos.toLocaleString('es-MX', { maximumFractionDigits: 1 })} de polos`
             : ''}
         </span>
+        {#if reg.mwSinInsumo >= 1}
+          <span class="tip-sub">Le faltan {fmt.format(Math.round(reg.mwSinInsumo))} MW de las carboeléctricas de Nava, que no tienen todo su carbón.</span>
+        {/if}
         {#if reg.region.margenCalculado}
           <span class="tip-sub">Sin enlace con el resto del estado. El PRODESEN no publica su margen: lo calcula el juego.</span>
         {/if}

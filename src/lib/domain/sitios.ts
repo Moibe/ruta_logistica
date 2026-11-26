@@ -289,7 +289,7 @@ export const CENTRO_MEXICO: LonLat = [-102.5, 23.6];
 
 // ---- one registry for every kind of site ------------------------------------
 
-export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo' | 'aeropuerto' | 'refineria' | 'plataforma' | 'mina' | 'industria';
+export type TipoSitio = 'ciudad' | 'puerto' | 'puerta' | 'polo' | 'aeropuerto' | 'refineria' | 'plataforma' | 'mina' | 'industria' | 'central';
 
 /**
  * Pemex's offshore complexes in the Bay of Campeche are stops at sea for the

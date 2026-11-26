@@ -111,7 +111,7 @@ import {
   resumir,
 } from '$lib/domain/interior';
 import { DIAS_PATIO_POLO } from '$lib/domain/sectores';
-import { PARTE_PRIVADOS, llevanPrivados, ACERERAS, MEMORIA_DIAS, RESERVA_DIAS, aceroAño, insumosAño, ARMADORAS, DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, autosAño, toneladasAño } from '$lib/domain/cadenas';
+import { PARTE_ARMADORAS, PLANTAS_INSUMO, PLANTA_INSUMO, parteAutomatica, MEMORIA_DIAS, RESERVA_DIAS, salidaPlanta, insumosAño, ARMADORAS, DIAS_EN_PATIO as DIAS_PATIO_CADENA, FLUJO, FLUJOS, FLUJOS_DEL_ESTADO, autosAño, toneladasAño } from '$lib/domain/cadenas';
 
 const SITIOS_POR_CLAVE = new Map(SITIOS.map((s) => [s.clave, s]));
 
@@ -262,10 +262,13 @@ class Simulacion {
   #patiosCadena = new Map<string, number>();
   /** Vehicles for export waiting at each carmaker's station, tonnes. */
   #patiosAutos = new Map<string, number>();
-  /** Rail inputs each steel mill has in store, tonnes, and how it was supplied in the last month (0 to 1). */
-  #reservasAcero = new Map<string, number>();
-  #surtidoAcero = new Map<string, number>(ACERERAS.map((a) => [a.id, 1]));
-  /** Steel waiting at each mill's station for a train, tonnes, and what the player's trains have taken. */
+  /**
+   * Chain inputs each plant that depends on them has in store, tonnes, and how it was supplied in
+   * the last month (0 to 1), by site key (`cadenas.ts`, `PLANTAS_INSUMO`).
+   */
+  #reservasInsumo = new Map<string, number>();
+  #surtidoInsumo = new Map<string, number>(PLANTAS_INSUMO.map((p) => [p.clave, 1]));
+  /** Steel waiting at each mill's station for a train (what isn't bound for a carmaker), tonnes, and what the player's trains have taken. */
   #patiosAcero = new Map<string, number>();
   acero = $state.raw<Record<string, number>>({});
   /** Vehicles the player's trains have taken from each carmaker to an exit, tonnes. */
@@ -416,13 +419,13 @@ class Simulacion {
         this.barcos = barcos;
         for (const e of ESTADOS_EXPORTADORES) this.#bodegas.set(e, flujoDelEstado(e, añoDe(this.horas)) * 24 * 7);
         for (const e of ESTADOS_PRODUCTIVOS) this.#bodegasNacional.set(e, flujoNacional(e, añoDe(this.horas)) * 24 * 7);
-        for (const a of ACERERAS) {
+        for (const p of PLANTAS_INSUMO) {
           const h = this.horas;
-          this.#reservasAcero.set(a.id, (insumosAño(a.id, h, añoDe(h)) / 365.25) * RESERVA_DIAS * 0.5);
-          this.#patiosAcero.set(a.id, (aceroAño(a.id, h, 1) / 365.25) * 7);
+          this.#reservasInsumo.set(p.clave, (insumosAño(p.clave, h, añoDe(h)) / 365.25) * RESERVA_DIAS * 0.5);
+          if (p.sale === 'acero') this.#patiosAcero.set(p.id, ((salidaPlanta(p, h, 1) * (1 - PARTE_ARMADORAS)) / 365.25) * 7);
         }
         for (const p of ARMADORAS) this.#patiosAutos.set(p.id, (autosAño(p, this.horas, añoDe(this.horas)) / 365.25) * 7);
-        for (const f of FLUJOS) this.#patiosCadena.set(f.id, ((toneladasAño(f, this.horas, añoDe(this.horas)) * (llevanPrivados(f) ? 1 - PARTE_PRIVADOS : 1)) / 365.25) * 7);
+        for (const f of FLUJOS) this.#patiosCadena.set(f.id, ((toneladasAño(f, this.horas, añoDe(this.horas)) * (1 - parteAutomatica(f))) / 365.25) * 7);
         // The ports open with a week of their trade waiting.
         const h = 24 * DIAS_INICIO;
         for (const clave of PUERTOS_COMERCIO) {
@@ -789,7 +792,14 @@ class Simulacion {
       polos.set(o.id, polo ? mwEnUso(o, polo) : mwDelPolo(o.id) * o.ocupacion);
     }
     const gas = gasDisponible((id) => this.obrasEnergia.get(id)?.fase === 'en-servicio');
-    this.energia = estadoEnergia(this.horas, hechas, polos, gas);
+    // A power plant short of its chain's fuel gives fewer MW to its region (Nava, without coal).
+    const sinInsumo = new Map<string, number>();
+    for (const p of PLANTAS_INSUMO) {
+      if (p.sale !== 'electricidad' || !p.region || salidaPlanta(p, this.horas, 1) <= 0) continue;
+      const faltan = p.plena - salidaPlanta(p, this.horas, this.surtido(p.clave));
+      sinInsumo.set(p.region, (sinInsumo.get(p.region) ?? 0) + faltan);
+    }
+    this.energia = estadoEnergia(this.horas, hechas, polos, gas, sinInsumo);
     this.refinacion = refinacionJuego({
       avance: (id) => {
         const o = this.obrasPemex.get(id);
@@ -977,33 +987,32 @@ class Simulacion {
       const f = Math.max(0, flujoDelEstado(e, año) - (autosEstado.get(e) ?? 0));
       this.#bodegas.set(e, Math.min((this.#bodegas.get(e) ?? 0) + f * horas, f * 24 * DIAS_EN_ESPERA));
     }
+    const surtidoDe = (clave: string) => this.surtido(clave);
     for (const f of FLUJOS) {
-      const ta = toneladasAño(f, this.horas, año);
-      // The private railroads' share goes straight to its destination: a mill stores it.
-      const privados = llevanPrivados(f) ? PARTE_PRIVADOS : 0;
-      const planta = f.destino.startsWith('industria:') ? f.destino.slice('industria:'.length) : '';
-      if (privados > 0 && ACERERAS.some((a) => a.id === planta)) {
-        const tope = (insumosAño(planta, this.horas, año) / 365.25) * RESERVA_DIAS;
-        this.#reservasAcero.set(planta, Math.min(tope, (this.#reservasAcero.get(planta) ?? 0) + ((ta * privados) / (365.25 * 24)) * horas));
-      }
-      const h = (ta * (1 - privados)) / (365.25 * 24);
+      const ta = toneladasAño(f, this.horas, año, surtidoDe);
+      // What gets there without the player (a belt, the private railroads' share) goes straight to its destination: a plant stores it.
+      const auto = parteAutomatica(f);
+      if (auto > 0 && PLANTA_INSUMO.has(f.destino)) this.#guardarInsumo(f.destino, ((ta * auto) / (365.25 * 24)) * horas, año);
+      const h = (ta * (1 - auto)) / (365.25 * 24);
       this.#patiosCadena.set(f.id, Math.min((this.#patiosCadena.get(f.id) ?? 0) + h * horas, h * 24 * DIAS_PATIO_CADENA));
     }
-    // The steel mills use up their inputs; how they were supplied sets the steel they make.
+    // The plants that depend on their chain use up their inputs; how they were supplied sets what they make.
     const aceroEstado = new Map<string, number>();
-    for (const a of ACERERAS) {
-      const pide = (insumosAño(a.id, this.horas, año) / (365.25 * 24)) * horas;
-      const hay = this.#reservasAcero.get(a.id) ?? 0;
+    for (const p of PLANTAS_INSUMO) {
+      const pide = (insumosAño(p.clave, this.horas, año) / (365.25 * 24)) * horas;
+      const hay = this.#reservasInsumo.get(p.clave) ?? 0;
       const cubierto = pide > 0 ? Math.min(1, hay / pide) : 1;
-      this.#reservasAcero.set(a.id, Math.max(0, hay - pide));
-      const s = this.#surtidoAcero.get(a.id) ?? 1;
+      this.#reservasInsumo.set(p.clave, Math.max(0, hay - pide));
+      const s = this.#surtidoInsumo.get(p.clave) ?? 1;
       const peso = Math.min(1, horas / (24 * MEMORIA_DIAS));
       const surtido = this.modo === 'realidad' ? 1 : s + (cubierto - s) * peso;
-      this.#surtidoAcero.set(a.id, surtido);
-      const h = aceroAño(a.id, this.horas, surtido) / (365.25 * 24);
-      const estado = SITIOS_POR_CLAVE.get(`industria:${a.id}`)?.estado ?? '';
-      aceroEstado.set(estado, (aceroEstado.get(estado) ?? 0) + aceroAño(a.id, this.horas, 1) / (365.25 * 24));
-      this.#patiosAcero.set(a.id, Math.min((this.#patiosAcero.get(a.id) ?? 0) + h * horas, h * 24 * DIAS_PATIO_CADENA));
+      this.#surtidoInsumo.set(p.clave, surtido);
+      if (p.sale !== 'acero') continue;
+      // A mill's steel: the carmakers' share leaves as their flows; the rest waits as domestic cargo.
+      const h = (salidaPlanta(p, this.horas, surtido) * (1 - PARTE_ARMADORAS)) / (365.25 * 24);
+      const estado = SITIOS_POR_CLAVE.get(p.clave)?.estado ?? '';
+      aceroEstado.set(estado, (aceroEstado.get(estado) ?? 0) + salidaPlanta(p, this.horas, 1) / (365.25 * 24));
+      this.#patiosAcero.set(p.id, Math.min((this.#patiosAcero.get(p.id) ?? 0) + h * horas, h * 24 * DIAS_PATIO_CADENA));
     }
     for (const e of ESTADOS_PRODUCTIVOS) {
       // The chains' domestic flows and the mills' steel come out of the state's generic cargo: the yearbook's total stays.
@@ -1106,11 +1115,7 @@ class Simulacion {
         [id]: { t: c.t + (llega ? ton : 0), tkm: c.tkm + ton * km, porAño: llega ? { ...c.porAño, [año]: (c.porAño[año] ?? 0) + ton } : c.porAño },
       };
       if (llega) {
-        const planta = destino.startsWith('industria:') ? destino.slice('industria:'.length) : '';
-        if (ACERERAS.some((a) => a.id === planta)) {
-          const tope = (insumosAño(planta, this.horas, añoDe(this.horas)) / 365.25) * RESERVA_DIAS;
-          this.#reservasAcero.set(planta, Math.min(tope, (this.#reservasAcero.get(planta) ?? 0) + ton));
-        }
+        if (PLANTA_INSUMO.has(destino)) this.#guardarInsumo(destino, ton, añoDe(this.horas));
         t.entregadoCadena += ton;
         delete t.cadena[id];
       }
@@ -1126,13 +1131,20 @@ class Simulacion {
     }
   }
 
-  /** How a steel mill was supplied in the last month (0 to 1), its inputs in store and its steel waiting, tonnes. */
-  surtidoAcero(id: string): number {
-    return this.modo === 'realidad' ? 1 : (this.#surtidoAcero.get(id) ?? 1);
+  /** A plant stores the inputs that reach it, up to `RESERVA_DIAS` of them. */
+  #guardarInsumo(clave: string, ton: number, año: number) {
+    const tope = (insumosAño(clave, this.horas, año) / 365.25) * RESERVA_DIAS;
+    this.#reservasInsumo.set(clave, Math.min(tope, (this.#reservasInsumo.get(clave) ?? 0) + ton));
   }
-  reservaAcero(id: string): number {
-    return this.#reservasAcero.get(id) ?? 0;
+
+  /** How a plant that depends on its chain was supplied in the last month (0 to 1), and its inputs in store (tonnes), by site key. */
+  surtido(clave: string): number {
+    return this.modo === 'realidad' ? 1 : (this.#surtidoInsumo.get(clave) ?? 1);
   }
+  reservaInsumo(clave: string): number {
+    return this.#reservasInsumo.get(clave) ?? 0;
+  }
+  /** Steel waiting at a mill's station (the part not bound for a carmaker), tonnes. */
   enPatioAcero(id: string): number {
     return this.#patiosAcero.get(id) ?? 0;
   }
