@@ -17,6 +17,7 @@
   import { esperaTotal, piernasDelRecorrido, posicion, trayectoActual } from '$lib/domain/servicio';
   import { CENTRO_MEXICO, PUERTAS } from '$lib/domain/sitios';
   import { puntoEn, seccion } from '$lib/domain/trayecto';
+  import { kmEnHoras } from '$lib/domain/petroleros';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
   import { estadoUnidad } from '$lib/ui/formato';
@@ -523,10 +524,61 @@
       ctx.textAlign = 'left';
     }
 
+    pintarPetroleros(ctx);
     pintarBarcos(ctx, now);
   }
 
   // ---- ships ------------------------------------------------------------------
+
+  /** The buyers' tankers (`petroleros.ts`): small hulls in a light crude tone, under the player's ships, all the way to their far port. */
+  const PETROLERO = '#e3935a';
+  function pintarPetroleros(ctx: CanvasRenderingContext2D) {
+    if (!projection) return;
+    const pxKm = pxPorKm();
+    for (const p of sim.petroleros) {
+      const km = kmEnHoras(p.trayecto, sim.horas - p.salida);
+      const head = projection(puntoEn(p.trayecto, km));
+      const back = projection(puntoEn(p.trayecto, Math.max(0, km - Math.max(1, 8 / pxKm))));
+      if (!head) continue;
+      let rumbo = 0;
+      if (back) {
+        let dx = head[0] - back[0];
+        if (Math.abs(dx) > worldWidth / 2) dx -= Math.sign(dx) * worldWidth;
+        rumbo = Math.atan2(head[1] - back[1], dx);
+      }
+      for (const ox of worldOffsets()) {
+        const hx = transform.applyX(head[0] + ox);
+        const hy = transform.applyY(head[1]);
+        if (hx < -30 || hx > width + 30 || hy < -30 || hy > height + 30) continue;
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, 9);
+        glow.addColorStop(0, conAlfa(PETROLERO, 0.3));
+        glow.addColorStop(1, conAlfa(PETROLERO, 0));
+        ctx.fillStyle = glow;
+        ctx.fillRect(hx - 9, hy - 9, 18, 18);
+        ctx.restore();
+        const L = CASCO_PX * 0.8 * Math.min(1.6, 0.9 + 0.12 * Math.sqrt(transform.k));
+        const W = L * 0.4;
+        ctx.save();
+        ctx.translate(hx, hy);
+        ctx.rotate(rumbo);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(-L * 0.3, -W / 2);
+        ctx.lineTo(-L, -W / 2);
+        ctx.lineTo(-L, W / 2);
+        ctx.lineTo(-L * 0.3, W / 2);
+        ctx.closePath();
+        ctx.fillStyle = PETROLERO;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(10, 14, 22, 0.8)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+  }
 
   /** Screen length of a ship's hull at world scale, px. */
   const CASCO_PX = 9;

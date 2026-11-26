@@ -26,6 +26,7 @@
   import { distanceKm, interpolate, toVector3 } from '$lib/domain/geo';
   import { piernasDelRecorrido, posicion, trayectoActual } from '$lib/domain/servicio';
   import { PUERTAS } from '$lib/domain/sitios';
+  import { kmEnHoras } from '$lib/domain/petroleros';
   import { puntoEn } from '$lib/domain/trayecto';
   import { sim } from '$lib/state/simulacion.svelte';
 
@@ -219,6 +220,27 @@
     invalidate();
   });
 
+  // ---- the buyers' tankers (`petroleros.ts`): plain hulls in a light crude tone, reused frame to frame ----
+
+  const petroleroMat = new MeshBasicMaterial({ color: new Color('#e3935a'), side: DoubleSide });
+  const petroleroBrilloMat = new MeshBasicMaterial({
+    color: new Color('#e3935a'),
+    transparent: true,
+    opacity: 0.28,
+    blending: AdditiveBlending,
+    depthWrite: false,
+  });
+  const petroleros: { casco: Mesh; brillo: Mesh }[] = [];
+  function cascosPetroleros(n: number) {
+    while (petroleros.length < n) {
+      const casco = new Mesh(cascoGeom, petroleroMat);
+      const brillo = new Mesh(brilloGeom, petroleroBrilloMat);
+      raiz.add(brillo, casco);
+      petroleros.push({ casco, brillo });
+    }
+    petroleros.forEach((p, i) => (p.casco.visible = p.brillo.visible = i < n));
+  }
+
   // ---- every frame ----------------------------------------------------------------
 
   const P = new Vector3();
@@ -310,9 +332,32 @@
         }
       }
 
+      const enMar = sim.petroleros;
+      cascosPetroleros(enMar.length);
+      enMar.forEach((p, i) => {
+        const t = p.trayecto;
+        const km = kmEnHoras(t, sim.horas - p.salida);
+        P.set(...toVector3(puntoEn(t, km), R.barco));
+        N.copy(P).normalize();
+        A.set(...toVector3(puntoEn(t, km > 20 ? km - 20 : km), 1));
+        B.set(...toVector3(puntoEn(t, km > 20 ? km : km + 20), 1));
+        F.subVectors(B, A);
+        F.addScaledVector(N, -F.dot(N));
+        const v = petroleros[i];
+        if (F.lengthSq() > 1e-14) {
+          F.normalize();
+          L.crossVectors(N, F);
+          orientar(v.casco);
+        }
+        v.casco.position.copy(P);
+        v.casco.scale.setScalar(CASCO_PX * pxUnidad * 0.8);
+        v.brillo.position.copy(P);
+        v.brillo.scale.setScalar(BRILLO_PX * pxUnidad * 0.4);
+      });
+
       if (haySeleccion !== etiquetaVisible) etiquetaVisible = haySeleccion;
       // Keep frames coming while ships move; paused, the camera alone asks for them.
-      if (sim.corriendo && vistas.length) invalidate();
+      if (sim.corriendo && (vistas.length || sim.petroleros.length)) invalidate();
       else if (haySeleccion) invalidate();
     },
     { autoInvalidate: false }

@@ -18,5 +18,15 @@
   "haciaLon": 4.05,
   "haciaLat": 51.95,
   "oceano": "Atlántico"
+ },
+ {
+  "id": "eua",
+  "nombre": "Estados Unidos",
+  "lon": -94.6,
+  "lat": 29.22,
+  "hacia": "Houston",
+  "haciaLon": -94.72,
+  "haciaLat": 29.34,
+  "oceano": "Golfo de México"
  }
 ]

@@ -91,6 +91,7 @@
   import { duracion, estadoUnidad, km as fmtKm } from '$lib/ui/formato';
   import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
   import { COLOR_DUEÑO, COLOR_USO, INDUSTRIA, MINERIA, AEROPUERTO, COMBUSTIBLE, COMBUSTOLEO, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
+  import { kmEnHoras, type Petrolero } from '$lib/domain/petroleros';
   import { CENTRALES_CO, CENTRAL_CO_DE_PLANTA, COMBUSTOLEO as DATOS_CO, ENTREGAS_CO, factorCentral, factorDemandaCo, mbdCentralCo, porDuctoCo, realCombustoleo } from '$lib/domain/combustoleo';
   import { abastoDiario, BASES_ABASTO, CAYO_ARCAS, COMPLEJOS, produccionComplejo, type Complejo } from '$lib/domain/plataformas';
   import { comercioDe, NOMBRE_CARGA, TIPOS_CARGA, type TipoCarga } from '$lib/domain/comercioMar';
@@ -314,6 +315,8 @@
   const ESTELA_BARCO_PX = 70;
   /** Hull drawn on screen: a fixed icon size (a real 300 m hull is a few px even at 40×). */
   const CASCO_PX = 13;
+  /** The buyers' tankers: a light crude tone, so they read on the dark sea apart from the player's ships. */
+  const PETROLERO = '#e3935a';
   /** How far the camera can slide before the geography layer is repainted. */
   const MARGEN = 256;
 
@@ -472,6 +475,7 @@
 
   type Target =
     | { kind: 'unidad'; unidad: Unidad }
+    | { kind: 'petrolero'; petrolero: Petrolero }
     | { kind: 'puerta'; puerta: Puerta }
     | { kind: 'puerto'; puerto: Puerto }
     | { kind: 'aeropuerto'; aeropuerto: Aeropuerto }
@@ -574,6 +578,8 @@
   let estacionPts: { clave: string; via: [number, number]; sitio: [number, number]; km: number }[] = [];
   /** Where each vehicle's head was drawn last frame, for hit-testing. */
   let cabezas: { unidad: Unidad; x: number; y: number }[] = [];
+  /** Where each buyer's tanker on screen was drawn, for hit-testing. */
+  let petroleroPts: { petrolero: Petrolero; x: number; y: number }[] = [];
 
   const estadoNombre = new Map<string, string>();
 
@@ -2099,10 +2105,72 @@
     const pxKm = pxPorKm();
     const sel = (u: Unidad) => sim.seleccion === u.id;
     const orden = [...sim.barcos, ...sim.trenes].sort((a, b) => Number(sel(a)) - Number(sel(b)));
+    petroleroPts = [];
+    if (layers.barcos) pintarPetroleros(ctx, pxKm);
     for (const u of orden) {
       if (u.tipo === 'barco') {
         if (layers.barcos) pintarBarco(ctx, u, pxKm, now);
       } else if (layers.trenes) pintarTren(ctx, u, pxKm, now);
+    }
+  }
+
+  /**
+   * The buyers' tankers (`petroleros.ts`): small hulls in crude's colour with a faint wake, under the
+   * player's vehicles. Only their part on the board: past a gateway they're on the world views.
+   */
+  function pintarPetroleros(ctx: CanvasRenderingContext2D, pxKm: number) {
+    const L = CASCO_PX * 0.8 * Math.min(1.6, 0.85 + 0.15 * Math.sqrt(transform.k));
+    const W = L * 0.38;
+    for (const p of sim.petroleros) {
+      const t = p.trayecto;
+      const km = kmEnHoras(t, sim.horas - p.salida);
+      if (km < t.enTablero[0] || km > t.enTablero[1]) continue;
+      const estela = enPantalla(seccion(t, Math.max(t.enTablero[0], km - 70 / pxKm), km));
+      if (!estela.length) continue;
+      const [hx, hy] = estela[estela.length - 1];
+      if (hx < -40 || hx > width + 40 || hy < -40 || hy > height + 40) continue;
+      petroleroPts.push({ petrolero: p, x: hx, y: hy });
+      const hot = hovered?.kind === 'petrolero' && hovered.petrolero.id === p.id;
+      if (estela.length >= 2) {
+        const [ax, ay] = estela[0];
+        const g = ctx.createLinearGradient(ax, ay, hx, hy);
+        g.addColorStop(0, conAlfa(CRUDO, 0));
+        g.addColorStop(1, conAlfa(PETROLERO, 0.4));
+        ctx.save();
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        trazar(ctx, estela);
+        ctx.stroke();
+        ctx.restore();
+      }
+      // A soft glow, so a small hull reads on the dark sea.
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      const brillo = ctx.createRadialGradient(hx, hy, 0, hx, hy, 10);
+      brillo.addColorStop(0, conAlfa(PETROLERO, hot ? 0.5 : 0.28));
+      brillo.addColorStop(1, conAlfa(PETROLERO, 0));
+      ctx.fillStyle = brillo;
+      ctx.fillRect(hx - 10, hy - 10, 20, 20);
+      ctx.restore();
+      const proa = enPantalla(seccion(t, Math.max(0, km - Math.max(0.5, 6 / pxKm)), km));
+      const [bx, by] = proa.length >= 2 ? proa[0] : [hx - 1, hy];
+      ctx.save();
+      ctx.translate(hx, hy);
+      ctx.rotate(Math.atan2(hy - by, hx - bx));
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(-L * 0.3, -W / 2);
+      ctx.lineTo(-L, -W / 2);
+      ctx.lineTo(-L, W / 2);
+      ctx.lineTo(-L * 0.3, W / 2);
+      ctx.closePath();
+      ctx.fillStyle = PETROLERO;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(10, 14, 22, 0.8)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.restore();
     }
   }
 
@@ -2343,6 +2411,15 @@
         }
       }
       if (best) return best;
+      // The buyers' tankers, under the player's vehicles.
+      for (const c of petroleroPts) {
+        const d = Math.hypot(c.x - mx, c.y - my);
+        if (d < 9 && d < bestD) {
+          best = { kind: 'petrolero', petrolero: c.petrolero };
+          bestD = d;
+        }
+      }
+      if (best) return best;
     }
     // Sites next, nearest within a few pixels: they sit on top of estados.
     if (layers.puertos) {
@@ -2518,6 +2595,8 @@
       ? null
       : t.kind === 'unidad'
         ? `unidad:${t.unidad.id}`
+        : t.kind === 'petrolero'
+        ? `petrolero:${t.petrolero.id}`
         : t.kind === 'puerta'
           ? `puerta:${t.puerta.id}`
           : t.kind === 'puerto'
@@ -2639,7 +2718,7 @@
       return;
     }
     // A rail line, a power plant or a fuel terminal only shows its card on hover.
-    if (target.kind === 'via' || target.kind === 'planta' || target.kind === 'terminal' || target.kind === 'cayo-arcas') return;
+    if (target.kind === 'via' || target.kind === 'planta' || target.kind === 'terminal' || target.kind === 'cayo-arcas' || target.kind === 'petrolero') return;
     if (target.kind === 'estado') {
       const e = baked?.estados.find((x) => x.props.clave === target.estado.clave);
       if (e) flyToBounds(e.bounds);
@@ -3090,6 +3169,15 @@
       </span>
       <strong>{u.nombre}</strong>
       <span class="tip-sub">{lineaUnidad}</span>
+    {:else if hovered.kind === 'petrolero'}
+      {@const p = hovered.petrolero}
+      {@const _reloj = sim.horas}
+      {@const destino = PUERTAS.find((x) => `puerta:${x.id}` === p.destino)}
+      {@const faltan = Math.max(0, p.trayecto.horas - (sim.horas - p.salida))}
+      <span class="label tip-kind" style:color={CRUDO}>Petrolero de un comprador</span>
+      <strong>Crudo de {p.origen === 'cayo-arcas' ? 'Cayo Arcas' : nombreCorto(p.origen)} a {destino?.hacia ?? p.destino}</strong>
+      <span class="tip-sub">{fmt.format(Math.round(p.barriles / 1000))} mil barriles · llega en {faltan >= 48 ? `${Math.round(faltan / 24)} días` : `${Math.round(faltan)} horas`}</span>
+      <span class="tip-sub">No es tuyo: es el barco de quien compra el crudo que el país no refina. En 2018 se fue el 53 % a Estados Unidos, el 17 % a Europa y el 27 % al Lejano Oriente (Balance Nacional de Energía).</span>
     {:else if hovered.kind === 'puerta'}
       <span class="label tip-kind" style:color="var(--accent)">Salida al mundo</span>
       <strong>Hacia {hovered.puerta.nombre}</strong>

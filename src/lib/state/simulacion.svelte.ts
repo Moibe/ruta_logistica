@@ -1,6 +1,8 @@
 import { browser } from '$app/environment';
 import { COLORES_BARCO, crearBarco, NOMBRES_BARCO, SERVICIOS_BARCO, type Barco, type ClaseBarco } from '$lib/domain/barcos';
-import { construirMar, type Mar, type RutasMarJson } from '$lib/domain/mar';
+import { construirMar, rutaMar, type Mar, type RutasMarJson } from '$lib/domain/mar';
+import { barrilesPorPetrolero, KMH_PETROLERO, rutasPetroleras, type Petrolero } from '$lib/domain/petroleros';
+import type { Trayecto } from '$lib/domain/trayecto';
 import { construirRed, type Red, type RedJson } from '$lib/domain/red';
 import { aplicarSaturacion, costoConUso, trenesDelJugador, usoDe, type Uso } from '$lib/domain/saturacion';
 import {
@@ -365,6 +367,12 @@ class Simulacion {
   #diaDesabasto = -1;
   /** The State's emergency tanker trucks, by state: how many, what they cost (millions of pesos) and each purchase. */
   pipas = $state.raw<Record<string, { n: number; mdp: number; compras: { horas: number; n: number; mdp: number }[] }>>({});
+  /** The buyers' tankers at sea now, carrying the crude exported (`petroleros.ts`). Replaced when one sails or arrives. */
+  petroleros = $state.raw<Petrolero[]>([]);
+  /** Barrels each route (port → gateway) has waiting for its next tanker, and each route's path. */
+  #cargaPetroleros = new Map<string, number>();
+  #rutasPetroleros = new Map<string, Trayecto | null>();
+  #siguientePetrolero = 1;
   /** What the State's trains charged and cost each year, millions of pesos (`tarifas.ts`). */
   #cuentasTrenes = new Map<string, CuentaTrenes>();
   /** Fuel oil each Mexican refinery makes now, Mbd (`combustoleo.ts`). Recomputed with the refineries. */
@@ -542,6 +550,7 @@ class Simulacion {
         // all they keep of the half the player brings.
         for (const id of this.combustoleo.keys()) this.#patiosCo.set(id, this.#topePatioCo(id));
         for (const c of CENTRALES_CO) this.#reservasCo.set(c.id, this.#topeReservaCo(c));
+        this.#sembrarPetroleros();
         // Its first stop is where its run ends (`destinos`' last).
         for (const b of barcos) if (b.clase === 'tanque') this.#cargarLiquidos(b, b.paradas[0], b.destinos.length - 1);
         // Half the complexes' storage full, and a supply vessel that has just left its base sails loaded.
@@ -1239,6 +1248,49 @@ class Simulacion {
     c.tkm += ton * p.km;
     c.km += p.km;
     this.#cuentasTrenes.set(año, c);
+  }
+
+  // ---- the buyers' tankers ------------------------------------------------------------------
+
+  #rutaPetrolera(origen: string, destino: string): Trayecto | null {
+    const k = `${origen}|${destino}`;
+    if (!this.#rutasPetroleros.has(k)) this.#rutasPetroleros.set(k, this.mar ? rutaMar(this.mar, origen, destino, KMH_PETROLERO) : null);
+    return this.#rutasPetroleros.get(k) ?? null;
+  }
+
+  /** The game opens with the tankers that would be at sea already, spread along each route, and part of the next load waiting. */
+  #sembrarPetroleros() {
+    const nuevos: Petrolero[] = [];
+    rutasPetroleras(this.crudoExportado).forEach((r, i) => {
+      const t = this.#rutaPetrolera(r.origen, r.destino);
+      const carga = barrilesPorPetrolero(r.destino);
+      if (!t || r.mbd <= 0) return;
+      const cada = (carga / (r.mbd * 1000)) * 24;
+      const fase = (i * 0.618) % 1;
+      for (let atras = cada * fase; atras < t.horas; atras += cada)
+        nuevos.push({ id: this.#siguientePetrolero++, origen: r.origen, destino: r.destino, trayecto: t, salida: this.horas - atras, barriles: carga });
+      this.#cargaPetroleros.set(`${r.origen}|${r.destino}`, carga * (1 - fase));
+    });
+    this.petroleros = nuevos;
+  }
+
+  /** The crude exported piles up on each route; a full load sails, and a tanker that arrived is gone. */
+  #despacharPetroleros(horas: number) {
+    if (this.modo !== 'juego' || !this.mar) return;
+    const nuevos: Petrolero[] = [];
+    for (const r of rutasPetroleras(this.crudoExportado)) {
+      const k = `${r.origen}|${r.destino}`;
+      const carga = barrilesPorPetrolero(r.destino);
+      let hay = (this.#cargaPetroleros.get(k) ?? 0) + barrilesEn(r.mbd, horas);
+      while (hay >= carga) {
+        const t = this.#rutaPetrolera(r.origen, r.destino);
+        if (t) nuevos.push({ id: this.#siguientePetrolero++, origen: r.origen, destino: r.destino, trayecto: t, salida: this.horas, barriles: carga });
+        hay -= carga;
+      }
+      this.#cargaPetroleros.set(k, hay);
+    }
+    const siguen = this.petroleros.filter((p) => this.horas - p.salida < p.trayecto.horas);
+    if (nuevos.length || siguen.length !== this.petroleros.length) this.petroleros = [...siguen, ...nuevos];
   }
 
   /** A year of the State's trains: charged, run and trackage rights (millions of pesos), tonne-km and train-km. Read it with `horas`. */
@@ -2261,6 +2313,7 @@ class Simulacion {
         this.#producir(horas);
         this.#abastecer(horas);
         this.#abastecerCombustoleo(horas);
+        this.#despacharPetroleros(horas);
         this.#consumirAbasto(horas);
         for (const t of this.trenes) {
           avanzar(t, horas);

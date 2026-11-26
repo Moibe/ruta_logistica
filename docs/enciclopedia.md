@@ -35,7 +35,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [Natural Earth](https://www.naturalearthdata.com/) 1:10m | Estados, países vecinos, vías férreas y ciudades del tablero de México | Repositorio `nvkelso/natural-earth-vector`, commit `ca96624` del 2 de junio de 2022 (versión 5.2.0-pre) | Dominio público |
 | Atlas Ambiental de América del Norte, de la CCA (Comisión para la Cooperación Ambiental de México, Estados Unidos y Canadá) | Origen de las vías férreas de Norteamérica que trae Natural Earth (así lo registra la bitácora de cambios de Natural Earth); reúne cartografía de INEGI, USGS y Natural Resources Canada | Red de alrededor de 2010 | A través de Natural Earth |
 | [world-atlas](https://github.com/topojson/world-atlas) | Contornos del mundo para las vistas globales (tierra a 110m y 50m, países a 110m), y la tierra 50m sobre la que se calculan las travesías oceánicas | 2.0.2, que redistribuye Natural Earth 4.1.0 en TopoJSON | ISC (los datos, dominio público) |
-| Curaduría propia | Los 18 puertos, las 2 salidas al mundo y sus puertos lejanos (Shanghái y Róterdam), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
+| Curaduría propia | Los 18 puertos, las 3 salidas al mundo y sus puertos lejanos (Shanghái, Róterdam y Houston), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
 | Cálculo propio sobre Natural Earth | Las 276 rutas marítimas entre puertos, salidas y complejos de plataformas, y las 2 travesías oceánicas de las salidas a sus puertos lejanos (ver [Rutas marítimas](#8-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
 | `logistica-oceanica` (proyecto hermano) | Velocidades de referencia de las clases de barco | — | Del proyecto |
 | [Diario Oficial de la Federación](https://dof.gob.mx) | Las declaratorias de los 32 Polos del Bienestar vigentes: polígono, superficie, municipio y fecha de cada uno (ver [Polos del Bienestar](#5-polos-del-bienestar)) | Declaratorias del 12 de mayo de 2023 al 7 de agosto de 2026, con sus notas aclaratorias y modificaciones; consultadas el 19 de noviembre de 2026 | Documento oficial público |
@@ -78,7 +78,7 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [CFE, Informe Anual 2018](https://gaceta.diputados.gob.mx/Gaceta/64/2019/may/CFE_IA-20190521.pdf) (en la Gaceta de la Cámara de Diputados) | El combustóleo que quemó en 2018 cada una de sus empresas de generación, y las centrales de cada una por tecnología | 21 de mayo de 2019 | Documento oficial público |
 | [ASF, auditoría 2020-0430 «Erogaciones por Mantenimiento en Refinerías»](https://www.asf.gob.mx/Trans/Informes/IR2020c/Documentos/Auditorias/2020_0430_a.pdf) | El combustóleo que hizo cada refinería en 2019 y 2020 | Cuenta Pública 2020 | Documento oficial público |
 | [ASF, auditoría 2017-0522 a CFEnergía](https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf) | El combustóleo que la CFE compraba en Estados Unidos llegaba en buque tanque a Tuxpan; el gas natural licuado, a Altamira y Manzanillo | Cuenta Pública 2017 | Documento oficial público |
-| [SENER, Balance Nacional de Energía 2019](https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf) | Lo que el país exportó e importó de cada petrolífero en 2018 (en PJ) y el poder calorífico neto del combustóleo (cuadro 29) | Febrero de 2021 | Documento oficial público |
+| [SENER, Balance Nacional de Energía 2019](https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf) | Lo que el país exportó e importó de cada petrolífero en 2018 (en PJ), el poder calorífico neto del combustóleo (cuadro 29) y a dónde se exportó el crudo (cuadro 49) | Febrero de 2021 | Documento oficial público |
 | [ARTF, Indicadores Ferroviarios 2020](https://www.gob.mx/cms/uploads/attachment/file/559416/Indicadores_Ferroviarios_ARTF_2020_Final.pdf) | Ingreso por tonelada-km de cada concesionaria, toneladas-km, trenes-km y carros por tren de 2016 a 2019 | 2020 | Documento oficial público |
 | [GMXT, reporte del cuarto trimestre de 2018 ante la BMV](https://gmxt.mx/wp-content/uploads/2019/07/4TRIM18D-GMXT.pdf) | Ingresos y utilidad de operación de Ferromex y Ferrosur en 2018: cuánto gastaban por peso cobrado | Febrero de 2019 | Reporte regulatorio de la empresa |
 | [Cofece, estudio de competencia en el ferrocarril de carga](https://www.cofece.mx/wp-content/uploads/2021/08/FERRO_doc-2021.pdf) | La contraprestación de 16.5 centavos de dólar por carro-km que fijó la SCT por un derecho de paso | 2021 | Documento oficial público |
@@ -3220,7 +3220,8 @@ donde pasan sí dicen de quién son (ver [Dueños](#dueños)).
 ### Cómo se calculan
 
 Ninguna ruta de barco se dibujó a mano. `npm run datos` las calcula entre **cada par** de los
-18 puertos, las 2 salidas al mundo y los 4 complejos de plataformas (276 rutas):
+18 puertos, las 3 salidas al mundo, los 4 complejos de plataformas y la terminal de Cayo Arcas (325
+rutas):
 
 1. **La tierra en una malla.** La misma tierra 1:10m del tablero (estados y países vecinos)
    se pasa a una malla de 0.05° (unos 5.5 km por celda) que va de 122° a 70° O y de 5° a 34°
@@ -3262,15 +3263,17 @@ corredor interoceánico, y está en el juego tal cual.
 
 ### Salidas al mundo y travesías oceánicas
 
-Dos "puertas" en el borde del tablero. Cada una representa un **puerto lejano**: un barco que
-sale por ella **cruza el océano de verdad** hasta ese puerto, hace escala allá 48 h y vuelve
-por el mismo camino. En el tablero se pierde de vista al pasar la puerta; en las vistas del
-mundo (mapa plano y globo) se le ve navegar toda la travesía.
+Tres "puertas". Cada una representa un **puerto lejano**: un barco que sale por ella **cruza el
+océano de verdad** hasta ese puerto, hace escala allá 48 h y vuelve por el mismo camino. En el
+tablero se pierde de vista al pasar la puerta; en las vistas del mundo (mapa plano y globo) se le ve
+navegar toda la travesía. La de Estados Unidos está en el Golfo, frente a Galveston: ahí el tablero
+lo ve todo, porque Houston queda a 22 km.
 
 | Salida | Dónde | Puerto lejano | Océano |
 | --- | --- | --- | --- |
 | Asia | Pacífico, 23.5° N · 118.2° O | Shanghái, terminal de aguas profundas de Yangshan (30.627° N, 122.067° E) | Pacífico |
 | Europa | Atlántico, al norte de las Bahamas, 29.5° N · 77° O | Róterdam, Maasvlakte (51.95° N, 4.05° E) | Atlántico |
+| Estados Unidos | Golfo de México, frente a Galveston, 29.22° N · 94.6° O | Houston: la entrada de su canal de navegación, en Galveston (29.34° N, 94.72° O) | Golfo de México |
 
 **Cómo se calculan las travesías** (`scripts/travesias.mjs`, dentro de `npm run datos`). Con
 el mismo método que las rutas de México, pero sobre el mundo entero:
@@ -3293,6 +3296,7 @@ el mismo método que las rutas de México, pero sobre el mundo entero:
 | --- | ---: | ---: | ---: | --- |
 | Asia → Shanghái | 11,407 km (6,159 mn) | 11,214 km | +1.7 % | Pacífico norte en arco, al sur de Japón y de Kyushu |
 | Europa → Róterdam | 7,108 km (3,838 mn) | 6,881 km | +3.3 % | Al sur de Terranova (cabo Race), el Canal de la Mancha y el estrecho de Dover |
+| Estados Unidos → Houston | 22 km (12 mn) | — | — | La entrada a la bahía de Galveston |
 
 Los vértices del trazo, de la puerta al puerto lejano:
 
@@ -4187,6 +4191,35 @@ dejan fuera.
 | Cayo Arcas, en el mar | 26.88 | 38.2 % | 467 |
 | Coatzacoalcos (con Pajaritos) | 8.31 | 11.8 % | 144 |
 | Salina Cruz | 4.48 | 6.4 % | 78 |
+
+**A dónde va y cómo se ve.** El Balance Nacional de Energía 2019 (cuadro 49, con datos de la SENER y
+de Pemex) da a dónde se fue el crudo exportado (miles de barriles diarios):
+
+| Destino | 2018 | Parte | 2019 | En el juego sale hacia |
+| --- | ---: | ---: | ---: | --- |
+| Estados Unidos | 588 | 53.5 % | 505 | Houston |
+| Resto de América | 34 | 3.1 % | 104 | Houston |
+| Europa | 186 | 16.9 % | 182 | Róterdam |
+| Lejano Oriente y otros | 291 | 26.5 % | 312 | Shanghái |
+| **Total** | **1,100** | | **1,103** | |
+
+Se lo llevan los **petroleros de los compradores**, que se ven navegar en el tablero y en las vistas
+del mundo. No los controlas, como los trenes de las concesionarias:
+
+- **De dónde salen.** De los cuatro puertos de arriba, en su parte. Salina Cruz, en el Pacífico,
+  manda todo a Asia; los del Golfo se reparten lo demás.
+- **A dónde van.** Lo de Estados Unidos y el resto de América, a Houston; lo de Europa, a Róterdam; lo
+  del Lejano Oriente, a Shanghái. Todo en la proporción de 2018.
+- **Cuándo zarpan.** Cada ruta junta el crudo que le toca y zarpa un petrolero cuando tiene su carga
+  completa. Al llegar, desaparece.
+- **Cuánto carga cada uno.** El buque típico de cada ruta (**estimación del juego**):
+  - unos 700 mil barriles a Houston (Aframax);
+  - un millón a Europa (Suezmax);
+  - dos millones a Asia (VLCC).
+
+Al empezar zarpa uno al día y algo más, y en el mar hay entre 8 y 12. Rumbo a Houston van casi
+siempre uno o dos; a Asia, cuatro o cinco, porque el viaje dura un mes. Si rehabilitas refinerías o
+terminas la Olmeca, se exporta menos crudo y zarpan menos.
 
 | Año | Crudo producido | Crudo exportado | Combustibles que hizo Pemex | Combustibles que importó Pemex |
 | --- | ---: | ---: | ---: | ---: |
@@ -5253,7 +5286,12 @@ los otros dos aún no se capturan.
   Europa salen del tablero por una "puerta" y cruzan el océano de verdad hasta Shanghái o
   Róterdam: el tablero solo los pierde de vista, las vistas del mundo los siguen. Allá hacen
   una escala fija de 48 h; lo que pasa en esos puertos (qué cargan, quién lo pide) no se
-  simula.
+  simula. El 26 de noviembre de 2026 se sumó una tercera, a Houston, a donde se fue más de la
+  mitad del crudo exportado en 2018.
+- **Los petroleros de los compradores se ven, pero no se controlan.** *(26 nov 2026.)* El usuario
+  preguntó a dónde se exporta el crudo y si no debería ver los barcos. Aprobó la salida a Houston y
+  los petroleros que llevan el crudo exportado, como tráfico de fondo. Que tus buques tanque puedan
+  llevar exportación queda para después. Ver [Los combustibles](#los-combustibles).
 - **Las travesías se calculan como las rutas de México, no se dibujan.** Es el mismo método
   (malla, ruta más corta lejos de la costa, enderezado, auditoría), solo que sobre el mundo
   y enderezado en círculos máximos. *(19 nov 2026; reemplaza el tiempo fijo "gran círculo +

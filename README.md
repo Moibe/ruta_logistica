@@ -254,7 +254,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `static/data/polos/<polo>.json` | El dibujo de cada polo por dentro (los 32 tienen vista): terreno del DOF en una o varias piezas, franjas excluidas, lotes, calles, espuela, conexión eléctrica y alrededores de OpenStreetMap, en metros (~70 KB cada uno). Lo genera el mismo script |
 | `src/lib/domain/datos/comercio-mar.json` | **Comercio por mar**: lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (SEMAR), lo que entra y sale por tren (ATTRAPI 2025), la carga de cada clase de barco y las reglas de los patios. Lo genera `scripts/comercio/gen-comercio-mar.mjs` |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
-| `src/lib/domain/datos/puertas.json`  | Las **2 salidas al mundo** (Asia, Europa) con su puerto lejano y océano, a mano |
+| `src/lib/domain/datos/puertas.json`  | Las **3 salidas al mundo** (Asia, Europa, Estados Unidos) con su puerto lejano y océano, a mano |
 | `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
 | `src/lib/domain/datos/obras-via.json` | **Catálogo de obras del Estado**: trazos, paradas o líneas, costo por km y tiempo oficiales, con fuentes |
 | `src/lib/domain/datos/energia.json`  | **Electricidad**: regiones (CENACE) con demanda y márgenes oficiales, centrales de 2018, privadas con su fecha (permisos de la CNE), centrales de la CFE para construir, MW de los polos; con fuentes |
@@ -412,6 +412,14 @@ El tablero tiene la capa *Ductos*. Detalle en la [enciclopedia](docs/enciclopedi
 
 El tablero tiene la capa *Combustibles*: los estados por la parte que vino del país y las 78
 terminales de Pemex. Detalle en la [enciclopedia](docs/enciclopedia.md#los-combustibles).
+
+**Los petroleros de los compradores** (`domain/petroleros.ts`, `crudoPorDestino` en
+`datos/combustibles.json`): el crudo exportado (`sim.crudoExportado`) se reparte por puerto de salida
+(`crudoPorPuerto`) y por destino (Balance Nacional de Energía, 2018: Houston, Róterdam, Shanghái;
+`rutasPetroleras`). Cada ruta zarpa un petrolero al juntar su carga (`#despacharPetroleros`,
+`sim.petroleros`), que sigue `rutaMar` hasta el puerto lejano y desaparece. Se dibujan en el tablero
+(`pintarPetroleros`, con ficha), en el mapa plano y en el globo. Cayo Arcas es un punto de las rutas
+marítimas (`cayo-arcas`).
 
 **El dinero de los trenes** (`domain/tarifas.ts`, `datos/tarifas.json`, generado por
 `scripts/dinero/gen-tarifas.mjs`): al terminar cada tramo (`#cobrarPierna`) un tren cobra 0.68 pesos
@@ -768,6 +776,8 @@ costa del mundo solo sube de resolución). Además:
   publique la lista por central. Sin él, de 2028 en adelante varias regiones se quedan sin
   margen.
 - **Dinero, lo que sigue**: que los buques del jugador cobren y cuesten; tarifas por año.
+- **Exportaciones por mar, lo que sigue**: que tus buques tanque puedan llevar parte del crudo
+  exportado; que el combustóleo y la gasolina que sobren también salgan en petroleros.
 - **Otros sitios por dentro**: la vista de un puerto o una refinería, como la de los polos.
 - **Comercio por mar, lo que sigue**: el cabotaje de carga entre puertos del país; más salidas al mundo (Estados Unidos, Sudamérica) para que las rutas
   reales tengan a dónde ir; el valor en dólares de lo que se mueve.
