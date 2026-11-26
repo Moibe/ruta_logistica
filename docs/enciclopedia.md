@@ -3268,14 +3268,17 @@ corredor interoceánico, y está en el juego tal cual.
 Tres "puertas". Cada una representa un **puerto lejano**: un barco que sale por ella **cruza el
 océano de verdad** hasta ese puerto, hace escala allá 48 h y vuelve por el mismo camino. En el
 tablero se pierde de vista al pasar la puerta; en las vistas del mundo (mapa plano y globo) se le ve
-navegar toda la travesía. La de Estados Unidos está en el Golfo, frente a Galveston: ahí el tablero
-lo ve todo, porque Houston queda a 22 km.
+navegar toda la travesía. La de Estados Unidos es distinta: Houston cabe en el tablero, así que ahí
+se dibuja la salida, como un puerto con su nombre, y el tablero sigue a los barcos todo el camino y
+durante su escala. Entran por Galveston y suben por el canal de navegación de Houston (el *Houston
+Ship Channel*), trazado a mano por la bahía de Galveston porque es demasiado angosto para la malla,
+hasta Port Houston, en la terminal de Barbours Cut (Morgan's Point).
 
 | Salida | Dónde | Puerto lejano | Océano |
 | --- | --- | --- | --- |
 | Asia | Pacífico, 23.5° N · 118.2° O | Shanghái, terminal de aguas profundas de Yangshan (30.627° N, 122.067° E) | Pacífico |
 | Europa | Atlántico, al norte de las Bahamas, 29.5° N · 77° O | Róterdam, Maasvlakte (51.95° N, 4.05° E) | Atlántico |
-| Estados Unidos | Golfo de México, frente a Galveston, 29.22° N · 94.6° O | Houston: la entrada de su canal de navegación, en Galveston (29.34° N, 94.72° O) | Golfo de México |
+| Estados Unidos | Golfo de México, frente a Galveston, 29.22° N · 94.6° O | Houston: Port Houston, terminal de Barbours Cut (29.68° N, 95.0° O), al final de su canal de navegación, que entra por Galveston (29.34° N, 94.72° O) | Golfo de México |
 
 **Cómo se calculan las travesías** (`scripts/travesias.mjs`, dentro de `npm run datos`). Con
 el mismo método que las rutas de México, pero sobre el mundo entero:
@@ -3298,7 +3301,7 @@ el mismo método que las rutas de México, pero sobre el mundo entero:
 | --- | ---: | ---: | ---: | --- |
 | Asia → Shanghái | 11,407 km (6,159 mn) | 11,214 km | +1.7 % | Pacífico norte en arco, al sur de Japón y de Kyushu |
 | Europa → Róterdam | 7,108 km (3,838 mn) | 6,881 km | +3.3 % | Al sur de Terranova (cabo Race), el Canal de la Mancha y el estrecho de Dover |
-| Estados Unidos → Houston | 22 km (12 mn) | — | — | La entrada a la bahía de Galveston |
+| Estados Unidos → Houston | 70 km (38 mn) | — | — | La entrada a la bahía de Galveston y el canal de navegación de Houston, a mano (48 km) |
 
 Los vértices del trazo, de la puerta al puerto lejano:
 
@@ -4240,7 +4243,7 @@ ya no lo lleva el de ellos: el país exporta lo mismo, solo cambia quién lo tra
 | Salida | Flete por barril | Pesos por barril | Cómo se sacó |
 | --- | ---: | ---: | --- |
 | Houston | 1.09 dólares | 20 | Unos 8 dólares por tonelada de un Aframax del Caribe a la costa del Golfo en 2018 (Argus: 7.14 de abril a agosto de 2019, 11 % menos que en 2018), a 7.33 barriles por tonelada |
-| Róterdam | 2.49 dólares | 46 | Interpolado por la distancia de las rutas del juego: 1,233 km de Dos Bocas a Houston, 9,331 a Róterdam y 14,094 de Salina Cruz a Shanghái |
+| Róterdam | 2.49 dólares | 46 | Interpolado por la distancia de las rutas del juego: 1,281 km de Dos Bocas a Houston, 9,331 a Róterdam y 14,094 de Salina Cruz a Shanghái |
 | Shanghái | 3.32 dólares | 61 | 6.63 millones de dólares por viaje de un VLCC (2 millones de barriles) de la costa del Golfo a China, a principios de 2019 (S&P Global) |
 
 - **Qué deja.** Un buque en Dos Bocas ⇄ Houston lleva unos 300 mil barriles por viaje y cobra unos
@@ -5321,6 +5324,9 @@ los otros dos aún no se capturan.
   una escala fija de 48 h; lo que pasa en esos puertos (qué cargan, quién lo pide) no se
   simula. El 26 de noviembre de 2026 se sumó una tercera, a Houston, a donde se fue más de la
   mitad del crudo exportado en 2018.
+- **Houston, en el tablero.** *(26 nov 2026.)* El usuario notó que Houston cabe en el mapa y pidió
+  quitar el «Hacia Estados Unidos». La salida se dibuja en Houston, como puerto, y los barcos se ven
+  todo el camino por el canal de navegación hasta Port Houston y durante su escala.
 - **Los petroleros de los compradores se ven, pero no se controlan.** *(26 nov 2026.)* El usuario
   preguntó a dónde se exporta el crudo y si no debería ver los barcos. Aprobó la salida a Houston y
   los petroleros que llevan el crudo exportado, como tráfico de fondo. Ver

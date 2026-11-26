@@ -1,5 +1,9 @@
 import { distanceKm, interpolate, type LonLat } from './geo';
 import { crearTrayecto, type Trayecto } from './trayecto';
+import { PUERTAS } from './sitios';
+
+/** Gateways whose far port is on the board (Houston): the board follows the whole crossing. */
+const TRAVESIA_EN_TABLERO = new Set(PUERTAS.filter((p) => p.enTablero).map((p) => `puerta:${p.id}`));
 
 /**
  * Sea lanes. `npm run datos` routes one lane between every pair of ports and
@@ -119,7 +123,9 @@ export function rutaMar(mar: Mar, desde: string, hasta: string, velocidad: numbe
     ...c.canal.map((enCanal) => (enCanal ? VELOCIDAD_CANAL : velocidad)),
     ...despues.slice(1).map(() => velocidad),
   ];
-  return crearTrayecto(puntos, vel, [i0, i0 + c.puntos.length - 1]);
+  const desdeTablero = TRAVESIA_EN_TABLERO.has(desde) ? 0 : i0;
+  const hastaTablero = TRAVESIA_EN_TABLERO.has(hasta) ? puntos.length - 1 : i0 + c.puntos.length - 1;
+  return crearTrayecto(puntos, vel, [desdeTablero, hastaTablero]);
 }
 
 /** Whether the lane between two points goes through the Panama Canal. */

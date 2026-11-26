@@ -642,7 +642,7 @@
     ciudadPts = CIUDADES.map((c) => projection!(c.lonLat) ?? [NaN, NaN]);
     puertoPts = PUERTOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     aeropuertoPts = AEROPUERTOS.map((a) => projection!(a.lonLat) ?? [NaN, NaN]);
-    puertaPts = PUERTAS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
+    puertaPts = PUERTAS.map((p) => projection!(p.enMapa) ?? [NaN, NaN]);
     poloPts = POLOS.map((p) => projection!(p.lonLat) ?? [NaN, NaN]);
     plantaPts = LONLAT_PLANTAS.map((p) => projection!(p) ?? [NaN, NaN]);
     refineriaPts = REFINERIAS.map((r) => projection!(r.lonLat) ?? [NaN, NaN]);
@@ -772,7 +772,7 @@
   function sitioLonLat(clave: string): LonLat | null {
     const [tipo, id] = clave.split(':');
     if (tipo === 'puerto') return PUERTOS.find((p) => p.id === id)?.lonLat ?? null;
-    if (tipo === 'puerta') return PUERTAS.find((p) => p.id === id)?.lonLat ?? null;
+    if (tipo === 'puerta') return PUERTAS.find((p) => p.id === id)?.enMapa ?? null;
     if (tipo === 'polo') return POLOS.find((p) => p.id === id)?.lonLat ?? null;
     if (tipo === 'aeropuerto') return AEROPUERTOS.find((a) => a.id === id)?.lonLat ?? null;
     return CIUDADES.find((c) => c.id === id)?.lonLat ?? null;
@@ -1910,20 +1910,25 @@
         ctx.arc(0, 0, 9, 0, Math.PI * 2);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.rotate(ang);
         ctx.fillStyle = hot ? '#ffffff' : '#7fd8ff';
         ctx.beginPath();
-        ctx.moveTo(6, 0);
-        ctx.lineTo(-3, -4.5);
-        ctx.lineTo(-1, 0);
-        ctx.lineTo(-3, 4.5);
-        ctx.closePath();
+        if (p.enTablero) {
+          // The far port itself (Houston): a port's dot inside the ring.
+          ctx.arc(0, 0, 3.2, 0, Math.PI * 2);
+        } else {
+          ctx.rotate(ang);
+          ctx.moveTo(6, 0);
+          ctx.lineTo(-3, -4.5);
+          ctx.lineTo(-1, 0);
+          ctx.lineTo(-3, 4.5);
+          ctx.closePath();
+        }
         ctx.fill();
         ctx.restore();
         ctx.globalAlpha = 1;
         taken.push([x - 11, y - 11, x + 11, y + 11]);
         labels.push({
-          text: `Hacia ${p.nombre}`,
+          text: p.enTablero ? p.hacia : `Hacia ${p.nombre}`,
           spots: spotsAround(x, y, 11),
           size: 11,
           font: '600 11px Inter, "Segoe UI", system-ui, sans-serif',
@@ -3180,12 +3185,17 @@
       <span class="tip-sub">No es tuyo: es el barco de quien compra el crudo que el país no refina. En 2018 se fue el 53 % a Estados Unidos, el 17 % a Europa y el 27 % al Lejano Oriente (Balance Nacional de Energía).</span>
     {:else if hovered.kind === 'puerta'}
       <span class="label tip-kind" style:color="var(--accent)">Salida al mundo</span>
-      <strong>Hacia {hovered.puerta.nombre}</strong>
-      <span class="tip-sub">
-        {`Travesía a ${hovered.puerta.hacia} por el ${hovered.puerta.oceano}`}{sim.mar
-          ? ` · ${fmtKm(kmTravesia(sim.mar, `puerta:${hovered.puerta.id}`))}`
-          : ''}
-      </span>
+      {#if hovered.puerta.enTablero}
+        <strong>{hovered.puerta.hacia}</strong>
+        <span class="tip-sub">{hovered.puerta.nombre} · al final de su canal de navegación, que entra por Galveston</span>
+      {:else}
+        <strong>Hacia {hovered.puerta.nombre}</strong>
+        <span class="tip-sub">
+          {`Travesía a ${hovered.puerta.hacia} por el ${hovered.puerta.oceano}`}{sim.mar
+            ? ` · ${fmtKm(kmTravesia(sim.mar, `puerta:${hovered.puerta.id}`))}`
+            : ''}
+        </span>
+      {/if}
       {#if lineaTrazado}<span class="tip-rail mar">{lineaTrazado}</span>{/if}
     {:else if hovered.kind === 'puerto'}
       <span class="label tip-kind" style:color="var(--accent)">

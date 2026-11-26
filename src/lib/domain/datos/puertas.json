@@ -25,8 +25,23 @@
   "lon": -94.6,
   "lat": 29.22,
   "hacia": "Houston",
-  "haciaLon": -94.72,
-  "haciaLat": 29.34,
-  "oceano": "Golfo de México"
+  "haciaLon": -95.0,
+  "haciaLat": 29.684,
+  "oceano": "Golfo de México",
+  "canal": [
+   [
+    -94.72,
+    29.34
+   ],
+   [
+    -94.77,
+    29.37
+   ],
+   [
+    -94.975,
+    29.67
+   ]
+  ],
+  "enTablero": true
  }
 ]

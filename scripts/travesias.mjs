@@ -359,7 +359,10 @@ export function travesias(poligonos, puertas) {
   const salida = [];
   for (const p of puertas) {
     const desde = [p.lon, p.lat];
-    const hasta = [p.haciaLon, p.haciaLat];
+    // A far port up a channel too narrow for the grid (Houston's): the grid goes to the channel's
+    // entrance and the hand-traced channel is added after it.
+    const canal = p.canal ?? [];
+    const hasta = canal.length ? canal[0] : [p.haciaLon, p.haciaLat];
     const origen = entrada(desde, `puerta:${p.id}`);
     const destino = entrada(hasta, p.hacia);
 
@@ -416,13 +419,17 @@ export function travesias(poligonos, puertas) {
     else coords.unshift(juntar(desde, coords[0]));
     if (celda(hasta) === destino) coords[coords.length - 1] = juntar(hasta, coords.at(-1));
     else coords.push(juntar(hasta, coords.at(-1)));
+    if (canal.length) for (const q of [...canal.slice(1), [p.haciaLon, p.haciaLat]]) coords.push(juntar(q, coords.at(-1)));
 
     let km = 0;
+    let kmCanal = 0;
+    for (let k = coords.length - canal.length; canal.length && k < coords.length; k++) kmCanal += kmGC(coords[k - 1], coords[k]);
     for (let k = 1; k < coords.length; k++) km += kmGC(coords[k - 1], coords[k]);
     salida.push({
       puerta: `puerta:${p.id}`,
       hacia: p.hacia,
       km: Math.round(km * 10) / 10,
+      kmCanal,
       coords: coords.flatMap(([lon, lat]) => [Math.round(normalizar(lon) * 1e4) / 1e4, Math.round(lat * 1e4) / 1e4]),
       exploradas,
       celdasCamino: camino.length,
@@ -444,7 +451,7 @@ export function travesias(poligonos, puertas) {
       const pasos = Math.max(1, Math.ceil(largo));
       for (let s = 0; s < pasos; s++) {
         const aqui = recorrido + (largo * s) / pasos;
-        if (aqui < EXENTO_KM || aqui > t.km - EXENTO_KM) continue;
+        if (aqui < EXENTO_KM || aqui > t.km - EXENTO_KM - t.kmCanal) continue;
         const q = interpolar(pts[k - 1], pts[k], s / pasos);
         if (enTierra(poligonos, q)) {
           muestras++;

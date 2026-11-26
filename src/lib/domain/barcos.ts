@@ -184,7 +184,8 @@ export function enTravesia(b: Barco): Travesia | null {
   const n = b.destinos.length;
   if (b.estado === 'parada') {
     const p = puerta(b.destinos[b.pierna]);
-    return p ? { puerta: p, tramo: 'alla' } : null;
+    // A far port on the board (Houston) is just another port there.
+    return p && !p.enTablero ? { puerta: p, tramo: 'alla' } : null;
   }
   const [desde, hasta] = b.piernas[b.pierna].enTablero;
   if (b.km > hasta) {

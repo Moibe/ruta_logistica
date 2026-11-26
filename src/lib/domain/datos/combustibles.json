@@ -1687,7 +1687,7 @@
     "puerta:europa": 2.49,
     "puerta:asia": 3.32
    },
-   "dato": "Lo que cobra un buque tanque tuyo por cada barril de crudo que lleva a una salida, en dólares: el flete de mercado, que en la realidad paga el comprador porque Pemex vende el crudo puesto en el puerto. A Houston, unos 8 dólares por tonelada de un Aframax del Caribe a la costa del Golfo en 2018 (Argus), 1.09 por barril; a Asia, 6.63 millones de dólares por viaje de un VLCC de la costa del Golfo a China a principios de 2019 (S&P Global), 3.32 por barril; a Europa, interpolado por la distancia de las rutas del juego (1,233 km de Dos Bocas a Houston, 9,331 a Róterdam y 14,094 de Salina Cruz a Shanghái), 2.49. Las dos cifras se leyeron en el resumen del buscador: estimación del juego.",
+   "dato": "Lo que cobra un buque tanque tuyo por cada barril de crudo que lleva a una salida, en dólares: el flete de mercado, que en la realidad paga el comprador porque Pemex vende el crudo puesto en el puerto. A Houston, unos 8 dólares por tonelada de un Aframax del Caribe a la costa del Golfo en 2018 (Argus), 1.09 por barril; a Asia, 6.63 millones de dólares por viaje de un VLCC de la costa del Golfo a China a principios de 2019 (S&P Global), 3.32 por barril; a Europa, interpolado por la distancia de las rutas del juego (1,281 km de Dos Bocas a Houston, 9,331 a Róterdam y 14,094 de Salina Cruz a Shanghái), 2.49. Las dos cifras se leyeron en el resumen del buscador: estimación del juego.",
    "fuentes": [
     "argus-aframax",
     "spglobal-vlcc"

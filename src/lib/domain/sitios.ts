@@ -172,6 +172,13 @@ export type Puerta = {
   haciaLonLat: LonLat;
   /** The ocean the crossing goes over. */
   oceano: string;
+  /**
+   * The far port is on the board itself (Houston): the board draws the gateway there, as a port,
+   * and follows its ships all the way in.
+   */
+  enTablero: boolean;
+  /** Where the board draws the gateway: the far port when it's on the board, the edge of the board otherwise. */
+  enMapa: LonLat;
 };
 
 type PuertaJson = {
@@ -183,6 +190,7 @@ type PuertaJson = {
   haciaLon: number;
   haciaLat: number;
   oceano: string;
+  enTablero?: boolean;
 };
 
 export const PUERTAS: readonly Puerta[] = (puertasJson as PuertaJson[]).map((p) => ({
@@ -192,6 +200,8 @@ export const PUERTAS: readonly Puerta[] = (puertasJson as PuertaJson[]).map((p) 
   hacia: p.hacia,
   haciaLonLat: [p.haciaLon, p.haciaLat],
   oceano: p.oceano,
+  enTablero: !!p.enTablero,
+  enMapa: p.enTablero ? [p.haciaLon, p.haciaLat] : [p.lon, p.lat],
 }));
 
 /**
