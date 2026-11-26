@@ -748,11 +748,6 @@ costa del mundo solo sube de resolución). Además:
 
 ## Siguiente
 
-- **Construir.** La red base es la anterior a 2018 a propósito: lo que se construyó de
-  2018 en adelante (el Tren Maya, las líneas nuevas del Corredor Interoceánico…) lo
-  construye el jugador. Las rutas ya se calculan sobre la red, así que una vía nueva las
-  cambia sola. Construir vía es lo que llena los polos que no la tienen (Chetumal, Cancún,
-  Tuxpan…). Ya están el catálogo de obras del Estado y su presupuesto real.
 - **Petróleo, lo que sigue**:
   - los oleoductos troncales, que no están en las fuentes abiertas (los poliductos que faltaban
     ya se dibujan con las tablas del mapa de la SENER de 2018);
@@ -767,10 +762,8 @@ costa del mundo solo sube de resolución). Además:
   margen.
 - **Más dinero del Estado**, con la carga: lo que cobran los trenes del Estado, lo que pagan
   sus trenes por pasar por vía privada y los impuestos de las concesionarias.
-- **Polos por dentro, lo que sigue**: la vista de los demás polos con su polígono del DOF;
-  quizás la vista de otros sitios (puertos, refinerías).
-- **Comercio por mar, lo que sigue**: el cabotaje entre puertos del país; La Paz, Acapulco y
-  Ciudad del Carmen; más salidas al mundo (Estados Unidos, Sudamérica) para que las rutas
+- **Otros sitios por dentro**: la vista de un puerto o una refinería, como la de los polos.
+- **Comercio por mar, lo que sigue**: el cabotaje de carga entre puertos del país; más salidas al mundo (Estados Unidos, Sudamérica) para que las rutas
   reales tengan a dónde ir; el valor en dólares de lo que se mueve.
 - **Sitios**: que el jugador pueda colocar los suyos (bodegas, plantas, terminales), además de
   los polos.
