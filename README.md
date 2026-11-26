@@ -69,13 +69,15 @@ saltar al siguiente libre.
 - Capas: estados (con hover y clic para acercar), frontera terrestre punteada, costa como
   línea de luz, vías férreas (primarias más intensas y gruesas que secundarias; con
   durmientes a partir de 4×; estaciones sobre la vía a partir de 3.5×), puertos (rombo con halo; los cuatro principales más grandes), ciudades (anillo + punto
-  para capitales), polos (hexágono punteado). Cada capa se apaga desde el panel **Capas**
-  (`ui/Capas.svelte`), abajo en la columna de la izquierda, sobre la pastilla de vistas (si la
-  columna no alcanza, se encoge y se desplaza por dentro), en tres grupos: movimiento (trenes y
-  barcos, solo en el juego), territorio, y energía y petróleo. El estado de las capas vive en
-  `tablero.capas`, que comparten el mapa, el panel y la lista de vehículos (`tablero.alternar`:
+  para capitales), polos (hexágono punteado). Cada capa se apaga desde la barra **Capas**
+  (`ui/Capas.svelte`), a lo largo del borde de abajo, del borde izquierdo al zoom, en tres
+  grupos: movimiento (trenes y barcos, solo en el juego), territorio, y energía y petróleo. La barra
+  dice lo más que cabe: grupos y nombres, solo nombres, grupos e íconos, o solo íconos (el nombre
+  sale encima al pasar el cursor); lo decide midiendo copias ocultas de sí misma, una por nivel,
+  así que una capa nueva u otro tamaño de ventana no piden un breakpoint. El estado de las capas vive en
+  `tablero.capas`, que comparten el mapa, la barra y la lista de vehículos (`tablero.alternar`:
   energía y combustibles se excluyen; apagar trenes o barcos esconde su lista y cierra su ficha y
-  su trazado). Arriba, bajo el reloj, van dos listas, la de trenes y la de barcos (`Flota` con
+  su trazado). En la columna de la izquierda, bajo el reloj, van dos listas, la de trenes y la de barcos (`Flota` con
   `tipo`), cada una con su capa encendida, su *＋ Nuevo* (`tablero.nuevo(tipo)`; el de la otra
   cambia el trazo en curso) y la ficha de su vehículo elegido; con las dos abiertas se reparten el
   alto. Entre las dos va la leyenda de las vías (`ui/LeyendaVias.svelte`: color por clase, dueño o
@@ -83,9 +85,13 @@ saltar al siguiente libre.
   cuántas capas están encendidas, y cada lista en su nombre y *＋ Nuevo* (con las listas y la
   leyenda plegadas, sus barras bajan juntas 120 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
   los dejó (`state/plegable.svelte.ts`, en `localStorage`, leído al montar porque el tablero se
-  arma en el servidor). Las
-  leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, y abajo a la derecha
-  solo el zoom y *Reencuadrar*. Colores e íconos compartidos: `map/simbolos.ts`.
+  arma en el servidor). Las cifras del tablero (puertos, ciudades, polos, km de vía, trenes y
+  barcos) van centradas bajo la barra del Erario, sobre Estados Unidos, donde no tapan nada. Las
+  leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, encima de la barra de
+  capas, y abajo a la derecha solo el zoom y *Reencuadrar*, del alto de la barra y de ancho
+  `--herramientas`, donde termina. La pastilla de vistas (`ui/ViewNav.svelte`, el ojo bajo la
+  greca) va arriba a la derecha, junto al librito, y abre su lista hacia abajo. Colores e íconos
+  compartidos: `map/simbolos.ts`.
 - **Grandes industrias privadas** (capa *Industrias*, `domain/industrias.ts`): las armadoras de
   vehículos ligeros, T-MEX Park y las acereras y la fundición que reciben el mineral de la capa de
   minería, visibles entre su fecha de inicio y la de cierre en los dos modos.
@@ -699,7 +705,7 @@ src/lib/
     MexicoMap.svelte     el tablero
     InteriorPolo.svelte  un polo por dentro (SVG)
   ui/
-    ViewNav.svelte   las vistas, plegadas abajo a la izquierda: Mundo (Canvas · Globo) | México
+    ViewNav.svelte   las vistas, plegadas arriba a la derecha junto al librito: Mundo (Canvas · Globo) | México
     Reloj.svelte · Flota.svelte · Trazado.svelte · formato.ts   paneles (Reloj y Flota también en el mundo)
     Erario.svelte · FichaPolo.svelte   presupuesto y empleos; la ficha del polo y su construcción
     FrentesPolo.svelte · LotesPolo.svelte   adentro de un polo: sus frentes de obra; sus lotes y sus empresas

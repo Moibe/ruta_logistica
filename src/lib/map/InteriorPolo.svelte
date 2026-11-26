@@ -944,7 +944,7 @@
 
   .atribucion {
     position: fixed;
-    left: calc(1rem + var(--vistas) + 0.6rem);
+    left: 1rem;
     bottom: 1.2rem;
     margin: 0;
     font-size: 0.62rem;

@@ -436,12 +436,12 @@
 </div>
 
 <style>
-  /* A bar along the top, from the clock to the book. */
+  /* A bar along the top, from the clock to the views pill and the book. */
   .erario {
     position: fixed;
     top: 1rem;
     left: calc(1rem + 260px + 0.5rem);
-    right: calc(1rem + var(--libro) + 0.5rem);
+    right: calc(1rem + var(--libro) + 0.5rem + var(--vistas) + 0.5rem);
     z-index: 30;
     display: flex;
     align-items: stretch;

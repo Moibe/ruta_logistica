@@ -19,7 +19,7 @@
 <MexicoMap />
 <Reloj />
 <Erario />
-<!-- The left column, under the clock: a roster for trains and one for ships when their layers are on, and the layers at the bottom. -->
+<!-- The left column, under the clock: a roster for trains and one for ships when their layers are on. -->
 <div class="columna">
   {#if sim.modo === 'juego' && tablero.capas.trenes}
     <Flota tipo="tren" />
@@ -31,8 +31,9 @@
   {#if sim.modo === 'juego' && tablero.capas.barcos}
     <Flota tipo="barco" />
   {/if}
-  <Capas />
 </div>
+<!-- The layers, in a bar along the bottom edge. -->
+<Capas />
 {#if sim.modo === 'juego'}
   <Trazado />
 {/if}
@@ -56,11 +57,6 @@
 
   .columna > :global(*) {
     pointer-events: auto;
-  }
-
-  /* The layers sit at the bottom of the column, right over the views pill. */
-  .columna > :global(nav.capas) {
-    margin-top: auto;
   }
 
   /* The rosters and the track legend all folded, their bars would sit on Tijuana's label: together, they drop below it. */

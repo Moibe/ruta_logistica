@@ -4024,7 +4024,7 @@
   .stats {
     position: fixed;
     top: calc(1rem + var(--libro) + 0.5rem);
-    left: calc((100vw + 260px - var(--libro)) / 2);
+    left: calc((100vw + 260px - var(--libro) - var(--vistas) - 0.5rem) / 2);
     transform: translateX(-50%);
     white-space: nowrap;
     z-index: 30;
@@ -4050,17 +4050,20 @@
     color: var(--warn);
   }
 
+  /* As tall as the views pill and as wide as --herramientas: the layers bar along
+     the bottom edge ends just left of it. */
   .tools {
     position: fixed;
     right: 1rem;
     bottom: 1rem;
     z-index: 30;
+    width: var(--herramientas);
+    height: var(--vistas-alto);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    flex-wrap: wrap;
     gap: 0.4rem;
-    padding: 0.45rem 0.6rem;
+    padding: 0 0.6rem;
   }
 
   .tools .ctl {
@@ -4251,6 +4254,7 @@
   @media (max-width: 720px) {
     .tools {
       left: 1rem;
+      width: auto;
       justify-content: center;
     }
   }

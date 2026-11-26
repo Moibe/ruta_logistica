@@ -2,8 +2,8 @@
   import { page } from '$app/state';
 
   /**
-   * The views, kept out of the way: a small pill in the bottom-left corner that
-   * says where you are and opens the list upward on click. Two scales of the
+   * The views, kept out of the way: a small pill in the top-right corner, next
+   * to the book, that says where you are and opens the list downward on click. Two scales of the
    * same geography — "Mundo" is where Mexico sits (the flat projection and the
    * sphere from the `global` project); "México" is the board the game is
    * played on.
@@ -85,17 +85,18 @@
 <style>
   .vistas {
     position: fixed;
-    left: 1rem;
-    bottom: 1rem;
+    top: 1rem;
+    right: calc(1rem + var(--libro) + 0.5rem);
     z-index: 40;
   }
 
+  /* As tall as the book beside it. */
   .pastilla {
     display: flex;
     align-items: center;
     gap: 0.45rem;
     width: var(--vistas);
-    height: var(--vistas-alto);
+    height: var(--libro);
     padding: 0 0.65rem;
     font-size: 0.72rem;
     color: var(--muted);
@@ -124,6 +125,7 @@
     stroke: var(--warn);
     stroke-width: 1.8;
     filter: drop-shadow(0 0 3px var(--warn));
+    transform: none;
   }
 
   .pastilla .ojo circle {
@@ -135,6 +137,7 @@
     transform: none;
   }
 
+  /* The chevron points down, where the list opens, and turns up while it's open. */
   .pastilla svg {
     flex: none;
     fill: none;
@@ -142,11 +145,12 @@
     stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
+    transform: rotate(180deg);
     transition: transform 0.15s;
   }
 
   .pastilla.abierto svg {
-    transform: rotate(180deg);
+    transform: none;
   }
 
   .dot {
@@ -158,12 +162,12 @@
     box-shadow: 0 0 8px var(--warn);
   }
 
-  /* ---- the open list, growing upward from the pill ------------------------ */
+  /* ---- the open list, hanging down from the pill -------------------------- */
 
   .menu {
     position: absolute;
-    left: 0;
-    bottom: calc(100% + 0.5rem);
+    right: 0;
+    top: calc(100% + 0.5rem);
     width: 12.5rem;
     display: flex;
     flex-direction: column;
