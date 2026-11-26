@@ -44,6 +44,8 @@
     PUERTO_DE_REFINERIA,
     PARTE_DEER_PARK_A_MEXICO,
     DEER_PARK_MX,
+    usdPorBarrilDeerPark,
+    deerParkEstimado,
     PUERTOS_COMBUSTIBLE,
     REFINERIA_DEL_PUERTO,
     REPARTO,
@@ -3502,6 +3504,12 @@
               <span class="tip-rail" style:color={COMBUSTIBLE}>
                 A México llegan {fmtMil(sim.deerParkAMexico)} mil b/d ({Math.round(PARTE_DEER_PARK_A_MEXICO * 100)} %), en buques que renta Pemex de Houston a Tuxpan. En su patio esperan {fmtMil(sim.enPatio(r.id) / 1000)} mil barriles para tus buques tanque, en Houston; lo que no recogen se vende en Estados Unidos.
               </span>
+              {#if sim.modo === 'juego'}
+                {@const usd = usdPorBarrilDeerPark(añoDe(sim.horas))}
+                <span class="tip-sub">
+                  En {añoDe(sim.horas)} {usd >= 0 ? 'gana' : 'pierde'} {Math.abs(usd).toLocaleString('es-MX')} dólares por barril{deerParkEstimado(añoDe(sim.horas)) ? ' (estimación del juego)' : ''}, que {usd >= 0 ? 'entran a' : 'salen de'} la caja de Pemex.
+                </span>
+              {/if}
             {/if}
           {/if}
           {@const sobra = sim.abasto?.sobrante.get(r.id) ?? 0}

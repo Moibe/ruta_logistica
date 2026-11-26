@@ -5,7 +5,7 @@
   import { CAJA_CFE_MES, ENERGIA } from '$lib/domain/energia';
   import { km, mdp, personas } from './formato';
   import { añoDe } from '$lib/domain/calendario';
-  import { DESABASTO, delPais, MDP_POR_PIPA, nombrePuerta, REAL_COMBUSTIBLES, realDelAño } from '$lib/domain/combustibles';
+  import { DESABASTO, deerParkEstimado, delPais, MDP_POR_PIPA, nombrePuerta, REAL_COMBUSTIBLES, realDelAño, usdPorBarrilDeerPark } from '$lib/domain/combustibles';
   import { realCombustoleo } from '$lib/domain/combustoleo';
   import { OBRAS_VIA } from '$lib/domain/obrasVia';
   import { OBRAS_ENERGIA } from '$lib/domain/energia';
@@ -130,6 +130,19 @@
   const detallePemex =
     'Pemex paga sus refinerías con lo que el Gobierno Federal le transfiere para refinación: 6.1 mil millones al mes de 2019 a 2024 ' +
     '(391 mil millones de enero de 2019 a abril de 2024) y 2.2 mil millones desde 2025 (Plan de Trabajo 2025–2030). Solo las obras de Pemex se pagan de aquí.';
+
+  /** What Deer Park, once Pemex's, left in its till this game year. */
+  const deerParkCaja = $derived.by(() => {
+    sim.horas;
+    if (sim.modo !== 'juego' || !sim.deerParkPropia) return '';
+    const año = añoDe(sim.horas);
+    const m = sim.deerParkAño(año);
+    const usd = usdPorBarrilDeerPark(año);
+    return (
+      `${String.fromCharCode(10)}Deer Park en ${año}: ${m >= 0 ? 'dejó' : 'costó'} ${mdp(Math.abs(m))} a esta caja, ${Math.abs(usd).toLocaleString('es-MX')} dólares ` +
+      `${usd >= 0 ? 'de ganancia' : 'de pérdida'} por barril de combustible que hace${deerParkEstimado(año) ? ' (estimación del juego: la mediana de 2022 a 2025)' : ''}.`
+    );
+  });
 
   /** Millions of pesos, short for the two-till cell: "2.20 mil M", "850 M". */
   const corto = (n: number) =>
@@ -360,7 +373,7 @@
       </span>
     </div>
     <!-- The two state companies' tills, one over the other. -->
-    <div class="celda caja doble tres" title={`${detalleCfe}\n\n${detallePemex}`}>
+    <div class="celda caja doble tres" title={`${detalleCfe}\n\n${detallePemex}${deerParkCaja}`}>
       <span class="label cfe">CFE</span>
       <b class="mono" class:agotado={sim.dineroCfe < 1}>{corto(sim.dineroCfe)}</b>
       <span class="mes">{alMes(CAJA_CFE_MES)}</span>

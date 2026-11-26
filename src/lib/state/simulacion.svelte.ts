@@ -38,6 +38,7 @@ import {
   presupuestarPlanta,
   regionDelPolo,
   type EstadoRegion,
+  ENERGIA,
 } from '$lib/domain/energia';
 import { OBRAS_GAS, obraGas } from '$lib/domain/ductos';
 import { clavePolo, estadoReal, type EstadoReal } from '$lib/domain/realidad';
@@ -59,6 +60,7 @@ import {
   BARRILES_POR_TANQUE,
   DEER_PARK_MX,
   PARTE_DEER_PARK_A_MEXICO,
+  usdPorBarrilDeerPark,
   CONCENTRADORES,
   concentradorDe,
   costaDe,
@@ -381,6 +383,8 @@ class Simulacion {
   petroleros = $state.raw<Petrolero[]>([]);
   /** Barrels each route (port → gateway) has waiting for its next tanker, and each route's path. */
   #cargaPetroleros = new Map<string, number>();
+  /** What Deer Park left in Pemex's till each year, millions of pesos (negative: it lost). */
+  #cuentasDeerPark = new Map<string, number>();
   /** Deer Park's fuel for Mexico waiting in Houston for Pemex's next tanker, barrels. */
   #cargaDeerPark = 0;
   #rutasPetroleros = new Map<string, Trayecto | null>();
@@ -1274,6 +1278,25 @@ class Simulacion {
     const k = `${origen}|${destino}`;
     if (!this.#rutasPetroleros.has(k)) this.#rutasPetroleros.set(k, this.mar ? rutaMar(this.mar, origen, destino, KMH_PETROLERO) : null);
     return this.#rutasPetroleros.get(k) ?? null;
+  }
+
+  /**
+   * An hour of Deer Park, once Pemex's: what it gains or loses per barrel of fuel it makes, that
+   * year's (`usdPorBarrilDeerPark`), goes into or out of Pemex's till.
+   */
+  #cobrarDeerPark(horas: number) {
+    if (this.modo !== 'juego' || !this.deerParkPropia) return;
+    const año = añoDe(this.horas);
+    const barriles = barrilesEn(this.refinacion?.porRefineria.get('deer-park')?.combustibles ?? 0, horas);
+    const mdp = (barriles * usdPorBarrilDeerPark(año) * ENERGIA.tipoCambio) / 1e6;
+    if (!mdp) return;
+    this.dineroPemex += mdp;
+    this.#cuentasDeerPark.set(String(año), (this.#cuentasDeerPark.get(String(año)) ?? 0) + mdp);
+  }
+
+  /** What Deer Park left in Pemex's till in `año`, millions of pesos (negative: it lost). Read it with `horas`. */
+  deerParkAño(año: number): number {
+    return this.#cuentasDeerPark.get(String(año)) ?? 0;
   }
 
   /** Deer Park's fuel that goes to Mexico now on Pemex's tankers, Mbd (0 while it isn't Pemex's). */
@@ -2451,6 +2474,7 @@ class Simulacion {
         this.#abastecer(horas);
         this.#abastecerCombustoleo(horas);
         this.#despacharPetroleros(horas);
+        this.#cobrarDeerPark(horas);
         this.#consumirAbasto(horas);
         for (const t of this.trenes) {
           avanzar(t, horas);

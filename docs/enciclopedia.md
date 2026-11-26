@@ -80,6 +80,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [ASF, auditoría 2017-0522 a CFEnergía](https://www.asf.gob.mx/Trans/Informes/IR2017c/Documentos/Auditorias/2017_0522_d.pdf) | El combustóleo que la CFE compraba en Estados Unidos llegaba en buque tanque a Tuxpan; el gas natural licuado, a Altamira y Manzanillo | Cuenta Pública 2017 | Documento oficial público |
 | [Argus, «Lower Venezuela cargo demand weighs on Aframaxes»](https://www.argusmedia.com/zh/news/1960292-lower-venezuela-cargo-demand-weighs-on-aframaxes) | El flete de un Aframax del Caribe a la costa del Golfo de EUA: 7.14 dólares por tonelada de abril a agosto de 2019, 11 % menos que en 2018. No se leyó la nota: se usa lo que muestra el buscador | 2019 | Prensa especializada |
 | [S&P Global, «Record US crude exports boost VLCC tanker demand, rates»](https://www.spglobal.com/energy/en/news-research/blog/crude-oil/030519-in-the-loop-record-us-crude-exports-boost-vlcc-tanker-demand-rates) | El flete de un VLCC de la costa del Golfo de EUA a China: 6.63 millones de dólares por viaje a principios de 2019. No se leyó la nota: se usa lo que muestra el buscador | Marzo de 2019 | Prensa especializada |
+| [Energy Magazine, nota del 3 de marzo de 2025](https://energymagazine.mx/2025/03/perdidas-y-desafios-en-deer-park-pemex-enfrenta-un-2024-dificil) | Lo que ganó o perdió Deer Park: 954 millones de dólares en 2022, 581 en 2023 y −118 en 2024; 256 mil barriles diarios de combustibles en 2024 | Marzo de 2025 | Prensa especializada |
+| [Expansión, nota del 27 de marzo de 2026](https://expansion.mx/empresas/2026/03/27/deer-park-cerro-2025-con-perdidas-por-80-mdd) | Lo que perdió Deer Park: 80 millones de dólares en 2025 y 118 en 2024; 194 mil barriles diarios de combustibles en 2025 | Marzo de 2026 | Prensa |
 | [Expansión, nota del 18 de enero de 2023](https://expansion.mx/empresas/2023/01/18/refineria-deer-park-envia-gasolina-mexico-volumen-minimo) | Lo que Deer Park mandó a México desde la compra: unos 14 mil barriles diarios de gasolina y 17 mil de destilados (cifras internas de Pemex vistas por Expansión); de ahí el 12 % | Enero de 2023 | Prensa |
 | [Expansión, nota del 28 de octubre de 2026](https://expansion.mx/empresas/2026/10/28/deer-park-mejor-refineria-pemex-enviar-combustibles-mexico) | La estimación de un analista: Deer Park manda a México entre 15 y 20 % de su producción; Pemex no publica el volumen | Octubre de 2026 | Prensa |
 | [SENER, Balance Nacional de Energía 2019](https://www.gob.mx/cms/uploads/attachment/file/618408/20210218_BNE.pdf) | Lo que el país exportó e importó de cada petrolífero en 2018 (en PJ), el poder calorífico neto del combustóleo (cuadro 29) y a dónde se exportó el crudo (cuadro 49) | Febrero de 2021 | Documento oficial público |
@@ -3830,6 +3832,25 @@ alcanza al rehabilitarla:
   vende en Estados Unidos. Pemex sí cuenta todo Deer Park como refinación propia; el juego también
   (en «Refinación»), pero al abasto del país solo llega lo que de verdad cruza.
 
+  **Lo que gana o pierde entra a la caja de Pemex**, por cada barril de combustible que hace. Es su
+  resultado por todo lo que vende: en Estados Unidos y a Pemex para México, que también se lo
+  compra. Los reportes trimestrales de Pemex en la Bolsa dan lo que procesa, no lo que gana; las
+  cifras son de prensa:
+
+  | Año | Resultado | Combustibles | Por barril |
+  | --- | ---: | ---: | ---: |
+  | 2022 | ganó 954 millones de dólares | 258 mil b/d ¹ | 10.13 dólares |
+  | 2023 | ganó 581 millones | 241 mil b/d ¹ | 6.60 |
+  | 2024 | perdió 118 millones | 256 mil b/d | −1.26 |
+  | 2025 | perdió 80 millones | 194 mil b/d | −1.13 |
+  | Los demás | | | 2.74 (la mediana: **estimación del juego**) |
+
+  ¹ Lo que procesó por su rendimiento (0.93). Fuentes: Energy Magazine (2022 a 2024 y los
+  combustibles de 2024) y Expansión (2024, 2025 y sus combustibles). Comprada en 2018, con 248 mil
+  barriles diarios, deja unos 12.5 millones de pesos al día, 4.6 mil millones al año; en 2022, unos
+  17 mil millones, casi lo que costó comprarla (23 mil millones). La ficha de Deer Park y la de la
+  caja de Pemex lo dicen.
+
 Los costos en dólares se pasan a pesos a 18.33, el promedio de 2024.
 
 **Los combustibles.** Cada refinería da gasolina, diésel y turbosina por barril de crudo:
@@ -5361,7 +5382,9 @@ los otros dos aún no se capturan.
   si lo de Deer Park no viaja en barco a México y aprobó tres cosas: que al país le llegue solo la
   parte que se manda (el 12 %, con las cifras de Pemex de 2022, en vez del 100 % de antes), que esa
   parte se vea en buques que renta Pemex de Houston a Tuxpan, y que sus buques tanque puedan cargar
-  en Houston lo demás. Lo que se vende en Estados Unidos todavía no mueve la caja de Pemex.
+  en Houston lo demás. Después pidió que lo de Estados Unidos moviera la caja de Pemex: entra lo
+  que Deer Park gana o pierde por barril cada año (todo su resultado, porque también le vende a
+  Pemex lo que va a México).
 - **Las travesías se calculan como las rutas de México, no se dibujan.** Es el mismo método
   (malla, ruta más corta lejos de la costa, enderezado, auditoría), solo que sobre el mundo
   y enderezado en círculos máximos. *(19 nov 2026; reemplaza el tiempo fijo "gran círculo +

@@ -22,6 +22,16 @@ const FUENTES = {
       'SHCP, comunicado 008/2019 (24 de enero de 2019): Pemex contará con «671 autotanques con una capacidad equivalente a 144 mil barriles diarios. El monto total es de 92 millones de dólares»',
     url: 'https://www.gob.mx/shcp/prensa/comunicado-no-008-2019-el-gobierno-de-mexico-amplia-la-estrategia-de-combate-al-robo-de-combustible-mediante-la-compra-de-pipas',
   },
+  'energymagazine-deer-park-2025': {
+    fuente:
+      'Energy Magazine, nota del 3 de marzo de 2025 sobre las pérdidas de Deer Park en 2024: un saldo negativo de 118 millones de dólares, contra 954 millones de ganancias en 2022 y 581 en 2023; 256 mil barriles diarios de gasolina, diésel y turbosina en 2024',
+    url: 'https://energymagazine.mx/2025/03/perdidas-y-desafios-en-deer-park-pemex-enfrenta-un-2024-dificil',
+  },
+  'expansion-deer-park-2025': {
+    fuente:
+      'Expansión, nota del 27 de marzo de 2026 sobre los resultados de Deer Park: pérdidas por 80 millones de dólares en 2025 y 118 en 2024; 194 mil barriles diarios de combustibles en 2025',
+    url: 'https://expansion.mx/empresas/2026/03/27/deer-park-cerro-2025-con-perdidas-por-80-mdd',
+  },
   'expansion-deer-park-2023': {
     fuente:
       'Expansión, nota del 18 de enero de 2023 sobre la gasolina que Deer Park manda a México: México ha recibido alrededor de 14 mil barriles diarios de gasolina y 17 mil de destilados desde que se formalizó la compra, según cifras internas de Pemex',
@@ -534,6 +544,28 @@ const DP_A_MEXICO = 14 + 17;
 const DP_HIZO_2022 = PETROLEO.refinerias.find((r) => r.id === 'deer-park').anual['2022'] * PETROLEO.rendimientos.deerPark;
 const DP_PARTE = Math.round((DP_A_MEXICO / DP_HIZO_2022) * 1000) / 1000;
 
+// Deer Park's yearly result (millions of dollars, press: no Pemex document gives it) over the fuel it
+// made that year: dollars per barrel into Pemex's till. 2022 and 2023, its run by its yield (the
+// game's figures); 2024 and 2025, the fuel the press reports.
+const DP_RINDE = PETROLEO.rendimientos.deerPark;
+const DP_ANUAL = PETROLEO.refinerias.find((r) => r.id === 'deer-park').anual;
+const DP_RESULTADO = { 2022: 954, 2023: 581, 2024: -118, 2025: -80 };
+const DP_COMBUSTIBLES = {
+  2022: Math.round(DP_ANUAL['2022'] * DP_RINDE),
+  2023: Math.round(DP_ANUAL['2023'] * DP_RINDE),
+  2024: 256,
+  2025: 194,
+};
+const diasDe = (y) => ((y % 4 === 0 && y % 100 !== 0) || y % 400 === 0 ? 366 : 365);
+const DP_USD_BARRIL = Object.fromEntries(
+  Object.entries(DP_RESULTADO).map(([y, musd]) => [y, Math.round(((musd * 1e6) / (DP_COMBUSTIBLES[y] * 1000 * diasDe(Number(y)))) * 100) / 100])
+);
+// Years without a figure (before 2022 and from 2026): the median of the four, estimate of the game.
+const DP_MEDIANA = (() => {
+  const v = Object.values(DP_USD_BARRIL).sort((a, b) => a - b);
+  return Math.round(((v[1] + v[2]) / 2) * 100) / 100;
+})();
+
 const datos = {
   corte: '2026-11-22',
   nota: 'Generado por scripts/combustibles/gen-combustibles.mjs. Lo que se calcula aquí son estimaciones del juego con cifras oficiales; cada dato dice de dónde sale.',
@@ -635,6 +667,22 @@ const datos = {
       `mil de crudo, a ${PETROLEO.rendimientos.deerPark} de rendimiento). Un analista estimaba en 2026 entre 15 y 20 %. Llega en buques tanque de ` +
       'Pemex de Houston a Tuxpan; lo demás se vende en Estados Unidos, salvo lo que tus buques tanque recojan en Houston.',
     fuentes: ['expansion-deer-park-2023', 'expansion-deer-park-2026'],
+    resultado: {
+      musd: DP_RESULTADO,
+      combustiblesMbd: DP_COMBUSTIBLES,
+      usdPorBarril: DP_USD_BARRIL,
+      estimadoUsd: DP_MEDIANA,
+      dato:
+        'Lo que gana o pierde Deer Park, ya de Pemex, entra a la caja de Pemex por cada barril de combustible que hace: ' +
+        Object.keys(DP_RESULTADO)
+          .map((y) => `${y}, ${DP_RESULTADO[y] >= 0 ? 'ganó' : 'perdió'} ${Math.abs(DP_RESULTADO[y])} millones de dólares con ${DP_COMBUSTIBLES[y]} mil barriles diarios, ${DP_USD_BARRIL[y]} por barril`)
+          .join('; ') +
+        `. Los otros años, la mediana: ${DP_MEDIANA} dólares por barril (estimación del juego). Es su resultado por todo lo que vende: en Estados ` +
+        'Unidos y a Pemex para México, que también se lo compra. Las cifras son de prensa (Energy Magazine, Expansión); los reportes trimestrales ' +
+        'de Pemex en la Bolsa dan lo que procesa, no lo que gana. 2022 y 2023, con lo que procesó por su rendimiento; 2024 y 2025, los combustibles ' +
+        'que reporta la prensa.',
+      fuentes: ['energymagazine-deer-park-2025', 'expansion-deer-park-2025'],
+    },
   },
   crudoPorDestino: {
     mbd: {

@@ -92,7 +92,18 @@ type CombustiblesJson = {
   /** Where each coastal refinery loads tankers. */
   puertoDeRefineria: Record<string, string>;
   /** Deer Park, once Pemex's: the share of its fuel that goes to Mexico, where it loads (Houston) and where it comes in (Tuxpan). */
-  deerPark: { parteAMexico: number; puerto: string; entra: string } & Dato;
+  deerPark: {
+    parteAMexico: number;
+    puerto: string;
+    entra: string;
+    /** Its yearly result (millions of dollars), the fuel it made (Mbd), the dollars per barrel, and the estimate for other years. */
+    resultado: {
+      musd: Record<string, number>;
+      combustiblesMbd: Record<string, number>;
+      usdPorBarril: Record<string, number>;
+      estimadoUsd: number;
+    } & Dato;
+  } & Dato;
   /**
    * Imports: the most each port takes from abroad (Mbd), the ports each zone
    * imports through, the share of a sea-fed state's fuel that comes through
@@ -162,6 +173,10 @@ export const PUERTO_DE_REFINERIA = new Map(Object.entries(COMBUSTIBLES.puertoDeR
  */
 export const DEER_PARK_MX = COMBUSTIBLES.deerPark;
 export const PARTE_DEER_PARK_A_MEXICO = DEER_PARK_MX.parteAMexico;
+/** What Deer Park, once Pemex's, leaves in Pemex's till per barrel of fuel it makes in `año`, dollars (negative: it loses). */
+export const usdPorBarrilDeerPark = (año: number) => DEER_PARK_MX.resultado.usdPorBarril[String(año)] ?? DEER_PARK_MX.resultado.estimadoUsd;
+/** Whether that year's figure is the game's estimate. */
+export const deerParkEstimado = (año: number) => !(String(año) in DEER_PARK_MX.resultado.usdPorBarril);
 /** The refinery of each tanker port: the coastal ones' and Deer Park's, at Houston. */
 export const REFINERIA_DEL_PUERTO = new Map([
   ...[...PUERTO_DE_REFINERIA].map(([r, p]) => [p, r] as const),
