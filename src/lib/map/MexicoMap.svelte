@@ -311,6 +311,8 @@
    */
   const PANEL_IZQ = 290;
   const PANELES_DESDE = 900;
+  /** The board's figures under the Erario bar show from this width (the `.stats` media query). */
+  const CIFRAS_DESDE = 1100;
   /** A train is never drawn shorter than this, or it would be a dot at country scale. */
   const TREN_MIN_PX = 18;
   /** Glowing wake behind a moving train, in screen px so it reads at any zoom. */
@@ -634,12 +636,14 @@
     if (!width || !height) return;
     projection = makeProjection();
     proyeccionLista++;
-    // Room for the nav bar on top, the tool strips below, and the clock and
-    // roster on the left when they're showing.
+    // Room for the Erario bar on top (and the board's figures under it, which
+    // sit over Tijuana when they show), the layers bar below, and the clock and
+    // rosters on the left when they're showing.
     const izq = width >= PANELES_DESDE ? PANEL_IZQ : 28;
+    const arriba = width >= CIFRAS_DESDE ? 134 : 88;
     projection.fitExtent(
       [
-        [izq, 88],
+        [izq, arriba],
         [width - 28, height - 76],
       ],
       FRAME
@@ -4036,14 +4040,11 @@
     color: #bfeaff;
   }
 
-  /* Just under the Erario bar, centred on it: there it sits over the United
-     States, which is empty, instead of over Tijuana and Mexicali at the bar's
-     left end. The bottom edge stays free. */
+  /* Just under the Erario bar, flush with its left edge (the user's choice). The bottom edge stays free. */
   .stats {
     position: fixed;
     top: calc(1rem + var(--libro) + 0.5rem);
-    left: calc((100vw + 260px - var(--libro) - var(--vistas) - 0.5rem) / 2);
-    transform: translateX(-50%);
+    left: calc(1rem + 260px + 0.5rem);
     white-space: nowrap;
     z-index: 30;
     display: flex;

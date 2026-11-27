@@ -85,7 +85,8 @@ saltar al siguiente libre.
   leyenda plegadas, sus barras bajan juntas 120 px para no tapar el rótulo de Tijuana). Cada navegador recuerda cómo
   los dejó (`state/plegable.svelte.ts`, en `localStorage`, leído al montar porque el tablero se
   arma en el servidor). Las cifras del tablero (puertos, ciudades, polos, km de vía, trenes y
-  barcos) van centradas bajo la barra del Erario, sobre Estados Unidos, donde no tapan nada. Las
+  barcos) van bajo la barra del Erario, a ras de su borde izquierdo; como ahí cae Tijuana, el
+  mapa empieza 134 px abajo en vez de 88 cuando se ven (desde 1,100 px). Las
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, encima de la barra de
   capas, y abajo a la derecha solo el zoom y *Reencuadrar*, del alto de la barra y de ancho
   `--herramientas`, donde termina. La pastilla de vistas (`ui/ViewNav.svelte`, el ojo bajo la
