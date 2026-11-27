@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { sim } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
   import { añoCompleto, FEDERAL } from '$lib/domain/presupuesto';
@@ -289,9 +290,34 @@
   const obrasEnCurso = $derived(cuenta.enCurso + cuenta.viasEnObra + enObraCfe);
   const obrasDetenidas = $derived(cuenta.detenidas + cuenta.viasDetenidas);
   const obrasHechas = $derived(cuenta.operando + cuenta.viasEnServicio + hechasCfe);
+
+  /**
+   * How much the bar says, richest first: everything; without the ships' cell
+   * (its figures stay in the exports' title); with the works' counts in their
+   * title and without the air cargo; and without the jobs. It says the most
+   * that fits. Hidden copies of the bar, one per level, give each level's
+   * width, so a figure that grows or another window size needs no breakpoint.
+   */
+  const NIVELES = ['todo', 'sin-mar', 'corto', 'minimo'] as const;
+  let nivel = $state<(typeof NIVELES)[number]>('todo');
+  let barra: HTMLElement;
+  const copias: HTMLElement[] = [];
+
+  onMount(() => {
+    const elegir = () => {
+      const libre = barra.getBoundingClientRect().width;
+      const i = copias.findIndex((c) => c.getBoundingClientRect().width <= libre);
+      nivel = NIVELES[i === -1 ? NIVELES.length - 1 : i];
+    };
+    // The bar changes with the window; the copies with the figures and the mode (Juego or Realidad).
+    const observador = new ResizeObserver(elegir);
+    observador.observe(barra);
+    for (const c of copias) observador.observe(c);
+    return () => observador.disconnect();
+  });
 </script>
 
-<div class="erario panel">
+{#snippet celdas()}
   {#if real}
     <div class="celda caja" title={`Presupuesto federal para ferrocarriles de ese año: ${mdp(real.federal)} de pesos (Cuenta Pública y Presupuesto de Egresos): subfunción de transporte por ferrocarril, Tren Maya y Ferrocarril del Istmo.`}>
       <span class="label">Trenes {real.año} · {real.serie}</span>
@@ -421,9 +447,9 @@
       title={`Catálogo de obras del Estado: ${obrasEnCurso} en obra${obrasDetenidas ? ` (${obrasDetenidas} detenida${obrasDetenidas > 1 ? 's' : ''})` : ''}, ${obrasHechas} hechas`}
       onclick={() => (tablero.catalogo ? tablero.cerrarCatalogo() : tablero.abrirCatalogo())}
     >
-      <span class="label">Obras del Estado</span>
+      <span class="label"><span class="largo">Obras del Estado</span><span class="solo-angosto">Obras</span></span>
       <span class="valor">
-        <!-- With less room the counts go to the title; a stopped work still shows. -->
+        <!-- With less room the counts go to the title and the label shortens; a stopped work still shows. -->
         <span class="conteo">
           {obrasEnCurso} en obra{#if obrasDetenidas}<span class="alerta"> ({obrasDetenidas} detenida{obrasDetenidas > 1 ? 's' : ''})</span>{/if}
           · {obrasHechas} hechas
@@ -433,22 +459,53 @@
       </span>
     </button>
   {/if}
+{/snippet}
+
+<div class="linea">
+  <div class="erario panel {nivel}" bind:this={barra}>
+    {@render celdas()}
+  </div>
+  <!-- One copy per level, never seen, only measured. -->
+  <div class="copias" aria-hidden="true" inert>
+    {#each NIVELES as n, i (n)}
+      <div class="erario panel {n}" bind:this={copias[i]}>{@render celdas()}</div>
+    {/each}
+  </div>
 </div>
 
 <style>
   /* A bar along the top, from the clock to the views pill and the book. */
-  .erario {
+  .linea {
     position: fixed;
     top: 1rem;
     left: calc(1rem + 260px + 0.5rem);
     right: calc(1rem + var(--libro) + 0.5rem + var(--vistas) + 0.5rem);
     z-index: 30;
+  }
+
+  .erario {
     display: flex;
     align-items: stretch;
+    width: 100%;
     min-height: var(--libro);
     padding: 0.4rem 0.4rem;
     font-size: 0.76rem;
     overflow: hidden;
+  }
+
+  .copias {
+    position: absolute;
+    left: 0;
+    top: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .copias .erario {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: max-content;
   }
 
   .celda {
@@ -578,33 +635,34 @@
     display: none;
   }
 
-  /* Less room: the works' counts go to the cell's title, then the secondary cells give way, then the bar. */
-  @media (max-width: 1500px) {
-    .obras-via .conteo,
-    .celda.ancha {
-      display: none;
-    }
-
-    .obras-via .solo-angosto {
-      display: inline;
-    }
+  /* The levels, each giving up a little more: the ships' cell (its figures stay in the exports'
+     title); then the works' counts go to their title and the air cargo goes; then the jobs. */
+  .sin-mar .mar-celda,
+  .corto .mar-celda,
+  .minimo .mar-celda {
+    display: none;
   }
 
-  /* The ships' cell needs a little more room than the other wide ones; its figures stay in the exports' title. */
-  @media (max-width: 1560px) {
-    .celda.mar-celda {
-      display: none;
-    }
+  .corto .conteo,
+  .corto .largo,
+  .corto .celda.ancha,
+  .minimo .conteo,
+  .minimo .largo,
+  .minimo .celda.ancha {
+    display: none;
   }
 
-  @media (max-width: 1400px) {
-    .celda.opcional {
-      display: none;
-    }
+  .corto .solo-angosto,
+  .minimo .solo-angosto {
+    display: inline;
+  }
+
+  .minimo .celda.opcional {
+    display: none;
   }
 
   @media (max-width: 1000px) {
-    .erario {
+    .linea {
       display: none;
     }
   }

@@ -297,7 +297,11 @@ doceava parte del presupuesto federal real para ferrocarriles de ese año (lo ej
 Cuenta Pública de 2018 a 2025, lo aprobado en 2026, el proyecto de 2027, que se repite después)
 más el derecho de las concesionarias (1.25 % de sus ingresos, 3 % desde 2027). Lo que no se
 gasta se acumula; polos y vías salen de la misma caja. `sim.#cobrar` paga cada mes que empieza
-y la barra `Erario` (a lo largo de la parte de arriba) muestra lo que llegó. Las fichas avisan cuánto tardaría de verdad una obra
+y la barra `Erario` (a lo largo de la parte de arriba, del reloj a la pastilla de vistas) muestra lo que llegó. La barra
+dice lo más que cabe en cuatro niveles: todo; sin la celda de barcos (sus cifras siguen en el título de
+Exportado); con el conteo de obras en su título, «Obras» en vez de «Obras del Estado» y sin la carga aérea;
+y sin los empleos. Lo decide midiendo copias ocultas de sí misma, una por nivel, como la barra de capas,
+así que una cifra que crece u otro tamaño de ventana no piden un breakpoint (a 1,366 px cabe hasta Empleos). Las fichas avisan cuánto tardaría de verdad una obra
 al paso del dinero (`mesesAlRitmoDelDinero`, con el calendario real de mensualidades). La
 tabla por año y el método, en la [enciclopedia](docs/enciclopedia.md#el-presupuesto-del-estado).
 
@@ -509,7 +513,7 @@ La partida trae 10 barcos abastecedores. Capa *Plataformas*. Detalle en la
   `Tren`, `importacion`, `importacionDe` e `importado`. Todos los barcos tienen `llegadas`.
 
 Se ve en el puerto (al pasar el puntero), en la ficha de cada barco y tren, y en la barra
-(celda *Barcos*, desde 1,560 px). Detalle en la
+(celda *Barcos*, cuando cabe en la barra). Detalle en la
 [enciclopedia](docs/enciclopedia.md#el-comercio-por-mar).
 
 **Construir polos** (`domain/obras.ts`, estado en `sim.obras`): el jugador es el Estado y paga
