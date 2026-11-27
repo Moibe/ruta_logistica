@@ -2532,6 +2532,13 @@ Monterrey y en Puebla) y el complejo de cobre de La Caridad. Al empezar la parti
 mapa; después llegan BMW (abril de 2019), Toyota Guanajuato (diciembre de 2019) y T-MEX Park (agosto de 2025), y se van
 Honda El Salto como armadora (enero de 2020), AHMSA (diciembre de 2022), Nissan CIVAC (marzo de 2026) y COMPAS (mayo de 2026).
 
+**Las que están en obra también se ven** *(pedido del usuario, 26 nov 2026: quería ver T-MEX desde que
+está en construcción, aunque no lo construya él)*: huecas y punteadas, como la Olmeca, desde que empezó su
+construcción hasta que abren, con su ficha pero sin ser parada. BMW desde el 16 de junio de 2016 (S&P
+Global Mobility), Toyota Guanajuato desde el 14 de noviembre de 2016 (Mexico Industry) y T-MEX Park
+desde marzo de 2022 (ProMéxico Industry: la nota del 17 de marzo dice que empezó, sin el día). Al
+empezar la partida, BMW y Toyota Guanajuato ya están en obra; T-MEX aparece en marzo de 2022.
+
 | Planta | Municipio, estado | Qué hace | Desde | Vía en operación (2018) | Fuente |
 | --- | --- | --- | --- | ---: | --- |
 | Volkswagen de México, planta Puebla | Cuautlancingo, PUE | Autos y SUV (Jetta, Taos, Tiguan) | 1967 | 4.8 km | [fuente](https://www.vw.com.mx/es/experiencia/cultura/historia-volkswagen-mexico.html) |

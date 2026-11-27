@@ -44,6 +44,8 @@ export type Industria = {
   /** When it started working (when a source says) and when it stopped, as precise as known ("1967", "2019-06"). */
   desde?: string;
   hasta?: string;
+  /** When its construction started (when a source says): on the board, hollow, from then until `desde`. */
+  obraDesde?: string;
   /** What its sources say about rail. */
   tren?: string;
   /** A note for its card (a plant that changed hands, a park's link to an airport). */

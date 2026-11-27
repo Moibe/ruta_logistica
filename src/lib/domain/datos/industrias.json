@@ -1,5 +1,5 @@
 {
- "corte": "2026-11-24",
+ "corte": "2026-11-27",
  "nota": "Generado por scripts/industrias/gen-industrias.mjs.",
  "fuentes": {
   "ahmsa-2019": {
@@ -165,6 +165,18 @@
   "tmex-dhl": {
    "fuente": "DHL Supply Chain México (dicho de la empresa), 2026: inaugura la nave 3 de su campus en T-MEX Park y llega a 160,000 m²; primeras naves en agosto de 2025",
    "url": "https://www.dhl.com/mx-es/home/prensa/archivo-de-prensa/2026/dhl-supply-chain-mexico-inaugura-la-nave-3-de-su-mega-campus-tmex-y-alcanza-los-160-000-m2-de-infraestructura-logistica.html"
+  },
+  "bmw-obra": {
+   "fuente": "S&P Global Mobility (AutoTechInsight), 17 de junio de 2016: BMW colocó la primera piedra de su planta de San Luis Potosí el 16 de junio de 2016",
+   "url": "https://autotechinsight.spglobal.com/news/36058/bmw-breaks-ground-on-mexico-plant-confirms-3-series-production"
+  },
+  "toyota-gto-obra": {
+   "fuente": "Mexico Industry, 1 de marzo de 2020: Toyota colocó la primera piedra de su planta de Apaseo el Grande el 14 de noviembre de 2016",
+   "url": "https://mexicoindustry.com/noticia/toyota-consolida-la--industria-automotriz-en-mexico"
+  },
+  "tmex-obra": {
+   "fuente": "Mexico Industry (ProMéxico Industry), 17 de marzo de 2022: empezó la construcción de T-MEX Park en Nextlalpan, con la primera piedra puesta por el gobernador; la nota no da el día",
+   "url": "https://www.promexicoindustry.com/en/article/construction-begins-on-the-t-mexpark-logistics-hub-in-the-state-of-mexico"
   },
   "tmex-anuncio": {
    "fuente": "Gobierno de México, segundo paquete de proyectos de infraestructura con el sector privado (30 de noviembre de 2020): «T-MEC Park», 13,020 millones de pesos, logística",
@@ -1040,9 +1052,11 @@
    "estado": "GTO",
    "que": "La pickup Tacoma",
    "desde": "2019-12",
+   "obraDesde": "2016-11-14",
    "fuentes": [
     "toyota",
     "toyota-gto",
+    "toyota-gto-obra",
     "raiavl",
     "osm"
    ],
@@ -1062,8 +1076,10 @@
    "estado": "SLP",
    "que": "Autos (Serie 3, Serie 2 Coupé, M2)",
    "desde": "2019-04",
+   "obraDesde": "2016-06-16",
    "fuentes": [
     "bmw",
+    "bmw-obra",
     "raiavl",
     "osm"
    ],
@@ -1380,12 +1396,14 @@
    "estado": "MEX",
    "que": "Parque logístico privado junto al AIFA; su primer inquilino en operación es DHL Supply Chain (160,000 m² en 2026)",
    "desde": "2025-08",
+   "obraDesde": "2022-03",
    "tren": "El desarrollador planea espuelas y una zona intermodal con Ferrovalle; no hay evidencia de que operen.",
    "nota": "De Grupo El-Mann. El gobierno federal lo anunció en 2020 como «T-MEC Park» entre los proyectos con el sector privado; no tiene dinero público ni es un Polo del Bienestar. Su superficie (4 a 6 millones de m²) y sus empleos son cifras del desarrollador. Su enlace de carga con el AIFA es un dicho del desarrollador: el aeropuerto no lo menciona.",
    "fuentes": [
     "tmex-fidepar",
     "tmex-dhl",
     "tmex-anuncio",
+    "tmex-obra",
     "osm"
    ],
    "lonLat": [

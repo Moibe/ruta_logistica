@@ -352,6 +352,8 @@
   const layers = tablero.capas;
   /** A big private industry is on the board from the day it starts working until the day it stops. */
   const industriaVisible = (p: { desde?: string; hasta?: string }) => (!p.desde || sim.horas >= horasDeFecha(p.desde)) && (!p.hasta || sim.horas < horasDeFecha(p.hasta));
+  /** Under construction now: on the board, hollow, not yet working. */
+  const industriaEnObra = (p: { desde?: string; obraDesde?: string }) => !!p.obraDesde && !!p.desde && sim.horas >= horasDeFecha(p.obraDesde) && sim.horas < horasDeFecha(p.desde);
   const TIPO_INDUSTRIA: Record<Industria['tipo'], string> = {
     armadora: 'Armadora de vehículos · industria privada',
     logistica: 'Parque logístico · privado',
@@ -1695,7 +1697,8 @@
     // Only the plants of a supply chain with a station are stops: the rest fade back while a route is laid out.
     if (layers.industrias) {
       INDUSTRIAS.forEach((p, i) => {
-        if (!industriaVisible(p)) return;
+        const enObra = industriaEnObra(p);
+        if (!industriaVisible(p) && !enObra) return;
         const x = sx(industriaPts[i]);
         const y = sy(industriaPts[i]);
         if (!onScreen(x, y)) return;
@@ -1720,11 +1723,22 @@
           ctx.lineTo(x + s, y + s * 0.7);
         }
         ctx.closePath();
-        ctx.fillStyle = hot ? '#f7fee7' : INDUSTRIA;
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
-        ctx.lineWidth = 0.9;
-        ctx.stroke();
+        if (enObra) {
+          // Under construction: hollow and dashed, like the Olmeca.
+          ctx.fillStyle = conAlfa(INDUSTRIA, 0.14);
+          ctx.fill();
+          ctx.setLineDash([2, 1.6]);
+          ctx.strokeStyle = hot ? '#f7fee7' : INDUSTRIA;
+          ctx.lineWidth = 1.1;
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else {
+          ctx.fillStyle = hot ? '#f7fee7' : INDUSTRIA;
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
+          ctx.lineWidth = 0.9;
+          ctx.stroke();
+        }
         ctx.globalAlpha = 1;
         taken.push([x - s - 1, y - s - 1, x + s + 1, y + s + 1]);
         if (tablero.trazando) return;
@@ -2457,7 +2471,7 @@
     if (layers.industrias && (!tablero.trazando || tablero.tipoNuevo === 'tren')) {
       INDUSTRIAS.forEach((p, i) => {
         if (tablero.trazando && !sim.red?.estaciones.has(`industria:${p.id}`)) return;
-        if (!industriaVisible(p)) return;
+        if (!industriaVisible(p) && !(industriaEnObra(p) && !tablero.trazando)) return;
         const d = Math.hypot(transform.applyX(industriaPts[i][0]) - mx, transform.applyY(industriaPts[i][1]) - my);
         if (d < 9 && d < bestD) {
           best = { kind: 'industria', industria: p };
@@ -3416,7 +3430,11 @@
       {@const surten = MINAS.filter((m) => industriaVisible(m) && m.destinos.includes(`industria:${p.id}`))}
       <span class="label tip-kind" style:color={INDUSTRIA}>{TIPO_INDUSTRIA[p.tipo]}</span>
       <strong>{p.nombre}</strong>
-      <span class="tip-sub">{p.municipio}, {estadoNombre.get(p.estado) ?? p.estado}{p.desde ? ` · desde ${p.desde.slice(0, 4)}` : ''}</span>
+      {@const enObra = industriaEnObra(p)}
+      <span class="tip-sub">{p.municipio}, {estadoNombre.get(p.estado) ?? p.estado}{p.desde ? ` · ${enObra ? 'abre en' : 'desde'} ${p.desde.slice(0, 4)}` : ''}</span>
+      {#if enObra}
+        <span class="tip-rail">En obra desde {p.obraDesde!.slice(0, 4)}: no la construyes tú, es privada. Empieza a trabajar en {p.desde!.slice(0, 7).replace('-', '/')}.</span>
+      {/if}
       <span class="tip-rail">{p.que}</span>
       {#if c}
         <span class="tip-rail">

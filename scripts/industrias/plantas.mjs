@@ -40,6 +40,9 @@ export const FUENTES = {
   jac: { fuente: 'Secretaría de Economía: Giant Motors Latinoamérica anuncia su planta en Hidalgo (Ciudad Sahagún, 2017)', url: 'https://www.gob.mx/se/articulos/giant-motors-latinoamerica-anuncia-inversion-de-planta-automotriz-en-el-estado-de-hidalgo' },
   'tmex-fidepar': { fuente: 'FIDEPAR (Gobierno del Estado de México), listado de parques industriales, septiembre de 2026: T-MEX Park, Nextlalpan, carretera Teoloyucan–Jaltocan', url: 'https://fidepar.edomex.gob.mx/' },
   'tmex-dhl': { fuente: 'DHL Supply Chain México (dicho de la empresa), 2026: inaugura la nave 3 de su campus en T-MEX Park y llega a 160,000 m²; primeras naves en agosto de 2025', url: 'https://www.dhl.com/mx-es/home/prensa/archivo-de-prensa/2026/dhl-supply-chain-mexico-inaugura-la-nave-3-de-su-mega-campus-tmex-y-alcanza-los-160-000-m2-de-infraestructura-logistica.html' },
+  'bmw-obra': { fuente: 'S&P Global Mobility (AutoTechInsight), 17 de junio de 2016: BMW colocó la primera piedra de su planta de San Luis Potosí el 16 de junio de 2016', url: 'https://autotechinsight.spglobal.com/news/36058/bmw-breaks-ground-on-mexico-plant-confirms-3-series-production' },
+  'toyota-gto-obra': { fuente: 'Mexico Industry, 1 de marzo de 2020: Toyota colocó la primera piedra de su planta de Apaseo el Grande el 14 de noviembre de 2016', url: 'https://mexicoindustry.com/noticia/toyota-consolida-la--industria-automotriz-en-mexico' },
+  'tmex-obra': { fuente: 'Mexico Industry (ProMéxico Industry), 17 de marzo de 2022: empezó la construcción de T-MEX Park en Nextlalpan, con la primera piedra puesta por el gobernador; la nota no da el día', url: 'https://www.promexicoindustry.com/en/article/construction-begins-on-the-t-mexpark-logistics-hub-in-the-state-of-mexico' },
   'tmex-anuncio': { fuente: 'Gobierno de México, segundo paquete de proyectos de infraestructura con el sector privado (30 de noviembre de 2020): «T-MEC Park», 13,020 millones de pesos, logística', url: 'https://www.gob.mx/cms/uploads/attachment/file/730917/002_SEGUNDO_ANUNCIO_30_NOVIEMBRE_2020.pdf' },
 };
 
@@ -80,8 +83,8 @@ export const PLANTAS = [
   }),
   a('kia-pesqueria', 'Kia', 'Kia México, Pesquería', 'kia', 'Pesquería', 'NL', 'Autos (K3, K4) y el eléctrico EV3', '2016', ['kia']),
   a('toyota-tijuana', 'Toyota Tijuana', 'Toyota Motor Manufacturing de Baja California', 'toyota', 'Tijuana', 'BC', 'La pickup Tacoma', '2004', ['toyota']),
-  a('toyota-guanajuato', 'Toyota Guanajuato', 'Toyota Motor Manufacturing de Guanajuato', 'toyota', 'Apaseo el Grande', 'GTO', 'La pickup Tacoma', '2019-12', ['toyota', 'toyota-gto']),
-  a('bmw-san-luis-potosi', 'BMW', 'BMW Group, planta San Luis Potosí', 'bmw', 'Villa de Reyes', 'SLP', 'Autos (Serie 3, Serie 2 Coupé, M2)', '2019-04', ['bmw']),
+  a('toyota-guanajuato', 'Toyota Guanajuato', 'Toyota Motor Manufacturing de Guanajuato', 'toyota', 'Apaseo el Grande', 'GTO', 'La pickup Tacoma', '2019-12', ['toyota', 'toyota-gto', 'toyota-gto-obra'], { obraDesde: '2016-11-14' }),
+  a('bmw-san-luis-potosi', 'BMW', 'BMW Group, planta San Luis Potosí', 'bmw', 'Villa de Reyes', 'SLP', 'Autos (Serie 3, Serie 2 Coupé, M2)', '2019-04', ['bmw', 'bmw-obra'], { obraDesde: '2016-06-16' }),
   a('mazda-salamanca', 'Mazda', 'Mazda de México Vehicle Operation, Salamanca', 'mazda', 'Salamanca', 'GTO', 'Autos y SUV (Mazda2, Mazda3, CX-3, CX-30)', '2014-01', ['mazda', 'mazda-tren'], {
     tren: 'Tiene espuela propia para exportar por tren (Congreso de Guanajuato).',
   }),
@@ -176,8 +179,9 @@ export const PLANTAS = [
     estado: 'MEX',
     que: 'Parque logístico privado junto al AIFA; su primer inquilino en operación es DHL Supply Chain (160,000 m² en 2026)',
     desde: '2025-08',
+    obraDesde: '2022-03',
     tren: 'El desarrollador planea espuelas y una zona intermodal con Ferrovalle; no hay evidencia de que operen.',
     nota: 'De Grupo El-Mann. El gobierno federal lo anunció en 2020 como «T-MEC Park» entre los proyectos con el sector privado; no tiene dinero público ni es un Polo del Bienestar. Su superficie (4 a 6 millones de m²) y sus empleos son cifras del desarrollador. Su enlace de carga con el AIFA es un dicho del desarrollador: el aeropuerto no lo menciona.',
-    fuentes: ['tmex-fidepar', 'tmex-dhl', 'tmex-anuncio', 'osm'],
+    fuentes: ['tmex-fidepar', 'tmex-dhl', 'tmex-anuncio', 'tmex-obra', 'osm'],
   },
 ];
