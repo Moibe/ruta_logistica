@@ -1,0 +1,487 @@
+{
+ "corte": "2026-11-27",
+ "nota": "Generado por scripts/islas/gen-islas.mjs.",
+ "fuente": "Nombres de OpenStreetMap (Nominatim), comprobados contra el centro de cada polígono de Natural Earth 10m del tablero (a menos de 15 km). Las islas sin nombre en OSM (barras de las lagunas costeras) no están.",
+ "islas": [
+  {
+   "nombre": "Isla Tiburón",
+   "estado": "SON",
+   "centro": [
+    -112.372,
+    28.975
+   ],
+   "osm": "relation/2672915",
+   "osmKm": 2.9
+  },
+  {
+   "nombre": "Isla Ángel de la Guarda",
+   "estado": "BC",
+   "centro": [
+    -113.341,
+    29.272
+   ],
+   "osm": "relation/3971180",
+   "osmKm": 3.4
+  },
+  {
+   "nombre": "Isla Cozumel",
+   "estado": "QROO",
+   "centro": [
+    -86.874,
+    20.468
+   ],
+   "osm": "relation/11914633",
+   "osmKm": 6.3
+  },
+  {
+   "nombre": "Isla de Cedros",
+   "estado": "BC",
+   "centro": [
+    -115.222,
+    28.163
+   ],
+   "osm": "relation/11781789",
+   "osmKm": 4.6
+  },
+  {
+   "nombre": "Isla Magdalena",
+   "estado": "BCS",
+   "centro": [
+    -112.167,
+    24.806
+   ],
+   "osm": "relation/7687678",
+   "osmKm": 12
+  },
+  {
+   "nombre": "Isla Guadalupe",
+   "estado": "BC",
+   "centro": [
+    -118.292,
+    29.031
+   ],
+   "osm": "relation/6951997",
+   "osmKm": 2.2
+  },
+  {
+   "nombre": "Isla Santa Margarita",
+   "estado": "BCS",
+   "centro": [
+    -111.829,
+    24.444
+   ],
+   "osm": "relation/11884946",
+   "osmKm": 5.2
+  },
+  {
+   "nombre": "Isla San José",
+   "estado": "BCS",
+   "centro": [
+    -110.629,
+    24.975
+   ],
+   "osm": "relation/11864113",
+   "osmKm": 1.8
+  },
+  {
+   "nombre": "Isla Socorro",
+   "estado": "COL",
+   "centro": [
+    -110.98,
+    18.781
+   ],
+   "osm": "relation/5300073",
+   "osmKm": 1.3
+  },
+  {
+   "nombre": "Isla del Carmen",
+   "estado": "BCS",
+   "centro": [
+    -111.152,
+    25.953
+   ],
+   "osm": "relation/11906067",
+   "osmKm": 2.8
+  },
+  {
+   "nombre": "Isla María Madre",
+   "estado": "NAY",
+   "centro": [
+    -106.575,
+    21.618
+   ],
+   "osm": "way/376222953",
+   "osmKm": 0.4
+  },
+  {
+   "nombre": "Isla Jacques Cousteau (Cerralvo)",
+   "estado": "BCS",
+   "centro": [
+    -109.871,
+    24.241
+   ],
+   "osm": "relation/13680076",
+   "osmKm": 2.3
+  },
+  {
+   "nombre": "Isla del Carmen",
+   "estado": "CAMP",
+   "centro": [
+    -91.662,
+    18.72
+   ],
+   "osm": "relation/11875399",
+   "osmKm": 1.8
+  },
+  {
+   "nombre": "Arrecife Alacranes",
+   "estado": "YUC",
+   "centro": [
+    -89.692,
+    22.476
+   ],
+   "osm": "relation/7205583",
+   "osmKm": 0.2
+  },
+  {
+   "nombre": "Isla Espíritu Santo",
+   "estado": "BCS",
+   "centro": [
+    -110.36,
+    24.494
+   ],
+   "osm": "relation/11806817",
+   "osmKm": 4.7
+  },
+  {
+   "nombre": "Isla Montague",
+   "estado": "BC",
+   "centro": [
+    -114.72,
+    31.734
+   ],
+   "osm": "relation/7869474",
+   "osmKm": 3.3
+  },
+  {
+   "nombre": "Isla María Magdalena",
+   "estado": "NAY",
+   "centro": [
+    -106.421,
+    21.465
+   ],
+   "osm": "relation/16170175",
+   "osmKm": 0.8
+  },
+  {
+   "nombre": "Isla San Ignacio",
+   "estado": "SIN",
+   "centro": [
+    -108.884,
+    25.418
+   ],
+   "osm": "relation/11863775",
+   "osmKm": 3.2
+  },
+  {
+   "nombre": "Isla Santa Catalina",
+   "estado": "BCS",
+   "centro": [
+    -110.776,
+    25.657
+   ],
+   "osm": "relation/11881280",
+   "osmKm": 0.8
+  },
+  {
+   "nombre": "Isla Mazocarit",
+   "estado": "SON",
+   "centro": [
+    -109.197,
+    26.306
+   ],
+   "osm": "way/449301957",
+   "osmKm": 8.2
+  },
+  {
+   "nombre": "Isla San Esteban",
+   "estado": "SON",
+   "centro": [
+    -112.577,
+    28.705
+   ],
+   "osm": "relation/11810668",
+   "osmKm": 0.5
+  },
+  {
+   "nombre": "Isla Arena",
+   "estado": "BC",
+   "centro": [
+    -114.152,
+    28.033
+   ],
+   "osm": "relation/16170170",
+   "osmKm": 5.8
+  },
+  {
+   "nombre": "Isla Ana",
+   "estado": "BCS",
+   "centro": [
+    -113.203,
+    26.706
+   ],
+   "osm": "relation/8731059",
+   "osmKm": 1.5
+  },
+  {
+   "nombre": "Isla San Lorenzo",
+   "estado": "BC",
+   "centro": [
+    -112.815,
+    28.623
+   ],
+   "osm": "relation/10368382",
+   "osmKm": 0.5
+  },
+  {
+   "nombre": "Isla San Marcos",
+   "estado": "BCS",
+   "centro": [
+    -112.079,
+    27.218
+   ],
+   "osm": "relation/16170281",
+   "osmKm": 0.8
+  },
+  {
+   "nombre": "Isla Creciente",
+   "estado": "BCS",
+   "centro": [
+    -111.586,
+    24.364
+   ],
+   "osm": "relation/7734890",
+   "osmKm": 8.4
+  },
+  {
+   "nombre": "Isla Santo Domingo",
+   "estado": "BCS",
+   "centro": [
+    -112.112,
+    25.382
+   ],
+   "osm": "relation/11863577",
+   "osmKm": 0.6
+  },
+  {
+   "nombre": "Isla Clarión",
+   "estado": "COL",
+   "centro": [
+    -114.755,
+    18.341
+   ],
+   "osm": "relation/5300072",
+   "osmKm": 3.8
+  },
+  {
+   "nombre": "Isla María Cleofas",
+   "estado": "NAY",
+   "centro": [
+    -106.244,
+    21.315
+   ],
+   "osm": "relation/16170184",
+   "osmKm": 0.8
+  },
+  {
+   "nombre": "Isla Lobos",
+   "estado": "SON",
+   "centro": [
+    -110.586,
+    27.343
+   ],
+   "osm": "relation/11871126",
+   "osmKm": 3.3
+  },
+  {
+   "nombre": "Isla Monserrat",
+   "estado": "BCS",
+   "centro": [
+    -111.038,
+    25.687
+   ],
+   "osm": "relation/16252286",
+   "osmKm": 0.8
+  },
+  {
+   "nombre": "Isla San Benedicto",
+   "estado": "COL",
+   "centro": [
+    -110.818,
+    19.311
+   ],
+   "osm": "relation/3937919",
+   "osmKm": 1.7
+  },
+  {
+   "nombre": "Banco Chinchorro (Cayo Norte)",
+   "estado": "QROO",
+   "centro": [
+    -87.259,
+    18.688
+   ],
+   "osm": "relation/16811076",
+   "osmKm": 8
+  },
+  {
+   "nombre": "Banco Chinchorro (Cayo Centro)",
+   "estado": "QROO",
+   "centro": [
+    -87.341,
+    18.482
+   ],
+   "osm": "relation/11697250",
+   "osmKm": 12
+  },
+  {
+   "nombre": "Isla San Juanito",
+   "estado": "NAY",
+   "centro": [
+    -106.668,
+    21.759
+   ],
+   "osm": "relation/16187079",
+   "osmKm": 1.2
+  },
+  {
+   "nombre": "Isla Huivulai",
+   "estado": "SON",
+   "centro": [
+    -109.999,
+    27.065
+   ],
+   "osm": "way/22656164",
+   "osmKm": 3.7
+  },
+  {
+   "nombre": "Isla Tortuga",
+   "estado": "BCS",
+   "centro": [
+    -111.881,
+    27.438
+   ],
+   "osm": "relation/16170273",
+   "osmKm": 0.4
+  },
+  {
+   "nombre": "Isla Mujeres",
+   "estado": "QROO",
+   "centro": [
+    -86.727,
+    21.24
+   ],
+   "osm": "relation/10525366",
+   "osmKm": 0.9
+  },
+  {
+   "nombre": "Isla Natividad",
+   "estado": "BCS",
+   "centro": [
+    -115.19,
+    27.875
+   ],
+   "osm": "relation/10377644",
+   "osmKm": 1.2
+  },
+  {
+   "nombre": "Isla Coronado (Smith)",
+   "estado": "BC",
+   "centro": [
+    -113.509,
+    29.066
+   ],
+   "osm": "way/22656529",
+   "osmKm": 1.2
+  },
+  {
+   "nombre": "Isla Coronados (Loreto)",
+   "estado": "BCS",
+   "centro": [
+    -111.274,
+    26.12
+   ],
+   "osm": "relation/16170312",
+   "osmKm": 0.2
+  },
+  {
+   "nombre": "Isla San Luis",
+   "estado": "BC",
+   "centro": [
+    -114.41,
+    29.974
+   ],
+   "osm": "relation/19747979",
+   "osmKm": 0.5
+  },
+  {
+   "nombre": "Isla San Benito Oeste",
+   "estado": "BC",
+   "centro": [
+    -115.587,
+    28.31
+   ],
+   "osm": "relation/11842758",
+   "osmKm": 0.7
+  },
+  {
+   "nombre": "Isla San Pedro Nolasco",
+   "estado": "SON",
+   "centro": [
+    -111.383,
+    27.969
+   ],
+   "osm": "way/376220034",
+   "osmKm": 0.4
+  },
+  {
+   "nombre": "Isla San Francisco",
+   "estado": "BCS",
+   "centro": [
+    -110.573,
+    24.827
+   ],
+   "osm": "relation/16252303",
+   "osmKm": 0.5
+  },
+  {
+   "nombre": "Isla Danzante",
+   "estado": "BCS",
+   "centro": [
+    -111.252,
+    25.794
+   ],
+   "osm": "way/376216960",
+   "osmKm": 0.6
+  },
+  {
+   "nombre": "Isla San Martín",
+   "estado": "BC",
+   "centro": [
+    -116.114,
+    30.49
+   ],
+   "osm": "way/22658675",
+   "osmKm": 0.1
+  },
+  {
+   "nombre": "Isla Coronado Sur",
+   "estado": "BC",
+   "centro": [
+    -117.247,
+    32.408
+   ],
+   "osm": "relation/18216330",
+   "osmKm": 0.5
+  }
+ ]
+}

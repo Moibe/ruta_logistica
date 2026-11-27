@@ -127,6 +127,12 @@ saltar al siguiente libre.
   vez, por su puerto.
 - Clic en un estado vuela a encuadrarlo; clic en un puerto o ciudad vuela hacia él.
   *Reencuadrar* regresa al país completo.
+- **Islas con nombre:** sobre una isla, la ficha dice «Isla · estado» y su nombre (Tiburón,
+  Guadalupe, Cozumel…). Los polígonos son los de Natural Earth que no son la tierra firme de su
+  estado (54); los nombres, de OpenStreetMap, los comprueba `scripts/islas/gen-islas.mjs` con
+  Nominatim (a menos de 15 km del centro del polígono) y los escribe en `datos/islas.json`;
+  `map/mexico.ts` los casa con los polígonos por su centro (`islas`). 48 tienen nombre; las barras
+  de laguna sin nombre en OSM siguen diciendo solo el estado. Detalle en la enciclopedia, «Islas».
 - **Tres capas de pintado**, porque ahora hay cosas que se mueven:
   - **capa**: geografía y vías, en un lienzo fuera de pantalla 256 px más grande que la vista
     por cada lado. Mientras el zoom no cambie y la cámara no se salga del margen (arrastrar,

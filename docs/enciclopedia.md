@@ -225,6 +225,50 @@ oficiales:
 | YUC | Yucatán | Yuc. |
 | ZAC | Zacatecas | Zac. |
 
+### Islas
+
+Las islas del tablero son los polígonos de cada estado que no son su tierra firme: 54 en los
+datos de Natural Earth 10m (las chicas no llegan a esa escala). Natural Earth solo nombra cinco
+(Guadalupe, Clarión, Socorro, Cozumel y las Revillagigedo como grupo), así que los nombres vienen
+de **OpenStreetMap**: `scripts/islas/gen-islas.mjs` busca cada uno en Nominatim y lo acepta solo
+si OSM pone esa isla a menos de 15 km del centro del polígono. Al pasar el cursor, la ficha dice
+«Isla · estado» y el nombre; 48 lo tienen. Los seis polígonos sin nombre son barras de lagunas
+costeras que OSM no nombra (Mar Muerto, Tamiahua, San Andrés y la chica de Ojo de Liebre) e Isla
+Santa Cruz (BCS, 25.3° N), que Nominatim no encuentra: ahí la ficha sigue diciendo el estado.
+
+Dos islas no están en el polígono del estado al que pertenecen: Natural Earth pone **San
+Esteban** en Baja California y **Montague** en Sonora; son de Sonora (Hermosillo) y de Baja
+California (Mexicali), y así las dice la ficha. **Cerralvo** se llama Jacques Cousteau desde 2009
+(DOF, 17 de noviembre de 2009) y la ficha da los dos nombres. El Banco Chinchorro aparece en dos
+piezas (Cayo Norte y Cayo Centro).
+
+| Isla | Estado | | Isla | Estado |
+| --- | --- | --- | --- | --- |
+| Isla Tiburón | SON | | Isla Santo Domingo | BCS |
+| Isla Ángel de la Guarda | BC | | Isla Clarión | COL |
+| Isla Cozumel | QROO | | Isla María Cleofas | NAY |
+| Isla de Cedros | BC | | Isla Lobos | SON |
+| Isla Magdalena | BCS | | Isla Monserrat | BCS |
+| Isla Guadalupe | BC | | Isla San Benedicto | COL |
+| Isla Santa Margarita | BCS | | Banco Chinchorro (Cayo Norte) | QROO |
+| Isla San José | BCS | | Banco Chinchorro (Cayo Centro) | QROO |
+| Isla Socorro | COL | | Isla San Juanito | NAY |
+| Isla del Carmen | BCS | | Isla Huivulai | SON |
+| Isla María Madre | NAY | | Isla Tortuga | BCS |
+| Isla Jacques Cousteau (Cerralvo) | BCS | | Isla Mujeres | QROO |
+| Isla del Carmen | CAMP | | Isla Natividad | BCS |
+| Arrecife Alacranes | YUC | | Isla Coronado (Smith) | BC |
+| Isla Espíritu Santo | BCS | | Isla Coronados (Loreto) | BCS |
+| Isla Montague | BC | | Isla San Luis | BC |
+| Isla María Magdalena | NAY | | Isla San Benito Oeste | BC |
+| Isla San Ignacio | SIN | | Isla San Pedro Nolasco | SON |
+| Isla Santa Catalina | BCS | | Isla San Francisco | BCS |
+| Isla Mazocarit | SON | | Isla Danzante | BCS |
+| Isla San Esteban | SON | | Isla San Martín | BC |
+| Isla Arena | BC | | Isla Coronado Sur | BC |
+| Isla Ana | BCS | | Isla San Lorenzo | BC |
+| Isla San Marcos | BCS | | Isla Creciente | BCS |
+
 ### Países vecinos
 
 Se dibujan de fondo, un paso atrás de México: Estados Unidos, Guatemala y Belice (con

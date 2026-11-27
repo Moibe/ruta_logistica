@@ -93,7 +93,7 @@
   import { sim, type Unidad } from '$lib/state/simulacion.svelte';
   import { tablero } from '$lib/state/tablero.svelte';
   import { duracion, estadoUnidad, km as fmtKm } from '$lib/ui/formato';
-  import { loadMexico, type EstadoProps, type MexicoGeometry } from './mexico';
+  import { loadMexico, type EstadoProps, type IslaProps, type MexicoGeometry } from './mexico';
   import { COLOR_DUEÑO, COLOR_USO, INDUSTRIA, MINERIA, AEROPUERTO, COMBUSTIBLE, COMBUSTOLEO, CRUDO, GAS, PLATAFORMA, POLO, PUNTOS_AVION, REFINERIA } from './simbolos';
   import { kmEnHoras, type Petrolero } from '$lib/domain/petroleros';
   import { CENTRALES_CO, CENTRAL_CO_DE_PLANTA, COMBUSTOLEO as DATOS_CO, ENTREGAS_CO, factorCentral, factorDemandaCo, mbdCentralCo, porDuctoCo, realCombustoleo } from '$lib/domain/combustoleo';
@@ -499,7 +499,7 @@
     | { kind: 'cayo-arcas' }
     | { kind: 'ducto'; ducto: Ducto }
     /** `region`: the pointer is over a system of its own inside the state (Mulegé), with the electricity layer on. */
-    | { kind: 'estado'; estado: EstadoProps; region?: string };
+    | { kind: 'estado'; estado: EstadoProps; region?: string; isla?: IslaProps };
 
   let host = $state.raw<HTMLDivElement>();
   let canvas = $state.raw<HTMLCanvasElement>();
@@ -545,6 +545,8 @@
     frontera: Path2D;
     limites: Path2D;
     estados: { props: EstadoProps; path: Path2D; bounds: [[number, number], [number, number]] }[];
+    /** The named islands, only for the tooltip: the estados' paths already draw them. */
+    islas: { props: IslaProps; path: Path2D; bounds: [[number, number], [number, number]] }[];
     /** Electricity systems of their own inside a state (Mulegé): their area, clipped by the state when drawn, and their border. */
     subregiones: { region: string; estado: string; zona: Path2D; frontera: Path2D }[];
   };
@@ -732,6 +734,7 @@
       frontera: P(g.frontera),
       limites: P(g.limites),
       estados: g.estados.features.map((f) => ({ props: f.properties, path: P(f), bounds: p.bounds(f) })),
+      islas: g.islas.features.map((f) => ({ props: f.properties, path: P(f), bounds: p.bounds(f) })),
       subregiones: ENERGIA.regiones.flatMap((r) =>
         r.parteDe && r.zona && r.frontera ? [{ region: r.id, estado: r.parteDe, zona: trazo(r.zona, true), frontera: trazo(r.frontera, false) }] : []
       ),
@@ -2611,10 +2614,20 @@
       const [[x0, y0], [x1, y1]] = e.bounds;
       if (px < x0 || px > x1 || py < y0 || py > y1) continue;
       if (!hitCtx.isPointInPath(e.path, px, py)) continue;
+      // On an island with a name, the tooltip says which one.
+      let isla: IslaProps | undefined;
+      for (const i of baked.islas) {
+        const [[ix0, iy0], [ix1, iy1]] = i.bounds;
+        if (px < ix0 || px > ix1 || py < iy0 || py > iy1) continue;
+        if (hitCtx.isPointInPath(i.path, px, py)) {
+          isla = i.props;
+          break;
+        }
+      }
       if (layers.energia)
         for (const s of baked.subregiones)
-          if (s.estado === e.props.clave && hitCtx.isPointInPath(s.zona, px, py)) return { kind: 'estado', estado: e.props, region: s.region };
-      return { kind: 'estado', estado: e.props };
+          if (s.estado === e.props.clave && hitCtx.isPointInPath(s.zona, px, py)) return { kind: 'estado', estado: e.props, region: s.region, isla };
+      return { kind: 'estado', estado: e.props, isla };
     }
     return null;
   }
@@ -3775,7 +3788,7 @@
       {@const reg = sim.energia.find((e) => e.region.id === regionEstado)}
       {@const aparte = hovered.region ? [] : (SUBREGIONES_DEL_ESTADO.get(hovered.estado.clave) ?? [])}
       <span class="label tip-kind">Estado · {hovered.estado.clave}</span>
-      <strong>{hovered.estado.nombre}</strong>
+      <strong>{hovered.isla ? `${hovered.isla.nombre} · ${hovered.estado.nombre}` : hovered.estado.nombre}</strong>
       {#if reg}
         <span class="tip-rail energia-nivel" class:critico={reg.nivel === 'critico'}>
           {reg.region.parteDe ? `Sistema aislado de ${reg.region.nombre}` : `Región ${reg.region.nombre}`}: {TEXTO_NIVEL[reg.nivel]}
@@ -3827,7 +3840,7 @@
       {@const usa = a.consumo.get(clave) ?? 0}
       {@const hueco = a.hueco.get(clave) ?? 0}
       <span class="label tip-kind" style:color={COMBUSTIBLE}>Combustibles · {clave}</span>
-      <strong>{hovered.estado.nombre}</strong>
+      <strong>{hovered.isla ? `${hovered.isla.nombre} · ${hovered.estado.nombre}` : hovered.estado.nombre}</strong>
       <span class="tip-rail">
         Usa {fmtMil(usa)} mil barriles diarios · en {año}, el {Math.round(parteDelPais(clave) * 100)} % vino del país
       </span>
@@ -3882,6 +3895,11 @@
           {#if c.tren + c.barco > 0}· en {año}, {fmtMil(c.tren / 1000)} mil en tren y {fmtMil(c.barco / 1000)} mil en barco{/if}
         </span>
       {/if}
+    {:else if hovered.isla}
+      <!-- The island's own estado, which Natural Earth's polygon doesn't always get right. -->
+      <span class="label tip-kind">Isla · {hovered.isla.estado}</span>
+      <strong>{hovered.isla.nombre}</strong>
+      <span class="tip-sub">{estadoNombre.get(hovered.isla.estado) ?? hovered.estado.nombre} · Clic para acercar</span>
     {:else}
       <span class="label tip-kind">Estado · {hovered.estado.clave}</span>
       <strong>{hovered.estado.nombre}</strong>
