@@ -89,11 +89,13 @@ saltar al siguiente libre.
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, encima de la barra de
   capas, y abajo a la derecha solo el zoom y *Reencuadrar*, del alto de la barra y de ancho
   `--herramientas`, donde termina. La pastilla de vistas (`ui/ViewNav.svelte`, el ojo bajo la
-  greca) va arriba a la derecha, junto al librito, y abre su lista hacia abajo. Colores e íconos
+  greca y una flecha, un cuadrado como el librito) va arriba a la derecha, junto al librito, y
+  abre su lista hacia abajo; el nombre de la vista actual es su `title`. Colores e íconos
   compartidos: `map/simbolos.ts`.
 - **Grandes industrias privadas** (capa *Industrias*, `domain/industrias.ts`): las armadoras de
   vehículos ligeros, T-MEX Park y las acereras y la fundición que reciben el mineral de la capa de
-  minería, visibles entre su fecha de inicio y la de cierre en los dos modos.
+  minería, visibles entre su fecha de inicio y la de cierre en los dos modos; las que tienen
+  `obraDesde` se ven huecas desde esa fecha hasta que abren (`industriaEnObra`).
   `scripts/industrias/plantas.mjs` tiene cada planta con sus fuentes; `buscar-osm.mjs` y
   `buscar-overpass.mjs` las buscan en OpenStreetMap y `ubicar.mjs` fija su lugar
   (`ubicaciones.json`); `gen-industrias.mjs` baja del INEGI (RAIAVL, API PxWeb) la producción y la

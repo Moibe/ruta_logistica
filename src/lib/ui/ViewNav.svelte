@@ -66,8 +66,8 @@
     class="pastilla panel"
     class:abierto
     aria-expanded={abierto}
-    aria-label="Vistas"
-    title="Cambiar de vista"
+    aria-label="Vistas · {actual}"
+    title="Vistas · {actual}"
     onclick={() => (abierto = !abierto)}
   >
     <!-- An eye under a stepped brow: the stepped fret of Mesoamerican temples
@@ -77,7 +77,6 @@
       <path d="M2.5 14c3.5-4.6 15.5-4.6 19 0-3.5 4-15.5 4-19 0Z" />
       <circle cx="12" cy="12.9" r="2.7" />
     </svg>
-    <span class="nombre">{actual}</span>
     <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" /></svg>
   </button>
 </nav>
@@ -90,15 +89,15 @@
     z-index: 40;
   }
 
-  /* As tall as the book beside it. */
+  /* A square like the book beside it: only the eye and the chevron; the view's name is its title and is marked in the list. */
   .pastilla {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
+    justify-content: center;
+    gap: 0.3rem;
     width: var(--vistas);
     height: var(--libro);
-    padding: 0 0.65rem;
-    font-size: 0.72rem;
+    padding: 0;
     color: var(--muted);
     cursor: pointer;
     transition:
@@ -110,14 +109,6 @@
   .pastilla.abierto {
     color: var(--ink);
     border-color: rgba(126, 190, 255, 0.3);
-  }
-
-  .nombre {
-    flex: 1;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   /* "Views": an eye, lit like the brand dot. */
