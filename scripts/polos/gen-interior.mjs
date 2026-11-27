@@ -2895,7 +2895,7 @@ const FUENTES = {
     url: 'https://dof.gob.mx/nota_detalle.php?codigo=5688608&fecha=12/05/2023',
   },
   'energia-polos': {
-    fuente: 'Estimación del juego con las declaratorias y el portal de Economía: un polo sin cifra oficial de energía usa la mediana de los siete que sí la tienen, 8 MW (ver La energía)',
+    fuente: 'Estimación del juego con las declaratorias, el portal de Economía, el Gobierno de Puebla y Proyectos México: un polo sin cifra oficial de energía usa la mediana de los nueve que sí la tienen, 8 MW (ver La energía)',
     url: '',
   },
   'sict-dos-bocas': { fuente: 'SICT: costo del ramal ferroviario a Dos Bocas, base del costo por km de la espuela (ver la sección de obras del Estado)', url: 'https://www.gob.mx/sct/prensa/precisa-sict-que-ramal-ferroviario-roberto-ayala-dos-bocas-tiene-un-costo-estimado-de-6-mil-54-mdp' },
@@ -3138,6 +3138,14 @@ const FUENTES = {
   'puebla-subestacion-chiapa': {
     fuente: 'Gobierno de Puebla, comunicado AA 644/2026 (30 de junio de 2026): la subestación eléctrica de San José Chiapa, 591 millones de pesos del estado en 4 ha, con 60 MVA para el PODECOBI, la industria del Café y Maíz del Bienestar y la fábrica de baterías de Olinia',
     url: 'https://www.puebla.gob.mx/index.php/noticias/item/24231-subestacion-electrica-asegura-desarrollo-industrial-en-san-jose-chiapa-armenta-mier',
+  },
+  'proyectos-mexico-seybaplaya': {
+    fuente: 'Proyectos México (Banobras), ficha 1001 «PODECOBI Seybaplaya I, Campeche»: oferta eléctrica disponible en el predio por 6 MW hasta 2030. La página no respondió (tiempo de espera agotado): se usa lo que muestra el buscador',
+    url: 'https://www.proyectosmexico.gob.mx/proyecto_inversion/1001-podecobi-seybaplaya-i-campeche/',
+  },
+  'sma-tlaxcala-2026': {
+    fuente: 'Secretaría de Medio Ambiente de Tlaxcala, declaración del 8 de octubre de 2026 recogida por la prensa local (La Prensa de Tlaxcala, e-Tlaxcala, 385 Grados): estudios técnicos adicionales descartan el sitio de Atlangatepec por sus condiciones geofísicas, topográficas e hidráulicas; informará a la Semarnat. Sin boletín oficial en línea',
+    url: 'https://laprensadetlaxcala.com/2026/10/estudios-tecnicos-determinan-que-no-es-viable-contruir-el-polo-de-economia-circular-en-atlangatepec/',
   },
   'dof-seybaplaya': {
     fuente: 'DOF, Acuerdo por el que se emite la declaratoria del Polo de Desarrollo Económico para el Bienestar Seybaplaya I, Campeche (30 de junio de 2025): cuadros de construcción de dos fracciones, 99.99 ha; a pie de la MEX-180, a 4.9 km del puerto de Seybaplaya, a 29 km del puerto de Campeche y a 37 km del Tren Maya; gas y electricidad en el predio; sus vocaciones productivas, la declaratoria de Polo Industrial del Bienestar del Gobierno de Campeche (25 de septiembre de 2024) y su propiedad (pública estatal)',
@@ -4143,8 +4151,8 @@ function interiorCircularTlaxcala(g) {
     nombre: 'Economía Circular Tlaxcala',
     lugar: 'Atlangatepec, Tlaxcala',
     sectores: ['plastico', 'papel', 'metalicas'],
-    fuentesLista: ['dof-circular-tlaxcala', 'osm', 'sict-dos-bocas', 'energia-polos'],
-    realNota: 'El polo real: el Gobierno de Tlaxcala lo propuso en la ex hacienda de San Pedro Ecatepec, de un fideicomiso suyo, y la Semarnat lo declaró el 8 de junio de 2026 (DOF). No se ha reportado obra: sus lotes y su acomodo son del juego.',
+    fuentesLista: ['dof-circular-tlaxcala', 'sma-tlaxcala-2026', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    realNota: 'El polo real: el Gobierno de Tlaxcala lo propuso en la ex hacienda de San Pedro Ecatepec, de un fideicomiso suyo, y la Semarnat lo declaró el 8 de junio de 2026 (DOF). El 8 de octubre de 2026 la Secretaría de Medio Ambiente del estado descartó el sitio: estudios técnicos lo hallaron inviable por sus condiciones geofísicas, topográficas e hidráulicas, y dijo que informaría a la Semarnat (prensa local). La declaratoria sigue vigente: el DOF no la ha abrogado, así que el polo sigue aquí. No se ha reportado obra: sus lotes y su acomodo son del juego.',
     frentes: FRENTES_COMUNES,
     frentesDato: {
       dato: 'La declaratoria no dice qué obras necesita el polo. El juego usa los mismos frentes que en Huamantla, con las mismas partes del costo: 40 % vialidades e iluminación, 25 % agua y drenaje, 25 % energía, 10 % un centro de servicios (estimación del juego). Cada uno de sus polígonos lleva su calle; se hacen uno tras otro.',
@@ -4217,7 +4225,7 @@ function interiorSeybaplaya(g) {
     nombre: 'Seybaplaya I',
     lugar: 'Seybaplaya, Campeche',
     sectores: ['alimentos', 'productos-metalicos', 'maquinaria', 'plastico'],
-    fuentesLista: ['dof-seybaplaya', 'osm', 'sict-dos-bocas', 'energia-polos'],
+    fuentesLista: ['dof-seybaplaya', 'proyectos-mexico-seybaplaya', 'osm', 'sict-dos-bocas'],
     realNota: 'El polo real: el Gobierno de Campeche lo declaró Polo Industrial del Bienestar el 25 de septiembre de 2024, en terrenos del estado, y la Secretaría de Economía lo declaró polo del Plan México el 30 de junio de 2025 (DOF). No se ha reportado obra: sus lotes y su acomodo son del juego.',
     frentes: FRENTES_COMUNES,
     frentesDato: {
@@ -4232,7 +4240,13 @@ function interiorSeybaplaya(g) {
       dato: `No tiene vía cerca: la declaratoria pone el Tren Maya a 37 km. La espuela del juego va del ${g.espuela.via} al polo: ${km(g.espuela.km)} km en línea recta (OpenStreetMap), la espuela más larga de los polos. En 2018 por ahí corre el viejo ferrocarril del Sureste, sobre cuyo derecho de vía se reconstruyó el Tren Maya: construido, el polo tiene su estación en esa vía. Cuesta por km lo que el ramal a Dos Bocas (SICT) y tarda por lo menos 2 meses (estimación del juego); se puede cambiar de destino más adelante.`,
       fuentes: ['dof-seybaplaya', 'osm', 'sict-dos-bocas', 'juego'],
     },
-    energia: energiaSinCifra('seybaplaya', g, `La declaratoria dice que el predio tiene electricidad, sin decir cuánta. La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`),
+    energia: {
+      mva: 6,
+      fuenteCorta: 'Proyectos México',
+      kmLinea: g.conexionElectrica.km,
+      dato: `Energía disponible en el predio de 6 MW hasta 2030 (ficha del polo en Proyectos México, de Banobras; leída en el resumen del buscador: la página no responde). La declaratoria solo dice que el predio tiene electricidad. La línea de alta tensión más cercana a su subestación queda a ${km(g.conexionElectrica.km)} km (OpenStreetMap).`,
+      fuentes: ['proyectos-mexico-seybaplaya', 'osm'],
+    },
     lotes: {
       lista: listaLotes(g),
       dato: `Dos fracciones que comparten un lado, a pie de la MEX-180. No hay lotes publicados. El juego les da a los lotes la parte que la declaratoria de Coatzacoalcos I dice de uso industrial (76.46 %): ${km(haLotes(g))} ha en ${nLotes(g)} lotes de 8 a 15 ha, y 3 ha de servicios en la fracción 2; lo demás es área común y reserva (estimación del juego).`,

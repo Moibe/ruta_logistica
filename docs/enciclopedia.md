@@ -841,8 +841,8 @@ anuario 2018, tablas 6-1, 6-2 y 10). Las dos últimas columnas son una empresa e
 
 #### La subestación del polo
 
-Lo que el polo da a sus empresas es su cifra oficial de electricidad (o la mediana de las ocho
-oficiales, 10.45 MW): su subestación en la primera fase. Cuando no alcanza, **la CFE la amplía**. En
+Lo que el polo da a sus empresas es su cifra oficial de electricidad (o la mediana de las nueve
+oficiales, 8 MW): su subestación en la primera fase. Cuando no alcanza, **la CFE la amplía**. En
 la pestaña *Obra* está el frente *Subestación*, que se abre cuando el frente de energía está
 terminado.
 
@@ -908,11 +908,11 @@ juego ya tenía.
   Ferroistmo**, a 2.14 km en línea recta, más cerca que la Línea Z que mide el DOF.
 - **Los frentes** son los mismos que en Huamantla, con las mismas partes del costo. La
   declaratoria no dice qué obras necesita el polo.
-- **La energía:** no hay cifra oficial. Le toca la de un polo sin cifra, la mediana de los ocho
-  que la tienen: **10.45 MW**, lo que da su subestación en su primera fase.
+- **La energía:** no hay cifra oficial. Le toca la de un polo sin cifra, la mediana de los nueve
+  que la tienen: **8 MW**, lo que da su subestación en su primera fase.
   - Sus empresas piden lo mismo por empleo que en Huamantla, 1.6 kW al promedio. Lleno de
     industria promedio (sus 15,763 empleos, 61.2 por hectárea), el polo pediría **25 MW**.
-  - Con 10.45 MW caben unos cuatro lotes de 20 ha de industria promedio. Una petroquímica o una
+  - Con 8 MW caben unos tres lotes de 20 ha de industria promedio. Una petroquímica o una
     metalúrgica de ese tamaño (11 MW) no cabe.
   - Es lo que dicen las cifras oficiales: los polos arrancan con 4 a 60 MW, y uno grande necesita
     que la CFE amplíe su subestación para llenarse (ver
@@ -1047,7 +1047,7 @@ UTM zona 15, con el rumbo y la distancia de cada lado y el centro y el radio de 
   - Al precio por km del ramal a Dos Bocas cuesta 2 millones con 4 cuadrillas y tarda el
     mínimo, 2 meses.
   - Es el polo más barato de conectar al tren.
-- **La energía:** no hay cifra oficial; le tocan los **10.45 MW** de un polo sin cifra.
+- **La energía:** no hay cifra oficial; le tocan los **8 MW** de un polo sin cifra.
   - La línea de 115 kV más cercana pasa al norte, a 3.86 km de su subestación (OpenStreetMap).
   - Lleno de industria promedio (28,282 empleos, 61.2 por hectárea) pediría 45.3 MW.
   - Un lote de 20 ha da 1,602 empleos y pide lo mismo que en Coatzacoalcos I (ver la tabla de
@@ -1110,7 +1110,7 @@ cuyas áreas calculadas dan las declaradas.
 - **Las calles:** tres, de 6.8, 0.9 y 8.5 km.
 - **La espuela:** va de la **Línea MB de Ferromex**, la vía principal más cercana, a GOB 2:
   **0.32 km**. Cuesta 21 millones con 4 cuadrillas y tarda el mínimo, 2 meses.
-- **La energía:** no hay cifra oficial; le tocan los **10.45 MW** de un polo sin cifra.
+- **La energía:** no hay cifra oficial; le tocan los **8 MW** de un polo sin cifra.
   - Su subestación queda a 1.43 km de la línea de 115 kV de las subestaciones del puerto (Puerto
     5 Norte, la más cercana).
   - Lleno de industria promedio (100,174 empleos) pediría 160 MW: necesitará muchos bancos de
@@ -1523,7 +1523,7 @@ polígonos en UTM zona 12, el 2 (216.16 ha) y el 1 (61.42 ha).
 - **Los empleos:** 61.2 por hectárea, 16,978.
 - **La espuela:** la **Línea Q de Ferromex** corre pegada al polígono 2: **0.02 km**, 1 millón
   con cuatro cuadrillas y el mínimo de 2 meses.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno de
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno de
   industria promedio pide 27.2 MW: un banco de la CFE. Pero sus vocaciones gastan mucho: un lote
   de petroquímica o de metálicas básicas de 20 ha pide 11 MW. La línea de 230 kV más
   cercana queda a 0.52 km de su subestación (OpenStreetMap).
@@ -1600,7 +1600,7 @@ DOF no dice la zona; Celaya está en ella), con sus curvas.
 - **La espuela:** pegados a su lado oeste corren ramales de vía sin nombre (OpenStreetMap). La
   espuela va a la línea principal más cercana, la **Línea AM de Ferromex**: **1.09 km**, 50
   millones con una cuadrilla (5.6 meses) o 72 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   5.1 MW: le sobra. La línea de 115 kV más cercana queda a 0.08 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 288 millones con una cuadrilla;
@@ -1665,7 +1665,7 @@ DOF no dice la zona; Durango está en ella), con números en formato europeo (2.
   (electrónica) a 4 MW (papel).
 - **La espuela:** la **Línea DA de la Línea Coahuila Durango** corre pegada al polígono 1:
   **0.04 km**, 3 millones con cuatro cuadrillas y el mínimo de 2 meses.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   30.9 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.31 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,732 millones con una
@@ -1719,7 +1719,7 @@ curvas, con su centro y su radio.
   (dispositivos médicos) a 5.5 MW (metálicas básicas o petroquímica).
 - **La espuela:** la **Línea Z de Ferroistmo** queda al oeste: **2.26 km** (el DOF dice 3; el
   desarrollador, 2). Cuesta 103 millones con una cuadrilla (5.6 meses) o 149 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   8.0 MW: alcanza. La línea de 115 kV más cercana queda a 1.07 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 451 millones con una cuadrilla;
@@ -1762,7 +1762,7 @@ polígono de nueve vértices en UTM zona 15, con rumbos escritos «NW 84°…».
   (agroindustria) a 5.6 MW (metálicas básicas).
 - **La espuela:** la **Línea K de Ferroistmo** corre pegada a su lado suroeste: **0.02 km**, 1
   millón con cuatro cuadrillas y el mínimo de 2 meses.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   4.8 MW; un lote de metálicas básicas ya pide 5.6. La línea de 115 kV más cercana queda a 0.68 km
   de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 268 millones con una cuadrilla;
@@ -1801,7 +1801,7 @@ a lado. Quedan tres predios: el sur (168.50 ha), el norte (55.88) y el central (
   (dispositivos médicos) a 5.6 MW (metálicas básicas).
 - **La espuela:** el ramal KA de Ferroistmo lo cruza: **0.01 km**, menos de un millón con cuatro
   cuadrillas y el mínimo de 2 meses.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   25.8 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.12 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,445 millones con una cuadrilla;
@@ -1843,7 +1843,7 @@ dos curvas cuyo centro va en el mismo renglón que el vértice donde terminan.
   (dispositivos médicos) a 5.7 MW (metálicas básicas).
 - **La espuela:** la **Línea KA de Ferroistmo** queda a **0.47 km** (el DOF dice 0.75). Cuesta 21
   millones con una cuadrilla (5.6 meses) o 31 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   14.7 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.39 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 822 millones con una cuadrilla;
@@ -1886,8 +1886,8 @@ zona 15, cada uno también en latitud y longitud.
   o 5.5 MW (petroquímica).
 - **La espuela:** la **Línea FA de Ferroistmo** queda al sur: **1.43 km** en línea recta. Cuesta
   65 millones con una cuadrilla (5.6 meses) o 94 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
-  9.4 MW: alcanza. La línea de 115 kV más cercana queda a 1.32 km de su subestación
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  9.4 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 1.32 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 528 millones con una cuadrilla;
   las vialidades, 211 millones en 11.5 meses, o 306 en 4.1 con cuatro.
@@ -1921,7 +1921,7 @@ zona 15.
   (dispositivos médicos) a 5.5 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** queda a **2.67 km** en línea recta (el DOF dice 4.7).
   Cuesta 121 millones con una cuadrilla (5.6 meses) o 176 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   32.4 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.02 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,820 millones con una
@@ -1960,7 +1960,7 @@ zona 15 que cierra con una curva; el centro de la curva viene en el renglón que
   (dispositivos médicos) a 5.6 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** corre pegada a su lado este: **0.03 km**, 2 millones
   con cuatro cuadrillas y el mínimo de 2 meses.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   35.3 MW: un banco de la CFE. La línea de 400 kV más cercana queda a 2.63 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,978 millones con una
@@ -1999,7 +1999,7 @@ curvas; el centro de cada una viene en el renglón que sigue al lado que dobla.
   (dispositivos médicos) a 5.5 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** pasa por su entrada: **0.03 km**, 2 millones con
   cuatro cuadrillas y el mínimo de 2 meses.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   17.5 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 0.41 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 984 millones con una
@@ -2044,7 +2044,7 @@ de su cuadro.
   (dispositivos médicos) a 5.6 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** queda a **4.5 km** en línea recta. Cuesta 204
   millones con una cuadrilla (5.6 meses) o 296 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   49.2 MW: 2 bancos de la CFE. OpenStreetMap no tiene líneas ni subestaciones a menos de 5 km: la
   línea de 115 kV más cercana queda a 8.48 km de su subestación, y la vista se abre hasta ella.
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 2,758 millones con una
@@ -2086,7 +2086,7 @@ Interoceánico: 412.54 ha en Ciudad Ixtepec, Oaxaca, junto a la MEX-185D.
   (dispositivos médicos) a 5.5 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** queda a **3.22 km** en línea recta (el DOF dice 3.5).
   Cuesta 146 millones con una cuadrilla (5.6 meses) o 212 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   40.4 MW: un banco de la CFE. OpenStreetMap no tiene líneas ni subestaciones a menos de 5 km: la
   línea de 115 kV más cercana queda a 7.41 km de su subestación.
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 2,265 millones con una
@@ -2129,7 +2129,7 @@ Interoceánico: 246.08 ha en Asunción Ixtaltepec, Oaxaca, con unos 2 km de fren
   (dispositivos médicos) a 5.6 MW (metálicas básicas).
 - **La espuela:** la **Línea Z de Ferroistmo** queda al oeste: **0.99 km**. Cuesta 45 millones con
   una cuadrilla (5.6 meses) o 65 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   24.1 MW: un banco de la CFE. La línea de 400 kV más cercana queda a 0.04 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,351 millones con una
@@ -2169,7 +2169,7 @@ llamados BET (28.42 y 5.23 ha) y uno CERHAN (6.78 ha).
   4.4 MW (metálicas básicas).
 - **La espuela:** la **Línea VB de Ferrosur** queda a **0.46 km**. Cuesta 21 millones con una
   cuadrilla (5.6 meses) o 30 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   4.0 MW: alcanza. La línea de 230 kV más cercana queda a 1.1 km de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 222 millones con una cuadrilla;
   las vialidades, 89 millones en 8.9 meses, o 129 en 3.1 con cuatro.
@@ -2199,13 +2199,19 @@ circular, de la Semarnat: 20 ha en la ex hacienda de San Pedro Ecatepec, Atlanga
   2.2 MW (metálicas básicas).
 - **La espuela:** la **Línea V de CPKC** queda a **0.46 km**. Cuesta 21 millones con una cuadrilla
   (5.6 meses) o 30 con cuatro (2 meses).
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   2.0 MW: alcanza. La línea de 230 kV más cercana queda a 0.92 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 110 millones con una cuadrilla;
   las vialidades, 44 millones en 7.2 meses, o 64 en 2.5 con cuatro.
 
-**En la realidad**: declarado el 8 de junio de 2026 (DOF). No se ha reportado obra.
+**En la realidad**: declarado el 8 de junio de 2026 (DOF). No se ha reportado obra. El 8 de octubre
+de 2026 la Secretaría de Medio Ambiente de Tlaxcala descartó el sitio: estudios técnicos adicionales
+lo hallaron inviable por sus condiciones geofísicas, topográficas e hidráulicas, y dijo que informaría
+a la Semarnat (La Prensa de Tlaxcala, e-Tlaxcala y 385 Grados, 8 y 9 de octubre; no hay boletín
+oficial en línea). El DOF no ha abrogado la declaratoria (buscado hasta el 27 de noviembre de 2026),
+así que el polo sigue en el juego y en Realidad, con la nota en su ficha; si se abroga, saldrá como
+Parque Hidalgo. *(Decisión del usuario, 27 nov 2026.)*
 
 ### Capital de la Tecnología y la Sostenibilidad por dentro
 
@@ -2237,8 +2243,9 @@ norte antes que el este.
 - **La espuela:** la **Línea VB de Ferrosur** toca el polígono sur: **0 km**, sin costo.
 - **La energía:** los **60 MVA** de la subestación que el Gobierno de Puebla construyó en San José
   Chiapa. La comparte con la industria del Café y Maíz del Bienestar y la fábrica de baterías de
-  Olinia; el juego se la da toda al polo. Lleno pide 21.3 MW: le sobra. Es la octava cifra
-  oficial, y con ella la mediana de los polos sin cifra subió de 8 a 10.45 MW. La línea de 230 kV
+  Olinia; el juego se la da toda al polo. Lleno pide 21.3 MW: un banco de la CFE. Es la octava cifra
+  oficial (con ella la mediana de los polos sin cifra subió de 8 a 10.45 MW; con la novena, Seybaplaya,
+  volvió a 8). La línea de 230 kV
   más cercana queda a 2.34 km de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 1,195 millones con una cuadrilla;
   las vialidades, 478 millones en 14.7 meses, o 693 en 5.2 con cuatro.
@@ -2287,9 +2294,10 @@ comparten un lado (25.92 y 74.07 ha), con los rumbos escritos «N 7-54-1 E».
   polo tiene su estación en esa vía. Cuesta 963 millones con una cuadrilla (10.6 meses) o 1,397 con
   cuatro (3.8 meses). Su destino se puede cambiar más adelante (otra vía, el puerto) desde su
   configuración.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno
-  pide 9.8 MW: alcanza. La línea de 115 kV más cercana queda a 0.31 km de su subestación
-  (OpenStreetMap).
+- **La energía:** los **6 MW** de la ficha de Proyectos México (Banobras): «oferta eléctrica
+  disponible en el predio por 6 MW hasta 2030», leída en el resumen del buscador porque la página no
+  responde; la declaratoria solo dice que el predio tiene electricidad. Lleno pide 9.8 MW: un banco
+  de la CFE. La línea de 115 kV más cercana queda a 0.31 km de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 549 millones con una cuadrilla;
   las vialidades, 220 millones en 11.6 meses, o 318 en 4.1 con cuatro.
 - **Las vocaciones en sectores:** agroindustria es la industria alimentaria; la manufactura ligada
@@ -2328,8 +2336,8 @@ norte antes que el este (67.46, 13.08 y 7.26 ha).
   o 37 con cuatro (2 meses). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta ahí: en 2018 no
   hay vía en Quintana Roo. En el catálogo de obras, el Tren Maya llega a Chetumal
   por los tramos 6 y 7.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
-  8.6 MW: alcanza. En su vista no hay líneas de alta tensión, solo subestaciones del Tren Maya: la
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
+  8.6 MW: un banco de la CFE. En su vista no hay líneas de alta tensión, solo subestaciones del Tren Maya: la
   línea de 115 kV más cercana queda a 2.96 km de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 482 millones con una cuadrilla; las
   vialidades, 193 millones en 11.2 meses, o 280 en 4.0 con cuatro.
@@ -2426,7 +2434,7 @@ conforme de Lambert del INEGI (GRS80, paralelos 17.5° y 29.5°, origen 12° N 1
 - **La espuela:** el **Tren Maya** pasa pegado: **0.03 km**, 2 millones con cuatro cuadrillas y el
   mínimo de 2 meses. Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta ahí: en 2018 no
   hay vía en Quintana Roo.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   5.9 MW: alcanza. La línea de 230 kV más cercana queda a 2.5 km de su subestación (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 334 millones con una cuadrilla; las
   vialidades, 133 millones en 10 meses, o 194 en 3.5 con cuatro.
@@ -2465,7 +2473,7 @@ transcribió.
 - **La espuela:** va al **Tren Maya**, a **0.49 km**. Cuesta 22 millones con una cuadrilla (5.6 meses)
   o 32 con cuatro (2 meses). Construido, el polo tiene su estación cuando el jugador lleve el Tren Maya hasta ahí: en 2018 no
   hay vía en Quintana Roo.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   3.9 MW: alcanza. La línea de 230 kV más cercana queda a 1.85 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 219 millones con una cuadrilla; las
@@ -2504,7 +2512,7 @@ curvas; el centro de cada una viene en el renglón que sigue al lado que dobla.
   juego va a la línea principal más cercana, la **Línea FA de Ferroistmo**, a **3.11 km**. Cuesta 141
   millones con una cuadrilla (5.6 meses) o 205 con cuatro (2 meses). En la red del juego hay vía a
   0.4 km: construido, tiene su estación.
-- **La energía:** no tiene cifra oficial: la mediana, **10.45 MW** (estimación del juego). Lleno pide
+- **La energía:** no tiene cifra oficial: la mediana, **8 MW** (estimación del juego). Lleno pide
   12.9 MW: un banco de la CFE. La línea de 115 kV más cercana queda a 2.1 km de su subestación
   (OpenStreetMap).
 - **Los frentes:** son los de Huamantla. Su obra completa cuesta 724 millones con una cuadrilla; las
@@ -3742,10 +3750,10 @@ cambia en la realidad es el diésel y el combustóleo que deja de quemar. El jue
 de las centrales grandes de la CFE (ver [El combustóleo](#el-combustóleo)), pero no el de las de
 Mulegé ni las emisiones.
 
-**Lo que piden los polos.** Ocho tienen cifra oficial. Las declaratorias dan lo que pedirán, el
-portal de Economía lo que tendrán disponible, siempre en su primera fase, y el Gobierno de Puebla
-la subestación que construyó para Capital de la Tecnología; el juego toma una u otra como la
-electricidad del polo:
+**Lo que piden los polos.** Nueve tienen cifra oficial. Las declaratorias dan lo que pedirán, el
+portal de Economía y la ficha de Proyectos México lo que tendrán disponible, siempre en su primera
+fase, y el Gobierno de Puebla la subestación que construyó para Capital de la Tecnología; el juego
+toma una u otra como la electricidad del polo:
 
 | Polo | Hectáreas | MW | MW por hectárea | De dónde |
 | --- | ---: | ---: | ---: | --- |
@@ -3753,6 +3761,7 @@ electricidad del polo:
 | Hermosillo | 546.5 | 7 | 0.013 | Declaratoria (DOF): «una demanda de electricidad de 1 MW a 7 MW de 2026 a 2030». |
 | Parque Industrial Bajío | 342.1 | 12.9 | 0.038 | Portal de Economía: «Energía: 12.9 MW disponible (hidroeléctrica y geotérmica)». |
 | Tuxpan | 235.1 | 4 | 0.017 | Declaratoria (DOF): «en su etapa madura… una demanda de electricidad de 4 MW». |
+| Seybaplaya I | 100.0 | 6 | 0.060 | Proyectos México (Banobras), ficha del polo: «oferta eléctrica disponible en el predio por 6 MW hasta 2030» (leída en el resumen del buscador: la página no responde). |
 | Nezahualcóyotl | 68.4 | 7.7 | 0.113 | Declaratoria (DOF): «crecimiento en su demanda de electricidad de 5 a 7.7 MW de 2027 a 2030». |
 | San Jerónimo | 60.3 | 20 | 0.332 | Portal de Economía: «Energía: Disponibilidad de hasta 20MW». |
 | Huamantla | 53 | 8 | 0.151 | Portal de Economía: «Energía: 8 MW». |
@@ -3760,9 +3769,9 @@ electricidad del polo:
 
 **La cifra no crece con la superficie.** Va de 4 a 60 MW en polos de 53 a 911 hectáreas. Por
 hectárea cambia 25 veces de uno a otro, y su correlación con el tamaño es nula (0.10 en escala
-logarítmica). Por eso **un polo sin cifra recibe la mediana de los ocho: 10.45 MW**, el promedio
-de los dos de en medio (8 y 12.9), sin importar su tamaño (estimación del juego). Era de 8 MW
-mientras fueron siete.
+logarítmica). Por eso **un polo sin cifra recibe la mediana de los nueve: 8 MW**, la cifra de en
+medio (Huamantla), sin importar su tamaño (estimación del juego). Fue de 10.45 MW mientras fueron
+ocho (del 23 al 27 de noviembre de 2026) y de 8 mientras fueron siete.
 
 - **Antes** el juego daba a cada polo sin cifra 0.0257 MW por hectárea (la razón de los primeros
   cinco). Así Altamira (1,638 ha) pedía 42 MW y Arriaga (49 ha) 1.3, con una precisión que las
@@ -5426,8 +5435,8 @@ los otros dos aún no se capturan.
   su caja, no de la del Estado, como sus centrales. Así la CFE reparte su dinero entre generar
   más (la región) y llevarlo a donde se usa (el polo).
 - **La energía de un polo no se reparte por hectárea.** *(22 nov 2026.)* Las cifras oficiales
-  (ocho polos) van de 4 a 60 MW sin importar si el polo tiene 53 o 911 hectáreas. Un polo sin
-  cifra recibe la mediana, 10.45 MW, y adentro las empresas piden por empleo. Así un polo grande
+  (nueve polos) van de 4 a 60 MW sin importar si el polo tiene 53 o 911 hectáreas. Un polo sin
+  cifra recibe la mediana, 8 MW, y adentro las empresas piden por empleo. Así un polo grande
   arranca con lo que arrancan los demás y necesita más subestación para llenarse.
 - **En un polo, las empresas las atrae el Estado.** *(22 nov 2026.)* El jugador no pone
   empresas: promueve cada lote para un sector de las vocaciones de la declaratoria, y las
@@ -5509,6 +5518,11 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   10.45 MW (el promedio de 8 y 12.9). Los 32 polos juntos pasan de unos 280 a unos 390 MW. Con
   ella, Teapa ya no necesita un banco de la CFE, Ciudad Ixtepec necesita uno en vez de dos y
   Altamira cinco en vez de seis; a Salina Cruz ya no le cabe justo, le sobra.
+- **Seybaplaya, la novena cifra oficial.** *(27 nov 2026.)* El usuario aprobó meter los 6 MW de la
+  ficha de Proyectos México, leídos solo en el resumen del buscador porque la página no responde.
+  La mediana de los polos sin cifra vuelve a 8 MW (la de Huamantla): los 32 polos juntos piden unos
+  330.0 MW. Los que llenos piden entre 8 y 10.45 MW (Matías Romero, 9.4; Chetumal, 8.6) ahora
+  necesitan un banco de la CFE, y a Seybaplaya, con sus 6 MW, también le hace falta uno (pide 9.8).
 - **En pantalla** los MVA de un polo se muestran con un decimal (10.5).
 
 **Capital de la Tecnología: su superficie ([nota aclaratoria](https://dof.gob.mx/nota_detalle.php?codigo=5764007&fecha=29/07/2025), DOF)**

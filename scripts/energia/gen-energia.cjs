@@ -355,6 +355,7 @@ const FACTORES = {
     huamantla: [8, 'Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: 8 MW».'],
     'san-jeronimo': [20, 'Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: Disponibilidad de hasta 20MW».'],
     'parque-industrial-bajio': [12.9, 'Portal de los Polos de Desarrollo, Secretaría de Economía: «Energía: 12.9 MW disponible (hidroeléctrica y geotérmica)».'],
+    seybaplaya: [6, 'Proyectos México (Banobras), ficha 1001 del polo: «oferta eléctrica disponible en el predio por 6 MW hasta 2030». La página no respondió: se leyó en el resumen del buscador.'],
     // The state's own substation for the polo, counted one MVA per MW like the CFE's banks.
     'capital-tecnologia': [60, 'Gobierno de Puebla (comunicado del 30 de junio de 2026): la subestación de San José Chiapa, con «una capacidad de 60 Megavolts Amperes, suficiente para cubrir la demanda industrial de esa zona durante los próximos 30 años», para el polo, la industria del Café y Maíz del Bienestar y la fábrica de baterías de Olinia.'],
   };

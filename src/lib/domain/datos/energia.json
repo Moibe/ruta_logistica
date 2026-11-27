@@ -47,7 +47,7 @@
   "polos": {
    "fuente": "Declaratorias de los polos (DOF) y portal de los Polos de Desarrollo de la Secretaría de Economía",
    "url": "https://podecobi.economia.gob.mx/polos-de-desarrollo",
-   "dato": "Ocho polos tienen cifra oficial: lo que pedirán o tendrán disponible en su primera fase, de 4 a 60 MW. No crece con la superficie, así que los demás usan la mediana de los ocho: 10.45 MW (estimación del juego)."
+   "dato": "Nueve polos tienen cifra oficial: lo que pedirán o tendrán disponible en su primera fase, de 4 a 60 MW. No crece con la superficie, así que los demás usan la mediana de los nueve: 8 MW (estimación del juego)."
   },
   "mulege": {
    "fuente": "SENER, PRODESEN 2019–2033 (tablas 5.1 y 6.5) y Plan de Desarrollo del Sector Eléctrico 2025–2039 (tabla A1.6); su límite, INEGI, Marco Geoestadístico de diciembre de 2025",
@@ -94,7 +94,7 @@
  },
  "cajaCfeMdpAño": 26400,
  "tipoCambio": 18.33,
- "mwSinCifra": 10.45,
+ "mwSinCifra": 8,
  "regiones": [
   {
    "id": "central",
@@ -450,78 +450,79 @@
  "polos": {
   "coatzacoalcos-i": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "coatzacoalcos-ii": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "salina-cruz": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "san-blas-atempa": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "san-juan-evangelista": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "texistepec": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "matias-romero": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "mixtequilla": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "ciudad-ixtepec": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "ixtaltepec": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "tapachula-i": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "tapachula-ii": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "arriaga": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "teapa": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "seybaplaya": {
    "region": "peninsular",
-   "mw": 10.45,
-   "oficial": false
+   "mw": 6,
+   "oficial": true,
+   "dato": "Proyectos México (Banobras), ficha 1001 del polo: «oferta eléctrica disponible en el predio por 6 MW hasta 2030». La página no respondió: se leyó en el resumen del buscador."
   },
   "san-jeronimo": {
    "region": "norte",
@@ -543,7 +544,7 @@
   },
   "chetumal": {
    "region": "peninsular",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "parque-industrial-bajio": {
@@ -554,7 +555,7 @@
   },
   "puerta-logistica-bajio": {
    "region": "occidental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "nezahualcoyotl": {
@@ -577,7 +578,7 @@
   },
   "durango": {
    "region": "norte",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "hermosillo": {
@@ -588,32 +589,32 @@
   },
   "altamira": {
    "region": "noreste",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "topolobampo": {
    "region": "noroeste",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "cancun": {
    "region": "peninsular",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "circular-puebla": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "circular-tlaxcala": {
    "region": "oriental",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   },
   "circular-quintana-roo": {
    "region": "peninsular",
-   "mw": 10.45,
+   "mw": 8,
    "oficial": false
   }
  },
