@@ -43,5 +43,15 @@
    ]
   ],
   "enTablero": true
+ },
+ {
+  "id": "caribe",
+  "nombre": "Caribe",
+  "lon": -84.7,
+  "lat": 19.7,
+  "hacia": "Colón",
+  "haciaLon": -79.9026,
+  "haciaLat": 9.3505,
+  "oceano": "Caribe"
  }
 ]

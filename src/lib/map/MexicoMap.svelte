@@ -960,9 +960,11 @@
 
   /**
    * Greedy collision placement (logistica-oceanica's, with candidate spots):
-   * labels go in priority order, each takes the first of its spots that is on
-   * screen and free, or is dropped. `taken` arrives pre-filled with the site
-   * symbols so no label ever covers a dot.
+   * labels go in priority order, each takes the first of its spots that is
+   * wholly on screen and free — failing that, the first free one that is at
+   * least partly on screen (a site at the edge keeps its name, cut) — or is
+   * dropped. `taken` arrives pre-filled with the site symbols so no label ever
+   * covers a dot.
    */
   function placeLabels(ctx: CanvasRenderingContext2D, labels: Label[], taken: Box[]) {
     labels.sort((a, b) => b.priority - a.priority);
@@ -971,6 +973,8 @@
       ctx.letterSpacing = `${label.spacing ?? 0}px`;
       const w = ctx.measureText(label.text).width;
       const h = label.size;
+      let entero: { spot: Spot; box: Box } | null = null;
+      let parcial: { spot: Spot; box: Box } | null = null;
       for (const spot of label.spots) {
         const x0 = spot.align === 'left' ? spot.x : spot.align === 'right' ? spot.x - w : spot.x - w / 2;
         let box: Box = [x0 - 2, spot.y - h, x0 + w + 2, spot.y + h * 0.3];
@@ -984,27 +988,34 @@
         }
         if (box[2] < 0 || box[0] > width || box[3] < 0 || box[1] > height) continue;
         if (taken.some((t) => overlaps(box, t))) continue;
-        taken.push(box);
-        ctx.textAlign = spot.align;
-        if (label.angle) {
-          ctx.save();
-          ctx.translate(spot.x, spot.y);
-          ctx.rotate(label.angle);
-          ctx.textBaseline = 'middle';
-          ctx.fillStyle = label.color;
-          ctx.fillText(label.text, 0, 0);
-          ctx.restore();
-        } else {
-          if (label.halo) {
-            ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
-            ctx.lineWidth = 3;
-            ctx.lineJoin = 'round';
-            ctx.strokeText(label.text, spot.x, spot.y);
-          }
-          ctx.fillStyle = label.color;
-          ctx.fillText(label.text, spot.x, spot.y);
+        if (box[0] >= 0 && box[2] <= width && box[1] >= 0 && box[3] <= height) {
+          entero = { spot, box };
+          break;
         }
-        break;
+        parcial ??= { spot, box };
+      }
+      const sitio = entero ?? parcial;
+      if (!sitio) continue;
+      const { spot, box } = sitio;
+      taken.push(box);
+      ctx.textAlign = spot.align;
+      if (label.angle) {
+        ctx.save();
+        ctx.translate(spot.x, spot.y);
+        ctx.rotate(label.angle);
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = label.color;
+        ctx.fillText(label.text, 0, 0);
+        ctx.restore();
+      } else {
+        if (label.halo) {
+          ctx.strokeStyle = 'rgba(3, 9, 18, 0.9)';
+          ctx.lineWidth = 3;
+          ctx.lineJoin = 'round';
+          ctx.strokeText(label.text, spot.x, spot.y);
+        }
+        ctx.fillStyle = label.color;
+        ctx.fillText(label.text, spot.x, spot.y);
       }
     }
     ctx.letterSpacing = '0px';
