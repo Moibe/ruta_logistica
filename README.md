@@ -220,7 +220,9 @@ saltar al siguiente libre.
 - **Un motor de servicios común** (`domain/servicio.ts`) para trenes y barcos: cambia cómo se
   traza cada pierna y cuánto se espera, el paso de simulación es el mismo.
 - **En el tablero**: casco con proa orientado al rumbo y estela; el Canal de Panamá trazado en
-  cian; las dos salidas como un anillo con flecha. Los barcos tienen su propia lista, y su
+  cian; las salidas como un anillo con flecha que va en la orilla de la pantalla, donde su
+  travesía cruza el borde visible (se mueve con el zoom y el arrastre), para que un barco que
+  sale llegue hasta la marca y no se esfume a medio mar. Los barcos tienen su propia lista, y su
   *＋ Nuevo* pide la clase y las escalas (puertos o salidas). Con un barco
   elegido que pasa la salida, la cámara que lo seguía se queda esperándolo ahí y su ficha
   ofrece **Ver en el globo**.
