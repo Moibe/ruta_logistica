@@ -3333,8 +3333,10 @@ corredor interoceánico, y está en el juego tal cual.
 
 Seis "puertas". Cada una representa un **puerto lejano**: un barco que sale por ella **cruza el
 océano de verdad** hasta ese puerto, hace escala allá 48 h y vuelve por el mismo camino. En el
-tablero se pierde de vista al pasar la puerta; en las vistas del mundo (mapa plano y globo) se le ve
-navegar toda la travesía. Las de Estados Unidos y de Cuba son distintas: Houston y La Habana caben
+tablero se le ve hasta que se sale de la pantalla: la marca de la salida (un anillo con una flecha
+y «Hacia X») no está en un punto fijo del mar, sino donde la travesía cruza el borde visible, y se
+mueve con el zoom y el arrastre, de modo que un barco que sale llega hasta la marca y no se esfuma a
+medio mar. En las vistas del mundo (mapa plano y globo) se le ve navegar toda la travesía. Las de Estados Unidos y de Cuba son distintas: Houston y La Habana caben
 en el tablero, así que ahí se dibuja la salida, como un puerto con su nombre, y el tablero sigue a los
 barcos todo el camino y durante su escala. A Houston entran por Galveston y suben por el canal de
 navegación de Houston (el *Houston Ship Channel*), trazado a mano por la bahía de Galveston porque es

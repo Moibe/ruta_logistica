@@ -6,7 +6,7 @@
   import type { MultiLineString, MultiPoint } from 'geojson';
   import { untrack } from 'svelte';
   import type { LonLat } from '$lib/domain/geo';
-  import { CLASES_BARCO, fueraDelMapa } from '$lib/domain/barcos';
+  import { CLASES_BARCO } from '$lib/domain/barcos';
   import { kmTravesia } from '$lib/domain/mar';
   import { CAPACIDAD, DUEÑOS, kmALaVia, type Dueño } from '$lib/domain/red';
   import { MINAS, NOMBRE_MEDIDA, NOMBRE_MINERAL, cifraMina, type Mina } from '$lib/domain/mineria';
@@ -67,7 +67,7 @@
   } from '$lib/domain/petroleo';
   import { añoDe, fechaLarga as fechaDeJuego, horasDeFecha } from '$lib/domain/calendario';
   import { factorVelocidad, nivelUso, type NivelUso } from '$lib/domain/saturacion';
-  import { esperaTotal, piernasDelRecorrido, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
+  import { esperaTotal, piernasDelRecorrido, posicion, posicionEnTablero, trayectoActual } from '$lib/domain/servicio';
   import {
     CIUDAD_DEL_PUERTO,
     CIUDADES,
@@ -87,7 +87,7 @@
     type Puerta,
     type Puerto,
   } from '$lib/domain/sitios';
-  import { seccion, tramoEnTablero, type Trayecto } from '$lib/domain/trayecto';
+  import { puntoEn, seccion, type Trayecto } from '$lib/domain/trayecto';
   import { LARGO_TREN_KM, type Tren } from '$lib/domain/trenes';
   import type { Barco } from '$lib/domain/barcos';
   import { sim, type Unidad } from '$lib/state/simulacion.svelte';
@@ -581,6 +581,56 @@
   let puertoPts: [number, number][] = [];
   let aeropuertoPts: [number, number][] = [];
   let puertaPts: [number, number][] = [];
+  /** Where each gateway was drawn this frame, on screen (a far-off one isn't), for hit-testing. */
+  let puertaXY: ([number, number] | undefined)[] = [];
+
+  /** The visible sea: the canvas minus the panels over it, with a margin for the gateway's ring. */
+  function rectMapa() {
+    return {
+      x0: (width >= PANELES_DESDE ? 280 : 0) + 16,
+      y0: (width >= CIFRAS_DESDE ? 112 : 76) + 16,
+      x1: width - 16,
+      y1: height - 54 - 16,
+    };
+  }
+
+  /**
+   * Where a gateway's ring goes this frame: on the edge of the visible sea, where its crossing
+   * leaves the screen, so a ship sailing out reaches the ring instead of vanishing at sea. The
+   * crossing is walked from the gateway outward (its vertices are ~50 km apart) to the first one
+   * off the visible rectangle, and the ring sits where that segment crosses the edge, the arrow
+   * pointing along it. A gateway already off the rectangle isn't drawn; a crossing that never
+   * leaves it keeps the ring at its last visible vertex.
+   */
+  function salidaEnPantalla(p: Puerta, i: number): { x: number; y: number; ang: number } | null {
+    const r = rectMapa();
+    const dentro = (x: number, y: number) => x >= r.x0 && x <= r.x1 && y >= r.y0 && y <= r.y1;
+    let ax = transform.applyX(puertaPts[i][0]);
+    let ay = transform.applyY(puertaPts[i][1]);
+    if (!dentro(ax, ay)) return null;
+    const trav = sim.mar?.travesias.get(`puerta:${p.id}`);
+    let ang = NaN;
+    if (trav) {
+      for (let k = 1; k < trav.length; k++) {
+        if (!enRegion(trav[k])) break;
+        const q = aPantalla(trav[k]);
+        if (!q) break;
+        ang = Math.atan2(q[1] - ay, q[0] - ax);
+        if (dentro(q[0], q[1])) {
+          [ax, ay] = q;
+          continue;
+        }
+        // The segment leaves the rectangle: the fraction along it at the first edge it crosses.
+        let t = 1;
+        if (q[0] < r.x0) t = Math.min(t, (r.x0 - ax) / (q[0] - ax));
+        if (q[0] > r.x1) t = Math.min(t, (r.x1 - ax) / (q[0] - ax));
+        if (q[1] < r.y0) t = Math.min(t, (r.y0 - ay) / (q[1] - ay));
+        if (q[1] > r.y1) t = Math.min(t, (r.y1 - ay) / (q[1] - ay));
+        return { x: ax + (q[0] - ax) * t, y: ay + (q[1] - ay) * t, ang };
+      }
+    }
+    return { x: ax, y: ay, ang };
+  }
   let poloPts: [number, number][] = [];
   let plantaPts: [number, number][] = [];
   let refineriaPts: [number, number][] = [];
@@ -801,8 +851,8 @@
     const piernas = piernasDelRecorrido(u);
     rutaSel = {
       id: u.id,
-      // The board's stretch of each leg: an ocean crossing belongs to the world views.
-      path: new Path2D(path({ type: 'MultiLineString', coordinates: piernas.map(tramoEnTablero) }) ?? ''),
+      // Each leg as far as it stays in the board's region: the rest of a crossing belongs to the world views.
+      path: new Path2D(path({ type: 'MultiLineString', coordinates: piernas.flatMap(tramosEnRegion) }) ?? ''),
     };
   }
 
@@ -1938,15 +1988,18 @@
 
     // Gateways to the world: a ring with an arrow pointing out of the board,
     // the way the ships leave.
+    puertaXY = [];
     if (layers.puertos) {
       const centro = projection([-102, 23]);
       PUERTAS.forEach((p, i) => {
-        const x = sx(puertaPts[i]);
-        const y = sy(puertaPts[i]);
-        if (!onScreen(x, y) || !centro) return;
+        if (!centro) return;
+        const salida = p.enTablero ? { x: sx(puertaPts[i]), y: sy(puertaPts[i]), ang: NaN } : salidaEnPantalla(p, i);
+        if (!salida || !onScreen(salida.x, salida.y)) return;
+        const { x, y } = salida;
+        puertaXY[i] = [x, y];
         const hot = hovered?.kind === 'puerta' && hovered.puerta.id === p.id;
         ctx.globalAlpha = trazaTren ? 0.3 : 1;
-        const ang = Math.atan2(y - transform.applyY(centro[1]), x - transform.applyX(centro[0]));
+        const ang = Number.isNaN(salida.ang) ? Math.atan2(y - transform.applyY(centro[1]), x - transform.applyX(centro[0])) : salida.ang;
         ctx.save();
         ctx.translate(x, y);
         ctx.strokeStyle = hot ? '#ffffff' : 'rgba(127, 216, 255, 0.85)';
@@ -2118,6 +2171,30 @@
     return out;
   }
 
+  /**
+   * Whether a point is in the board's region (where the camera can go, with a little slack): a ship
+   * is drawn here as long as it is, gateway or no gateway, so it leaves by the edge of the screen
+   * instead of vanishing at sea. Beyond, it belongs to the world views.
+   */
+  function enRegion([lon, lat]: LonLat): boolean {
+    return lon >= REGION.w - 3 && lon <= REGION.e + 3 && lat >= REGION.s - 3 && lat <= REGION.n + 3;
+  }
+
+  /** The runs of a trajectory that lie in the board's region. */
+  function tramosEnRegion(t: Trayecto): LonLat[][] {
+    const runs: LonLat[][] = [];
+    let run: LonLat[] = [];
+    for (const p of t.puntos) {
+      if (enRegion(p)) run.push(p);
+      else if (run.length) {
+        runs.push(run);
+        run = [];
+      }
+    }
+    if (run.length) runs.push(run);
+    return runs;
+  }
+
   function trazar(ctx: CanvasRenderingContext2D, pts: [number, number][]) {
     ctx.beginPath();
     ctx.moveTo(pts[0][0], pts[0][1]);
@@ -2148,7 +2225,7 @@
   /**
    * Every vehicle on the board, ships first (they're under the coast's trains
    * in spirit, out at sea), the selected one last so it's on top. Records each
-   * head for hit-testing; ships off the map on a crossing aren't drawn.
+   * head for hit-testing; a ship is drawn as far as its crossing stays in the board's region.
    */
   function pintarUnidades(ctx: CanvasRenderingContext2D, now: number) {
     cabezas = [];
@@ -2167,7 +2244,7 @@
 
   /**
    * The buyers' tankers (`petroleros.ts`): small hulls in crude's colour with a faint wake, under the
-   * player's vehicles. Only their part on the board: past a gateway they're on the world views.
+   * player's vehicles. Drawn while they're in the board's region; beyond it they're on the world views.
    */
   function pintarPetroleros(ctx: CanvasRenderingContext2D, pxKm: number) {
     const L = CASCO_PX * 0.8 * Math.min(1.6, 0.85 + 0.15 * Math.sqrt(transform.k));
@@ -2175,8 +2252,8 @@
     for (const p of sim.petroleros) {
       const t = p.trayecto;
       const km = kmEnHoras(t, sim.horas - p.salida);
-      if (km < t.enTablero[0] || km > t.enTablero[1]) continue;
-      const estela = enPantalla(seccion(t, Math.max(t.enTablero[0], km - 70 / pxKm), km));
+      if (!enRegion(puntoEn(t, km))) continue;
+      const estela = enPantalla(seccion(t, Math.max(0, km - 70 / pxKm), km).filter(enRegion));
       if (!estela.length) continue;
       const [hx, hy] = estela[estela.length - 1];
       if (hx < -40 || hx > width + 40 || hy < -40 || hy > height + 40) continue;
@@ -2206,7 +2283,7 @@
       ctx.fillStyle = brillo;
       ctx.fillRect(hx - 10, hy - 10, 20, 20);
       ctx.restore();
-      const proa = enPantalla(seccion(t, Math.max(0, km - Math.max(0.5, 6 / pxKm)), km));
+      const proa = enPantalla(seccion(t, Math.max(0, km - Math.max(0.5, 6 / pxKm)), km).filter(enRegion));
       const [bx, by] = proa.length >= 2 ? proa[0] : [hx - 1, hy];
       ctx.save();
       ctx.translate(hx, hy);
@@ -2229,7 +2306,7 @@
 
   /** The wake behind a moving vehicle: fades from nothing to its tail, added on like a light trail. */
   function pintarEstela(ctx: CanvasRenderingContext2D, u: Unidad, desdeKm: number, hastaKm: number, ancho: number, alfa: number) {
-    const rastro = enPantalla(seccion(trayectoActual(u), desdeKm, hastaKm));
+    const rastro = enPantalla(seccion(trayectoActual(u), desdeKm, hastaKm).filter(enRegion));
     if (rastro.length < 2) return;
     const [ax, ay] = rastro[0];
     const [bx, by] = rastro[rastro.length - 1];
@@ -2326,11 +2403,12 @@
   }
 
   function pintarBarco(ctx: CanvasRenderingContext2D, b: Barco, pxKm: number, now: number) {
-    if (fueraDelMapa(b)) return;
+    // Drawn while it's in the board's region: past a gateway it keeps sailing to the edge of the screen.
+    if (!enRegion(posicion(b))) return;
     const leg = trayectoActual(b);
     // Heading from a short stretch of lane behind the bow, measured on screen.
     const atrasKm = Math.max(0.5, 6 / pxKm);
-    const tramo = enPantalla(seccion(leg, b.km - atrasKm, b.km));
+    const tramo = enPantalla(seccion(leg, b.km - atrasKm, b.km).filter(enRegion));
     if (!tramo.length) return;
     const [hx, hy] = tramo[tramo.length - 1];
     cabezas.push({ unidad: b, x: hx, y: hy });
@@ -2428,8 +2506,8 @@
     ctx.save();
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
-    for (const leg of tablero.previa as Trayecto[]) {
-      const pts = enPantalla(tramoEnTablero(leg));
+    for (const run of (tablero.previa as Trayecto[]).flatMap(tramosEnRegion)) {
+      const pts = enPantalla(run);
       if (pts.length < 2) continue;
       ctx.globalCompositeOperation = 'lighter';
       ctx.strokeStyle = mar ? 'rgba(76, 201, 255, 0.2)' : 'rgba(255, 209, 102, 0.18)';
@@ -2521,7 +2599,9 @@
     }
     if (layers.puertos) {
       PUERTAS.forEach((p, i) => {
-        const d = Math.hypot(transform.applyX(puertaPts[i][0]) - mx, transform.applyY(puertaPts[i][1]) - my);
+        const xy = puertaXY[i];
+        if (!xy) return;
+        const d = Math.hypot(xy[0] - mx, xy[1] - my);
         if (d < 12 && d < bestD) {
           best = { kind: 'puerta', puerta: p };
           bestD = d;
