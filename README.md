@@ -224,8 +224,8 @@ saltar al siguiente libre.
   travesía cruza el borde visible (se mueve con el zoom y el arrastre), para que un barco que
   sale llegue hasta la marca y no se esfume a medio mar. Los barcos tienen su propia lista, y su
   *＋ Nuevo* pide la clase y las escalas (puertos o salidas). Con un barco
-  elegido que pasa la salida, la cámara que lo seguía se queda esperándolo ahí y su ficha
-  ofrece **Ver en el globo**.
+  elegido que sale al mundo, la cámara que lo seguía lo acompaña hasta la orilla de la región
+  del tablero, se queda esperándolo ahí, y su ficha ofrece **Ver en el globo**.
 
 ### Mundo
 

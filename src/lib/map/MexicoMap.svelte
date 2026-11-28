@@ -907,9 +907,12 @@
     flyTo((x0 + x1) / 2, (y0 + y1) / 2, k);
   }
 
+  /** Where the camera follows a vehicle: its position while it's in the board's region; past it, the gateway. */
+  const posicionSeguida = (u: Unidad): LonLat => (enRegion(posicion(u)) ? posicion(u) : posicionEnTablero(u));
+
   function flyToUnidad(u: Unidad) {
-    // A ship on an ocean crossing: the gateway it went through.
-    const p = projection?.(posicionEnTablero(u));
+    // A ship beyond the board's region: the gateway it went through.
+    const p = projection?.(posicionSeguida(u));
     // Ships sail open water: a train-sized close-up would show nothing but sea.
     if (p) flyTo(p[0], p[1], Math.max(transform.k, u.tipo === 'barco' ? 3 : 5));
   }
@@ -925,7 +928,7 @@
     let [tx, ty, tk] = fly.to;
     // A train keeps moving while the camera flies to it: aim at where it is now.
     if (sim.siguiendo && sim.seleccionado) {
-      const p = projection?.(posicionEnTablero(sim.seleccionado));
+      const p = projection?.(posicionSeguida(sim.seleccionado));
       if (p) [tx, ty] = p;
     }
     // Zoom interpolates geometrically: a linear ramp from 1× to 20× spends
@@ -939,13 +942,14 @@
 
   /**
    * Keep the followed train or ship centred (after any flight has landed). A
-   * ship that sails out through a gateway leaves the camera waiting there, and
-   * comes back into it.
+   * ship sailing out is followed to the edge of the board's region, where the
+   * camera stops (it can't go further) and waits until the ship comes back in.
    */
   function follow() {
     if (fly || !sim.siguiendo) return;
     const t = sim.seleccionado;
-    const p = t ? projection?.(posicionEnTablero(t)) : null;
+    if (!t || !enRegion(posicion(t))) return;
+    const p = projection?.(posicion(t));
     if (!p) return;
     const k = transform.k;
     setTransform(zoomIdentity.translate(width / 2 - k * p[0], height / 2 - k * p[1]).scale(k));
