@@ -179,6 +179,10 @@ export type Puerta = {
   enTablero: boolean;
   /** Where the board draws the gateway: the far port when it's on the board, the edge of the board otherwise. */
   enMapa: LonLat;
+  /** What the board writes next to it, when "Hacia {nombre}" doesn't read well ("Hacia el resto de América"). */
+  rotulo?: string;
+  /** For a far port on the board: where in it the ships arrive ("al final de su canal de navegación…"). */
+  nota?: string;
 };
 
 type PuertaJson = {
@@ -191,6 +195,8 @@ type PuertaJson = {
   haciaLat: number;
   oceano: string;
   enTablero?: boolean;
+  rotulo?: string;
+  nota?: string;
 };
 
 export const PUERTAS: readonly Puerta[] = (puertasJson as PuertaJson[]).map((p) => ({
@@ -202,6 +208,8 @@ export const PUERTAS: readonly Puerta[] = (puertasJson as PuertaJson[]).map((p) 
   oceano: p.oceano,
   enTablero: !!p.enTablero,
   enMapa: p.enTablero ? [p.haciaLon, p.haciaLat] : [p.lon, p.lat],
+  ...(p.rotulo ? { rotulo: p.rotulo } : {}),
+  ...(p.nota ? { nota: p.nota } : {}),
 }));
 
 /**

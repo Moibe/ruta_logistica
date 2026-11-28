@@ -28,25 +28,27 @@
   "haciaLon": -95.0,
   "haciaLat": 29.684,
   "oceano": "Golfo de México",
-  "canal": [
-   [
-    -94.72,
-    29.34
-   ],
-   [
-    -94.77,
-    29.37
-   ],
-   [
-    -94.975,
-    29.67
-   ]
-  ],
-  "enTablero": true
+  "canal": [[-94.72, 29.34], [-94.77, 29.37], [-94.975, 29.67]],
+  "enTablero": true,
+  "nota": "al final de su canal de navegación, que entra por Galveston"
  },
  {
   "id": "caribe",
   "nombre": "Caribe",
+  "lon": -82.35,
+  "lat": 23.45,
+  "hacia": "La Habana",
+  "haciaLon": -82.355,
+  "haciaLat": 23.163,
+  "oceano": "estrecho de Florida",
+  "canal": [[-82.36, 23.21]],
+  "enTablero": true,
+  "nota": "en la boca de su bahía, entre el Morro y la Punta"
+ },
+ {
+  "id": "resto-america",
+  "nombre": "Resto de América",
+  "rotulo": "Hacia el resto de América",
   "lon": -84.7,
   "lat": 19.7,
   "hacia": "Colón",

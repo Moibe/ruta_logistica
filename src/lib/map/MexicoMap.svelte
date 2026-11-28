@@ -274,9 +274,12 @@
 
   /**
    * What "the whole country" means for framing: the extremes of the mainland
-   * plus Cabo San Lucas. Fixed points rather than the data, so the first frame
-   * is right before the TopoJSON arrives and remote islands (Guadalupe,
-   * Revillagigedo) don't push Mexico into a corner.
+   * plus Cabo San Lucas, and the two gateways nearest the edges — Asia's, off
+   * the tip of the peninsula, and La Habana, the far port on the board that
+   * would otherwise fall on the edge (Houston is well inside). Fixed points
+   * rather than the data, so the first frame is right before the TopoJSON
+   * arrives and remote islands (Guadalupe, Revillagigedo) don't push Mexico
+   * into a corner.
    */
   const FRAME: MultiPoint = {
     type: 'MultiPoint',
@@ -285,8 +288,10 @@
       [-114.72, 32.72],
       [-97.14, 25.96],
       [-86.71, 21.14],
+      [-82.355, 23.163],
       [-92.21, 14.53],
       [-109.9, 22.87],
+      [-118.2, 23.5],
     ],
   };
 
@@ -1495,7 +1500,12 @@
       ctx.restore();
     }
 
+    // The panels over the board go first: the left column (clock and rosters), the bars along the
+    // top (Erario, the board's figures) and the layers bar along the bottom. A label under them
+    // would be hidden, so a site at the edge gets its name on another side (Tijuana's to the right).
     const taken: Box[] = [];
+    if (width >= PANELES_DESDE) taken.push([0, 0, 280, height]);
+    taken.push([0, 0, width, width >= CIFRAS_DESDE ? 112 : 76], [0, height - 54, width, height]);
     const labels: Label[] = [];
 
     if (layers.ciudades) {
@@ -1964,7 +1974,7 @@
         ctx.globalAlpha = 1;
         taken.push([x - 11, y - 11, x + 11, y + 11]);
         labels.push({
-          text: p.enTablero ? p.hacia : `Hacia ${p.nombre}`,
+          text: p.rotulo ?? (p.enTablero ? p.hacia : `Hacia ${p.nombre}`),
           spots: spotsAround(x, y, 11),
           size: 11,
           font: '600 11px Inter, "Segoe UI", system-ui, sans-serif',
@@ -3246,7 +3256,7 @@
       {#if hovered.puerta.enTablero}
         {@const _reloj = sim.horas}
         <strong>{hovered.puerta.hacia}</strong>
-        <span class="tip-sub">{hovered.puerta.nombre} · al final de su canal de navegación, que entra por Galveston</span>
+        <span class="tip-sub">{hovered.puerta.nombre}{hovered.puerta.nota ? ` · ${hovered.puerta.nota}` : ''}</span>
         {#if `puerta:${hovered.puerta.id}` === DEER_PARK_MX.puerto}
           {#if sim.modo === 'juego' && sim.deerParkPropia}
             <span class="tip-rail" style:color={COMBUSTIBLE}>
@@ -3257,7 +3267,7 @@
           {/if}
         {/if}
       {:else}
-        <strong>Hacia {hovered.puerta.nombre}</strong>
+        <strong>{hovered.puerta.rotulo ?? `Hacia ${hovered.puerta.nombre}`}</strong>
         <span class="tip-sub">
           {`Travesía a ${hovered.puerta.hacia} por el ${hovered.puerta.oceano}`}{sim.mar
             ? ` · ${fmtKm(kmTravesia(sim.mar, `puerta:${hovered.puerta.id}`))}`

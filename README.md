@@ -10,7 +10,7 @@ país. Dos escalas de la misma geografía:
 - **México**: el tablero, donde se juega. Estados, red ferroviaria real, puertos y ciudades,
   en la proyección cónica de Lambert del INEGI, con **trenes de carga** corriendo por las
   vías reales y **barcos** navegando rutas marítimas calculadas (por el Canal de Panamá de
-  costa a costa, y hacia Asia, Europa, Houston y el Caribe por cuatro salidas al mundo), bajo un reloj de juego.
+  costa a costa, y hacia Asia, Europa, Houston, La Habana y Colón por cinco salidas al mundo), bajo un reloj de juego.
   Encima, los **32 Polos del Bienestar** declarados en el DOF, donde dicen sus declaratorias,
   esperando a que el jugador los construya.
 
@@ -126,9 +126,10 @@ saltar al siguiente libre.
 - Etiquetas con colisión: cada una prueba cuatro posiciones alrededor de su punto y gana la
   de mayor prioridad (puertos > capital del país > capitales > ciudades por población >
   estados > mares y países). Prefiere una posición que quepa entera en la pantalla (la salida
-  del Caribe, en el borde derecho, pone su nombre a la izquierda); si ninguna cabe, se queda con
-  una que se vea en parte. Una ciudad portuaria (Veracruz, Mazatlán…) se etiqueta una sola
-  vez, por su puerto.
+  al resto de América, en el borde derecho, pone su nombre a la izquierda); si ninguna cabe, se
+  queda con una que se vea en parte. Los paneles (la columna de la izquierda, las barras de
+  arriba y la de capas) cuentan como ocupados, así que ningún rótulo queda debajo de ellos. Una
+  ciudad portuaria (Veracruz, Mazatlán…) se etiqueta una sola vez, por su puerto.
 - Clic en un estado vuela a encuadrarlo; clic en un puerto o ciudad vuela hacia él.
   *Reencuadrar* regresa al país completo.
 - **Islas con nombre:** sobre una isla, la ficha dice «Isla · estado» y su nombre (Tiburón,
@@ -273,7 +274,7 @@ Todo es local en `static/data/` y `src/lib/domain/`: sin tiles, sin proveedor, s
 | `static/data/polos/<polo>.json` | El dibujo de cada polo por dentro (los 32 tienen vista): terreno del DOF en una o varias piezas, franjas excluidas, lotes, calles, espuela, conexión eléctrica y alrededores de OpenStreetMap, en metros (~70 KB cada uno). Lo genera el mismo script |
 | `src/lib/domain/datos/comercio-mar.json` | **Comercio por mar**: lo que cada puerto exportó e importó por mar en 2024 por tipo de carga (SEMAR), lo que entra y sale por tren (ATTRAPI 2025), la carga de cada clase de barco y las reglas de los patios. Lo genera `scripts/comercio/gen-comercio-mar.mjs` |
 | `src/lib/domain/datos/aduanas.json` | **Aduanas** (ANAM): recaudación y valor de operaciones de 2025, su sitio en el tablero y cuáles son salidas |
-| `src/lib/domain/datos/puertas.json`  | Las **4 salidas al mundo** (Asia, Europa, Estados Unidos y el Caribe, cuyo puerto lejano es Colón, en Panamá) con su puerto lejano y océano, a mano. Houston, con `canal` (el tramo trazado a mano por la bahía de Galveston) y `enTablero`: el tablero la dibuja ahí, como puerto, y sigue toda su travesía (`mar.ts`, `enTravesia`) |
+| `src/lib/domain/datos/puertas.json`  | Las **5 salidas al mundo** (Asia, Europa, Estados Unidos, el Caribe, que es La Habana, y el resto de América, que es Colón) con su puerto lejano y océano, a mano. Houston y La Habana, con `canal` (el tramo trazado a mano: la bahía de Galveston; la boca de la bahía de La Habana) y `enTablero`: el tablero las dibuja ahí, como puertos, y sigue toda su travesía (`mar.ts`, `enTravesia`); `rotulo` cuando «Hacia {nombre}» no lee bien y `nota` para decir a dónde llega un barco en el puerto del tablero |
 | `src/lib/domain/datos/polos.json`    | Los **32 Polos del Bienestar**, sacados una vez de sus declaratorias en el DOF  |
 | `src/lib/domain/datos/obras-via.json` | **Catálogo de obras del Estado**: trazos, paradas o líneas, costo por km y tiempo oficiales, con fuentes |
 | `src/lib/domain/datos/energia.json`  | **Electricidad**: regiones (CENACE) con demanda y márgenes oficiales, centrales de 2018, privadas con su fecha (permisos de la CNE), centrales de la CFE para construir, MW de los polos; con fuentes |
@@ -816,6 +817,6 @@ costa del mundo solo sube de resolución). Además:
   en petroleros.
 - **Otros sitios por dentro**: la vista de un puerto o una refinería, como la de los polos.
 - **Comercio por mar, lo que sigue**: el cabotaje de carga entre puertos del país; más salidas al mundo (Sudamérica) para que las rutas
-  reales tengan a dónde ir; que el crudo del «resto de América» y el combustóleo exportado salgan por la salida del Caribe (Colón), que ya existe pero no la usa nada; el valor en dólares de lo que se mueve.
+  reales tengan a dónde ir; que el crudo del «resto de América» y el combustóleo exportado salgan por la salida del resto de América (Colón), y lo que va a Cuba desde 2023 por la del Caribe (La Habana), que ya existen pero no las usa nada; el valor en dólares de lo que se mueve.
 - **Sitios**: que el jugador pueda colocar los suyos (bodegas, plantas, terminales), además de
   los polos.
