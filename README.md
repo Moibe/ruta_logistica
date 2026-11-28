@@ -70,7 +70,7 @@ saltar al siguiente libre.
   línea de luz, vías férreas (primarias más intensas y gruesas que secundarias; con
   durmientes a partir de 4×; estaciones sobre la vía a partir de 3.5×), puertos (rombo con halo; los cuatro principales más grandes), ciudades (anillo + punto
   para capitales), polos (hexágono punteado). Cada capa se apaga desde la barra **Capas**
-  (`ui/Capas.svelte`), a lo largo del borde de abajo, del borde izquierdo al zoom, en tres
+  (`ui/Capas.svelte`), a todo lo largo del borde de abajo, en tres
   grupos: movimiento (trenes y barcos, solo en el juego), territorio, y energía y petróleo. La barra
   dice lo más que cabe: grupos y nombres, solo nombres, grupos e íconos, o solo íconos (el nombre
   sale encima al pasar el cursor); lo decide midiendo copias ocultas de sí misma, una por nivel,
@@ -88,10 +88,11 @@ saltar al siguiente libre.
   barcos) van bajo la barra del Erario, a ras de su borde izquierdo; como ahí cae Tijuana, el
   mapa empieza 134 px abajo en vez de 88 cuando se ven (desde 1,100 px). Las
   leyendas quedan abajo, a la derecha de esa columna, sobre el Pacífico, encima de la barra de
-  capas, y abajo a la derecha solo el zoom y *Reencuadrar*, del alto de la barra y de ancho
-  `--herramientas`, donde termina. La pastilla de vistas (`ui/ViewNav.svelte`, el ojo bajo la
+  capas. La pastilla de vistas (`ui/ViewNav.svelte`, el ojo bajo la
   greca y una flecha, un cuadrado como el librito) va arriba a la derecha, junto al librito, y
-  abre su lista hacia abajo; el nombre de la vista actual es su `title`. Colores e íconos
+  abre su lista hacia abajo; el nombre de la vista actual es su `title`. A su izquierda, el zoom
+  y *Reencuadrar*, del alto del librito y de ancho `--herramientas`, donde termina la barra del
+  Erario; el borde de abajo queda para la barra de capas. Colores e íconos
   compartidos: `map/simbolos.ts`.
 - **Grandes industrias privadas** (capa *Industrias*, `domain/industrias.ts`): las armadoras de
   vehículos ligeros, T-MEX Park y las acereras y la fundición que reciben el mineral de la capa de

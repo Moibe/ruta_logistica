@@ -474,12 +474,12 @@
 </div>
 
 <style>
-  /* A bar along the top, from the clock to the views pill and the book. */
+  /* A bar along the top, from the clock to the zoom strip, the views pill and the book. */
   .linea {
     position: fixed;
     top: 1rem;
     left: calc(1rem + 260px + 0.5rem);
-    right: calc(1rem + var(--libro) + 0.5rem + var(--vistas) + 0.5rem);
+    right: calc(1rem + var(--libro) + 0.5rem + var(--vistas) + 0.5rem + var(--herramientas) + 0.5rem);
     z-index: 30;
   }
 

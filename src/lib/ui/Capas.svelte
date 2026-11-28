@@ -184,11 +184,11 @@
 </div>
 
 <style>
-  /* Along the bottom edge, from the left edge to the zoom strip, and as tall as it. */
+  /* Along the whole bottom edge. */
   .linea {
     position: fixed;
     left: 1rem;
-    right: calc(1rem + var(--herramientas) + 0.5rem);
+    right: 1rem;
     bottom: 1rem;
     z-index: 30;
     height: var(--vistas-alto);

@@ -4087,15 +4087,16 @@
     color: var(--warn);
   }
 
-  /* As tall as the views pill and as wide as --herramientas: the layers bar along
-     the bottom edge ends just left of it. */
+  /* In the top row, left of the views pill and as tall as it (the square of the book),
+     --herramientas wide: the Erario bar ends just left of it. The bottom edge stays
+     free for the layers bar. */
   .tools {
     position: fixed;
-    right: 1rem;
-    bottom: 1rem;
-    z-index: 30;
+    top: 1rem;
+    right: calc(1rem + var(--libro) + 0.5rem + var(--vistas) + 0.5rem);
+    z-index: 40;
     width: var(--herramientas);
-    height: var(--vistas-alto);
+    height: var(--libro);
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -4288,11 +4289,4 @@
     }
   }
 
-  @media (max-width: 720px) {
-    .tools {
-      left: 1rem;
-      width: auto;
-      justify-content: center;
-    }
-  }
 </style>

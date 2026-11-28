@@ -15,14 +15,14 @@
   --warn: #ffd166;
   /* The Polos del Bienestar: a light guinda (MexicoMap's POLO). */
   --polo: #f472b6;
-  /* The encyclopedia button in the top-right corner (Libro); the views pill (ViewNav, --vistas
-     wide, the same square as the book) sits left of it, and Erario left of both. */
+  /* The top-right row, right to left: the encyclopedia button (Libro), the views pill (ViewNav,
+     --vistas wide, the same square as the book), the zoom strip (MexicoMap's tools,
+     --herramientas wide), and Erario up to the clock. */
   --libro: 3.55rem;
   --vistas: 3.55rem;
-  /* The height of the strips along the bottom edge: the layers bar (Capas), which runs from the
-     left edge to the zoom strip (MexicoMap's tools, --herramientas wide). */
-  --vistas-alto: 2.35rem;
   --herramientas: 9.5rem;
+  /* The height of the layers bar (Capas) along the whole bottom edge. */
+  --vistas-alto: 2.35rem;
   --line: rgba(126, 190, 255, 0.14);
   --glass: rgba(10, 24, 42, 0.62);
   --glass-strong: rgba(8, 20, 36, 0.86);
