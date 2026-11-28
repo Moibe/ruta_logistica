@@ -35,8 +35,8 @@ superior derecha, junto al presupuesto, abre esta misma página (`/enciclopedia`
 | [Natural Earth](https://www.naturalearthdata.com/) 1:10m | Estados, países vecinos, vías férreas y ciudades del tablero de México | Repositorio `nvkelso/natural-earth-vector`, commit `ca96624` del 2 de junio de 2022 (versión 5.2.0-pre) | Dominio público |
 | Atlas Ambiental de América del Norte, de la CCA (Comisión para la Cooperación Ambiental de México, Estados Unidos y Canadá) | Origen de las vías férreas de Norteamérica que trae Natural Earth (así lo registra la bitácora de cambios de Natural Earth); reúne cartografía de INEGI, USGS y Natural Resources Canada | Red de alrededor de 2010 | A través de Natural Earth |
 | [world-atlas](https://github.com/topojson/world-atlas) | Contornos del mundo para las vistas globales (tierra a 110m y 50m, países a 110m), y la tierra 50m sobre la que se calculan las travesías oceánicas | 2.0.2, que redistribuye Natural Earth 4.1.0 en TopoJSON | ISC (los datos, dominio público) |
-| Curaduría propia | Los 18 puertos, las 5 salidas al mundo y sus puertos lejanos (Shanghái, Róterdam, Houston, La Habana y Colón), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
-| Cálculo propio sobre Natural Earth | Las 378 rutas marítimas entre puertos, salidas y complejos de plataformas, y las 5 travesías de las salidas a sus puertos lejanos (ver [Rutas marítimas](#8-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
+| Curaduría propia | Los 18 puertos, las 6 salidas al mundo y sus puertos lejanos (Shanghái, Róterdam, Houston, La Habana, Kingston y Colón), dos tramos de vía, el trazo del Canal de Panamá, nombres en español, abreviaturas de estados y varias correcciones (ver la [bitácora](#12-bitácora-de-correcciones-a-los-datos)) | — | Del proyecto |
+| Cálculo propio sobre Natural Earth | Las 406 rutas marítimas entre puertos, salidas y complejos de plataformas, y las 6 travesías de las salidas a sus puertos lejanos (ver [Rutas marítimas](#8-rutas-marítimas)) | Tierra 1:10m del tablero para las rutas; 1:50m del mundo para las travesías | Del proyecto |
 | `logistica-oceanica` (proyecto hermano) | Velocidades de referencia de las clases de barco | — | Del proyecto |
 | [Diario Oficial de la Federación](https://dof.gob.mx) | Las declaratorias de los 32 Polos del Bienestar vigentes: polígono, superficie, municipio y fecha de cada uno (ver [Polos del Bienestar](#5-polos-del-bienestar)) | Declaratorias del 12 de mayo de 2023 al 7 de agosto de 2026, con sus notas aclaratorias y modificaciones; consultadas el 19 de noviembre de 2026 | Documento oficial público |
 | Secretaría de Economía | Lámina "Polos de Desarrollo Económico para el Bienestar" (22 de mayo de 2025): los polos anunciados por etapa | — | Documento oficial público |
@@ -3288,7 +3288,7 @@ donde pasan sí dicen de quién son (ver [Dueños](#dueños)).
 ### Cómo se calculan
 
 Ninguna ruta de barco se dibujó a mano. `npm run datos` las calcula entre **cada par** de los
-18 puertos, las 5 salidas al mundo, los 4 complejos de plataformas y la terminal de Cayo Arcas (378
+18 puertos, las 6 salidas al mundo, los 4 complejos de plataformas y la terminal de Cayo Arcas (406
 rutas):
 
 1. **La tierra en una malla.** La misma tierra 1:10m del tablero (estados y países vecinos)
@@ -3331,10 +3331,10 @@ corredor interoceánico, y está en el juego tal cual.
 
 ### Salidas al mundo y travesías oceánicas
 
-Cinco "puertas". Cada una representa un **puerto lejano**: un barco que sale por ella **cruza el
+Seis "puertas". Cada una representa un **puerto lejano**: un barco que sale por ella **cruza el
 océano de verdad** hasta ese puerto, hace escala allá 48 h y vuelve por el mismo camino. En el
 tablero se pierde de vista al pasar la puerta; en las vistas del mundo (mapa plano y globo) se le ve
-navegar toda la travesía. Las de Estados Unidos y del Caribe son distintas: Houston y La Habana caben
+navegar toda la travesía. Las de Estados Unidos y de Cuba son distintas: Houston y La Habana caben
 en el tablero, así que ahí se dibuja la salida, como un puerto con su nombre, y el tablero sigue a los
 barcos todo el camino y durante su escala. A Houston entran por Galveston y suben por el canal de
 navegación de Houston (el *Houston Ship Channel*), trazado a mano por la bahía de Galveston porque es
@@ -3348,8 +3348,9 @@ Habana para que se vea sin mover el mapa.
 | Asia | Pacífico, 23.5° N · 118.2° O | Shanghái, terminal de aguas profundas de Yangshan (30.627° N, 122.067° E) | Pacífico |
 | Europa | Atlántico, al norte de las Bahamas, 29.5° N · 77° O | Róterdam, Maasvlakte (51.95° N, 4.05° E) | Atlántico |
 | Estados Unidos | Golfo de México, frente a Galveston, 29.22° N · 94.6° O | Houston: Port Houston, terminal de Barbours Cut (29.68° N, 95.0° O), al final de su canal de navegación, que entra por Galveston (29.34° N, 94.72° O) | Golfo de México |
-| Caribe | Estrecho de Florida, frente a La Habana, 23.25° N · 82.35° O | La Habana: la boca de su bahía, entre el Morro y la Punta (23.163° N, 82.355° O) | Estrecho de Florida |
-| Resto de América | Mar Caribe, al este de Cozumel, 19.7° N · 84.7° O | Colón: Puerto de Cristóbal (9.35° N, 79.90° O), en la bahía de Limón, la boca atlántica del Canal de Panamá | Caribe |
+| Cuba | Estrecho de Florida, frente a La Habana, 23.45° N · 82.35° O | La Habana: la boca de su bahía, entre el Morro y la Punta (23.163° N, 82.355° O) | Estrecho de Florida |
+| Caribe | Mar Caribe, al sur del cabo de San Antonio, 20.7° N · 84.3° O | Kingston: el puerto de Kingston (Port Bustamante), en el fondo de su bahía, por el canal al oeste de Port Royal (17.97° N, 76.84° O, sobre la costa de Natural Earth) | Caribe |
+| Resto de América | Mar Caribe, al este de Banco Chinchorro, 18.9° N · 85.1° O | Colón: Puerto de Cristóbal (9.35° N, 79.90° O), en la bahía de Limón, la boca atlántica del Canal de Panamá | Caribe |
 
 **Cómo se calculan las travesías** (`scripts/travesias.mjs`, dentro de `npm run datos`). Con
 el mismo método que las rutas de México, pero sobre el mundo entero:
@@ -3373,16 +3374,20 @@ el mismo método que las rutas de México, pero sobre el mundo entero:
 | Asia → Shanghái | 11,407 km (6,159 mn) | 11,214 km | +1.7 % | Pacífico norte en arco, al sur de Japón y de Kyushu |
 | Europa → Róterdam | 7,108 km (3,838 mn) | 6,881 km | +3.3 % | Al sur de Terranova (cabo Race), el Canal de la Mancha y el estrecho de Dover |
 | Estados Unidos → Houston | 70 km (38 mn) | — | — | La entrada a la bahía de Galveston y el canal de navegación de Houston, a mano (48 km) |
-| Caribe → La Habana | 32 km (17 mn) | — | — | De la salida, frente a la ciudad, derecho al sur hasta la boca de la bahía |
-| Resto de América → Colón | 1,261 km (681 mn) | 1,261 km | 0 % | Recto al sur-sureste por el Caribe occidental, entre los cayos de Nicaragua y Providencia, hasta la boca de la bahía de Limón |
+| Cuba → La Habana | 32 km (17 mn) | — | — | De la salida, frente a la ciudad, derecho al sur hasta la boca de la bahía |
+| Caribe → Kingston | 919 km (496 mn) | 840 km | +9 % | Al sur de las islas Caimán, rodea Jamaica por el oeste y entra a la bahía de Kingston por el canal al oeste de Port Royal |
+| Resto de América → Colón | 1,200 km (648 mn) | 1,201 km | 0 % | Recto al sur-sureste por el Caribe occidental, entre los cayos de Nicaragua y Providencia, hasta la boca de la bahía de Limón |
 
 Los vértices del trazo, de la puerta al puerto lejano:
 
 - **Asia**: 118.2° O 23.5° N → 139.45° E 32.65° N → 130.15° E 29.85° N → Yangshan.
 - **Europa**: 77° O 29.5° N → 56.75° O 46.25° N → 52.55° O 46.45° N → 4.75° O 49.65° N →
   1.15° E 50.65° N → 2.45° E 51.95° N → 3.95° E 51.95° N → Róterdam.
-- **Caribe**: 82.35° O 23.45° N → 82.36° O 23.21° N → la boca de la bahía de La Habana.
-- **Resto de América**: 84.7° O 19.7° N → 79.95° O 9.45° N (la boca de la bahía de Limón) → Cristóbal.
+- **Cuba**: 82.35° O 23.45° N → 82.36° O 23.21° N → la boca de la bahía de La Habana.
+- **Caribe**: 84.3° O 20.7° N → 79.85° O 19.05° N → 77.45° O 17.35° N → 76.85° O 17.75° N → 76.86° O
+  17.9° N → 76.855° O 17.945° N (el canal de entrada, a mano) → Kingston.
+- **Resto de América**: 85.1° O 18.9° N → 80.25° O 9.95° N → 79.95° O 9.45° N (la boca de la bahía
+  de Limón) → Cristóbal.
 
 Tiempo de cada travesía, solo de ida (a la velocidad de la clase):
 
@@ -3390,21 +3395,23 @@ Tiempo de cada travesía, solo de ida (a la velocidad de la clase):
 | --- | ---: | ---: | ---: |
 | Asia → Shanghái | 14.3 d | 18.3 d | 19.7 d |
 | Europa → Róterdam | 8.9 d | 11.4 d | 12.3 d |
-| Caribe → La Habana | 1.0 h | 1.2 h | 1.3 h |
-| Resto de América → Colón | 1.6 d | 2.0 d | 2.2 d |
+| Cuba → La Habana | 1.0 h | 1.2 h | 1.3 h |
+| Caribe → Kingston | 1.2 d | 1.5 d | 1.6 d |
+| Resto de América → Colón | 1.5 d | 1.9 d | 2.1 d |
 
 De puerto mexicano a puerto lejano, en portacontenedor: **Manzanillo → Shanghái 13,005 km
 (7,022 mn), 16.3 días**; **Veracruz → Róterdam 9,515 km (5,137 mn), 11.9 días**. Las
-distancias reales rondan las 7,000 y las 5,100 mn. **Veracruz → Colón, 2,602 km (1,405 mn),
-3.3 días**; en buque tanque, Dos Bocas → Colón, 2,401 km (1,296 mn), 3.9 días.
+distancias reales rondan las 7,000 y las 5,100 mn. **Veracruz → Colón, 2,592 km (1,400 mn),
+3.2 días**; en buque tanque, Dos Bocas → Kingston, 2,051 km (1,107 mn), 3.3 días, y Dos Bocas →
+Colón, 2,391 km (1,291 mn), 3.8 días.
 
 La salida a Europa está pasado el estrecho de Florida, así que la ruta desde el Golfo cruza
 el estrecho antes de salir del tablero.
 
 La del resto de América está pasado el canal de Yucatán: desde el Golfo la ruta dobla el cabo
 Catoche, cruza el canal entre Yucatán y el cabo de San Antonio (Cuba) y sale del tablero al este
-de Cozumel (Dos Bocas → salida, 1,140 km; Progreso, 655; Veracruz, 1,341); desde el Pacífico se
-llega por Panamá (Salina Cruz, 3,556 km). **Por qué Colón.** La salida representa a
+de Banco Chinchorro (Dos Bocas → salida, 1,191 km; Progreso, 706; Veracruz, 1,392); desde el
+Pacífico se llega por Panamá (Salina Cruz, 3,499 km). **Por qué Colón.** La salida representa a
 Centroamérica y Sudamérica, el «resto de América» del Balance Nacional de Energía sin el Caribe,
 que tiene la suya; Colón es su puerto de referencia: la boca atlántica del Canal de Panamá, con
 su zona libre y su mercado de combustible para barcos. Panamá fue, con Estados Unidos e Irlanda,
@@ -3412,15 +3419,22 @@ uno de los tres destinos principales del combustóleo mexicano en 2020 (Expansi�
 Secretaría de Economía; en 2019 fueron 19 países). Es **curaduría propia**: cambiar el puerto
 lejano es editar `puertas.json` y correr `npm run datos`.
 
-**La del Caribe es Cuba**, y se ve entera: La Habana cabe en el tablero, como Houston, así que la
-salida se dibuja ahí, como un puerto, y los barcos se siguen hasta la boca de la bahía. Desde el
-Golfo la ruta pasa al norte del cabo Catoche y sigue derecho al este por el paralelo 23.4°, al
-norte de la costa cubana, hasta la salida frente a la ciudad; la última recta son 32 km al sur.
-Progreso → La Habana, 904 km (488 mn), 1.5 días en buque tanque; Dos Bocas, 1,385 km (748 mn),
-2.2 días. Es la puerta de los envíos a Cuba de 2023 a 2025 (Pemex, informe a la SEC: unos 15 mil
-barriles diarios de crudo y 2,200 de petrolíferos en 2025). Por ahora **no sale nada por ninguna
-de las dos**: el crudo del «resto de América» sigue saliendo por Houston y el combustóleo
-exportado no sube a ningún barco (ver [El petróleo](#el-petróleo)).
+**La del Caribe son las Antillas**, con Kingston como puerto lejano: el mayor puerto de transbordo
+del Caribe, con la refinería de Petrojam, y uno de los países que recibían crudo mexicano por el
+Acuerdo de San José (México y Venezuela, 1980). Sale del tablero al sur del cabo de San Antonio
+(Dos Bocas → salida, 1,132 km; Progreso, 647; Veracruz, 1,332), y la travesía, de 919 km, pasa
+al sur de las islas Caimán y rodea Jamaica por el oeste hasta su costa sur. Las coordenadas del
+puerto son **aproximadas**, puestas sobre la costa de Natural Earth (Nominatim no respondió).
+
+**La de Cuba** se ve entera: La Habana cabe en el tablero, como Houston, así que la salida se
+dibuja ahí, como un puerto, y los barcos se siguen hasta la boca de la bahía. Desde el Golfo la
+ruta pasa al norte del cabo Catoche y sigue derecho al este por el paralelo 23.4°, al norte de
+la costa cubana, hasta la salida frente a la ciudad; la última recta son 32 km al sur. Progreso →
+La Habana, 904 km (488 mn), 1.5 días en buque tanque; Dos Bocas, 1,385 km (748 mn), 2.2 días. Es
+la puerta de los envíos a Cuba de 2023 a 2025 (Pemex, informe a la SEC: unos 15 mil barriles
+diarios de crudo y 2,200 de petrolíferos en 2025). Por ahora **no sale nada por ninguna de las
+tres**: el crudo del «resto de América» sigue saliendo por Houston y el combustóleo exportado no
+sube a ningún barco (ver [El petróleo](#el-petróleo)).
 
 ---
 
@@ -4344,7 +4358,7 @@ del mundo. No los controlas, como los trenes de las concesionarias:
   manda todo a Asia; los del Golfo se reparten lo demás.
 - **A dónde van.** Lo de Estados Unidos y el resto de América, a Houston; lo de Europa, a Róterdam; lo
   del Lejano Oriente, a Shanghái. Todo en la proporción de 2018. Desde el 27 de noviembre de 2026 hay
-  salidas del Caribe (La Habana) y del resto de América (Colón), pero todavía no sale nada por ellas
+  salidas de Cuba (La Habana), del Caribe (Kingston) y del resto de América (Colón), pero todavía no sale nada por ellas
   (ver [Salidas al mundo](#salidas-al-mundo-y-travesías-oceánicas)).
 - **Cuándo zarpan.** Cada ruta junta el crudo que le toca y zarpa un petrolero cuando tiene su carga
   completa. Al llegar, desaparece.
@@ -6081,9 +6095,9 @@ Todo lo que se cambió respecto a las fuentes, y por qué.
   vuelta; un barco, en circuito.
 - **Escala**: una parada de barco en un puerto.
 - **Salida al mundo (puerta)**: punto del borde del tablero por donde un barco sale hacia
-  Asia, Europa, el Caribe o el resto de América. Como escala, representa a su puerto lejano.
+  Asia, Europa, Cuba, el Caribe o el resto de América. Como escala, representa a su puerto lejano.
 - **Puerto lejano**: el puerto al que lleva una salida: Shanghái (Yangshan), Róterdam, Houston, La
-  Habana o Colón (Cristóbal).
+  Habana, Kingston o Colón (Cristóbal).
 - **Travesía**: el cruce del océano entre una salida y su puerto lejano. Fuera del tablero,
   pero a la vista en el mapa plano y en el globo.
 - **Ruta marítima**: el camino por mar, ya calculado, entre dos puertos o salidas.
