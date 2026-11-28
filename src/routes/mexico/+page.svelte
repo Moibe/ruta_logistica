@@ -58,9 +58,4 @@
   .columna > :global(*) {
     pointer-events: auto;
   }
-
-  /* The rosters and the track legend all folded, their bars would sit on Tijuana's label: together, they drop below it. */
-  .columna:has(:global(aside.flota)):not(:has(:global(aside.flota:not(.plegado)))):not(:has(:global(section.vias:not(.plegado)))) > :global(:first-child) {
-    margin-top: 7.5rem;
-  }
 </style>

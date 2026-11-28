@@ -363,6 +363,11 @@
   .flota.en-columna:not(.plegado) {
     min-height: 8.5rem;
   }
+
+  /* Folded, it is just its bar: the open roster is the one that gives way. */
+  .flota.en-columna.plegado {
+    flex: none;
+  }
   .flota header {
     display: flex;
     align-items: center;
